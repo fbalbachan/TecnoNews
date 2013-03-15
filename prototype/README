@@ -1,0 +1,30 @@
+1) Cómo configurarlo
+--------------------
+
+En el directorio freeling_config debe haber 3 archivitos que indican a
+qué FreeLing se va a conectar SentiLecto: server, client, port
+
+freeling_config/server:
+FREELING_SERVER=/opt/freeling3/bin/analyze
+
+freeling_config/client:
+FREELING_CLIENT=/opt/freeling3/bin/analyzer_client
+
+freeling_config/port:
+FREELING_PORT=9999
+
+
+2) Cómo correrlo
+----------------
+
+./sentitext.py
+
+
+3) Dónde poner texto para probar
+--------------------------------
+
+En input.txt, una oración por línea (por ahora).
+
+4) Instrucciones para interfaz
+
+
