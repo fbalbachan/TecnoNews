@@ -74,6 +74,7 @@ labels_de_nucleo_de_grup_verb_inf = [
 ]
 
 labels_de_nucleo_de_sn = [
+# TODO: guardar sólo labels; atributos salen del mapeador de msi
 ('n-ms', 'M','S'),         
 ('n-mp', 'M','P'),         
 ('n-fs', 'F','S'),         
@@ -89,10 +90,10 @@ labels_de_nucleo_de_sn = [
 ('psubj-fs', 'F','S'),
 ('psubj-s', '*','S'),
 
-('a-ms', 'M','S'),         
-('a-mp', 'M','P'),         
-('a-fs', 'F','S'),         
-('a-fp', 'F','P'),         
+('j-ms', 'M','S'),         
+('j-mp', 'M','P'),         
+('j-fs', 'F','S'),         
+('j-fp', 'F','P'),         
 
 ('pdem-ms', 'M','S'),         
 ('pdem-mp', 'M','P'),         

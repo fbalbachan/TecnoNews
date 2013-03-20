@@ -144,65 +144,6 @@ class Clausula(object):
             self.sujeto = sujeto_para(primer_verbo.words[0])
             self.sujeto_es_tacito = True
 
-    def hallar_entidades(self):
-        sns           = self.by_label('sn')
-        grup_verb_inf = self.by_label('grup-verb-inf')
-        s_adjs        = self.by_label('s-adj')
-
-        sn_groups = []
-        if sns: sn_groups.extend(sns)
-        if grup_verb_inf: sn_groups.extend(grup_verb_inf)
-        if s_adjs: sn_groups.extend(s_adjs)
-
-        if not sn_groups: return
-
-        if not self.verbs:
-            self.entidades_sujeto.extend(sn_groups)
-            return
-        primer_verbo = sorted(self.verbs, key=lambda x: x.start)[0]
-
-        sujetos    = filter(lambda e: e.end < primer_verbo.start, sn_groups)
-        no_sujetos = filter(lambda e: e.start > primer_verbo.end, sn_groups)
-
-        for sujeto in sujetos:
-            nucleo_sujeto, (label, genero, numero) = sujeto.nucleo()
-            if nucleo_sujeto:
-                sujeto.genero = genero
-                sujeto.numero = numero
-                self.entidades_sujeto.append(sujeto)
-                # logger.info("entidades_sujeto: %s núcleo: (%s) label: (%s) género: (%s) nro: (%s)" % (sujeto, nucleo_sujeto, label, genero, numero))
-
-        for no_sujeto in no_sujetos:
-            nucleo_no_sujeto, (label, genero, numero) = no_sujeto.nucleo()
-            if nucleo_no_sujeto:
-                no_sujeto.genero = genero
-                no_sujeto.numero = numero
-                self.entidades_no_sujeto.append(no_sujeto)
-                # logger.info("entidades_no_sujeto: %s núcleo: (%s) label: (%s) género: (%s) nro: (%s)" % (no_sujeto, nucleo_no_sujeto, label, genero, numero))
-
-        # caja privativa: carente _de dinero_ | sin _grandes problemas_ | imposibilidato _de ganar_
-
-        grup_sps     = self.by_label('grup-sp')
-        grup_sp_sin = filter(lambda e: u'sin' in [w.lemma for w in e.words], grup_sps)
-        if grup_sp_sin: self.entidades_privativa.extend(grup_sp_sin)
-
-        sp_des = self.by_label('sp-de')
-        for sp_de in sp_des:
-            comienzo_sp_de = sp_de.words[0].position
-            palabra_previa = filter(lambda w: w.position == comienzo_sp_de - 1, self.words)
-            if palabra_previa and palabra_previa[0].lemma in [u'carente', u'falto', u'privado', u'privar', u'necesitado', u'necesitar']:
-                self.entidades_privativa.append(sp_de)
-                # print "sp-de -> privativa: ", sp_de
-
-        grup_sp_infs = self.by_label('grup-sp-inf')
-        for grup_sp_inf in grup_sp_infs:
-            comienzo_grup_sp_inf = grup_sp_inf.words[0].position
-            palabra_previa = filter(lambda w: w.position == comienzo_grup_sp_inf - 1, self.words)
-            if palabra_previa and palabra_previa[0].lemma in [u'imposibilitado', u'imposibilitar', u'impedido', u'impedir', u'necesitado', u'necesitar', u'difícil', u'imposible']:
-                self.entidades_privativa.append(grup_sp_inf)
-                # print "grup-sp-inf -> privativa: ", grup_sp_inf
-
-
     def hallar_subordinante(self):
         if self.all.label == 'subord-rel':
             encabezador = self.all.subordinante()

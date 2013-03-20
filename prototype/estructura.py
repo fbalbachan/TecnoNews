@@ -12,10 +12,9 @@ class Estructura(object):
         self.end = end
         self.struct = struct
         self.nivel = nivel
+        self.msi = None # <- núcleo.msi
         self.words = [Palabra(match.strip()) for match in re.findall(r'.\(\w+ \w+ [A-Z0-9]+ -\){-?\d+', ' '.join(struct), re.U)]
         self.children = []
-        self.genero = None
-        self.numero = None
 
     def __repr__(self):
         return u"%s (%d,%d) %s [%d]" % (self.label, # .encode('utf-8')
@@ -29,13 +28,6 @@ class Estructura(object):
 
     def forms(self):
         return [word.form for word in self.words]
-
-    def sin_determinantes(self):
-        determinantes = filter(lambda c: c.label in labels_de_determinante, self.children)
-        return self.quitar(determinantes)
-
-    def subjetivemas(self):
-        return set([f.lower() for f in self.forms()]).intersection(subjetivemas)
 
     def contains(self, otra_estructura):
         return (self.start < otra_estructura.start) and (self.end >= otra_estructura.end) 
@@ -79,30 +71,8 @@ class Estructura(object):
         else:
             return self
 
-    def subordinante(self):
-        encabezador_list = filter(lambda x: x.form.lower() in relativos, self.words)
-        
-        if encabezador_list:
-            encabezador = encabezador_list[0]
-        else:
-            encabezador_list = [filter(lambda (x,y): ' '.join((x.form,y.form)) in relativos,
-                                       izip(self.words[0:len(self.words)-1], self.words[1:]))]
-            encabezador_list = encabezador_list[0]
-            encabezador = Palabra('')
-            encabezador.form = encabezador_list[0][0].form + ' ' + encabezador_list[0][1].form 
-            encabezador.lemma = encabezador_list[0][0].lemma + ' ' + encabezador_list[0][1].lemma
-            encabezador.tag = encabezador_list[0][0].tag + ' ' + encabezador_list[0][1].tag
-            encabezador.position = encabezador_list[0][0].position
-        try:
-            (genero, numero) = gen_num_relativos[encabezador.form]
-        except IndexError:
-            # no es ni 'que, quienes...' ni 'el cual, los cuales...'; es 'donde, cuyo...'
-            (genero, numero) = ('', '')
-        encabezador.genero = genero
-        encabezador.numero = numero
-        return encabezador
-
     def nucleo(self):
+        # TODO: guardar sólo labels; atributos salen del mapeador de msi
         labels_de_nucleo = labels_de_nucleo_de_sn
 
         # núcleo de grup-verb-inf es especial:

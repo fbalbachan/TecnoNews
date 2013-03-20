@@ -1,0 +1,3 @@
+AQ0MS0 -> {categoría:adjetivo, tipo:calificativo, grado:null, género:masculino, número:singular, función:null, persona:3} 
+
+msi del sintagma <- msi del núcleo <- msi de cierto tipo de palabra: todos los núcleos de entidades tienen, al menos, estos 2 atributos: género y número; persona, por default cuando no está: 3
