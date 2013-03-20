@@ -15,7 +15,7 @@ logger    = logging.getLogger('sentitext')
 handler   = logging.FileHandler('logs/sentitext.log')
 formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
 handler.setFormatter(formatter)
-logger.addHandler(handler) 
+logger.addHandler(handler)
 logger.setLevel(logging.INFO)
 
 def resolver_subordinante(clause, sentence_containing_this_clause):
@@ -34,7 +34,7 @@ def resolver_subordinante(clause, sentence_containing_this_clause):
     info_verbo = verbo_subordinada.tag[-3:]
     persona_verbo_subordinada, numero_verbo_subordinada, extra_verbo_subordinada = info_verbo[0], info_verbo[1], info_verbo[2]
     logger.info("verbo_subordinada: %s %s %s %s" % (verbo_subordinada, persona_verbo_subordinada, numero_verbo_subordinada, extra_verbo_subordinada))
-    
+
     if not(es_oblicua):
         if subordinante.form.lower() == 'que':
             for previous_clause in reversed(sentence_containing_this_clause.clauses[:clause.nivel]):
@@ -74,7 +74,7 @@ def resolver_subordinante(clause, sentence_containing_this_clause):
                         # if numero_candidato == numero_verbo_subordinada:
                         clause.sujeto = candidato_proximo_al_que
                         break
-                        
+
         else:
             for previous_clause in reversed(sentence_containing_this_clause.clauses[:clause.nivel]):
                 candidatos = previous_clause.entidades_sujeto + previous_clause.entidades_no_sujeto
@@ -86,12 +86,12 @@ def resolver_subordinante(clause, sentence_containing_this_clause):
                         break
 
     return clause
-    
+
 def extract_entities(input_text):
     entities = []
 
-    text = Texto(); # logger.info('-'*80); logger.info('nuevo texto\n'+' '*80)
-    # input_sentences = [s.strip() for s in filter(lambda x: not(x.startswith('#')), input_text)]
+    text = Texto()
+
     input_sentences = [s.strip() for s in re.split(sentence_delimiters, input_text, re.U)]
     input_sentences = filter(lambda s: s != u'' and s != None, input_sentences)
     for i, input_sentence in enumerate(input_sentences): logger.info("input sentence: %d) '%s'" % (i, input_sentence))
@@ -99,42 +99,46 @@ def extract_entities(input_text):
 
     for sentence_id, sentence in enumerate(sentences):
         sentence.id = sentence_id
-        # logger.info('.'*80); logger.info("sentence: %d) '%s'" % (sentence.id, sentence.input_text))
 
         for i, clause in enumerate(sentence.clauses):
-            # logger.info("cláusula: '%s' principal: %s" % (clause, clause.principal and 'sí' or 'no'))
-                        
+            logger.info(u"cláusula: '%s' principal: %s" % (clause, clause.principal and u'sí' or u'no'))
+
             go = clause.contenidas_en(global_operator_words)
             if go:
                 clause.contiene_global_operator = True
                 clause.svo.global_operator = GlobalOperator(filter(lambda (a,b,c): a == go[0], global_operators)[0])
-                # logger.info("global operator %s" % clause.svo.global_operator)
+                logger.info("global operator %s" % clause.svo.global_operator)
 
-            if clause.is_whole_sentence:
-                clause.svo.asignar_sentimiento()
-                # logger.info("clause.svo: %s" % clause.svo)
-                continue
+            # if clause.is_whole_sentence:
+            #     clause.svo.asignar_sentimiento()
+            #     logger.info("clause.svo: %s" % clause.svo)
+            #     continue
 
             clause.hallar_entidades()
+            logger.info(u"entidades sujeto: %s" % clause.entidades_sujeto)
+            logger.info(u"entidades no sujeto: %s" % clause.entidades_no_sujeto)
 
             clause.hallar_subordinante()
             if clause.subordinante: clause = resolver_subordinante(clause, sentence)
 
             clause.hallar_sujeto()
+            logger.info(u"sujeto: %s" % clause.sujeto)
+
             clause.hallar_SVO()
+            
             if clause.svo:
                 # si hay sujeto pronominal forma tercera, buscarlo más abajo:
                 if len(clause.svo.subject.words) == 1 and clause.svo.subject.words[0].form.lower() in formas_terceras:
                     clause.sujeto_es_pronominal = True
-                    # logger.info("clause.svo.subject es pronominal: %s" % clause.svo.subject.words[0])
+                    logger.info(u"clause.svo.subject es pronominal: %s" % clause.svo.subject)
                 # si hay objeto forma tercera, resolverlo:
                 if len(clause.svo.object.words) == 1 and clause.svo.object.words[0].lemma in formas_terceras:
                     clause.objeto_es_pronominal = True
-                    # logger.info("clause.svo.object es pronominal: %s" % clause.svo.object.words[0])
-                
+                    logger.info(u"clause.svo.object es pronominal: %s" % clause.svo.object)
+
                 clause.svo.asignar_sentimiento()
-                # logger.info("clause.svo %s" % clause.svo.__str__())
-            
+                logger.info(u"clause.svo con sentimiento %s" % clause.svo)
+
             clause_entities = []
             clause_entities.append(clause.svo.subject)
             clause_entities.append(clause.svo.object)
@@ -146,7 +150,7 @@ def extract_entities(input_text):
 
         text.add(sentence)
 
-    # logger.info('.'*80); logger.info("text: %s" % text)
+    logger.info('.'*80); logger.info("text: %s" % text)
 
     # resolver antecedentes inter-oración:
     for sentence in text.sentences:
@@ -157,8 +161,8 @@ def extract_entities(input_text):
             if (main_clause.sujeto_es_tacito and len(main_clause.sujeto.words) == 1 and main_clause.sujeto.words[0].form.lower() in formas_terceras) or main_clause.sujeto_es_pronominal:
                 # logger.info("buscando antecedente sujeto tácito / pronominal: %s" % main_clause.sujeto)
                 found_antecedente = False
-                
-                # 1) por paralelismo sintáctico (buscar sujeto de la oración anterior) 
+
+                # 1) por paralelismo sintáctico (buscar sujeto de la oración anterior)
                 for previous_sentence in reversed(text.sentences[:sentence.id]):
                     # logger.info("previous sentence: %s" % previous_sentence)
                     main_previous_clause = filter(lambda c: c.principal, previous_sentence.clauses)[0]
@@ -196,11 +200,12 @@ def extract_entities(input_text):
 
     # logger.info('.'*80); logger.info("extraer_entidades - entidades: %s" % ' - '.join([e.__str__() for e in entities]))
     # logger.info('.'*80); logger.info("extraer_entidades - svos: %s" % ' - '.join([svo.__str__() for svo in svos]))
+
     return svos, entities
 
 def format_entities(entities):
     entidades_ordenadas = sorted(entities, key=lambda e: e.estructura.__str__())
-    # logger.info('.'*80); logger.info("entidades (candidatos): %s" % ' - '.join([e.__str__() for e in entidades_ordenadas]))
+    logger.info('.'*80); logger.info("entidades (candidatos): %s" % ' - '.join([e.__str__() for e in entidades_ordenadas]))
 
     entities_final = []
     groups = itertools.groupby(entidades_ordenadas, lambda e: e.estructura.sin_determinantes().__str__())
@@ -216,19 +221,19 @@ def format_entities(entities):
                     entities_final.append(other_entity)
         else:
             entities_final.append(others[0])
-        
+
     return entities_final
 
 
 if __name__ == '__main__':
-    input_text = codecs.open('input.txt', 'r', 'utf-8').readlines()
+    # input_text = [line.strip() for line in codecs.open('input.txt', 'r', 'utf-8').readlines() if not(line.startswith('#'))]
+    input_text = codecs.open('input.txt', 'r', 'utf-8').read()
 
     svos, entities = extract_entities(input_text)
+
     entities_with_sentiment = format_entities(entities)
 
-    # logger.info('.'*80)
     for e in entities_with_sentiment:
-        # logger.info("%s (sentence id: %d) -> %s" % (e, e.sentence_id, e.get_sentiment()))
-        print "%s (sentence id: %d) -> %s" % (e, e.sentence_id, e.get_sentiment())
+        print u"%s (sentence id: %d) -> %s" % (e, e.sentence_id, e.get_sentiment())
 
-    for svo in svos: print "%s" % svo
+    for svo in svos: print u"%s" % svo

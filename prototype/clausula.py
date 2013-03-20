@@ -12,7 +12,7 @@ logger    = logging.getLogger('clausula')
 handler   = logging.FileHandler('logs/clausula.log')
 formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
 handler.setFormatter(formatter)
-logger.addHandler(handler) 
+logger.addHandler(handler)
 logger.setLevel(logging.INFO)
 
 def traverse(struct):
@@ -45,7 +45,7 @@ class Clausula(object):
         self.all = estructura
         self.words = self.all.words
         # logger.info('.'*80); logger.info("words: %s" % ' '.join([w.__str__() for w in self.words]))
-        self.lemmas = [w.lemma for w in self.words] 
+        self.lemmas = [w.lemma for w in self.words]
         self.flatstructs = list(traverse(self.all))
         self.verbs = self.by_label('verb') or []
         self.verbs.extend(self.by_label('parti-flex')) # participios, p.ej. 'comido'
@@ -88,7 +88,7 @@ class Clausula(object):
         entidades_a_izquierda = self.entidades_sujeto
         for entidad in entidades_a_izquierda:
             nucleo, (label, genero, numero) = entidad.nucleo()
-            # logger.info("entidad a izquierda: %s %s %s %s" % (nucleo, label, genero, numero))
+            logger.info(u"entidad a izquierda: %s %s %s %s" % (nucleo, label, genero, numero))
             if nucleo:
                 matching_word = nucleo.words[0]
                 if (nro_verbo == numero) and persona_verbo == '3':
@@ -123,7 +123,7 @@ class Clausula(object):
                     matching_word = nucleo.words[0]
                     if (nro_verbo == numero) and persona_verbo == '3':
                         self.sujeto = entidad
-                        self.entidades_no_sujeto.remove(entidad) 
+                        self.entidades_no_sujeto.remove(entidad)
                         break
                     if (((persona_verbo == '2')
                          and (nro_verbo == 'S')
@@ -146,14 +146,14 @@ class Clausula(object):
 
     def hallar_entidades(self):
         sns           = self.by_label('sn')
-        grup_verb_inf = self.by_label('grup-verb-inf') 
+        grup_verb_inf = self.by_label('grup-verb-inf')
         s_adjs        = self.by_label('s-adj')
-        
+
         sn_groups = []
         if sns: sn_groups.extend(sns)
         if grup_verb_inf: sn_groups.extend(grup_verb_inf)
         if s_adjs: sn_groups.extend(s_adjs)
-        
+
         if not sn_groups: return
 
         if not self.verbs:
@@ -181,7 +181,7 @@ class Clausula(object):
                 # logger.info("entidades_no_sujeto: %s núcleo: (%s) label: (%s) género: (%s) nro: (%s)" % (no_sujeto, nucleo_no_sujeto, label, genero, numero))
 
         # caja privativa: carente _de dinero_ | sin _grandes problemas_ | imposibilidato _de ganar_
-        
+
         grup_sps     = self.by_label('grup-sp')
         grup_sp_sin = filter(lambda e: u'sin' in [w.lemma for w in e.words], grup_sps)
         if grup_sp_sin: self.entidades_privativa.extend(grup_sp_sin)
@@ -215,7 +215,7 @@ class Clausula(object):
             svo.build()
             self.svo = svo
             return
-        
+
         if self.modal: svo.modal_verb = self.modal
 
         primer_verbo = sorted(set(self.verbs), key=lambda x: x.start)[0]
@@ -231,7 +231,7 @@ class Clausula(object):
         svo.verb = Verb(primer_verbo, marco_verbal)
 
         if self.sujeto: svo.subject = SVOelement(self.sujeto)
-        
+
         sns_incluidas = self.entidades_sujeto + self.entidades_no_sujeto
 
         # if not sns_incluidas:
@@ -286,7 +286,7 @@ class Clausula(object):
                                                         and not(svo.object.estructura.contains(o)), no_sujetos_sns)]
         else:
             svo.others = [SVOelement(x) for x in no_sujetos_sns]
-        
+
         # quitar adjuntos que contengan algo que duplique lo que haya en alguna Eprivativa
         valid_others = []
         privativas_sin_encabezador = [' '.join([w.__str__() for w in p.estructura.words[1:]]) for p in svo.privativa]
@@ -306,9 +306,9 @@ class Clausula(object):
 
         # regla 6: si es pasiva, mover sujeto a objeto (pisando objeto)
         if self.pasiva and svo.subject:
-            svo.object = SVOelement(svo.subject.estructura)            
+            svo.object = SVOelement(svo.subject.estructura)
             svo.subject = SVOelement()
-            
+
         # done
         svo.build()
         self.svo = svo

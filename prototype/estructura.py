@@ -18,11 +18,11 @@ class Estructura(object):
         self.numero = None
 
     def __repr__(self):
-        return "%s (%d,%d) %s [%d]".encode('utf-8') % (self.label,
-                                                       self.start,
-                                                       self.end,
-                                                       ' '.join([w.form for w in self.words]),
-                                                       self.nivel)
+        return u"%s (%d,%d) %s [%d]" % (self.label, # .encode('utf-8')
+                                        self.start,
+                                        self.end,
+                                        ' '.join([w.form for w in self.words]),
+                                        self.nivel)
 
     def __str__(self):
         return ' '.join([x for x in self.forms()])
@@ -115,7 +115,7 @@ class Estructura(object):
                     (label, genero, numero) = label_de_nucleo[0], label_de_nucleo[1], label_de_nucleo[2]
                     return child, (label, genero, numero)
                     
-        return get_estructura_vacia, ('', '', '')
+        return get_estructura_vacia(), ('', '', '')
 
 def get_estructura_vacia():
     return Estructura((0, 0, ['empty_[', u'+(x x EMPTY -){0', ']'], 0))

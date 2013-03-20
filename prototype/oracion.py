@@ -26,7 +26,7 @@ class Oracion(object):
         # freeling bracketed parse -> structures
         self.input_text = sentence
         self.detrolled_text = detroll(sentence)
-        comando = u'echo "%s." | ' + freeling_client + ' localhost ' + freeling_port
+        comando = u'echo "%s." | ' + freeling_client + ' localhost:' + freeling_port
         freeling_output = [s.decode('utf-8').strip() for s in os.popen((comando % sentence).encode('utf-8')).read().split('\n')]
         if not freeling_output: exit()
         self.flatstructs = filter(lambda x: x.label != 'f-term', [Estructura(e) for e in list(estructuras_balanceadas(freeling_output))])

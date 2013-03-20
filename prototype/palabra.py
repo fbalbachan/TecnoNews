@@ -20,5 +20,5 @@ class Palabra(object):
         return self.__str__()
 
     def __str__(self):
-        return '%s' % (self.form)
+        return u'%s' % (self.form)
 
