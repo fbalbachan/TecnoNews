@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from est import *
-from estructura import *
+from structure import *
 from logger_utils import *
 from freeling_utils import FreelingAnalyzer
 
@@ -11,12 +11,16 @@ class Sentence(object):
         self.logger = get_logger('sentilecto')
 
         self.input_sentence = input_sentence
-        self.analyzer = analyzer != None and True or FreelingAnalyzer()
+
+        if analyzer != None:
+            self.analyzer = analyzer
+        else:
+            FreelingAnalyzer()
 
         # freeling bracketed parse -> structures
         freeling_output = self.analyzer.parse(self.input_sentence)
         if not freeling_output: return
-        self.flatstructs = filter(lambda x: x.label != 'f-term', [Estructura(e) for e in list(estructuras_balanceadas(freeling_output))])
+        self.flatstructs = filter(lambda x: x.label != 'f-term', [Structure(e) for e in list(estructuras_balanceadas(freeling_output))])
 
         # all-spanning tree -> struct for the whole sentence
         self.all = max(filter(lambda x: x.start == 0, self.flatstructs), key=lambda x: x.end)
@@ -26,7 +30,7 @@ class Sentence(object):
 
         self.verbs = filter(lambda e: e.label in ['verb', 'parti-flex'], self.flatstructs)
         self.main_verb = None
-        
+
         # grup_verbs       = self.by_label('grup-verb')
         # verb_pass        = self.by_label('verb-pass')
 
