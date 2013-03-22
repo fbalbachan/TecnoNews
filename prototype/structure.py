@@ -1,11 +1,11 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import re, copy
-from palabra import *
+from word import *
 from conf import *
 from itertools import izip
 
-class Estructura(object):
+class Structure(object):
     def __init__(self, (start, end, struct, nivel)):
         self.label = struct[0].split('_[')[0].strip('+').lower()
         self.start = start
@@ -13,7 +13,7 @@ class Estructura(object):
         self.struct = struct
         self.nivel = nivel
         self.msi = None # <- núcleo.msi
-        self.words = [Palabra(match.strip()) for match in re.findall(r'.\(\w+ \w+ [A-Z0-9]+ -\){-?\d+', ' '.join(struct), re.U)]
+        self.words = [Word(match.strip()) for match in re.findall(r'.\(\w+ \w+ [A-Z0-9]+ -\){-?\d+', ' '.join(struct), re.U)]
         self.children = []
 
     def __repr__(self):
@@ -29,14 +29,14 @@ class Estructura(object):
     def forms(self):
         return [word.form for word in self.words]
 
-    def contains(self, otra_estructura):
-        return (self.start < otra_estructura.start) and (self.end >= otra_estructura.end) 
+    def contains(self, another_structure):
+        return (self.start < another_structure.start) and (self.end >= another_structure.end) 
 
     def contains_any(self, iterable):
         return any(self.contains(i) for i in iterable)
 
-    def is_contained_by(self, otra_estructura):
-        return otra_estructura.contains(self)
+    def is_contained_by(self, another_structure):
+        return another_structure.contains(self)
 
     def is_contained_by_any(self, iterable):
         return any(i.contains(self) for i in iterable)
@@ -71,21 +71,21 @@ class Estructura(object):
         else:
             return self
 
-    def nucleo(self):
+    def head(self):
         # TODO: guardar sólo labels; atributos salen del mapeador de msi
-        labels_de_nucleo = labels_de_nucleo_de_sn
+        labels_de_head = labels_de_head_de_sn
 
         # núcleo de grup-verb-inf es especial:
         if self.label == 'grup-verb-inf':
-            labels_de_nucleo += labels_de_nucleo_de_grup_verb_inf
+            head_labels += grup_verb_inf_head_labels
 
         for child in sorted(self.children, key=lambda c: c.nivel):
-            for label_de_nucleo in labels_de_nucleo:
-                if child.label == label_de_nucleo[0]:
-                    (label, genero, numero) = label_de_nucleo[0], label_de_nucleo[1], label_de_nucleo[2]
+            for head_label in head_labels:
+                if child.label == head_label[0]:
+                    (label, genero, numero) = head_label[0], head_label[1], head_label[2]
                     return child, (label, genero, numero)
                     
-        return get_estructura_vacia(), ('', '', '')
+        return get_empty_structure(), ('', '', '')
 
-def get_estructura_vacia():
-    return Estructura((0, 0, ['empty_[', u'+(x x EMPTY -){0', ']'], 0))
+def get_empty_structure():
+    return Structure((0, 0, ['empty_[', u'+(x x EMPTY -){0', ']'], 0))

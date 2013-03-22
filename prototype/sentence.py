@@ -1,26 +1,21 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import os
 from est import *
 from estructura import *
-from utils.utils import *
-from utils.tokenize import *
-from conf import *
-
-freeling_client = open('freeling_config/client', 'r').read().strip('\n').strip('FREELING_CLIENT=')
-freeling_port = open('freeling_config/port', 'r').read().strip('\n').strip('FREELING_PORT=')
-comando = u'echo "%s." | ' + freeling_client + ' localhost:' + freeling_port
+from logger_utils import *
+from freeling_utils import FreelingAnalyzer
 
 class Sentence(object):
 
-    def __init__(self, input_sentence):
-        self.valid = True
+    def __init__(self, input_sentence, analyzer=None):
+        self.logger = get_logger('sentilecto')
+
+        self.input_sentence = input_sentence
+        self.analyzer = analyzer != None and True or FreelingAnalyzer()
 
         # freeling bracketed parse -> structures
-        self.input_sentence = input_sentence
-
-        freeling_output = [s.decode('utf-8').strip() for s in os.popen((comando % input_sentence).encode('utf-8')).read().split('\n')]
-        if not freeling_output: exit()
+        freeling_output = self.analyzer.parse(self.input_sentence)
+        if not freeling_output: return
         self.flatstructs = filter(lambda x: x.label != 'f-term', [Estructura(e) for e in list(estructuras_balanceadas(freeling_output))])
 
         # all-spanning tree -> struct for the whole sentence
@@ -29,10 +24,13 @@ class Sentence(object):
         # assign children
         for struct in self.flatstructs: struct.children = [s for s in self.flatstructs if struct.contains(s)]
 
-        grup_verbs       = self.by_label('grup-verb')
-        verb_pass        = self.by_label('verb-pass')
-
         self.verbs = filter(lambda e: e.label in ['verb', 'parti-flex'], self.flatstructs)
+        self.main_verb = None
+        
+        # grup_verbs       = self.by_label('grup-verb')
+        # verb_pass        = self.by_label('verb-pass')
+
+        self.entities = self.get_entities()
 
     def __str__(self):
         return ' | '.join(sorted([e.__str__() for e in self.flatstructs]))
@@ -40,7 +38,7 @@ class Sentence(object):
     def by_label(self, label):
         return filter(lambda e: e.label == label, self.flatstructs)
 
-    def hallar_entidades(self):
+    def get_entities(self):
         sns           = self.by_label('sn')
         grup_verb_inf = self.by_label('grup-verb-inf') # sólo es entity si está a nivel 1
         patons        = self.by_label('paton')
@@ -48,22 +46,21 @@ class Sentence(object):
         coor_ns       = self.by_label('coor_n')
 
         entities = []
-        if sns: entities.extend(sns)
-        if grup_verb_inf: entities.extend(grup_verb_inf)
-        if patons: entities.extend(patons)
-        if ptonics: entities.extend(ptonics)
-        if coor_ns: entities.extend(coor_ns)
 
+        for group in [sns,grup_verb_inf, patons, ptonics, coor_ns]:
+            if group: entities.extend(group)
+
+        self.logger.info(u"entities: %s" % [e for e in entities])
+        self.entities = entities
         return entities
 
+    def get_entity_at_level(self, n):
+        return filter(lambda e: e.nivel == n, self.entities)
+
+    def get_entities_at_distance(self, distance, verb_position=None):
+        if verb_position == None: verb_position = self.main_verb.words[0].position
+        return filter(lambda e: (e.words.pos - verb_position) < distance)
+
     # sentence API:
-
-    # def get_entities()
-    # respecto del verbo
-    # def get_rightmost_entity()
-    # respecto del verbo
-    # def get_leftmost_entity()
-    # def get_entity_at_level(n)
-    # def get_entity_at_distance(n)
+    # respecto del verbo: def get_rightmost_entity(), def get_leftmost_entity()
     # def get_svo()
-

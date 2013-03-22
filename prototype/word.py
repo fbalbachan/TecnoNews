@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-class Palabra(object):
+class Word(object):
     def __init__(self, content):
         try:
             content, position = content.strip('+(').strip('(').split('{')
@@ -12,8 +12,8 @@ class Palabra(object):
             self.lemma = None
             self.tag = None
             self.position = None
-        self.genero = None
-        self.numero = None
+        self.gender = None
+        self.number = None
         self.sentiment = (0, 0)
 
     def __repr__(self):

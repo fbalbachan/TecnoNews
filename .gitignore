@@ -12,8 +12,5 @@ pattern*
 shared/log/*.log
 test-result/*
 tmp/*
-prototype/freeling_config/client
-prototype/freeling_config/server
-prototype/freeling_config/port
 prototype/logs
-prototype/input.txt
+prototype/sentence.txt
