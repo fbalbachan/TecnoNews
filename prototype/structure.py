@@ -16,12 +16,11 @@ class Structure(object):
         self.end = end
         self.struct = struct
         self.nivel = nivel
-        self.msi = None # <- núcleo.msi
         self.words = [Word(match.strip()) for match in re.findall(r'.\(\w+ \w+ [A-Z0-9]+ -\){-?\d+', ' '.join(struct), re.U)]
         self.children = []
 
     def __repr__(self):
-        return u"%s (%d,%d) %s [%d]" % (self.label, # .encode('utf-8')
+        return u"%s (%d,%d) %s [%d]" % (self.label,
                                         self.start,
                                         self.end,
                                         ' '.join([w.form for w in self.words]),
@@ -77,23 +76,21 @@ class Structure(object):
 
     def head(self):
         entity_head_labels = head_labels
-
-        # núcleo de grup-verb-inf es especial:
         if self.label == 'grup-verb-inf': entity_head_labels += grup_verb_inf_head_labels
 
-        for child in sorted(self.children, key=lambda c: c.nivel):
-            self.logger.info(u"children: %s" % [x.__str__() for x in self.children])
-            for entity_head_label in entity_head_labels:
-                if child.label == entity_head_label:
-                    head_word = child.words[0]
-                    head_tag = head_word.tag
-                    self.logger.info(u"head_word: %s, head_tag: %s" % (head_word, head_tag))
-                    msi, filtered_msi = tag2msi(head_tag), tag2filtered_msi(head_tag)
-                    return (msi, filtered_msi)
+        for entity_head_label in entity_head_labels:
+            for child in sorted(self.children, key=lambda c: c.nivel):
+                if child.label == entity_head_label: return child
                     
-        # return get_empty_structure(), ('', '', '')
-        return default_msi, default_msi
+        # found no head
+        return get_empty_structure()
 
+    def msi(self):
+        return tag2msi(self.head().words[0].tag)
+
+    def filtered_msi(self):
+        return tag2filtered_msi(self.head().words[0].tag)
+        
 def get_empty_structure():
     return Structure((0, 0, ['empty_[', u'+(x x EMPTY -){0', ']'], 0))
 

@@ -20,5 +20,4 @@ class Word(object):
         return self.__str__()
 
     def __str__(self):
-        return u'%s' % (self.form)
-
+        return u'[%s|%s|%s]' % (self.form, self.tag, self.position)
