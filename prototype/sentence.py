@@ -53,7 +53,6 @@ class Sentence(object):
         for group in [sns,grup_verb_inf, patons, ptonics, coor_ns]:
             if group: entities.extend(group)
 
-        self.logger.info(u"entities: %s" % [e for e in entities])
         self.entities = entities
         return entities
 

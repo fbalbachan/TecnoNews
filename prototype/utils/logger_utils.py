@@ -4,6 +4,7 @@ import logging
 
 def get_logger(file):
     logger    = logging.getLogger(file)
+    logger.propagate = False
     handler   = logging.FileHandler('logs/'+file+'.log')
     formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
     handler.setFormatter(formatter)

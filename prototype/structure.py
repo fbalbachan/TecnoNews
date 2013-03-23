@@ -3,9 +3,14 @@
 import re, copy
 from word import *
 from itertools import izip
+from msi_mapper import *
+from head_labels import *
+from utils.logger_utils import *
 
 class Structure(object):
     def __init__(self, (start, end, struct, nivel)):
+        self.logger = get_logger('sentilecto')
+
         self.label = struct[0].split('_[')[0].strip('+').lower()
         self.start = start
         self.end = end
@@ -71,20 +76,23 @@ class Structure(object):
             return self
 
     def head(self):
-        # TODO: guardar sólo labels; atributos salen del mapeador de msi
-        labels_de_head = labels_de_head_de_sn
+        entity_head_labels = head_labels
 
         # núcleo de grup-verb-inf es especial:
-        if self.label == 'grup-verb-inf':
-            head_labels += grup_verb_inf_head_labels
+        if self.label == 'grup-verb-inf': entity_head_labels += grup_verb_inf_head_labels
 
         for child in sorted(self.children, key=lambda c: c.nivel):
-            for head_label in head_labels:
-                if child.label == head_label[0]:
-                    (label, genero, numero) = head_label[0], head_label[1], head_label[2]
-                    return child, (label, genero, numero)
+            self.logger.info(u"children: %s" % [x.__str__() for x in self.children])
+            for entity_head_label in entity_head_labels:
+                if child.label == entity_head_label:
+                    head_word = child.words[0]
+                    head_tag = head_word.tag
+                    self.logger.info(u"head_word: %s, head_tag: %s" % (head_word, head_tag))
+                    msi, filtered_msi = tag2msi(head_tag), tag2filtered_msi(head_tag)
+                    return (msi, filtered_msi)
                     
-        return get_empty_structure(), ('', '', '')
+        # return get_empty_structure(), ('', '', '')
+        return default_msi, default_msi
 
 def get_empty_structure():
     return Structure((0, 0, ['empty_[', u'+(x x EMPTY -){0', ']'], 0))
