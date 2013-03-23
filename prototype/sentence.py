@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 from est import *
 from structure import *
-from logger_utils import *
-from freeling_utils import FreelingAnalyzer
+from utils.logger_utils import *
+from utils.freeling_utils import FreelingAnalyzer
 
 class Sentence(object):
 

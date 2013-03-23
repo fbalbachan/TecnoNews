@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 import re, copy
 from word import *
-from conf import *
 from itertools import izip
 
 class Structure(object):
@@ -89,3 +88,26 @@ class Structure(object):
 
 def get_empty_structure():
     return Structure((0, 0, ['empty_[', u'+(x x EMPTY -){0', ']'], 0))
+
+def estructuras_balanceadas(lista):
+    w = 0
+    out = []
+    nivel = 0
+    # set position for each word
+    for x in lista:
+        if x.startswith('+(') or x.startswith('('):
+            w += 1
+            out.append(x+'{%d'%w)
+        else:
+            out.append(x)
+    lista = out
+    # parse bracketed structures
+    stack = []
+    for i, x in enumerate(lista):
+        if x.endswith(']') and stack:
+            start = stack.pop()
+            nivel -= 1
+            yield (start, i, lista[start:i+1], nivel) # (principio, fin, estructura, nivel)
+        elif x.endswith('_['):
+            stack.append(i)
+            nivel += 1

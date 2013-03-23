@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import codecs
 from sentence import *
-from logger_utils import *
+from utils.logger_utils import *
 
 def extract_entities(input_sentence):
     logger = get_logger('sentilecto')
