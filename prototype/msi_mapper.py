@@ -1,21 +1,25 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
 import re, sys, json
+from msi_data import *
 
 def tag2msi(tag):
-    return ""
-
+    category = tag[0]
+    result = {"category": word_category[category], "person": 3}
+    attributes = attribute_map[category]                                
+                                                                    
+    # special case ('N' has a two-letter attribute)
+    if category == 'N':                                             
+        for (position, letter) in zip([1,2,3,45,6], [tag[1], tag[2], tag[3], tag[4:6], tag[6]]):          
+            attribute, values = attributes[position]                    
+            result[attribute] = values[letter]                                                        
+    else:                                                               
+        for (position, letter) in enumerate(tag[1:], 1):                
+            attribute, values = attributes[position]                # ("function", {"0": None, "P": u"participio"})
+            result[attribute] = values[letter]                      # result["function"] = values["P"]
+    
+    return result
 
 if __name__ == '__main__':
-    if sys.argv > 1:
-        print(tag2msi(sys.argv[0]))
-
-    else:
-        expected = {"category": "adjetivo","type": "calificativo","grade": None,"gender": "masculino","number": "singular","function": None,"person": 3}
-        expected_json = '{"category": "adjetivo", "function": "null", "grade": null, "gender": "masculino", "number": "singular", "person": 3, "type": "calificativo"}'
-
-        result = tag2msi("AQ0MS0")
-        result_json = json.dumps(result)
-        
-        assert result == expected
-        assert result_json == expected_json
+    try: print(tag2msi(sys.argv[1]))
+    except IndexError: print "please provide a tag, e.g.: ./msi_mapper.py AQ0MS0"
