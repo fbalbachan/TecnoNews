@@ -7,7 +7,7 @@ from utils.freeling_utils import FreelingAnalyzer
 class Sentence(object):
 
     def __init__(self, input_sentence, analyzer=None):
-        self.logger = get_logger('sentilecto')
+        self.logger = get_logger('entinews')
 
         self.input_sentence = input_sentence
 

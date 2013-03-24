@@ -9,7 +9,7 @@ from utils.logger_utils import *
 
 class Structure(object):
     def __init__(self, (start, end, struct, nivel)):
-        self.logger = get_logger('sentilecto')
+        self.logger = get_logger('entinews')
 
         self.words = [Word(match.strip()) for match in re.findall(r'.\(\w+ \w+ [A-Z0-9]+ -\){-?\d+', ' '.join(struct), re.U)]
         self.label = struct[0].split('_[')[0].strip('+').lower()
@@ -18,8 +18,8 @@ class Structure(object):
         self.struct = struct
         self.nivel = nivel
         self.head = None
+        self.full_msi = None
         self.msi = None
-        self.filtered_msi = None
         self.children = []
 
     def __repr__(self):
@@ -81,8 +81,8 @@ class Structure(object):
 
     def refresh(self):
         self.head = self.get_head()
+        self.full_msi = self.get_full_msi()
         self.msi = self.get_msi()
-        self.filtered_msi = self.get_filtered_msi()
 
     def get_head(self):
         entity_head_labels = head_labels
@@ -99,13 +99,13 @@ class Structure(object):
         # found no head
         return None # get_empty_structure()
 
-    def get_msi(self):
+    def get_full_msi(self):
         if not self.head: return empty_msi
-        return tag2msi(self.head.words[0].tag)
+        return tag2fullmsi(self.head.words[0].tag)
 
-    def get_filtered_msi(self):
-        if not self.msi: self.msi()
-        return filtered_msi(self.msi)
+    def get_msi(self):
+        if not self.full_msi: self.get_full_msi()
+        return msi(self.full_msi)
 
 # def get_empty_structure():
 #     return Structure((0, 0, ['empty_[', u'+(x x EMPTY -){0', ']'], 0))

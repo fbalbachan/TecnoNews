@@ -5,7 +5,7 @@ from model.sentence import *
 from utils.logger_utils import *
 
 def extract_entities(input_sentence):
-    logger = get_logger('sentilecto')
+    logger = get_logger('entinews')
     logger.info(u"\n%s\ninput sentence: %s" % ("*"*80, input_sentence))
 
     sentence = Sentence(input_sentence)
@@ -16,5 +16,5 @@ def extract_entities(input_sentence):
 
 
 if __name__ == '__main__':
-    sentence = codecs.open('sentence.txt', 'r', 'utf-8').read().strip()
+    sentence = codecs.open('input/sentence.txt', 'r', 'utf-8').read().strip()
     entities = extract_entities(sentence)

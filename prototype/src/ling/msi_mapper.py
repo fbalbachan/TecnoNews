@@ -3,10 +3,10 @@
 import re, sys, json
 from msi_data import *
 
-default_msi = {"person": 3, "number": u"singular", "gender": u"masculino"}
+default_msi = {"person": 3, "number": u"singular", "gender": u"masculine"}
 empty_msi = {"person": None, "number": None, "gender": None}
 
-def tag2msi(tag):
+def tag2fullmsi(tag):
     category = tag[0]
     result = {"category": word_category[category]}
     attributes = attribute_map[category]                                
@@ -23,27 +23,27 @@ def tag2msi(tag):
     
     return result
 
-def filtered_msi(msi):
+def msi(a_msi):
 
     try:
-        if msi["gender"]:
-            gender = msi["gender"]
+        if a_msi["gender"]:
+            gender = a_msi["gender"]
         else:
-            gender = u"masculino"
+            gender = u"masculine"
     except KeyError:
-        gender = u"masculino"
+        gender = u"masculine"
 
     try:
-        if msi["number"]:
-            number = msi["number"]
+        if a_msi["number"]:
+            number = a_msi["number"]
         else:
             number = u"singular"
     except KeyError:
         number = u"singular"
 
     try:
-        if msi["person"]:
-            person = msi["person"]
+        if a_msi["person"]:
+            person = a_msi["person"]
         else:
             person = 3
     except KeyError:
@@ -55,6 +55,6 @@ def filtered_msi(msi):
 
 if __name__ == '__main__':
     try:
-        print(tag2msi(sys.argv[1]))
-        print(tag2filtered_msi(sys.argv[1]))
+        print(tag2fullmsi(sys.argv[1]))
+        print(msi(tag2fullmsi(sys.argv[1])))
     except IndexError: print "please provide a tag, e.g.: ./msi_mapper.py AQ0MS0"
