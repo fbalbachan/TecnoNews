@@ -2,21 +2,24 @@
 # -*- coding: utf-8 -*-
 import re, copy
 from word import *
-from itertools import izip
-from msi_mapper import *
-from head_labels import *
+from itertools import izip, groupby
+from ling.msi_mapper import *
+from ling.head_labels import *
 from utils.logger_utils import *
 
 class Structure(object):
     def __init__(self, (start, end, struct, nivel)):
         self.logger = get_logger('sentilecto')
 
+        self.words = [Word(match.strip()) for match in re.findall(r'.\(\w+ \w+ [A-Z0-9]+ -\){-?\d+', ' '.join(struct), re.U)]
         self.label = struct[0].split('_[')[0].strip('+').lower()
         self.start = start
         self.end = end
         self.struct = struct
         self.nivel = nivel
-        self.words = [Word(match.strip()) for match in re.findall(r'.\(\w+ \w+ [A-Z0-9]+ -\){-?\d+', ' '.join(struct), re.U)]
+        self.head = None
+        self.msi = None
+        self.filtered_msi = None
         self.children = []
 
     def __repr__(self):
@@ -70,29 +73,42 @@ class Structure(object):
                     nuevo_end = sorted([e.end for e in container.children]).pop()
                     container.start = nuevo_start
                     container.end = nuevo_end
+            self.refresh()
             return container
         else:
+            self.refresh()
             return self
 
-    def head(self):
+    def refresh(self):
+        self.head = self.get_head()
+        self.msi = self.get_msi()
+        self.filtered_msi = self.get_filtered_msi()
+
+    def get_head(self):
         entity_head_labels = head_labels
         if self.label == 'grup-verb-inf': entity_head_labels += grup_verb_inf_head_labels
 
-        for entity_head_label in entity_head_labels:
-            for child in sorted(self.children, key=lambda c: c.nivel):
-                if child.label == entity_head_label: return child
-                    
+        children_per_level = [(level, list(children)) for (level, children) in groupby(sorted(self.children, key=lambda c: c.nivel),
+                                                                                       key=lambda c: c.nivel)]
+
+        for (level, children) in children_per_level:
+            for entity_head_label in entity_head_labels:
+                for child in children:
+                    if child.label == entity_head_label: return child
+
         # found no head
-        return get_empty_structure()
+        return None # get_empty_structure()
 
-    def msi(self):
-        return tag2msi(self.head().words[0].tag)
+    def get_msi(self):
+        if not self.head: return empty_msi
+        return tag2msi(self.head.words[0].tag)
 
-    def filtered_msi(self):
-        return tag2filtered_msi(self.head().words[0].tag)
-        
-def get_empty_structure():
-    return Structure((0, 0, ['empty_[', u'+(x x EMPTY -){0', ']'], 0))
+    def get_filtered_msi(self):
+        if not self.msi: self.msi()
+        return filtered_msi(self.msi)
+
+# def get_empty_structure():
+#     return Structure((0, 0, ['empty_[', u'+(x x EMPTY -){0', ']'], 0))
 
 def estructuras_balanceadas(lista):
     w = 0

@@ -1,0 +1,20 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+import codecs
+from model.sentence import *
+from utils.logger_utils import *
+
+def extract_entities(input_sentence):
+    logger = get_logger('sentilecto')
+    logger.info(u"\n%s\ninput sentence: %s" % ("*"*80, input_sentence))
+
+    sentence = Sentence(input_sentence)
+    entities = sentence.entities
+    for i, entity in enumerate(entities, 1): logger.info(u"%d) entity: %s | head: %s | head msi: %s" % (i, entity, entity.head, entity.msi))
+
+    return entities
+
+
+if __name__ == '__main__':
+    sentence = codecs.open('sentence.txt', 'r', 'utf-8').read().strip()
+    entities = extract_entities(sentence)

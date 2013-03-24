@@ -3,7 +3,8 @@
 import re, sys, json
 from msi_data import *
 
-default_msi = {"person": 3, "number": u"S", "gender": u"M"}
+default_msi = {"person": 3, "number": u"singular", "gender": u"masculino"}
+empty_msi = {"person": None, "number": None, "gender": None}
 
 def tag2msi(tag):
     category = tag[0]
@@ -22,24 +23,23 @@ def tag2msi(tag):
     
     return result
 
-def tag2filtered_msi(tag):
-    msi = tag2msi(tag)
+def filtered_msi(msi):
 
     try:
         if msi["gender"]:
             gender = msi["gender"]
         else:
-            gender = u"M"
+            gender = u"masculino"
     except KeyError:
-        gender = u"M"
+        gender = u"masculino"
 
     try:
         if msi["number"]:
             number = msi["number"]
         else:
-            number = u"S"
+            number = u"singular"
     except KeyError:
-        number = u"S"
+        number = u"singular"
 
     try:
         if msi["person"]:

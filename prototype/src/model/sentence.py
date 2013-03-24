@@ -11,10 +11,10 @@ class Sentence(object):
 
         self.input_sentence = input_sentence
 
-        if analyzer != None:
+        if analyzer:
             self.analyzer = analyzer
         else:
-            FreelingAnalyzer()
+            self.analyzer = FreelingAnalyzer()
 
         # freeling bracketed parse -> structures
         freeling_output = self.analyzer.parse(self.input_sentence)
@@ -25,7 +25,9 @@ class Sentence(object):
         self.all = max(filter(lambda x: x.start == 0, self.flatstructs), key=lambda x: x.end)
 
         # assign children
-        for struct in self.flatstructs: struct.children = [s for s in self.flatstructs if struct.contains(s)]
+        for struct in self.flatstructs:
+            struct.children = [s for s in self.flatstructs if struct.contains(s)]
+            struct.refresh()
 
         self.verbs = filter(lambda e: e.label in ['verb', 'parti-flex'], self.flatstructs)
         self.main_verb = None
@@ -53,8 +55,7 @@ class Sentence(object):
         for group in [sns,grup_verb_inf, patons, ptonics, coor_ns]:
             if group: entities.extend(group)
 
-        self.entities = entities
-        return entities
+        return sorted(entities, key=lambda e: e.words[0].position) 
 
     def get_entity_at_level(self, n):
         return filter(lambda e: e.nivel == n, self.entities)
