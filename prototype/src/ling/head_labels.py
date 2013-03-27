@@ -15,6 +15,7 @@ head_labels = [
 'psubj-mp',
 'psubj-ms',
 'psubj-fs',
+'psubj-fp',
 'psubj-s',
 
 'j-ms',         
