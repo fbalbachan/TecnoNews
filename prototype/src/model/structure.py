@@ -91,13 +91,32 @@ class Structure(object):
         children_per_level = [(level, list(children)) for (level, children) in groupby(sorted(self.children, key=lambda c: c.nivel),
                                                                                        key=lambda c: c.nivel)]
 
+        head_candidates = []
         for (level, children) in children_per_level:
+            # print "all children", [(c.__str__(), c.msi) for c in children]
             for entity_head_label in entity_head_labels:
+                # print "revisando entity_head_label: ", entity_head_label
                 for child in children:
-                    if child.label == entity_head_label: return child
+                    # print "revisando child: ", child
+                    if (child.label == entity_head_label):
+
+                        # exceptional case
+                        # print "comparing", child.label, entity_head_label
+                        # print "child msi", child.msi
+                        if child.msi["number"] == u"invariable" or child.msi["gender"] == u"common":
+                            head_candidates.append(child); print "saved head candidate"
+                            # print "invariable or common:", child, child.msi
+                        else:
+                            # general case
+                            if child.label == entity_head_label: return child
+
+                # caso coor-n
+                # género (con la 1° involucrada o no)
+
 
         # found no head
-        return None # get_empty_structure()
+        if head_candidates: return head_candidates[0]
+        return None
 
     def get_full_msi(self):
         if not self.head: return empty_msi

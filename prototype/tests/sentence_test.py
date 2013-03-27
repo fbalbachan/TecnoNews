@@ -12,6 +12,9 @@ class TestSentence(unittest.TestCase):
         sentence2 = u'el Papa Francisco prepara su homilía.'
         self.sentence2 = Sentence(sentence2)
 
+        sentence3 = u'el perro y el gato pelearon.'
+        self.sentence3 = Sentence(sentence3)
+
     def test_get_entities(self):
         result = self.sentence1.entities
         self.assertEqual(result[0].__str__(), u'el cartero')
@@ -20,6 +23,11 @@ class TestSentence(unittest.TestCase):
         result = self.sentence2.entities
         self.assertEqual(result[0].__str__(), u'el Papa_Francisco')
         self.assertEqual(result[1].__str__(), u'su homilía')
+
+        result = self.sentence3.entities
+        self.assertEqual(result[0].__str__(), u'el perro y el gato')
+        self.assertEqual(result[1].__str__(), u'el perro')
+        self.assertEqual(result[2].__str__(), u'el gato')
 
     def test_get_entity_heads(self):
         result = self.sentence1.get_entities()

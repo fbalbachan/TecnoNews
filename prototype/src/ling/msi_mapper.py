@@ -3,7 +3,7 @@
 import re, sys, json
 from msi_data import *
 
-default_msi = {"person": 3, "number": u"singular", "gender": u"masculine"}
+default_msi = {"person": 3, "number": u"singular", "gender": u"neutral"}
 empty_msi = {"person": None, "number": None, "gender": None}
 
 def tag2fullmsi(tag):
@@ -29,9 +29,9 @@ def msi(a_msi):
         if a_msi["gender"]:
             gender = a_msi["gender"]
         else:
-            gender = u"masculine"
+            gender = u"neutral"
     except KeyError:
-        gender = u"masculine"
+        gender = u"neutral"
 
     try:
         if a_msi["number"]:

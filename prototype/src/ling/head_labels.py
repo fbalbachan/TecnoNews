@@ -42,4 +42,4 @@ head_labels = [
 'paton-p',
 ]
 
-grup_verb_inf_head_label = ['forma-inf']
+grup_verb_inf_head_labels = ['forma-inf']

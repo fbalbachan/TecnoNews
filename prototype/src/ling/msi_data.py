@@ -16,7 +16,7 @@ word_category = {"A": u"adjective",
 
 attribute_map = {"A": {1: ("type", {"Q": u"calificative", "O": u"ordinal", "0": None}),
                        2: ("grade", {"0" : None, "A": u"augmentative", "C": u"diminutive", "S": u"superlative"}),
-                       3: ("gender", {"M": u"masculine", "F": u"feminine", "C": u"common"}),
+                       3: ("gender", {"M": u"masculine", "F": u"feminine", "C": u"neutral"}),                   # u"common"
                        4: ("number", {"S": u"singular", "P": u"plural", "N": u"invariable"}),
                        5: ("function", {"0": None, "P": u"participle"})},
                  
@@ -24,26 +24,26 @@ attribute_map = {"A": {1: ("type", {"Q": u"calificative", "O": u"ordinal", "0": 
 
                  "D": {1: ("type", {"D": u"demostrative", "P": u"possesive", "T": "interrogative", "E": u"exclamative", "I": u"indefinite", "A": u"articulo"}),
                        2: ("person", {"1" : 1, "2": 2, "3": 3, "0": None}),
-                       3: ("gender", {"M": u"masculine", "F": u"feminine", "C": u"common", "N": u"neutral"}),
-                       4: ("number", {"S": u"singular", "P": u"plural", "N": u"invariable"}),
+                       3: ("gender", {"M": u"masculine", "F": u"feminine", "C": u"neutral", "N": u"neutral"}),  # u"common"
+                       4: ("number", {"S": u"singular", "P": u"plural", "N": u"singular"}),                     # u"invariable"
                        5: ("owner", {"S": u"singular", "P": u"plural", "0": None})},
 
                  "N": {1: ("type", {"C": u"common", "P": u"proper"}),
-                       2: ("gender", {"M": u"masculine", "F": u"feminine", "C": u"common", "0": None}),
-                       3: ("number", {"S": u"singular", "P": u"plural", "N": u"invariable", "0": None}),
+                       2: ("gender", {"M": u"masculine", "F": u"feminine", "C": u"common", "0": u"neutral"}), # <- 0: es NP
+                       3: ("number", {"S": u"singular", "P": u"plural", "N": u"invariable", "0": u"singular"}),
                        45: ("semantic_classification", {"SP": u"person", "G0": u"place", "O0": u"organization", "V0": u"other", "00": None}),
                        6: ("grade", {"A": u"augmentative", "D": u"diminutive", "0": None})},
 
                  "V": {1: ("type", {"M": u"main", "A": u"auxiliar", "S": u"semiauxiliar"}),
                        2: ("mode", {"I": u"indicative", "S": u"subjuntive", "M": u"imperative", "N": u"infinitive", "G": u"gerundio", "P": u"participio"}),
-                       3: ("time", {"P": u"presente", "I": u"imperfecto", "F": u"futuro", "S": u"pasado", "C": u"condicional", "0": None}),
+                       3: ("time", {"P": u"presente", "I": u"imperfecto", "F": u"futuro", "S": u"pasado", "C": u"condicional", "0": u"singular"}),     # None
                        4: ("person", {"1" : 1, "2": 2, "3": 3, "0": None}),
                        5: ("number", {"S": u"singular", "P": u"plural", "0": None}),
                        6: ("gender", {"M": u"masculine", "F": u"feminine", "0": None})},
 
                  "P": {1: ("type", {"P": u"personal", "D": u"demostrative", "X": u"possesive", "I": u"indefinite", "T": u"interrogative", "R": u"relative", "E": u"exclamative"}),
                        2: ("person", {"1" : 1, "2": 2, "3": 3, "0": None}),
-                       3: ("gender", {"M": u"masculine", "F": u"feminine", "C": u"common", "N": u"neutral"}),
+                       3: ("gender", {"M": u"masculine", "F": u"feminine", "C": u"neutral", "N": u"neutral"}), # u"common"
                        4: ("number", {"S": u"singular", "P": u"plural", "N": u"impersonal/invariable"}),
                        5: ("case", {"N": u"nominative", "A": u"acusative", "D": u"dative", "O": u"oblicuo", "0": None}),
                        6: ("owner", {"S": u"singular", "P": u"plural", "0": None}),
@@ -51,7 +51,7 @@ attribute_map = {"A": {1: ("type", {"Q": u"calificative", "O": u"ordinal", "0": 
 
                  "C": {1: ("type", {"C": u"coordinated", "S": u"subordinated"}),
                        2: ("person", {"1" : 1, "2": 2, "3": 3}),
-                       3: ("gender", {"M": u"masculine", "F": u"feminine", "C": u"common", "N": u"neutral"}),
+                       3: ("gender", {"M": u"masculine", "F": u"feminine", "C": u"neutral", "N": u"neutral"}), # u"common"
                        4: ("number", {"S": u"singular", "P": u"plural", "N": u"impersonal/invariable"}),
                        5: ("case", {"N": u"nominative", "A": u"acusative", "D": u"dative", "O": u"oblique"}),
                        6: ("owner", {"S": u"singular", "P": u"plural"}),
