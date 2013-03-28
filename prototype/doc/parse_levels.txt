@@ -1,0 +1,24 @@
+                                             |
+freeling output:                             | entinews output:
+                                             |  
++grup-verb_[                               0 |  0   grup-verb (0,19) el hombre pasea [0]
+  sn_[                                     1 |   
+    espec-ms_[                             2 |  1   sn (1,12) el hombre [1]              
+      +j-ms_[                              3 |  1   verb (13,15) pasea [1]               
+        +(el el DA0MS0 -)                  4 |   
+      ]					     |	2   espec-ms (2,6) el [2]		 
+    ]					     |	2   grup-nom-ms (7,11) hombre [2]	 
+    +grup-nom-ms_[			   2 |		
+      +n-ms_[				   3 |	3   j-ms (3,5) el [3]		
+	+(hombre hombre NCMS000 -)	   4 |	3   n-ms (8,10) hombre [3] 
+      ]                                      |
+    ]                                        |
+  ]                                          |
+  +verb_[                                  1 |
+    +(pasea pasear VMIP3S0 -)              2 | 
+  ]                                          | 
+  F-term_[                                 1 |
+    +(. . Fp -)                            2 |
+  ]                                          |
+]                                            |   
+

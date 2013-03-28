@@ -21,19 +21,20 @@ class Sentence(object):
         if not freeling_output: return
         self.flatstructs = filter(lambda x: x.label != 'f-term', [Structure(e) for e in list(estructuras_balanceadas(freeling_output))])
 
-        # all-spanning tree -> struct for the whole sentence
-        self.all = max(filter(lambda x: x.start == 0, self.flatstructs), key=lambda x: x.end)
-
         # assign children
         for struct in self.flatstructs:
             struct.children = [s for s in self.flatstructs if struct.contains(s)]
             struct.refresh()
 
+        # all-spanning tree -> struct for the whole sentence
+        self.all = None
+        try: self.all = max(filter(lambda x: x.start == 0, self.flatstructs), key=lambda x: x.end)
+        except Exception: logger.info(u"cannot find all-encompassing structure")
+
         self.verbs = filter(lambda e: e.label in ['verb', 'parti-flex'], self.flatstructs)
         self.main_verb = None
 
-        # grup_verbs       = self.by_label('grup-verb')
-        # verb_pass        = self.by_label('verb-pass')
+        self.leaves = [s for s in self.flatstructs if s.is_leaf]
 
         self.entities = self.get_entities()
 
@@ -65,5 +66,7 @@ class Sentence(object):
         return filter(lambda e: (e.words.pos - verb_position) < distance)
 
     # sentence API:
-    # respecto del verbo: def get_rightmost_entity(), def get_leftmost_entity()
+
+    # def get_rightmost_entity(), def get_leftmost_entity() # respecto del verbo
+
     # def get_svo()

@@ -8,7 +8,7 @@ from ling.head_labels import *
 from utils.logger_utils import *
 
 class Structure(object):
-    def __init__(self, (start, end, struct, nivel)):
+    def __init__(self, (start, end, struct, level)):
         self.logger = get_logger('entinews')
 
         self.words = [Word(match.strip()) for match in re.findall(r'.\(\w+ \w+ [A-Z0-9]+ -\){-?\d+', ' '.join(struct), re.U)]
@@ -16,18 +16,19 @@ class Structure(object):
         self.start = start
         self.end = end
         self.struct = struct
-        self.nivel = nivel
+        self.level = level
         self.head = None
         self.full_msi = None
         self.msi = None
         self.children = []
+        self.is_leaf = False
 
     def __repr__(self):
         return u"%s (%d,%d) %s [%d]" % (self.label,
                                         self.start,
                                         self.end,
                                         ' '.join([w.form for w in self.words]),
-                                        self.nivel)
+                                        self.level)
 
     def __str__(self):
         return ' '.join([x for x in self.forms()])
@@ -83,40 +84,63 @@ class Structure(object):
         self.head = self.get_head()
         self.full_msi = self.get_full_msi()
         self.msi = self.get_msi()
+        if not self.children: self.is_leaf = True
 
     def get_head(self):
         entity_head_labels = head_labels
         if self.label == 'grup-verb-inf': entity_head_labels += grup_verb_inf_head_labels
 
-        children_per_level = [(level, list(children)) for (level, children) in groupby(sorted(self.children, key=lambda c: c.nivel),
-                                                                                       key=lambda c: c.nivel)]
+        children_per_level = [(level, list(children)) for (level, children) in groupby(sorted(self.children, key=lambda c: c.level),
+                                                                                       key=lambda c: c.level)]
+        
+        leaves_per_level = [(level, filter(lambda child: child.is_leaf, children)) for (level, children) in children_per_level]
+        # print "leaves_per_level", leaves_per_level
 
         head_candidates = []
-        for (level, children) in children_per_level:
-            # print "all children", [(c.__str__(), c.msi) for c in children]
+
+        # for (level, children) in children_per_level:
+        #     for entity_head_label in entity_head_labels:
+        #         # print "revisando entity_head_label: ", entity_head_label
+        #         for child in children:
+        #             # print "revisando child: ", child, child.label, child.level
+        #             if (child.label == entity_head_label):
+
+        #                 # exceptional case
+        #                 # print "comparing", child.label, entity_head_label
+        #                 # print "child msi", child.msi
+        #                 if child.msi["number"] == u"invariable" or child.msi["gender"] == u"common":
+        #                     head_candidates.append(child); print "saved head candidate"
+        #                     print "invariable or common:", child, child.msi
+        #                 else:
+        #                     # general case
+        #                     if child.label == entity_head_label: return child
+
+        for (level, leaves) in leaves_per_level:
             for entity_head_label in entity_head_labels:
                 # print "revisando entity_head_label: ", entity_head_label
-                for child in children:
-                    # print "revisando child: ", child
-                    if (child.label == entity_head_label):
+                for leaf in leaves:
+                    print entity_head_label, " comparando con leaf: ", leaf.__repr__(), leaf.label, leaf.level
+                    if (leaf.label == entity_head_label):
+                        print "label match", leaf.label, leaf.msi, entity_head_label
 
                         # exceptional case
-                        # print "comparing", child.label, entity_head_label
-                        # print "child msi", child.msi
-                        if child.msi["number"] == u"invariable" or child.msi["gender"] == u"common":
-                            head_candidates.append(child); print "saved head candidate"
-                            # print "invariable or common:", child, child.msi
+                        if leaf.msi["number"] == u"invariable" or leaf.msi["gender"] == u"common":
+                            head_candidates.append(leaf); print "saved head candidate"
+                            print "invariable or common:", leaf, leaf.msi
                         else:
                             # general case
-                            if child.label == entity_head_label: return child
+                            print "not invariable nor common:", leaf, leaf.msi
+                            return leaf
 
                 # caso coor-n
                 # género (con la 1° involucrada o no)
 
-
-        # found no head
-        if head_candidates: return head_candidates[0]
-        return None
+        if head_candidates:
+            # found exceptional head
+            return head_candidates[0]
+        else:
+            # there is no head
+            return None
 
     def get_full_msi(self):
         if not self.head: return empty_msi
@@ -132,7 +156,7 @@ class Structure(object):
 def estructuras_balanceadas(lista):
     w = 0
     out = []
-    nivel = 0
+    level = 0
     # set position for each word
     for x in lista:
         if x.startswith('+(') or x.startswith('('):
@@ -146,8 +170,8 @@ def estructuras_balanceadas(lista):
     for i, x in enumerate(lista):
         if x.endswith(']') and stack:
             start = stack.pop()
-            nivel -= 1
-            yield (start, i, lista[start:i+1], nivel) # (principio, fin, estructura, nivel)
+            level -= 1
+            yield (start, i, lista[start:i+1], level) # (start, end, structure, level)
         elif x.endswith('_['):
             stack.append(i)
-            nivel += 1
+            level += 1
