@@ -48,45 +48,20 @@ class Structure(object):
     def is_contained_by_any(self, iterable):
         return any(i.contains(self) for i in iterable)
 
-    def quitar(self, quitables):
-        if quitables:
-            container = copy.deepcopy(self)
-            quitables = filter(lambda x: container.contains(x), quitables)
-            if quitables:
-                ranges_quitables = sorted([(e.start, e.end) for e in quitables], key=lambda (start,end): start)
-                removable_words = [w.position for quitable in quitables for w in quitable.words]
-
-                # children not matching any quitables
-                valid_children = [c for c in container.children for r in ranges_quitables if not(any([x for x in range(c.start, c.end+1) if x in range(r[0], r[1]+1)]))]
-
-                # children containing quitables -> remove their matching children
-                partially_valid_children = [c for c in container.children if c.contains_any(quitables)]
-                for c in partially_valid_children:
-                    c.children = filter(lambda x: not((x.start, x.end) in ranges_quitables) and not(x.is_contained_by_any(quitables)), c.children)
-                    c.words = [w for w in c.words if w.position not in removable_words]
-                    valid_children.append(c)
-                
-                container.children = set(valid_children)
-                container.words = [w for w in container.words if w.position not in removable_words]
-
-                if container.children:
-                    nuevo_start = sorted([e.start for e in container.children])[0]
-                    nuevo_end = sorted([e.end for e in container.children]).pop()
-                    container.start = nuevo_start
-                    container.end = nuevo_end
-            self.refresh()
-            return container
-        else:
-            self.refresh()
-            return self
-
-    def refresh(self):
-        self.head = self.get_head()
-        self.full_msi = self.get_full_msi()
-        self.msi = self.get_msi()
+    def set_leaf_status(self):
         if not self.children: self.is_leaf = True
 
+    def assign_head(self):
+        self.head = self.get_head()
+        if self.head:
+            self.msi = self.head.msi
+            self.full_msi = self.head.full_msi
+        else:
+            self.msi = empty_msi
+
     def get_head(self):
+        if self.is_leaf: return self
+
         entity_head_labels = head_labels
         if self.label == 'grup-verb-inf': entity_head_labels += grup_verb_inf_head_labels
 
@@ -94,42 +69,21 @@ class Structure(object):
                                                                                        key=lambda c: c.level)]
         
         leaves_per_level = [(level, filter(lambda child: child.is_leaf, children)) for (level, children) in children_per_level]
-        # print "leaves_per_level", leaves_per_level
+        # print("leaves_per_level", leaves_per_level)
 
         head_candidates = []
 
-        # for (level, children) in children_per_level:
-        #     for entity_head_label in entity_head_labels:
-        #         # print "revisando entity_head_label: ", entity_head_label
-        #         for child in children:
-        #             # print "revisando child: ", child, child.label, child.level
-        #             if (child.label == entity_head_label):
-
-        #                 # exceptional case
-        #                 # print "comparing", child.label, entity_head_label
-        #                 # print "child msi", child.msi
-        #                 if child.msi["number"] == u"invariable" or child.msi["gender"] == u"common":
-        #                     head_candidates.append(child); print "saved head candidate"
-        #                     print "invariable or common:", child, child.msi
-        #                 else:
-        #                     # general case
-        #                     if child.label == entity_head_label: return child
-
         for (level, leaves) in leaves_per_level:
             for entity_head_label in entity_head_labels:
-                # print "revisando entity_head_label: ", entity_head_label
                 for leaf in leaves:
-                    print entity_head_label, " comparando con leaf: ", leaf.__repr__(), leaf.label, leaf.level
                     if (leaf.label == entity_head_label):
-                        print "label match", leaf.label, leaf.msi, entity_head_label
+                        # print(leaf, leaf.words[0].tag, "label match", leaf.label, leaf.msi, leaf.full_msi, entity_head_label)
 
                         # exceptional case
                         if leaf.msi["number"] == u"invariable" or leaf.msi["gender"] == u"common":
-                            head_candidates.append(leaf); print "saved head candidate"
-                            print "invariable or common:", leaf, leaf.msi
+                            head_candidates.append(leaf); # print("saved head candidate (invariable or common):", leaf, leaf.msi)
+                        # general case
                         else:
-                            # general case
-                            print "not invariable nor common:", leaf, leaf.msi
                             return leaf
 
                 # caso coor-n

@@ -3,6 +3,7 @@
 from structure import *
 from utils.logger_utils import *
 from utils.freeling_utils import FreelingAnalyzer
+from ling.msi_mapper import *
 
 class Sentence(object):
 
@@ -24,18 +25,28 @@ class Sentence(object):
         # assign children
         for struct in self.flatstructs:
             struct.children = [s for s in self.flatstructs if struct.contains(s)]
-            struct.refresh()
 
+        # is_leaf?
+        for struct in self.flatstructs:
+            struct.set_leaf_status()
+
+        # assign MSI to all leaves
+        self.leaves = [s for s in self.flatstructs if s.is_leaf]
+        for leaf in self.leaves:
+            leaf.full_msi = tag2fullmsi(leaf.words[0].tag)
+            leaf.msi = msi(leaf.full_msi)
+
+        for struct in self.flatstructs:
+            struct.assign_head()
+        
         # all-spanning tree -> struct for the whole sentence
-        self.all = None
-        try: self.all = max(filter(lambda x: x.start == 0, self.flatstructs), key=lambda x: x.end)
-        except Exception: logger.info(u"cannot find all-encompassing structure")
+        # self.all = None
+        # try: self.all = max(filter(lambda x: x.start == 0, self.flatstructs), key=lambda x: x.end)
+        # except Exception: logger.info(u"cannot find all-encompassing structure")
 
         self.verbs = filter(lambda e: e.label in ['verb', 'parti-flex'], self.flatstructs)
         self.main_verb = None
-
-        self.leaves = [s for s in self.flatstructs if s.is_leaf]
-
+            
         self.entities = self.get_entities()
 
     def __str__(self):
