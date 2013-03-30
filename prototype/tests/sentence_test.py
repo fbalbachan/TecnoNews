@@ -15,6 +15,9 @@ class TestSentence(unittest.TestCase):
         sentence3 = u'el perro y el gato pelearon.'
         self.sentence3 = Sentence(sentence3)
 
+        sentence4 = u'Fulano es malo.'
+        self.sentence4 = Sentence(sentence4)
+
     def test_get_entities(self):
         result = self.sentence1.entities
         self.assertEqual(result[0].__str__(), u'el cartero')
@@ -64,6 +67,10 @@ class TestSentence(unittest.TestCase):
         self.assertEqual(result[1].msi, {'person': 3,
                                          'number': u'singular',
                                          'gender': u'feminine'})
+
+    def test_get_equative_entities(self):
+        result = self.sentence4.equative_entities
+        self.assertEqual(result[0].__str__(), u'malo')
 
 
 if __name__ == '__main__':

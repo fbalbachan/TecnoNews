@@ -25,29 +25,14 @@ def tag2fullmsi(tag):
 
 def msi(a_msi):
 
-    try:
-        if a_msi["gender"]:
-            gender = a_msi["gender"]
-        else:
-            gender = u"neutral"
-    except KeyError:
-        gender = u"neutral"
+    try: gender = a_msi["gender"] if a_msi["gender"] else u"neutral"
+    except KeyError: gender = u"neutral"
 
-    try:
-        if a_msi["number"]:
-            number = a_msi["number"]
-        else:
-            number = u"singular"
-    except KeyError:
-        number = u"singular"
+    try: number = a_msi["number"] if a_msi["number"] else u"singular"
+    except KeyError: number = u"singular"
 
-    try:
-        if a_msi["person"]:
-            person = a_msi["person"]
-        else:
-            person = 3
-    except KeyError:
-        person = 3
+    try: person = a_msi["person"] if a_msi["person"] else 3
+    except KeyError: person = 3
 
     result = {"person": person, "gender": gender, "number": number}
     return result

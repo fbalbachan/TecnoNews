@@ -19,7 +19,7 @@ class Structure(object):
         self.level = level
         self.head = None
         self.full_msi = None
-        self.msi = None
+        self.msi = empty_msi
         self.children = []
         self.is_leaf = False
 
@@ -51,16 +51,8 @@ class Structure(object):
     def set_leaf_status(self):
         if not self.children: self.is_leaf = True
 
-    def assign_head(self):
-        self.head = self.get_head()
-        if self.head:
-            self.msi = self.head.msi
-            self.full_msi = self.head.full_msi
-        else:
-            self.msi = empty_msi
-
-    def get_head(self):
-        if self.is_leaf: return self
+    def assign_msi(self):
+        if self.is_leaf: return
 
         entity_head_labels = head_labels
         if self.label == 'grup-verb-inf': entity_head_labels += grup_verb_inf_head_labels
@@ -71,7 +63,42 @@ class Structure(object):
         leaves_per_level = [(level, filter(lambda child: child.is_leaf, children)) for (level, children) in children_per_level]
         # print("leaves_per_level", leaves_per_level)
 
+        all_leaves = []
+        for (level, leaves) in leaves_per_level:
+            all_leaves += filter(lambda leaf: leaf.words[0].tag != "CC", leaves)
+
         head_candidates = []
+
+        # exceptional caso: coor-n                         TODO género (con la 1° involucrada o no)
+        if self.label == 'coor-n':
+            # son todas feminine => feminine; else masculine
+
+            # set number
+            self.msi['number'] = u'plural'
+
+            # set gender
+            all_feminine = all([leaf.msi["gender"] == u"feminine" for leaf in all_leaves])
+            any_masculine = any([leaf.msi["gender"] == u"masculine" for leaf in all_leaves])
+            print all_feminine
+            if any_masculine:
+                self.msi['gender'] = u'masculine'
+            if all_feminine:
+                self.msi['gender'] = u'feminine'
+            else:
+                self.msi['gender'] = u'neutral'
+            print self.msi
+
+            # set person
+            any_1_person = any([leaf.msi["person"] == 1 for leaf in all_leaves])
+            any_2_person = any([leaf.msi["person"] == 2 for leaf in all_leaves])
+            if any_1_person:
+                self.msi['person'] = 1
+            elif any_2_person:
+                self.msi['person'] = 2
+            else:
+                self.msi['person'] = 3
+
+            return
 
         for (level, leaves) in leaves_per_level:
             for entity_head_label in entity_head_labels:
@@ -82,26 +109,21 @@ class Structure(object):
                         # exceptional case
                         if leaf.msi["number"] == u"invariable" or leaf.msi["gender"] == u"common":
                             head_candidates.append(leaf); # print("saved head candidate (invariable or common):", leaf, leaf.msi)
+
                         # general case
                         else:
-                            return leaf
+                            self.msi = leaf.msi
 
-                # caso coor-n
-                # género (con la 1° involucrada o no)
 
         if head_candidates:
             # found exceptional head
-            return head_candidates[0]
+            self.msi = head_candidates[0].msi
         else:
             # there is no head
-            return None
-
-    def get_full_msi(self):
-        if not self.head: return empty_msi
-        return tag2fullmsi(self.head.words[0].tag)
+            return
 
     def get_msi(self):
-        if not self.full_msi: self.get_full_msi()
+        # if not self.full_msi: self.full_msi = tag2fullmsi(self.words[0].tag)
         return msi(self.full_msi)
 
 # def get_empty_structure():

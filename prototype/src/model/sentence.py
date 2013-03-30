@@ -34,10 +34,11 @@ class Sentence(object):
         self.leaves = [s for s in self.flatstructs if s.is_leaf]
         for leaf in self.leaves:
             leaf.full_msi = tag2fullmsi(leaf.words[0].tag)
-            leaf.msi = msi(leaf.full_msi)
+            # leaf.msi = msi(leaf.full_msi)
+            leaf.msi = leaf.get_msi()
 
         for struct in self.flatstructs:
-            struct.assign_head()
+            struct.assign_msi()
         
         # all-spanning tree -> struct for the whole sentence
         # self.all = None
@@ -48,6 +49,7 @@ class Sentence(object):
         self.main_verb = None
             
         self.entities = self.get_entities()
+        self.equative_entities  = self.get_equative_entities()
 
     def __str__(self):
         return ' | '.join(sorted([e.__str__() for e in self.flatstructs]))
@@ -60,7 +62,7 @@ class Sentence(object):
         grup_verb_inf = self.by_label('grup-verb-inf') # sólo es entity si está a nivel 1
         patons        = self.by_label('paton')
         ptonics       = self.by_label('ptonic')
-        coor_ns       = self.by_label('coor_n')
+        coor_ns       = self.by_label('coor-n')
 
         entities = []
 
@@ -69,12 +71,17 @@ class Sentence(object):
 
         return sorted(entities, key=lambda e: e.words[0].position) 
 
-    def get_entity_at_level(self, n):
-        return filter(lambda e: e.nivel == n, self.entities)
+    def get_equative_entities(self):
+        s_adjs       = self.by_label('s-adj')
 
-    def get_entities_at_distance(self, distance, verb_position=None):
-        if verb_position == None: verb_position = self.main_verb.words[0].position
-        return filter(lambda e: (e.words.pos - verb_position) < distance)
+        return sorted(s_adjs, key=lambda e: e.words[0].position) 
+
+    def get_entity_at_level(self, n):
+        return filter(lambda e: e.level == n, self.entities)
+
+    # def get_entities_at_distance(self, distance, verb_position=None):
+    #     if verb_position == None: verb_position = self.main_verb.words[0].position
+    #     return filter(lambda e: (e.words.pos - verb_position) < distance)
 
     # sentence API:
 
