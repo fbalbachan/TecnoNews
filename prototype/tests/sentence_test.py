@@ -28,45 +28,25 @@ class TestSentence(unittest.TestCase):
         self.assertEqual(result[1].__str__(), u'su homilía')
 
         result = self.sentence3.entities
-        self.assertEqual(result[0].__str__(), u'el perro y el gato')
-        self.assertEqual(result[1].__str__(), u'el perro')
+        self.assertEqual(result[0].__str__(), u'el perro')
+        self.assertEqual(result[1].__str__(), u'el perro y el gato')
         self.assertEqual(result[2].__str__(), u'el gato')
-
-    def test_get_entity_heads(self):
-        result = self.sentence1.get_entities()
-        self.assertEqual(result[0].head.__repr__(), u'n-ms (8,10) cartero [3]')
-        self.assertEqual(result[0].head.__str__(), u'cartero')
-        self.assertEqual(result[1].head.__repr__(), u'n-fp (23,25) cartas [3]')
-        self.assertEqual(result[1].head.__str__(), u'cartas')
-
-        result = self.sentence2.get_entities()
-        self.assertEqual(result[0].head.__repr__(), u'w-ms (8,10) Papa_Francisco [3]')
-        self.assertEqual(result[0].head.__str__(), u'Papa_Francisco')
-        self.assertEqual(result[1].head.__repr__(), u'n-fs (23,25) homilía [3]')
-        self.assertEqual(result[1].head.__str__(), u'homilía')
 
     def test_get_entity_head_MSIs(self):
         result = self.sentence1.get_entities()
-        self.assertEqual(result[0].full_msi, {'category': u'noun',
-                                              'semantic_classification': None,
-                                              'grade': None,
-                                              'gender': u'masculine',
-                                              'number': u'singular',
-                                              'type': u'common'})
         self.assertEqual(result[1].msi, {'person': 3,
                                          'number': u'plural',
                                          'gender': u'feminine'})
 
         result = self.sentence2.get_entities()
-        self.assertEqual(result[0].full_msi, {'category': u'noun',
-                                              'semantic_classification': None,
-                                              'grade': None,
-                                              'gender': None,
-                                              'number': None,
-                                              'type': u'proper'})
         self.assertEqual(result[1].msi, {'person': 3,
                                          'number': u'singular',
                                          'gender': u'feminine'})
+
+        result = self.sentence3.get_entities()
+        self.assertEqual(result[1].msi, {'person': 3,
+                                         'number': u'plural',
+                                         'gender': u'masculine'})
 
     def test_get_equative_entities(self):
         result = self.sentence4.equative_entities

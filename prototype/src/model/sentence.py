@@ -27,27 +27,14 @@ class Sentence(object):
             struct.children = [s for s in self.flatstructs if struct.contains(s)]
 
         # is_leaf?
-        for struct in self.flatstructs:
-            struct.set_leaf_status()
+        for struct in self.flatstructs: struct.set_leaf_status()
 
         # assign MSI to all leaves
         self.leaves = [s for s in self.flatstructs if s.is_leaf]
         for leaf in self.leaves:
             leaf.full_msi = tag2fullmsi(leaf.words[0].tag)
-            # leaf.msi = msi(leaf.full_msi)
-            leaf.msi = leaf.get_msi()
+            leaf.msi      = msi(leaf.full_msi)
 
-        for struct in self.flatstructs:
-            struct.assign_msi()
-        
-        # all-spanning tree -> struct for the whole sentence
-        # self.all = None
-        # try: self.all = max(filter(lambda x: x.start == 0, self.flatstructs), key=lambda x: x.end)
-        # except Exception: logger.info(u"cannot find all-encompassing structure")
-
-        self.verbs = filter(lambda e: e.label in ['verb', 'parti-flex'], self.flatstructs)
-        self.main_verb = None
-            
         self.entities = self.get_entities()
         self.equative_entities  = self.get_equative_entities()
 
@@ -58,22 +45,23 @@ class Sentence(object):
         return filter(lambda e: e.label == label, self.flatstructs)
 
     def get_entities(self):
-        sns           = self.by_label('sn')
-        grup_verb_inf = self.by_label('grup-verb-inf') # sólo es entity si está a nivel 1
-        patons        = self.by_label('paton')
-        ptonics       = self.by_label('ptonic')
-        coor_ns       = self.by_label('coor-n')
+        sns            = self.by_label('sn')
+        grup_verb_infs = self.by_label('grup-verb-inf') # sólo es entity si está a nivel 1
+        patons         = self.by_label('paton')
+        ptonics        = self.by_label('ptonic')
+        coor_ns        = self.by_label('coor-n')
 
         entities = []
-
-        for group in [sns,grup_verb_inf, patons, ptonics, coor_ns]:
+        for group in [sns, patons, ptonics, coor_ns]:
             if group: entities.extend(group)
+        if grup_verb_infs: entities.extend(filter(lambda g: g.level == 1, grup_verb_infs))
+            
+        for entity in entities: entity.assign_msi()
 
         return sorted(entities, key=lambda e: e.words[0].position) 
 
     def get_equative_entities(self):
         s_adjs       = self.by_label('s-adj')
-
         return sorted(s_adjs, key=lambda e: e.words[0].position) 
 
     def get_entity_at_level(self, n):
