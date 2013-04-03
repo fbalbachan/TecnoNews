@@ -16,8 +16,11 @@ class FreelingAnalyzer(object):
 
     def parse(self, sentence):
         command = u'echo "%s." | ' + self.client + ' ' + self.host + ':' + self.parser_port
-        output = [s.decode('utf-8').strip() for s in os.popen((command % sentence).encode('utf-8')).read().split('\n')]
-        return output
+        pretty_output = [s.decode('utf-8') for s in os.popen((command % sentence).encode('utf-8')).read().split('\n')]
+        print pretty_output
+        output = [s.strip() for s in os.popen((command % sentence).encode('utf-8')).read().split('\n')]
+        print output
+        return output, pretty_output
 
     def tag(self, sentence):
         command = u'echo "%s." | ' + self.client + ' ' + self.host + ':' + self.tagger_port

@@ -18,9 +18,9 @@ class Sentence(object):
             self.analyzer = FreelingAnalyzer()
 
         # freeling bracketed parse -> structures
-        freeling_output = self.analyzer.parse(self.input_sentence)
-        if not freeling_output: return
-        self.flatstructs = filter(lambda x: x.label != 'f-term', [Structure(e) for e in list(estructuras_balanceadas(freeling_output))])
+        self.freeling_output, self.pretty_freeling_output = self.analyzer.parse(self.input_sentence)
+        if not self.freeling_output: return
+        self.flatstructs = filter(lambda x: x.label != 'f-term', [Structure(e) for e in list(estructuras_balanceadas(self.freeling_output))])
 
         # assign children
         for struct in self.flatstructs:
@@ -38,6 +38,12 @@ class Sentence(object):
         self.entities = self.get_entities()
         self.equative_entities  = self.get_equative_entities()
 
+        self.is_active = len(self.by_label('verb-pass')) == 0 and len(self.by_label('grup-verb')) > 0
+        self.is_passive = len(self.by_label('verb-pass')) > 0
+        self.unimember = not(self.is_active) and not(self.is_passive)
+
+        self.verbs = self.by_label('verb')
+
     def __str__(self):
         return ' | '.join(sorted([e.__str__() for e in self.flatstructs]))
 
@@ -47,7 +53,7 @@ class Sentence(object):
     def get_entities(self):
         sns            = self.by_label('sn')
         grup_verb_infs = self.by_label('grup-verb-inf') # sólo es entity si está a nivel 1
-        patons         = self.by_label('paton')
+        patons         = self.by_label('patons')
         ptonics        = self.by_label('ptonic')
         coor_ns        = self.by_label('coor-n')
 

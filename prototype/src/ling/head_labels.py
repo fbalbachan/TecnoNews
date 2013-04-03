@@ -40,6 +40,9 @@ head_labels = [
 
 'paton-s',
 'paton-p',
+
+'pinterrog-s',
+'pinterrog-p',
 ]
 
 grup_verb_inf_head_labels = ['forma-inf']
