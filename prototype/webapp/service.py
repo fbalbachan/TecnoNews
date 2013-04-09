@@ -13,9 +13,9 @@ import entinews
 logger    = get_logger('webapp/service')
 
 urls = (
-   '/favicon.ico',   'favicon',
+   '/favicon.ico',                     'favicon',
+   '/entinews/sentence/tree/(.+)',     'EntiNewsParseTree',
    '/entinews/sentence/entities/(.+)', 'EntiNews',
-   '/entinews/view/sentence/entities/(.+)', 'EntiNewsPretty'
 )
 
 app = web.application(urls, globals())
@@ -37,21 +37,21 @@ class EntiNews:
       result["entities"] = []
 
       for entity in entities:
-         logger.info(u"%s | %s | %s" % (entity, entity.head, entity.msi))
-         result["entities"].append({"entity": entity.__str__(),
-                                    "msi": entity.msi})
+         result["entities"].append({"entity": entity.__str__(), "msi": entity.msi})
          logger.info(u"result: %s" % result)
+
       return json.dumps(result, ensure_ascii=False).encode('utf-8')
 
-class EntiNewsPretty:
+class EntiNewsParseTree:
    def GET(self, input_sentence):
       logger.info('.'*80); logger.info("input sentence: %s" % input_sentence)
 
       sentence = entinews.parse_sentence(input_sentence)
       entities = entinews.extract_entities(sentence)
-      freeling output = sentence.pretty_freeling_output
+      parse_tree = sentence.pretty_freeling_output
 
-      return web.template.render('views').entities(entities, freeling_output)
+      return web.template.render('templates').entities(input_sentence, entities, parse_tree)
+      # return parse_tree
 
 if __name__ == "__main__":
     print "launching..."

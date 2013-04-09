@@ -15,14 +15,14 @@ class FreelingAnalyzer(object):
         self.tagger_port = freeling_tagger_port
 
     def parse(self, sentence):
+        if type(sentence) != unicode: sentence = sentence.decode('utf-8')
         command = u'echo "%s." | ' + self.client + ' ' + self.host + ':' + self.parser_port
-        pretty_output = [s.decode('utf-8') for s in os.popen((command % sentence).encode('utf-8')).read().split('\n')]
-        print pretty_output
-        output = [s.strip() for s in os.popen((command % sentence).encode('utf-8')).read().split('\n')]
-        print output
+        pretty_output = os.popen((command % sentence).encode('utf-8')).read().decode('utf-8')
+        output = [s.strip().decode('utf-8') for s in os.popen((command % sentence).encode('utf-8')).read().split('\n')]
         return output, pretty_output
 
     def tag(self, sentence):
+        if type(sentence) != unicode: sentence = sentence.decode('utf-8')
         command = u'echo "%s." | ' + self.client + ' ' + self.host + ':' + self.tagger_port
-        output = [s.decode('utf-8').strip() for s in os.popen((command % sentence).encode('utf-8')).read().split('\n')]
+        output = [s.strip().decode('utf-8') for s in os.popen((command % sentence).encode('utf-8')).read().split('\n')]
         return output
