@@ -4,6 +4,7 @@ from structure import *
 from utils.logger_utils import *
 from utils.freeling_utils import FreelingAnalyzer
 from ling.msi_mapper import *
+from ling.verb_categories import *
 
 class Sentence(object):
 
@@ -38,12 +39,20 @@ class Sentence(object):
         self.entities = self.get_entities()
         self.equative_entities  = self.get_equative_entities()
 
-        self.is_active = len(self.by_label('verb-pass')) == 0 and len(self.by_label('grup-verb')) > 0
-        self.is_passive = len(self.by_label('verb-pass')) > 0
-        self.unimember = not(self.is_active) and not(self.is_passive)
-
+        # set verbs and their lemma & MSI
         self.verbs = self.by_label('verb')
+        for verb in self.verbs: verb.assign_verb_msi()
+        for verb in self.verbs: verb.assign_verb_lemma()
 
+        # set [active|passive] voice
+        self.grup_verbs = self.by_label('grup-verb')
+        self.verb_passs = self.by_label('verb-pass')
+
+        self.is_active = self.verbs and self.grup_verbs and not(self.verb_passs) and any([gv.level == 0 for gv in self.grup_verbs]) and all([not v.is_impersonal_verb() for v in self.verbs])
+        self.is_passive = len(self.verb_passs) > 0
+        self.is_unimember = not(self.is_active) and not(self.is_passive)
+
+                                                                                                                             
     def __str__(self):
         return ' | '.join(sorted([e.__str__() for e in self.flatstructs]))
 
@@ -62,7 +71,7 @@ class Sentence(object):
             if group: entities.extend(group)
         if grup_verb_infs: entities.extend(filter(lambda g: g.level == 1, grup_verb_infs))
             
-        for entity in entities: entity.assign_msi()
+        for entity in entities: entity.assign_noun_msi()
 
         return sorted(entities, key=lambda e: e.words[0].position) 
 

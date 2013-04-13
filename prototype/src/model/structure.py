@@ -5,6 +5,7 @@ from word import *
 from itertools import izip, groupby
 from ling.msi_mapper import *
 from ling.head_labels import *
+from ling.verb_categories import *
 from utils.logger_utils import *
 
 class Structure(object):
@@ -51,7 +52,18 @@ class Structure(object):
     def set_leaf_status(self):
         if not self.children: self.is_leaf = True
 
-    def assign_msi(self):
+    def is_impersonal_verb(self):
+        return self.lemma in impersonal_verbs
+
+    def assign_verb_msi(self):
+        if self.is_leaf: return
+        
+        self.msi = self.children[0].msi    # verb's msi = first child's msi
+
+    def assign_verb_lemma(self):
+        self.lemma = self.words[-1].lemma  # verb's lemma = last child's lemma
+
+    def assign_noun_msi(self):
         if self.is_leaf: return
 
         if self.label == 'grup-verb-inf': head_labels.insert(0, grup_verb_inf_head_labels[0])
