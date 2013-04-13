@@ -39,20 +39,29 @@ class Sentence(object):
         self.entities = self.get_entities()
         self.equative_entities  = self.get_equative_entities()
 
-        # set verbs and their lemma & MSI
-        self.verbs = self.by_label('verb')
-        for verb in self.verbs: verb.assign_verb_msi()
-        for verb in self.verbs: verb.assign_verb_lemma()
+        self.grup_verbs = self.by_label('grup-verb')
+
+        # set verb and its lemma & MSI
+        try:
+            self.verb = self.by_label('verb')[0]
+            self.verb.assign_verb_msi()
+            self.verb.assign_verb_lemma()
+        except IndexError:
+            self.verb = None
+
+        # set verb_pass and its lemma & MSI
+        try:
+            self.verb_pass = self.by_label('verb-pass')[0]
+            self.verb_pass.assign_verb_pass_msi()
+            self.verb_pass.assign_verb_lemma()
+        except IndexError:
+            self.verb_pass = None
 
         # set [active|passive] voice
-        self.grup_verbs = self.by_label('grup-verb')
-        self.verb_passs = self.by_label('verb-pass')
-
-        self.is_active = self.verbs and self.grup_verbs and not(self.verb_passs) and any([gv.level == 0 for gv in self.grup_verbs]) and all([not v.is_impersonal_verb() for v in self.verbs])
-        self.is_passive = len(self.verb_passs) > 0
+        self.is_active = self.verb and not(self.verb.is_impersonal_verb()) and not(self.verb_pass) and any([gv.level == 0 for gv in self.grup_verbs]) 
+        self.is_passive = self.verb_pass != None
         self.is_unimember = not(self.is_active) and not(self.is_passive)
 
-                                                                                                                             
     def __str__(self):
         return ' | '.join(sorted([e.__str__() for e in self.flatstructs]))
 
