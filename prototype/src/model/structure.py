@@ -23,6 +23,8 @@ class Structure(object):
         self.msi = {}
         self.children = []
         self.is_leaf = False
+        self.lemma = None
+        self.position = None
 
     def __repr__(self):
         return u"%s (%d,%d) %s [%d]" % (self.label,
@@ -56,28 +58,31 @@ class Structure(object):
         return self.lemma in impersonal_verbs
 
     def is_existential_verb(self):
-        return self.lemma == u'haber'
+        return self.lemma == existential_verb
 
-    def assign_verb_msi(self):
-        if self.is_leaf: return
-        self.msi = self.children[0].msi
-        if self.is_impersonal_verb(): self.msi['person'] = 0
-        if self.is_existential_verb(): self.msi['number'] = u'invariable'
+    def has_multiple_children(self):
+        immediate_children = [child for child in self.children if child.level == self.level + 1]
+        return len(immediate_children) > 1
 
     def assign_verb_lemma(self):
         self.lemma = self.words[-1].lemma
 
-    def assign_verb_pass_msi(self):
-        if self.is_leaf: return
-        vauxs = filter(lambda child: child.label == 'vaux', self.children)
-        vsers = filter(lambda child: child.label == 'vser', self.children)
-        if vauxs:
-            self.msi = vauxs[0].msi
-        elif vsers:
-            self.msi = vsers[0].msi
+    def assign_verb_msi(self):
+        if not(self.is_leaf): self.msi = self.children[0].msi
+        if self.is_impersonal_verb(): self.msi['person'] = 0
+        if self.is_existential_verb(): self.msi['number'] = u'invariable'
 
     def assign_verb_pass_lemma(self):
         self.lemma = filter(lambda child: child.label == 'parti-flex', self.children)[0].children[0].words[0].lemma 
+
+    def assign_verb_pass_msi(self):
+        if not(self.is_leaf):
+            vauxs = filter(lambda child: child.label == 'vaux', self.children)
+            vsers = filter(lambda child: child.label == 'vser', self.children)
+            if vauxs:
+                self.msi = vauxs[0].msi
+            elif vsers:
+                self.msi = vsers[0].msi
 
     def assign_noun_msi(self):
         if self.is_leaf: return

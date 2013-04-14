@@ -36,32 +36,35 @@ class Sentence(object):
             leaf.full_msi = tag2fullmsi(leaf.words[0].tag)
             leaf.msi      = msi(leaf.full_msi)
 
+        # assign position relative to level
+        there_are_more_levels = True
+        level = 0
+        while there_are_more_levels:
+            children_per_level = [struct for struct in self.flatstructs if struct.level == level]
+            if children_per_level:
+                position = 0
+                for child in children_per_level:
+                    if not(child.is_leaf) and child.has_multiple_children():
+                        child.position = position
+                        print "assigned position:", child, child.label, child.position
+                    position += 1
+                level += 1
+            else:
+                there_are_more_levels = False
+
         self.entities = self.get_entities()
         self.equative_entities  = self.get_equative_entities()
 
         self.grup_verbs = self.by_label('grup-verb')
 
-        # set verb and its lemma & MSI
-        try:
-            self.verb = self.by_label('verb')[0]
-            self.verb.assign_verb_msi()
-            self.verb.assign_verb_lemma()
-        except IndexError:
-            self.verb = None
-
-        # set verb_pass and its lemma & MSI
-        try:
-            self.verb_pass = self.by_label('verb-pass')[0]
-            self.verb_pass.assign_verb_pass_msi()
-            self.verb_pass.assign_verb_lemma()
-        except IndexError:
-            self.verb_pass = None
-
-        # set [active|passive] voice
-        self.is_active = self.verb and not(self.verb.is_impersonal_verb()) and not(self.verb_pass) and any([gv.level == 0 for gv in self.grup_verbs]) 
-        self.is_passive = self.verb_pass != None
+        # set main verb & sentence voice
+        self.verb, self.is_active, self.is_passive = self.get_voice()
         self.is_unimember = not(self.is_active) and not(self.is_passive)
 
+        # set subject
+        self.subject = self.get_subject()
+
+        
     def __str__(self):
         return ' | '.join(sorted([e.__str__() for e in self.flatstructs]))
 
@@ -91,12 +94,53 @@ class Sentence(object):
     def get_entity_at_level(self, n):
         return filter(lambda e: e.level == n, self.entities)
 
-    # def get_entities_at_distance(self, distance, verb_position=None):
-    #     if verb_position == None: verb_position = self.main_verb.words[0].position
-    #     return filter(lambda e: (e.words.pos - verb_position) < distance)
-
-    # sentence API:
+    def get_entities_at_distance(self, distance):
+        return filter(lambda e: (e.words.pos - self.verb.position) < distance, self.entities)
 
     # def get_rightmost_entity(), def get_leftmost_entity() # respecto del verbo
 
-    # def get_svo()
+    def get_voice(self):
+        # set verb and its lemma & MSI
+        try:
+            active_verb = self.by_label('verb')[0]
+            active_verb.assign_verb_lemma()
+            active_verb.assign_verb_msi()
+        except IndexError:
+            active_verb = None
+        
+        # set verb_pass and its lemma & MSI
+        try:
+            passive_verb = self.by_label('verb-pass')[0]
+            passive_verb.assign_verb_pass_lemma()
+            passive_verb.assign_verb_pass_msi()
+        except IndexError:
+            passive_verb = None
+
+        is_active = active_verb and not(active_verb.is_impersonal_verb()) and not(passive_verb) and any([gv.level==0 for gv in self.grup_verbs]) 
+        is_passive = passive_verb != None
+
+        if is_active:
+            verb = active_verb
+        elif is_passive:
+            verb = passive_verb
+        else:
+            verb = active_verb
+
+        return verb, is_active, is_passive
+
+    def get_subject(self):
+        # si activa:
+        #     1) sujeto a mismo nivel que el verbo
+        #     candidatos, en orden de preferencia:
+        #       * a izq, al mismo nivel, a distancia infinita
+        #         condición: mismo msi que el verbo
+        #       * a der, al mismo nivel, a distancia 2
+        #              x y z
+        #              y a distancia 1 de x
+        #              z a distancia 2 de x
+        #       * si lo anterior no funciona, es tácito. hay que expresarlo, a partir del msi del verbo
+        # else: 
+        #     pass
+
+        candidates = self.entities
+        return candidates[0]
