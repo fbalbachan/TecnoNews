@@ -14,3 +14,4 @@ test-result/*
 tmp/*
 prototype/logs
 prototype/sentence.txt
+prototype/no/*

@@ -36,34 +36,19 @@ class Sentence(object):
             leaf.full_msi = tag2fullmsi(leaf.words[0].tag)
             leaf.msi      = msi(leaf.full_msi)
 
-        # assign position relative to level
-        there_are_more_levels = True
-        level = 0
-        while there_are_more_levels:
-            children_per_level = [struct for struct in self.flatstructs if struct.level == level]
-            if children_per_level:
-                position = 0
-                for child in children_per_level:
-                    if not(child.is_leaf) and child.has_multiple_children():
-                        child.position = position
-                        print "assigned position:", child, child.label, child.position
-                    position += 1
-                level += 1
-            else:
-                there_are_more_levels = False
-
-        self.entities = self.get_entities()
-        self.equative_entities  = self.get_equative_entities()
-
         self.grup_verbs = self.by_label('grup-verb')
 
         # set main verb & sentence voice
         self.verb, self.is_active, self.is_passive = self.get_voice()
         self.is_unimember = not(self.is_active) and not(self.is_passive)
 
+        # find entities
+        self.entities = self.get_entities()
+        self.equative_entities  = self.get_equative_entities()
+        self.entities_at_verb_level = self.assign_entity_position_relative_to_verb()
+
         # set subject
         self.subject = self.get_subject()
-
         
     def __str__(self):
         return ' | '.join(sorted([e.__str__() for e in self.flatstructs]))
@@ -127,6 +112,13 @@ class Sentence(object):
             verb = active_verb
 
         return verb, is_active, is_passive
+
+    def assign_entity_position_relative_to_verb(self):
+        entities_at_verb_level = filter(lambda entity: entity.level == self.verb.level, self.entities)
+        if entities_at_verb_level:
+            for (position, struct) in enumerate(sorted(entities_at_verb_level + [self.verb], key=lambda struct: struct.words[0].position)):
+                struct.position = position
+        return filter(lambda e: e != self.verb, entities_at_verb_level)
 
     def get_subject(self):
         # si activa:

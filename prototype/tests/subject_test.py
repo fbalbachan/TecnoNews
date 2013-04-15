@@ -5,19 +5,17 @@ from model.sentence import *
 
 class TestSubject(unittest.TestCase):
 
-    def test_entity_position(self):
+    def test_entities_at_verb_level(self):
         examples = [
-            (u'todas las noches viene el cartero',      u'todas las noches',          (1, 0)),
-            (u'todas las noches viene el cartero',      u'el cartero',                (1, 2)),
-            (u'las cartas del cartero llegaron tarde',  u'las cartas de el cartero',  (1, 0)),
-            (u'las cartas del cartero llegaron tarde',  u'el cartero',                (3, 0)),
+            (u'todas las noches viene el cartero',      [u'todas las noches', u'el cartero']),
+            (u'las cartas del cartero llegaron tarde',  [u'las cartas de el cartero']),
+            (u'el golpeador golpeó mucho a su esposa',  [u'el golpeador']),
         ]
 
-        for (input_text, expected_entity, (expected_level, expected_position)) in examples:
+        for (input_text, expected_entities) in examples:
             sentence = Sentence(input_text)
-            entity = filter(lambda e: e.__str__() == expected_entity, sentence.entities)[0]
-            self.assertEqual(expected_level, entity.level)
-            self.assertEqual(expected_position, entity.position)
+            entities_at_verb_level = [e.__str__() for e in sentence.entities_at_verb_level]
+            self.assertEqual(expected_entities, entities_at_verb_level)
 
     def _subject(self):
         examples = [

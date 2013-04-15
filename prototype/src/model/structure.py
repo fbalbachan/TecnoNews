@@ -54,15 +54,18 @@ class Structure(object):
     def set_leaf_status(self):
         if not self.children: self.is_leaf = True
 
+    # def has_multiple_children(self):
+    #     immediate_children = [child for child in self.children if child.level == self.level + 1]
+    #     return len(immediate_children) > 1
+
+    def get_children_per_level(self, n):
+        return sorted(filter(lambda child: child.level == n, self.children), key=lambda c: c.position)
+
     def is_impersonal_verb(self):
         return self.lemma in impersonal_verbs
 
     def is_existential_verb(self):
         return self.lemma == existential_verb
-
-    def has_multiple_children(self):
-        immediate_children = [child for child in self.children if child.level == self.level + 1]
-        return len(immediate_children) > 1
 
     def assign_verb_lemma(self):
         self.lemma = self.words[-1].lemma
