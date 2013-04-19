@@ -49,7 +49,7 @@ class Sentence(object):
 
         # set subject
         self.subject = self.get_subject()
-        
+
     def __str__(self):
         return ' | '.join(sorted([e.__str__() for e in self.flatstructs]))
 
@@ -58,7 +58,7 @@ class Sentence(object):
 
     def get_entities(self):
         sns            = self.by_label('sn')
-        grup_verb_infs = self.by_label('grup-verb-inf') # sólo es entity si está a nivel 1
+        grup_verb_infs = self.by_label('grup-verb-inf')
         patons         = self.by_label('patons')
         ptonics        = self.by_label('ptonic')
         coor_ns        = self.by_label('coor-n')
@@ -66,15 +66,15 @@ class Sentence(object):
         entities = []
         for group in [sns, patons, ptonics, coor_ns]:
             if group: entities.extend(group)
-        if grup_verb_infs: entities.extend(filter(lambda g: g.level == 1, grup_verb_infs))
-            
+        if grup_verb_infs: entities.extend(filter(lambda g: g.level == 1, grup_verb_infs)) # sólo es entity si está a nivel 1
+
         for entity in entities: entity.assign_noun_msi()
 
-        return sorted(entities, key=lambda e: e.words[0].position) 
+        return sorted(entities, key=lambda e: e.words[0].position)
 
     def get_equative_entities(self):
         s_adjs       = self.by_label('s-adj')
-        return sorted(s_adjs, key=lambda e: e.words[0].position) 
+        return sorted(s_adjs, key=lambda e: e.words[0].position)
 
     def get_entity_at_level(self, n):
         return filter(lambda e: e.level == n, self.entities)
@@ -92,7 +92,7 @@ class Sentence(object):
             active_verb.assign_verb_msi()
         except IndexError:
             active_verb = None
-        
+
         # set verb_pass and its lemma & MSI
         try:
             passive_verb = self.by_label('verb-pass')[0]
@@ -101,7 +101,7 @@ class Sentence(object):
         except IndexError:
             passive_verb = None
 
-        is_active = active_verb and not(active_verb.is_impersonal_verb()) and not(passive_verb) and any([gv.level==0 for gv in self.grup_verbs]) 
+        is_active = active_verb and not(active_verb.is_impersonal_verb()) and not(passive_verb) and any([gv.level==0 for gv in self.grup_verbs])
         is_passive = passive_verb != None
 
         if is_active:
@@ -131,8 +131,31 @@ class Sentence(object):
         #              y a distancia 1 de x
         #              z a distancia 2 de x
         #       * si lo anterior no funciona, es tácito. hay que expresarlo, a partir del msi del verbo
-        # else: 
+        # else:
         #     pass
 
-        candidates = self.entities
-        return candidates[0]
+        candidates = self.entities_at_verb_level
+        candidates_left_of_verb = [entity for entity in candidates if entity.position < self.verb.position]
+        candidates_right_of_verb = [entity for entity in candidates if entity.position > self.verb.position]
+
+        if candidates_left_of_verb:
+            left_candidates = [entity for entity in candidates_left_of_verb if msi_concordance(entity, self.verb)]
+
+        if left_candidates:
+            return left_candidates[0]
+
+        if candidates_right_of_verb:
+            right_candidates = [entity for entity in candidates_right_of_verb if msi_concordance(entity, self.verb) and ((self.verb.position - entity.position) < 2)]
+
+        if right_candidates:
+            return right_candidates[0]
+
+        # TODO tácito
+        print "dunno"
+        print self.verb.msi
+        for x in candidates: print x, x.msi
+
+        return None
+
+def msi_concordance(subject, verb):
+    return (subject.msi['person'] == verb.msi['person']) and (subject.msi['number'] == verb.msi['number']) 
