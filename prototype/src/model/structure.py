@@ -142,8 +142,10 @@ class Structure(object):
         if msi_candidates: self.msi = msi_candidates[0].msi
 
             
-# def get_empty_structure():
-#     return Structure((0, 0, ['empty_[', u'+(x x EMPTY -){0', ']'], 0))
+def build_structure(word=u'_'):
+    leaf = u'+(%s %s EMPTY -){0' % (word, word)
+    start, end, struct, level = 0, 0, ['empty_[', leaf, ']'], 0
+    return Structure((start, end, struct, level))
 
 def estructuras_balanceadas(lista):
     w = 0

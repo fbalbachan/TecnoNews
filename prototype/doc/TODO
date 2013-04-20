@@ -1,5 +1,19 @@
-person:1, number:singular, gender:neutral => aplanar a "yo"
-
-* mostrar freeling parse_tree en webapp
+* mostrar freeling parse_tree en webapp: DONE
 
 * al buscar entidad sujeto a izquierda, las que no cumplen condición se guardan para la cajita de ADJUNTOS
+
+* person:1, number:singular, gender:neutral => aplanar a "yo"
+
+* def get_subject(self):
+  # si activa:
+  #     1) sujeto a mismo nivel que el verbo
+  #     candidatos, en orden de preferencia:
+  #       * a izq, al mismo nivel, a distancia infinita
+  #         condición: mismo msi que el verbo
+  #       * a der, al mismo nivel, a distancia 2
+  #              x y z
+  #              y a distancia 1 de x
+  #              z a distancia 2 de x
+  #       * si lo anterior no funciona, es tácito. hay que expresarlo, a partir del msi del verbo
+  # else:
+  #     pass

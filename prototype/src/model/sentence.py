@@ -5,6 +5,7 @@ from utils.logger_utils import *
 from utils.freeling_utils import FreelingAnalyzer
 from ling.msi_mapper import *
 from ling.verb_categories import *
+from ling.tacit_subjects import *
 
 class Sentence(object):
 
@@ -121,41 +122,15 @@ class Sentence(object):
         return filter(lambda e: e != self.verb, entities_at_verb_level)
 
     def get_subject(self):
-        # si activa:
-        #     1) sujeto a mismo nivel que el verbo
-        #     candidatos, en orden de preferencia:
-        #       * a izq, al mismo nivel, a distancia infinita
-        #         condición: mismo msi que el verbo
-        #       * a der, al mismo nivel, a distancia 2
-        #              x y z
-        #              y a distancia 1 de x
-        #              z a distancia 2 de x
-        #       * si lo anterior no funciona, es tácito. hay que expresarlo, a partir del msi del verbo
-        # else:
-        #     pass
-
         candidates = self.entities_at_verb_level
         candidates_left_of_verb = [entity for entity in candidates if entity.position < self.verb.position]
         candidates_right_of_verb = [entity for entity in candidates if entity.position > self.verb.position]
 
-        if candidates_left_of_verb:
-            left_candidates = [entity for entity in candidates_left_of_verb if msi_concordance(entity, self.verb)]
+        left_candidates = [e for e in candidates_left_of_verb if msi_concordance(e, self.verb)]
+        if left_candidates: return left_candidates[0]
 
-        if left_candidates:
-            return left_candidates[0]
+        right_candidates = [e for e in candidates_right_of_verb if msi_concordance(e, self.verb) and ((e.position - self.verb.position) < 2)]
+        if right_candidates: return right_candidates[0]
 
-        if candidates_right_of_verb:
-            right_candidates = [entity for entity in candidates_right_of_verb if msi_concordance(entity, self.verb) and ((self.verb.position - entity.position) < 2)]
-
-        if right_candidates:
-            return right_candidates[0]
-
-        # TODO tácito
-        print "dunno"
-        print self.verb.msi
-        for x in candidates: print x, x.msi
-
-        return None
-
-def msi_concordance(subject, verb):
-    return (subject.msi['person'] == verb.msi['person']) and (subject.msi['number'] == verb.msi['number']) 
+        tacit_candidate = tacit_subject_for(self.verb.msi)
+        if tacit_candidate: return build_structure(tacit_candidate)
