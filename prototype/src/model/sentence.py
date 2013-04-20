@@ -132,5 +132,5 @@ class Sentence(object):
         right_candidates = [e for e in candidates_right_of_verb if msi_concordance(e, self.verb) and ((e.position - self.verb.position) < 2)]
         if right_candidates: return right_candidates[0]
 
-        tacit_candidate = tacit_subject_for(self.verb.msi)
+        tacit_candidate = tacit_subject_for(self.msi)
         if tacit_candidate: return build_structure(tacit_candidate)
