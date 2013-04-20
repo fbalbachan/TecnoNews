@@ -51,6 +51,20 @@ class Sentence(object):
         # set subject
         self.subject = self.get_subject()
 
+        # set OD
+        self.OD = self.get_OD()
+
+        # set OI
+        self.OI = self.get_OI()
+
+        # set regimen
+        self.regimen = self.get_regimen()
+
+        # set regimen
+        self.regimen = self.get_regimen()
+        
+
+
     def __str__(self):
         return ' | '.join(sorted([e.__str__() for e in self.flatstructs]))
 
@@ -125,12 +139,26 @@ class Sentence(object):
         candidates = self.entities_at_verb_level
         candidates_left_of_verb = [entity for entity in candidates if entity.position < self.verb.position]
         candidates_right_of_verb = [entity for entity in candidates if entity.position > self.verb.position]
+        
+        if candidates_left_of_verb:
+            left_candidates = [e for e in candidates_left_of_verb if msi_concordance(e, self.verb)]
+            if left_candidates: return left_candidates[0]
 
-        left_candidates = [e for e in candidates_left_of_verb if msi_concordance(e, self.verb)]
-        if left_candidates: return left_candidates[0]
+        if candidates_right_of_verb:
+            right_candidates = [e for e in candidates_right_of_verb if msi_concordance(e, self.verb) and ((e.position - self.verb.position) < 2)]
+            if right_candidates: return right_candidates[0]
 
-        right_candidates = [e for e in candidates_right_of_verb if msi_concordance(e, self.verb) and ((e.position - self.verb.position) < 2)]
-        if right_candidates: return right_candidates[0]
+        tacit_candidate = tacit_subject_for(self.verb)
+        tacit_subject = build_structure(word=tacit_candidate)
+        tacit_subject.msi = self.verb.msi
+        # print "tacit", tacit_subject.__str__(), tacit_subject.msi
+        return tacit_subject
 
-        tacit_candidate = tacit_subject_for(self.msi)
-        if tacit_candidate: return build_structure(tacit_candidate)
+    def get_OD(self):
+        return None
+
+    def get_OI(self):
+        return None
+
+    def get_regimen(self):
+        return None

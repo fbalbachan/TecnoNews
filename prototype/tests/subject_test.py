@@ -63,15 +63,16 @@ class TestSubject(unittest.TestCase):
             self.assertEqual(expected_subject, subject.__str__())
 
             verb_msi = sentence.verb.msi
+            print sentence.verb, sentence.verb.msi
             self.assertEqual(expected_verb_msi, verb_msi)
 
     def test_subject_keepcon_samples(self):
         examples = [
-            { 'input_text' : u'lo matamos a su padre',
-              'subject' : u'nosotros', # {[FIRST] [PLURAL]}
-              'verb' : u'matar', # {[FIRST] [PLURAL]}
-          },
-  
+          #   { 'input_text' : u'matamos a su padre',
+          #     'subject' : u'nosotros', # {[FIRST] [PLURAL]}
+          #     'verb' : u'matar', # {[FIRST] [PLURAL]}
+          # },
+
           #   { 'input_text' : u'estoy lidiando con mis alumnos de la facultad durante todo el mes',
           #     'subject' : u'yo', # {[FIRST] [SINGULAR]}
           #     'verb' : u'lidiar', # {[FIRST] [SINGULAR]}
@@ -81,12 +82,24 @@ class TestSubject(unittest.TestCase):
           #     'subject' : u'esto', # {[SINGULAR]}
           #     'verb' : u'parecer', # {[THIRD] [SINGULAR]}
           # },
-            
+
           #   { 'input_text' : u'llueve en la ciudad sin parar',
-          #     'subject' : u'impersonal', {}
+          #     'subject' : 'None',
           #     'verb' : u'llover', # {[THIRD] [SINGULAR]}
           # },
-              
+
+
+
+          #   { 'input_text' : u'ella odia correr por el parque a la noche',
+          #     'subject' : u'ella', # {[THIRD] [SINGULAR] [FEMALE]}
+          #     'verb' : u'odiar', # {[THIRD] [SINGULAR]}
+          # },
+
+          #   { 'input_text' : u'lo matamos a su padre',
+          #     'subject' : u'nosotros', # {[FIRST] [PLURAL]}
+          #     'verb' : u'matar', # {[FIRST] [PLURAL]}
+          # },
+  
           #   { 'input_text' : u'no me anduvo el auto',
           #     'subject' : u'el auto', # {[SINGULAR] [MALE]}
           #     'verb' : u'andar', # {[THIRD] [SINGULAR]}
@@ -97,15 +110,10 @@ class TestSubject(unittest.TestCase):
           #     'verb' : u'educar', # {[FIRST] [PLURAL]}
           # },
 
-          #   { 'input_text' : u'puedes comprarlo para navidad',
-          #     'subject' : u'usted', # {[SECOND] [SINGULAR]}
-          #     'verb' : u'comprar', # {[SECOND] [SINGULAR]}
-          # },
-
-          #   { 'input_text' : u'ella odia correr por el parque a la noche',
-          #     'subject' : u'ella', # {[THIRD] [SINGULAR] [FEMALE]}
-          #     'verb' : u'odiar', # {[THIRD] [SINGULAR]}
-          # },
+            { 'input_text' : u'puedes comprarlo para navidad',
+              'subject' : u'tú', # {[SECOND] [SINGULAR]}
+              'verb' : u'comprar', # {[SECOND] [SINGULAR]}
+          },
 
           #   { 'input_text' : u'a el hombre lo atacaron ayer por la espalda',
           #     'subject' : u'ellos', # {[THIRD] [PLURAL]}
@@ -127,10 +135,10 @@ class TestSubject(unittest.TestCase):
           #     'verb' : u'perseguir', # {[THIRD] [PLURAL] [FEMALE]}
           # },
 
-          #   { 'input_text' : u'todos los meses llegaba el cartero con una excelente noticia',
-          #     'subject' : u'el cartero', # {[SINGULAR] [MALE]}
-          #     'verb' : u'llegar', # {[THIRD] [SINGULAR]}
-          # },
+            { 'input_text' : u'todos los meses llegaba el cartero con una excelente noticia',
+              'subject' : u'el cartero', # {[SINGULAR] [MALE]}
+              'verb' : u'llegar', # {[THIRD] [SINGULAR]}
+          },
             
           #   { 'input_text' : u'Vos y yo somos tal para cual',
           #     'subject' : u'vos y yo', # {[FIRST] [PLURAL]}
@@ -225,7 +233,7 @@ class TestSubject(unittest.TestCase):
       
         for example in examples:
             input_text, expected_subject, expected_verb = example['input_text'], example['subject'], example['verb']
-            print 'trying: ', example['input_text']
+            print input_text, ' - ', expected_subject, ' - ', expected_verb
 
             sentence = Sentence(input_text)
 
@@ -233,7 +241,7 @@ class TestSubject(unittest.TestCase):
             self.assertEqual(expected_subject, subject.__str__())
 
             verb = sentence.verb
-            self.assertEqual(expected_verb, verb.__str__())
+            self.assertEqual(expected_verb, verb.lemma)
 
 
 if __name__ == '__main__':

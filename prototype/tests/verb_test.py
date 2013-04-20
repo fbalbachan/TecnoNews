@@ -5,8 +5,21 @@ from model.sentence import *
 
 class TestVerbs(unittest.TestCase):
 
+    def test_verb_msi_for_modal_verbs(self):
+        examples = [
+            (u'puedes comprar',             {'person': 2, 'number': u'singular', 'gender': u'neutral'},    u'comprar'),
+        ] 
+
+        for (input_text, expected_verb_msi, expected_verb_lemma) in examples:
+            sentence = Sentence(input_text)
+
+            verb_msi   = sentence.verb.msi
+            self.assertEqual(expected_verb_msi, verb_msi)
+
+            verb_lemma = sentence.verb.lemma
+            self.assertEqual(expected_verb_lemma, verb_lemma)
+
     def test_verb_msi(self):
-        
         examples = [
             (u'llueve',                     {'person': 0, 'number': u'singular', 'gender': u'neutral'},    u'llover'),
                                                                                                             
@@ -29,8 +42,6 @@ class TestVerbs(unittest.TestCase):
 
             verb_lemma = sentence.verb.lemma
             self.assertEqual(expected_verb_lemma, verb_lemma)
-            
-            # print sentence.verb, "position", sentence.verb.position
 
     def test_verb_pass_msi(self):
         

@@ -6,8 +6,9 @@ tacit_subjects = {
 
     (1, 'singular', 'neutral') : u'yo',
 
-    (2, 'singular') : u'tú',
+    (2, 'singular', 'neutral') : u'tú',
 
+    (3, 'invariable', 'neutral') : u'lo',
     (3, 'singular', 'neutral')   : u'él',
     (3, 'singular', 'masculine') : u'él',
     (3, 'singular', 'feminine')  : u'ella',
@@ -16,12 +17,13 @@ tacit_subjects = {
     (1, 'plural', 'masculine') : u'nosotros',
     (1, 'plural', 'feminine')  : u'nosotras',
 
-    (2, 'plural')   : u'ustedes',
+    (2, 'plural', 'neutral')   : u'ustedes',
 
     (3, 'plural', 'neutral')   : u'ellos',
     (3, 'plural', 'masculine') : u'ellos',
     (3, 'plural', 'feminine')  : u'ellas',
 }
 
-def tacit_subject_for(verb_msi):
-    return tacit_subjects[(verb_msi['person'], verb_msi['number'])]
+def tacit_subject_for(verb):
+    print "verb", verb.lemma, verb.msi['person'], verb.msi['number'], verb.msi['gender']
+    return tacit_subjects[(verb.msi['person'], verb.msi['number'], verb.msi['gender'])]

@@ -39,8 +39,8 @@ def msi(a_msi):
 
 def msi_concordance(subject, verb):
     """Structure -> boolean"""
-    return (subject.msi['person'] == verb.msi['person']) and (subject.msi['number'] == verb.msi['number'])
-
+    # return (subject.msi['person'] == verb.msi['person']) and (subject.msi['number'] == verb.msi['number'])
+    return subject.msi == verb.msi
 
 if __name__ == '__main__':
     try:

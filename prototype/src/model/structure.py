@@ -72,6 +72,7 @@ class Structure(object):
 
     def assign_verb_msi(self):
         if not(self.is_leaf): self.msi = self.children[0].msi
+        for c in self.children: print c, c.label
         if self.is_impersonal_verb(): self.msi['person'] = 0
         if self.is_existential_verb(): self.msi['number'] = u'invariable'
 
@@ -141,11 +142,11 @@ class Structure(object):
 
         if msi_candidates: self.msi = msi_candidates[0].msi
 
-            
-def build_structure(word=u'_'):
-    leaf = u'+(%s %s EMPTY -){0' % (word, word)
-    start, end, struct, level = 0, 0, ['empty_[', leaf, ']'], 0
-    return Structure((start, end, struct, level))
+
+def build_structure(word=u'_', label=u'TACIT'):
+    leaf = u'+(%s %s %s -){0' % (word, word, label)
+    struct = [u'%s_[' % label, leaf, ']']
+    return Structure((0, 0, struct, 0))
 
 def estructuras_balanceadas(lista):
     w = 0
