@@ -10,7 +10,7 @@ from utils.logger_utils import *
 
 class Structure(object):
     def __init__(self, (start, end, struct, level)):
-        self.logger = get_logger("entinews")
+        self.logger = get_logger('entinews')
 
         self.words = [Word(match.strip()) for match in re.findall(r'.\(\w+ \w+ [A-Z0-9]+ -\){-?\d+', ' '.join(struct), re.U)]
         self.label = struct[0].split('_[')[0].strip('+').lower()
@@ -27,7 +27,7 @@ class Structure(object):
         self.position = None
 
     def __repr__(self):
-        return u"%s (%d,%d) %s [%d]" % (self.label,
+        return u'%s (%d,%d) %s [%d]' % (self.label,
                                         self.start,
                                         self.end,
                                         ' '.join([w.form for w in self.words]),
@@ -61,6 +61,9 @@ class Structure(object):
     def get_children_per_level(self, n):
         return sorted(filter(lambda child: child.level == n, self.children), key=lambda c: c.position)
 
+    def has_modal_verb(self):
+        return len(self.words) > 1 and self.words[0].lemma in modal_verbs
+
     def is_impersonal_verb(self):
         return self.lemma in impersonal_verbs
 
@@ -71,10 +74,10 @@ class Structure(object):
         self.lemma = self.words[-1].lemma
 
     def assign_verb_msi(self):
-        if not(self.is_leaf): self.msi = self.children[0].msi
-        for c in self.children: print c, c.label
-        if self.is_impersonal_verb(): self.msi['person'] = 0
-        if self.is_existential_verb(): self.msi['number'] = u'invariable'
+        if self.has_modal_verb(): self.msi = msi(tag2fullmsi(self.words[0].tag)); return
+        if not(self.is_leaf): self.msi = self.children[0].msi; return
+        if self.is_impersonal_verb(): self.msi['person'] = 0; return
+        if self.is_existential_verb(): self.msi['number'] = u'invariable'; return
 
     def assign_verb_pass_lemma(self):
         self.lemma = filter(lambda child: child.label == 'parti-flex', self.children)[0].children[0].words[0].lemma 
@@ -104,25 +107,25 @@ class Structure(object):
         if self.label == 'coor-n':
 
             # set number
-            self.msi["number"] = u'plural'
+            self.msi['number'] = u'plural'
 
             all_leaves = []
             for (level, leaves) in leaves_per_level:
-                all_leaves += filter(lambda leaf: leaf.words[0].tag != "CC", leaves)
+                all_leaves += filter(lambda leaf: leaf.words[0].tag != 'CC', leaves)
 
             # set gender
-            any_masculine = any([leaf.msi["gender"] == u"masculine" for leaf in all_leaves])
-            all_feminine = all([leaf.msi["gender"] == u"feminine" for leaf in all_leaves])
-            if any_masculine: self.msi["gender"] = u'masculine'
-            elif all_feminine: self.msi["gender"] = u'feminine'
-            else: self.msi["gender"] = u'neutral'
+            any_masculine = any([leaf.msi['gender'] == u'masculine' for leaf in all_leaves])
+            all_feminine = all([leaf.msi['gender'] == u'feminine' for leaf in all_leaves])
+            if any_masculine: self.msi['gender'] = u'masculine'
+            elif all_feminine: self.msi['gender'] = u'feminine'
+            else: self.msi['gender'] = u'neutral'
 
             # set person
-            any_1_person = any([leaf.msi["person"] == 1 for leaf in all_leaves])
-            any_2_person = any([leaf.msi["person"] == 2 for leaf in all_leaves])
-            if any_1_person: self.msi["person"] = 1
-            elif any_2_person: self.msi["person"] = 2
-            else: self.msi["person"] = 3
+            any_1_person = any([leaf.msi['person'] == 1 for leaf in all_leaves])
+            any_2_person = any([leaf.msi['person'] == 2 for leaf in all_leaves])
+            if any_1_person: self.msi['person'] = 1
+            elif any_2_person: self.msi['person'] = 2
+            else: self.msi['person'] = 3
 
             return
 
@@ -132,7 +135,7 @@ class Structure(object):
                     if (leaf.label == entity_head_label):
 
                         # [invariable|common] case
-                        if leaf.msi["number"] == u"invariable" or leaf.msi["gender"] == u"common":
+                        if leaf.msi['number'] == u'invariable' or leaf.msi['gender'] == u'common':
                             msi_candidates.append(leaf)
 
                         # general case

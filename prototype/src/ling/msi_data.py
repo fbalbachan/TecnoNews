@@ -41,7 +41,7 @@ attribute_map = {"A": {1: ("type", {"Q": u"calificative", "O": u"ordinal", "0": 
                        5: ("number", {"S": u"singular", "P": u"plural", "0": None}),
                        6: ("gender", {"M": u"masculine", "F": u"feminine", "0": None})},
 
-                 "P": {1: ("type", {"P": u"personal", "D": u"demostrative", "X": u"possesive", "I": u"indefinite", "T": u"interrogative", "R": u"relative", "E": u"exclamative"}),
+                 "P": {1: ("type", {"P": u"personal", "D": u"demostrative", "X": u"possesive", "I": u"indefinite", "T": u"interrogative", "R": u"relative", "E": u"exclamative", "0": None}),
                        2: ("person", {"1" : 1, "2": 2, "3": 3, "0": None}),
                        3: ("gender", {"M": u"masculine", "F": u"feminine", "C": u"neutral", "N": u"neutral"}), # u"common"
                        4: ("number", {"S": u"singular", "P": u"plural", "N": u"impersonal/invariable"}),
@@ -67,6 +67,7 @@ attribute_map = {"A": {1: ("type", {"Q": u"calificative", "O": u"ordinal", "0": 
                  "F": {1: ("category", {"Z": u"number"}),
                        2: ("type", {"d": u"partitive", "m": u"money", "p": u"percentage", "u": u"unit"})},
                              
-                 "W": {}
+                 "W": {},
 
+                 "Z": {}
                 }

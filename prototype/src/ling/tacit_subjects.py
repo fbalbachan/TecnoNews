@@ -25,5 +25,4 @@ tacit_subjects = {
 }
 
 def tacit_subject_for(verb):
-    print "verb", verb.lemma, verb.msi['person'], verb.msi['number'], verb.msi['gender']
     return tacit_subjects[(verb.msi['person'], verb.msi['number'], verb.msi['gender'])]

@@ -34,8 +34,9 @@ class Sentence(object):
         # assign MSI to all leaves
         self.leaves = [s for s in self.flatstructs if s.is_leaf]
         for leaf in self.leaves:
-            leaf.full_msi = tag2fullmsi(leaf.words[0].tag)
-            leaf.msi      = msi(leaf.full_msi)
+            if leaf.label != u'fc':
+                leaf.full_msi = tag2fullmsi(leaf.words[0].tag)
+                leaf.msi      = msi(leaf.full_msi)
 
         self.grup_verbs = self.by_label('grup-verb')
 
@@ -139,19 +140,18 @@ class Sentence(object):
         candidates = self.entities_at_verb_level
         candidates_left_of_verb = [entity for entity in candidates if entity.position < self.verb.position]
         candidates_right_of_verb = [entity for entity in candidates if entity.position > self.verb.position]
-        
+
         if candidates_left_of_verb:
             left_candidates = [e for e in candidates_left_of_verb if msi_concordance(e, self.verb)]
-            if left_candidates: return left_candidates[0]
+            if left_candidates: return sorted(left_candidates, key=lambda e: self.verb.position - e.position)[0]
 
         if candidates_right_of_verb:
             right_candidates = [e for e in candidates_right_of_verb if msi_concordance(e, self.verb) and ((e.position - self.verb.position) < 2)]
-            if right_candidates: return right_candidates[0]
+            if right_candidates: return sorted(right_candidates, key=lambda e: e.position - self.verb.position)[0]
 
         tacit_candidate = tacit_subject_for(self.verb)
         tacit_subject = build_structure(word=tacit_candidate)
         tacit_subject.msi = self.verb.msi
-        # print "tacit", tacit_subject.__str__(), tacit_subject.msi
         return tacit_subject
 
     def get_OD(self):

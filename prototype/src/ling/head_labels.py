@@ -40,6 +40,8 @@ head_labels = [
 
 'paton-s',
 'paton-p',
+'paton',
+'paton-mp', 
 
 'pinterrog-s',
 'pinterrog-p',
