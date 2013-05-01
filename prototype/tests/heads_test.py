@@ -18,10 +18,10 @@ class TestStructureHead(unittest.TestCase):
         (u'los virus', u'los virus', {'person':3,'number':u'plural',   'gender':u'masculine'}),
         (u'el virus', u'el virus', {'person':3,'number':u'singular','gender':u'masculine'}),
         (u'el perro y el gato', u'el perro y el gato', {'person':3,'number':u'plural','gender':u'masculine'}),
-        (u'Fulano y Mengano', u'Fulano y Mengano', {'person':3,'number':u'plural','gender':u'masculine'}),
+        (u'Fulano y Mengano', u'Fulano y Mengano', {'person':3,'number':u'plural','gender':u'neutral'}), # 'masculine' ?
         (u'vos y yo', u'vos y yo', {'person':1,'number':u'plural','gender':u'neutral'}),
         (u'tú y yo', u'tú y yo', {'person':1,'number':u'plural','gender':u'neutral'}),
-        ## (u'la paloma y el águila', u'la paloma y el águila', {'person':3,'number':u'plural','gender':u'feminine'}),
+        # (u'la paloma y el águila', u'la paloma y el águila', {'person':3,'number':u'plural','gender':u'feminine'}), # coord ?
         (u'la paloma y el perro', u'la paloma y el perro', {'person':3,'number':u'plural','gender':u'masculine'}),
         (u'la paloma y la codorniz', u'la paloma y la codorniz', {'person':3,'number':u'plural','gender':u'feminine'}),
         ]
@@ -44,7 +44,7 @@ class TestStructureHead(unittest.TestCase):
         (u'ellas',     {'person': 3, 'number': u'plural', 'gender': u'feminine'}),
         ]
 
-    def test_get_structure_MSIs(self):
+    def test_get_entity_MSI(self):
         for (input_text, which_entity, expected_MSI) in self.data:
             entity = filter(lambda e: e.__str__() == which_entity, Sentence(input_text).get_entities())[0]
             print u"trying: %s" % entity

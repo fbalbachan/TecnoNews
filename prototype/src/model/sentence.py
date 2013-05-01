@@ -49,21 +49,19 @@ class Sentence(object):
         self.equative_entities  = self.get_equative_entities()
         self.entities_at_verb_level = self.assign_entity_position_relative_to_verb()
 
-        # set subject
-        self.subject = self.get_subject()
+        if self.verb:
 
-        # set OD
-        self.OD = self.get_OD()
+            # set subject
+            self.subject = self.get_subject()
 
-        # set OI
-        self.OI = self.get_OI()
+            # set OD
+            self.OD = self.get_OD()
+            
+            # set OI
+            self.OI = self.get_OI()
 
-        # set regimen
-        self.regimen = self.get_regimen()
-
-        # set regimen
-        self.regimen = self.get_regimen()
-        
+            # set regimen
+            self.regimen = self.get_regimen()
 
 
     def __str__(self):
@@ -130,7 +128,11 @@ class Sentence(object):
         return verb, is_active, is_passive
 
     def assign_entity_position_relative_to_verb(self):
-        entities_at_verb_level = filter(lambda entity: entity.level == self.verb.level, self.entities)
+        try:
+            entities_at_verb_level = filter(lambda entity: entity.level == self.verb.level, self.entities)
+        except AttributeError:
+            # no verb | no entities
+            return []
         if entities_at_verb_level:
             for (position, struct) in enumerate(sorted(entities_at_verb_level + [self.verb], key=lambda struct: struct.words[0].position)):
                 struct.position = position
