@@ -51,6 +51,9 @@ class Sentence(object):
 
         if self.verb:
 
+            # get verb info
+            # self.verb.lemma -> verb_info, required_boxes
+
             # set subject
             self.subject = self.get_subject()
 
