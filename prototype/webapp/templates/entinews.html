@@ -14,29 +14,44 @@ $def with (result)
     </script>
   </head>
   <body onLoad="clearForms()" onUnload="clearForms()">
-    Input sentence:<br>
-    <p style="margin-right: 40px; margin-left: 40px; font-size: 14px;">$result['input_sentence']</p>
+
+    <div>
+      <h3>Oración</h3>
+      <p style="margin-right: 40px; margin-left: 40px; font-size: 14px;">$result['input_sentence']</p>
+    </div>
+
     <hr>
 
     <div>
-      <table border="1" style="padding: 10px;">
-    	<tr>
-    	  <th>Subject</th>
-    	  <th>Verb</th>
-    	</tr>
-    	<tr>
-    	  <td style="padding: 10px; text-align: center;" title="$result['subject.msi']"> $result['subject']</td>
-    	  <td style="padding: 10px; text-align: center;" title="$result['verb.msi']"> $result['verb']</td>
-    	</tr>
-      </table>
-    </div>
-
-    $if result['entities'] != []:
-        <h3>Entities</h3>
+      <h3>Entidades</h3>
+      $if result['entities'] != []:
 	<ul>
 	$for i, entity in enumerate(result['entities']):
 	    <li title="$entity['msi']">$entity['entity']</li>
 	</ul>
+      $else:
+	<p>None found.</p>	
+    </div>
+
+    <hr>
+
+    <div>
+      <h3>Cajitas</h3>
+      <table border="1" style="padding: 10px;">
+    	<tr>
+    	  <th>Subject</th>
+    	  <th>Verb</th>
+    	  <th>Objects / Regimen / Equative</th>
+    	  <th>Adjuncts</th>
+    	</tr>
+    	<tr>
+    	  <td style="padding: 10px; text-align: center;" title="$result['subject.msi']"> $result['subject']</td>
+    	  <td style="padding: 10px; text-align: center;" title="$result['verb.msi']"> $result['verb']</td>
+    	  <td style="padding: 10px; text-align: center;" title="[TODO]"> .</td>
+    	  <td style="padding: 10px; text-align: center;" title="[TODO]"> .</td>
+    	</tr>
+      </table>
+    </div>
 
   </body>
 </html>

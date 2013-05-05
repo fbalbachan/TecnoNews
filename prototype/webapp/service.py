@@ -3,6 +3,8 @@
 import os, sys, re
 from utils.logger_utils import *
 
+WEBAPP_PATH = open('webapp/webapp_path','r').read().strip('\n').strip('WEBAPP_PATH=')
+
 pid = str(os.getpid())
 pidfile = '/tmp/entinews.pid'
 file(pidfile, 'w').write(pid)
@@ -55,8 +57,8 @@ class EntiNews:
       result['script_class'] = sentence.verb_script_class
 
       # return json.dumps(result, ensure_ascii=False).encode('utf-8')
-      page = web.template.frender('/home/ddellera/code/tecnolecto/entinews/prototype/webapp/templates/entinews.html')
-      return page(result)
+      return web.template.render(WEBAPP_PATH + 'templates/').entinews(result)
+      # return page(result)
 
 class EntiNewsParseTree:
    def GET(self, input_sentence):
