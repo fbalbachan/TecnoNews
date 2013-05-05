@@ -30,11 +30,11 @@ class Structure(object):
         return u'%s (%d,%d) %s [%d]' % (self.label,
                                         self.start,
                                         self.end,
-                                        ' '.join([w.form for w in self.words]),
-                                        self.level)
+                                        u' '.join([w.form for w in self.words]),
+                                        self.level)#.encode('utf-8')
 
     def __str__(self):
-        return ' '.join([x for x in self.forms()])
+        return u' '.join([x for x in self.forms()]).encode('utf-8')
 
     def forms(self):
         return [word.form for word in self.words]

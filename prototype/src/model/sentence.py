@@ -6,6 +6,7 @@ from utils.freeling_utils import FreelingAnalyzer
 from ling.msi_mapper import *
 from ling.verb_categories import *
 from ling.tacit_subjects import *
+from ling.verb_info import *
 
 class Sentence(object):
 
@@ -49,10 +50,22 @@ class Sentence(object):
         self.equative_entities  = self.get_equative_entities()
         self.entities_at_verb_level = self.assign_entity_position_relative_to_verb()
 
+        self.subject = None
+
+        self.OD      = None
+        self.OI      = None
+        self.regimen = None
+
+        self.boxes   = None
+
         if self.verb:
 
             # get verb info
-            # self.verb.lemma -> verb_info, required_boxes
+            self.verb_script_class = get_script_class(self.verb.lemma)
+            self.verb_transitivity = get_transitivity(self.verb.lemma)
+            
+            # prepare boxes
+            self.boxes = allowed_boxes(self.verb_transitivity)
 
             # set subject
             self.subject = self.get_subject()

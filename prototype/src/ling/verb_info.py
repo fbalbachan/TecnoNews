@@ -6,7 +6,7 @@ import codecs
 
 logger = get_logger('entinews')
 
-required_boxes_according_to_verb_transitivity = {
+allowed_boxes_according_to_verb_transitivity = {
     # verb_category : available_boxes
     'TRANSITIVE'   : {'od': True, 'oi': True, 'regimen': False, 'equative': False},
     'INTRANSITIVE' : {'od': False, 'oi': True, 'regimen': False, 'equative': False},
@@ -32,16 +32,23 @@ scripts = {
     'S': 'SWITCH',
 }
 
-def verb_info(verb):
+def get_script_class(verb):
     try:
-        return verbs[verb.lower()]
+        return verbs[verb.lower()]['script']
     except KeyError:
         logger.warn("wrong/missing verb info: ", verb)
-        return {'script' : None, 'transitivity' : None}
+        return None
 
-def required_boxes(verb_transitivity):
+def get_transitivity(verb):
     try:
-        result = required_boxes_according_to_verb_transitivity[verb_transitivity]
+        return verbs[verb.lower()]['transitivity']
+    except KeyError:
+        logger.warn("wrong/missing verb info: ", verb)
+        return None
+
+def allowed_boxes(verb_transitivity):
+    try:
+        result = allowed_boxes_according_to_verb_transitivity[verb_transitivity]
     except KeyError:
         logger.error("wrong/missing verb transitivity: ", verb_transitivity)
         result = None
@@ -56,4 +63,4 @@ for line in verb_file_reader:
     verbs[verb_word]                 = {}
     verbs[verb_word]['script']       = scripts[verb_script]
     verbs[verb_word]['transitivity'] = transitivities[verb_transitivity]
-    verbs[verb_word]['boxes']        = required_boxes_according_to_verb_transitivity[transitivities[verb_transitivity]]
+    verbs[verb_word]['boxes']        = allowed_boxes_according_to_verb_transitivity[transitivities[verb_transitivity]]

@@ -2,29 +2,41 @@
 --------------------
 
 En el directorio freeling_config debe haber 3 archivitos que indican a
-qué FreeLing se va a conectar SentiLecto: server, client, port
+qué FreeLing se va a conectar entinews: server, client, port
 
 freeling_config/server:
-FREELING_SERVER=/opt/freeling3/bin/analyze
+FREELING_SERVER=/opt/freeling-3.0/bin/analyze
 
 freeling_config/client:
-FREELING_CLIENT=/opt/freeling3/bin/analyzer_client
+FREELING_CLIENT=/opt/freeling-3.0/bin/analyzer_client
 
 freeling_config/port:
-FREELING_PORT=9999
+FREELING_PORT=10000
 
 
-2) Cómo correrlo
-----------------
+2) Cómo correr de manera interactiva
+------------------------------------
 
-./sentitext.py
+# en la consola:
 
+entinews/prototype $ ./run_repl.sh
 
-3) Dónde poner texto para probar
---------------------------------
+# en el prompt, ingresar un oración:
+> comió un pancho en Buenos Aires
 
-En input.txt, una oración por línea (por ahora).
+# output:
 
-4) Instrucciones para interfaz
+entity:  un pancho
+   msi:  {'person': 3, 'number': u'singular', 'gender': u'masculine'}
 
+entity:  Buenos_Aires
+   msi:  {'person': 3, 'number': u'singular', 'gender': u'neutral'}
 
+subject:  un pancho
+    msi:  {'person': 3, 'number': u'singular', 'gender': u'masculine'}
+
+verb:  comió
+	 transitivity:  TRANSITIVE
+	 script:  NEUTRAL
+
+allowed boxes:  {'regimen': False, 'od': True, 'equative': False, 'oi': True}
