@@ -15,10 +15,9 @@ import entinews
 logger    = get_logger('webapp/service')
 
 urls = (
-   '/favicon.ico',                     'favicon',
-   '/entinews/sentence/tree/(.+)',     'EntiNewsParseTree',
-   # '/entinews/sentence/entities/(.+)', 'EntiNews',
-    '/entinews/sentence/(.+)',         'EntiNews',
+   '/favicon.ico', 'favicon',
+   '/sentence/tree/(.+)', 'EntiNewsParseTree',
+   '/sentence/(.+)', 'EntiNews',
 )
 
 app = web.application(urls, globals())
