@@ -6,6 +6,7 @@ from itertools import izip, groupby
 from ling.msi_mapper import *
 from ling.head_labels import *
 from ling.verb_categories import *
+from ling.entity_labels import *
 from utils.logger_utils import *
 
 class Structure(object):
@@ -60,6 +61,12 @@ class Structure(object):
 
     def get_children_per_level(self, n):
         return sorted(filter(lambda child: child.level == n, self.children), key=lambda c: c.position)
+
+    def is_proper_entity(self):
+        return self.label in proper_entity_labels
+
+    def is_pronominal_entity(self):
+        return self.label in pronominal_entity_labels
 
     def has_modal_verb(self):
         return len(self.words) > 1 and self.words[0].lemma in modal_verbs

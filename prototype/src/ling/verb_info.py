@@ -11,8 +11,8 @@ allowed_boxes_according_to_verb_transitivity = {
     'TRANSITIVE'   : {'od': True, 'oi': True, 'regimen': False, 'equative': False},
     'INTRANSITIVE' : {'od': False, 'oi': True, 'regimen': False, 'equative': False},
     'REGIMEN'      : {'od': False, 'oi': False, 'regimen': True, 'equative': False},
-    'EQUATIVE'     : {'od': True, 'oi': True, 'regimen': False, 'equative': False},
-    'UNKNOWN'      : {'od': False, 'oi': True, 'regimen': False, 'equative': False},
+    'EQUATIVE'     : {'od': False, 'oi': True, 'regimen': False, 'equative': True},
+    'EXISTENTIAL'  : {'od': True, 'oi': False, 'regimen': False, 'equative': False},
 }
 
 transitivities = {
@@ -20,7 +20,8 @@ transitivities = {
     'I': 'INTRANSITIVE',
     'R': 'REGIMEN',
     'E': 'EQUATIVE',
-    'X': 'UNKNOWN',
+    'X': 'INTRANSITIVE',
+    'H': 'EXISTENTIAL',
 }
 
 scripts = {

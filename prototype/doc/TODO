@@ -78,3 +78,36 @@ si es entidad propiamente dicha:
 2) buscarlo a izquierda
    o bien primera a distancia 0, al mismo nivel
    o bien es sp a nivel -1 con distancia < 1
+
+
+regimen:
+
+puede ser grup-sp, grup-sp-de (en ese orden) a nivel del verbo
+
+1) a derecha (a distancia < 3), luego a izquierda (a distancia < 2)
+
+
+ecuativo:
+
+1) s_adj, primero a derecha (< 2), luego a izquierda (< 2)
+
+2) únicamente a derecha, 1° entidad al mismo nivel que el verbo
+
+-----------------------------------------------------------------------------------------------
+
+* si no hay verbo, la primera entidad es el sujeto
+
+* si verbo es existencial, sujeto es None; primera entidad es OD
+
+-----------------------------------------------------------------------------------------------
+
+* pasiva:
+
+habilitar sujeto, OD, adjuntos (el resto no)
+
+OD: llenar OD con las mismas reglas de sujeto de activa
+sujeto: grup-sp encabezado por 'por', a nivel del verbo, primero a derecha con distancia < 3, luego a izquierda, con distancia < 2
+
+-----------------------------------------------------------------------------------------------
+
+* si entidad es grup-sp "por ...", quitar 'por'

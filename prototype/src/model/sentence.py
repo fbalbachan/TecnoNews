@@ -41,7 +41,10 @@ class Sentence(object):
 
         self.grup_verbs = self.by_label('grup-verb')
 
-        self.all_words = self.grup_verbs[0].words
+        # FIXME: so far, only grup-verb sentences
+        self.all_encompassing_structure = self.grup_verbs[0]
+
+        self.all_words = self.all_encompassing_structure.words
 
         # set main verb & sentence voice
         self.verb, self.is_active, self.is_passive = self.get_voice()
@@ -175,6 +178,12 @@ class Sentence(object):
         return tacit_subject
 
     def get_OD(self):
+
+        proper_entities = filter(lambda e: , self.entities)
+
+        # entities_left_of_verb = [entity for entity in entities if entity.position < self.verb.position]
+        # entities_right_of_verb = [entity for entity in candidates if entity.position > self.verb.position]
+
         return None
 
     def get_OI(self):
