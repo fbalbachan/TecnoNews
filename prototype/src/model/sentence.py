@@ -41,6 +41,8 @@ class Sentence(object):
 
         self.grup_verbs = self.by_label('grup-verb')
 
+        self.all_words = self.grup_verbs[0].words
+
         # set main verb & sentence voice
         self.verb, self.is_active, self.is_passive = self.get_voice()
         self.is_unimember = not(self.is_active) and not(self.is_passive)
