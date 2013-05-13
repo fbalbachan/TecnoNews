@@ -155,7 +155,7 @@ class Sentence(object):
             # no verb | no entities
             return []
         if entities_at_verb_level:
-            for (position, struct) in enumerate(sorted(entities_at_verb_level + [self.verb], key=lambda struct: struct.words[0].position)):
+            for (position, struct) in enumerate(sorted(entities_at_verb_level + [self.verb], key=lambda x: x.words[0].position)):
                 if struct.position != self.verb.position: struct.position = position
         return filter(lambda e: e.position != self.verb.position, entities_at_verb_level)
 
