@@ -35,7 +35,7 @@ class TestSubject(unittest.TestCase):
              {'person': 3, 'number': u'singular', 'gender': u'neutral'},
              u'caminar por el bosque',
              {'person': 3, 'number': u'singular', 'gender': u'neutral'},
-             u'gustart',
+             u'gustar',
             ),
 
             (u'llovió toda la noche',
@@ -60,7 +60,7 @@ class TestSubject(unittest.TestCase):
             sentence = Sentence(input_text)
 
             subject = sentence.subject
-            self.assertEqual(expected_subject, subject.__str__())
+            self.assertEqual(expected_subject, subject.__str__().decode('utf-8'))
 
             verb_msi = sentence.verb.msi
             print sentence.verb, sentence.verb.msi
@@ -207,7 +207,7 @@ class TestSubject(unittest.TestCase):
             sentence = Sentence(input_text)
 
             subject = sentence.subject
-            self.assertEqual(expected_subject, subject.__str__())
+            self.assertEqual(expected_subject, subject.__str__().decode('utf-8'))
             
             verb = sentence.verb
             self.assertEqual(expected_verb, verb.lemma)

@@ -35,9 +35,6 @@ class EntiNews:
       entities = entinews.extract_entities(sentence)
       subject = entinews.extract_subject(sentence)
       verb = sentence.verb
-      sentence.verb_transitivity
-      sentence.verb_script_class
-      sentence.boxes
 
       result = {}
       result['input_sentence'] = sentence.input_sentence
@@ -54,6 +51,13 @@ class EntiNews:
       result['verb.msi'] = verb.msi
       result['transitivity'] = sentence.verb_transitivity
       result['script_class'] = sentence.verb_script_class
+
+      if sentence.OD:
+         result['OD'] = sentence.OD.__str__().decode('utf-8')
+         result['OD.msi'] = sentence.OD.msi
+      else:
+         result['OD'] = None
+         result['OD.msi'] = None
 
       # return json.dumps(result, ensure_ascii=False).encode('utf-8')
       return web.template.render(WEBAPP_PATH + 'templates/').entinews(result)
