@@ -3,4 +3,4 @@
 
 proper_entity_labels = ['sn', 'grup-verb-inf', 'coor-n']
 
-proper_entity_labels = ['patons', 'ptonic']
+pronominal_entity_labels = ['patons', 'ptonic']

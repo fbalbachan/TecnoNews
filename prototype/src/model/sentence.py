@@ -54,7 +54,7 @@ class Sentence(object):
         self.entities = self.get_entities()
         self.equative_entities  = self.get_equative_entities()
         self.entities_at_verb_level = self.assign_entity_position_relative_to_verb()
-
+        
         self.subject = None
 
         self.OD      = None
@@ -64,7 +64,6 @@ class Sentence(object):
         self.boxes   = None
 
         if self.verb:
-
             # get verb info
             self.verb_script_class = get_script_class(self.verb.lemma)
             self.verb_transitivity = get_transitivity(self.verb.lemma)
@@ -103,7 +102,9 @@ class Sentence(object):
             if group: entities.extend(group)
         if grup_verb_infs: entities.extend(filter(lambda g: g.level == 1, grup_verb_infs)) # sólo es entity si está a nivel 1
 
-        for entity in entities: entity.assign_noun_msi()
+        for entity in entities:
+            entity.assign_noun_msi()
+            entity.assign_entity_type()
 
         return sorted(entities, key=lambda e: e.words[0].position)
 
@@ -114,8 +115,8 @@ class Sentence(object):
     def get_entity_at_level(self, n):
         return filter(lambda e: e.level == n, self.entities)
 
-    def get_entities_at_distance(self, distance):
-        return filter(lambda e: (e.words.pos - self.verb.position) < distance, self.entities)
+    # def get_entities_at_distance(self, distance):
+    #     return filter(lambda e: (e.words.pos - self.verb.position) < distance, self.entities)
 
     # def get_rightmost_entity(), def get_leftmost_entity() # respecto del verbo
 
@@ -139,13 +140,12 @@ class Sentence(object):
         is_active = active_verb and not(active_verb.is_impersonal_verb()) and not(passive_verb) and any([gv.level==0 for gv in self.grup_verbs])
         is_passive = passive_verb != None
 
-        if is_active:
-            verb = active_verb
-        elif is_passive:
+        if is_passive:
             verb = passive_verb
         else:
             verb = active_verb
 
+        verb.assign_verb_position()
         return verb, is_active, is_passive
 
     def assign_entity_position_relative_to_verb(self):
@@ -156,8 +156,8 @@ class Sentence(object):
             return []
         if entities_at_verb_level:
             for (position, struct) in enumerate(sorted(entities_at_verb_level + [self.verb], key=lambda struct: struct.words[0].position)):
-                struct.position = position
-        return filter(lambda e: e != self.verb, entities_at_verb_level)
+                if struct.position != self.verb.position: struct.position = position
+        return filter(lambda e: e.position != self.verb.position, entities_at_verb_level)
 
     def get_subject(self):
         candidates = self.entities_at_verb_level
@@ -178,12 +178,25 @@ class Sentence(object):
         return tacit_subject
 
     def get_OD(self):
+        proper_entities = filter(lambda e: e.entity_type == 'proper_entity' and e.position != self.subject.position, self.entities)
+        if proper_entities:
+            proper_entities_right_of_verb = [entity for entity in proper_entities if entity.words[0].position > self.verb.position]
+            if proper_entities_right_of_verb:
+                # a distancia < 2
+                candidates = filter(lambda e: abs(e.words[0].position - self.verb.position) < 2
+                                   and e.level == self.verb.level,
+                                   proper_entities_right_of_verb)
+                if candidates: return sorted(candidates, key=lambda e: e.position)[0]
+                
+                # contenida en sp (a nivel -1) y a distancia < 2
+                sps = self.by_label('grup-sp')
+                if sps:
+                    for e in filter(lambda e: abs(e.words[0].position - self.verb.position) < 2, proper_entities_right_of_verb):
+                        containing_sps_abover_verb = filter(lambda sp: sp.contains(x) and sp.level == self.verb.level -1, sps)
+                        if containing_sps: return e
 
-        proper_entities = filter(lambda e: , self.entities)
-
-        # entities_left_of_verb = [entity for entity in entities if entity.position < self.verb.position]
-        # entities_right_of_verb = [entity for entity in candidates if entity.position > self.verb.position]
-
+            # proper_entities_left_of_verb = [entity for entity in proper_entities if not(entity in proper_entities_right_of_verb)]
+        
         return None
 
     def get_OI(self):

@@ -26,6 +26,7 @@ class Structure(object):
         self.is_leaf = False
         self.lemma = None
         self.position = None
+        self.entity_type = None
 
     def __repr__(self):
         return u'%s (%d,%d) %s [%d]' % (self.label,
@@ -68,8 +69,14 @@ class Structure(object):
     def is_pronominal_entity(self):
         return self.label in pronominal_entity_labels
 
+    def assign_entity_type(self):
+        if self.is_proper_entity():
+            self.entity_type = 'proper_entity'
+        elif self.is_pronominal_entity():
+            self.entity_type = 'pronominal_entity'            
+
     def has_modal_verb(self):
-        return len(self.words) > 1 and self.words[0].lemma in modal_verbs
+        return len(self.words) > 1 and (self.words[0].lemma in modal_verbs)
 
     def is_impersonal_verb(self):
         return self.lemma in impersonal_verbs
@@ -79,6 +86,9 @@ class Structure(object):
 
     def assign_verb_lemma(self):
         self.lemma = self.words[-1].lemma
+
+    def assign_verb_position(self):
+        self.position = self.words[-1].position
 
     def assign_verb_msi(self):
         if self.has_modal_verb(): self.msi = msi(tag2fullmsi(self.words[0].tag)); return

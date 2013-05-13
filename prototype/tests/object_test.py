@@ -7,12 +7,12 @@ class TestObjects(unittest.TestCase):
 
     def test_OD(self):
         examples = [
-            (u'el cartero trajo las cartas',  [u'las cartas']),
+            (u'el cartero trajo las cartas',  u'las cartas'),
         ]
 
         for (input_text, expected_OD) in examples:
             sentence = Sentence(input_text)
-            self.assertEqual(expected_OD, sentence.OD)
+            self.assertEqual(expected_OD, sentence.OD.__str__())
 
 
 if __name__ == '__main__':
