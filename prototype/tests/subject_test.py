@@ -149,7 +149,7 @@ class TestSubject(unittest.TestCase):
           },
 
             { 'input_text' : u'Ella puede comer de todo',
-              'subject' : u'ella', # {[THIRD] [SINGULAR] [FEMALE]}
+              'subject' : u'Ella', # {[THIRD] [SINGULAR] [FEMALE]}
               'verb' : u'comer', # {[THIRD] [SINGULAR]}
           },
 

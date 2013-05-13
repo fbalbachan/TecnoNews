@@ -87,8 +87,8 @@ class Structure(object):
     def assign_verb_lemma(self):
         self.lemma = self.words[-1].lemma
 
-    def assign_verb_position(self):
-        self.position = self.words[-1].position
+    # def assign_verb_position(self):
+    #     self.position = self.words[-1].position
 
     def assign_verb_msi(self):
         if self.has_modal_verb(): self.msi = msi(tag2fullmsi(self.words[0].tag)); return

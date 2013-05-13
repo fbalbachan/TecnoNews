@@ -145,7 +145,7 @@ class Sentence(object):
         else:
             verb = active_verb
 
-        verb.assign_verb_position()
+        # verb.assign_verb_position()
         return verb, is_active, is_passive
 
     def assign_entity_position_relative_to_verb(self):
@@ -156,14 +156,13 @@ class Sentence(object):
             return []
         if entities_at_verb_level:
             for (position, struct) in enumerate(sorted(entities_at_verb_level + [self.verb], key=lambda x: x.words[0].position)):
-                if struct.position != self.verb.position: struct.position = position
+                struct.position = position
         return filter(lambda e: e.position != self.verb.position, entities_at_verb_level)
 
     def get_subject(self):
         candidates = self.entities_at_verb_level
         candidates_left_of_verb = [entity for entity in candidates if entity.position < self.verb.position]
         candidates_right_of_verb = [entity for entity in candidates if entity.position > self.verb.position]
-
         if candidates_left_of_verb:
             left_candidates = [e for e in candidates_left_of_verb if msi_concordance(e, self.verb)]
             if left_candidates: return sorted(left_candidates, key=lambda e: self.verb.position - e.position)[0]
@@ -178,12 +177,14 @@ class Sentence(object):
         return tacit_subject
 
     def get_OD(self):
-        proper_entities = filter(lambda e: e.entity_type == 'proper_entity' and e.position != self.subject.position, self.entities)
-        if proper_entities:
-            proper_entities_right_of_verb = [entity for entity in proper_entities if entity.words[0].position > self.verb.position]
+        proper_entities_at_verb_level = filter(lambda e: e.entity_type == 'proper_entity'
+                                               and e.position != self.subject.position,
+                                               self.entities_at_verb_level)
+        if proper_entities_at_verb_level:
+            proper_entities_right_of_verb = [entity for entity in proper_entities_at_verb_level if entity.position > self.verb.position]
             if proper_entities_right_of_verb:
                 # a distancia < 2
-                candidates = filter(lambda e: abs(e.words[0].position - self.verb.position) < 2
+                candidates = filter(lambda e: abs(e.position - self.verb.position) < 2
                                    and e.level == self.verb.level,
                                    proper_entities_right_of_verb)
                 if candidates: return sorted(candidates, key=lambda e: e.position)[0]
