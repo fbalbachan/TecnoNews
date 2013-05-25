@@ -8,11 +8,11 @@ logger = get_logger('entinews')
 
 allowed_boxes_according_to_verb_transitivity = {
     # verb_category : available_boxes
-    'TRANSITIVE'   : {'od': True, 'oi': True, 'regimen': False, 'equative': False},
-    'INTRANSITIVE' : {'od': False, 'oi': True, 'regimen': False, 'equative': False},
-    'REGIMEN'      : {'od': False, 'oi': False, 'regimen': True, 'equative': False},
-    'EQUATIVE'     : {'od': False, 'oi': True, 'regimen': False, 'equative': True},
-    'EXISTENTIAL'  : {'od': True, 'oi': False, 'regimen': False, 'equative': False},
+    'TRANSITIVE'   : {'od': True, 'oi': True, 'regimen': False, 'equative': False, 'adjuncts': True},
+    'INTRANSITIVE' : {'od': False, 'oi': True, 'regimen': False, 'equative': False, 'adjuncts': True},
+    'REGIMEN'      : {'od': False, 'oi': False, 'regimen': True, 'equative': False, 'adjuncts': True},
+    'EQUATIVE'     : {'od': False, 'oi': True, 'regimen': False, 'equative': True, 'adjuncts': True},
+    'EXISTENTIAL'  : {'od': True, 'oi': False, 'regimen': False, 'equative': False, 'adjuncts': True},
 }
 
 transitivities = {

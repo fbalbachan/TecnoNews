@@ -47,24 +47,26 @@ $def with (result)
     	  <th>Ecuativo</th>
     	  <th>Adjuntos</th>
     	</tr>
+
+	$ if result['boxes']['od']: color_od = '#33FF66'
+	$ else: color_od = "#FF6666"
+	$ if result['boxes']['oi']: color_oi = '#33FF66'
+	$ else: color_oi = "#FF6666"
+	$ if result['boxes']['regimen']: color_regimen = '#33FF66'
+	$ else: color_regimen = "#FF6666"
+	$ if result['boxes']['equative']: color_equative = '#33FF66'
+	$ else: color_equative = "#FF6666"
+	$ if result['boxes']['adjuncts']: color_adjuncts = '#33FF66'
+	$ else: color_adjuncts = "#FF6666"
+
     	<tr>
-    	  <td style="padding: 10px; text-align: center;" title="$result['subject.msi']"> $result['subject']</td>
-    	  <td style="padding: 10px; text-align: center;" title="$result['verb.msi'] | $result['transitivity'] | $result['script_class']"> $result['verb']</td>
-	  $ if $result['boxes']['od']: color_od = "FFFFFF":
-	  $ else: color_od = "000000"
-	  $ if $result['boxes']['oi']: color_oi = "FFFFFF":
-	  $ else: color_oi = "000000"
-	  $ if $result['boxes']['regimen']: color_regimen = "FFFFFF":
-	  $ else: color_regimen = "000000"
-	  $ if $result['boxes']['equative']: color_equative = "FFFFFF":
-	  $ else: color_equative = "000000"
-	  $ if $result['boxes']['adjuncts']: color_adjuncts = "FFFFFF":
-	  $ else: color_adjuncts = "000000"
-    	  <td style="padding: 10px; text-align: center; background-color: $color_od;" title="$result['od.msi']"> $result['od']</td>
-    	  <td style="padding: 10px; text-align: center; background-color: $color_oi;" title="[TODO]"> .</td>
-    	  <td style="padding: 10px; text-align: center; background-color: $color_regimen;" title="[TODO]"> .</td>
-    	  <td style="padding: 10px; text-align: center; background-color: $color_equative;" title="[TODO]"> .</td>
-    	  <td style="padding: 10px; text-align: center; background-color: $color_adjuncts;" title="[TODO]"> .</td>
+    	  <td style="padding: 10px; text-align: center;" title="$result['subject.msi'] | $result['subject.entity_type']"> $result['subject']</td>
+    	  <td style="padding: 10px; text-align: center;" title="$result['verb.msi'] | $result['verb.transitivity'] | $result['verb.script_class']"> $result['verb']</td>
+    	  <td style="padding: 10px; text-align: center;" bgcolor=$color_od title="$result['od.msi']"> $result['od']</td>
+	  <td style="padding: 10px; text-align: center;" bgcolor=$color_oi title="[TODO]"> .</td>
+	  <td style="padding: 10px; text-align: center;" bgcolor=$color_regimen title="[TODO]"> .</td>
+	  <td style="padding: 10px; text-align: center;" bgcolor=$color_equative title="[TODO]"> .</td>
+	  <td style="padding: 10px; text-align: center;" bgcolor=$color_adjuncts title="[TODO]"> .</td>
     	</tr>
       </table>
     </div>

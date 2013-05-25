@@ -47,7 +47,7 @@ class Sentence(object):
         self.all_words = self.all_encompassing_structure.words
 
         # set main verb & sentence voice
-        self.verb, self.is_active, self.is_passive = self.get_voice()
+        self.verb, self.is_active, self.is_passive = self.get_voice_and_verb()
         self.is_unimember = not(self.is_active) and not(self.is_passive)
 
         # find entities
@@ -57,9 +57,11 @@ class Sentence(object):
         
         self.subject = None
 
-        self.od      = None
-        self.oi      = None
-        self.regimen = None
+        self.od       = None
+        self.oi       = None
+        self.regimen  = None
+        self.equative = None
+        self.adjuncts = None
 
         self.boxes   = None
 
@@ -68,24 +70,18 @@ class Sentence(object):
             self.verb_script_class = get_script_class(self.verb.lemma)
             self.verb_transitivity = get_transitivity(self.verb.lemma)
             
-            # prepare boxes
+            # set up available boxes
             self.boxes = allowed_boxes(self.verb_transitivity)
 
             # set subject
             self.subject = self.get_subject()
 
-            # fill boxes
-            if self.boxes['od']:
-                self.od = self.get_od()
-
-            if self.boxes['oi']:
-                self.oi = self.get_oi()
-
-            if self.boxes['regimen']:
-                self.regimen = self.get_regimen()
-
-            if self.boxes['equative']:
-                self.regimen = self.get_regimen()
+            # fill allowed boxes
+            if self.boxes['od']: self.od = self.get_od()
+            if self.boxes['oi']: self.oi = self.get_oi()
+            if self.boxes['regimen']: self.regimen = self.get_regimen()
+            if self.boxes['equative']: self.regimen = self.get_equative()
+            if self.boxes['adjuncts']: self.regimen = self.get_adjuncts()
 
 
     def __str__(self):
@@ -119,12 +115,7 @@ class Sentence(object):
     def get_entity_at_level(self, n):
         return filter(lambda e: e.level == n, self.entities)
 
-    # def get_entities_at_distance(self, distance):
-    #     return filter(lambda e: (e.words.pos - self.verb.position) < distance, self.entities)
-
-    # def get_rightmost_entity(), def get_leftmost_entity() # respecto del verbo
-
-    def get_voice(self):
+    def get_voice_and_verb(self):
         # set verb and its lemma & MSI
         try:
             active_verb = self.by_label('verb')[0]
@@ -224,34 +215,61 @@ class Sentence(object):
                                                    and e.position != self.subject.position,
                                                    self.entities_at_verb_level)
         
-        # 2.1) a izquierda
-        # 2.1.1) con distancia 0
         if pronominal_entities_at_verb_level:
-            proper_entities_right_of_verb = [entity for entity in proper_entities_at_verb_level if entity.position > self.verb.position]
-            if proper_entities_right_of_verb:
-               pass
-
-        # 2.1) a derecha
-        # 2.1.1) con distancia 0
+            # 2.1) a izquierda
+            # 2.1.1) con distancia 0
+            pronominal_entities_left_of_verb = [entity for entity in pronominal_entities_at_verb_level if entity.position < self.verb.position]
+            if pronominal_entities_left_of_verb:
+                candidates = filter(lambda e: abs(e.position - self.verb.position) == 1
+                                    and e.level == self.verb.level,
+                                    pronominal_entities_left_of_verb)
+                if candidates: return sorted(candidates, key=lambda e: e.position)[0]
+             
+            # 2.1) a derecha
+            # 2.1.1) con distancia 0
+            pronominal_entities_right_of_verb = [entity for entity in pronominal_entities_at_verb_level if entity.position > self.verb.position]
+            if pronominal_entities_right_of_verb:
+                candidates = filter(lambda e: abs(e.position - self.verb.position) == 1
+                                    and e.level == self.verb.level,
+                                    pronominal_entities_right_of_verb)
+                if candidates: return sorted(candidates, key=lambda e: e.position)[0]
 
         return None
 
     def get_oi(self):
-        return None
+       # con verbo transitivo: 
+       #     OI puede existir si hay OD
+            
+       # si es entidad propiamente dicha:
+       # 1) buscarlo a derecha
+       #    sp a nivel -1 con distancia < 2
+            
+       # 2) buscarlo a izquierda
+       #    o bien primera a distancia 0, al mismo nivel
+       #    o bien es sp a nivel -1 con distancia < 1
+            
+       return None
 
     def get_regimen(self):
         return None
 
+    def get_equative(self):
+        return None
+
+    def get_adjuncts(self):
+        return None
+
     def __str__(self):
-        output = u'input_sentence: %s' % self.input_sentence
-        output += u"\nentities: %s" % u', '.join(self.entities)
-        output += u"\nsubject: %s" % self.subject
-        output += u"\nverb: %s" % self.verb
-        output += u"\nverb_transitivity: %s" % self.verb_transitivity
-        output += u"\nverb_script_class: %s" % self.verb_script_class
-        output += u"\nallowed boxes: %s" % self.boxes
-        output += u"\nod: %s" % self.od
-        output += u"\noi: %s" % self.oi
-        output += u"\nregimen: %s" % self.regimen
-        output += u"\nequative: %s" % self.equative
+        output = "\ninput_sentence: %s" % self.input_sentence.encode('utf-8')
+        output += "\n\nentities: %s" % ', '.join([e.__str__() for e in self.entities])
+        output += "\n\nsubject: %s" % self.subject.__str__()
+        output += "\n\nverb: %s" % self.verb.__str__()
+        output += "\nverb_transitivity: %s" % self.verb_transitivity
+        output += "\nverb_script_class: %s" % self.verb_script_class
+        output += "\nallowed boxes: %s" % [k for (k,v) in filter(lambda (k, v): v is True, self.boxes.iteritems())]
+        output += "\n\nod: %s" % self.od
+        output += "\noi: %s" % self.oi
+        output += "\nregimen: %s" % self.regimen.__str__()
+        output += "\nequative: %s" % self.equative.__str__()
+        output += "\nadjuncts: %s\n" % self.adjuncts.__str__()
         return output

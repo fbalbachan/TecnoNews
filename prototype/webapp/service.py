@@ -10,7 +10,7 @@ pidfile = '/tmp/entinews.pid'
 file(pidfile, 'w').write(pid)
 
 import re, web, codecs, json, logging
-import entinews
+from entinews import *
 
 logger    = get_logger('webapp/service')
 
@@ -46,11 +46,13 @@ class EntiNews:
 
       result['subject'] = subject.__str__().decode('utf-8')
       result['subject.msi'] = subject.msi
-
+      result['subject.entity_type'] = subject.entity_type
       result['verb'] = verb.__str__()
       result['verb.msi'] = verb.msi
-      result['transitivity'] = sentence.verb_transitivity
-      result['script_class'] = sentence.verb_script_class
+      result['verb.transitivity'] = sentence.verb_transitivity
+      result['verb.script_class'] = sentence.verb_script_class
+
+      result['boxes'] = sentence.boxes
 
       if sentence.od:
          result['od'] = sentence.od.__str__().decode('utf-8')
@@ -59,12 +61,33 @@ class EntiNews:
          result['od'] = None
          result['od.msi'] = None
 
-      if sentence.OI:
-         result['oi'] = sentence.od.__str__().decode('utf-8')
-         result['oi.msi'] = sentence.od.msi
+      if sentence.oi:
+         result['oi'] = sentence.oi.__str__().decode('utf-8')
+         result['oi.msi'] = sentence.oi.msi
       else:
          result['oi'] = None
          result['oi.msi'] = None
+
+      if sentence.regimen:
+         result['regimen'] = sentence.regimen.__str__().decode('utf-8')
+         result['regimen.msi'] = sentence.regimen.msi
+      else:
+         result['regimen'] = None
+         result['regimen.msi'] = None
+
+      if sentence.equative:
+         result['equative'] = sentence.equative.__str__().decode('utf-8')
+         result['equative.msi'] = sentence.equative.msi
+      else:
+         result['equative'] = None
+         result['equative.msi'] = None
+
+      if sentence.adjuncts:
+         result['adjuncts'] = sentence.adjuncts.__str__().decode('utf-8')
+         result['adjuncts.msi'] = sentence.adjuncts.msi
+      else:
+         result['adjuncts'] = None
+         result['adjuncts.msi'] = None
 
       # return json.dumps(result, ensure_ascii=False).encode('utf-8')
       return web.template.render(WEBAPP_PATH + 'templates/').entinews(result)
