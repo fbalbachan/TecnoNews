@@ -237,18 +237,46 @@ class Sentence(object):
         return None
 
     def get_oi(self):
-       # con verbo transitivo: 
-       #     OI puede existir si hay OD
+        if self.verb_transitivity == 'TRANSITIVE' and not(self.od): return None
+       
+        proper_entities_at_verb_level = filter(lambda e: e.entity_type == 'proper_entity'
+                                               and e.position != self.subject.position,
+                                               self.entities_at_verb_level)
+
+        
+        if self.od: proper_entities_at_verb_level = filter(lambda e: e.position != self.od.position, proper_entities_at_verb_level)
+
+        if proper_entities_at_verb_level:
+            # 1) a derecha
+
+            # 1.1) 
+            proper_entities_right_of_verb = [entity for entity in proper_entities_at_verb_level if entity.position > self.verb.position]
+            if pronominal_entities_right_of_verb:
+                candidates = filter(lambda e: abs(e.position - self.verb.position) <= 2
+                                    and e.level == self.verb.level,
+                                    proper_entities_right_of_verb)
+                if candidates: return sorted(candidates, key=lambda e: e.position)[0]
+
+            # 1.2) sp a nivel - 1 con distancia < 2
+            sps = self.by_label('grup-sp')
+            if sps:
+                for e in filter(lambda e: abs(e.words[0].position - self.verb.position) <= 2, proper_entities_left_of_verb):
+                    containing_sps = filter(lambda sp: sp.contains(x) and sp.level == self.verb.level - 1, sps)
+                    if containing_sps: return e
+
+            # 2) a izquierda
+            proper_entities_left_of_verb = [entity for entity in self.entities_at_verb_level if entity.position > self.verb.position]
+            if pronominal_entities_left_of_verb:
+                candidates = filter(lambda e: abs(e.position - self.verb.position) <= 2
+                                    and e.level == self.verb.level,
+                                    proper_entities_right_of_verb)
+                if candidates: return sorted(candidates, key=lambda e: e.position)[0]
             
-       # si es entidad propiamente dicha:
-       # 1) buscarlo a derecha
-       #    sp a nivel -1 con distancia < 2
+            # 2.1) a distancia 0, al mismo nivel
+        
+            # 2.2) sp a nivel - 1 con distancia < 1
             
-       # 2) buscarlo a izquierda
-       #    o bien primera a distancia 0, al mismo nivel
-       #    o bien es sp a nivel -1 con distancia < 1
-            
-       return None
+        return None
 
     def get_regimen(self):
         return None
@@ -261,7 +289,7 @@ class Sentence(object):
 
     def __str__(self):
         output = "\ninput_sentence: %s" % self.input_sentence.encode('utf-8')
-        output += "\n\nentities: %s" % ', '.join([e.__str__() for e in self.entities])
+        output += "\n\nentities: %s" % ', '.join([e.__str__() + " " + str(e.msi) + " " + str(e.label) + " " + str(e.level) for e in self.entities])
         output += "\n\nsubject: %s" % self.subject.__str__()
         output += "\n\nverb: %s" % self.verb.__str__()
         output += "\nverb_transitivity: %s" % self.verb_transitivity
