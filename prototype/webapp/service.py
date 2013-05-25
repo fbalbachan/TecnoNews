@@ -31,9 +31,9 @@ class EntiNews:
    def GET(self, input_sentence):
       logger.info('.'*80); logger.info('input sentence: %s' % input_sentence)
 
-      sentence = entinews.parse_sentence(input_sentence)
-      entities = entinews.extract_entities(sentence)
-      subject = entinews.extract_subject(sentence)
+      sentence = Sentence(input_sentence)
+      entities = sentence.entities
+      subject = sentence.subject
       verb = sentence.verb
 
       result = {}
@@ -52,12 +52,19 @@ class EntiNews:
       result['transitivity'] = sentence.verb_transitivity
       result['script_class'] = sentence.verb_script_class
 
-      if sentence.OD:
-         result['OD'] = sentence.OD.__str__().decode('utf-8')
-         result['OD.msi'] = sentence.OD.msi
+      if sentence.od:
+         result['od'] = sentence.od.__str__().decode('utf-8')
+         result['od.msi'] = sentence.od.msi
       else:
-         result['OD'] = None
-         result['OD.msi'] = None
+         result['od'] = None
+         result['od.msi'] = None
+
+      if sentence.OI:
+         result['oi'] = sentence.od.__str__().decode('utf-8')
+         result['oi.msi'] = sentence.od.msi
+      else:
+         result['oi'] = None
+         result['oi.msi'] = None
 
       # return json.dumps(result, ensure_ascii=False).encode('utf-8')
       return web.template.render(WEBAPP_PATH + 'templates/').entinews(result)
@@ -67,8 +74,8 @@ class EntiNewsParseTree:
    def GET(self, input_sentence):
       logger.info('.'*80); logger.info('input sentence: %s' % input_sentence)
 
-      sentence = entinews.parse_sentence(input_sentence)
-      entities = entinews.extract_entities(sentence)
+      sentence = Sentence(input_sentence)
+      entities = sentence.entities
       parse_tree = sentence.pretty_freeling_output
 
       return web.template.render('templates').entities(input_sentence, entities, parse_tree)
