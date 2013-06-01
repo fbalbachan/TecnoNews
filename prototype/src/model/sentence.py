@@ -66,12 +66,16 @@ class Sentence(object):
         self.boxes   = None
 
         if self.verb:
+
             # get verb info
             self.verb_script_class = get_script_class(self.verb.lemma)
             self.verb_transitivity = get_transitivity(self.verb.lemma)
             
             # set up available boxes
             self.boxes = allowed_boxes(self.verb_transitivity)
+
+            # fill verb box
+            self.boxes['verb'] = self.verb.words[-1].lemma 
 
             # set subject
             self.subject = self.get_subject()

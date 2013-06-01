@@ -47,7 +47,7 @@ class EntiNews:
       result['subject'] = subject.__str__().decode('utf-8')
       result['subject.msi'] = subject.msi
       result['subject.entity_type'] = subject.entity_type
-      result['verb'] = verb.__str__()
+      result['verb'] = sentence.boxes['verb'].__str__()
       result['verb.msi'] = verb.msi
       result['verb.transitivity'] = sentence.verb_transitivity
       result['verb.script_class'] = sentence.verb_script_class
