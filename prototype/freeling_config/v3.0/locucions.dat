@@ -1,13 +1,155 @@
-hay_que tenemos_que $1:VM I
-<tener>_que tener_que $1:VM I
-hijo_de_perra RG I
-hijos_de_perra RG I
-buenos_días RG I
-buen_día RG I
-buen_dia RG I
-buenos_dias RG I
-buenas_noches RG I
-buenas_tardes RG I
+me_<haber>_<rendir> rendirse $2:VM I
+te_<haber>_<rendir> rendirse $2:VM I
+se_<haber>_<rendir> rendirse $2:VM I
+nos_<haber>_<rendir> rendirse $2:VM I
+os_<haber>_<rendir> rendirse $2:VM I
+me_<rendir> rendirse $2:VM I
+te_<rendir> rendirse $2:VM I
+se_<rendir> rendirse $2:VM I
+nos_<rendir> rendirse $2:VM I
+os_<rendir> rendirse $2:VM I
+<rendir>_tributo rendir_tributo $1:VM I
+<rendir>_examen rendir_examen $1:VM I 
+rendirme rendirse $1:VM I
+rendirte rendirse $1:VM I
+rendirnos rendirse $1:VM I
+rendiros rendirse $1:VM I
+me_<haber>_<afanar> afanarse $2:VM I
+te_<haber>_<afanar> afanarse $2:VM I
+se_<haber>_<afanar> afanarse $2:VM I
+nos_<haber>_<afanar> afanarse $2:VM I
+os_<haber>_<afanar> afanarse $2:VM I
+me_<afanar> afanarse $2:VM I
+te_<afanar> afanarse $2:VM I
+se_<afanar> afanarse $2:VM I
+nos_<afanar> afanarse $2:VM I
+os_<afanar> afanarse $2:VM I
+afanarme afanarse $1:VM I
+afanarte afanarse $1:VM I
+afanarnos afanarse $1:VM I
+afanaros afanarse $1:VM I
+me_<haber>_<alterar> alterarse $2:VM I
+te_<haber>_<alterar> alterarse $2:VM I
+se_<haber>_<alterar> alterarse $2:VM I
+nos_<haber>_<alterar> alterarse $2:VM I
+os_<haber>_<alterar> alterarse $2:VM I
+me_<alterar> alterarse $2:VM I
+te_<alterar> alterarse $2:VM I
+se_<alterar> alterarse $2:VM I
+nos_<alterar> alterarse $2:VM I
+os_<alterar> alterarse $2:VM I
+alterarme alterarse $1:VM I
+alterarte alterarse $1:VM I
+alterarnos alterarse $1:VM I
+alteraros alterarse $1:VM I
+me_<haber>_<aprovechar> aprovecharse $2:VM I
+te_<haber>_<aprovechar> aprovecharse $2:VM I
+se_<haber>_<aprovechar> aprovecharse $2:VM I
+nos_<haber>_<aprovechar> aprovecharse $2:VM I
+os_<haber>_<aprovechar> aprovecharse $2:VM I
+me_<aprovechar> aprovecharse $2:VM I
+te_<aprovechar> aprovecharse $2:VM I
+se_<aprovechar> aprovecharse $2:VM I
+nos_<aprovechar> aprovecharse $2:VM I
+os_<aprovechar> aprovecharse $2:VM I
+aprovecharme aprovecharse $1:VM I
+aprovecharte aprovecharse $1:VM I
+aprovecharnos aprovecharse $1:VM I
+aprovecharos aprovecharse $1:VM I
+me_<haber>_<burlar> burlarse $2:VM I
+te_<haber>_<burlar> burlarse $2:VM I
+se_<haber>_<burlar> burlarse $2:VM I
+nos_<haber>_<burlar> burlarse $2:VM I
+os_<haber>_<burlar> burlarse $2:VM I
+me_<burlar> burlarse $2:VM I
+te_<burlar> burlarse $2:VM I
+se_<burlar> burlarse $2:VM I
+nos_<burlar> burlarse $2:VM I
+os_<burlar> burlarse $2:VM I
+burlarme burlarse $1:VM I
+burlarte burlarse $1:VM I
+burlarnos burlarse $1:VM I
+burlaros burlarse $1:VM I
+me_<haber>_<comprometer> comprometerse $2:VM I
+te_<haber>_<comprometer> comprometerse $2:VM I
+se_<haber>_<comprometer> comprometerse $2:VM I
+nos_<haber>_<comprometer> comprometerse $2:VM I
+os_<haber>_<comprometer> comprometerse $2:VM I
+me_<comprometer> comprometerse $2:VM I
+te_<comprometer> comprometerse $2:VM I
+se_<comprometer> comprometerse $2:VM I
+nos_<comprometer> comprometerse $2:VM I
+os_<comprometer> comprometerse $2:VM I
+comprometerme comprometerse $1:VM I
+comprometerte comprometerse $1:VM I
+comprometernos comprometerse $1:VM I
+comprometeros comprometerse $1:VM I
+me_<haber>_<confiar> confiarse $2:VM I
+te_<haber>_<confiar> confiarse $2:VM I
+se_<haber>_<confiar> confiarse $2:VM I
+nos_<haber>_<confiar> confiarse $2:VM I
+os_<haber>_<confiar> confiarse $2:VM I
+me_<confiar> confiarse $2:VM I
+te_<confiar> confiarse $2:VM I
+se_<confiar> confiarse $2:VM I
+nos_<confiar> confiarse $2:VM I
+os_<confiar> confiarse $2:VM I
+confiarme confiarse $1:VM I
+confiarte confiarse $1:VM I
+confiarnos confiarse $1:VM I
+confiaros confiarse $1:VM I
+me_<haber>_<deprimir> deprimirse $2:VM I
+te_<haber>_<deprimir> deprimirse $2:VM I
+se_<haber>_<deprimir> deprimirse $2:VM I
+nos_<haber>_<deprimir> deprimirse $2:VM I
+os_<haber>_<deprimir> deprimirse $2:VM I
+me_<deprimir> deprimirse $2:VM I
+te_<deprimir> deprimirse $2:VM I
+se_<deprimir> deprimirse $2:VM I
+nos_<deprimir> deprimirse $2:VM I
+os_<deprimir> deprimirse $2:VM I
+deprimirme deprimirse $1:VM I
+deprimirte deprimirse $1:VM I
+deprimirnos deprimirse $1:VM I
+deprimiros deprimirse $1:VM I
+me_<haber>_<deteriorar> deteriorarse $2:VM I
+te_<haber>_<deteriorar> deteriorarse $2:VM I
+se_<haber>_<deteriorar> deteriorarse $2:VM I
+nos_<haber>_<deteriorar> deteriorarse $2:VM I
+os_<haber>_<deteriorar> deteriorarse $2:VM I
+me_<deteriorar> deteriorarse $2:VM I
+te_<deteriorar> deteriorarse $2:VM I
+se_<deteriorar> deteriorarse $2:VM I
+nos_<deteriorar> deteriorarse $2:VM I
+os_<deteriorar> deteriorarse $2:VM I
+deteriorarme deteriorarse $1:VM I
+deteriorarte deteriorarse $1:VM I
+deteriorarnos deteriorarse $1:VM I
+deterioraros deteriorarse $1:VM I
+me_<haber>_<motivar> motivarse $2:VM I
+te_<haber>_<motivar> motivarse $2:VM I
+se_<haber>_<motivar> motivarse $2:VM I
+nos_<haber>_<motivar> motivarse $2:VM I
+os_<haber>_<motivar> motivarse $2:VM I
+me_<motivar> motivarse $2:VM I
+te_<motivar> motivarse $2:VM I
+se_<motivar> motivarse $2:VM I
+nos_<motivar> motivarse $2:VM I
+os_<motivar> motivarse $2:VM I
+motivarme motivarse $1:VM I
+motivarte motivarse $1:VM I
+motivarnos motivarse $1:VM I
+motivaros motivarse $1:VM I
+<estar>_<orgulloso> estar_orgulloso $1:VM I
+bellas_artes bellas_artes NCFP000 I
+<tener>_que deber $1:VM I
+<haber>_que deber $1:VM I
+<bueno>_<día> bueno_día I I
+<bueno>_<noche> bueno_noche tag I
+<bueno>_<tarde> bueno_tarde tag I
+<bueno>_para_nada bueno_para_nada tag I
+<capaz_de> capaz_de tag I
+<capaz_que> tag I
 a_anequín a_anequín RG I
 a_barlovento a_barlovento RG I
 a_barrisco a_barrisco RG I
@@ -3172,81 +3314,3 @@ zona_horaria zona_horaria NCFS000 I
 <zona>_<restringir> zona_restringida $1:NC I
 <zona>_<turístico> zona_turística $1:NC I
 chachi_wuay NCMS000 I
-cristina_kirchner cristina_kirchner NP00000
-atlántico_sur atlántico_sur NP00000
-gran_bretaña gran_bretaña NP00000
-salón_de_las_mujeres_de_el_bicentenario_de_la_casa_rosada salón_de_las_mujeres_de_el_bicentenario_de_la_casa_rosada NP00000
-héctor_timerman héctor_timerman NP00000
-reino_unido reino_unido NP00000
-consejo_de_seguridad consejo_de_seguridad NP00000
-asamblea_general asamblea_general NP00000
-comité_de_descolonización_de_las_naciones_unidas comité_de_descolonización_de_las_naciones_unidas NP00000
-nueva_york nueva_york NP00000
-naciones_unidas naciones_unidas NP00000
-casa_rosada casa_rosada NP00000
-secretaría_de_medios secretaría_de_medios NP00000
-daily_mail daily_mail NP00000
-arturo_puricelli arturo_puricelli NP00000
-kodjo_menan kodjo_menan NP00000
-consejo_de_seguridad_de_las_naciones_unidas consejo_de_seguridad_de_las_naciones_unidas NP00000
-nassir_abdulaziz_al-nasser nassir_abdulaziz_al-nasser NP00000
-ban_ki-moon ban_ki-moon NP00000
-comité_de_descolonización comité_de_descolonización NP00000
-pedro_nuñez_mosquera pedro_nuñez_mosquera NP00000
-jorge_argüello jorge_argüello NP00000
-comité_de_descolonización comité_de_descolonización NP00000
-jan_cheek jan_cheek NP00000
-atlántico_sur atlántico_sur NP00000
-norberto_aguirre norberto_aguirre NP00000
-cristina_kirchner cristina_kirchner NP00000
-atlántico_sur atlántico_sur NP00000
-gran_bretaña gran_bretaña NP00000
-salón_de_las_mujeres_de_el_bicentenario_de_la_casa_rosada salón_de_las_mujeres_de_el_bicentenario_de_la_casa_rosada NP00000
-héctor_timerman héctor_timerman NP00000
-reino_unido reino_unido NP00000
-consejo_de_seguridad consejo_de_seguridad NP00000
-asamblea_general asamblea_general NP00000
-comité_de_descolonización_de_las_naciones_unidas comité_de_descolonización_de_las_naciones_unidas NP00000
-nueva_york nueva_york NP00000
-naciones_unidas naciones_unidas NP00000
-casa_rosada casa_rosada NP00000
-secretaría_de_medios secretaría_de_medios NP00000
-daily_mail daily_mail NP00000
-arturo_puricelli arturo_puricelli NP00000
-kodjo_menan kodjo_menan NP00000
-consejo_de_seguridad_de_las_naciones_unidas consejo_de_seguridad_de_las_naciones_unidas NP00000
-nassir_abdulaziz_al-nasser nassir_abdulaziz_al-nasser NP00000
-ban_ki-moon ban_ki-moon NP00000
-comité_de_descolonización comité_de_descolonización NP00000
-pedro_nuñez_mosquera pedro_nuñez_mosquera NP00000
-jorge_argüello jorge_argüello NP00000
-comité_de_descolonización comité_de_descolonización NP00000
-jan_cheek jan_cheek NP00000
-atlántico_sur atlántico_sur NP00000
-norberto_aguirre norberto_aguirre NP00000
-cristina_kirchner cristina_kirchner NP00000
-atlántico_sur atlántico_sur NP00000
-gran_bretaña gran_bretaña NP00000
-salón_de_las_mujeres_de_el_bicentenario_de_la_casa_rosada salón_de_las_mujeres_de_el_bicentenario_de_la_casa_rosada NP00000
-héctor_timerman héctor_timerman NP00000
-reino_unido reino_unido NP00000
-consejo_de_seguridad consejo_de_seguridad NP00000
-asamblea_general asamblea_general NP00000
-comité_de_descolonización_de_las_naciones_unidas comité_de_descolonización_de_las_naciones_unidas NP00000
-nueva_york nueva_york NP00000
-naciones_unidas naciones_unidas NP00000
-casa_rosada casa_rosada NP00000
-secretaría_de_medios secretaría_de_medios NP00000
-daily_mail daily_mail NP00000
-arturo_puricelli arturo_puricelli NP00000
-kodjo_menan kodjo_menan NP00000
-consejo_de_seguridad_de_las_naciones_unidas consejo_de_seguridad_de_las_naciones_unidas NP00000
-nassir_abdulaziz_al-nasser nassir_abdulaziz_al-nasser NP00000
-ban_ki-moon ban_ki-moon NP00000
-comité_de_descolonización comité_de_descolonización NP00000
-pedro_nuñez_mosquera pedro_nuñez_mosquera NP00000
-jorge_argüello jorge_argüello NP00000
-comité_de_descolonización comité_de_descolonización NP00000
-jan_cheek jan_cheek NP00000
-atlántico_sur atlántico_sur NP00000
-norberto_aguirre norberto_aguirre NP00000
