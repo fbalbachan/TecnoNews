@@ -10,6 +10,7 @@ nos_<rendir> rendirse $2:VM I
 os_<rendir> rendirse $2:VM I
 <rendir>_tributo rendir_tributo $1:VM I
 <rendir>_examen rendir_examen $1:VM I 
+<rendir>_cuentas rendir_cuentas $1:VM I 
 rendirme rendirse $1:VM I
 rendirte rendirse $1:VM I
 rendirnos rendirse $1:VM I

@@ -12622,6 +12622,10 @@ renacer,VERBO,25,0
 renacimiento,,0,0
 renal,,0,0
 rencor,,0,40
+rendir,VERBO,30,0
+rendir_tributo,VERBO,40,0
+rendir_cuentas,VERBO,0,20
+rendir_examen,VERBO,0,0
 rendición,,0,0
 rendija,,0,0
 rendimiento,,0,0
