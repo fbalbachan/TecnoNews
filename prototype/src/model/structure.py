@@ -56,10 +56,6 @@ class Structure(object):
     def set_leaf_status(self):
         if not self.children: self.is_leaf = True
 
-    # def has_multiple_children(self):
-    #     immediate_children = [child for child in self.children if child.level == self.level + 1]
-    #     return len(immediate_children) > 1
-
     def get_children_per_level(self, n):
         return sorted(filter(lambda child: child.level == n, self.children), key=lambda c: c.position)
 
@@ -86,9 +82,6 @@ class Structure(object):
 
     def assign_verb_lemma(self):
         self.lemma = self.words[-1].lemma
-
-    # def assign_verb_position(self):
-    #     self.position = self.words[-1].position
 
     def assign_verb_msi(self):
         if self.has_modal_verb(): self.msi = msi(tag2fullmsi(self.words[0].tag)); return
