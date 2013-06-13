@@ -51,7 +51,7 @@ class TestOD(unittest.TestCase):
             print "input: ", input_text
             print "expected: ", expected_od
             print "got: ", result_od
-            # print sentence
+            print sentence.evidence
             
             self.assertTrue(sentence.is_active)
             self.assertEquals(expected_od.encode('utf-8'), sentence.od.__str__())

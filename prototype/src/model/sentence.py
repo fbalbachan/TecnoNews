@@ -13,6 +13,8 @@ class Sentence(object):
     def __init__(self, input_sentence, analyzer=None):
         self.logger = get_logger('entinews')
 
+        self.evidence = u''
+
         self.input_sentence = input_sentence
 
         if analyzer:
@@ -186,10 +188,12 @@ class Sentence(object):
                 # 1.1.1) a distancia < 2, al mismo nivel
                 candidates = filter(lambda entity:
                                     entity.level == self.verb.level and
+                                    entity.position and
+                                    entity.position != self.od.position and
                                     abs(entity.position - self.verb.position) <= 2,
                                     proper_entities_right_of_verb)
                 if candidates:
-                    print "od: 1.1.1"
+                    self.evidence += "\nod: 1.1.1"
                     return sorted(candidates, key=lambda entity: entity.position)[0]
 
                 # 1.1.2) contenida en sp y a distancia < 2
@@ -202,7 +206,7 @@ class Sentence(object):
                                                                  sp.words[0].lemma == u'a' and
                                                                  abs(sp.position - self.verb.position) <= 2, sps)
                         if sps_containing_candidate_entity:
-                            print "od: 1.1.2"
+                            self.evidence += "\nod: 1.1.2"
                             return entity
 
                 # 1.2) a izquierda
@@ -212,7 +216,7 @@ class Sentence(object):
                                     and abs(entity.position - self.verb.position) == 1,
                                     proper_entities_left_of_verb)
                 if candidates:
-                    print "od: 1.2.1"
+                    self.evidence += "\nod: 1.2.1"
                     return sorted(candidates, key=lambda entity: entity.position)[0]
 
                 # 1.2.2) sp con distancia < 1
@@ -224,7 +228,7 @@ class Sentence(object):
                                                                  sp.words[0].lemma == u'a' and
                                                                  abs(sp.position - self.verb.position) <= 2, sps)
                         if sps_containing_candidate_entity:
-                            print "od: 1.2.2"
+                            self.evidence += "\nod: 1.2.2"
                             return entity
 
         # 2) pronominal entities
@@ -238,7 +242,7 @@ class Sentence(object):
                                     and abs(e.position - self.verb.position) == 1,
                                     pronominal_entities_left_of_verb)
                 if candidates:
-                    print "od: 2.1.1"
+                    self.evidence += "\nod: 2.1.1"
                     return sorted(candidates, key=lambda e: e.position)[0]
 
             # 2.2) a derecha
@@ -249,58 +253,139 @@ class Sentence(object):
                                     and abs(e.position - self.verb.position) == 1,
                                     pronominal_entities_right_of_verb)
                 if candidates:
-                    print "od: 2.2.1"
+                    self.evidence += "\nod: 2.2.1"
                     return sorted(candidates, key=lambda e: e.position)[0]
 
         return None
 
     def get_oi(self):
-        # if self.verb_transitivity == 'TRANSITIVE' and not(self.od): return None
 
-        # proper_entities_at_verb_level = filter(lambda e: e.entity_type == 'proper_entity'
-        #                                        and e.position != self.subject.position,
-        #                                        self.entities_at_verb_level)
+        if self.verb_transitivity == 'TRANSITIVE' and not(self.od): return None
 
+        proper_entities_at_verb_level = filter(lambda e: e.entity_type == 'proper_entity'
+                                               and e.position != self.subject.position,
+                                               self.entities_at_verb_level)
 
-        # if self.od: proper_entities_at_verb_level = filter(lambda e: e.position != self.od.position, proper_entities_at_verb_level)
+        if self.od: proper_entities_at_verb_level = filter(lambda e: e.position != self.od.position, proper_entities_at_verb_level)
 
-        # if proper_entities_at_verb_level:
-        #     # 1) a derecha
+        if proper_entities_at_verb_level:
+            # 1) a derecha
 
-        #     # 1.1)
-        #     proper_entities_right_of_verb = [entity for entity in proper_entities_at_verb_level if entity.position > self.verb.position]
-        #     if pronominal_entities_right_of_verb:
-        #         candidates = filter(lambda e: abs(e.position - self.verb.position) <= 2
-        #                             and e.level == self.verb.level,
-        #                             proper_entities_right_of_verb)
-        #         if candidates: return sorted(candidates, key=lambda e: e.position)[0]
+            # 1.1)
+            proper_entities_right_of_verb = [entity for entity in proper_entities_at_verb_level if entity.position > self.verb.position]
+            if pronominal_entities_right_of_verb:
+                candidates = filter(lambda e: abs(e.position - self.verb.position) <= 2
+                                    and e.level == self.verb.level,
+                                    proper_entities_right_of_verb)
+                if candidates:
+                    self.evidence += "\noi: 1.1"
+                    return sorted(candidates, key=lambda e: e.position)[0]
 
-        #     # 1.2) sp con distancia < 2
-        #     sps = self.by_label('grup-sp')
-        #     print "sps", sps
-        #     if sps:
-        #         for e in filter(lambda e: abs(e.words[0].position - self.verb.position) <= 2, proper_entities_left_of_verb):
-        #             containing_sps = filter(lambda sp: sp.contains(x) and sp.level == self.verb.level -1 , sps)
-        #             if containing_sps: return e
+            # 1.2) sp con distancia < 2
+            sps = self.by_label('grup-sp')
+            if sps:
+                for e in filter(lambda e: abs(e.words[0].position - self.verb.position) <= 2, proper_entities_left_of_verb):
+                    containing_sps = filter(lambda sp: sp.contains(x) and sp.level == self.verb.level -1 , sps)
+                    if containing_sps:
+                        self.evidence += "\noi: 1.2"
+                        return sorted(candidates, key=lambda e: e.position)[-1]
 
-        #     # 2) a izquierda
-        #     proper_entities_left_of_verb = [entity for entity in self.entities_at_verb_level if entity.position > self.verb.position]
-        #     if pronominal_entities_left_of_verb:
-        #         candidates = filter(lambda e: abs(e.position - self.verb.position) <= 2
-        #                             and e.level == self.verb.level,
-        #                             proper_entities_right_of_verb)
-        #         if candidates: return sorted(candidates, key=lambda e: e.position)[0]
+            # 2) a izquierda
+            proper_entities_left_of_verb = [entity for entity in self.entities_at_verb_level if entity.position > self.verb.position]
+            if pronominal_entities_left_of_verb:
+                candidates = filter(lambda e: abs(e.position - self.verb.position) <= 2
+                                    and e.level == self.verb.level,
+                                    proper_entities_right_of_verb)
+                if candidates:
+                    self.evidence += "\noi: 2"
+                    return sorted(candidates, key=lambda e: e.position)[-1]
 
-        #     # 2.1) a distancia 0, al mismo nivel
+            # 2.1) a distancia 0, al mismo nivel
 
-        #     # 2.2) sp a nivel - 1 con distancia < 1
+            # 2.2) sp a nivel - 1 con distancia < 1
 
         return None
 
     def get_regimen(self):
+
+        # 1) grup-sp
+        sps = self.by_label('grup-sp')
+
+        if sps:
+            # 1.1) a derecha, distancia < 3
+            sps_right_of_verb_at_verb_level = filter(lambda sp: (sp.level == self.verb.level)
+                                                     and (sp.position > self.verb.position)
+                                                     and abs(sp.position - self.verb.position) <= 3,
+                                                     sps)
+            if sps_right_of_verb_at_verb_level:
+                self.evidence += "\nregimen: 1.1"
+                return sorted(sps_right_of_verb_at_verb_level, key=lambda sp: sp.position)[0]
+
+            # 1.2) a izquierda, distancia < 2
+            sps_left_of_verb_at_verb_level = filter(lambda sp: (sp.level == self.verb.level)
+                                                     and (sp.position < self.verb.position)
+                                                     and abs(sp.position - self.verb.position) <= 2,
+                                                     sps)
+            if sps_left_of_verb_at_verb_level:
+                self.evidence += "\nregimen: 1.2"
+                return sorted(sps_left_of_verb_at_verb_level, key=lambda sp: sp.position)[0]
+
+        # 2) grup-sp-de
+        sps_des = self.by_label('grup-sp-de')
+
+        if sps_des:
+            # 2.1) a derecha, distancia < 3
+            sps_des_right_of_verb_at_verb_level = filter(lambda sp: (sp.level == self.verb.level)
+                                                         and (sp.position > self.verb.position)
+                                                         and abs(sp.position - self.verb.position) <= 3,
+                                                         sps_des)
+            if sps_des_right_of_verb_at_verb_level:
+                self.evidence += "\nregimen: 2.1"
+                return sorted(sps_right_of_verb_at_verb_level, key=lambda sp: sp.position)[0]
+
+            # 2.2) a izquierda, distancia < 2
+            sps_des_left_of_verb_at_verb_level = filter(lambda sp: (sp.level == self.verb.level)
+                                                        and (sp.position < self.verb.position)
+                                                        and abs(sp.position - self.verb.position) <= 2,
+                                                        sps_des)
+            if sps_des_left_of_verb_at_verb_level:
+                self.evidence += "\nregimen: 2.2"
+                return sorted(sps_des_left_of_verb_at_verb_level, key=lambda sp: sp.position)[-1]
+
         return None
 
     def get_equative(self):
+
+        # 1) s-adj
+        s_adjs = self.by_label('s-adj')
+
+        if s_adjs:
+            # 1.1) a derecha, distancia < 2
+            s_adjs_right_of_verb_at_verb_level = filter(lambda s: (s.level == self.verb.level)
+                                                        and (s.position > self.verb.position)
+                                                        and abs(s.position - self.verb.position) <= 2,
+                                                        s_adjs)
+            if s_adjs_right_of_verb_at_verb_level:
+                self.evidence += "\nregimen: 2.1"
+                return sorted(s_adjs_right_of_verb_at_verb_level, key=lambda s: s.position)[0]
+
+            # 1.2) a izquierda, distancia < 2
+            s_adjs_left_of_verb_at_verb_level = filter(lambda s: (sp.level == self.verb.level)
+                                                       and (s.position < self.verb.position)
+                                                       and abs(s.position - self.verb.position) <= 2,
+                                                       s_adjs)
+            if sps_des_left_of_verb_at_verb_level:
+                self.evidence += "\nregimen: 1.2"
+                return sorted(sps_des_left_of_verb_at_verb_level, key=lambda s: s.position)[-1]
+
+
+            # 1.3) a derecha, 1° entidad al mismo nivel que el verbo
+            s_adjs_right_of_verb_at_verb_level_away = filter(lambda s: (s.level == self.verb.level)
+                                                             and (s.position > self.verb.position)
+                                                             s_adjs)
+                self.evidence += "\nregimen: 1.3"
+                return sorted(sps_right_of_verb_at_verb_level, key=lambda s: s.position)[0]
+
         return None
 
     def get_adjuncts(self):
