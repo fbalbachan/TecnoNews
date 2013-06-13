@@ -174,11 +174,10 @@ class Sentence(object):
         return tacit_subject
 
     def get_od(self):
-        
+
         # 1) proper entities
-        proper_entities = filter(lambda e: e.entity_type and e.entity_type == 'proper_entity'
-                                 and e.position != None and e.position != self.subject.position,
-                                 self.entities)
+        proper_entities = filter(lambda e: e.entity_type and (e.entity_type == 'proper_entity') and (e.position != self.subject.position), self.entities)
+
         if proper_entities:
             proper_entities_right_of_verb = [entity for entity in proper_entities if entity.words[0].position > self.verb.words[0].position]
             if proper_entities_right_of_verb:
@@ -190,15 +189,13 @@ class Sentence(object):
                                     abs(entity.position - self.verb.position) <= 2,
                                     proper_entities_right_of_verb)
                 if candidates:
-                    print "od: 1.1.1" 
+                    print "od: 1.1.1"
                     return sorted(candidates, key=lambda entity: entity.position)[0]
 
                 # 1.1.2) contenida en sp y a distancia < 2
                 sps = self.by_label('grup-sp')
                 if sps:
                     for entity in proper_entities_right_of_verb:
-                        for sp in sps:
-                            print sp.level==self.verb.level,sp.contains(entity),sp.words[0].lemma==u'a',abs(sp.position-self.verb.position)<=2,sps
                         sps_containing_candidate_entity = filter(lambda sp:
                                                                  sp.level == self.verb.level and
                                                                  sp.contains(entity) and
@@ -221,8 +218,6 @@ class Sentence(object):
                 # 1.2.2) sp con distancia < 1
                 if sps:
                     for entity in proper_entities_left_of_verb:
-                        for sp in sps:
-                            print sp.level==self.verb.level,sp.contains(entity),sp.words[0].lemma==u'a',abs(sp.position-self.verb.position)<=2,sps                            
                         sps_containing_candidate_entity = filter(lambda sp:
                                                                  sp.level == self.verb.level and
                                                                  sp.contains(entity) and
@@ -233,9 +228,7 @@ class Sentence(object):
                             return entity
 
         # 2) pronominal entities
-        pronominal_entities = filter(lambda e: e.entity_type and e.entity_type == 'pronominal_entity'
-                                     and e.position != None and e.position != self.subject.position,
-                                     self.entities)
+        pronominal_entities = filter(lambda e: e.entity_type and (e.entity_type == 'pronominal_entity') and e.position != self.subject.position, self.entities)
         if pronominal_entities:
             # 2.1) a izquierda
             # 2.1.1) con distancia 0
