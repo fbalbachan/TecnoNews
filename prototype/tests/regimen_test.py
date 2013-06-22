@@ -7,8 +7,8 @@ class TestRegimen(unittest.TestCase):
 
     def setUp(self):
         self.input_texts_with_regimen = [
-                (u'todos los cuatrimestres yo lidio con mis alumnos', u'mis alumnos'),
-             ]
+            (u'todos los cuatrimestres yo lidio con mis alumnos', u'mis alumnos'),
+        ]
 
     def test_get_regimen(self):
         for (input_text, expected_regimen) in self.input_texts_with_regimen:
@@ -19,7 +19,8 @@ class TestRegimen(unittest.TestCase):
             print "expected: ", expected_regimen
             print "got: ", result_regimen
             print sentence.evidence
-            
+            print sentence
+
             self.assertTrue(sentence.is_active)
             self.assertEquals(expected_regimen.encode('utf-8'), sentence.regimen.__str__())
 

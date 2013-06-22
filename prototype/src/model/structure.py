@@ -11,7 +11,7 @@ from utils.logger_utils import *
 
 class Structure(object):
     def __init__(self, (start, end, struct, level)):
-        self.logger = get_logger('entinews')
+        # self.logger = get_logger('entinews')
 
         self.words = [Word(match.strip()) for match in re.findall(r'.\(\w+ \w+ [A-Z0-9]+ -\){-?\d+', ' '.join(struct), re.U)]
         self.label = struct[0].split('_[')[0].strip('+').lower()
@@ -37,6 +37,19 @@ class Structure(object):
 
     def __str__(self):
         return u' '.join([x for x in self.forms()]).encode('utf-8')
+
+
+    def __eq__(self, other):
+        if other != None and isinstance(other, self.__class__):
+            return self.words[0].position == other.words[0].position
+        else:
+            return False
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+    def conflicts_with(self, *other_entities):
+         return any([self is already_filled_box for already_filled_box in other_entities])
 
     def forms(self):
         return [word.form for word in self.words]

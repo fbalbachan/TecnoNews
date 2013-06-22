@@ -12,7 +12,7 @@ file(pidfile, 'w').write(pid)
 import re, web, codecs, json, logging
 from entinews import *
 
-logger    = get_logger('webapp/service')
+# logger    = get_logger('webapp/service')
 
 urls = (
    '/favicon.ico', 'favicon',
@@ -29,7 +29,7 @@ class favicon:
 
 class EntiNews:
    def GET(self, input_sentence):
-      logger.info('.'*80); logger.info('input sentence: %s' % input_sentence)
+      #logger.info('.'*80); logger.info('input sentence: %s' % input_sentence)
 
       sentence = Sentence(input_sentence)
       entities = sentence.entities
@@ -42,7 +42,7 @@ class EntiNews:
 
       for entity in entities:
          result['entities'].append({'entity': entity.__str__().decode('utf-8'), 'msi': entity.msi})
-         logger.info(u'result: %s' % result)
+         # logger.info(u'result: %s' % result)
 
       result['subject'] = subject.__str__().decode('utf-8')
       result['subject.msi'] = subject.msi
@@ -83,8 +83,9 @@ class EntiNews:
          result['equative.msi'] = None
 
       if sentence.adjuncts:
-         result['adjuncts'] = sentence.adjuncts.__str__().decode('utf-8')
-         result['adjuncts.msi'] = sentence.adjuncts.msi
+         print "sentence adjuntcs", sentence.adjuncts
+         result['adjuncts'] = ' | '.join([adjunct.__str__().decode('utf-8') for adjunct in sentence.adjuncts])
+         result['adjuncts.msi'] = [adjunct.msi for adjunct in sentence.adjuncts]
       else:
          result['adjuncts'] = None
          result['adjuncts.msi'] = None
@@ -95,7 +96,7 @@ class EntiNews:
 
 class EntiNewsParseTree:
    def GET(self, input_sentence):
-      logger.info('.'*80); logger.info('input sentence: %s' % input_sentence)
+      # logger.info('.'*80); logger.info('input sentence: %s' % input_sentence)
 
       sentence = Sentence(input_sentence)
       entities = sentence.entities
