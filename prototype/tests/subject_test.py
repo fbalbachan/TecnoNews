@@ -14,7 +14,7 @@ class TestSubject(unittest.TestCase):
 
         for (input_text, expected_entities) in examples:
             sentence = Sentence(input_text)
-            entities_at_verb_level = [e.__str__() for e in sentence.entities_at_verb_level]
+            entities_at_verb_level = [e.__str__() for e in filter(lambda entity: entity.level == sentence.verb.level, sentence.entities)]
             self.assertEqual(expected_entities, entities_at_verb_level)
 
     def test_subject(self):
