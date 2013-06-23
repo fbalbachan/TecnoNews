@@ -313,7 +313,7 @@ class Sentence(object):
                             self.evidence += "\noi: 1.1"
                             return entity
 
-        # 2) a izquierda
+        # 2) pronominal a izquierda
         # 2.1) a distancia <= 2, al mismo nivel
         entities_at_verb_level = filter(lambda entity: entity.level == self.verb.level, self.entities)
         pronominal_entities_left_of_verb = [entity for entity in entities_at_verb_level
@@ -325,12 +325,25 @@ class Sentence(object):
                                 abs(e.position - self.verb.position) <= 2,
                                 pronominal_entities_left_of_verb)
             if candidates:
-                if self.od: candidates = filter(lambda c: c.words[0].position != self.od.words[0].position, candidates)
-                if candidates:
-                   self.evidence += "\noi: 2.1"
-                   return sorted(candidates, key=lambda e: e.position)[-1]
+                self.evidence += "\noi: 2.1"
+                return sorted(candidates, key=lambda e: e.position)[-1]
 
-        # 2.2) sp con distancia <= 3, al mismo nivel; entidad dentro de sp a nivel (sp+1)
+        # 3) pronominal a derecha
+        # 3.1) a distancia <= 2, al mismo nivel
+        entities_at_verb_level = filter(lambda entity: entity.level == self.verb.level, self.entities)
+        pronominal_entities_right_of_verb = [entity for entity in entities_at_verb_level
+                                            if (entity.position > self.verb.position) and
+                                            (entity.entity_type == 'pronominal_entity') and
+                                            not entity.conflicts_with(self.subject, self.od)]
+        if pronominal_entities_right_of_verb:
+            candidates = filter(lambda e: e.level == self.verb.level and
+                                abs(e.position - self.verb.position) <= 2,
+                                pronominal_entities_right_of_verb)
+            if candidates:
+                self.evidence += "\noi: 3.1"
+                return sorted(candidates, key=lambda e: e.position)[-1]
+
+        # 4) sp con distancia <= 3, al mismo nivel; entidad dentro de sp a nivel (sp+1)
         sps = self.by_label('grup-sp')
         sps_a = filter(lambda sp: sp.words[0].lemma == u'a' and
                        sp.level == self.verb.level and
@@ -340,7 +353,7 @@ class Sentence(object):
             for sp_a in sps_a:
                 for entity in sorted(proper_entities_left_of_verb, key=lambda e: e.position, reverse=True):
                     if (sp_a.contains(entity)) and (entity.level == (sp_a.level + 1)):
-                        self.evidence += "\noi: 2.2"
+                        self.evidence += "\noi: 4"
                         return entity
         
         return None
