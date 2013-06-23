@@ -184,7 +184,10 @@ class Sentence(object):
     def get_od(self):
 
         # 1) proper entities
-        proper_entities = filter(lambda e: e.entity_type and (e.entity_type == 'proper_entity') and (e.position != self.subject.position), self.entities)
+        proper_entities = filter(lambda e:
+                                 e.entity_type and (e.entity_type == 'proper_entity') and
+                                 not e.conflicts_with(self.subject),
+                                 self.entities)
 
         if proper_entities:
             proper_entities_right_of_verb = [entity for entity in proper_entities if entity.words[0].position > self.verb.words[0].position]
@@ -194,8 +197,7 @@ class Sentence(object):
                 # 1.1.1) a distancia <= 3, al mismo nivel
                 candidates = filter(lambda entity:
                                     entity.level == self.verb.level and
-                                    entity.position and
-                                    entity.position != self.subject.position and
+                                    not entity.conflicts_with(self.subject) and
                                     abs(entity.position - self.verb.position) <= 3,
                                     proper_entities_right_of_verb)
                 if candidates:
@@ -210,7 +212,8 @@ class Sentence(object):
                                                                  sp.level == self.verb.level and
                                                                  sp.contains(entity) and
                                                                  sp.words[0].lemma == u'a' and
-                                                                 abs(sp.position - self.verb.position) <= 3, sps)
+                                                                 abs(sp.position - self.verb.position) <= 3 and
+                                                                 not entity.conflicts_with(self.subject), sps)
                         if sps_containing_candidate_entity:
                             self.evidence += "\nod: 1.1.2"
                             return entity
@@ -219,7 +222,8 @@ class Sentence(object):
                 # 1.2.1) distancia <= 2, al mismo nivel
                 proper_entities_left_of_verb = [entity for entity in proper_entities if not(entity in proper_entities_right_of_verb)]
                 candidates = filter(lambda entity: entity.level == self.verb.level
-                                    and abs(entity.position - self.verb.position) <= 2,
+                                    and abs(entity.position - self.verb.position) <= 2 and
+                                    not entity.conflicts_with(self.subject),
                                     proper_entities_left_of_verb)
                 if candidates:
                     self.evidence += "\nod: 1.2.1"
@@ -232,20 +236,27 @@ class Sentence(object):
                                                                  sp.level == self.verb.level and
                                                                  sp.contains(entity) and
                                                                  sp.words[0].lemma == u'a' and
-                                                                 abs(sp.position - self.verb.position) <= 2, sps)
+                                                                 abs(sp.position - self.verb.position) <= 2 and
+                                                                 not entity.conflicts_with(self.subject), sps)
                         if sps_containing_candidate_entity:
                             self.evidence += "\nod: 1.2.2"
                             return entity
 
         # 2) pronominal entities
-        pronominal_entities = filter(lambda e: e.entity_type and (e.entity_type == 'pronominal_entity') and e.position != self.subject.position, self.entities)
+        pronominal_entities = filter(lambda e:
+                                     e.entity_type and (e.entity_type == 'pronominal_entity') and
+                                     not e.conflicts_with(self.subject),
+                                     self.entities)
         if pronominal_entities:
             # 2.1) a izquierda
             # 2.1.1) con distancia <= 2
-            pronominal_entities_left_of_verb = [entity for entity in pronominal_entities if entity.words[0].position < self.verb.words[0].position]
+            pronominal_entities_left_of_verb = [entity for entity in pronominal_entities
+                                                if entity.words[0].position < self.verb.words[0].position]
             if pronominal_entities_left_of_verb:
-                candidates = filter(lambda e: e.level == self.verb.level
-                                    and abs(e.position - self.verb.position) <= 2,
+                candidates = filter(lambda e:
+                                    e.level == self.verb.level and
+                                    abs(e.position - self.verb.position) <= 2 and
+                                    not e.conflicts_with(self.subject),
                                     pronominal_entities_left_of_verb)
                 if candidates:
                     self.evidence += "\nod: 2.1.1"
@@ -255,8 +266,10 @@ class Sentence(object):
             # 2.2.1) con distancia <= 2
             pronominal_entities_right_of_verb = [entity for entity in pronominal_entities if entity.words[0].position > self.verb.words[0].position]
             if pronominal_entities_right_of_verb:
-                candidates = filter(lambda e: e.level == self.verb.level
-                                    and abs(e.position - self.verb.position) <= 2,
+                candidates = filter(lambda e:
+                                    e.level == self.verb.level and
+                                    abs(e.position - self.verb.position) <= 2 and
+                                    not e.conflicts_with(self.subject),
                                     pronominal_entities_right_of_verb)
                 if candidates:
                     self.evidence += "\nod: 2.2.1"
@@ -266,23 +279,23 @@ class Sentence(object):
 
     def get_oi(self):
 
-        if not(self.is_active): return None
+        if not(self.is_active):
+            self.evidence += "\noi: 0.1"
+            return None
 
-        if self.verb_transitivity == 'TRANSITIVE' and not(self.od): return None
+        if self.verb_transitivity == 'TRANSITIVE' and not(self.od):
+            self.evidence += "\noi: 0.2"
+            return None
 
         proper_entities_right_of_verb = filter(lambda e: e.entity_type == 'proper_entity' and
                                                e.words[0].position > self.verb.words[0].position and
-                                               e.words[0].position != self.subject.words[0].position,
+                                               not e.conflicts_with(self.subject, self.od),
                                                self.entities)
 
         proper_entities_left_of_verb = filter(lambda e: e.entity_type == 'proper_entity' and
                                               e.words[0].position < self.verb.words[0].position and
-                                              e.words[0].position != self.subject.words[0].position,
+                                              not e.conflicts_with(self.subject, self.od),
                                               self.entities)
-
-        if self.od:
-            proper_entities_right_of_verb = filter(lambda e: e.words[0].position != self.od.words[0].position, proper_entities_right_of_verb)
-            proper_entities_left_of_verb = filter(lambda e: e.words[0].position != self.od.words[0].position, proper_entities_left_of_verb)
 
         if proper_entities_right_of_verb:
             # 1) a derecha
@@ -300,40 +313,43 @@ class Sentence(object):
                             self.evidence += "\noi: 1.1"
                             return entity
 
-            # 2) a izquierda
-            # 2.1) a distancia <= 2, al mismo nivel
-            entities_at_verb_level = filter(lambda entity: entity.level == self.verb.level, self.entities)
-            pronominal_entities_left_of_verb = [entity for entity in entities_at_verb_level
-                                                if (entity.position > self.verb.position) and
-                                                (entity.entity_type == 'pronominal') and
-                                                (entity.position != self.subject.position)]
-            if pronominal_entities_left_of_verb:
-                candidates = filter(lambda e: e.level == self.verb.level and
-                                    abs(e.position - self.verb.position) <= 2,
-                                    pronominal_entities_left_of_verb)
+        # 2) a izquierda
+        # 2.1) a distancia <= 2, al mismo nivel
+        entities_at_verb_level = filter(lambda entity: entity.level == self.verb.level, self.entities)
+        pronominal_entities_left_of_verb = [entity for entity in entities_at_verb_level
+                                            if (entity.position < self.verb.position) and
+                                            (entity.entity_type == 'pronominal_entity') and
+                                            not entity.conflicts_with(self.subject, self.od)]
+        if pronominal_entities_left_of_verb:
+            candidates = filter(lambda e: e.level == self.verb.level and
+                                abs(e.position - self.verb.position) <= 2,
+                                pronominal_entities_left_of_verb)
+            if candidates:
+                if self.od: candidates = filter(lambda c: c.words[0].position != self.od.words[0].position, candidates)
                 if candidates:
-                    self.evidence += "\noi: 2.1"
-                    # TODO chequear que no sea od
-                    return sorted(candidates, key=lambda e: e.position)[-1]
+                   self.evidence += "\noi: 2.1"
+                   return sorted(candidates, key=lambda e: e.position)[-1]
 
-            # 2.2) sp con distancia <= 3, al mismo nivel; entidad dentro de sp a nivel (sp+1)
-            sps = self.by_label('grup-sp')
-            sps_a = filter(lambda sp: sp.words[0].lemma == u'a' and
-                           sp.level == self.verb.level and
-                           abs(sp.position - self.verb.position) <= 3,
-                           sps)
-            if sps_a:
-                for sp_a in sps_a:
-                    for entity in sorted(proper_entities_left_of_verb, key=lambda e: e.position, reverse=True):
-                        if (sp_a.contains(entity)) and (entity.level == (sp_a.level + 1)):
-                            self.evidence += "\noi: 2.2"
-                            return entity
+        # 2.2) sp con distancia <= 3, al mismo nivel; entidad dentro de sp a nivel (sp+1)
+        sps = self.by_label('grup-sp')
+        sps_a = filter(lambda sp: sp.words[0].lemma == u'a' and
+                       sp.level == self.verb.level and
+                       abs(sp.position - self.verb.position) <= 3,
+                       sps)
+        if sps_a:
+            for sp_a in sps_a:
+                for entity in sorted(proper_entities_left_of_verb, key=lambda e: e.position, reverse=True):
+                    if (sp_a.contains(entity)) and (entity.level == (sp_a.level + 1)):
+                        self.evidence += "\noi: 2.2"
+                        return entity
         
         return None
 
     def get_regimen(self):
 
-        if not(self.is_active): return None
+        if not(self.is_active):
+            self.evidence += "\nregimen: 0.1"
+            return None
 
         # 1) grup-sp
         sps = self.by_label('grup-sp')
@@ -347,9 +363,7 @@ class Sentence(object):
             if sps_right_of_verb_at_verb_level:
                 proper_entities_right_of_verb = filter(lambda e: e.entity_type == 'proper_entity' and
                                                        e.words[0].position > self.verb.words[0].position and
-                                                       e.words[0].position != self.subject.words[0].position and
-                                                       (self.od != None and e.words[0].position != self.od.words[0].position) or True and
-                                                       (self.oi != None and e.words[0].position != self.oi.words[0].position) or True,
+                                                       not e.conflicts_with(self.subject, self.od, self.oi),
                                                        self.entities)
                 for sp in sps_right_of_verb_at_verb_level:
                     for entity in sorted(proper_entities_right_of_verb, key=lambda e: e.position):
@@ -365,9 +379,7 @@ class Sentence(object):
             if sps_left_of_verb_at_verb_level:
                 proper_entities_left_of_verb = filter(lambda e: e.entity_type == 'proper_entity' and
                                                        e.words[0].position < self.verb.words[0].position and
-                                                       e.words[0].position != self.subject.words[0].position and
-                                                       (self.od != None and e.words[0].position != self.od.words[0].position) or True and
-                                                       (self.oi != None and e.words[0].position != self.oi.words[0].position) or True,
+                                                       not e.conflicts_with(self.subject, self.od, self.oi),
                                                        self.entities)
                 for sp in sps_left_of_verb_at_verb_level:
                     for entity in sorted(proper_entities_left_of_verb, key=lambda e: e.position, reverse=True):
@@ -388,9 +400,7 @@ class Sentence(object):
             if sps_des_right_of_verb_at_verb_level:
                 proper_entities_right_of_verb = filter(lambda e: e.entity_type == 'proper_entity' and
                                                        e.words[0].position > self.verb.words[0].position and
-                                                       e.words[0].position != self.subject.words[0].position and
-                                                       (self.od != None and e.words[0].position != self.od.words[0].position) or True and
-                                                       (self.oi != None and e.words[0].position != self.oi.words[0].position) or True,
+                                                       not e.conflicts_with(self.subject, self.od, self.oi),
                                                        self.entities)
                 for sp in sps_des_right_of_verb_at_verb_level:
                     for entity in sorted(proper_entities_right_of_verb, key=lambda e: e.position, reverse=True):
@@ -406,21 +416,21 @@ class Sentence(object):
             if sps_left_of_verb_at_verb_level:
                 proper_entities_left_of_verb = filter(lambda e: e.entity_type == 'proper_entity' and
                                                        e.words[0].position < self.verb.words[0].position and
-                                                       e.words[0].position != self.subject.words[0].position and
-                                                       (self.od != None and e.words[0].position != self.od.words[0].position) or True and
-                                                       (self.oi != None and e.words[0].position != self.oi.words[0].position) or True,
+                                                       not e.conflicts_with(self.subject, self.od, self.oi),
                                                        self.entities)
                 for sp in sps_des_left_of_verb_at_verb_level:
                     for entity in sorted(proper_entities_left_of_verb, key=lambda e: e.position, reverse=True):
                         if (sp.contains(entity)) and (entity.level == (sp.level + 1)):
-                            self.evidence += "\nregimen: 1.2"
+                            self.evidence += "\nregimen: 2.2"
                             return entity
 
         return None
 
     def get_equative(self):
 
-        if not(self.is_active): return None
+        if not(self.is_active):
+            self.evidence += "\nequative: 0.1"
+            return None
 
         # 1) s-adj
         s_adjs = self.by_label('s-adj')
@@ -431,10 +441,6 @@ class Sentence(object):
                                                         (s_adj.level == self.verb.level)
                                                         and (s_adj.position > self.verb.position)
                                                         and abs(s_adj.position - self.verb.position) <= 3
-                                                        # s.words[0].position != self.subject.words[0].position and
-                                                        # (self.od != None and s.words[0].position != self.od.words[0].position) or True and
-                                                        # (self.oi != None and s.words[0].position != self.oi.words[0].position) or True
-                                                        # (self.regimen != None and s.words[0].position != self.regimen.words[0].position) or True,
                                                         and not s_adj.conflicts_with(self.subject, self.od, self.oi, self.regimen),
                                                         s_adjs)
             if s_adjs_right_of_verb_at_verb_level:
@@ -469,7 +475,7 @@ class Sentence(object):
         candidates = []
         for e in self.entities:
             conflict = False
-            for x in [self.subject, self.od, self.oi, self.regimen]:
+            for x in [self.subject, self.od, self.oi, self.regimen, self.equative]:
                 if x != None and e.words[0].position == x.words[0].position:
                     conflict = True
                     break
@@ -488,5 +494,5 @@ class Sentence(object):
         output += "\noi: %s" % self.oi.__str__()
         output += "\nregimen: %s" % self.regimen.__str__()
         output += "\nequative: %s" % self.equative.__str__()
-        output += "\nadjuncts: %s\n" % self.adjuncts.__str__()
+        output += "\nadjuncts: %s\n" % ' '.join([adjunct.__str__() for adjunct in self.adjuncts])
         return output

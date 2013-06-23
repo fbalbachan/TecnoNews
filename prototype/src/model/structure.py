@@ -49,7 +49,7 @@ class Structure(object):
         return not self.__eq__(other)
 
     def conflicts_with(self, *other_entities):
-         return any([self is already_filled_box for already_filled_box in other_entities])
+         return any([self is other_entity for other_entity in other_entities])
 
     def forms(self):
         return [word.form for word in self.words]

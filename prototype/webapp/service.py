@@ -32,6 +32,8 @@ class EntiNews:
       #logger.info('.'*80); logger.info('input sentence: %s' % input_sentence)
 
       sentence = Sentence(input_sentence)
+      print sentence.evidence
+      print sentence
       entities = sentence.entities
       subject = sentence.subject
       verb = sentence.verb
@@ -83,7 +85,6 @@ class EntiNews:
          result['equative.msi'] = None
 
       if sentence.adjuncts:
-         print "sentence adjuntcs", sentence.adjuncts
          result['adjuncts'] = ' | '.join([adjunct.__str__().decode('utf-8') for adjunct in sentence.adjuncts])
          result['adjuncts.msi'] = [adjunct.msi for adjunct in sentence.adjuncts]
       else:
