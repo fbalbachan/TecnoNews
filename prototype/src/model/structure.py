@@ -103,12 +103,13 @@ class Structure(object):
         if self.is_existential_verb(): self.msi['number'] = u'invariable'; return
 
     def assign_verb_pass_lemma(self):
-        self.lemma = filter(lambda child: child.label == 'parti-flex', self.children)[0].children[0].words[0].lemma 
+        self.lemma = self.children[0].words[0].lemma
 
-    def assign_verb_pass_msi(self):
+    def assign_verb_pass_msi(self, verb_pass):
+        print "is_leaf", self.is_leaf, self
         if not(self.is_leaf):
-            vauxs = filter(lambda child: child.label == 'vaux', self.children)
-            vsers = filter(lambda child: child.label == 'vser', self.children)
+            vauxs = filter(lambda child: child.label == 'vaux', verb_pass.children)
+            vsers = filter(lambda child: child.label == 'vser', verb_pass.children)
             if vauxs:
                 self.msi = vauxs[0].msi
             elif vsers:

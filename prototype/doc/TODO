@@ -112,3 +112,11 @@ sujeto: grup-sp encabezado por 'por', a nivel del verbo
 -----------------------------------------------------------------------------------------------
 
 * si entidad es grup-sp "por ...", quitar 'por'
+
+-----------------------------------------------------------------------------------------------
+
+* si no hay verbo en la sentence:
+  primera entidad que aparece es sujeto, el resto son adjuntos
+
+-----------------------------------------------------------------------------------------------
+

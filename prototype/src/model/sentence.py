@@ -67,7 +67,7 @@ class Sentence(object):
         self.equative = None
         self.adjuncts = None
 
-        self.boxes   = None
+        self.boxes   = {}
 
         if self.verb:
 
@@ -85,16 +85,23 @@ class Sentence(object):
 
             # fill verb box
             self.boxes['verb'] = self.verb.words[-1].lemma
-
+            
             # fill allowed boxes
-            if self.boxes['subject']: self.subject = self.get_subject()
-            if self.boxes['od']: self.od = self.get_od()
-            if self.boxes['oi']: self.oi = self.get_oi()
-            if self.boxes['regimen']: self.regimen = self.get_regimen()
-            if self.boxes['equative']: self.equative = self.get_equative()
-            if self.boxes['adjuncts']: self.adjuncts = self.get_adjuncts()
-
-
+            if self.is_active:
+                if self.boxes['subject']: self.subject = self.get_subject()
+                if self.boxes['od']: self.od = self.get_od()
+                if self.boxes['oi']: self.oi = self.get_oi()
+                if self.boxes['regimen']: self.regimen = self.get_regimen()
+                if self.boxes['equative']: self.equative = self.get_equative()
+                if self.boxes['adjuncts']: self.adjuncts = self.get_adjuncts()
+            elif self.is_passive:
+                if self.boxes['subject']: None
+                if self.boxes['od']: self.od = self.get_subject()
+                if self.boxes['oi']: self.oi = None
+                if self.boxes['regimen']: self.regimen = None
+                if self.boxes['equative']: self.equative = None
+                if self.boxes['adjuncts']: self.adjuncts = []
+                
     def __str__(self):
         return ' | '.join(sorted([e.__str__() for e in self.flatstructs]))
 
@@ -141,8 +148,10 @@ class Sentence(object):
         try:
             passive_verb = self.by_label('parti-flex')[0]
             passive_verb.assign_verb_pass_lemma()
-            passive_verb.assign_verb_pass_msi()
+            passive_verb.assign_verb_pass_msi(self.verb_passs[0])
+            print "passive_verb.msi", passive_verb.msi
         except IndexError:
+            print "ojota!"
             passive_verb = None
 
         is_active = active_verb and not(active_verb.is_impersonal_verb()) and not(passive_verb) and any([gv.level==0 for gv in self.grup_verbs])
