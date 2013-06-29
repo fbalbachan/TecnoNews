@@ -35,7 +35,6 @@ class EntiNews:
       print sentence.evidence
       print sentence
       entities = sentence.entities
-      subject = sentence.subject
       verb = sentence.verb
 
       result = {}
@@ -46,9 +45,6 @@ class EntiNews:
          result['entities'].append({'entity': entity.__str__().decode('utf-8'), 'msi': entity.msi})
          # logger.info(u'result: %s' % result)
 
-      result['subject'] = subject.__str__().decode('utf-8')
-      result['subject.msi'] = subject.msi
-      result['subject.entity_type'] = subject.entity_type
       result['verb'] = sentence.boxes['verb'].__str__()
       result['verb.msi'] = verb.msi
       result['verb.transitivity'] = sentence.verb_transitivity
@@ -56,6 +52,15 @@ class EntiNews:
 
       result['boxes'] = sentence.boxes
 
+      if sentence.subject:
+         result['subject'] = sentence.subject.__str__().decode('utf-8')
+         result['subject.msi'] = sentence.subject.msi
+         result['subject.entity_type'] = sentence.subject.entity_type
+      else:
+         result['subject'] = None
+         result['subject.msi'] = None
+         result['subject.entity_type'] = None
+         
       if sentence.od:
          result['od'] = sentence.od.__str__().decode('utf-8')
          result['od.msi'] = sentence.od.msi

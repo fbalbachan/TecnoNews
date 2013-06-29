@@ -103,10 +103,11 @@ ecuativo:
 
 * pasiva:
 
-habilitar sujeto, OD, adjuntos (el resto no)
-
 OD: llenar OD con las mismas reglas de sujeto de activa
-sujeto: grup-sp encabezado por 'por', a nivel del verbo, primero a derecha con distancia < 3, luego a izquierda, con distancia < 2
+sujeto: grup-sp encabezado por 'por', a nivel del verbo
+	1) a derecha con distancia <= 3, que no sea grup-verb-inf
+	2) a izquierda con distancia <= 3, que no sea grup-verb-inf
+	3) 'alguien'
 
 -----------------------------------------------------------------------------------------------
 

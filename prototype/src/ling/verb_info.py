@@ -4,16 +4,21 @@ from utils.logger_utils import *
 from utils.csvwrapper import *
 import codecs
 
-logger = get_logger('entinews')
+# logger = get_logger('entinews')
 
 allowed_boxes_according_to_verb_transitivity = {
     # verb_category : available_boxes
-    'TRANSITIVE'   : {'od': True, 'oi': True, 'regimen': False, 'equative': False, 'adjuncts': True},
-    'INTRANSITIVE' : {'od': False, 'oi': True, 'regimen': False, 'equative': False, 'adjuncts': True},
-    'REGIMEN'      : {'od': False, 'oi': False, 'regimen': True, 'equative': False, 'adjuncts': True},
-    'EQUATIVE'     : {'od': False, 'oi': True, 'regimen': False, 'equative': True, 'adjuncts': True},
-    'EXISTENTIAL'  : {'od': True, 'oi': False, 'regimen': False, 'equative': False, 'adjuncts': True},
+    'TRANSITIVE'   : {'subject': True, 'od': True, 'oi': True, 'regimen': False, 'equative': False, 'adjuncts': True},
+    'INTRANSITIVE' : {'subject': True, 'od': False, 'oi': True, 'regimen': False, 'equative': False, 'adjuncts': True},
+    'REGIMEN'      : {'subject': True, 'od': False, 'oi': False, 'regimen': True, 'equative': False, 'adjuncts': True},
+    'EQUATIVE'     : {'subject': True, 'od': False, 'oi': True, 'regimen': False, 'equative': True, 'adjuncts': True},
+    'EXISTENTIAL'  : {'subject': False, 'od': True, 'oi': False, 'regimen': False, 'equative': False, 'adjuncts': True},
+    'IMPERSONAL'   : {'subject': False, 'od': False, 'oi': False, 'regimen': False, 'equative': False, 'adjuncts': True},
 }
+
+allowed_boxes_for_passive_verbs = {'subject': True, 'od': True, 'oi': False, 'regimen': False, 'equative': False, 'adjuncts': True}
+
+allowed_boxes_for_unimember_sentences = {}
 
 transitivities = {
     'T': 'TRANSITIVE',
@@ -22,6 +27,7 @@ transitivities = {
     'E': 'EQUATIVE',
     'X': 'INTRANSITIVE',
     'H': 'EXISTENTIAL',
+    'M': 'IMPERSONAL',
 }
 
 scripts = {
@@ -37,21 +43,21 @@ def get_script_class(verb):
     try:
         return verbs[verb.lower()]['script']
     except KeyError:
-        logger.warn("wrong/missing verb info: ", verb)
+        # logger.warn("wrong/missing verb info: ", verb)
         return None
 
 def get_transitivity(verb):
     try:
         return verbs[verb.lower()]['transitivity']
     except KeyError:
-        logger.warn("wrong/missing verb info: ", verb)
+        # logger.warn("wrong/missing verb info: ", verb)
         return None
 
 def allowed_boxes(verb_transitivity):
     try:
         result = allowed_boxes_according_to_verb_transitivity[verb_transitivity]
     except KeyError:
-        logger.error("wrong/missing verb transitivity: ", verb_transitivity)
+        # logger.error("wrong/missing verb transitivity: ", verb_transitivity)
         result = None
     return result
 

@@ -42,9 +42,12 @@ class Sentence(object):
                 leaf.msi      = msi(leaf.full_msi)
 
         self.grup_verbs = self.by_label('grup-verb')
+        self.verb_passs = self.by_label('verb-pass')
 
-        # FIXME: so far, only grup-verb sentences
-        self.all_encompassing_structure = self.grup_verbs[0]
+        if self.grup_verbs:
+            self.all_encompassing_structure = self.grup_verbs[0]
+        elif self.verb_passs:
+            self.all_encompassing_structure = self.verb_passs[0]
 
         self.all_words = self.all_encompassing_structure.words
 
@@ -58,7 +61,6 @@ class Sentence(object):
         self.structures_at_verb_level = self.assign_structure_position_relative_to_verb()
 
         self.subject = None
-
         self.od       = None
         self.oi       = None
         self.regimen  = None
@@ -74,15 +76,18 @@ class Sentence(object):
             self.verb_transitivity = get_transitivity(self.verb.lemma)
 
             # set up available boxes
-            self.boxes = allowed_boxes(self.verb_transitivity)
+            if self.is_active:
+                self.boxes = allowed_boxes(self.verb_transitivity)
+            elif self.is_passive:
+                self.boxes = allowed_boxes_for_passive_verbs
+            else:
+                self.boxes = allowed_boxes_for_unimember_sentences
 
             # fill verb box
             self.boxes['verb'] = self.verb.words[-1].lemma
 
-            # set subject
-            self.subject = self.get_subject()
-
             # fill allowed boxes
+            if self.boxes['subject']: self.subject = self.get_subject()
             if self.boxes['od']: self.od = self.get_od()
             if self.boxes['oi']: self.oi = self.get_oi()
             if self.boxes['regimen']: self.regimen = self.get_regimen()
@@ -108,6 +113,10 @@ class Sentence(object):
             if group: entities.extend(group)
         if grup_verb_infs: entities.extend(filter(lambda g: g.level == 1, grup_verb_infs)) # sólo es entity si está a nivel 1
 
+        # remove entities contained in other entities: e.g.,
+        # "llegó el hombre de la esquina" -> entities: ["el hombre de la esquina", "la esquina"] -> entities: ["el hombre de la esquina"]
+        entities = [e for e in entities if not e.is_contained_by_any(entities)]
+
         for entity in entities:
             entity.assign_noun_msi()
             entity.assign_entity_type()
@@ -122,7 +131,6 @@ class Sentence(object):
         return filter(lambda e: e.level == n, self.entities)
 
     def get_voice_and_verb(self):
-        # set verb and its lemma & MSI
         try:
             active_verb = self.by_label('verb')[0]
             active_verb.assign_verb_lemma()
@@ -130,9 +138,8 @@ class Sentence(object):
         except IndexError:
             active_verb = None
 
-        # set verb_pass and its lemma & MSI
         try:
-            passive_verb = self.by_label('verb-pass')[0]
+            passive_verb = self.by_label('parti-flex')[0]
             passive_verb.assign_verb_pass_lemma()
             passive_verb.assign_verb_pass_msi()
         except IndexError:
@@ -146,7 +153,7 @@ class Sentence(object):
         else:
             verb = active_verb
 
-        # verb.assign_verb_position()
+        print "got verb", verb
         return verb, is_active, is_passive
 
     def assign_structure_position_relative_to_verb(self):
@@ -497,13 +504,16 @@ class Sentence(object):
 
     def __str__(self):
         output = "\ninput_sentence: %s" % self.input_sentence.encode('utf-8')
+        output += "\nactive: %s" % self.is_active
+        output += "\npassive: %s" % self.is_passive
+        output += "\nunimember: %s" % self.is_unimember
         output += "\n\nentities:\n%s" % '\n'.join([e.__str__() + " " + str(e.msi) + " " + str(e.label) + " " + str(e.level) for e in self.entities])
-        output += "\n\nsubject: %s" % self.subject.__str__()
-        output += "\nallowed boxes: %s" % [k for (k,v) in filter(lambda (k, v): v is True, self.boxes.iteritems())]
         output += "\n\nverb: %s" % self.boxes['verb'].__str__()
         output += "\nverb_transitivity: %s" % self.verb_transitivity
         output += "\nverb_script_class: %s" % self.verb_script_class
-        output += "\n\nod: %s" % self.od.__str__()
+        output += "\nallowed boxes: %s" % [k for (k,v) in filter(lambda (k, v): v is True, self.boxes.iteritems())]
+        output += "\nsubject: %s" % self.subject.__str__()
+        output += "\nod: %s" % self.od.__str__()
         output += "\noi: %s" % self.oi.__str__()
         output += "\nregimen: %s" % self.regimen.__str__()
         output += "\nequative: %s" % self.equative.__str__()
