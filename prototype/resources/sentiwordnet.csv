@@ -3929,7 +3929,7 @@ continuar,VERBO,0,0
 continuidad,,0,0
 continuo,,0,0
 contorno,,0,0
-contra,,0,0
+contra,,0,40
 contra_reloj,,0,0
 contra_rembolso,,0,0
 contra_viento_y_marea,,0,0
@@ -5154,6 +5154,7 @@ desregulación,,0,0
 destacable,,35,0
 destacamento,,0,0
 destacar,VERBO,30,0
+destacarse,VERBO,50,0
 destartalado,,0,50
 destello,,10,0
 desterrar,VERBO,0,25
@@ -7629,6 +7630,8 @@ habitual,,0,0
 habla,,0,0
 hablante,,0,0
 hablar,VERBO,0,0
+hablar_bien,VERBO,80,0
+hablar_mal,VERBO,0,80
 hacedor,,0,0
 hacendado,,0,0
 hacer_cargo,,0,0
@@ -11089,6 +11092,7 @@ pensamiento,,0,0
 pensamiento_filosófico,,0,0
 pensante,,20,0
 pensar,VERBO,0,0
+pensar_mal,VERBO,0,80
 pensativo,,0,0
 pensión,,0,0
 pensión_de_jubilación,,0,0
