@@ -106,7 +106,6 @@ class Structure(object):
         self.lemma = self.children[0].words[0].lemma
 
     def assign_verb_pass_msi(self, verb_pass):
-        print "is_leaf", self.is_leaf, self
         if not(self.is_leaf):
             vauxs = filter(lambda child: child.label == 'vaux', verb_pass.children)
             vsers = filter(lambda child: child.label == 'vser', verb_pass.children)

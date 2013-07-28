@@ -8,17 +8,17 @@ import codecs
 
 allowed_boxes_according_to_verb_transitivity = {
     # verb_category : available_boxes
-    'TRANSITIVE'   : {'subject': True, 'od': True, 'oi': True, 'regimen': False, 'equative': False, 'adjuncts': True},
-    'INTRANSITIVE' : {'subject': True, 'od': False, 'oi': True, 'regimen': False, 'equative': False, 'adjuncts': True},
-    'REGIMEN'      : {'subject': True, 'od': False, 'oi': False, 'regimen': True, 'equative': False, 'adjuncts': True},
-    'EQUATIVE'     : {'subject': True, 'od': False, 'oi': True, 'regimen': False, 'equative': True, 'adjuncts': True},
-    'EXISTENTIAL'  : {'subject': False, 'od': True, 'oi': False, 'regimen': False, 'equative': False, 'adjuncts': True},
-    'IMPERSONAL'   : {'subject': False, 'od': False, 'oi': False, 'regimen': False, 'equative': False, 'adjuncts': True},
+    'TRANSITIVE'   : {'verb': True, 'subject': True, 'od': True, 'oi': True, 'regimen': False, 'equative': False, 'adjuncts': True},
+    'INTRANSITIVE' : {'verb': True, 'subject': True, 'od': False, 'oi': True, 'regimen': False, 'equative': False, 'adjuncts': True},
+    'REGIMEN'      : {'verb': True, 'subject': True, 'od': False, 'oi': False, 'regimen': True, 'equative': False, 'adjuncts': True},
+    'EQUATIVE'     : {'verb': True, 'subject': True, 'od': False, 'oi': True, 'regimen': False, 'equative': True, 'adjuncts': True},
+    'EXISTENTIAL'  : {'verb': True, 'subject': False, 'od': True, 'oi': False, 'regimen': False, 'equative': False, 'adjuncts': True},
+    'IMPERSONAL'   : {'verb': True, 'subject': False, 'od': False, 'oi': False, 'regimen': False, 'equative': False, 'adjuncts': True},
 }
 
-allowed_boxes_for_passive_verbs = {'subject': True, 'od': True, 'oi': False, 'regimen': False, 'equative': False, 'adjuncts': True}
+allowed_boxes_for_passive_verbs = {'verb': True, 'subject': True, 'od': True, 'oi': False, 'regimen': False, 'equative': False, 'adjuncts': True}
 
-allowed_boxes_for_unimember_sentences = {}
+allowed_boxes_for_unimember_sentences = {'verb': False, 'subject': True, 'od': False, 'oi': False, 'regimen': False, 'equative': False, 'adjuncts': True}
 
 transitivities = {
     'T': 'TRANSITIVE',

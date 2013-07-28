@@ -65,48 +65,49 @@ class Sentence(object):
         self.equative_entities  = self.get_equative_entities()
         self.structures_at_verb_level = self.assign_structure_position_relative_to_verb()
 
-        self.subject  = None
-        self.od       = None
-        self.oi       = None
-        self.regimen  = None
-        self.equative = None
-        self.adjuncts = None
+        self.verb_final_form = None
+        self.subject         = None 
+        self.od              = None 
+        self.oi              = None 
+        self.regimen         = None 
+        self.equative        = None 
+        self.adjuncts        = [] 
 
         self.boxes   = {}
 
         if self.verb:
-
             # get verb info
             self.verb_script_class = get_script_class(self.verb.lemma)
             self.verb_transitivity = get_transitivity(self.verb.lemma)
 
-            # set up available boxes
-            if self.is_active:
-                self.boxes = allowed_boxes(self.verb_transitivity)
-            elif self.is_passive:
-                self.boxes = allowed_boxes_for_passive_verbs
-            else:
-                self.boxes = allowed_boxes_for_unimember_sentences
+        # set up available boxes
+        if self.is_active:
+            self.boxes = allowed_boxes(self.verb_transitivity)
+        elif self.is_passive:
+            self.boxes = allowed_boxes_for_passive_verbs
+        elif self.is_unimember:
+            self.boxes = allowed_boxes_for_unimember_sentences
+        else:
+            raise Exception('unexpected sentence type is neither active, passive or unimember')
 
-            # fill verb box
-            self.boxes['verb'] = self.verb.words[-1].lemma
-            
-            # fill allowed boxes
-            if self.is_active:
-                if self.boxes['subject']: self.subject = self.get_subject()
-                if self.boxes['od']: self.od = self.get_od()
-                if self.boxes['oi']: self.oi = self.get_oi()
-                if self.boxes['regimen']: self.regimen = self.get_regimen()
-                if self.boxes['equative']: self.equative = self.get_equative()
-                if self.boxes['adjuncts']: self.adjuncts = self.get_adjuncts()
-            elif self.is_passive:
-                if self.boxes['subject']: None
-                if self.boxes['od']: self.od = self.get_subject()
-                if self.boxes['oi']: self.oi = None
-                if self.boxes['regimen']: self.regimen = None
-                if self.boxes['equative']: self.equative = None
-                if self.boxes['adjuncts']: self.adjuncts = []
-                
+        # fill allowed boxes
+        if self.is_active:
+            self.verb_final_form = self.verb.words[-1].lemma
+            if self.boxes['subject']: self.subject = self.get_active_subject()
+            if self.boxes['od']: self.od = self.get_od()
+            if self.boxes['oi']: self.oi = self.get_oi()
+            if self.boxes['regimen']: self.regimen = self.get_regimen()
+            if self.boxes['equative']: self.equative = self.get_equative()
+            if self.boxes['adjuncts']: self.adjuncts = self.get_adjuncts()
+        elif self.is_passive:
+            self.verb_final_form = self.verb.words[-1].lemma
+            if self.boxes['subject']: self.subject = self.get_passive_subject()
+            if self.boxes['od']: self.od = self.get_active_subject()
+        elif self.is_unimember:
+            if self.entities:
+                self.subject = self.entities[0]
+                if self.entities > 1: self.adjuncts = self.entities[1:]
+
     def __str__(self):
         return ' | '.join(sorted([e.__str__() for e in self.flatstructs]))
 
@@ -154,11 +155,10 @@ class Sentence(object):
             passive_verb = self.by_label('parti-flex')[0]
             passive_verb.assign_verb_pass_lemma()
             passive_verb.assign_verb_pass_msi(self.verb_passs[0])
-            print "passive_verb.msi", passive_verb.msi
         except IndexError:
             passive_verb = None
 
-        is_active = active_verb and not(active_verb.is_impersonal_verb()) and not(passive_verb) and any([gv.level==0 for gv in self.grup_verbs])
+        is_active = active_verb != None and not(active_verb.is_impersonal_verb()) and not(passive_verb) and any([gv.level==0 for gv in self.grup_verbs])
         is_passive = passive_verb != None
 
         if is_passive:
@@ -177,7 +177,7 @@ class Sentence(object):
                 struct.position = position
         return filter(lambda e: e.position != self.verb.position, structures_at_verb_level)
 
-    def get_subject(self):
+    def get_active_subject(self):
         candidates = filter(lambda e: e.label != 'grup-sp', self.structures_at_verb_level)
         candidates_left_of_verb = [entity for entity in candidates
                                    if entity.position < self.verb.position and entity.entity_type == 'proper_entity']
@@ -186,19 +186,50 @@ class Sentence(object):
         if candidates_left_of_verb:
             left_candidates = [e for e in candidates_left_of_verb if e.msi and msi_concordance(e, self.verb)]
             if left_candidates:
-                self.evidence += "\nsubject: 1"
+                self.evidence += "\nsubject (active sentence): 1"
                 return sorted(left_candidates, key=lambda e: self.verb.position - e.position)[0]
                 
         if candidates_right_of_verb:
             right_candidates = [e for e in candidates_right_of_verb if e.msi and msi_concordance(e, self.verb) and ((e.position - self.verb.position) <= 3)]
             if right_candidates:
-                self.evidence += "\nsubject: 2"
+                self.evidence += "\nsubject (active sentence): 2"
                 return sorted(right_candidates, key=lambda e: e.position - self.verb.position)[0]
 
         tacit_candidate = tacit_subject_for(self.verb)
         tacit_subject = build_structure(word=tacit_candidate)
         tacit_subject.msi = self.verb.msi
         return tacit_subject
+
+    def get_passive_subject(self):
+        
+        # 1) grup-sp encabezado por 'por', a nivel del verbo
+        candidates = filter(lambda e: e.label == 'grup-sp' and e.words[0].form.lower() == u'por', self.structures_at_verb_level)
+        candidates_left_of_verb = [entity for entity in candidates
+                                   if entity.position < self.verb.position]
+        candidates_right_of_verb = [entity for entity in candidates
+                                    if entity.position > self.verb.position]
+ 
+	# 1.1) a derecha con distancia <= 3, que no sea grup-verb-inf
+        if candidates_right_of_verb:
+            right_candidates = [e for e in candidates_right_of_verb if ((e.position - self.verb.position) <= 3) and e.label != 'grup-verb-inf']
+            if right_candidates:
+                self.evidence += "\nsubject (passive sentence): 1.1"
+                candidate = sorted(right_candidates, key=lambda e: e.position - self.verb.position)[0]
+                candidate.words = candidate.words[1:] # remove 'por'
+                return candidate 
+
+	# 1.2) a izquierda con distancia <= 3, que no sea grup-verb-inf
+        if candidates_left_of_verb:
+            left_candidates = [e for e in candidates_left_of_verb if ((e.position - self.verb.position) <= 3) and e.label != 'grup-verb-inf']
+            if left_candidates:
+                self.evidence += "\nsubject (passive sentence): 1.2"
+                candidate = sorted(left_candidates, key=lambda e: self.verb.position - e.position)[0]
+                candidate.words = candidate.words[1:] # remove 'por'
+                return candidate 
+
+	# 2) 'alguien'
+        self.evidence += "\nsubject (passive sentence): 2"
+        return tacit_subject_for_passive_sentence()
 
     def get_od(self):
 
@@ -519,15 +550,16 @@ class Sentence(object):
         output += "\nactive: %s" % self.is_active
         output += "\npassive: %s" % self.is_passive
         output += "\nunimember: %s" % self.is_unimember
-        output += "\n\nentities:\n%s" % '\n'.join([e.__str__() + " " + str(e.msi) + " " + str(e.label) + " " + str(e.level) for e in self.entities])
-        output += "\n\nverb: %s" % self.boxes['verb'].__str__()
-        output += "\nverb_transitivity: %s" % self.verb_transitivity
-        output += "\nverb_script_class: %s" % self.verb_script_class
+        if self.entities: output += "\n\nentities:\n%s" % '\n'.join([e.__str__() + " " + str(e.msi) + " " + str(e.label) + " " + str(e.level) for e in self.entities])
         output += "\nallowed boxes: %s" % [k for (k,v) in filter(lambda (k, v): v is True, self.boxes.iteritems())]
-        output += "\nsubject: %s" % self.subject.__str__()
-        output += "\nod: %s" % self.od.__str__()
-        output += "\noi: %s" % self.oi.__str__()
-        output += "\nregimen: %s" % self.regimen.__str__()
-        output += "\nequative: %s" % self.equative.__str__()
-        output += "\nadjuncts: %s\n" % ' '.join([adjunct.__str__() for adjunct in self.adjuncts])
+        if self.boxes['subject']: output += "\nsubject: %s" % self.subject.__str__()
+        if self.boxes['verb']:
+            output += "\n\nverb: %s" % self.verb_final_form.__str__()
+            output += "\nverb_transitivity: %s" % self.verb_transitivity
+            output += "\nverb_script_class: %s" % self.verb_script_class
+        if self.boxes['od']: output += "\nod: %s" % self.od.__str__()
+        if self.boxes['oi']: output += "\noi: %s" % self.oi.__str__()
+        if self.boxes['regimen']: output += "\nregimen: %s" % self.regimen.__str__()
+        if self.boxes['equative']: output += "\nequative: %s" % self.equative.__str__()
+        if self.boxes['adjuncts']: output += "\nadjuncts: %s\n" % ' '.join([adjunct.__str__() for adjunct in self.adjuncts])
         return output
