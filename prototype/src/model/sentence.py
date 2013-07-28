@@ -204,6 +204,12 @@ class Sentence(object):
         
         # 1) grup-sp encabezado por 'por', a nivel del verbo
         candidates = filter(lambda e: e.label == 'grup-sp' and e.words[0].form.lower() == u'por', self.structures_at_verb_level)
+
+        # las estructuras 'grup-sp' no figuran en la lista de entities, así que no recibieron msi antes
+        for entity in candidates:
+            entity.assign_noun_msi()
+            entity.assign_entity_type() # FIXME: esto no fue pensado para grup-sp
+
         candidates_left_of_verb = [entity for entity in candidates
                                    if entity.position < self.verb.position]
         candidates_right_of_verb = [entity for entity in candidates

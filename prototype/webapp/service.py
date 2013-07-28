@@ -34,22 +34,26 @@ class EntiNews:
       sentence = Sentence(input_sentence)
       print sentence.evidence
       print sentence
-      entities = sentence.entities
-      verb = sentence.verb
 
       result = {}
       result['input_sentence'] = sentence.input_sentence
       result['entities'] = []
 
-      for entity in entities:
+      for entity in sentence.entities:
          result['entities'].append({'entity': entity.__str__().decode('utf-8'), 'msi': entity.msi})
          # logger.info(u'result: %s' % result)
 
-      result['verb'] = sentence.boxes['verb'].__str__()
-      result['verb.msi'] = verb.msi
-      result['verb.transitivity'] = sentence.verb_transitivity
-      result['verb.script_class'] = sentence.verb_script_class
-
+      if sentence.verb:
+         result['verb'] = sentence.verb_final_form.__str__()
+         result['verb.msi'] = sentence.verb.msi
+         result['verb.transitivity'] = sentence.verb_transitivity
+         result['verb.script_class'] = sentence.verb_script_class
+      else:
+         result['verb'] = None
+         result['verb.msi'] = None
+         result['verb.transitivity'] = None
+         result['verb.script_class'] = None
+         
       result['boxes'] = sentence.boxes
 
       if sentence.subject:

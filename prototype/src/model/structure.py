@@ -168,7 +168,6 @@ class Structure(object):
 
         if msi_candidates: self.msi = msi_candidates[0].msi
 
-
 def build_structure(word=u'_', label=u'TACIT'):
     leaf = u'+(%s %s %s -){0' % (word, word, label)
     struct = [u'%s_[' % label, leaf, ']']
