@@ -44,23 +44,28 @@ class Sentence(object):
         self.grup_verbs = self.by_label('grup-verb')
         self.verb_passs = self.by_label('verb-pass')
 
-        if self.grup_verbs:
-            self.all_encompassing_structure = self.grup_verbs[0]
-        elif self.verb_passs:
-            self.all_encompassing_structure = self.verb_passs[0]
-
-        self.all_words = self.all_encompassing_structure.words
-
         # set main verb & sentence voice
         self.verb, self.is_active, self.is_passive = self.get_voice_and_verb()
         self.is_unimember = not(self.is_active) and not(self.is_passive)
+
+        # root node of the sentence parse tree (i.e. the first node at the top)
+        self.all_encompassing_structure = None
+        
+        # set root node depending on sentence's voice 
+        if self.is_active and self.grup_verbs:
+            self.all_encompassing_structure = self.grup_verbs[0]
+        elif self.is_passive and self.verb_passs:
+            self.all_encompassing_structure = self.verb_passs[0]
+
+        self.all_words = []
+        if self.all_encompassing_structure: self.all_words = self.all_encompassing_structure.words
 
         # find entities
         self.entities = self.get_entities()
         self.equative_entities  = self.get_equative_entities()
         self.structures_at_verb_level = self.assign_structure_position_relative_to_verb()
 
-        self.subject = None
+        self.subject  = None
         self.od       = None
         self.oi       = None
         self.regimen  = None
@@ -151,7 +156,6 @@ class Sentence(object):
             passive_verb.assign_verb_pass_msi(self.verb_passs[0])
             print "passive_verb.msi", passive_verb.msi
         except IndexError:
-            print "ojota!"
             passive_verb = None
 
         is_active = active_verb and not(active_verb.is_impersonal_verb()) and not(passive_verb) and any([gv.level==0 for gv in self.grup_verbs])
@@ -162,7 +166,6 @@ class Sentence(object):
         else:
             verb = active_verb
 
-        print "got verb", verb
         return verb, is_active, is_passive
 
     def assign_structure_position_relative_to_verb(self):

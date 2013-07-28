@@ -46,24 +46,30 @@ class TestStructureHead(unittest.TestCase):
 
     def test_get_entity_MSI(self):
         for (input_text, which_entity, expected_MSI) in self.data:
-            entity = filter(lambda e: e.__str__() == which_entity, Sentence(input_text).get_entities())[0]
-            print u"trying: %s" % entity
-            print "result: %s | expected: %s" % (entity.msi, expected_MSI)
+            entity = filter(lambda e: e.__str__() == which_entity.encode('utf-8'), Sentence(input_text).get_entities())[0]
+
+            print("trying: %s" % entity)
+            print("result: %s | expected: %s" % (entity.msi, expected_MSI))
+
             self.assertEqual(entity.msi, expected_MSI)
 
     def test_get_grup_verb_inf_MSI(self):
         input_text = u'caminar por el bosque es peligroso' 
-        entity = filter(lambda x: x.__str__() == u'caminar por el bosque', Sentence(input_text).get_entities())[0]
+        entity = filter(lambda x: x.__str__() == u'caminar por el bosque'.encode('utf-8'), Sentence(input_text).get_entities())[0]
         expected_MSI = {'person': 3, 'number': u'singular', 'gender': u'neutral'}
 
-        print u"trying: %s" % entity
-        print "result: %s | expected: %s" % (entity.msi, expected_MSI)
+        print("trying: %s" % entity)
+        print("result: %s | expected: %s" % (entity.msi, expected_MSI))
+
         self.assertEqual(entity.msi, expected_MSI)
 
     def test_get_grammatical_person_MSIs(self):
         for (sentence, expected_MSI) in self.grammatical_person_data:
             entity = Sentence(sentence).get_entities()[0]
-            print u"%s | result: %s | expected: %s" % (entity, entity.msi, expected_MSI)
+
+            print("trying: %s" % entity)
+            print("%s | result: %s | expected: %s" % (entity, entity.msi, expected_MSI))
+
             self.assertEqual(entity.msi, expected_MSI)
 
 
