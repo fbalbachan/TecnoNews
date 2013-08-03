@@ -103,6 +103,7 @@ class Sentence(object):
             self.verb_final_form = self.verb.words[-1].lemma
             if self.boxes['subject']: self.subject = self.get_passive_subject()
             if self.boxes['od']: self.od = self.get_active_subject()
+            if self.boxes['adjuncts']: self.adjuncts = self.get_adjuncts()
         elif self.is_unimember:
             if self.entities:
                 self.subject = self.entities[0]
