@@ -159,7 +159,7 @@ class Sentence(object):
         except IndexError:
             passive_verb = None
 
-        is_active = active_verb != None and not(active_verb.is_impersonal_verb()) and not(passive_verb) and any([gv.level==0 for gv in self.grup_verbs])
+        is_active = active_verb != None and not(passive_verb) and any([gv.level==0 for gv in self.grup_verbs])
         is_passive = passive_verb != None
 
         if is_passive:
