@@ -2,16 +2,15 @@
 #-*- coding: utf-8 -*-
 import unittest
 from model.sentence import *
+from csv_file_reader import load_csv_test_file
 
 class TestPassiveSentence(unittest.TestCase):
 
-    def test_verb(self):
-        examples = [
-            (u'el alimento fue comido por los animales', u'comer', u'los animales', u'el alimento'),
-            (u'la batalla fue ganada', u'ganar', u'alguien', u'la batalla'),
-        ]
+    def setUp(self):
+        self.input_texts = load_csv_test_file('tests/input/passive_test.csv')
 
-        for (input_text, expected_verb_lemma, expected_subject, expected_od) in examples:
+    def test_verb(self):
+        for (input_text, expected_verb_lemma, expected_subject, expected_od) in self.input_texts:
             sentence = Sentence(input_text)
 
             self.assertEqual(expected_subject.__str__(), sentence.subject.__str__())

@@ -1,0 +1,5 @@
+"input sentence","expected verb","expected subject","expected od"
+"el alimento fue comido por los animales","comer","los animales","el alimento"
+"la batalla fue ganada","ganar","alguien","la batalla"
+"durante noches enteras fueron perseguidas las mujeres","perseguir","alguien","las mujeres"
+"hemos sido perseguidas días enteros por las asesinas","perseguir","las asesinas","nosotros"

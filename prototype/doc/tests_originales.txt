@@ -1,0 +1,272 @@
+-------------------------------------------------------------------
+SENTENCE : lo matamos a su padre.
+sujeto: nosotros{[FIRST] [PLURAL]}
+verbo: matar{[FIRST] [PLURAL]}
+objeto directo: su padre{[SINGULAR] [MALE]}
+objeto indirecto: null
+regimen: null
+adjunts: [él{[THIRD] [SINGULAR] [MALE]}]
+----------------------------------------------------
+SENTENCE : estoy lidiando con mis alumnos de la facultad durante todo el mes.
+sujeto: yo{[FIRST] [SINGULAR]}
+verbo: lidiar{[FIRST] [SINGULAR]}
+objeto directo: null
+objeto indirecto: null
+regimen: mis alumnos de la facultad{[PLURAL] [MALE]}
+adjunts: [todo el mes{[SINGULAR] [MALE]}]
+----------------------------------------------------
+SENTENCE : esto me parece muy bien.
+sujeto: esto{[SINGULAR]}
+verbo: parecer{[THIRD] [SINGULAR]}
+objeto directo: null
+objeto indirecto: null
+regimen: null
+adjunts: [yo{[FIRST] [SINGULAR]}]
+----------------------------------------------------
+SENTENCE : llueve en la ciudad sin parar.
+sujeto: impersonal{}
+verbo: llover{[THIRD] [SINGULAR]}
+objeto directo: null
+objeto indirecto: null
+regimen: null
+adjunts: [la ciudad{[SINGULAR] [FEMALE]}]
+----------------------------------------------------
+SENTENCE : no me anduvo el auto.
+sujeto: el auto{[SINGULAR] [MALE]}
+verbo: andar{[THIRD] [SINGULAR]}
+objeto directo: null
+objeto indirecto: null
+regimen: null
+adjunts: [yo{[FIRST] [SINGULAR]}]
+----------------------------------------------------
+SENTENCE : a los niños debemos educarlos con propiedad.
+sujeto: nosotros{[FIRST] [PLURAL]}
+verbo: educar{[FIRST] [PLURAL]}
+objeto directo: los niños{[PLURAL] [MALE]}
+objeto indirecto: null
+regimen: null
+adjunts: [propiedad{[SINGULAR] [FEMALE]}, ellos{[THIRD] [PLURAL] [MALE]}]
+----------------------------------------------------
+SENTENCE : puedes comprarlo para navidad.
+sujeto: usted{[SECOND] [SINGULAR]}
+verbo: comprar{[SECOND] [SINGULAR]}
+objeto directo: null
+objeto indirecto: null
+regimen: null
+adjunts: [él{[THIRD] [SINGULAR] [MALE]}, navidad{[SINGULAR] [FEMALE]}]
+----------------------------------------------------
+SENTENCE : ella odia correr por el parque a la noche.
+sujeto: ella{[THIRD] [SINGULAR] [FEMALE]}
+verbo: odiar{[THIRD] [SINGULAR]}
+objeto directo: correr por el parque a la noche{[SINGULAR]}
+objeto indirecto: null
+regimen: null
+adjunts: []
+----------------------------------------------------
+SENTENCE : a el hombre lo atacaron ayer por la espalda.
+sujeto: ellos{[THIRD] [PLURAL]}
+verbo: atacar{[THIRD] [PLURAL]}
+objeto directo: él{[THIRD] [SINGULAR] [MALE]}
+objeto indirecto: null
+regimen: null
+adjunts: [él{[THIRD] [SINGULAR] [MALE]}, la espalda{[SINGULAR] [FEMALE]}, el hombre{[SINGULAR] [MALE]}]
+----------------------------------------------------
+SENTENCE : cuchillo en mano, el hombre ataca a la bestia.
+sujeto: el hombre{[SINGULAR] [MALE]}
+verbo: atacar{[THIRD] [SINGULAR]}
+objeto directo: la bestia{[SINGULAR] [FEMALE]}
+objeto indirecto: null
+regimen: null
+adjunts: [mano{[SINGULAR] [FEMALE]}, cuchillo{[SINGULAR] [MALE]}]
+----------------------------------------------------
+SENTENCE : tienen que dejar de fumar cigarrillos.
+sujeto: cigarrillos{[PLURAL] [MALE]}
+verbo: fumar{[THIRD] [PLURAL]}
+objeto directo: null
+objeto indirecto: null
+regimen: null
+adjunts: []
+----------------------------------------------------
+SENTENCE : durante noches enteras fueron perseguidas a sol y sombra las mujeres.
+sujeto: null
+verbo: perseguir{[THIRD] [PLURAL] [FEMALE]}
+objeto directo: ellas{[THIRD] [PLURAL] [FEMALE]}
+objeto indirecto: null
+regimen: null
+adjunts: [sombra{[SINGULAR] [FEMALE]}, las mujeres{[PLURAL] [FEMALE]}, sol{[SINGULAR] [MALE]}, noches enteras{[PLURAL] [FEMALE]}]
+----------------------------------------------------
+SENTENCE : todos los meses llegaba el cartero con una excelente noticia.
+sujeto: el cartero{[SINGULAR] [MALE]}
+verbo: llegar{[THIRD] [SINGULAR]}
+objeto directo: null
+objeto indirecto: null
+regimen: null
+adjunts: [todos los meses{[PLURAL] [MALE]}, una excelente noticia{[SINGULAR] [FEMALE]}]
+----------------------------------------------------
+SENTENCE : Vos y yo somos tal para cual.
+[V (0, 1) <6>]
+[V (0, 1) <6>]
+sujeto: vos y yo{[FIRST] [PLURAL]}
+verbo: ser{[FIRST] [PLURAL]}
+objeto directo: null
+objeto indirecto: null
+regimen: null
+adjunts: [tal{[SINGULAR]}]
+----------------------------------------------------
+SENTENCE : las mujeres necesitamos comer todos los días.
+SENTENCE : durante toda la noche me dijo eso mi amigo.
+sujeto: eso{[SINGULAR]}
+verbo: decir{[THIRD] [SINGULAR]}
+objeto directo: mi amigo{[SINGULAR] [MALE]}
+objeto indirecto: null
+regimen: null
+adjunts: [yo{[FIRST] [SINGULAR]}, toda la noche{[SINGULAR] [FEMALE]}]
+----------------------------------------------------
+SENTENCE : la casa se encuentra sobre la colina.
+sujeto: la casa{[SINGULAR] [FEMALE]}
+verbo: encontrar{[THIRD] [SINGULAR]}
+objeto directo: null
+objeto indirecto: null
+regimen: null
+adjunts: [la colina{[SINGULAR] [FEMALE]}]
+----------------------------------------------------
+SENTENCE : el mueble de mi abuelo se rompe con facilidad.
+sujeto: el mueble de mi abuelo{[SINGULAR] [MALE]}
+verbo: romper{[THIRD] [SINGULAR]}
+objeto directo: null
+objeto indirecto: null
+regimen: null
+adjunts: [facilidad{[SINGULAR] [FEMALE]}]
+----------------------------------------------------
+SENTENCE : odio caminar por el bosque.
+sujeto: yo{[FIRST] [SINGULAR]}
+verbo: odiar{[FIRST] [SINGULAR]}
+objeto directo: caminar por el bosque{[SINGULAR]}
+objeto indirecto: null
+regimen: null
+adjunts: []
+----------------------------------------------------
+SENTENCE : me gusta caminar por el bosque.
+sujeto: caminar por el bosque{[SINGULAR]}
+verbo: gustar{[THIRD] [SINGULAR]}
+objeto directo: yo{[FIRST] [SINGULAR]}
+objeto indirecto: null
+regimen: null
+adjunts: [yo{[FIRST] [SINGULAR]}]
+----------------------------------------------------
+SENTENCE : puede un hombre cambiar al mundo.
+sujeto: un hombre{[SINGULAR] [MALE]}
+verbo: poder{[THIRD] [SINGULAR]}
+objeto directo: cambiar a el mundo{[SINGULAR]}
+objeto indirecto: null
+regimen: null
+adjunts: []
+----------------------------------------------------
+SENTENCE : hemos sido perseguidas días enteros por las asesinas.
+sujeto: las asesinas{[PLURAL] [FEMALE]}
+verbo: perseguir{[FIRST] [PLURAL] [FEMALE]}
+objeto directo: nosotras{[FIRST] [PLURAL] [FEMALE]}
+objeto indirecto: null
+regimen: null
+adjunts: [deas enteros{[PLURAL] [FEMALE]}]
+----------------------------------------------------
+SENTENCE : el perro y el gato son dos animales.
+sujeto: el perro y el gato{[PLURAL] [MALE]}
+verbo: ser{[THIRD] [PLURAL]}
+objeto directo: null
+objeto indirecto: null
+regimen: null
+adjunts: [dos animales{[PLURAL] [MALE]}]
+----------------------------------------------------
+SENTENCE : todo lo dicho es para bien.
+sujeto: lo dicho{[SINGULAR]}
+verbo: ser{[THIRD] [SINGULAR]}
+objeto directo: null
+objeto indirecto: null
+regimen: null
+adjunts: [todo{[SINGULAR] [MALE]}]
+----------------------------------------------------
+SENTENCE : los hombres pueden haber sido malos.
+sujeto: los hombres{[PLURAL] [MALE]}
+verbo: haber{[THIRD] [PLURAL]}
+objeto directo: null
+objeto indirecto: null
+regimen: null
+adjunts: []
+----------------------------------------------------
+SENTENCE : lloraba mucho, las manos apretadas.
+sujeto: él{[THIRD] [SINGULAR]}
+verbo: llorar{[THIRD] [SINGULAR]}
+objeto directo: null
+objeto indirecto: null
+regimen: null
+adjunts: [las manos apretadas{[PLURAL] [FEMALE]}]
+----------------------------------------------------
+SENTENCE : lloraba mucho la condesa de Londres.
+[L (28, 29) <6>]
+[L (28, 29) <6>]
+sujeto: la condeca de Londres{[SINGULAR] [FEMALE]}
+verbo: llorar{[THIRD] [SINGULAR]}
+objeto directo: null
+objeto indirecto: null
+regimen: null
+adjunts: []
+----------------------------------------------------
+SENTENCE : fue manipulada mucho, cuchillo en mano, la condesa de Londres.
+[L (54, 55) <6>]
+[L (54, 55) <6>]
+SENTENCE : La casa nunca había sido tan codiciada antes de su venida.
+[L (0, 1) <6>]
+[L (0, 1) <6>]
+SENTENCE : La casa nunca ha sido tan codiciada antes de su venida.
+[L (0, 1) <6>]
+[L (0, 1) <6>]
+sujeto: la casa{[SINGULAR] [FEMALE]}
+verbo: ser{[THIRD] [SINGULAR]}
+objeto directo: null
+objeto indirecto: null
+regimen: null
+adjunts: [su venida{[SINGULAR] [FEMALE]}]
+----------------------------------------------------
+SENTENCE : La casa, pese a las opiniones ajenas, no debe estar ubicada en la colina.
+[L (0, 1) <6>]
+[L (0, 1) <6>]
+sujeto: la casa ,{[SINGULAR] [FEMALE]}
+verbo: estar{[THIRD] [SINGULAR]}
+objeto directo: null
+objeto indirecto: null
+regimen: null
+adjunts: [las opiniones ajenas{[PLURAL] [FEMALE]}, la colina{[SINGULAR] [FEMALE]}]
+----------------------------------------------------
+SENTENCE : Ella puede comer de todo.
+[E (0, 1) <6>]
+[E (0, 1) <6>]
+sujeto: ella{[THIRD] [SINGULAR] [FEMALE]}
+verbo: comer{[THIRD] [SINGULAR]}
+objeto directo: null
+objeto indirecto: null
+regimen: null
+adjunts: [todo{[SINGULAR] [MALE]}]
+----------------------------------------------------
+SENTENCE : La casa no estaba en venta.
+[L (0, 1) <6>]
+[L (0, 1) <6>]
+sujeto: yo{[FIRST] [SINGULAR]}
+verbo: estar{[FIRST] [SINGULAR]}
+objeto directo: null
+objeto indirecto: null
+regimen: null
+adjunts: [venta{[SINGULAR] [FEMALE]}, la casa{[SINGULAR] [FEMALE]}]
+----------------------------------------------------
+SENTENCE : Salió con todos esa noche.
+[S (0, 1) <6>]
+[S (0, 1) <6>]
+SENTENCE : mi colega y yo trabajamos en conjunto para desarrollar estos algoritmos.
+sujeto: mi colega y yo{[FIRST] [PLURAL]}
+verbo: trabajar{[FIRST] [PLURAL]}
+objeto directo: null
+objeto indirecto: null
+regimen: null
+adjunts: [estos algoritmos{[PLURAL] [MALE]}, conjunto{[SINGULAR] [MALE]}]
+----------------------------------------------------
+SENTENCE : comer por las noches es lo mejor.

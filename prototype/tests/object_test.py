@@ -15,6 +15,7 @@ class TestObjects(unittest.TestCase):
         for (input_text, expected_od) in examples:
             sentence = Sentence(input_text)
             print "sujeto:", sentence.subject
+            print "objeto:", sentence.od
             self.assertEqual(expected_od, sentence.od.__str__())
 
 

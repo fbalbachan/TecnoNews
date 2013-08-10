@@ -7,17 +7,17 @@ class TestVerbInfo(unittest.TestCase):
 
     def test_verb_scripts_and_boxes(self):
         examples = [
-            (u'charlatanear', 'AGENTIVE', 'INTRANSITIVE', {'od': False,
-                                                           'oi': True,
-                                                           'regimen': False,
-                                                           'equative': False}),
+            (u'charlatanear',
+             'AGENTIVE',
+             'INTRANSITIVE',
+             {'regimen': False, 'oi': True, 'od': False, 'verb': True, 'equative': False, 'adjuncts': True, 'subject': True}),
         ]
 
         for (input_verb, expected_script, expected_transitivity, expected_boxes) in examples:
-            info = verb_info(input_verb)
-            self.assertEqual(expected_script,       info['script'])
-            self.assertEqual(expected_transitivity, info['transitivity'])
-            self.assertEqual(expected_boxes,        info['boxes'])
+            print "trying: ", input_verb
+            self.assertEqual(expected_script, get_script_class(input_verb))
+            self.assertEqual(expected_transitivity, get_transitivity(input_verb))
+            self.assertEqual(expected_boxes, allowed_boxes(get_transitivity(input_verb)))
 
 if __name__ == '__main__':
     unittest.main()
