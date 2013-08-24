@@ -61,10 +61,12 @@ class EntiNews:
          result['subject'] = sentence.subject.__str__().decode('utf-8')
          result['subject.msi'] = sentence.subject.msi
          result['subject.entity_type'] = sentence.subject.entity_type
+         result['subject.sentiment'] = u"↑ %.2f, ↓ %.2f" % sentence.subject.sentiment
       else:
          result['subject'] = None
          result['subject.msi'] = None
          result['subject.entity_type'] = None
+         result['subject.sentiment'] = u" - "
          
       if sentence.od:
          result['od'] = sentence.od.__str__().decode('utf-8')

@@ -1,1 +1,1 @@
-./src/entinews.py
+./src/entinews.py $1

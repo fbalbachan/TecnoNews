@@ -1,0 +1,122 @@
+* mostrar freeling parse_tree en webapp: DONE
+
+* person:1, number:singular, gender:neutral => aplanar a "yo": DONE
+
+* obtener sujeto: DONE
+
+  si activa:
+      1) sujeto a mismo nivel que el verbo
+      candidatos, en orden de preferencia:
+        * a izq, al mismo nivel, a distancia infinita
+          condición: mismo msi que el verbo
+        * a der, al mismo nivel, a distancia 2
+               x y z
+               y a distancia 1 de x
+               z a distancia 2 de x
+        * si lo anterior no funciona, es tácito. hay que expresarlo, a partir del msi del verbo
+  else:
+      pass
+  
+* cajitas: 
+  - tienen entidades
+
+  ..............................................................
+  SUJETO | verbo | OBJETO DIRECTO + OBJETO INDIRECTO] | ADJUNTOS
+   (msi) | (msi) | REGIMEN                            |
+                 | ECUATIVO + OBJETO INDIRECTO        | 
+  ..............................................................
+
+  * cómo llenar las cajitas:
+     ante un transitivo, puede haber OD + OI
+     ante un intransitivo, puede haber un OI (dativo de interés)
+     ante un regimen, sólo hay regimen
+     ante un ecuativo, puede haber un OI
+     al buscar entidad sujeto a izquierda, las que no cumplen condición se guardan para la cajita de ADJUNTOS
+
+  * una vez que una entidad llena una cajita, no puede aparecer en otra.
+
+
+  entidades y verbo tienen msi:
+  msi: (persona, genero, numero)
+
+  verbo además tiene: ([transitivo|intransitivo|regimen|ecuativo|blah], [agentivo|objetivo|dosaguas|...])
+                             T         I          R        E     X
+  tablita:
+
+  verbo.lemma | regimen transitividad | script
+
+             
+OD:
+
+condiciones para buscar dependen del tipo de entidad:
+entidades propiamente dichas (a derecha) | entidades pronominales: patons (me), ptonic (a mí)
+
+si candidato es entidad propiamente dicha:
+1) buscarlo a derecha
+   o bien primera a distancia < 2, al mismo nivel
+   o bien es sp a nivel -1 con distancia < 2
+
+2) buscarlo a izquierda
+   o bien primera a distancia 0, al mismo nivel
+   o bien es sp a nivel -1 con distancia < 1
+
+si candidato es entidad pronominal:
+1) buscarlo a izquierda
+   con distancia 0
+1) buscarlo a derecha
+   con distancia 0
+
+OI:
+
+con verbo transitivo: 
+    OI puede existir si hay OD
+
+si es entidad propiamente dicha:
+1) buscarlo a derecha
+   sp a nivel -1 con distancia < 2
+
+2) buscarlo a izquierda
+   o bien primera a distancia 0, al mismo nivel
+   o bien es sp a nivel -1 con distancia < 1
+
+
+regimen:
+
+puede ser grup-sp, grup-sp-de (en ese orden) a nivel del verbo
+
+1) a derecha (a distancia < 3), luego a izquierda (a distancia < 2)
+
+
+ecuativo:
+
+1) s_adj, primero a derecha (< 2), luego a izquierda (< 2)
+
+2) únicamente a derecha, 1° entidad al mismo nivel que el verbo
+
+-----------------------------------------------------------------------------------------------
+
+* si no hay verbo, la primera entidad es el sujeto
+
+* si verbo es existencial, sujeto es None; primera entidad es OD
+
+-----------------------------------------------------------------------------------------------
+
+* pasiva:
+
+OD: llenar OD con las mismas reglas de sujeto de activa
+sujeto: grup-sp encabezado por 'por', a nivel del verbo
+	1) a derecha con distancia <= 3, que no sea grup-verb-inf
+	2) a izquierda con distancia <= 3, que no sea grup-verb-inf
+	3) 'alguien'
+
+-----------------------------------------------------------------------------------------------
+
+* si entidad es grup-sp "por ...", quitar 'por'
+
+-----------------------------------------------------------------------------------------------
+
+* si no hay verbo en la sentence:
+  primera entidad que aparece es sujeto, el resto son adjuntos
+
+-----------------------------------------------------------------------------------------------
+

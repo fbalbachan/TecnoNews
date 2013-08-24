@@ -109,6 +109,8 @@ class Sentence(object):
                 self.subject = self.entities[0]
                 if self.entities > 1: self.adjuncts = self.entities[1:]
 
+        self.assign_sentiment_via_adverb()
+
     def __str__(self):
         return ' | '.join(sorted([e.__str__() for e in self.flatstructs]))
 
@@ -552,6 +554,20 @@ class Sentence(object):
             if not conflict: candidates.append(e)
         return candidates
 
+    def assign_sentiment_via_adverb(self):
+        sentiwordnet_file = 'resources/sentiwordnet.csv'
+        sentiwordnet_file_reader = unicode_csv_reader(codecs.open(sentiwordnet_file, 'r', 'utf-8'), first_line_is_header=False, delimiter=',')
+        words_with_sentiment = {}
+        for line in sentiwordnet_file_reader:
+            word, word_class, positive_sentiment, negative_sentiment = line[0], line[1], float(line[2]), float(line[3])
+            words_with_sentiment[word] = (word, word_class, positive_sentiment, negative_sentiment)
+        adverbs = [leaf.words[0] for leaf in self.leaves if leaf.words[0].tag == 'RG']
+        if adverbs:
+            adverbs_with_sentiment = [words_with_sentiment[adverb.lemma] for adverb in adverbs if words_with_sentiment.has_key(adverb.lemma)]
+            for adverb_with_sentiment in adverbs_with_sentiment:
+               self.subject.sentiment = (self.subject.sentiment[0] + adverb_with_sentiment[2],
+                                         self.subject.sentiment[1] + adverb_with_sentiment[3])
+
     def __str__(self):
         output = "\ninput_sentence: %s" % self.input_sentence.encode('utf-8')
         output += "\nactive: %s" % self.is_active
@@ -559,7 +575,9 @@ class Sentence(object):
         output += "\nunimember: %s" % self.is_unimember
         if self.entities: output += "\n\nentities:\n%s" % '\n'.join([e.__str__() + " " + str(e.msi) + " " + str(e.label) + " " + str(e.level) for e in self.entities])
         output += "\nallowed boxes: %s" % [k for (k,v) in filter(lambda (k, v): v is True, self.boxes.iteritems())]
-        if self.boxes['subject']: output += "\nsubject: %s" % self.subject.__str__()
+        if self.boxes['subject']:
+            output += "\nsubject: %s" % self.subject.__str__()
+            output += "\nsubject_sentiment: positive: %.2f, negative: %.2f" % self.subject.sentiment 
         if self.boxes['verb']:
             output += "\n\nverb: %s" % self.verb_final_form.__str__()
             output += "\nverb_transitivity: %s" % self.verb_transitivity

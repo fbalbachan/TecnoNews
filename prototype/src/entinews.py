@@ -17,5 +17,5 @@ if __name__ == '__main__':
    while True:
       input_text = raw_input('> ').decode('utf-8')
       if input_text == 'q': exit()
-      result = Sentence(input_text)
-      print result
+      sentence = Sentence(input_text)
+      print sentence

@@ -27,6 +27,7 @@ class Structure(object):
         self.lemma = None
         self.position = None
         self.entity_type = None
+        self.sentiment = (0.0, 0.0)
 
     def __repr__(self):
         return u'%s (%d,%d) %s [%d]' % (self.label,
@@ -37,7 +38,6 @@ class Structure(object):
 
     def __str__(self):
         return u' '.join([x for x in self.forms()]).encode('utf-8')
-
 
     def __eq__(self, other):
         if other != None and isinstance(other, self.__class__):

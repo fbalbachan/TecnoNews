@@ -14,7 +14,6 @@ class Word(object):
             self.position = None
         self.gender = None
         self.number = None
-        self.sentiment = (0, 0)
 
     def __repr__(self):
         return self.__str__()
