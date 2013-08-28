@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from structure import *
+from model.structure import *
 from utils.logger_utils import *
 from utils.freeling_utils import FreelingAnalyzer
 from ling.msi_mapper import *
@@ -109,7 +109,9 @@ class Sentence(object):
                 self.subject = self.entities[0]
                 if self.entities > 1: self.adjuncts = self.entities[1:]
 
-        self.assign_sentiment_via_adverb()
+        # self.assign_sentiment_via_adverbial_criterion()
+        
+        # self.assign_sentiment_via_nominal_criterion()
 
     def __str__(self):
         return ' | '.join(sorted([e.__str__() for e in self.flatstructs]))
@@ -554,19 +556,38 @@ class Sentence(object):
             if not conflict: candidates.append(e)
         return candidates
 
-    def assign_sentiment_via_adverb(self):
+    def assign_sentiment_via_adverbial_criterion(self):
         sentiwordnet_file = 'resources/sentiwordnet.csv'
         sentiwordnet_file_reader = unicode_csv_reader(codecs.open(sentiwordnet_file, 'r', 'utf-8'), first_line_is_header=False, delimiter=',')
         words_with_sentiment = {}
         for line in sentiwordnet_file_reader:
             word, word_class, positive_sentiment, negative_sentiment = line[0], line[1], float(line[2]), float(line[3])
             words_with_sentiment[word] = (word, word_class, positive_sentiment, negative_sentiment)
-        adverbs = [leaf.words[0] for leaf in self.leaves if leaf.words[0].tag == 'RG']
+        adverbs = filter(lambda word: word.tag == 'RG', self.all_words)
         if adverbs:
             adverbs_with_sentiment = [words_with_sentiment[adverb.lemma] for adverb in adverbs if words_with_sentiment.has_key(adverb.lemma)]
             for adverb_with_sentiment in adverbs_with_sentiment:
                self.subject.sentiment = (self.subject.sentiment[0] + adverb_with_sentiment[2],
                                          self.subject.sentiment[1] + adverb_with_sentiment[3])
+               self.evidence += u"\nupdating sentiment via adverbial criterion: (word: %s, %s, positive: %d, negative: %d)" % (adverb_with_sentiment[0], adverb_with_sentiment[1] == u'VERBO' and u'VERB' or u'NOT_VERB', adverb_with_sentiment[2], adverb_with_sentiment[3])
+
+    def assign_sentiment_via_nominal_criterion(self):
+        # sentiwordnet_file = 'resources/sentiwordnet.csv'
+        # sentiwordnet_file_reader = unicode_csv_reader(codecs.open(sentiwordnet_file, 'r', 'utf-8'), first_line_is_header=False, delimiter=',')
+        # words_with_sentiment = {}
+        # for line in sentiwordnet_file_reader:
+        #     word, word_class, positive_sentiment, negative_sentiment = line[0], line[1], float(line[2]), float(line[3])
+        #     words_with_sentiment[word] = (word, word_class, positive_sentiment, negative_sentiment)
+
+        # boxes = self.boxes.keys()
+        # for box in boxes:
+        #     for entity in box:
+        #         entity_words_with_sentiment = []
+        #         for entity_word_with_sentiment in entity_words_with_sentiment:
+        #             box.sentiment = (box.sentiment[0] + entity_with_sentiment[2],
+        #                              box.sentiment[1] + entity_with_sentiment[3])
+        #         self.evidence += u"updating sentiment via nominal criterion: (%s, %d, %d)" % entity_word_with_sentiment
+        pass
 
     def __str__(self):
         output = "\ninput_sentence: %s" % self.input_sentence.encode('utf-8')

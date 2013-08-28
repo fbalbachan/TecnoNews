@@ -1,0 +1,2 @@
+input_text,expected_subject_positive_sentiment,expected_subject_negative_sentiment
+"lamentablemente, el barco no existe",0.0,55.0

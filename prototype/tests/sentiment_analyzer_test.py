@@ -2,6 +2,7 @@
 #-*- coding: utf-8 -*-
 import unittest
 from model.sentence import *
+from sentiment.analyzer import SentimentAnalyzer
 from csv_file_reader import load_csv_test_file
 
 class TestSentimentAnalyzer(unittest.TestCase):
@@ -10,12 +11,23 @@ class TestSentimentAnalyzer(unittest.TestCase):
         self.input_texts = load_csv_test_file('tests/input/sentiment_analyzer.csv')
 
     def test_sentiment_analyzer(self):
-        for (input_text, expected_subject_sentiment) in self.input_texts:
-            sentence = Sentence(input_text)
-            expected_subject_sentiment = 0.0
-            print "trying: ", sentence
-            self.assertEquals(expected_subject_sentiment, sentence.subject.sentiment)
 
+        sentiment_analyzer = SentimentAnalyzer()
+
+        for (input_text, expected_subject_positive_sentiment, expected_subject_negative_sentiment) in self.input_texts:
+            print "trying: ", input_text
+
+            sentence = Sentence(input_text)
+            sentiment, evidence = sentiment_analyzer.assign_sentiment_via_adverbial_criterion(sentence)
+
+            expected_subject_positive_sentiment = float(expected_subject_positive_sentiment)
+            expected_subject_negative_sentiment = float(expected_subject_negative_sentiment)
+
+            # self.assertEquals((expected_subject_positive_sentiment, expected_subject_negative_sentiment), sentence.subject.sentiment)
+            # print sentence.evidence
+
+            self.assertEquals((expected_subject_positive_sentiment, expected_subject_negative_sentiment), sentiment)
+            print evidence
 
 if __name__ == '__main__':
     unittest.main()
