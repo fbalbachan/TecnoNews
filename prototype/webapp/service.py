@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import os, sys, re
-from utils.logger_utils import *
+#from utils.logger_utils import *
 
 WEBAPP_PATH = open('webapp/webapp_path','r').read().strip('\n').strip('WEBAPP_PATH=')
 RANDOM_NUMBER_PATH = open('webapp/random_number_path','r').read().strip('\n').strip('RANDOM_NUMBER_PATH=')
