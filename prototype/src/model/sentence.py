@@ -522,7 +522,7 @@ class Sentence(object):
                 return sorted(s_adjs_right_of_verb_at_verb_level, key=lambda s: s.position)[0]
 
             # 1.2) a izquierda, distancia <= 3
-            s_adjs_left_of_verb_at_verb_level = filter(lambda s:
+            s_adjs_left_of_verb_at_verb_level = filter(lambda s_adj:
                                                        (s_adj.level == self.verb.level)
                                                        and (s_adj.position < self.verb.position)
                                                        and abs(s_adj.position - self.verb.position) <= 2
@@ -530,7 +530,7 @@ class Sentence(object):
                                                        s_adjs)
             if s_adjs_left_of_verb_at_verb_level:
                 self.evidence += "\nequative: 1.2"
-                return sorted(sps_des_left_of_verb_at_verb_level, key=lambda s: s.position)[-1]
+                return sorted(s_adjs_left_of_verb_at_verb_level, key=lambda s: s.position)[-1]
 
         # 2) entidades propiamente dichas, a derecha, distancia <= 3
         candidates = filter(lambda e: (e.level == self.verb.level)
