@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from model.structure import *
-from utils.logger_utils import *
+#from utils.logger_utils import *
 from utils.freeling_utils import FreelingAnalyzer
 from ling.msi_mapper import *
 from ling.verb_categories import *
