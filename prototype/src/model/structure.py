@@ -7,7 +7,7 @@ from ling.msi_mapper import *
 from ling.head_labels import *
 from ling.verb_categories import *
 from ling.entity_labels import *
-from utils.logger_utils import *
+#from utils.logger_utils import *
 
 class Structure(object):
     def __init__(self, (start, end, struct, level)):
