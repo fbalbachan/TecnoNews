@@ -1,4 +1,4 @@
-$def with (result)
+$def with (sentencesResults)
 <!DOCTYPE html>
 <html>
   <head>
@@ -15,66 +15,68 @@ $def with (result)
   </head>
   <body onLoad="clearForms()" onUnload="clearForms()">
 
-    <div>
-      <h3>Oración</h3>
-      <p style="margin-right: 40px; margin-left: 40px; font-size: 14px;">$result['input_sentence']</p>
-    </div>
+    $for result in sentencesResults:
+    
+      <div>
+        <h3>Oración</h3>
+        <p style="margin-right: 40px; margin-left: 40px; font-size: 14px;">$result['input_sentence']</p>
+      </div>
 
-    <hr>
+      <hr>
 
-    <div>
-      <h3>Entidades</h3>
-      $if result['entities'] != []:
-	<ul>
-	$for i, entity in enumerate(result['entities']):
-	    <li title="$entity['msi']">$entity['entity']</li>
-	</ul>
-      $else:
-	<p>None found.</p>	
-    </div>
+      <div>
+        <h3>Entidades</h3>
+        $if result['entities'] != []:
+  	<ul>
+  	$for i, entity in enumerate(result['entities']):
+  	    <li title="$entity['msi']">$entity['entity']</li>
+  	</ul>
+        $else:
+  	<p>None found.</p>	
+      </div>
 
-    <hr>
+      <hr>
 
-    <div>
-      <h3>Cajitas</h3>
-      <table border="1" style="padding: 10px;">
-    	<tr>
-    	  <th>Sujeto</th>
-    	  <th>Verbo</th>
-    	  <th>Objeto Directo</th>
-    	  <th>Objeto Indirecto</th>
-    	  <th>Regimen</th>
-    	  <th>Ecuativo</th>
-    	  <th>Adjuntos</th>
-    	</tr>
+      <div>
+        <h3>Cajitas</h3>
+        <table border="1" style="padding: 10px;">
+      	<tr>
+      	  <th>Sujeto</th>
+      	  <th>Verbo</th>
+      	  <th>Objeto Directo</th>
+      	  <th>Objeto Indirecto</th>
+      	  <th>Regimen</th>
+      	  <th>Ecuativo</th>
+      	  <th>Adjuntos</th>
+      	</tr>
 
-	$ if result['boxes']['subject']: color_subject = '#33FF66'
-	$ else: color_subject = "#FF6666"
-	$ if result['boxes']['od']: color_od = '#33FF66'
-	$ else: color_od = "#FF6666"
-	$ if result['boxes']['oi']: color_oi = '#33FF66'
-	$ else: color_oi = "#FF6666"
-	$ if result['boxes']['regimen']: color_regimen = '#33FF66'
-	$ else: color_regimen = "#FF6666"
-	$ if result['boxes']['equative']: color_equative = '#33FF66'
-	$ else: color_equative = "#FF6666"
-	$ if result['boxes']['adjuncts']: color_adjuncts = '#33FF66'
-	$ else: color_adjuncts = "#FF6666"
+  	$ if result['boxes']['subject']: color_subject = '#33FF66'
+  	$ else: color_subject = "#FF6666"
+  	$ if result['boxes']['od']: color_od = '#33FF66'
+  	$ else: color_od = "#FF6666"
+  	$ if result['boxes']['oi']: color_oi = '#33FF66'
+  	$ else: color_oi = "#FF6666"
+  	$ if result['boxes']['regimen']: color_regimen = '#33FF66'
+  	$ else: color_regimen = "#FF6666"
+  	$ if result['boxes']['equative']: color_equative = '#33FF66'
+  	$ else: color_equative = "#FF6666"
+  	$ if result['boxes']['adjuncts']: color_adjuncts = '#33FF66'
+  	$ else: color_adjuncts = "#FF6666"
 
-    	<tr>
-    	  <td style="padding: 10px; text-align: center;" bgcolor=$color_subject title="$result['subject.msi'] | $result['subject.entity_type']"> $result['subject']</td>
-    	  <td style="padding: 10px; text-align: center;" title="$result['verb.msi'] | $result['verb.transitivity'] | $result['verb.script_class']"> $result['verb']</td>
-    	  <td style="padding: 10px; text-align: center;" bgcolor=$color_od title="$result['od.msi']"> $result['od']</td>
-	  <td style="padding: 10px; text-align: center;" bgcolor=$color_oi title="$result['oi.msi']"> $result['oi']</td>
-	  <td style="padding: 10px; text-align: center;" bgcolor=$color_regimen title="$result['regimen.msi']"> $result['regimen']</td>
-	  <td style="padding: 10px; text-align: center;" bgcolor=$color_equative title="$result['equative.msi']"> $result['equative']</td>
-	  <td style="padding: 10px; text-align: center;" bgcolor=$color_adjuncts title="$result['adjuncts.msi']"> $result['adjuncts']</td>
-    	</tr>
-    	<tr>
-    	  <td style="padding: 10px; text-align: center;" bgcolor=$color_subject> $result['subject.sentiment']</td>
-	</tr>
-      </table>
-    </div>
+      	<tr>
+      	  <td style="padding: 10px; text-align: center;" bgcolor=$color_subject title="$result['subject.msi'] | $result['subject.entity_type']"> $result['subject']</td>
+      	  <td style="padding: 10px; text-align: center;" title="$result['verb.msi'] | $result['verb.transitivity'] | $result['verb.script_class']"> $result['verb']</td>
+      	  <td style="padding: 10px; text-align: center;" bgcolor=$color_od title="$result['od.msi']"> $result['od']</td>
+  	  <td style="padding: 10px; text-align: center;" bgcolor=$color_oi title="$result['oi.msi']"> $result['oi']</td>
+  	  <td style="padding: 10px; text-align: center;" bgcolor=$color_regimen title="$result['regimen.msi']"> $result['regimen']</td>
+  	  <td style="padding: 10px; text-align: center;" bgcolor=$color_equative title="$result['equative.msi']"> $result['equative']</td>
+  	  <td style="padding: 10px; text-align: center;" bgcolor=$color_adjuncts title="$result['adjuncts.msi']"> $result['adjuncts']</td>
+      	</tr>
+      	<tr>
+      	  <td style="padding: 10px; text-align: center;" bgcolor=$color_subject> $result['subject.sentiment']</td>
+  	</tr>
+        </table>
+      </div>
 
   </body>
 </html>
