@@ -35,8 +35,8 @@ class EntiNews:
       input_sentences = sentenceSplitter.splitInSentences(input_sentence)
 
       sentencesResults = []
-
-      for (sentenceText in input_sentences)
+      
+      for sentenceText in input_sentences:
 
          sentence = Sentence(sentenceText)
          print sentence.evidence
