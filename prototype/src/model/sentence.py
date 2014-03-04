@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from model.structure import *
-from utils.logger_utils import *
+#from utils.logger_utils import *
 from utils.freeling_utils import FreelingAnalyzer
 from ling.msi_mapper import *
 from ling.verb_categories import *
@@ -530,7 +530,7 @@ class Sentence(object):
                                                        s_adjs)
             if s_adjs_left_of_verb_at_verb_level:
                 self.evidence += "\nequative: 1.2"
-                return sorted(sps_des_left_of_verb_at_verb_level, key=lambda s: s.position)[-1]
+                return sorted(s_adjs_left_of_verb_at_verb_level, key=lambda s: s.position)[-1]
 
         # 2) entidades propiamente dichas, a derecha, distancia <= 3
         candidates = filter(lambda e: (e.level == self.verb.level)
