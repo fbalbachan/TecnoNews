@@ -37,7 +37,7 @@ class Sentence(object):
         # assign MSI to all leaves
         self.leaves = [s for s in self.flatstructs if s.is_leaf]
         for leaf in self.leaves:
-            if leaf.label != u'fc':
+            if leaf.label != u'fc' and leaf.label != u'data':
                 leaf.full_msi = tag2fullmsi(leaf.words[0].tag)
                 leaf.msi      = msi(leaf.full_msi)
 
