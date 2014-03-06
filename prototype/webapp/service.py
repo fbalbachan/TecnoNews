@@ -115,7 +115,7 @@ class EntiNews:
          sentencesResults.append(result)
 
       # return json.dumps(result, ensure_ascii=False).encode('utf-8')
-      return web.template.render(WEBAPP_PATH + 'templates/').entinews(sentencesResults)
+      return web.template.render(WEBAPP_PATH + 'templates/').entinews(sentencesResults, input_sentence)
       # return page(result)
 
 class EntiNewsParseTree:

@@ -1,4 +1,4 @@
-$def with (sentencesResults)
+$def with (sentencesResults, input_sentence)
 <!DOCTYPE html>
 <html>
   <head>
@@ -14,6 +14,11 @@ $def with (sentencesResults)
     </script>
   </head>
   <body onLoad="clearForms()" onUnload="clearForms()">
+
+    <div>
+        <h3>Texto original</h3>
+        <p style="margin-right: 40px; margin-left: 40px; font-size: 14px;">$input_sentence</p>
+      </div>
 
     $for result in sentencesResults:
     
