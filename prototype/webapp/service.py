@@ -3,6 +3,7 @@
 import os, sys, re
 #from utils.logger_utils import *
 from model import sentenceSplitter
+from utils import tokenize
 
 WEBAPP_PATH = open('webapp/webapp_path','r').read().strip('\n').strip('WEBAPP_PATH=')
 RANDOM_NUMBER_PATH = open('webapp/random_number_path','r').read().strip('\n').strip('RANDOM_NUMBER_PATH=')
@@ -34,9 +35,11 @@ class EntiNews:
       #logger.info('.'*80); logger.info('input sentence: %s' % input_sentence)
       input_sentences = sentenceSplitter.splitInSentences(input_sentence)
 
+      initially_processed_sentences = [tokenize.replace_repeated_letters(tokenize.limpieza_inicial(tokenize.detroll(s))) for s in input_sentences]
+
       sentencesResults = []
       
-      for sentenceText in input_sentences:
+      for sentenceText in initially_processed_sentences:
 
          sentence = Sentence(sentenceText)
          print sentence.evidence
