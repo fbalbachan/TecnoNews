@@ -15,8 +15,6 @@ $def with (sentencesResults, input_sentence)
   </head>
   <body onLoad="clearForms()" onUnload="clearForms()">
 
-    $sentenceNumber = 0
-    
     <div>
         <h3>Texto original</h3>
         <p style="margin-right: 40px; margin-left: 40px; font-size: 14px;">$input_sentence</p>
@@ -24,10 +22,8 @@ $def with (sentencesResults, input_sentence)
 
     $for result in sentencesResults:
     
-      $sentenceNumber = sentenceNumber + 1
-
       <div>
-        <h3>Oración # $sentenceNumber</h3>
+        <h3>Oración # $result['sentence_number']</h3>
         <p style="margin-right: 40px; margin-left: 40px; font-size: 14px;">$result['input_sentence']</p>
       </div>
 

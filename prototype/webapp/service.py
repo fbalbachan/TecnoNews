@@ -38,8 +38,12 @@ class EntiNews:
       initially_processed_sentences = [tokenize.replace_repeated_letters(tokenize.limpieza_inicial(tokenize.detroll(s))) for s in input_sentences]
 
       sentencesResults = []
+
+      sentenceNumber = 0
       
       for sentenceText in initially_processed_sentences:
+
+         sentenceNumber = sentenceNumber + 1
 
          sentence = Sentence(sentenceText)
          print sentence.evidence
@@ -47,6 +51,7 @@ class EntiNews:
 
          result = {}
          result['input_sentence'] = sentence.input_sentence
+         result['sentence_number'] = sentenceNumber
          result['entities'] = []
 
          for entity in sentence.entities:
