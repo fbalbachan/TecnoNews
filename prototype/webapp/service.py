@@ -21,7 +21,7 @@ urls = (
    '/favicon.ico', 'favicon',
    '/sentence/tree/(.+)', 'EntiNewsParseTree',
    '/entinews/result', 'EntiNews',
-   RANDOM_NUMBER_PATH + '/', 'Index',
+   'input/' + RANDOM_NUMBER_PATH, 'Index',
 )
 
 app = web.application(urls, globals())
