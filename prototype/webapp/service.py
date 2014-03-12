@@ -20,8 +20,8 @@ from entinews import *
 urls = (
    '/favicon.ico', 'favicon',
    '/sentence/tree/(.+)', 'EntiNewsParseTree',
-   '/entinews/result', 'EntiNews',
-   '/input/' + RANDOM_NUMBER_PATH, 'Index',
+   '/result', 'EntiNews',
+   '/input', 'Index',
 )
 
 app = web.application(urls, globals())
