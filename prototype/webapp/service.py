@@ -20,7 +20,8 @@ from entinews import *
 urls = (
    '/favicon.ico', 'favicon',
    '/sentence/tree/(.+)', 'EntiNewsParseTree',
-   '/sentence/' + RANDOM_NUMBER_PATH + '/(.+)', 'EntiNews',
+   '/entinews/result', 'EntiNews',
+   RANDOM_NUMBER_PATH + '/', 'Index',
 )
 
 app = web.application(urls, globals())
@@ -30,10 +31,19 @@ class favicon:
       f = open('webapp/static/favicon.ico', 'rb') 
       return f.read() 
 
+class Index:
+   def GET(self):
+      return web.template.render('templates').index()
+
 class EntiNews:
-   def GET(self, input_sentence):
+   def GET(self):
+
+      i = web.input()
+      inputtext = i.text
+      logger.info('.'*80); logger.info("new text: %s" % inputtext)
+
       #logger.info('.'*80); logger.info('input sentence: %s' % input_sentence)
-      input_sentences = sentenceSplitter.splitInSentences(input_sentence)
+      input_sentences = sentenceSplitter.splitInSentences(inputtext)
 
       initially_processed_sentences = [tokenize.replace_repeated_letters(tokenize.limpieza_inicial(tokenize.detroll(s))) for s in input_sentences]
 
