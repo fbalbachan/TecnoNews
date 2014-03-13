@@ -33,7 +33,6 @@ class favicon:
 
 class Index:
    def GET(self):
-      return web.template.render('templates').index()
       return web.template.render(WEBAPP_PATH + 'templates/').index()
 
 class EntiNews:
