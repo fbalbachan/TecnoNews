@@ -33,7 +33,7 @@ class favicon:
 
 class Index:
    def GET(self):
-      return web.template.render(WEBAPP_PATH + 'templates/').index()
+      return web.template.render('webapp/templates/').index()
 
 class EntiNews:
    def GET(self):
@@ -130,7 +130,7 @@ class EntiNews:
          sentencesResults.append(result)
 
       # return json.dumps(result, ensure_ascii=False).encode('utf-8')
-      return web.template.render(WEBAPP_PATH + 'templates/').entinews(sentencesResults, inputtext)
+      return web.template.render('webapp/templates/').entinews(sentencesResults, inputtext)
       # return page(result)
 
 class EntiNewsParseTree:

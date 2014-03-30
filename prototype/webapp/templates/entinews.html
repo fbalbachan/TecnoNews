@@ -16,28 +16,28 @@ $def with (sentencesResults, input_sentence)
   <body onLoad="clearForms()" onUnload="clearForms()">
 
     <div>
-        <h3>Texto original</h3>
+        <h3>Input</h3>
         <p style="margin-right: 40px; margin-left: 40px; font-size: 14px;">$input_sentence</p>
       </div>
 
     $for result in sentencesResults:
     
       <div>
-        <h3>Oración # $result['sentence_number']</h3>
+        <h3>Sentence # $result['sentence_number']</h3>
         <p style="margin-right: 40px; margin-left: 40px; font-size: 14px;">$result['input_sentence']</p>
       </div>
 
       <hr>
 
       <div>
-        <h3>Entidades</h3>
+        <h3>Entities</h3>
         $if result['entities'] != []:
         	<ul>
         	$for i, entity in enumerate(result['entities']):
         	    <li title="$entity['msi']">$entity['entity']</li>
         	</ul>
         $else:
-  	<p>None found.</p>	
+  	<p>No entities found.</p>	
       </div>
 
       <hr>
@@ -46,13 +46,13 @@ $def with (sentencesResults, input_sentence)
         <h3>SVO Slots</h3>
         <table border="1" style="padding: 10px;">
       	<tr>
-      	  <th>Sujeto</th>
-      	  <th>Verbo</th>
-      	  <th>Objeto Directo</th>
-      	  <th>Objeto Indirecto</th>
-      	  <th>Regimen</th>
-      	  <th>Ecuativo</th>
-      	  <th>Adjuntos</th>
+      	  <th>Subject</th>
+      	  <th>Verb</th>
+      	  <th>Direct Object</th>
+      	  <th>Indirect Object</th>
+      	  <th>Regime</th>
+      	  <th>Equative</th>
+      	  <th>Adjuncts</th>
       	</tr>
 
     	$ if result['boxes']['subject']: color_subject = '#33FF66'

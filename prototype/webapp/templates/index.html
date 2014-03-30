@@ -1,10 +1,10 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
   <head>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.css">
     <script src="static/jquery-1.6.2.min.js"></script> 
-    <title>Entinews</title>
+    <title>SentiLecto</title>
     <script> 
       $$(document).ready(function(){
       $$('#language .es').click(function(){
@@ -33,8 +33,12 @@
             <span class="icon-bar"></span> 
             <span class="icon-bar"></span> 
           </button> 
+	  
           <div class="nav-collapse collapse"> 
             <ul class="nav"> 
+              <!-- <li class="">  -->
+              <!--   <a href="http://"></a>  -->
+              <!-- </li>  -->
             </ul> 
           </div> 
         </div> 
@@ -49,45 +53,23 @@
 	<form class="well form-search" action="/entinews/result" method="GET">  
 	  <fieldset>  
 	    <div class="control-group"> 
-	      <label class="control-label" for="text">Texto:</label>
+	      <label class="control-label" for="text">Input Text (only Spanish):</label>
 	      <!-- <p></p> -->
 	      <div class="controls"> 
-		<textarea class="input-xlarge" id="textarea" rows="14" style="width: 950px;" name="text"></textarea>
+		<textarea class="input-xlarge" id="textarea" rows="14" style="width: 950px;" name="text">Los noruegos exportan el exquisito bacalao. Ellos odian tomar vacaciones en Hawaii, aunque no odian el calor. </textarea>
 	      </div> 
-	      <button type="submit" style="margin-top: 10px;" class="btn btn-primary">Analizar</button> 
+	      <button type="submit" style="margin-top: 10px;" class="btn btn-primary">Analize!</button> 
 	    </div> 
 	  </fieldset> 
 	</form>
       </div>
 
-      <p>
-	Lorem ipsum dolor sit amet, consectetur adipiscing
-	elit. Nullam lobortis, eros faucibus vestibulum aliquet, est
-	sapien consectetur urna, id molestie nisi urna vel
-	mi. Pellentesque id sem quam, ut pharetra nulla. Aliquam
-	accumsan ultrices porttitor. Ut feugiat ipsum quis arcu
-	posuere feugiat iaculis lectus accumsan. Fusce blandit
-	facilisis lorem sed tincidunt. Fusce lacinia urna sed arcu
-	lacinia sollicitudin. Pellentesque ut nibh mauris, sed
-	hendrerit tortor. Donec posuere bibendum libero id
-	porta. Proin ac elit ac risus aliquam molestie in sed ipsum.
-      </p>
-
-      <p>
-	Donec non enim tellus, quis porta tortor. Integer eu leo
-	mauris. Nam vestibulum, massa sodales placerat volutpat, massa
-	purus posuere est, vel pellentesque ipsum arcu vitae
-	orci. Nulla facilisi. Morbi elementum mollis bibendum. Aenean
-	nisl est, gravida ut venenatis sed, congue vitae eros. Sed a
-	nisi felis. Cras iaculis diam gravida nunc faucibus
-	commodo. Ut nunc metus, tincidunt eget sollicitudin a, feugiat
-	non nunc. Fusce mollis massa ut sem laoreet porta. Integer et
-	risus dolor, at vestibulum lacus. Vivamus ornare odio
-	scelerisque urna lacinia aliquam. Donec mauris massa, lobortis
-	vel tempor vel, ultricies elementum orci. Cum sociis natoque
-	penatibus et magnis dis parturient montes, nascetur ridiculus
-	mus. Sed et ligula in orci mollis rutrum.
+      <p>This Entity-based Sentiment Analysis (ESA) solution yields a granular representation for the sentiment values involved in each opinion. Unlike other approaches, this solution can deal with polarity shifting in the same sentence ('I like chocolate but I hate strawberry ice-cream') or even within embedded clauses ('Norwegians, who are an aggresive People, sells out the exquisite herring').
+Also, SentiLecto better represents the premise whereby the entities involved in the opinion are syntactically  mapped onto SVO (subject-verb-object) slots for their sentiment assignments:
+'Mary hates John' (2 entities but only the object has a negative presentation) vs. 'Mary defames John' (the same 2 entities but only the subject has negative presentation).
 	</p>
+      <p></p>
+      <p>Try this challenging input text and behold the results!</p>
     </div>
     
   </body>
