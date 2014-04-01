@@ -5,7 +5,7 @@ import os, sys, re
 from model import sentenceSplitter
 from utils import tokenize
 
-WEBAPP_PATH = open('webapp/webapp_path','r').read().strip('\n').strip('WEBAPP_PATH=')
+#WEBAPP_PATH = open('webapp/webapp_path','r').read().strip('\n').strip('WEBAPP_PATH=')
 RANDOM_NUMBER_PATH = open('webapp/random_number_path','r').read().strip('\n').strip('RANDOM_NUMBER_PATH=')
 
 pid = str(os.getpid())
@@ -21,7 +21,7 @@ urls = (
    '/favicon.ico', 'favicon',
    '/sentence/tree/(.+)', 'EntiNewsParseTree',
    '/result', 'EntiNews',
-   '/input', 'Index',
+   '/', 'Index',
 )
 
 app = web.application(urls, globals())
