@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+import ConfigParser
 from utils.logger_utils import *
 from utils.csvwrapper import *
 import codecs
@@ -62,7 +63,10 @@ def allowed_boxes(verb_transitivity):
     return result
 
 # load verb resources from file
-verb_file = 'resources/scripts_verbales.csv'
+Config = ConfigParser.ConfigParser()
+Config.read("config")
+
+verb_file =  Config.get("resources", "verbal_scripts")
 verb_file_reader = unicode_csv_reader(codecs.open(verb_file, 'r', 'utf-8'), first_line_is_header=False, delimiter=',')
 verbs = {}
 for line in verb_file_reader:

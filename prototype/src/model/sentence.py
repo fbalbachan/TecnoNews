@@ -10,21 +10,18 @@ from ling.verb_info import *
 
 class Sentence(object):
 
-    def __init__(self, input_sentence, analyzer=None):
+    def __init__(self, input_sentence):
         # self.logger = get_logger('entinews')
 
         self.evidence = u''
 
         self.input_sentence = input_sentence
 
-        if analyzer:
-            self.analyzer = analyzer
-        else:
-            self.analyzer = FreelingAnalyzer()
-
         # freeling bracketed parse -> structures
-        self.freeling_output, self.pretty_freeling_output = self.analyzer.parse(self.input_sentence)
-        if not self.freeling_output: return
+        self.analyzer = FreelingAnalyzer(self.input_sentence)
+        
+        self.freeling_output, self.pretty_freeling_output = self.analyzer.parse()
+        if len(self.pretty_freeling_output) == 0: return
         self.flatstructs = filter(lambda x: x.label != 'f-term', [Structure(e) for e in list(estructuras_balanceadas(self.freeling_output))])
 
         # assign children
