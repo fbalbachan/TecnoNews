@@ -1,3 +1,9 @@
+Requerimientos previos
+----------------------
+
+Python: módulo "web"
+	# apt-get install python-webpy
+
 1) Cómo configurarlo
 --------------------
 
