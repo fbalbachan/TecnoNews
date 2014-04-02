@@ -5,37 +5,29 @@ import os, sys, re
 from model import sentenceSplitter
 from utils import tokenize
 
-#WEBAPP_PATH = open('webapp/webapp_path','r').read().strip('\n').strip('WEBAPP_PATH=')
-RANDOM_NUMBER_PATH = open('webapp/random_number_path','r').read().strip('\n').strip('RANDOM_NUMBER_PATH=')
-
-pid = str(os.getpid())
-pidfile = '/tmp/entinews.pid'
-file(pidfile, 'w').write(pid)
-
 import re, web, codecs, json, logging
 from entinews import *
 
+#WEBAPP_PATH = open('webapp/webapp_path','r').read().strip('\n').strip('WEBAPP_PATH=')
+#RANDOM_NUMBER_PATH = open('webapp/random_number_path','r').read().strip('\n').strip('RANDOM_NUMBER_PATH=')
+
 # logger    = get_logger('webapp/service')
 
-urls = (
-   '/favicon.ico', 'favicon',
-   '/sentence/tree/(.+)', 'EntiNewsParseTree',
-   '/result', 'EntiNews',
-   '/', 'Index',
-)
+def write_pidfile():
+	pid = str(os.getpid())
+	pidfile = '/tmp/entinews.pid'
+	file(pidfile, 'w').write(pid)
 
-app = web.application(urls, globals())
-
-class favicon: 
+class Favicon_request: 
    def GET(self): 
       f = open('webapp/static/favicon.ico', 'rb') 
       return f.read() 
 
-class Index:
+class Index_request:
    def GET(self):
-      return web.template.render('webapp/templates/').index()
+      return web.template.render().index()
 
-class EntiNews:
+class EntiNews_request:
    def GET(self):
 
       i = web.input()
@@ -130,10 +122,10 @@ class EntiNews:
          sentencesResults.append(result)
 
       # return json.dumps(result, ensure_ascii=False).encode('utf-8')
-      return web.template.render('webapp/templates/').entinews(sentencesResults, inputtext)
+      return web.template.render().entinews(sentencesResults, inputtext)
       # return page(result)
 
-class EntiNewsParseTree:
+class EntiNewsParseTree_request:
    def GET(self, input_sentence):
       # logger.info('.'*80); logger.info('input sentence: %s' % input_sentence)
 
@@ -141,9 +133,22 @@ class EntiNewsParseTree:
       entities = sentence.entities
       parse_tree = sentence.pretty_freeling_output
 
-      return web.template.render('templates').entities(input_sentence, entities, parse_tree)
+      return web.template.render().entities(input_sentence, entities, parse_tree)
       # return parse_tree
 
+### MAIN ###
+
 if __name__ == '__main__':
-    print 'launching...'
-    app.run()
+	print 'launching...'
+
+	urls = (
+	   '/favicon.ico', 'Favicon_request',
+	   '/sentence/tree/(.+)', 'EntiNewsParseTree_request',
+	   '/result', 'EntiNews_request',
+	   '/', 'Index_request',
+	)
+	
+	write_pidfile()
+	
+	app = web.application(urls, globals())
+	app.run()

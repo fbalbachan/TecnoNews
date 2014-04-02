@@ -1,6 +1,5 @@
 #!/bin/bash
-#cd /apps/entinews/prototype/
-export PYTHONPATH=$PYTHONPATH:`pwd`/src:`pwd`/webapp
+export PYTHONPATH=$PYTHONPATH:..:../src
 
 PID_FILE=/tmp/entinews.pid
 if [ -f $PID_FILE ]; then
@@ -11,4 +10,4 @@ if [ -f $PID_FILE ]; then
 	fi
 fi
 
-python webapp/service.py 8321
+python service.py 8321
