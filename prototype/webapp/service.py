@@ -20,7 +20,7 @@ def write_pidfile():
 
 class Favicon_request: 
    def GET(self): 
-      f = open('webapp/static/favicon.ico', 'rb') 
+      f = open('static/favicon.ico', 'rb') 
       return f.read() 
 
 class Index_request:
