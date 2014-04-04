@@ -1,10 +1,20 @@
-#!/usr/bin/python
 # -*- coding: utf-8 -*-
 import re
+from model.sentence import *
+from model.textCleaner import *
 
-sentence_delimiters = re.compile(ur"""\?+|\n|\. |,pero|, pero|:\s+|, y|,y|,mientras|, mientras|,entonces|, entonces|, aunque|,aunque|, sin embargo|,sin embargo|, no obstante|,no obstante|!+|; |\.\.\.|, pues|,pues""", re.U|re.I)
+class SentenceSplitter:
+	def sentences_in(self, text):
+		texts = [ text.strip() for text in self.split(text)]
+		clean_texts = [ self.textCleaner.clean(text) for text in texts]
+		non_empty_texts = filter(lambda text: text != u'' and text != None, texts)
+		return self.to_sentences(non_empty_texts)
 
-def splitInSentences(input_text):
-	input_sentences = [s.strip() for s in re.split(sentence_delimiters, input_text, re.U)]
-	input_sentences = filter(lambda s: s != u'' and s != None, input_sentences)
-	return input_sentences
+	def split(self, text):
+		return re.split(self.delimiters, text, re.U)
+
+	def to_sentences(self, texts):
+		return [ Sentence(text) for text in texts ]
+
+	delimiters = re.compile(ur"""\?+|\n|\. |,pero|, pero|:\s+|, y|,y|,mientras|, mientras|,entonces|, entonces|, aunque|,aunque|, sin embargo|,sin embargo|, no obstante|,no obstante|!+|; |\.\.\.|, pues|,pues""", re.U|re.I)
+	textCleaner = TextCleaner()

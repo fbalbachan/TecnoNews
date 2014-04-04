@@ -20,10 +20,10 @@ $def with (sentencesResults, input_sentence)
         <p style="margin-right: 40px; margin-left: 40px; font-size: 14px;">$input_sentence</p>
       </div>
 
-    $for result in sentencesResults:
+    $for index, result in sentencesResults:
     
       <div>
-        <h3>Sentence # $result['sentence_number']</h3>
+        <h3>Sentence # $index</h3>
         <p style="margin-right: 40px; margin-left: 40px; font-size: 14px;">$result['input_sentence']</p>
       </div>
 
