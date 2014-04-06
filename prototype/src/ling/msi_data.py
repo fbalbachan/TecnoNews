@@ -19,7 +19,7 @@ attribute_map = {"A": {1: ("type", {"Q": u"calificative", "O": u"ordinal", "0": 
                        3: ("gender", {"M": u"masculine", "F": u"feminine", "C": u"neutral"}),                   # u"common"
                        4: ("number", {"S": u"singular", "P": u"plural", "N": u"invariable"}),
                        5: ("function", {"0": None, "P": u"participle"})},
-                 
+
                  "R": {1: ("type", {"G": u"general", "N": u"negative"})},
 
                  "D": {1: ("type", {"D": u"demostrative", "P": u"possesive", "T": "interrogative", "E": u"exclamative", "I": u"indefinite", "A": u"articulo"}),
@@ -56,17 +56,19 @@ attribute_map = {"A": {1: ("type", {"Q": u"calificative", "O": u"ordinal", "0": 
                        5: ("case", {"N": u"nominative", "A": u"acusative", "D": u"dative", "O": u"oblique"}),
                        6: ("owner", {"S": u"singular", "P": u"plural"}),
                        7: ("politeness", {"P": u"polite"})},
-                       
+
                  "I": {},
 
                  "S": {1: ("type", {"P": u"preposition"}),
                        2: ("form", {"S" : u"simple", "C": u"contracted"}),
                        3: ("gender", {"M": u"masculine", "0": None}),
                        4: ("number", {"S": u"singular", "0": None})},
-                       
-                 "F": {1: ("category", {"Z": u"number"}),
-                       2: ("type", {"d": u"partitive", "m": u"money", "p": u"percentage", "u": u"unit"})},
-                             
+
+                 # Esto parece ser incorrercto.
+                 #"F": {1: ("category", {"Z": u"number"}),
+                 #      2: ("type", {"d": u"partitive", "m": u"money", "p": u"percentage", "u": u"unit"})},
+                 "F": {1: ("type", {"p": u".", "c" : u"," })}, # Completar
+
                  "W": {},
 
                  "Z": {}

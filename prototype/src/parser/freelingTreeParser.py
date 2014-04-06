@@ -1,20 +1,20 @@
-#!/usr/bin/env python
 #-*- coding: utf-8 -*-
 
 from labelNode import *
 from leafNode import *
+from ling.msi_mapper import *
 from re import search
-
+from utils.freelingClientParser import *
 
 class FreelingTreeParser:
-    def from_file(self, path):
-        file = open(path)
-        output = file.read().split("\n")
-        return self.parse(output)
-
     def from_text(self, text):
         freeling_client = FreelingClientParser()
         output= freeling_client.parse(text)
+        return self.parse(output)
+
+    def from_file(self, path):
+        file = open(path)
+        output = file.read().decode("utf-8").split("\n")
         return self.parse(output)
 
     def parse(self, output):
@@ -29,7 +29,6 @@ class FreelingTreeParser:
             if not self.is_level_ending(line):
                 node = self.node_for(line)
                 if father:
-                    node.set_father(father)
                     father.add_child(node)
                 if not self.is_leaf(line):
                     node_stack.append(node)
@@ -52,7 +51,7 @@ class FreelingTreeParser:
         regex_match = self.leaf_node_match_for(line)
         lexicalForm = regex_match.group(1)
         lemma = regex_match.group(2)
-        msi = regex_match.group(3)
+        msi = tag2fullmsi(regex_match.group(3))
         return LeafNode(lexicalForm, lemma, msi)
 
     def middle_node_label_of(self, line):
@@ -65,14 +64,10 @@ class FreelingTreeParser:
         return self.leaf_node_match_for(line) is not None
 
     def leaf_node_match_for(self, line):
-        return search(self.LEAF_NODE_REGEX, line.strip())
+        return search("^\+\(([^ ]+) ([^ ]+) (\w+) -\)$", line.strip())
 
     def level_of(self, line):
         line_indentation = search("^ *", line).group(0)
         return len(line_indentation) / self.SPACES_PER_LEVEL
 
     SPACES_PER_LEVEL = 2
-    LEAF_NODE_REGEX = "^\+\(([^ ]+) ([^ ]+) (\w+) -\)$"
-
-tree_parser = FreelingTreeParser()
-print tree_parser.from_file("parse_tree.txt").tree_representation()
