@@ -64,7 +64,7 @@ class FreelingTreeParser:
         return self.leaf_node_match_for(line) is not None
 
     def leaf_node_match_for(self, line):
-        return search("^\+\(([^ ]+) ([^ ]+) (\w+) -\)$", line.strip())
+        return search("^\+?\(([^ ]+) ([^ ]+) (\w+) -\)$", line.strip())
 
     def level_of(self, line):
         line_indentation = search("^ *", line).group(0)
