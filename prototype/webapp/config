@@ -1,11 +1,1 @@
-[freeling]
-
-host        = tecnolecto.com
-client      = analyzer_client
-parser_port = 10000
-tagger_port = 9999
-
-[resources]
-
-verbal_scripts = %(resources_dir)s/scripts_verbales.csv
-resources_dir = ../resources
+../config
