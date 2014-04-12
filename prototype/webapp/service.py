@@ -1,16 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import os, sys, re
-from model.sentence import *
-from entinews import *
+import os, web
 
-import re, web, codecs, json, logging
-#from entinews import *
-
-#WEBAPP_PATH = open('webapp/webapp_path','r').read().strip('\n').strip('WEBAPP_PATH=')
-#RANDOM_NUMBER_PATH = open('webapp/random_number_path','r').read().strip('\n').strip('RANDOM_NUMBER_PATH=')
-
-#logger    = get_logger('service')
+from entinews import Entinews
+from model.sentence import Sentence
 
 def write_pidfile():
 	pid = str(os.getpid())
@@ -18,13 +11,13 @@ def write_pidfile():
 	file(pidfile, 'w').write(pid)
 
 class Favicon_request:
-   def GET(self):
-      f = open('static/favicon.ico', 'rb')
-      return f.read()
+	def GET(self):
+		f = open('static/favicon.ico', 'rb')
+		return f.read()
 
 class Index_request:
-   def GET(self):
-      return web.template.render().index()
+	def GET(self):
+		return web.template.render().index()
 
 class EntiNews_request:
 	def GET(self):
@@ -35,15 +28,15 @@ class EntiNews_request:
 		return web.template.render().entinews(sentences, input_text)
 
 class EntiNewsParseTree_request:
-   def GET(self, input_sentence):
-      # logger.info('.'*80); logger.info('input sentence: %s' % input_sentence)
+	def GET(self, input_sentence):
+		# logger.info('.'*80); logger.info('input sentence: %s' % input_sentence)
 
-      sentence = Sentence(input_sentence)
-      entities = sentence.entities
-      parse_tree = sentence.pretty_freeling_output
+		sentence = Sentence(input_sentence)
+		entities = sentence.entities
+		parse_tree = sentence.pretty_freeling_output
 
-      return web.template.render().entities(input_sentence, entities, parse_tree)
-      # return parse_tree
+		return web.template.render().entities(input_sentence, entities, parse_tree)
+		# return parse_tree
 
 ### MAIN ###
 
@@ -51,10 +44,10 @@ if __name__ == '__main__':
 	print 'launching...'
 
 	urls = (
-	   '/favicon.ico', 'Favicon_request',
-	   '/sentence/tree/(.+)', 'EntiNewsParseTree_request',
-	   '/result', 'EntiNews_request',
-	   '/', 'Index_request',
+ 	  '/favicon.ico', 'Favicon_request',
+ 	  '/sentence/tree/(.+)', 'EntiNewsParseTree_request',
+ 	  '/result', 'EntiNews_request',
+ 	  '/', 'Index_request',
 	)
 
 	write_pidfile()
