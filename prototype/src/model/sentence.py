@@ -1,25 +1,28 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from model.structure import *
-#from utils.logger_utils import *
-from utils.freeling_utils import FreelingAnalyzer
 from ling.msi_mapper import *
-from ling.verb_categories import *
 from ling.tacit_subjects import *
+from ling.verb_categories import *
 from ling.verb_info import *
+from model.structure import *
 
+
+#from utils.logger_utils import *
 class Sentence(object):
 
-    def __init__(self, input_sentence):
-        # self.logger = get_logger('entinews')
+    def __init__(self, text):
+        self.text = text
+        self.parse_node = None
+        self.clauses = []
 
+    def x(self, text):
         self.evidence = u''
 
-        self.input_sentence = input_sentence
+        self.text = text
 
         # freeling bracketed parse -> structures
-        self.analyzer = FreelingAnalyzer(self.input_sentence)
-        
+        #self.analyzer = FreelingAnalyzer(self.text)
+
         self.freeling_output, self.pretty_freeling_output = self.analyzer.parse()
         if len(self.pretty_freeling_output) == 0: return
         self.flatstructs = filter(lambda x: x.label != 'f-term', [Structure(e) for e in list(estructuras_balanceadas(self.freeling_output))])
@@ -47,8 +50,8 @@ class Sentence(object):
 
         # root node of the sentence parse tree (i.e. the first node at the top)
         self.all_encompassing_structure = None
-        
-        # set root node depending on sentence's voice 
+
+        # set root node depending on sentence's voice
         if self.is_active and self.grup_verbs:
             self.all_encompassing_structure = self.grup_verbs[0]
         elif self.is_passive and self.verb_passs:
@@ -63,12 +66,12 @@ class Sentence(object):
         self.structures_at_verb_level = self.assign_structure_position_relative_to_verb()
 
         self.verb_final_form = None
-        self.subject         = None 
-        self.od              = None 
-        self.oi              = None 
-        self.regimen         = None 
-        self.equative        = None 
-        self.adjuncts        = [] 
+        self.subject         = None
+        self.od              = None
+        self.oi              = None
+        self.regimen         = None
+        self.equative        = None
+        self.adjuncts        = []
 
         self.boxes   = {}
 
@@ -107,7 +110,7 @@ class Sentence(object):
                 if self.entities > 1: self.adjuncts = self.entities[1:]
 
         # self.assign_sentiment_via_adverbial_criterion()
-        
+
         # self.assign_sentiment_via_nominal_criterion()
 
     def __str__(self):
@@ -190,7 +193,7 @@ class Sentence(object):
             if left_candidates:
                 self.evidence += "\nsubject (active sentence): 1"
                 return sorted(left_candidates, key=lambda e: self.verb.position - e.position)[0]
-                
+
         if candidates_right_of_verb:
             right_candidates = [e for e in candidates_right_of_verb if e.msi and msi_concordance(e, self.verb) and ((e.position - self.verb.position) <= 3)]
             if right_candidates:
@@ -203,7 +206,7 @@ class Sentence(object):
         return tacit_subject
 
     def get_passive_subject(self):
-        
+
         # 1) grup-sp encabezado por 'por', a nivel del verbo
         candidates = filter(lambda e: e.label == 'grup-sp' and e.words[0].form.lower() == u'por', self.structures_at_verb_level)
 
@@ -216,7 +219,7 @@ class Sentence(object):
                                    if entity.position < self.verb.position]
         candidates_right_of_verb = [entity for entity in candidates
                                     if entity.position > self.verb.position]
- 
+
 	# 1.1) a derecha con distancia <= 3, que no sea grup-verb-inf
         if candidates_right_of_verb:
             right_candidates = [e for e in candidates_right_of_verb if ((e.position - self.verb.position) <= 3) and e.label != 'grup-verb-inf']
@@ -224,7 +227,7 @@ class Sentence(object):
                 self.evidence += "\nsubject (passive sentence): 1.1"
                 candidate = sorted(right_candidates, key=lambda e: e.position - self.verb.position)[0]
                 candidate.words = candidate.words[1:] # remove 'por'
-                return candidate 
+                return candidate
 
 	# 1.2) a izquierda con distancia <= 3, que no sea grup-verb-inf
         if candidates_left_of_verb:
@@ -233,7 +236,7 @@ class Sentence(object):
                 self.evidence += "\nsubject (passive sentence): 1.2"
                 candidate = sorted(left_candidates, key=lambda e: self.verb.position - e.position)[0]
                 candidate.words = candidate.words[1:] # remove 'por'
-                return candidate 
+                return candidate
 
 	# 2) 'alguien'
         self.evidence += "\nsubject (passive sentence): 2"
@@ -413,7 +416,7 @@ class Sentence(object):
                     if (sp_a.contains(entity)) and (entity.level == (sp_a.level + 1)):
                         self.evidence += "\noi: 4"
                         return entity
-        
+
         return None
 
     def get_regimen(self):
@@ -532,7 +535,7 @@ class Sentence(object):
         # 2) entidades propiamente dichas, a derecha, distancia <= 3
         candidates = filter(lambda e: (e.level == self.verb.level)
                             and (e.position > self.verb.position)
-                            and e.entity_type == 'proper_entity' 
+                            and e.entity_type == 'proper_entity'
                             and abs(e.position - self.verb.position) <= 3
                             and not e.conflicts_with(self.subject, self.od, self.oi, self.regimen),
                             self.entities)
@@ -586,8 +589,8 @@ class Sentence(object):
         #         self.evidence += u"updating sentiment via nominal criterion: (%s, %d, %d)" % entity_word_with_sentiment
         pass
 
-    def __str__(self):
-        output = "\ninput_sentence: %s" % self.input_sentence.encode('utf-8')
+    def old__str__(self):
+        output = "\ninput_sentence: %s" % self.text.encode('utf-8')
         output += "\nactive: %s" % self.is_active
         output += "\npassive: %s" % self.is_passive
         output += "\nunimember: %s" % self.is_unimember
@@ -595,7 +598,7 @@ class Sentence(object):
         output += "\nallowed boxes: %s" % [k for (k,v) in filter(lambda (k, v): v is True, self.boxes.iteritems())]
         if self.boxes['subject']:
             output += "\nsubject: %s" % self.subject.__str__()
-            output += "\nsubject_sentiment: positive: %.2f, negative: %.2f" % self.subject.sentiment 
+            output += "\nsubject_sentiment: positive: %.2f, negative: %.2f" % self.subject.sentiment
         if self.boxes['verb']:
             output += "\n\nverb: %s" % self.verb_final_form.__str__()
             output += "\nverb_transitivity: %s" % self.verb_transitivity

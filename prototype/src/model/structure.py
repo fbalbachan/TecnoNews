@@ -1,14 +1,16 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import re, copy
-from word import *
 from itertools import izip, groupby
-from ling.msi_mapper import *
-from ling.head_labels import *
-from ling.verb_categories import *
-from ling.entity_labels import *
-#from utils.logger_utils import *
+import re, copy
 
+from ling.head_labels import *
+from ling.msi_mapper import *
+from ling.verb_categories import *
+from word import *
+
+
+#from ling.entity_labels import *
+#from utils.logger_utils import *
 class Structure(object):
     def __init__(self, (start, end, struct, level)):
         # self.logger = get_logger('entinews')
@@ -55,7 +57,7 @@ class Structure(object):
         return [word.form for word in self.words]
 
     def contains(self, another_structure):
-        return (self.start < another_structure.start) and (self.end >= another_structure.end) 
+        return (self.start < another_structure.start) and (self.end >= another_structure.end)
 
     def contains_any(self, iterable):
         return any(self.contains(i) for i in iterable)
@@ -82,7 +84,7 @@ class Structure(object):
         if self.is_proper_entity():
             self.entity_type = 'proper_entity'
         elif self.is_pronominal_entity():
-            self.entity_type = 'pronominal_entity'            
+            self.entity_type = 'pronominal_entity'
 
     def has_modal_verb(self):
         return len(self.words) > 1 and (self.words[0].lemma in modal_verbs)
@@ -121,7 +123,7 @@ class Structure(object):
 
         children_per_level = [(level, list(children)) for (level, children) in groupby(sorted(self.children, key=lambda c: c.level),
                                                                                        key=lambda c: c.level)]
-        
+
         leaves_per_level = [(level, filter(lambda child: child.is_leaf, children)) for (level, children) in children_per_level]
 
         msi_candidates = []

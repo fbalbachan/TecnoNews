@@ -28,8 +28,11 @@ tacit_subjects = {
 def tacit_subject_for_passive_sentence():
     subject = build_structure(word=u'alguien')
     subject.msi = (3, 'singular', 'neutral')
-    return subject 
+    return subject
 
 def tacit_subject_for(verb):
-    return tacit_subjects[(verb.msi['person'], verb.msi['number'], verb.msi['gender'])]
+    gender = verb.msi['gender']
+    if not gender:
+        gender = "neutral"
+    return tacit_subjects[(verb.msi['person'], verb.msi['number'], gender)].encode("utf-8")
 

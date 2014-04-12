@@ -1,0 +1,27 @@
+#-*- coding: utf-8 -*-
+
+from parser.labelNode import *
+from parser.leafNode import *
+import unittest
+
+
+class ParseNodeTest(unittest.TestCase):
+
+    def test_without(self):
+        father = LabelNode("father")
+        son = LabelNode("son")
+        grandson = LeafNode("grandson", "", {})
+        other_son = LabelNode("other")
+
+        grandson.set_father(son)
+        son.set_father(father)
+        other_son.set_father(father)
+
+        pruned = father.without(son)
+
+        self.assertFalse(father.is_equivalent_to(pruned))
+
+        node_id = lambda node: id(node)
+        node_intersection = set(map(node_id, father)) & set(map(node_id, pruned))
+
+        self.assertSetEqual(set(), node_intersection)

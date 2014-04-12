@@ -4,18 +4,18 @@ from parseNode import *
 
 
 class LeafNode(ParseNode):
-    def __init__(self, lexicalForm, lemma, msi):
+    def __init__(self, lexical_form, lemma, msi):
         ParseNode.__init__(self)
-        self.lexicalForm = lexicalForm
-        self.lemma = lemma
+        self.lexical_form = lexical_form.encode("utf-8")
+        self.lemma = lemma.encode("utf-8")
         self.msi = msi
 
     def __repr__(self):
-        return self.lexicalForm.encode("utf-8")
+        return self.lexical_form
 
     def is_equivalent_to(self, other):
         try:
-            attributes = ["lexicalForm", "lemma", "msi"]
+            attributes = ["lexical_form", "lemma", "msi"]
             return all( self.__dict__[attribute] == other.__dict__[attribute] for attribute in attributes) and \
                 ParseNode.is_equivalent_to(self, other)
         except KeyError:

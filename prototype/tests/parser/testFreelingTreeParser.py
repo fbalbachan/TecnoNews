@@ -51,7 +51,7 @@ class FreelingTreeParserTest(unittest.TestCase):
         self.assertTrue(parsed.is_equivalent_to(grup_verb_0))
 
         self.assertListEqual(["Leandro", u"comió", "la", "manzana", "."], \
-                             [ leaf.lexicalForm for leaf in parsed.leaves()])
+                             [ leaf.lexical_form for leaf in parsed.leaves()])
 
 if __name__ == '__main__':
     unittest.main()
