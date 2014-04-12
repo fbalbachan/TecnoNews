@@ -11,6 +11,12 @@ class SyntacticAnalyzer:
             structure = getattr(self, name, lambda: SyntacticStructure(name))()
             self.clause.syntactic_structures.append(structure)
 
+    def subject(self):
+        structure = SyntacticStructure("subject")
+        entities = self.clause.lonely_entities()
+        structure.entities = [ entities[0] ] if entities else []
+        return structure
+
     def verb(self):
         verb = SyntacticStructure("verb")
         verb.entities.append(self.clause.verb)

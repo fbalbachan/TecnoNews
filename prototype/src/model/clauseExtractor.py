@@ -10,10 +10,7 @@ class ClauseExtractor:
     def extract_from(self, sentence):
         root = sentence.parse_node
         potential_clause_roots = set(root.nodes_with_labels(self.CLAUSE_SEPARATORS))
-        clause_roots = self.filter_invalid_active_voice_clauses(potential_clause_roots)
-
-        if not clause_roots:
-            clause_roots = [root]
+        clause_roots = self.filter_invalid_active_voice_clauses(potential_clause_roots) + [root]
 
         roots_by_level = ParseNode.by_level(clause_roots)
 
@@ -33,7 +30,13 @@ class ClauseExtractor:
 
         clauses = clauses_by_node.values()
         self.compute_proper_tree_for(clauses)
-        return clauses
+        return self.without_invalid_clauses(clauses)
+
+    def without_invalid_clauses(self, clauses):
+        is_cc = lambda leaf: leaf.msi["category"] == "conjunction" and leaf.msi["type"] == "coordinated"
+        is_punctuation  = lambda leaf: leaf.msi["category"] == "punctuation"
+        return filter(lambda clause: not all([ is_cc(leaf) or is_punctuation(leaf)
+                                              for leaf in clause.proper_tree.leaves() ]), clauses)
 
     def compute_proper_tree_for(self, clauses):
         for clause in clauses:

@@ -28,13 +28,16 @@ class FreelingSentenceAnalyzerTest(unittest.TestCase):
         # Passive
         #sentence = Sentence("La manzana fue dejada por Leandro.")
         #sentence = Sentence("La manzana fue dejada.")
-        sentence = Sentence("Por Leandro fue dejada la manzana.")
+        #sentence = Sentence("Por Leandro fue dejada la manzana.")
+
+        ###
 
         #sentence = Sentence("El hombre de la esquina rosada le comió la manzana.")
         #sentence = Sentence("Pedro y Juan fueron comidos por Leandro.")
 
         #sentence = Sentence("El cartero todas las noches llegaba.")
-        #sentence = Sentence("Muy bueno el libro que fue comprado.")
+
+        sentence = Sentence("Muy bueno el libro que fue comprado.")
 
         #sentence = Sentence("Leandro comió y bebió agua.") # La "y" no es cláusula
         #sentence = Sentence("Fui aunque no tenía ganas.")
