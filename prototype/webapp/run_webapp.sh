@@ -1,6 +1,5 @@
 #!/bin/bash
 export PYTHONPATH=`pwd`/..
-echo $PYTHONPATH
 
 PID_FILE=/tmp/entinews.pid
 if [ -f $PID_FILE ]; then

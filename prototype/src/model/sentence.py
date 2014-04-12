@@ -7,3 +7,6 @@ class Sentence(object):
         self.text = text
         self.parse_node = None
         self.clauses = []
+
+    def __repr__(self):
+        return self.text.encode("utf-8")

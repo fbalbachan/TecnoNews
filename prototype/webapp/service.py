@@ -29,7 +29,7 @@ class EntiNews_request:
 		input_text = web_input.text
 
 		analyzer = FreelingSentenceAnalyzer()
-		sentence = Sentence("Muy bueno el libro que fue comprado.")
+		sentence = Sentence(input_text)
 		analyzer.analyze(sentence)
  		return web.template.render().test(sentence)
 

@@ -68,4 +68,4 @@ class Clause:
         return self.proper_tree.leaves()
 
     def __repr__(self):
-        return str(self.proper_leaves())
+        return " ".join([ str(leaf)for leaf in self.proper_leaves()])
