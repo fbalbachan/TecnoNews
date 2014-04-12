@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 
+from copy import copy
 from itertools import groupby
 
-from entity import *
 from ling.head_labels import *
 from ling.verb_info import get_script_class, get_transitivity
+from src.model.entity import Entity
 
 
 # Que el verbo sea una entidad es una licencia como también que exista una función sintáctica superior "verbo".
@@ -14,7 +15,7 @@ class Verb(Entity):
         Entity.__init__(self, node)
 
         lemma = self.lemma()
-        self.msi = self.leaf().msi
+        self.msi = self.adjusted_msi_for(self.leaf().msi)
 
         self.voice = voice
         self.script_class = get_script_class(lemma) # Reificar como método de clase
@@ -30,9 +31,20 @@ class Verb(Entity):
         return bool(self.node.nodes_with_labels(["vaux"]))
 
     def matches(self, entity):
-        person_entity = entity.msi["person"] if "person" in entity.msi else 3
-        return self.msi["number"] == entity.msi["number"] and self.msi["person"] == person_entity
+        person_of_entity = entity.msi["person"] if "person" in entity.msi else 3
+        matches = self.msi["number"] == entity.msi["number"] and self.msi["person"] == person_of_entity
+        if self.voice == "passive": matches = matches and self.matches_gender_of(entity)
+        return matches
+
+    def matches_gender_of(self, entity):
+        return self.msi["gender"] == entity.msi["gender"]
+
+    def adjusted_msi_for(self, msi):
+        adjusted = copy(msi)
+        if not adjusted["person"]: adjusted["person"] = 3
+        return adjusted
 
     def __repr__(self):
         node = self.leaf()
-        return node.lexical_form + " (" + node.lemma + ") " + str([ self.voice, self.script_class, self.transitivity ])
+        return node.lexical_form + " (" + node.lemma + ") " + str([ self.voice, self.script_class, self.transitivity ])\
+            + str(self.msi)

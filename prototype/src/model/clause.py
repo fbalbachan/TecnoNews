@@ -11,43 +11,49 @@ class Clause:
         self.verb = None
         self.syntactic_structures = []
 
-    # Debería ser lonely_verb...
-    def verb_level_entities(self):
-        return self.select_verb_level_ones_of(self.lonely_entities())
+    def subord_entities_closest_to_verb_at(self, side, allowed_distance, which_node = lambda node: True):
+        which = lambda entity, node: entity.is_subordinated() and entity.highest_subordinating_node() == node \
+                    and which_node(node)
+        entities_with_node = self.to_entities_with_node(self.nodes_closest_to_verb_at(side, allowed_distance), which)
+        return self.grouped_by_node(entities_with_node)
 
-    def verb_level_subord_entities_at(self, side, allowed_distance = float("inf"), which = lambda node: True):
-        subord_nodes = filter(which, self.verb_level_subords_at(side, allowed_distance))
-        entity_lists = [ [ entity for entity in self.lonely_entities() if node.contains(entity.node) ]
-                    for node in subord_nodes]
-        return filter(lambda entity_list: entity_list, entity_lists)
-
-    # No me gusta el código duplicado entre esto y lo que hace la misma búsqueda para entidades.
-    def verb_level_subords_at(self, side, allowed_distance):
-        subords = self.select_verb_level_ones_of(self.proper_tree.nodes_with_labels([ "coor-sp", "grup-sp", "sp-de" ]))
-        verb = self.verb.node
-        subords_with_position = [ (verb.absolute_distance_to(node), node) for node in subords
-                                 if verb.position_of(node) == side]
-        closest = self.sorted_by_closest(subords_with_position, allowed_distance)
-        return [ node for position, node in closest ]  # @UnusedVariable
+    def entities_closest_to_verb_at(self, side, allowed_distance):
+        by_component = zip(*self.to_entities_with_node(self.nodes_closest_to_verb_at(side, allowed_distance)))
+        return list(by_component[0]) if by_component else []
 
     def lonely_entities(self):
         assigned_entities = sum([ structure.entities for structure in self.syntactic_structures ], [])
         return [ entity for entity in self.entities if entity not in assigned_entities
                 and not any([ assigned.contains(entity) for assigned in assigned_entities ]) ]
 
-    def select_verb_level_ones_of(self, leveled_objects):
+    def grouped_by_node(self, entities_with_node):
+        entities = []
+        last_node = None
+        for entity, node in entities_with_node:
+            if last_node == node:
+                entities[-1].append(entity)
+            else:
+                entities.append([ entity ])
+            last_node = node
+        return entities
+
+    def to_entities_with_node(self, nodes, which = lambda entity, node: entity.node == node):
+        lonely_entities = self.lonely_entities()
+        entities = []
+        for node in nodes:
+            entities.extend( (entity, node) for entity in lonely_entities if which(entity, node) )
+        return entities
+
+    def verb_level_nodes(self):
         verb_node = self.verb.node
-        verb_level = verb_node.level()
-        return filter(lambda thing: thing.level() == verb_level, leveled_objects)
+        return verb_node.father.children
 
-    def entities_closest_to_verb_at(self, side, allowed_distance = float("inf")):
+    def nodes_closest_to_verb_at(self, side, allowed_distance = float("inf")):
         verb = self.verb.node
-        entities_with_position = [ (verb.absolute_distance_to(entity.node), entity)
-                                  for entity in self.verb_level_entities()
-                                  if verb.position_of(entity.node) == side]
-
-        closest = self.sorted_by_closest(entities_with_position, allowed_distance)
-        return [ entity for position, entity in closest ]  # @UnusedVariable
+        nodes_with_position = [ (verb.absolute_distance_to(node), node) for node in self.verb_level_nodes()
+                                  if verb.position_of(node) == side]
+        closest = self.sorted_by_closest(nodes_with_position, allowed_distance)
+        return [ node for position, node in closest ]  # @UnusedVariable
 
     def sorted_by_closest(self, things_with_position, allowed_distance):
         return sorted(filter(lambda (position, entity): position <= allowed_distance, things_with_position))

@@ -1,9 +1,10 @@
 #-*- coding: utf-8 -*-
 
-from activeVoiceSyntacticAnalizer import *
-from entity import *
-from entityMSISeer import *
 from ling.verb_info import *
+from src.model.activeVoiceSyntacticAnalizer import ActiveVoiceSyntacticAnalyzer
+from src.model.entity import Entity
+from src.model.entityMSISeer import EntityMSISeer
+from src.model.passiveVoiceSyntacticAnalyzer import PassiveVoiceSyntacticAnalyzer
 from syntacticStructure import *
 from verb import Verb
 
@@ -31,7 +32,8 @@ class ClauseAnalyzer:
 
 
     def analyze_syntactically(self, clause):
-        syntactic_analyzer_by_voice = { "active" : ActiveVoiceSyntacticAnalyzer }
+        syntactic_analyzer_by_voice = { "active" : ActiveVoiceSyntacticAnalyzer,
+                                       "passive" : PassiveVoiceSyntacticAnalyzer }
         analyzer = syntactic_analyzer_by_voice[clause.voice](clause)
         analyzer.analyze(self.allowed_syntactic_structures_for(clause))
 

@@ -1,0 +1,30 @@
+# -*- coding: utf-8 -*-
+from src.model.subject import Subject
+from src.model.syntacticAnalyzer import SyntacticAnalyzer
+from src.model.syntacticStructure import SyntacticStructure
+
+
+class PassiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
+    def __init__(self, clause):
+        SyntacticAnalyzer.__init__(self, clause)
+
+    def subject(self):
+        at_right = lambda: self.search_subject_at("right", 3)
+        at_left  = lambda: self.search_subject_at("left", 3)
+
+        entities = self.find_entities_by([at_right, at_left])
+        if entities: return Subject.concrete(entities[0])
+
+        return Subject.tacit("alguien", { "number" : "singular", "gender" : "neutral", "person" : 3 })
+
+    def search_subject_at(self, side, distance):
+        def which(node):
+            first_leaf = node.leaves()[0]
+            return first_leaf.msi["type"] == "preposition" and first_leaf.lexical_form.lower() == "por"
+        return self.search_subord_at(side, distance, which)
+
+    def od(self):
+        structure = SyntacticStructure("od")
+        entities = self.nominal_and_personal_entities(3, 2)
+        if entities: structure.entities = [ entities[0] ]
+        return structure

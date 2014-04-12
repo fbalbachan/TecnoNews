@@ -19,10 +19,16 @@ class FreelingSentenceAnalyzerTest(unittest.TestCase):
         #sentence = Sentence("Las manzanas comió Leandro.") # Esto no funciona en Sentilecto (queda en adjunto)
         #sentence = Sentence("Lo hizo para comer en su casa.") # Sujeto tácito
         #sentence = Sentence("Lo hizo para comer en su casa.") # Sujeto tácito
-        sentence = Sentence("A Gustavo, Leandro le comió la manzana.")
+        #sentence = Sentence("A Gustavo, Leandro le comió la manzana.")
         #sentence = Sentence("Él nos golpeó") # nos -> OD
         #sentence = Sentence("Me chocó de frente.") # me -> OI (licencia)
         #sentence = Sentence("Leandro desconfió de Gustavo.") # régimen
+        #sentence = Sentence("Leandro había comido la manzana.") # verbo compuesto
+
+        # Passive
+        #sentence = Sentence("La manzana fue dejada por Leandro.")
+        #sentence = Sentence("La manzana fue dejada.")
+        sentence = Sentence("Por Leandro fue dejada la manzana.")
 
         #sentence = Sentence("El hombre de la esquina rosada le comió la manzana.")
         #sentence = Sentence("Pedro y Juan fueron comidos por Leandro.")
