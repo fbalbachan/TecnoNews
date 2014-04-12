@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from utils import tokenize
+from src.utils import tokenize
 
 
 class TextCleaner:

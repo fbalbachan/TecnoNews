@@ -3,8 +3,8 @@
 import ConfigParser
 import codecs
 
-from utils.csvwrapper import *
-from utils.logger_utils import *
+from src.utils.csvwrapper import *
+from src.utils.logger_utils import *
 
 
 # logger = get_logger('entinews')

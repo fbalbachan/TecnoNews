@@ -1,10 +1,12 @@
 #-*- coding: utf-8 -*-
 
-from labelNode import *
-from leafNode import *
-from ling.msi_mapper import *
 from re import search
-from utils.freelingClientParser import *
+
+from src.ling.msi_mapper import *
+from src.parser.labelNode import *
+from src.parser.leafNode import *
+from src.utils.freelingClientParser import *
+
 
 class FreelingTreeParser:
     def from_text(self, text):

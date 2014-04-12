@@ -2,8 +2,10 @@
 # -*- coding: utf-8 -*-
 import os, web
 
-from entinews import Entinews
-from model.sentence import Sentence
+from src.entinews import Entinews
+from src.model.freelingSentenceAnalyzer import FreelingSentenceAnalyzer
+from src.model.sentence import Sentence
+
 
 def write_pidfile():
 	pid = str(os.getpid())
@@ -17,15 +19,23 @@ class Favicon_request:
 
 class Index_request:
 	def GET(self):
-		return web.template.render().index()
+		index = web.template.frender('templates/index.html')
+		return index()
+		#return web.template.render().index()
 
 class EntiNews_request:
 	def GET(self):
 		web_input = web.input()
 		input_text = web_input.text
-		entinews = Entinews()
-		sentences = entinews.sentences_for(input_text)
-		return web.template.render().entinews(sentences, input_text)
+
+		analyzer = FreelingSentenceAnalyzer()
+		sentence = Sentence("Muy bueno el libro que fue comprado.")
+		analyzer.analyze(sentence)
+ 		return web.template.render().test(sentence)
+
+# 		entinews = Entinews()
+# 		sentences = entinews.sentences_for(input_text)
+# 		return web.template.render().entinews(sentences, input_text)
 
 class EntiNewsParseTree_request:
 	def GET(self, input_sentence):

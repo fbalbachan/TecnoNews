@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from ling.tacit_subjects import tacit_subject_for
+from src.ling.tacit_subjects import tacit_subject_for
 from src.model.subject import Subject
 from src.model.syntacticAnalyzer import SyntacticAnalyzer
 from src.model.syntacticStructure import SyntacticStructure

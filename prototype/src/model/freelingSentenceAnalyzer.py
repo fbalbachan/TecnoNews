@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from clauseAnalyzer import *
-from clauseExtractor import *
-from parser.freelingTreeParser import *
+from src.model.clauseAnalyzer import *
+from src.model.clauseExtractor import *
+from src.parser.freelingTreeParser import *
 
 
 class FreelingSentenceAnalyzer:

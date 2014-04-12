@@ -1,13 +1,13 @@
 #-*- coding: utf-8 -*-
 
-from ling.verb_info import *
+from src.ling.verb_info import *
 from src.model.activeVoiceSyntacticAnalizer import ActiveVoiceSyntacticAnalyzer
 from src.model.entity import Entity
 from src.model.entityMSISeer import EntityMSISeer
 from src.model.passiveVoiceSyntacticAnalyzer import PassiveVoiceSyntacticAnalyzer
 from src.model.syntacticAnalyzer import SyntacticAnalyzer
-from syntacticStructure import *
-from verb import Verb
+from src.model.syntacticStructure import *
+from src.model.verb import Verb
 
 
 class ClauseAnalyzer:

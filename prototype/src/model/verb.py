@@ -3,8 +3,8 @@
 from copy import copy
 from itertools import groupby
 
-from ling.head_labels import *
-from ling.verb_info import get_script_class, get_transitivity
+from src.ling.head_labels import *
+from src.ling.verb_info import get_script_class, get_transitivity
 from src.model.entity import Entity
 
 
