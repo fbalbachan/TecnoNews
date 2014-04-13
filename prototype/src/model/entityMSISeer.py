@@ -13,7 +13,7 @@ class EntityMSISeer:
         return sorted(nouns_and_pronouns, key = lambda node: node.level())[0].msi
 
     def msi_of_coordinated_nominal_node(self, node):
-        msi = { "number" : "plural" }
+        msi = { "category" : "noun", "number" : "plural" }
 
         pronouns = sorted(node.leaves_of_category("pronoun"), key=lambda pronoun: pronoun.msi["person"])
         msi["person"] = pronouns[0].msi["person"] if pronouns else 3
@@ -33,7 +33,7 @@ class EntityMSISeer:
         return node.leaves()[0].msi
 
     def msi_of_infinity(self, node):
-        return { "gender" : "neutral", "person" : 3, "number" : "singular" }
+        return { "category" : "noun", "gender" : "neutral", "person" : 3, "number" : "singular" }
 
     msi_seer_by_label = { "sn" : msi_of_single_nominal_node,
                            "coor-n" : msi_of_coordinated_nominal_node,
