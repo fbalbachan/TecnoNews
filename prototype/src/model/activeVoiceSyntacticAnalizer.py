@@ -24,7 +24,8 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         nominal_at_right = lambda: self.search_nominal_od_at("right", 3)
         nominal_at_left  = lambda: self.search_nominal_od_at("left", 2)
         pronominal_at_left  = lambda: self.search_pronoun_at("left", 1)
-        return self.extract_searching("od", nominal_at_right, nominal_at_left, pronominal_at_left)
+        pronominal_at_right  = lambda: self.search_pronoun_at("right", 1) # Enclítico
+        return self.extract_searching("od", nominal_at_right, nominal_at_left, pronominal_at_left, pronominal_at_right)
 
     def oi(self):
         nominal_at_right = lambda: self.search_nominal_oi_at("right", 3)
