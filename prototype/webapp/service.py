@@ -1,6 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from StringIO import StringIO
 import os, web
+from sys import exc_info
+from traceback import format_exc, format_stack
 
 from src.entinews import Entinews
 from src.model.freelingSentenceAnalyzer import FreelingSentenceAnalyzer
@@ -25,13 +28,47 @@ class Index_request:
 
 class EntiNews_request:
 	def GET(self):
-		web_input = web.input()
-		input_text = web_input.text
+		try:
+			web_input = web.input()
+			input_text = web_input.text
+			analyzer = FreelingSentenceAnalyzer()
+			sentence = Sentence(input_text)
+			analyzer.analyze(sentence)
+			return web.template.render().test(sentence)
+		except Exception:
+			return web.template.render().exception(format_exc(), "")
 
-		analyzer = FreelingSentenceAnalyzer()
-		sentence = Sentence(input_text)
-		analyzer.analyze(sentence)
- 		return web.template.render().test(sentence)
+	def frame_info(self):
+		frame_info = StringIO("")
+
+		tb = exc_info()[2]
+		while 1:
+			if not tb.tb_next:
+				break
+			tb = tb.tb_next
+
+		stack = []
+
+		f = tb.tb_frame
+		while f:
+			stack.append(f)
+			f = f.f_back
+
+		stack.reverse()
+		frame_info.write("Locals by frame, innermost last\n")
+		for frame in stack:
+			frame_info.write("\nFrame %s in %s at line %s\n" % (frame.f_code.co_name,
+															frame.f_code.co_filename,
+												 			frame.f_lineno))
+			for key, value in frame.f_locals.items():
+				frame_info.write("\t%20s = " % key)
+				try:
+					uni = unicode(str(value), "utf-8", "replace")
+					frame_info.write(uni)
+				except:
+					frame_info.write("<ERROR WHILE PRINTING VALUE>")
+				frame_info.write("\n")
+		return frame_info.getvalue()
 
 # 		entinews = Entinews()
 # 		sentences = entinews.sentences_for(input_text)
