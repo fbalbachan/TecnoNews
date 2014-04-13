@@ -37,6 +37,12 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         at_left  = lambda: self.search_regime_at("left", 2)
         return self.extract_searching("regimen", at_right, at_left)
 
+    def equative(self):
+        structure = SyntacticStructure("equative")
+        entities = self.nominal_and_personal_entities(2, 3)
+        if entities: structure.entities = [ entities[0] ]
+        return structure
+
     def search_regime_at(self, side, distance):
         def which(node):
             first_leaf = node.leaves()[0]
