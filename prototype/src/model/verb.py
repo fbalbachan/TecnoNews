@@ -21,6 +21,9 @@ class Verb(Entity):
         self.script_class = get_script_class(lemma) # Reificar como método de clase
         self.transitivity = get_transitivity(lemma) # Idem
 
+        if not self.transitivity:
+            raise Exception("No se encontró información de transitividad para " + self.leaf().lexical_form)
+
     def lemma(self):
         return self.leaf().lemma
 
@@ -37,7 +40,7 @@ class Verb(Entity):
         return matches
 
     def matches_gender_of(self, entity):
-        return self.msi["gender"] == entity.msi["gender"]
+        return self.msi["gender"] == entity.msi["gender"] or entity.msi["gender"] == "neutral"
 
     def adjusted_msi_for(self, msi):
         adjusted = copy(msi)
