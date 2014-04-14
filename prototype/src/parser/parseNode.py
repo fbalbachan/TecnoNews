@@ -48,6 +48,9 @@ class ParseNode:
     def leaves_of_category(self, category):
         return self.leaves_of_msi({ "category" : category })
 
+    def leaves_string(self):
+        return " ".join([ str(leaf) for leaf in self.leaves() ])
+
     def contains(self, node):
         for each in self:
             if each is node: return True

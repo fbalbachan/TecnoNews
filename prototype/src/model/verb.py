@@ -14,10 +14,11 @@ class Verb(Entity):
     def __init__(self, node, voice):
         Entity.__init__(self, node)
 
-        lemma = self.lemma()
-        self.msi = self.adjusted_msi_for(self.leaf().msi)
-
         self.voice = voice
+
+        lemma = self.lemma()
+        self.msi = self.adjusted_msi()
+
         self.script_class = get_script_class(lemma) # Reificar como método de clase
         self.transitivity = get_transitivity(lemma) # Idem
 
@@ -28,10 +29,13 @@ class Verb(Entity):
         return self.leaf().lemma
 
     def leaf(self):
-        return self.node.nodes_with_labels(["parti"])[0].leaves()[0] if self.is_compound() else self.node.leaves()[0]
+        return self.verbal_leaves()[-1]
 
     def is_compound(self):
-        return bool(self.node.nodes_with_labels(["vaux"]))
+        return len(self.verbal_leaves()) > 1
+
+    def verbal_leaves(self):
+        return self.node.leaves_of_category("verb")
 
     def matches(self, entity):
         person_of_entity = entity.msi["person"] if "person" in entity.msi else 3
@@ -42,12 +46,12 @@ class Verb(Entity):
     def matches_gender_of(self, entity):
         return self.msi["gender"] == entity.msi["gender"] or entity.msi["gender"] == "neutral"
 
-    def adjusted_msi_for(self, msi):
-        adjusted = copy(msi)
+    def adjusted_msi(self):
+        verb_index_for_msi = -1 if self.voice == "passive" else 0 # Active
+        adjusted = copy(self.verbal_leaves()[verb_index_for_msi].msi)
         if not adjusted["person"]: adjusted["person"] = 3
         return adjusted
 
     def __repr__(self):
-        node = self.leaf()
-        return node.lexical_form + " (" + node.lemma + ") " + str([ self.voice, self.script_class, self.transitivity ])\
-            + str(self.msi)
+        return self.node.leaves_string() + " (" + self.lemma() + ") " + \
+            str([ self.voice, self.script_class, self.transitivity ]) + str(self.msi)
