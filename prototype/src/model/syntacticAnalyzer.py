@@ -47,6 +47,12 @@ class SyntacticAnalyzer:
         verb_matching_entities = filter(lambda entity: clause.verb.matches(entity), only_nominal_and_personal_pronouns)
         return verb_matching_entities
 
+    def search_subord_with_preposition_at(self, side, distance, *accepted_prepositions):
+        def which(node):
+            first_leaf = node.leaves()[0]
+            return first_leaf.msi["type"] == "preposition" and first_leaf.lexical_form.lower() in accepted_prepositions
+        return self.search_subord_at(side, distance, which)
+
     def search_subord_at(self, side, distance, which = lambda node: True):
         all_subord_entities = self.clause.subord_entities_closest_to_verb_at(side, distance, which)
         return all_subord_entities[0] if all_subord_entities else []

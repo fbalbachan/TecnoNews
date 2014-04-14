@@ -46,16 +46,10 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         return structure
 
     def search_regime_at(self, side, distance):
-        def which(node):
-            first_leaf = node.leaves()[0]
-            return first_leaf.msi["type"] == "preposition" and first_leaf.lexical_form.lower() in ["a", "con", "de"]
-        return self.search_subord_at(side, distance, which)
+        return self.search_subord_with_preposition_at(side, distance, "a", "con", "de")
 
     def search_nominal_oi_at(self, side, distance):
-        def which(node):
-            first_leaf = node.leaves()[0]
-            return first_leaf.msi["type"] == "preposition" and first_leaf.lexical_form.lower() == "a"
-        return self.search_subord_at(side, distance, which)
+        return self.search_subord_with_preposition_at(side, distance, "a")
 
     def search_nominal_od_at(self, side, distance):
         clause = self.clause
@@ -63,4 +57,4 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         if entities:
             return [ entities[0] ]
         else:
-            return self.search_subord_at(side, distance)
+            return self.search_subord_with_preposition_at(side, distance, "a")
