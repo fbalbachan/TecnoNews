@@ -11,6 +11,9 @@ class Clause:
         self.verb = None
         self.syntactic_structures = []
 
+    def structure(self, name):
+        return filter(lambda structure: structure.name == name, self.syntactic_structures)[0]
+
     def subord_entities_closest_to_verb_at(self, side, allowed_distance, which_node = lambda node: True):
         which = lambda entity, node: entity.is_subordinated() and entity.highest_subordinating_node() == node \
                     and which_node(node)

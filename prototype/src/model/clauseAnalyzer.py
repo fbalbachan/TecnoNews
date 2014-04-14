@@ -1,36 +1,25 @@
 #-*- coding: utf-8 -*-
 
+
+from logging import getLogger
+
 from src.ling.verb_info import *
 from src.model.activeVoiceSyntacticAnalizer import ActiveVoiceSyntacticAnalyzer
 from src.model.entity import Entity
 from src.model.entityMSISeer import EntityMSISeer
 from src.model.passiveVoiceSyntacticAnalyzer import PassiveVoiceSyntacticAnalyzer
 from src.model.syntacticAnalyzer import SyntacticAnalyzer
-from src.model.syntacticStructure import *
 from src.model.verb import Verb
 
 
 class ClauseAnalyzer:
 
     def analyze(self, clause):
-        print "analyze() clause", clause
-
         clause.voice = self.voice_of(clause)
-        print "\tVoice", clause.voice
-
         clause.entities = self.entities_of(clause)
-        print
-        for entity in clause.entities:
-            print "\tEntity", entity, entity.msi
-        #print "\tMax. entities", map(lambda e: e.leaves(), clause.maximal_entities())
-
         if clause.voice: clause.verb = self.verb_of(clause)
-
-        print "\n\tSyntactic structures"
         self.analyze_syntactically(clause)
-        for structure in clause.syntactic_structures:
-            print "\t\t" + structure.name, str(structure)
-
+        self.logger.debug("Result of analyze() clause '%s' voice %s", clause, clause.voice)
 
     def analyze_syntactically(self, clause):
         syntactic_analyzer_by_voice = { "active" : ActiveVoiceSyntacticAnalyzer,
@@ -82,3 +71,5 @@ class ClauseAnalyzer:
             return voice_by_label[verbal_node.pop()]
 
         return None
+
+    logger = getLogger("ClauseAnalyzer")

@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
 import codecs
-from utils.csvwrapper import *
+
+from src.utils.csvwrapper import *
+
 
 def load_csv_test_file(csv_file):
     """in: csv file filename

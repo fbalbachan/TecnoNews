@@ -1,8 +1,13 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
+from ast import literal_eval
 import unittest
-from model.sentence import *
+
 from csv_file_reader import load_csv_test_file
+from src.model.freelingSentenceAnalyzer import FreelingSentenceAnalyzer
+from src.model.sentence import *
+from tests.freelingTreeRepository import FreelingTreeRepository
+
 
 class TestSentence(unittest.TestCase):
 
@@ -10,18 +15,21 @@ class TestSentence(unittest.TestCase):
         self.input_texts = load_csv_test_file('tests/input/sentence_test.csv')
 
     def test_passive_or_active(self):
+        analyzer = FreelingSentenceAnalyzer(FreelingTreeRepository("tests/input/trees"))
+
         for (input_text, active, passive, unimember) in self.input_texts:
+            print "trying: %s .. " % input_text,
+
             sentence = Sentence(input_text)
-            is_active = active == 'True'
-            is_passive = passive == 'True'
-            is_unimember = unimember == 'True'
+            analyzer.analyze(sentence)
 
-            print "trying: ", sentence
+            self.assertEqual(1, len(sentence.clauses), "La oración tiene más de una cláusula.")
 
-            self.assertEquals(is_unimember, sentence.is_unimember)
-            self.assertEquals(is_active, sentence.is_active)
-            self.assertEquals(is_passive, sentence.is_passive)
+            voice = sentence.clauses[0].voice
+            expected_voice = "active" if literal_eval(active) else "passive" if literal_eval(passive) else None
+            self.assertEquals(voice, expected_voice, "La voz de la oración es incorrecta.")
 
+            print "OK"
 
 if __name__ == '__main__':
     unittest.main()
