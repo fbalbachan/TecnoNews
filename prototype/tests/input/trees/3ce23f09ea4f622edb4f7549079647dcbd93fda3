@@ -1,0 +1,41 @@
++verb-pass_[
+  sn_[
+    espec-fp_[
+      +j-fp_[
+        +(las el DA0FP0 -)
+      ]
+    ]
+    +grup-nom-fp_[
+      +n-fp_[
+        +(cartas carta NCFP000 -)
+      ]
+    ]
+  ]
+  vser_[
+    +(son ser VSIP3P0 -)
+  ]
+  +parti-flex_[
+    +parti-fp_[
+      +(llevadas llevar VMP00PF -)
+    ]
+  ]
+  grup-sp_[
+    +prep_[
+      +(por por SPS00 -)
+    ]
+    sn_[
+      espec-ms_[
+        +j-ms_[
+          +(el el DA0MS0 -)
+        ]
+      ]
+      +grup-nom-ms_[
+        +n-ms_[
+          +(cartero cartero NCMS000 -)
+        ]
+      ]
+    ]
+  ]
+]
+
+

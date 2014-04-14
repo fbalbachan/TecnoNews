@@ -1,0 +1,34 @@
++grup-verb_[
+  coor-n_[
+    sn_[
+      espec-ms_[
+        +j-ms_[
+          +(el el DA0MS0 -)
+        ]
+      ]
+      +grup-nom-ms_[
+        +n-ms_[
+          +(perro perro NCMS000 -)
+        ]
+      ]
+    ]
+    +(y y CC -)
+    sn_[
+      espec-ms_[
+        +j-ms_[
+          +(el el DA0MS0 -)
+        ]
+      ]
+      +grup-nom-ms_[
+        +n-ms_[
+          +(gato gato NCMS000 -)
+        ]
+      ]
+    ]
+  ]
+  +verb_[
+    +(pelearon pelear VMIS3P0 -)
+  ]
+]
+
+
