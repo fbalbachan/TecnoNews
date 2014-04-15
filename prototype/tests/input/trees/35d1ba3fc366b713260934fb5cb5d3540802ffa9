@@ -1,0 +1,44 @@
++grup-verb_[
+  coor-n_[
+    sn_[
+      espec-ms_[
+        +j-ms_[
+          +(el el DA0MS0 -)
+        ]
+      ]
+      +grup-nom-ms_[
+        +n-ms_[
+          +(perro perro NCMS000 -)
+        ]
+      ]
+    ]
+    +(y y CC -)
+    sn_[
+      espec-ms_[
+        +j-ms_[
+          +(el el DA0MS0 -)
+        ]
+      ]
+      +grup-nom-ms_[
+        +n-ms_[
+          +(gato gato NCMS000 -)
+        ]
+      ]
+    ]
+  ]
+  +verb_[
+    +(son ser VSIP3P0 -)
+  ]
+  sn_[
+    +grup-nom-mp_[
+      +n-mp_[
+        +(dos do NCMP000 -)
+      ]
+      n-mp_[
+        +(animales animal NCMP000 -)
+      ]
+    ]
+  ]
+]
+
+

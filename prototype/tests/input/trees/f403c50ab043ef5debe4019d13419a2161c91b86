@@ -1,0 +1,29 @@
++grup-verb_[
+  patons_[
+    +paton-ms_[
+      +(lo lo PP3MSA00 -)
+    ]
+  ]
+  +verb_[
+    +(matamos matar VMIP1P0 -)
+  ]
+  grup-sp_[
+    +prep_[
+      +(a a SPS00 -)
+    ]
+    sn_[
+      espec-ms_[
+        +pos-ms_[
+          +(su su DP3CS0 -)
+        ]
+      ]
+      +grup-nom-ms_[
+        +n-ms_[
+          +(padre padre NCMS000 -)
+        ]
+      ]
+    ]
+  ]
+]
+
+

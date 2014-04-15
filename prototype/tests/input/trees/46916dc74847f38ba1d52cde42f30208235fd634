@@ -1,0 +1,79 @@
++grup-verb_[
+  sn_[
+    espec-fs_[
+      +j-fs_[
+        +(la el DA0FS0 -)
+      ]
+    ]
+    +grup-nom-fs_[
+      +n-fs_[
+        +(casa casa NCFS000 -)
+      ]
+    ]
+    Fc_[
+      +(, , Fc -)
+    ]
+  ]
+  grup-sp_[
+    +prep_[
+      +(pese_a pese_a SPS00 -)
+    ]
+    sn_[
+      espec-fp_[
+        +j-fp_[
+          +(las el DA0FP0 -)
+        ]
+      ]
+      +grup-nom-fp_[
+        +n-fp_[
+          +(opiniones opinión NCFP000 -)
+        ]
+        s-a-fp_[
+          +a-fp_[
+            +(ajenas ajeno AQ0FP0 -)
+          ]
+        ]
+      ]
+    ]
+    Fc_[
+      +(, , Fc -)
+    ]
+  ]
+  neg_[
+    +(no no RN -)
+  ]
+  +verb_[
+    (debe deber VMIP3S0 -)
+    +infinitiu_[
+      +inf_[
+        +forma-inf_[
+          +(estar estar VAN0000 -)
+        ]
+      ]
+    ]
+  ]
+  subord-part_[
+    +parti-fs_[
+      +(ubicada ubicar VMP00SF -)
+    ]
+    grup-sp_[
+      +prep_[
+        +(en en SPS00 -)
+      ]
+      sn_[
+        espec-fs_[
+          +j-fs_[
+            +(la el DA0FS0 -)
+          ]
+        ]
+        +grup-nom-fs_[
+          +n-fs_[
+            +(colina colina NCFS000 -)
+          ]
+        ]
+      ]
+    ]
+  ]
+]
+
+
