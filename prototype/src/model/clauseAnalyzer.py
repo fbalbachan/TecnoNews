@@ -57,7 +57,13 @@ class ClauseAnalyzer:
             leaves.extend(node.leaves())
             return leaves
 
-        leaves_of_active_voice = lambda clause, node: node.leaves_of_category("verb")
+        def leaves_of_active_voice(clause, node):
+            root = clause.proper_tree
+            leaves = node.leaves_of_category("verb")
+            ser_node = filter(lambda child: not child.is_leaf() and child.label == "parti-ser", root.children)
+            if ser_node: leaves.extend(ser_node[0].leaves())
+            return leaves
+
         verbal_leaves_by_voice = { "active" : leaves_of_active_voice, "passive" : leaves_of_passive_voice }
 
         return verbal_leaves_by_voice[clause.voice](clause, node)
