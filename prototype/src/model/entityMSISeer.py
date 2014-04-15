@@ -9,8 +9,9 @@ class EntityMSISeer:
             return {}
 
     def msi_of_single_nominal_node(self, node):
-        nouns_and_pronouns = node.leaves_of_category("noun") + node.leaves_of_category("pronoun")
-        return sorted(nouns_and_pronouns, key = lambda node: node.level())[0].msi
+        useful_leaves = node.leaves_of_category("noun") + node.leaves_of_category("pronoun") + \
+            node.leaves_of_category("determinant")
+        return sorted(useful_leaves, key = lambda node: node.level())[0].msi
 
     def msi_of_coordinated_nominal_node(self, node):
         msi = { "category" : "noun", "number" : "plural" }
