@@ -43,7 +43,7 @@ class SyntacticAnalyzer:
         entities = clause.entities_closest_to_verb_at("left", distance_at_left) \
                     + clause.entities_closest_to_verb_at("right", distance_at_right)
 
-        only_nominal_and_personal_pronouns = self.only_nominal(entities) + self.only_personal_pronouns_of(entities)
+        only_nominal_and_personal_pronouns = self.only_nominal_and_personal_pronouns_of(entities)
         verb_matching_entities = filter(lambda entity: clause.verb.matches(entity), only_nominal_and_personal_pronouns)
         return verb_matching_entities
 
@@ -63,8 +63,9 @@ class SyntacticAnalyzer:
     def only_pronouns_of(self, entities):
         return filter(lambda entity: entity.category() == "pronoun", entities)
 
-    def only_personal_pronouns_of(self, entities):
-        return filter(lambda entity: entity.category() == "pronoun" and entity.msi["case"] == None, entities)
+    def only_nominal_and_personal_pronouns_of(self, entities):
+        is_personal_pronoun = lambda entity: entity.category() == "pronoun" and entity.msi["case"] == None
+        return filter(lambda entity: entity.category() == "noun" or is_personal_pronoun(entity), entities)
 
-    def only_nominal(self, entities):
+    def only_nominal_of(self, entities):
         return filter(lambda entity: entity.category() == "noun", entities)
