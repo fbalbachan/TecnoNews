@@ -26,11 +26,10 @@ class TestPassiveSentence(unittest.TestCase):
 
             clause = sentence.clauses[0]
 
-            self.assertEqual(expected_subject, clause.structure("subject").lexical_form)
+            self.assertEqual(expected_subject, clause.structure("subject").lexical_form())
             self.assertEqual(expected_verb_lemma, clause.structure("verb").entity().lemma())
 
-            self.assertTrue(len(clause.structure("od").entities) > 0, "No se encontró OD.")
-            self.assertEqual(expected_od, u"" + str(clause.structure("od").entity()))
+            self.assertEqual(expected_od, clause.structure("od").lexical_form())
 
             print "OK"
 

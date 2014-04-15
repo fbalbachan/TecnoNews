@@ -6,8 +6,11 @@ class SyntacticStructure:
         self.entities = []
         self.tacit_entities = []
 
+    def lexical_form(self):
+        return self.entity().lexical_form
+
     def entity(self):
-        return self.entities[0]
+        return (self.entities + self.tacit_entities)[0]
 
     def is_tacit(self):
         return not bool(self.entities) and bool(self.tacit_entities)

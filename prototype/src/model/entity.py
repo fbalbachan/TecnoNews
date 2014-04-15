@@ -3,8 +3,8 @@ from src.model.tacitEntity import TacitEntity
 
 class Entity (TacitEntity):
 
-    def __init__(self, node = None):
-        TacitEntity.__init__(self, "", {})
+    def __init__(self, node):
+        TacitEntity.__init__(self, node.leaves_string(), {})
         self.node = node
 
     def level(self):
