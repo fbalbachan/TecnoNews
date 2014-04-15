@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
-import codecs
 
 from src.utils.csvwrapper import *
 
@@ -13,5 +12,5 @@ def load_csv_test_file(csv_file):
                   ('input 2', 'expected result a2', 'expected result b2', ...),
                   ...
                  ]"""
-    file_reader = unicode_csv_reader(codecs.open(csv_file, 'r', 'utf-8'), first_line_is_header=True, delimiter=',')
+    file_reader = unicode_csv_reader(open(csv_file, 'r'), first_line_is_header=True, delimiter=',')
     return [test_tuple for test_tuple in file_reader if not(test_tuple[0].startswith('#'))]

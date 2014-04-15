@@ -16,7 +16,7 @@ class FreelingTreeParser:
 
     def from_file(self, path):
         file = open(path)
-        output = file.read().decode("utf-8").split("\n")
+        output = file.read().split("\n")
         return self.parse(output)
 
     def parse(self, output):

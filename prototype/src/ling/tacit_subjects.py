@@ -4,28 +4,28 @@
 tacit_subjects = {
     (0, 'singular', 'neutral') : None,
 
-    (1, 'singular', 'neutral') : u'yo',
+    (1, 'singular', 'neutral') : 'yo',
 
-    (2, 'singular', 'neutral') : u'tú',
+    (2, 'singular', 'neutral') : 'tú',
 
-    (3, 'invariable', 'neutral') : u'lo',
-    (3, 'singular', 'neutral')   : u'él',
-    (3, 'singular', 'masculine') : u'él',
-    (3, 'singular', 'feminine')  : u'ella',
+    (3, 'invariable', 'neutral') : 'lo',
+    (3, 'singular', 'neutral')   : 'él',
+    (3, 'singular', 'masculine') : 'él',
+    (3, 'singular', 'feminine')  : 'ella',
 
-    (1, 'plural', 'neutral')   : u'nosotros',
-    (1, 'plural', 'masculine') : u'nosotros',
-    (1, 'plural', 'feminine')  : u'nosotras',
+    (1, 'plural', 'neutral')   : 'nosotros',
+    (1, 'plural', 'masculine') : 'nosotros',
+    (1, 'plural', 'feminine')  : 'nosotras',
 
-    (2, 'plural', 'neutral')   : u'ustedes',
+    (2, 'plural', 'neutral')   : 'ustedes',
 
-    (3, 'plural', 'neutral')   : u'ellos',
-    (3, 'plural', 'masculine') : u'ellos',
-    (3, 'plural', 'feminine')  : u'ellas',
+    (3, 'plural', 'neutral')   : 'ellos',
+    (3, 'plural', 'masculine') : 'ellos',
+    (3, 'plural', 'feminine')  : 'ellas',
 }
 
 def tacit_subject_for(verb):
     gender = verb.msi['gender']
     if not gender:
         gender = "neutral"
-    return tacit_subjects[(verb.msi['person'], verb.msi['number'], gender)].encode("utf-8")
+    return tacit_subjects[(verb.msi['person'], verb.msi['number'], gender)]

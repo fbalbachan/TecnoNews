@@ -68,7 +68,7 @@ Config = ConfigParser.ConfigParser()
 Config.read("config")
 
 verb_file =  Config.get("resources", "verbal_scripts")
-verb_file_reader = unicode_csv_reader(codecs.open(verb_file, 'r', 'utf-8'), first_line_is_header=False, delimiter=',')
+verb_file_reader = unicode_csv_reader(open(verb_file, 'r'), first_line_is_header=False, delimiter=',')
 verbs = {}
 for line in verb_file_reader:
     verb_word, verb_script, verb_transitivity = line[0], line[1], line[2]

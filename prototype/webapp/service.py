@@ -31,12 +31,14 @@ class EntiNews_request:
 		try:
 			web_input = web.input()
 			input_text = web_input.text
+			if type(input_text) == unicode: input_text = input_text.encode("utf-8") # unicode -> str (encoded)
+
 			analyzer = FreelingSentenceAnalyzer()
 			sentence = Sentence(input_text)
 			analyzer.analyze(sentence)
 			return web.template.render().test(sentence)
-		except Exception:
-			return web.template.render().exception(format_exc(), "")
+ 		except Exception:
+ 			return web.template.render().exception(format_exc(), "")
 
 	def frame_info(self):
 		frame_info = StringIO("")
