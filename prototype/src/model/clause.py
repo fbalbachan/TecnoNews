@@ -11,6 +11,9 @@ class Clause:
         self.verb = None
         self.syntactic_structures = []
 
+    def has_structure(self, name):
+        return name in [ structure.name for structure in self.syntactic_structures ]
+
     def structure(self, name):
         return filter(lambda structure: structure.name == name, self.syntactic_structures)[0]
 

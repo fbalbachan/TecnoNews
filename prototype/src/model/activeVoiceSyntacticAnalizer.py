@@ -58,7 +58,7 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
 
     def search_nominal_od_at(self, side, distance):
         clause = self.clause
-        entities = self.only_nominal(clause.entities_closest_to_verb_at(side, distance))
+        entities = self.only_nominal_of(clause.entities_closest_to_verb_at(side, distance))
         if entities:
             return [ entities[0] ]
         else:

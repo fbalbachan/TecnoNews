@@ -9,8 +9,14 @@ class SyntacticStructure:
     def lexical_form(self):
         return self.entity().lexical_form
 
+    def is_empty(self):
+        return not bool(self.all_entities())
+
+    def all_entities(self):
+        return self.entities + self.tacit_entities
+
     def entity(self):
-        return (self.entities + self.tacit_entities)[0]
+        return self.all_entities()[0]
 
     def is_tacit(self):
         return not bool(self.entities) and bool(self.tacit_entities)
