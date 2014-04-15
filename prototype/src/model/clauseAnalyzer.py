@@ -39,14 +39,33 @@ class ClauseAnalyzer:
         return structures_getter_by_voice[clause.voice](clause)
 
     def verb_of(self, clause):
-        leaf = self.verb_leaf_of(clause)
-        return Verb(leaf, clause.voice)
+        node = self.verb_node_of(clause)
+        leaves = self.verb_leaves_of(clause, node)
+        return Verb(node, clause.voice, leaves)
 
-    def verb_leaf_of(self, clause):
+    # Debido a que en voz passiva freeling no agrupa las hojas verbales
+    def verb_leaves_of(self, clause, node):
+        def leaves_of_passive_voice(clause, node):
+            leaves = []
+            root = clause.proper_tree
+            auxiliar_node = root.nodes_with_labels("vaux")
+            if auxiliar_node: leaves.extend(auxiliar_node[0].leaves())
+
+            ser_node = root.nodes_with_labels(["vser", "parti-ser"])
+            if ser_node: leaves.extend(ser_node[0].leaves())
+
+            leaves.extend(node.leaves())
+            return leaves
+
+        leaves_of_active_voice = lambda clause, node: node.leaves_of_category("verb")
+        verbal_leaves_by_voice = { "active" : leaves_of_active_voice, "passive" : leaves_of_passive_voice }
+
+        return verbal_leaves_by_voice[clause.voice](clause, node)
+
+    def verb_node_of(self, clause):
         root = clause.proper_tree
         verb_node = root.nodes_with_labels([ "subord-ger", "verb", "parti-flex" ])
         if len(verb_node) != 1: raise Exception("Existe cero o más de un verbo en la cláusula.")
-
         return verb_node.pop()
 
     def entities_of(self, clause):

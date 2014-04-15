@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
+from src.model.tacitEntity import TacitEntity
 
-class Entity:
-    def __init__(self, node):
+class Entity (TacitEntity):
+
+    def __init__(self, node = None):
+        TacitEntity.__init__(self, "", {})
         self.node = node
-        self.msi = {}
 
     def level(self):
         return self.node.level()

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from src.ling.tacit_subjects import tacit_subject_for
-from src.model.subject import Subject
 from src.model.syntacticAnalyzer import SyntacticAnalyzer
 from src.model.syntacticStructure import SyntacticStructure
+from src.model.tacitEntity import TacitEntity
 
 
 class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
@@ -11,14 +11,19 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         SyntacticAnalyzer.__init__(self, clause)
 
     def subject(self):
+        structure = SyntacticStructure("subject")
         entities = self.nominal_and_personal_entities(3, 2)
-        if entities: return Subject.concrete(entities[0])
-        return self.tacit_subject()
+
+        if entities:
+            structure.entities = [ entities[0] ]
+        else:
+            structure.tacit_entities = [ self.tacit_subject() ]
+
+        return structure
 
     def tacit_subject(self):
         verb = self.clause.verb
-        tacit_msi = { "person" : verb.msi["person"], "number" : verb.msi["number"], "gender" : verb.msi["gender"] }
-        return Subject.tacit(tacit_subject_for(verb), tacit_msi)
+        return TacitEntity(verb.matching_pronoun(), verb.matching_pronoun_msi())
 
     def od(self):
         nominal_at_right = lambda: self.search_nominal_od_at("right", 3)
