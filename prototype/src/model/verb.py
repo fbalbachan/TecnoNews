@@ -38,7 +38,7 @@ class Verb(Entity):
         return len(self.leaves) > 1
 
     def matches(self, entity):
-        person_of_entity = entity.msi["person"] if "person" in entity.msi else 3
+        person_of_entity = entity.msi["person"] if "person" in entity.msi and entity.msi["person"] else 3
         matches = self.msi["number"] == entity.msi["number"] and self.msi["person"] == person_of_entity and \
             self.matches_gender_of(entity)
         return matches
