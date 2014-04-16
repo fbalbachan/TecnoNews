@@ -1,77 +1,108 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
 import unittest
-from model.sentence import *
+
+from src.model.freelingSentenceAnalyzer import FreelingSentenceAnalyzer
+from src.model.sentence import Sentence
+from tests.freelingTreeRepository import FreelingTreeRepository
+
 
 class TestVerbs(unittest.TestCase):
 
+    def setUp(self):
+        self.analyzer = FreelingSentenceAnalyzer(FreelingTreeRepository("tests/input/trees"))
+
     def test_verb_msi_for_modal_verbs(self):
         examples = [
-            (u'puedes comprar',             {'person': 2, 'number': u'singular', 'gender': u'neutral'},    u'comprar'),
-            (u'has podido comprar',         {'person': 2, 'number': u'singular', 'gender': u'neutral'},    u'comprar'),
-        ] 
+            ('puedes comprar',             {'person': 2, 'number': 'singular', 'gender': 'neutral'}, 'comprar'),
+            ('has podido comprar',         {'person': 2, 'number': 'singular', 'gender': 'neutral'}, 'comprar'),
+        ]
 
         for (input_text, expected_verb_msi, expected_verb_lemma) in examples:
+            print "trying: %s .. " % input_text,
+
             sentence = Sentence(input_text)
+            self.analyzer.analyze(sentence)
 
-            verb_msi   = sentence.verb.msi
-            self.assertEqual(expected_verb_msi, verb_msi)
+            self.assertEqual(1, len(sentence.clauses), "La oración tiene más de una cláusula.")
+            clause = sentence.clauses[0]
 
-            verb_lemma = sentence.verb.lemma
+            verb_msi   = clause.structure("verb").msi()
+            self.assert_is_included(expected_verb_msi, verb_msi)
+
+            verb_lemma = clause.structure("verb").entity().lemma()
             self.assertEqual(expected_verb_lemma, verb_lemma)
 
-    def _verb_msi(self):
+            print "OK"
+
+    def test_verb_msi(self):
         examples = [
-            (u'llueve',                     {'person': 0, 'number': u'singular', 'gender': u'neutral'},    u'llover'),
-                                                                                                            
-            (u'no hay cupo',                {'person': 3, 'number': u'invariable', 'gender': u'neutral'},  u'haber'),
-                                                                                                            
-            (u'el rey juega',               {'person': 3, 'number': u'singular', 'gender': u'neutral'},    u'jugar'),
-            (u'el rey ha jugado',           {'person': 3, 'number': u'singular', 'gender': u'neutral'},    u'jugar'),
-                                                                                                            
-            (u'los gatos pelean',           {'person': 3, 'number': u'plural', 'gender': u'neutral'},      u'pelear'),
-            (u'los gatos han peleado',      {'person': 3, 'number': u'plural', 'gender': u'neutral'},      u'pelear'),
-                                                                                                            
-            (u'el rey puede haber jugado',  {'person': 3, 'number': u'singular', 'gender': u'neutral'},    u'jugar'),
-        ] 
+            #('llueve',                     {'person': 0, 'number': 'singular', 'gender': 'neutral'},    'llover'),
+            #('no hay cupo',                {'person': 3, 'number': 'invariable', 'gender': 'neutral'},  'haber'),
+
+            ('el rey juega',               {'person': 3, 'number': 'singular', 'gender': 'neutral'},    'jugar'),
+            ('el rey ha jugado',           {'person': 3, 'number': 'singular', 'gender': 'neutral'},    'jugar'),
+
+            ('los gatos pelean',           {'person': 3, 'number': 'plural', 'gender': 'neutral'},      'pelear'),
+            ('los gatos han peleado',      {'person': 3, 'number': 'plural', 'gender': 'neutral'},      'pelear'),
+
+            ('el rey puede haber jugado',  {'person': 3, 'number': 'singular', 'gender': 'neutral'},    'jugar'),
+        ]
 
         for (input_text, expected_verb_msi, expected_verb_lemma) in examples:
+            print "trying: %s .. " % input_text,
             sentence = Sentence(input_text)
+            self.analyzer.analyze(sentence)
 
-            verb_msi   = sentence.verb.msi
-            self.assertEqual(expected_verb_msi, verb_msi)
+            self.assertEqual(1, len(sentence.clauses), "La oración tiene más de una cláusula.")
+            clause = sentence.clauses[0]
 
-            verb_lemma = sentence.verb.lemma
-            self.assertEqual(expected_verb_lemma, verb_lemma)
+            verb   = clause.structure("verb").entity()
 
-    def _verb_pass_msi(self):
-        
+            self.assert_is_included(expected_verb_msi, verb.msi)
+            self.assertEqual(expected_verb_lemma, verb.lemma())
+
+    def test_verb_pass_msi(self):
+
         examples = [
-            (u'la cena ha sido servida',     {'person': 3, 'number': u'singular', 'gender': u'neutral'},  u'servir'),
-            (u'las cenas han sido servidas', {'person': 3, 'number': u'plural', 'gender': u'neutral'},    u'servir'),
-                                                                                                          
-            (u'la batalla fue ganada',       {'person': 3, 'number': u'singular', 'gender': u'neutral'},  u'ganar'),
-            (u'las batallas fueron ganadas', {'person': 3, 'number': u'plural', 'gender': u'neutral'},    u'ganar'),
+            ('la cena ha sido servida',     {'person': 3, 'number': 'singular', 'gender': 'feminine'},  'servir'),
+            ('las cenas han sido servidas', {'person': 3, 'number': 'plural', 'gender': 'feminine'},    'servir'),
 
-            (u'he sido llamado',     {'person': 1, 'number': u'singular', 'gender': u'neutral'},  u'llamar'),
-            (u'hemos sido llamados', {'person': 1, 'number': u'plural', 'gender': u'neutral'},    u'llamar'),
+            ('la batalla fue ganada',       {'person': 3, 'number': 'singular', 'gender': 'feminine'},  'ganar'),
+            ('las batallas fueron ganadas', {'person': 3, 'number': 'plural', 'gender': 'feminine'},    'ganar'),
 
-            (u'serás llamado',       {'person': 2, 'number': u'singular', 'gender': u'neutral'},  u'llamar'),
-            (u'seréis llamados',     {'person': 2, 'number': u'plural', 'gender': u'neutral'},  u'llamar'),
+            ('he sido llamado',     {'person': 1, 'number': 'singular', 'gender': 'masculine'},  'llamar'),
+            ('hemos sido llamados', {'person': 1, 'number': 'plural', 'gender': 'masculine'},    'llamar'),
 
-            (u'será llamado',        {'person': 3, 'number': u'singular', 'gender': u'neutral'},  u'llamar'),
-            (u'serán llamados',      {'person': 3, 'number': u'plural', 'gender': u'neutral'},    u'llamar'),
+            ('serás llamado',       {'person': 2, 'number': 'singular', 'gender': 'masculine'},  'llamar'),
+            ('seréis llamados',     {'person': 2, 'number': 'plural', 'gender': 'masculine'},  'llamar'),
+
+            ('será llamado',        {'person': 3, 'number': 'singular', 'gender': 'masculine'},  'llamar'),
+            ('serán llamados',      {'person': 3, 'number': 'plural', 'gender': 'masculine'},    'llamar'),
 
         ]
 
         for (input_text, expected_verb_pass_msi, expected_verb_pass_lemma) in examples:
+            print "trying: %s .. " % input_text,
             sentence = Sentence(input_text)
+            self.analyzer.analyze(sentence)
 
-            verb_pass_msi   = sentence.verb.msi
-            verb_pass_lemma = sentence.verb.lemma
-            self.assertEqual(expected_verb_pass_msi, verb_pass_msi)
-            self.assertEqual(expected_verb_pass_lemma, verb_pass_lemma)
+            self.assertEqual(1, len(sentence.clauses), "La oración tiene más de una cláusula.")
+            clause = sentence.clauses[0]
 
+            verb   = clause.structure("verb").entity()
+
+            self.assertEqual("passive", verb.voice)
+
+            self.assert_is_included(expected_verb_pass_msi, verb.msi)
+            self.assertEqual(expected_verb_pass_lemma, verb.lemma())
+
+            print "OK"
+
+    def assert_is_included(self, this, into_that):
+        for attribute, value in this.items():
+            self.assertTrue(attribute in into_that)
+            self.assertEqual(value, into_that[attribute])
 
 if __name__ == '__main__':
     unittest.main()
