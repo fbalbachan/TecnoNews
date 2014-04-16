@@ -1,0 +1,31 @@
++grup-verb_[
+  coor-n_[
+    sn_[
+      +pron-ms_[
+        +psubj-ms_[
+          +(vos vos PP2CS00P -)
+        ]
+      ]
+    ]
+    +(y y CC -)
+    sn_[
+      +pron_[
+        +psubj-s_[
+          +(yo yo PP1CSN00 -)
+        ]
+      ]
+    ]
+  ]
+  +verb_[
+    +(comemos comer VMIP1P0 -)
+  ]
+  sn_[
+    +grup-nom-fs_[
+      +n-fs_[
+        +(pizza pizza NCFS000 -)
+      ]
+    ]
+  ]
+]
+
+

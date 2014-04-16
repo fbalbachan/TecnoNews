@@ -1,0 +1,27 @@
++grup-verb_[
+  grup-sp_[
+    +prep_[
+      +(a a SPS00 -)
+    ]
+    ptonic_[
+      +(mí mí PP1CSO00 -)
+    ]
+  ]
+  +verb_[
+    +(traigo traer VMIP1S0 -)
+  ]
+  sn_[
+    espec-fp_[
+      +j-fp_[
+        +(las el DA0FP0 -)
+      ]
+    ]
+    +grup-nom-fp_[
+      +n-fp_[
+        +(noticias noticia NCFP000 -)
+      ]
+    ]
+  ]
+]
+
+

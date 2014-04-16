@@ -1,0 +1,45 @@
++grup-verb_[
+  +verb_[
+    +(puede poder VMIP3S0 -)
+  ]
+  sn_[
+    espec-ms_[
+      +indef-ms_[
+        +(un uno DI0MS0 -)
+      ]
+    ]
+    +grup-nom-ms_[
+      +n-ms_[
+        +(hombre hombre NCMS000 -)
+      ]
+    ]
+  ]
+  grup-verb-inf_[
+    +infinitiu_[
+      +inf_[
+        +forma-inf_[
+          +(cambiar cambiar VMN0000 -)
+        ]
+      ]
+    ]
+    grup-sp_[
+      +prep_[
+        +(a a SPS00 -)
+      ]
+      sn_[
+        espec-ms_[
+          +j-ms_[
+            +(el el DA0MS0 -)
+          ]
+        ]
+        +grup-nom-ms_[
+          +n-ms_[
+            +(mundo mundo NCMS000 -)
+          ]
+        ]
+      ]
+    ]
+  ]
+]
+
+

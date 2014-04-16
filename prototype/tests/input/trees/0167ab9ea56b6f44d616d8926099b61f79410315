@@ -1,0 +1,36 @@
++grup-verb_[
+  sn_[
+    espec-fp_[
+      +grup-complex-spec-fp_[
+        +indef-fp_[
+          +(todas todo DI0FP0 -)
+        ]
+        j-fp_[
+          +(las el DA0FP0 -)
+        ]
+      ]
+    ]
+    +grup-nom-fp_[
+      +n-fp_[
+        +(noches noche NCFP000 -)
+      ]
+    ]
+  ]
+  +verb_[
+    +(viene venir VMIP3S0 -)
+  ]
+  sn_[
+    espec-ms_[
+      +j-ms_[
+        +(el el DA0MS0 -)
+      ]
+    ]
+    +grup-nom-ms_[
+      +n-ms_[
+        +(cartero cartero NCMS000 -)
+      ]
+    ]
+  ]
+]
+
+
