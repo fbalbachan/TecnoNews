@@ -4,8 +4,8 @@ from src.model.tacitEntity import TacitEntity
 class Entity (TacitEntity):
 
     def __init__(self, node):
-        TacitEntity.__init__(self, node.leaves_string(), {})
         self.node = node
+        TacitEntity.__init__(self, Entity.__repr__(self), {})
 
     def level(self):
         return self.node.level()
@@ -33,4 +33,4 @@ class Entity (TacitEntity):
         return filter(lambda node: node.label in [ "coor-sp", "grup-sp", "sp-de" ], path_to_root)
 
     def __repr__(self):
-        return " ".join([ str(leaf) for leaf in self.node.leaves() ])
+        return " ".join([ str(leaf) for leaf in self.node.leaves() if leaf.msi["category"] != "punctuation" ])

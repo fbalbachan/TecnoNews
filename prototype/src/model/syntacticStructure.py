@@ -6,6 +6,9 @@ class SyntacticStructure:
         self.entities = []
         self.tacit_entities = []
 
+    def msi(self):
+        return self.entity().msi
+
     def lexical_form(self):
         return self.entity().lexical_form
 

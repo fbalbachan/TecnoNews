@@ -1,29 +1,36 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
 import unittest
-from model.sentence import *
+
+from src.model.freelingSentenceAnalyzer import FreelingSentenceAnalyzer
+from src.model.sentence import Sentence
+from tests.freelingTreeRepository import FreelingTreeRepository
+
 
 class TestRegimen(unittest.TestCase):
 
     def setUp(self):
         self.input_texts_with_regimen = [
-            (u'todos los cuatrimestres yo lidio con mis alumnos', u'mis alumnos'),
+            ('todos los cuatrimestres yo lidio con mis alumnos', 'mis alumnos'),
         ]
 
     def test_get_regimen(self):
+        analyzer = FreelingSentenceAnalyzer(FreelingTreeRepository("tests/input/trees"))
+
         for (input_text, expected_regimen) in self.input_texts_with_regimen:
+            print "trying: %s .. " % input_text,
+
             sentence = Sentence(input_text)
-            result_regimen = sentence.regimen.__str__()
+            analyzer.analyze(sentence)
 
-            print "input: ", input_text
-            print "expected: ", expected_regimen
-            print "got: ", result_regimen
-            print sentence.evidence
-            print sentence
+            self.assertEqual(1, len(sentence.clauses), "La oración tiene más de una cláusula.")
+            clause = sentence.clauses[0]
 
-            self.assertTrue(sentence.is_active)
-            self.assertEquals(expected_regimen.encode('utf-8'), sentence.regimen.__str__())
+            self.assertEquals("active", clause.voice)
 
+            self.assertEquals(expected_regimen, clause.structure("regimen").lexical_form())
+
+            print "OK"
 
 if __name__ == '__main__':
     unittest.main()

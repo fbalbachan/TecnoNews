@@ -23,7 +23,11 @@ class Clause:
         entities_with_node = self.to_entities_with_node(self.nodes_closest_to_verb_at(side, allowed_distance), which)
         return self.grouped_by_node(entities_with_node)
 
-    def entities_closest_to_verb_at(self, side, allowed_distance):
+    def verb_level_entities(self):
+        by_component = zip(*self.to_entities_with_node(self.verb_level_nodes(), entities = self.entities))
+        return list(by_component[0]) if by_component else []
+
+    def entities_closest_to_verb_at(self, side, allowed_distance = float("inf")):
         by_component = zip(*self.to_entities_with_node(self.nodes_closest_to_verb_at(side, allowed_distance)))
         return list(by_component[0]) if by_component else []
 
@@ -43,12 +47,13 @@ class Clause:
             last_node = node
         return entities
 
-    def to_entities_with_node(self, nodes, which = lambda entity, node: entity.node == node):
-        lonely_entities = self.lonely_entities()
-        entities = []
+    def to_entities_with_node(self, nodes, which = lambda entity, node: entity.node == node, entities = None):
+        if not entities: entities = self.lonely_entities()
+
+        entities_with_node = []
         for node in nodes:
-            entities.extend( (entity, node) for entity in lonely_entities if which(entity, node) )
-        return entities
+            entities_with_node.extend( (entity, node) for entity in entities if which(entity, node) )
+        return entities_with_node
 
     def verb_level_nodes(self):
         verb_node = self.verb.node
