@@ -50,14 +50,19 @@ class Verb(Entity):
         first_leaf = self.leaves[0]
 
         person = first_leaf.msi["person"]
-        gender = self.leaf().msi["gender"] or "neutral"
+        gender = "neutral" if self.voice == "active" else (self.leaf().msi["gender"] or "neutral")
         number = first_leaf.msi["number"]
 
         return { "category" : "verb", "gender" : gender, "number" : number, "person" : person }
 
     def matching_pronoun(self):
+        neutral_pronouns = { (1, "singular"), (2, "singular"), (2, "plural") }
+
         msi = self.msi
-        return tacit_subjects[(msi["person"], msi["number"], msi["gender"])]
+        person = msi["person"]
+        number = msi["number"]
+        gender = "neutral" if (person, number) in neutral_pronouns else msi["gender"]
+        return tacit_subjects[(person, number, gender)]
 
     def matching_pronoun_msi(self):
         msi = self.msi
