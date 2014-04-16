@@ -1,32 +1,36 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
 import unittest
-from model.sentence import *
+
+from src.model.freelingSentenceAnalyzer import FreelingSentenceAnalyzer
+from src.model.sentence import Sentence
+from tests.freelingTreeRepository import FreelingTreeRepository
+
 
 class TestEquative(unittest.TestCase):
 
     def setUp(self):
         self.input_texts_with_equative = [
-            (u'Fulano es malo', u'malo'),
-            (u'Fulano me parece una buena persona', u'una buena persona'),
-            (u'Fulano parece huraño y taciturno', u'huraño y taciturno'),
-
+            ('Fulano me parece una buena persona', 'una buena persona'),
+            ('Fulano es un hombre huraño y taciturno', 'un hombre huraño y taciturno'),
         ]
 
     def test_get_equative(self):
+        analyzer = FreelingSentenceAnalyzer(FreelingTreeRepository("tests/input/trees"))
+
         for (input_text, expected_equative) in self.input_texts_with_equative:
+            print "trying: %s .. " % input_text,
+
             sentence = Sentence(input_text)
-            print sentence
+            analyzer.analyze(sentence)
 
-            result_equative = sentence.equative.__str__()
-            
-            print "input: ", input_text
-            print "expected: ", expected_equative
-            print "got: ", result_equative
-            print sentence.evidence
+            self.assertEqual(1, len(sentence.clauses), "La oración tiene más de una cláusula.")
+            clause = sentence.clauses[0]
 
-            self.assertTrue(sentence.is_active)
-            self.assertEquals(expected_equative.encode('utf-8'), sentence.equative.__str__())
+            self.assertEquals("active", clause.voice)
+            self.assertEquals(expected_equative, clause.structure("equative").lexical_form())
+
+            print "OK"
 
 
 if __name__ == '__main__':
