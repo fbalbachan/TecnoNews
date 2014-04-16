@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
 import unittest
-from ling.verb_info import *
+
+from src.ling.verb_info import get_script_class, get_transitivity, allowed_boxes
+
 
 class TestVerbInfo(unittest.TestCase):
 
@@ -10,7 +12,7 @@ class TestVerbInfo(unittest.TestCase):
             (u'charlatanear',
              'AGENTIVE',
              'INTRANSITIVE',
-             {'regimen': False, 'oi': True, 'od': False, 'verb': True, 'equative': False, 'adjuncts': True, 'subject': True}),
+             [ 'verb', 'subject', 'oi', 'adjuncts' ]),
         ]
 
         for (input_verb, expected_script, expected_transitivity, expected_boxes) in examples:
