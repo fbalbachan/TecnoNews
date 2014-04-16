@@ -11,7 +11,10 @@ class EntityMSISeer:
     def msi_of_single_nominal_node(self, node):
         useful_leaves = node.leaves_of_category("noun") + node.leaves_of_category("pronoun") + \
             node.leaves_of_category("determinant")
-        return sorted(useful_leaves, key = lambda node: node.level())[0].msi
+        msi = sorted(useful_leaves, key = lambda node: node.level())[0].msi
+        if not "person" in msi or not msi["person"]: msi["person"] = 3
+
+        return msi
 
     def msi_of_coordinated_nominal_node(self, node):
         msi = { "category" : "noun", "number" : "plural" }
