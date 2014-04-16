@@ -43,8 +43,8 @@ class SyntacticAnalyzer:
         entities = clause.entities_closest_to_verb_at("left", distance_at_left) \
                     + clause.entities_closest_to_verb_at("right", distance_at_right)
 
-        only_nominal_and_personal_pronouns = self.only_nominal_and_personal_pronouns_of(entities)
-        verb_matching_entities = filter(lambda entity: clause.verb.matches(entity), only_nominal_and_personal_pronouns)
+        valid_subject_entities = self.only_valid_subject_entities_of(entities)
+        verb_matching_entities = filter(lambda entity: clause.verb.matches(entity), valid_subject_entities)
         return verb_matching_entities
 
     def search_subord_with_preposition_at(self, side, distance, *accepted_prepositions):
@@ -63,9 +63,11 @@ class SyntacticAnalyzer:
     def only_pronouns_of(self, entities):
         return filter(lambda entity: entity.category() == "pronoun", entities)
 
-    def only_nominal_and_personal_pronouns_of(self, entities):
-        is_personal_pronoun = lambda entity: entity.category() == "pronoun" and entity.msi["case"] == None
-        return filter(lambda entity: entity.category() == "noun" or is_personal_pronoun(entity), entities)
+    def only_valid_subject_entities_of(self, entities):
+        is_valid_pronoun = lambda entity: entity.category() == "pronoun" and entity.msi["case"] \
+            in [None, "personal", "demostrative"]
+        return filter(lambda entity: entity.category() == "noun" or entity.category() == "determinant" or
+                      is_valid_pronoun(entity), entities)
 
     def only_nominal_of(self, entities):
         return filter(lambda entity: entity.category() == "noun", entities)
