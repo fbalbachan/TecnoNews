@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
 import unittest
-from ling.msi_mapper import *
+from src.ling.msi_mapper import *
 
 class TestMSIMapper(unittest.TestCase):
 
@@ -11,7 +11,7 @@ class TestMSIMapper(unittest.TestCase):
         expected_json = '{"category": "adjective", "function": null, "grade": null, "gender": "masculine", "number": "singular", "type": "calificative"}'
         result = tag2fullmsi(normal_tag)
         result_json = json.dumps(result)
-        self.assertEqual(expected, result) 
+        self.assertEqual(expected, result)
         self.assertEqual(expected_json, result_json.encode('utf-8'))
 
     def test_msi_normal_case(self):
@@ -20,7 +20,7 @@ class TestMSIMapper(unittest.TestCase):
         expected_json = '{"person": 3, "number": "singular", "gender": "masculine"}'
         result = msi(a_msi)
         result_json = json.dumps(result)
-        self.assertEqual(expected, result) 
+        self.assertEqual(expected, result)
         self.assertEqual(expected_json, result_json.encode('utf-8'))
 
     def test_tag2fullmsi_special_case(self):
@@ -30,7 +30,7 @@ class TestMSIMapper(unittest.TestCase):
         expected_json = u'{"category": "noun", "semantic_classification": null, "grade": null, "gender": "masculine", "number": "invariable", "type": "common"}'.encode('utf-8')
         result = tag2fullmsi(self.special_case_tag)
         result_json = json.dumps(result, ensure_ascii = False)
-        self.assertEqual(expected, result) 
+        self.assertEqual(expected, result)
         self.assertEqual(expected_json, result_json.encode('utf-8'))
 
     def test_msi_special_case(self):
@@ -39,7 +39,7 @@ class TestMSIMapper(unittest.TestCase):
         expected_json = '{"person": 3, "number": "singular", "gender": "masculine"}'
         result = msi(a_msi)
         result_json = json.dumps(result)
-        self.assertEqual(expected, result) 
+        self.assertEqual(expected, result)
         self.assertEqual(expected_json, result_json.encode('utf-8'))
 
 
