@@ -5,8 +5,7 @@ from logging import getLogger
 
 from src.ling.verb_info import *
 from src.model.activeVoiceSyntacticAnalizer import ActiveVoiceSyntacticAnalyzer
-from src.model.entity import Entity
-from src.model.entityMSISeer import EntityMSISeer
+from src.model.entityExtractor import EntityExtractor
 from src.model.passiveVoiceSyntacticAnalyzer import PassiveVoiceSyntacticAnalyzer
 from src.model.syntacticAnalyzer import SyntacticAnalyzer
 from src.model.verb import Verb
@@ -79,19 +78,7 @@ class ClauseAnalyzer:
         return verb_node
 
     def entities_of(self, clause):
-        root = clause.proper_tree
-        entity_labels = ["sn", "patons", "ptonic", "coor-n"]
-        entity_nodes = root.nodes_with_labels(entity_labels) + self.verb_level_infinitive_structures_of(clause)
-        entities = [ Entity(node) for node in entity_nodes ]
-
-        entity_msi_seer = EntityMSISeer()
-        for entity in entities: entity.msi = entity_msi_seer.msi_of(entity)
-        return entities
-
-    def verb_level_infinitive_structures_of(self, clause):
-        root = clause.proper_tree
-        desired_level = clause.verb.level() if clause.voice else 1
-        return filter(lambda node: node.level() == desired_level, root.nodes_with_labels(["grup-verb-inf"]))
+        return EntityExtractor(clause).extract()
 
     def voice_of(self, clause):
         root = clause.proper_tree
