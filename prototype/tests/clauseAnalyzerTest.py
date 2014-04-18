@@ -40,6 +40,7 @@ class TestClauseAnalyzer(unittest.TestCase):
             print "\t", clause
             for structure in clause.syntactic_structures:
                 print "\t  ", structure.name, structure
+        print "--"
 
     def update_frame_and_assert(self, assertion, frame):
         string = assertion

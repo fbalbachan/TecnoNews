@@ -72,7 +72,11 @@ class ClauseAnalyzer:
         root = clause.proper_tree
         verb_node = root.nodes_with_labels([ "subord-ger", "verb", "parti-flex" ])
         if len(verb_node) != 1: raise Exception("Existe cero o más de un verbo en la cláusula.")
-        return verb_node.pop()
+
+        verb_node = verb_node.pop()
+        if verb_node.label == "subord-ger": verb_node = verb_node.leaves()[0]
+
+        return verb_node
 
     def entities_of(self, clause):
         root = clause.proper_tree

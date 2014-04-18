@@ -9,7 +9,7 @@ El hombre que era bonito me dijo eso
 Hemos sido perseguidas días enteros por las asesinas
 	subject: las asesinas
 	od: nosotras
-	
+
 Habían sido comidas por las asesinas
 	subject: las asesinas
 	od: ellas
@@ -71,13 +71,12 @@ Leandro desconfió de Gustavo
 	subject: Leandro
 	regimen: Gustavo
 
-# FIXME
 Leandro había podido comer la manzana
-#	subject: Leandro
+	subject: Leandro
 	od: la manzana
 	verb: había podido comer
 		lemma: comer
-#		msi: { "category" : "verb", "person" : 3, "number" : "singular" }
+		msi: { "category" : "verb", "person" : 3, "number" : "singular" }
 
 # Oración unimembre
 Muy bueno el libro que fue comprado
@@ -89,5 +88,28 @@ Muy bueno el libro que fue comprado
 			lemma: comprar
 			msi: { "person" : 3, "gender" : "masculine" }
 
-# FIXME Lanza una excepción
+# Construcciones de gerundio
 Los charrúas comieron a Solís buscando satisfacer su hambre
+    clause: Los charrúas comieron a Solís
+        subject: Los charrúas
+        verb: comieron
+            lemma: comer
+        od: Solís
+    clause: buscando satisfacer su hambre
+        verb: buscando
+            lemma: buscar
+            msi: { "category" : "verb", "mode" : "gerundio" }
+        od: satisfacer su hambre
+
+Dejando sólo los huesos
+    verb: Dejando
+    od: los huesos
+
+Buscando ver a su padre, Leandro peleó sin pausa
+    clause: Buscando ver a su padre ,
+        verb: Buscando
+        od: ver a su padre
+    clause: Leandro peleó sin pausa
+        subject: Leandro
+        verb: peleó
+        adjuncts: pausa

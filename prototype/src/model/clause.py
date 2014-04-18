@@ -11,6 +11,9 @@ class Clause:
         self.verb = None
         self.syntactic_structures = []
 
+    def is_gerund(self):
+        return self.verb.msi["mode"] == "gerundio"
+
     def has_structure(self, name):
         return name in [ structure.name for structure in self.syntactic_structures ]
 

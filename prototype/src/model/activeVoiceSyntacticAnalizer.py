@@ -12,13 +12,13 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
 
     def subject(self):
         structure = SyntacticStructure("subject")
-        entities = self.nominal_and_personal_entities(3, 2)
+        if not self.clause.is_gerund():
+            entities = self.nominal_and_personal_entities(3, 2)
 
-        if entities:
-            structure.entities = [ entities[0] ]
-        else:
-            structure.tacit_entities = [ self.tacit_subject() ]
-
+            if entities:
+                structure.entities = [ entities[0] ]
+            else:
+                structure.tacit_entities = [ self.tacit_subject() ]
         return structure
 
     def tacit_subject(self):

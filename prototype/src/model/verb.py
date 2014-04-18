@@ -52,8 +52,9 @@ class Verb(Entity):
         person = first_leaf.msi["person"]
         gender = "neutral" if self.voice == "active" else (self.leaf().msi["gender"] or "neutral")
         number = first_leaf.msi["number"]
+        mode = first_leaf.msi["mode"]
 
-        return { "category" : "verb", "gender" : gender, "number" : number, "person" : person }
+        return { "category" : "verb", "gender" : gender, "number" : number, "person" : person, "mode" : mode }
 
     def matching_pronoun(self):
         neutral_pronouns = { (1, "singular"), (2, "singular"), (2, "plural") }
