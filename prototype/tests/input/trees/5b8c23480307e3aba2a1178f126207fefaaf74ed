@@ -1,0 +1,36 @@
++grup-verb_[
+  sn_[
+    +grup-nom-ms_[
+      +w-ms_[
+        +(Leandro leandro NP00000 -)
+      ]
+    ]
+  ]
+  +verb_[
+    vaux_[
+      +(había haber VAII1S0 -)
+    ]
+    (podido poder VMP00SM -)
+    +infinitiu_[
+      +inf_[
+        +forma-inf_[
+          +(comer comer VMN0000 -)
+        ]
+      ]
+    ]
+  ]
+  sn_[
+    espec-fs_[
+      +j-fs_[
+        +(la el DA0FS0 -)
+      ]
+    ]
+    +grup-nom-fs_[
+      +n-fs_[
+        +(manzana manzana NCFS000 -)
+      ]
+    ]
+  ]
+]
+
+

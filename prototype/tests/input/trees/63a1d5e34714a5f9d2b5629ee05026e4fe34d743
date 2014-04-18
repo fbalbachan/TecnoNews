@@ -1,0 +1,29 @@
++grup-verb_[
+  patons_[
+    +paton-s_[
+      +(Me me PP1CS000 -)
+    ]
+  ]
+  patons_[
+    +paton-fs_[
+      +(la lo PP3FSA00 -)
+    ]
+  ]
+  +verb_[
+    +(jugué jugar VMIS1S0 -)
+  ]
+  grup-sp_[
+    +prep_[
+      +(por por SPS00 -)
+    ]
+    sn_[
+      +pron-ms_[
+        +psubj-ms_[
+          +(vos vos PP2CS00P -)
+        ]
+      ]
+    ]
+  ]
+]
+
+

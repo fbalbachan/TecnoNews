@@ -1,0 +1,48 @@
++grup-verb_[
+  sn_[
+    espec-fs_[
+      +grup-complex-spec-fs_[
+        +indef-fs_[
+          +(Toda todo DI0FS0 -)
+        ]
+        j-fs_[
+          +(la el DA0FS0 -)
+        ]
+      ]
+    ]
+    +grup-nom-fs_[
+      +n-fs_[
+        +(noche noche NCFS000 -)
+      ]
+    ]
+  ]
+  sn_[
+    espec-ms_[
+      +j-ms_[
+        +(el el DA0MS0 -)
+      ]
+    ]
+    +grup-nom-ms_[
+      +n-ms_[
+        +(cartero cartero NCMS000 -)
+      ]
+    ]
+  ]
+  +verb_[
+    +(llegó llegar VMIS3S0 -)
+  ]
+  grup-sp_[
+    +prep_[
+      +(con con SPS00 -)
+    ]
+    sn_[
+      +grup-nom-fp_[
+        +n-fp_[
+          +(novedades novedad NCFP000 -)
+        ]
+      ]
+    ]
+  ]
+]
+
+

@@ -1,0 +1,24 @@
++grup-verb_[
+  sn_[
+    +grup-nom-ms_[
+      +w-ms_[
+        +(Leandro leandro NP00000 -)
+      ]
+    ]
+  ]
+  +verb_[
+    +(desconfió desconfiar VMIS3S0 -)
+  ]
+  sp-de_[
+    +(de de SPS00 -)
+    sn_[
+      +grup-nom-ms_[
+        +w-ms_[
+          +(Gustavo gustavo NP00000 -)
+        ]
+      ]
+    ]
+  ]
+]
+
+

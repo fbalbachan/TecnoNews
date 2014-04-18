@@ -1,0 +1,33 @@
++grup-verb_[
+  +verb_[
+    +(Odiamos odiar VMIP1P0 -)
+  ]
+  grup-verb-inf_[
+    +infinitiu_[
+      +inf_[
+        +forma-inf_[
+          +(comer comer VMN0000 -)
+        ]
+      ]
+    ]
+    grup-sp_[
+      +prep_[
+        +(en en SPS00 -)
+      ]
+      sn_[
+        espec-ms_[
+          +indef-ms_[
+            +(un uno DI0MS0 -)
+          ]
+        ]
+        +grup-nom-ms_[
+          +n-ms_[
+            +(bar bar NCMS000 -)
+          ]
+        ]
+      ]
+    ]
+  ]
+]
+
+

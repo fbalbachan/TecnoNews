@@ -1,0 +1,31 @@
++grup-verb_[
+  coor-n_[
+    sn_[
+      +grup-nom-ms_[
+        +w-ms_[
+          +(Fernando fernando NP00000 -)
+        ]
+      ]
+    ]
+    +(y y CC -)
+    sn_[
+      +grup-nom-ms_[
+        +w-ms_[
+          +(Juan juan NP00000 -)
+        ]
+      ]
+    ]
+  ]
+  +verb_[
+    +(hicieron hacer VMIS3P0 -)
+  ]
+  sn_[
+    +pron-ms_[
+      +pdem-ms_[
+        +(eso ese PD0NS000 -)
+      ]
+    ]
+  ]
+]
+
+
