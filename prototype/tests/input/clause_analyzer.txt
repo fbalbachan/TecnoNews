@@ -1,0 +1,93 @@
+El hombre que era bonito me dijo eso
+	clause: El hombre me dijo eso
+		subject: El hombre
+		od: eso
+		oi: me
+	clause: que era bonito
+		subject: él
+
+Hemos sido perseguidas días enteros por las asesinas
+	subject: las asesinas
+	od: nosotras
+	
+Habían sido comidas por las asesinas
+	subject: las asesinas
+	od: ellas
+	verb: Habían sido comidas
+		lemma: comer
+		msi: { "category" : "verb", "person" : 3, "number" : "plural", "gender" : "feminine" }
+
+# No debería lanzar excepción
+Me la jugué por vos
+
+# Verbo modal
+Podíamos comer una pizza
+	subject: nosotros
+	od: una pizza
+	verb: Podíamos comer
+		lemma: comer
+		msi: { "person" : 1, "number" : "plural" }
+
+# Sujeto compuesto (coordinado)
+Fernando y Juan hicieron eso
+	subject: Fernando y Juan
+	verb: hicieron
+
+# Entidades en infinitivo
+Odiamos comer en un bar
+	subject: nosotros
+	verb: Odiamos
+		lemma: odiar
+	od: comer en un bar
+		msi: { "category" : "noun", "person" : 3, "number" : "singular", "gender" : "neutral" }
+
+Toda la noche el cartero llegó con novedades
+	subject: el cartero
+	adjuncts:
+		entity: Toda la noche
+		entity: novedades
+
+Las manzanas comió Leandro
+	subject: Leandro
+	od: Las manzanas
+
+Lo hizo para comer en su casa
+	subject: él
+	verb: hizo
+		lemma: hacer
+
+A Gustavo, Leandro le comió la manzana
+	subject: Leandro
+	verb: comió
+	od: la manzana
+	oi: Gustavo
+
+Él nos golpeó
+	subject: Él
+	od: nos
+	verb: golpeó
+
+Leandro desconfió de Gustavo
+	subject: Leandro
+	regimen: Gustavo
+
+# FIXME
+Leandro había podido comer la manzana
+#	subject: Leandro
+	od: la manzana
+	verb: había podido comer
+		lemma: comer
+#		msi: { "category" : "verb", "person" : 3, "number" : "singular" }
+
+# Oración unimembre
+Muy bueno el libro que fue comprado
+	clause: Muy bueno el libro
+		subject: el libro
+	clause: que fue comprado
+		subject: alguien
+		verb: fue comprado
+			lemma: comprar
+			msi: { "person" : 3, "gender" : "masculine" }
+
+# FIXME Lanza una excepción
+Los charrúas comieron a Solís buscando satisfacer su hambre
