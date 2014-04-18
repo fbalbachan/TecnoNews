@@ -1,0 +1,56 @@
++verb-pass_[
+  sn_[
+    +pron-ms_[
+      +pdem-ms_[
+        +(Eso ese PD0NS000 -)
+      ]
+    ]
+  ]
+  vser_[
+    +(fue ser VSIS3S0 -)
+  ]
+  +parti-flex_[
+    +parti-ms_[
+      +(dicho decir VMP00SM -)
+    ]
+  ]
+  grup-sp_[
+    +prep_[
+      +(por por SPS00 -)
+    ]
+    sn_[
+      j-mp_[
+        +(los el DA0MP0 -)
+      ]
+      +grup-sp_[
+        +prep_[
+          +(de de SPS00 -)
+        ]
+        sn_[
+          espec-fs_[
+            +j-fs_[
+              +(la el DA0FS0 -)
+            ]
+          ]
+          +grup-nom-fs_[
+            +n-fs_[
+              +(espada espada NCFS000 -)
+            ]
+          ]
+          sp-de_[
+            +(de de SPS00 -)
+            sn_[
+              +grup-nom-fp_[
+                +n-fp_[
+                  +(escamas escama NCFP000 -)
+                ]
+              ]
+            ]
+          ]
+        ]
+      ]
+    ]
+  ]
+]
+
+

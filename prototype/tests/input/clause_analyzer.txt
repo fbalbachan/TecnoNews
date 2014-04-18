@@ -114,6 +114,19 @@ Buscando ver a su padre, Leandro peleó sin pausa
         verb: peleó
         adjuncts: pausa
 
+# Construcciones de infinitivo anidadas (no se considera "para comer en McDonals", sólo "McDonals")
 Lo dijo para comer en McDonals
     subject: él
     adjuncts: McDonals
+
+# Prioridad de asignación de MSI a entidades con subordinación interna
+La del albergue dijo eso
+    subject: La de el albergue
+        msi: { "number" : "singular", "gender" : "feminine", "person" : 3 }
+    verb: dijo
+    od: eso
+
+Eso fue dicho por los de la espada de escamas
+    subject: los de la espada de escamas
+        msi: { "number" : "plural", "gender" : "masculine", "person" : 3 }
+    od: Eso
