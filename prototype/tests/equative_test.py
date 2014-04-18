@@ -2,7 +2,7 @@
 #-*- coding: utf-8 -*-
 import unittest
 
-from src.model.freelingSentenceAnalyzer import FreelingSentenceAnalyzer
+from src.model.sentenceAnalyzer import SentenceAnalyzer
 from src.model.sentence import Sentence
 from tests.freelingTreeRepository import FreelingTreeRepository
 
@@ -16,7 +16,7 @@ class TestEquative(unittest.TestCase):
         ]
 
     def test_get_equative(self):
-        analyzer = FreelingSentenceAnalyzer(FreelingTreeRepository("tests/input/trees"))
+        analyzer = SentenceAnalyzer(FreelingTreeRepository("tests/input/trees"))
 
         for (input_text, expected_equative) in self.input_texts_with_equative:
             print "trying: %s .. " % input_text,

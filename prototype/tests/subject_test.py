@@ -2,7 +2,7 @@
 #-*- coding: utf-8 -*-
 import unittest
 
-from src.model.freelingSentenceAnalyzer import FreelingSentenceAnalyzer
+from src.model.sentenceAnalyzer import SentenceAnalyzer
 from src.model.sentence import Sentence
 from tests.csv_file_reader import load_csv_test_file
 from tests.freelingTreeRepository import FreelingTreeRepository
@@ -13,7 +13,7 @@ class TestSubject(unittest.TestCase):
     def setUp(self):
         self.input_texts = load_csv_test_file('tests/input/subject_test.csv')
         self.input_texts_with_msi = load_csv_test_file('tests/input/subject_with_msi_test.csv')
-        self.analyzer = FreelingSentenceAnalyzer(FreelingTreeRepository("tests/input/trees"))
+        self.analyzer = SentenceAnalyzer(FreelingTreeRepository("tests/input/trees"))
 
     def test_entities_at_verb_level(self):
         examples = [

@@ -2,7 +2,7 @@
 #-*- coding: utf-8 -*-
 import unittest
 
-from src.model.freelingSentenceAnalyzer import FreelingSentenceAnalyzer
+from src.model.sentenceAnalyzer import SentenceAnalyzer
 from src.model.sentence import Sentence
 from tests.freelingTreeRepository import FreelingTreeRepository
 
@@ -15,7 +15,7 @@ class TestRegimen(unittest.TestCase):
         ]
 
     def test_get_regimen(self):
-        analyzer = FreelingSentenceAnalyzer(FreelingTreeRepository("tests/input/trees"))
+        analyzer = SentenceAnalyzer(FreelingTreeRepository("tests/input/trees"))
 
         for (input_text, expected_regimen) in self.input_texts_with_regimen:
             print "trying: %s .. " % input_text,

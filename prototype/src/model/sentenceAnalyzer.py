@@ -7,7 +7,7 @@ from src.model.clauseExtractor import *
 from src.parser.freelingTreeParser import *
 
 
-class FreelingSentenceAnalyzer:
+class SentenceAnalyzer:
     def __init__(self, tree_parser = FreelingTreeParser()):
         self.tree_parser = tree_parser
 
@@ -23,4 +23,4 @@ class FreelingSentenceAnalyzer:
         for clause in sentence.clauses:
             clauseAnalyzer.analyze(clause)
 
-    logger = getLogger("FreelingSentenceAnalyzer")
+    logger = getLogger("SentenceAnalyzer")

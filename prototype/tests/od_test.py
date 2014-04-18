@@ -2,7 +2,7 @@
 #-*- coding: utf-8 -*-
 import unittest
 
-from src.model.freelingSentenceAnalyzer import FreelingSentenceAnalyzer
+from src.model.sentenceAnalyzer import SentenceAnalyzer
 from src.model.sentence import Sentence
 from tests.csv_file_reader import load_csv_test_file
 from tests.freelingTreeRepository import FreelingTreeRepository
@@ -14,7 +14,7 @@ class TestOD(unittest.TestCase):
         self.input_texts_with_ods = load_csv_test_file('tests/input/od_test.csv')
 
     def test_get_OD(self):
-        analyzer = FreelingSentenceAnalyzer(FreelingTreeRepository("tests/input/trees"))
+        analyzer = SentenceAnalyzer(FreelingTreeRepository("tests/input/trees"))
 
         for (input_text, expected_od) in self.input_texts_with_ods:
             print "trying: %s .. " % input_text,

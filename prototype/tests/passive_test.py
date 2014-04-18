@@ -3,7 +3,7 @@
 import unittest
 
 from csv_file_reader import load_csv_test_file
-from src.model.freelingSentenceAnalyzer import FreelingSentenceAnalyzer
+from src.model.sentenceAnalyzer import SentenceAnalyzer
 from src.model.sentence import Sentence
 from tests.freelingTreeRepository import FreelingTreeRepository
 
@@ -14,7 +14,7 @@ class TestPassiveSentence(unittest.TestCase):
         self.input_texts = load_csv_test_file('tests/input/passive_test.csv')
 
     def test_verb(self):
-        analyzer = FreelingSentenceAnalyzer(FreelingTreeRepository("tests/input/trees"))
+        analyzer = SentenceAnalyzer(FreelingTreeRepository("tests/input/trees"))
 
         for (input_text, expected_verb_lemma, expected_subject, expected_od) in self.input_texts:
             print "trying: %s .. " % input_text,

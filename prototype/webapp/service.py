@@ -6,8 +6,8 @@ from sys import exc_info
 from traceback import format_exc, format_stack
 
 from src.entinews import Entinews
-from src.model.freelingSentenceAnalyzer import FreelingSentenceAnalyzer
 from src.model.sentence import Sentence
+from src.model.sentenceAnalyzer import SentenceAnalyzer
 
 
 def write_pidfile():
@@ -33,7 +33,7 @@ class EntiNews_request:
 			input_text = web_input.text
 			if type(input_text) == unicode: input_text = input_text.encode("utf-8") # unicode -> str (encoded)
 
-			analyzer = FreelingSentenceAnalyzer()
+			analyzer = SentenceAnalyzer()
 			sentence = Sentence(input_text)
 			analyzer.analyze(sentence)
 			return web.template.render().test(sentence)

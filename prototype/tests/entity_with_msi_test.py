@@ -2,7 +2,7 @@
 #-*- coding: utf-8 -*-
 import unittest
 
-from src.model.freelingSentenceAnalyzer import FreelingSentenceAnalyzer
+from src.model.sentenceAnalyzer import SentenceAnalyzer
 from src.model.sentence import Sentence
 from tests.freelingTreeRepository import FreelingTreeRepository
 
@@ -10,7 +10,7 @@ from tests.freelingTreeRepository import FreelingTreeRepository
 class TestStructureHead(unittest.TestCase):
 
     def setUp(self):
-        self.analyzer = FreelingSentenceAnalyzer(FreelingTreeRepository("tests/input/trees"))
+        self.analyzer = SentenceAnalyzer(FreelingTreeRepository("tests/input/trees"))
 
         self.data = [
         ('la isla desierta', 'la isla desierta', {'person':3,'number':'singular','gender':'feminine'}),
