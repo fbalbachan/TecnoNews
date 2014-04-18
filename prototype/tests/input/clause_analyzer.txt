@@ -113,3 +113,7 @@ Buscando ver a su padre, Leandro peleó sin pausa
         subject: Leandro
         verb: peleó
         adjuncts: pausa
+
+Lo dijo para comer en McDonals
+    subject: él
+    adjuncts: McDonals
