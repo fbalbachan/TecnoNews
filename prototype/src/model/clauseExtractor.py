@@ -30,7 +30,12 @@ class ClauseExtractor:
 
         clauses = clauses_by_node.values()
         self.compute_proper_tree_for(clauses)
-        return self.without_invalid_clauses(clauses)
+        clauses = self.without_invalid_clauses(clauses)
+        return self.sorted(clauses, sentence)
+
+    def sorted(self, clauses, sentence):
+        leaves = sentence.parse_node.leaves()
+        return sorted(clauses, key = lambda clause: leaves.index(clause.node.leaves()[0]))
 
     def without_invalid_clauses(self, clauses):
         is_cc = lambda leaf: leaf.msi["category"] == "conjunction" and leaf.msi["type"] == "coordinated"
