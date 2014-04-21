@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/zsh
 export PYTHONPATH=$PYTHONPATH:`pwd`/src
 set -e
-for test in tests/*.py; do python $test; done
+for test in tests/**/*.py; do python $test; done
