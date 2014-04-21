@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
-from ling.msi_mapper import *
-from parser.freelingTreeParser import *
-from parser.labelNode import *
-from parser.leafNode import *
-from parser.parseNode import *
 import unittest
+
+from src.ling.msi_mapper import tag2fullmsi
+from src.parser.freelingTreeParser import FreelingTreeParser
+from src.parser.labelNode import LabelNode
+from src.parser.leafNode import LeafNode
 
 
 class FreelingTreeParserTest(unittest.TestCase):
@@ -20,7 +20,7 @@ class FreelingTreeParserTest(unittest.TestCase):
         w_ms_3 = LabelNode("w-ms")
         leandro_4 = LeafNode("Leandro", "leandro", tag2fullmsi("NP00000"))
         verb_1 = LabelNode("verb")
-        comio_2 = LeafNode("comió".decode("utf-8"), "comer", tag2fullmsi("VMIS3S0"))
+        comio_2 = LeafNode("comió", "comer", tag2fullmsi("VMIS3S0"))
         sn2_1 = LabelNode("sn")
         espec_fs_2 = LabelNode("espec-fs")
         j_fs_3 = LabelNode("j-fs")
@@ -50,7 +50,7 @@ class FreelingTreeParserTest(unittest.TestCase):
 
         self.assertTrue(parsed.is_equivalent_to(grup_verb_0))
 
-        self.assertListEqual(["Leandro", u"comió", "la", "manzana", "."], \
+        self.assertListEqual(["Leandro", "comió", "la", "manzana", "."], \
                              [ leaf.lexical_form for leaf in parsed.leaves()])
 
 if __name__ == '__main__':
