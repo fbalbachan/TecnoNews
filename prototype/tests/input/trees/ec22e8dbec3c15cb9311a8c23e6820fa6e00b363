@@ -1,0 +1,41 @@
++grup-verb_[
+  sn_[
+    espec-fs_[
+      +j-fs_[
+        +(La el DA0FS0 -)
+      ]
+    ]
+    +grup-nom-fs_[
+      +n-fs_[
+        +(manzana manzana NCFS000 -)
+      ]
+    ]
+    subord-rel_[
+      prel_[
+        +(que que PR0CN000 -)
+      ]
+      +verb-pass_[
+        vser_[
+          +(fue ser VSIS3S0 -)
+        ]
+        +parti-flex_[
+          +parti-fs_[
+            +(dejada dejar VMP00SF -)
+          ]
+        ]
+      ]
+    ]
+  ]
+  +verb_[
+    +(era ser VSII3S0 -)
+  ]
+  s-adj_[
+    +s-a-fs_[
+      +a-fs_[
+        +(fea feo AQ0FS0 -)
+      ]
+    ]
+  ]
+]
+
+
