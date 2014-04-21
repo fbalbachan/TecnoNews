@@ -41,13 +41,13 @@ class ClauseExtractor:
         is_cc = lambda leaf: leaf.msi["category"] == "conjunction" and leaf.msi["type"] == "coordinated"
         is_punctuation  = lambda leaf: leaf.msi["category"] == "punctuation"
         return filter(lambda clause: not all([ is_cc(leaf) or is_punctuation(leaf)
-                                              for leaf in clause.proper_tree.leaves() ]), clauses)
+                                              for leaf in clause.proper_tree().leaves() ]), clauses)
 
     def compute_proper_tree_for(self, clauses):
         for clause in clauses:
             original = clause.node
             foreign_nodes = [ child.node for child in clause.children ]
-            clause.proper_tree = original.without(foreign_nodes)
+            clause.proper_by_original = original.cloned_by_original(foreign_nodes)
 
     def filter_invalid_active_voice_clauses(self, nodes):
         return filter(lambda node : not node.is_subordinate(), nodes)

@@ -80,7 +80,7 @@ class ParseNode:
         return not self.is_leaf() and self.label in ["subord-rel", "subord"]
 
     def is_subordinate(self):
-        return not self.is_root() and self.father.subordinates_others()
+        return any( (node.subordinates_others() for node in self.path_to_root()) )
 
     # El padre no es comparado pues debería complejizarse el método. Sólo el subárbol descendente.
     def is_equivalent_to(self, other):
@@ -88,12 +88,9 @@ class ParseNode:
             return False
         return all( this.is_equivalent_to(that) for this, that in zip(self.children, other.children))
 
-    def clone(self):
-        return self.without([])
-
     # El subárbol devuelto es independiente y es copia profunda del original.
-    def without(self, nodes):
-        iterator = InDepthNodeIterator(self, nodes)
+    def cloned_by_original(self, without_nodes):
+        iterator = InDepthNodeIterator(self, without_nodes)
 
         cloned_by_original = {}
         if not self.is_root():
@@ -109,7 +106,7 @@ class ParseNode:
             cloned.children = []
 
             cloned_by_original[original_node] = cloned
-        return cloned_by_original[self]
+        return cloned_by_original
 
     def label_node_chlidren(self):
         return filter(lambda child: not child.is_leaf(), self.children)

@@ -3,13 +3,32 @@
 class Clause:
     def __init__(self, node):
         self.node = node
+        self.proper_by_original = {}
+
         self.children = []
         self.father = None
-        self.proper_tree = None
+
         self.voice = None
+
         self.entities = []
+        self.relative_entity = None
+
         self.verb = None
         self.syntactic_structures = []
+
+    def entity_by_original(self, node):
+        proper_node = self.proper_by_original[node]
+        entities = filter(lambda entity: entity.node == proper_node, self.entities)
+        return entities[0]
+
+    def proper_tree(self):
+        return self.proper_by_original[self.node]
+
+    def is_relative(self):
+        root = self.proper_tree()
+        leaves = root.leaves()
+        return root.label in [ "subord", "subord-rel" ] and \
+            bool(filter(lambda leaf: leaf.msi["category"] == "pronoun" and leaf.msi["type"] == "relative", leaves))
 
     def is_gerund(self):
         return self.verb.msi["mode"] == "gerundio"
@@ -32,7 +51,8 @@ class Clause:
 
     def entities_closest_to_verb_at(self, side, allowed_distance = float("inf")):
         by_component = zip(*self.to_entities_with_node(self.nodes_closest_to_verb_at(side, allowed_distance)))
-        return list(by_component[0]) if by_component else []
+        entities = list(by_component[0]) if by_component else []
+        return entities
 
     def lonely_entities(self):
         assigned_entities = sum([ structure.entities for structure in self.syntactic_structures ], [])
@@ -79,7 +99,7 @@ class Clause:
         self.children.append(clause)
 
     def proper_leaves(self):
-        return self.proper_tree.leaves()
+        return self.proper_tree().leaves()
 
     def __repr__(self):
         return " ".join([ str(leaf)for leaf in self.proper_leaves()])

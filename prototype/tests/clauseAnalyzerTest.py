@@ -3,8 +3,8 @@
 from ast import literal_eval
 import unittest
 
-from src.model.sentenceAnalyzer import SentenceAnalyzer
 from src.model.sentence import Sentence
+from src.model.sentenceAnalyzer import SentenceAnalyzer
 from tests.freelingTreeRepository import FreelingTreeRepository
 
 
@@ -15,7 +15,7 @@ class TestClauseAnalyzer(unittest.TestCase):
 
         frame = {}
 
-        test_file = open("tests/input/clause_analyzer.txt")
+        test_file = open("tests/input/context.txt")
         for line in test_file:
             line = line.strip("\n").strip(" ").replace("\t", "")
             if not line or self.is_comment(line): continue

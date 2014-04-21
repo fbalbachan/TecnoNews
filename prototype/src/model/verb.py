@@ -37,15 +37,6 @@ class Verb(Entity):
     def is_compound(self):
         return len(self.leaves) > 1
 
-    def matches(self, entity):
-        matches = self.msi["number"] == entity.msi["number"] and self.msi["person"] == entity.msi["person"] and \
-            self.matches_gender_of(entity)
-        return matches
-
-    def matches_gender_of(self, entity):
-        msi = self.msi
-        return msi["gender"] == "neutral" or entity.msi["gender"] == "neutral" or msi["gender"] == entity.msi["gender"]
-
     def guess_msi(self):
         first_leaf = self.leaves[0]
 
@@ -71,4 +62,4 @@ class Verb(Entity):
 
     def __repr__(self):
         return " ".join([ str(leaf) for leaf in self.leaves]) + " (" + self.lemma() + ") " + \
-            str([ self.voice, self.script_class, self.transitivity ]) + str(self.msi)
+            str([ self.voice, self.script_class, self.transitivity ]) + " " + str(self.msi["person"]) + "°"

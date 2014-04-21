@@ -1,0 +1,65 @@
+La manzana que fue dejada era fea
+    clause: La manzana era fea
+        subject: La manzana
+    clause: que fue dejada
+        subject: alguien
+        verb: fue dejada
+        od: La manzana
+
+La manzana que el cartero trajo estaba podrida
+    clause: La manzana estaba podrida
+        subject: La manzana
+    clause: que el cartero trajo
+        subject: el cartero
+        verb: trajo
+            lemma: traer
+        od: La manzana
+
+# Árbol inconsistente "por" no queda en la estructura subordinada. Lo atrapamos con un parche.
+La manzana por la que fueron comidos era verde
+    clause: La manzana por era verde
+        subject: La manzana por
+    clause: la que fueron comidos
+        subject: La manzana por
+        od: ellos
+
+La manzana, la que fue dejada era fea
+    clause: La manzana , era fea
+        subject: La manzana
+    clause: la que fue dejada
+        subject: alguien
+        od: La manzana
+
+El hombre con el que jugué había muerto
+    clause: El hombre había muerto
+        subject: El hombre
+    clause: con el que jugué
+        subject: yo
+        adjuncts: El hombre
+
+El hombre quien salió a jugar murió
+    clause: El hombre murió
+        subject: El hombre
+    clause: quien salió a jugar
+        subject: El hombre
+
+La manzana que el hombre comió era verde
+    clause: La manzana era verde
+        subject: La manzana
+    clause: que el hombre comió
+        subject: el hombre
+        od: La manzana
+
+El hombre con quien lidió era alto
+    clause: El hombre era alto
+        subject: El hombre
+    clause: con quien lidió
+        subject: él
+        regimen: El hombre
+
+Melina, la cual estaba implicada, había sido detenida.
+    clause: Melina , , había sido detenida .
+        subject: alguien
+        od: Melina
+    clause: la cual estaba implicada
+        subject: Melina
