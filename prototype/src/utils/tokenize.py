@@ -21,22 +21,22 @@ def detroll(text):
 
 def limpieza_inicial(s):
     # estos replaces están porque Freeling reemplaza estos signos (si están solos) por 'y'
-    s = s.replace(u'¡', '', re.U)
-    s = s.replace(u'!', '', re.U)
-    s = s.replace(u'¿', '', re.U)
-    s = s.replace(r'"', '', re.U)
-    s = s.replace(r"'", '', re.U)
-    s = s.replace(u"“", '', re.U)
-    s = s.replace(u"»", '', re.U)
-    s = s.replace(u"«", '', re.U)
-    s = s.replace(u"˵", '', re.U)
-    s = s.replace(u"`", '', re.U)
-    s = s.replace(u"‘", '', re.U)
-    s = s.replace(u"˶", '', re.U)
-    s = s.replace(u"”", '', re.U)
-    s = re.sub(r'\bq\b', u'que', s)
-    s = re.sub(r'\bQ\b', u'que', s)
-    s = re.sub(r'\?+', u'?', s)
+    s = s.replace('¡', '')
+    s = s.replace('!', '')
+    s = s.replace('¿', '')
+    s = s.replace('"', '')
+    s = s.replace("'", '')
+    s = s.replace("“", '')
+    s = s.replace("»", '')
+    s = s.replace("«", '')
+    s = s.replace("˵", '')
+    s = s.replace("`", '')
+    s = s.replace("‘", '')
+    s = s.replace("˶", '')
+    s = s.replace("”", '')
+    s = re.sub(r'\bq\b', 'que', s)
+    s = re.sub(r'\bQ\b', 'que', s)
+    s = re.sub(r'\?+', '?', s)
     # s = re.sub(r"\n+(\w)", '.\1', s, re.U)
     return s
 
@@ -44,4 +44,4 @@ def replace_repeated_letters(token):
     return re.sub(repeat_regex, replacement, token)
 
 def normalize_and_tokenize(text, regex=r'\w+'):
-    return [unidecode.unidecode(w).lower() for w in re.findall(regex, text)]
+    return [w.lower() for w in re.findall(regex, text)]
