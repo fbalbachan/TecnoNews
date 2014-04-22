@@ -2,6 +2,7 @@
 from src.ling.verb_info import allowed_boxes, allowed_boxes_for_passive_verbs, allowed_boxes_for_unimember_sentences
 from src.model.activeVoiceSyntacticAnalizer import ActiveVoiceSyntacticAnalyzer
 from src.model.entityExtractor import EntityExtractor
+from src.model.gerundSubjectSolver import GerundSubjectSolver
 from src.model.linkedEntityExtractor import LinkedEntityExtractor
 from src.model.passiveVoiceSyntacticAnalyzer import PassiveVoiceSyntacticAnalyzer
 from src.model.relativePronounSolver import RelativePronounSolver
@@ -24,6 +25,9 @@ class ClauseAnalyzer:
         if clause.is_relative():
             clause.relative_entity = self.relative_entity_of(clause)
             RelativePronounSolver(clause).solve()
+
+        if clause.is_gerund():
+            GerundSubjectSolver(clause).solve()
 
     def analyze_syntactically(self, clause):
         syntactic_analyzer_by_voice = { "active" : ActiveVoiceSyntacticAnalyzer,

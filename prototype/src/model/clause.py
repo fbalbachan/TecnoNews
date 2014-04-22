@@ -16,6 +16,9 @@ class Clause:
         self.verb = None
         self.syntactic_structures = []
 
+    def is_root(self):
+        return not bool(self.father)
+
     def entity_by_original(self, node):
         proper_node = self.proper_by_original[node]
         entities = filter(lambda entity: entity.node == proper_node, self.entities)
