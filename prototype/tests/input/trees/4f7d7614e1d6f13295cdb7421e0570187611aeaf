@@ -1,0 +1,43 @@
++grup-verb_[
+  sn_[
+    espec-mp_[
+      +j-mp_[
+        +(Los el DA0MP0 -)
+      ]
+    ]
+    +grup-nom-mp_[
+      +n-mp_[
+        +(noruegos noruego NCMP000 -)
+      ]
+    ]
+  ]
+  +verb_[
+    +(son ser VSIP3P0 -)
+  ]
+  s-adj_[
+    +s-a-mp_[
+      +a-mp_[
+        +(malos malo AQ0MP0 -)
+      ]
+    ]
+  ]
+  grup-sp_[
+    +prep_[
+      +(en en SPS00 -)
+    ]
+    sn_[
+      espec-ms_[
+        +pos-ms_[
+          +(su su DP3CS0 -)
+        ]
+      ]
+      +grup-nom-ms_[
+        +n-ms_[
+          +(país país NCMS000 -)
+        ]
+      ]
+    ]
+  ]
+]
+
+

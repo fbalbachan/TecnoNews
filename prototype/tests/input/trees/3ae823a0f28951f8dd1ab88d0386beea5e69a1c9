@@ -1,0 +1,66 @@
++grup-verb_[
+  sn_[
+    espec-mp_[
+      +j-mp_[
+        +(Los el DA0MP0 -)
+      ]
+    ]
+    +grup-nom-mp_[
+      +n-mp_[
+        +(noruegos noruego NCMP000 -)
+      ]
+    ]
+  ]
+  +verb_[
+    +(desarrollaron desarrollar VMIS3P0 -)
+  ]
+  sn_[
+    espec-fs_[
+      +pos-fs_[
+        +(su su DP3CS0 -)
+      ]
+    ]
+    +grup-nom-fs_[
+      s-a-fs_[
+        +a-fs_[
+          +(propia propio AQ0FS0 -)
+        ]
+      ]
+      +grup-nom-fs_[
+        +n-fs_[
+          +(cultura cultura NCFS000 -)
+        ]
+      ]
+    ]
+  ]
+  Fc_[
+    +(, , Fc -)
+  ]
+  subord-ger_[
+    +(confiando confiar VMG0000 -)
+    grup-sp_[
+      +prep_[
+        +(en en SPS00 -)
+      ]
+      sn_[
+        espec-fs_[
+          +pos-fs_[
+            +(su su DP3CS0 -)
+          ]
+        ]
+        +grup-nom-fs_[
+          +n-fs_[
+            +(herencia herencia NCFS000 -)
+          ]
+          s-a-fs_[
+            +a-fs_[
+              +(vikinga vikingo AQ0FS0 -)
+            ]
+          ]
+        ]
+      ]
+    ]
+  ]
+]
+
+

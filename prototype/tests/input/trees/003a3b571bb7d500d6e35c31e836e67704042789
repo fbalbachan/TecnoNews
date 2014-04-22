@@ -1,0 +1,36 @@
++grup-verb_[
+  sn_[
+    espec-mp_[
+      +j-mp_[
+        +(Los el DA0MP0 -)
+      ]
+    ]
+    +grup-nom-mp_[
+      +n-mp_[
+        +(noruegos noruego NCMP000 -)
+      ]
+    ]
+  ]
+  +verb_[
+    +(son ser VSIP3P0 -)
+  ]
+  sn_[
+    espec-ms_[
+      +indef-ms_[
+        +(un uno DI0MS0 -)
+      ]
+    ]
+    +grup-nom-ms_[
+      +n-ms_[
+        +(pueblo pueblo NCMS000 -)
+      ]
+      s-a-ms_[
+        +a-ms_[
+          +(agresivo agresivo AQ0MS0 -)
+        ]
+      ]
+    ]
+  ]
+]
+
+
