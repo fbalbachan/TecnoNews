@@ -26,7 +26,7 @@ class ClauseAnalyzer:
             clause.relative_entity = self.relative_entity_of(clause)
             RelativePronounSolver(clause).solve()
 
-        if clause.is_gerund():
+        if clause.voice and clause.is_gerund():
             GerundSubjectSolver(clause).solve()
 
     def analyze_syntactically(self, clause):
