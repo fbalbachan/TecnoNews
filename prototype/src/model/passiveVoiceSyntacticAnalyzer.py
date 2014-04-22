@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from src.ling.tacit_subjects import somebody
 from src.model.syntacticAnalyzer import SyntacticAnalyzer
 from src.model.syntacticStructure import SyntacticStructure
 from src.model.tacitEntity import TacitEntity
@@ -29,7 +30,7 @@ class PassiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         return self.search_subord_at(side, distance, which)
 
     def tacit_subject(self):
-        return TacitEntity("alguien", { "number" : "singular", "gender" : "neutral", "person" : 3 })
+        return somebody()
 
     def od(self):
         structure = SyntacticStructure("od")

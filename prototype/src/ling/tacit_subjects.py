@@ -1,5 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from src.model.tacitEntity import TacitEntity
+
 
 tacit_subjects = {
     (0, 'singular', 'neutral') : None,
@@ -23,6 +25,9 @@ tacit_subjects = {
     (3, 'plural', 'masculine') : 'ellos',
     (3, 'plural', 'feminine')  : 'ellas',
 }
+
+def somebody():
+    return TacitEntity("alguien", { "category" : "pronoun", "number" : "singular", "gender" : "neutral", "person" : 3 })
 
 def tacit_subject_for(verb):
     gender = verb.msi['gender']
