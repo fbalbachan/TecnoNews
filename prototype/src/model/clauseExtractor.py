@@ -31,7 +31,13 @@ class ClauseExtractor:
         clauses = clauses_by_node.values()
         self.compute_proper_tree_for(clauses)
         clauses = self.without_invalid_clauses(clauses)
+        self.sort_children_of(clauses, sentence)
+
         return self.sorted(clauses, sentence)
+
+    def sort_children_of(self, clauses, sentence):
+        for clause in clauses:
+            clause.children = self.sorted(clause.children, sentence)
 
     def sorted(self, clauses, sentence):
         leaves = sentence.parse_node.leaves()
