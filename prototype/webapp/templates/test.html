@@ -1,52 +1,115 @@
-$def with (sentence)
+$def with (sentence, printer)
 <!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8" />
-    <script>
-    function clearForms()
-    {
-      var i;
-      for (i = 0; (i < document.forms.length); i++) {
-        document.forms[i].reset();
-      }
-    }
-    </script>
-  </head>
-  <body onLoad="clearForms()" onUnload="clearForms()">
+    <style type="text/css">
+        @font-face {
+            font-family: meditation;
+            src: url('/static/font/Meditation.ttf');
+        }
 
-    <div>
-        <h3>Sentence</h3>
-        <p style="margin-right: 40px; margin-left: 40px; font-size: 14px;">$sentence</p>
-        <p style="margin-right: 40px; margin-left: 40px; font-size: 14px;"><pre>$sentence.parse_node.tree_representation()</pre></p>
-      </div>
+        @font-face {
+            font-family: monofur;
+            src: url('/static/font/monof55.ttf');
+        }
+
+        h2 {
+            color:#8A0808;
+            font-family: "monofur";
+            font-size: 200%
+        }
+
+        h3 {
+            color:#8A0808;
+            font-family: "monofur";
+            font-size: 150%
+        }
+
+        .grande {
+            color: #2E2E2E;
+            font-family: "monofur";
+            font-size: 120%;
+            margin-left: 40px;
+            font-weight:bold
+        }
+
+        .normal {
+            color: #2E2E2E;
+            font-family: "monofur";
+            font-size: 100%;
+            margin-left: 40px;
+        }
+
+        li {
+            color: #2E2E2E;
+            font-family: "monofur";
+            font-size: 100%;
+            margin-left: 60px;
+        }
+
+        .structures {
+            font-family: "monofur";
+            padding: 10px;
+            text-align: center;
+            min-width:120px
+        }
+
+        .str_table {
+            font-family: "monofur";
+            margin-left: 60px;
+        }
+
+    </style>
+  </head>
+  <body>
+
+    <h2>Sentence</h2>
+    <p class="grande">$sentence</p>
 
     $for clause in sentence.clauses:
 
-      <div>
-        <h3>Clause "$clause"</h3>
+        <h3>Clause</h3>
+            <p class="grande">$clause</p>
 
-        <p style="margin-left: 40px; font-size: 14px;">
-        <b>Voice</b> $clause.voice<br><br>
+        <p class="normal">
+        <b>Voice</b> $clause.voice<br>
 
-        <b>Entities</b><br>
+        $if clause.entities:
+            <br><b>Entities</b>
+            $for entity in clause.entities:
+                <br><li title="$printer.entity_tooltip(entity)">$entity</li>
         </p>
-        <p style="margin-left: 60px; font-size: 14px;">
-        $for entity in clause.entities:
-            <b>$entity</b> $entity.msi<br>
+        <p class="normal">
+        $if clause.relative_entity:
+            <b>Relative entities</b>
+            <br><li title="$printer.entity_tooltip(clause.relative_entity)">$clause.relative_entity</li>
         </p>
-
-        <p style="margin-left: 40px; font-size: 14px;">
+        <p class="normal">
         <b>Syntactic Structures</b><br>
 
-        <p style="margin-left: 60px; font-size: 14px;">
-        $for structure in clause.syntactic_structures:
-            <b>$structure.name</b> $structure
-            <br>
-        </p>
-        </p>
+        <table class="str_table" border="0">
+        <tr>
+          <th>Subject</th>
+          <th>Verb</th>
+          <th>Direct Object</th>
+          <th>Indirect Object</th>
+          <th>Regime</th>
+          <th>Equative</th>
+          <th>Adjuncts</th>
+        </tr>
 
-      </div>
+        <tr>
+            $for name in ["subject", "verb", "od", "oi", "regimen", "equative", "adjuncts"]:
+                $ if clause.has_structure(name): bg_color = '#5FB404'
+                $ else: bg_color = "#8A0808"
+
+                <td class="structures" bgcolor=$bg_color title="$printer.tooltip(clause, name)")>
+                    $printer.structure(clause, name)
+                </td>
+        </tr>
+        </table>
+        </p>
 
   </body>
 </html>
