@@ -38,14 +38,18 @@ class SyntacticAnalyzer:
             if entities: return entities
         return []
 
-    def nominal_and_personal_entities(self, distance_at_left, distance_at_right):
+    def verb_matching_subject_entities(self, distance_at_left, distance_at_right):
+        valid_subject_entities = self.valid_subject_entities(distance_at_left, distance_at_right)
+        verb_matching_entities = filter(lambda entity: self.clause.verb.matches(entity), valid_subject_entities)
+        return verb_matching_entities
+
+    def valid_subject_entities(self, distance_at_left, distance_at_right):
         clause = self.clause
         entities = clause.entities_closest_to_verb_at("left", distance_at_left) \
                     + clause.entities_closest_to_verb_at("right", distance_at_right)
-
+        print entities
         valid_subject_entities = self.only_valid_subject_entities_of(entities)
-        verb_matching_entities = filter(lambda entity: clause.verb.matches(entity), valid_subject_entities)
-        return verb_matching_entities
+        return valid_subject_entities
 
     def search_subord_with_preposition_at(self, side, distance, *accepted_prepositions):
         def which(node):

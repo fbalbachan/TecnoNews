@@ -33,7 +33,7 @@ class PassiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
 
     def od(self):
         structure = SyntacticStructure("od")
-        entities = self.nominal_and_personal_entities(3, 2)
+        entities = self.verb_matching_subject_entities(3, 2)
         if entities:
             structure.entities = [ entities[0] ]
         else:

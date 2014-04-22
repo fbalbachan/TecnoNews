@@ -13,7 +13,7 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
     def subject(self):
         structure = SyntacticStructure("subject")
         if not self.clause.is_gerund():
-            entities = self.nominal_and_personal_entities(3, 2)
+            entities = self.verb_matching_subject_entities(3, 2)
 
             if entities:
                 structure.entities = [ entities[0] ]
@@ -46,7 +46,8 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
 
     def equative(self):
         structure = SyntacticStructure("equative")
-        entities = self.nominal_and_personal_entities(2, 3)
+        entities = self.valid_subject_entities(2, 3) + \
+            self.search_subord_with_preposition_at("right", 3, "de", "para")
         if entities: structure.entities = [ entities[0] ]
         return structure
 
