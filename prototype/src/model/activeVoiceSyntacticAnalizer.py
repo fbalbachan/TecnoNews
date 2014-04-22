@@ -52,7 +52,7 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         return structure
 
     def search_regime_at(self, side, distance):
-        return self.search_subord_with_preposition_at(side, distance, "a", "con", "de")
+        return self.search_subord_with_preposition_at(side, distance)
 
     def search_nominal_oi_at(self, side, distance):
         return self.search_subord_with_preposition_at(side, distance, "a")
