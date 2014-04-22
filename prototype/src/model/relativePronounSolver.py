@@ -8,8 +8,14 @@ class RelativePronounSolver:
     def solve(self):
         clause = self.clause
 
-        solve_method_by_voice = { "active" : self.solve_active_voice, "passive" : self.solve_passive_voice }
-        solve_method_by_voice[clause.voice]()
+        if self.is_valid_linker():
+            solve_method_by_voice = { "active" : self.solve_active_voice, "passive" : self.solve_passive_voice }
+            solve_method_by_voice[clause.voice]()
+
+
+    def is_valid_linker(self):
+        linker_words = [ leaf.lexical_form for leaf in self.linker ]
+        return linker_words not in [ ["cuyo"], ["cuya"], ["cuyos"], ["cuyas"], ["donde"], ["adonde"], ["lo", "cual"] ]
 
     def solve_active_voice(self):
         clause = self.clause
