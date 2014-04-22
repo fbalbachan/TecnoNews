@@ -16,9 +16,6 @@ class Entity (TacitEntity):
     def contains(self, other):
         return self.node.contains(other.node)
 
-    def category(self):
-        return self.msi["category"]
-
     def highest_subordinating_level(self):
         return self.highest_subordinating_node().level()
 

@@ -6,6 +6,9 @@ class TacitEntity:
         self.lexical_form = lexical_form
         self.msi = msi
 
+    def category(self):
+        return self.msi["category"]
+
     def matches(self, entity):
         matches = self.msi["number"] == entity.msi["number"] and self.msi["person"] == entity.msi["person"] and \
             self.matches_gender_of(entity)
