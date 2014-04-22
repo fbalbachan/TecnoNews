@@ -18,5 +18,5 @@ class WebOutputUtils:
         return self.msi_string(entity.msi)
 
     def msi_string(self, msi):
-        return str(msi["person"]) + "° " + str(msi["gender"]) + " " + str(msi["number"])
+        return str(msi["person"]) + "° " + str(msi["gender"]) + " " + str(msi["number"]) + " (" + str(msi["category"]) + ")"
         #return ", ".join([ key + " = " + str(value) for (key, value) in msi.items() ])
