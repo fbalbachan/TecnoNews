@@ -43,8 +43,8 @@ attribute_map = {"A": {1: ("type", {"Q": u"calificative", "O": u"ordinal", "0": 
 
                  "P": {1: ("type", {"P": u"personal", "D": u"demostrative", "X": u"possesive", "I": u"indefinite", "T": u"interrogative", "R": u"relative", "E": u"exclamative", "0": None}),
                        2: ("person", {"1" : 1, "2": 2, "3": 3, "0": None}),
-                       3: ("gender", {"M": u"masculine", "F": u"feminine", "C": u"neutral", "N": u"neutral"}), # u"common"
-                       4: ("number", {"S": u"singular", "P": u"plural", "N": u"impersonal/invariable"}),
+                       3: ("gender", {"M": u"masculine", "F": u"feminine", "C": u"neutral", "N": u"neutral", "0" : None}), # u"common"
+                       4: ("number", {"S": u"singular", "P": u"plural", "N": u"impersonal/invariable", "0" : None}),
                        5: ("case", {"N": u"nominative", "A": u"acusative", "D": u"dative", "O": u"oblicuo", "0": None}),
                        6: ("owner", {"S": u"singular", "P": u"plural", "0": None}),
                        7: ("politeness", {"P": u"polite", "0": None})},
