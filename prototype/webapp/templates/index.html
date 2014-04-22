@@ -3,9 +3,9 @@
   <head>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.css">
-    <script src="static/jquery-1.6.2.min.js"></script> 
+    <script src="static/jquery-1.6.2.min.js"></script>
     <title>SentiLecto</title>
-    <script> 
+    <script>
       $$(document).ready(function(){
       $$('#language .es').click(function(){
       $$('.about.en').hide();
@@ -20,47 +20,47 @@
       $$('#language .es').removeClass('selected');
       });
       });
-    </script> 
-  </head> 
+    </script>
+  </head>
 
   <body>
   <!-- <div lang="es-AR"> -->
-    <div class="navbar navbar-fixed-top"> 
-      <div class="navbar-inner"> 
-        <div class="container"> 
-          <button type="button"class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> 
-            <span class="icon-bar"></span> 
-            <span class="icon-bar"></span> 
-            <span class="icon-bar"></span> 
-          </button> 
-	  
-          <div class="nav-collapse collapse"> 
-            <ul class="nav"> 
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <button type="button"class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+
+          <div class="nav-collapse collapse">
+            <ul class="nav">
               <!-- <li class="">  -->
               <!--   <a href="http://"></a>  -->
               <!-- </li>  -->
-            </ul> 
-          </div> 
-        </div> 
-      </div> 
-    </div> 
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <div class="container" style="width: 1000px">
 
       <h2 style="padding-top:60px;padding-bottom:10px;"></h2>
 
       <div>
-	<form class="well form-search" action="result" method="GET">  
-	  <fieldset>  
-	    <div class="control-group"> 
+	<form class="well form-search" action="result" method="GET">
+	  <fieldset>
+	    <div class="control-group">
 	      <label class="control-label" for="text">Input Text (only Spanish):</label>
 	      <!-- <p></p> -->
-	      <div class="controls"> 
-		<textarea class="input-xlarge" id="textarea" rows="14" style="width: 950px;" name="text">Los noruegos exportan el exquisito bacalao. A ellos les molesta tomar vacaciones en Hawaii, aunque no odian el calor. Afortunadamente, prefieren el frío. </textarea>
-	      </div> 
-	      <button type="submit" style="margin-top: 10px;" class="btn btn-primary">Analize!</button> 
-	    </div> 
-	  </fieldset> 
+	      <div class="controls">
+		<textarea class="input-xlarge" id="textarea" rows="14" style="width: 950px;" name="text">Los noruegos, quienes son un pueblo agresivo, exportan el exquisito bacalao. A ellos les molesta tomar vacaciones en Hawaii, aunque no odian el calor. Afortunadamente, no fueron conquistados por los ingleses en el año 1066, y en cambio desarrollaron su propia cultura, confiando en su herencia vikinga y no formando parte de la Unión Europea.</textarea>
+	      </div>
+	      <button type="submit" style="margin-top: 10px;" class="btn btn-primary">Analize!</button>
+	    </div>
+	  </fieldset>
 	</form>
       </div>
 
@@ -68,10 +68,12 @@
 <b>SentiLecto better represents the premise whereby the entities involved in the opinion are syntactically  mapped onto SVO (subject-verb-object) slots for their sentiment assignments</b>:
 '<i>Mary hates John</i>' (2 entities but only the object has a negative presentation) vs. '<i>Mary defames John</i>' (the same 2 entities but only the subject has negative presentation).
 	</p>
-      <p></p>
+      <p>
+        SentiLecto leans on outstanding linguistic features such as: passive/active voice transformation, anaphora resolution and co-reference chains, modality treatment and accurate verb scripts for all verbs in Spanish, even with different pronominal cases (for example, 'destacar' 'to appraise something' vs. 'destacarSE' 'to highlight oneself from the rest')
+      </p>
       <p>Try this challenging input text and behold the results!</p>
     </div>
-    
+
   </body>
   <!-- </div> -->
 </html>

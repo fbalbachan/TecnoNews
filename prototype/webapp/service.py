@@ -9,6 +9,7 @@ from traceback import format_exc, format_stack
 from src.entinews import Entinews
 from src.model.sentence import Sentence
 from src.model.sentenceAnalyzer import SentenceAnalyzer
+from src.model.sentenceSplitter import SentenceSplitter
 from src.webOutputUtils import WebOutputUtils
 
 
@@ -24,11 +25,15 @@ def analyze():
 		if type(input_text) == unicode: input_text = input_text.encode("utf-8") # unicode -> str (encoded)
 
 		analyzer = SentenceAnalyzer()
-		sentence = Sentence(input_text)
-		analyzer.analyze(sentence)
-		return sentence
+		sentenceSplitter = SentenceSplitter()
+
+		sentences = sentenceSplitter.sentences_in(input_text)
+		for sentence in sentences:
+			analyzer.analyze(sentence)
+		return sentences
 	except Exception:
-		return web.template.render().exception(format_exc(), "")
+		print format_exc()
+		#web.template.render().exception(format_exc(), "")
 
 class Favicon_request:
 	def GET(self):
@@ -51,8 +56,8 @@ class Debug_request:
 
 class EntiNews_request:
 	def GET(self):
-		sentence = analyze()
-		return web.template.render().test(sentence, WebOutputUtils())
+		sentences = analyze()
+		return web.template.render().test(sentences, WebOutputUtils())
 
 ### MAIN ###
 

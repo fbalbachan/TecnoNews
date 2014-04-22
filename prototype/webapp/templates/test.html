@@ -1,4 +1,4 @@
-$def with (sentence, printer)
+$def with (sentences, printer)
 <!DOCTYPE html>
 <html>
   <head>
@@ -52,7 +52,7 @@ $def with (sentence, printer)
             font-family: "monofur";
             padding: 10px;
             text-align: center;
-            min-width:120px
+            min-width:130px
         }
 
         .str_table {
@@ -63,53 +63,51 @@ $def with (sentence, printer)
     </style>
   </head>
   <body>
+    $for sentence in sentences:
+        <h2>Sentence $(sentences.index(sentence) + 1)</h2>
+        <p class="grande">$sentence</p>
 
-    <h2>Sentence</h2>
-    <p class="grande">$sentence</p>
-
-    $for clause in sentence.clauses:
-
-        <h3>Clause</h3>
+        $for clause in sentence.clauses:
+            <h3>Clause $(sentences.index(sentence) + 1).$printer.clause_number(clause, sentence)</h3>
             <p class="grande">$clause</p>
 
-        <p class="normal">
-        <b>Voice</b> $clause.voice<br>
+            <p class="normal">
+            <b>Voice</b> $clause.voice<br>
 
-        $if clause.entities:
-            <br><b>Entities</b>
-            $for entity in clause.entities:
-                <br><li title="$printer.entity_tooltip(entity)">$entity</li>
-        </p>
-        <p class="normal">
-        $if clause.relative_entity:
-            <b>Relative entities</b>
-            <br><li title="$printer.entity_tooltip(clause.relative_entity)">$clause.relative_entity</li>
-        </p>
-        <p class="normal">
-        <b>Syntactic Structures</b><br>
+            $if clause.entities:
+                <br><b>Entities</b>
+                $for entity in clause.entities:
+                    <br><li title="$printer.entity_tooltip(entity)">$entity</li>
+            </p>
+            <p class="normal">
+            $if clause.relative_entity:
+                <b>Relative entities</b>
+                <br><li title="$printer.entity_tooltip(clause.relative_entity)">$clause.relative_entity</li>
+            </p>
+            <p class="normal">
+            <b>Syntactic Structures</b><br>
 
-        <table class="str_table" border="0">
-        <tr>
-          <th>Subject</th>
-          <th>Verb</th>
-          <th>Direct Object</th>
-          <th>Indirect Object</th>
-          <th>Regime</th>
-          <th>Equative</th>
-          <th>Adjuncts</th>
-        </tr>
+            <table class="str_table" border="0">
+            <tr>
+              <th>Subject</th>
+              <th>Verb</th>
+              <th>Direct<br>Object</th>
+              <th>Indirect Object<br>Experiencer</th>
+              <th>Phrasal<br>Complement</th>
+              <th>Equative</th>
+              <th>Adjuncts</th>
+            </tr>
 
-        <tr>
-            $for name in ["subject", "verb", "od", "oi", "regimen", "equative", "adjuncts"]:
-                $ if clause.has_structure(name): bg_color = '#5FB404'
-                $ else: bg_color = "#8A0808"
+            <tr>
+                $for name in ["subject", "verb", "od", "oi", "regimen", "equative", "adjuncts"]:
+                    $ if clause.has_structure(name): bg_color = '#5FB404'
+                    $ else: bg_color = "#8A0808"
 
-                <td class="structures" bgcolor=$bg_color title="$printer.tooltip(clause, name)")>
-                    $printer.structure(clause, name)
-                </td>
-        </tr>
-        </table>
-        </p>
-
+                    <td class="structures" bgcolor=$bg_color title="$printer.tooltip(clause, name)")>
+                        $printer.structure(clause, name)
+                    </td>
+            </tr>
+            </table>
+            </p>
   </body>
 </html>
