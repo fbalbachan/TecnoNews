@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from re import compile, match, split
 import re
 from src.model.sentence import *
 from src.model.textCleaner import *
@@ -12,15 +11,10 @@ class SentenceSplitter:
 		return self.to_sentences(non_empty_texts)
 
 	def split(self, text):
-		return split(self.delimiters, text, re.U)
+		return re.split(self.delimiters, text, re.U)
 
 	def to_sentences(self, texts):
-		return [ Sentence(self.add_final_punctuation_if_absent_to(text)) for text in texts ]
+		return [ Sentence(text) for text in texts ]
 
-	def add_final_punctuation_if_absent_to(self, text):
-		if not match(".*\W$", text.strip(" ")):
-			text = text + "."
-		return text
-
-	delimiters = compile(ur"""\?+|\n|\. |,pero|, pero|:\s+|, y|,y|,mientras|, mientras|,entonces|, entonces|, aunque|,aunque|, sin embargo|,sin embargo|, no obstante|,no obstante|!+|; |\.\.\.|, pues|,pues""", re.U|re.I)
+	delimiters = re.compile(ur"""\?+|\n|\. |,pero|, pero|:\s+|, y|,y|,mientras|, mientras|,entonces|, entonces|, aunque|,aunque|, sin embargo|,sin embargo|, no obstante|,no obstante|!+|; |\.\.\.|, pues|,pues""", re.U|re.I)
 	textCleaner = TextCleaner()
