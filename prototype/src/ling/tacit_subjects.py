@@ -27,7 +27,8 @@ tacit_subjects = {
 }
 
 def somebody():
-    return TacitEntity("alguien", { "category" : "pronoun", "number" : "singular", "gender" : "neutral", "person" : 3 })
+    return TacitEntity("alguien", { "category" : "pronoun", "number" : "singular", "gender" : "neutral",
+                                   "person" : 3, "type" : "personal", "case" : None })
 
 def tacit_subject_for(verb):
     gender = verb.msi['gender']

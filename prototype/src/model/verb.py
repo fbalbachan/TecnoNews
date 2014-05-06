@@ -58,7 +58,8 @@ class Verb(Entity):
 
     def matching_pronoun_msi(self):
         msi = self.msi
-        return { "category" : "pronoun", "person" : msi["person"], "number" : msi["number"], "gender" : msi["gender"] }
+        return { "category" : "pronoun", "person" : msi["person"], "number" : msi["number"], "gender" : msi["gender"],
+                "type" : "personal", "case" : None }
 
     def __repr__(self):
         return " ".join([ str(leaf) for leaf in self.leaves]) + " (" + self.lemma() + ") " + \
