@@ -89,7 +89,7 @@ class ClauseAnalyzer:
         return EntityExtractor(clause).extract()
 
     def relative_entity_of(self, clause):
-        linked_entity = LinkedEntityExtractor(clause, None).extract()
+        linked_entity = LinkedEntityExtractor(clause).extract()
         return linked_entity
 
     def voice_of(self, clause):

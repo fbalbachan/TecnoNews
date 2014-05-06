@@ -2,9 +2,8 @@
 
 class LinkedEntityExtractor:
 
-    def __init__(self, clause, context):
+    def __init__(self, clause):
         self.clause = clause
-        self.context = context
 
     def extract(self):
         extract_methods_by_label = {"subord" : self.extract_from_non_relative,
