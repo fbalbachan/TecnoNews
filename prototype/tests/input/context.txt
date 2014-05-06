@@ -190,8 +190,8 @@ El hombre con quien lidió era alto
         subject: él
         regimen: El hombre
 
-Melina, la cual estaba implicada, había sido detenida.
-    clause: Melina , , había sido detenida .
+Melina, la cual estaba implicada, había sido detenida
+    clause: Melina , , había sido detenida
         subject: alguien
         od: Melina
     clause: la cual estaba implicada
@@ -229,3 +229,27 @@ El hombre buscó, lo cual llevó minutos
         subject: El hombre
     clause: lo cual llevó minutos
         subject: él
+
+# Resolución de PP y ST inter-oracional
+Leandro es bueno. Él comió la manzana.
+    sentence: Leandro es bueno
+        subject: Leandro
+    sentence: Él comió la manzana
+        subject: Leandro
+
+# Tácito
+Leandro es bueno. Comió las manzanas.
+    sentence: Leandro es bueno
+        subject: Leandro
+    sentence: Comió las manzanas
+        subject: Leandro
+
+# Alteración del orden de búsqueda con pasivas
+Leandro es bueno. Fue comido por Pedro. Finalmente murió.
+    sentence: Leandro es bueno
+        subject: Leandro
+    sentence: Fue comido por Pedro
+        subject: Pedro
+        od: Leandro
+    sentence: Finalmente murió
+        subject: Leandro

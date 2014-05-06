@@ -16,5 +16,5 @@ class SentenceSplitter:
 	def to_sentences(self, texts):
 		return [ Sentence(text) for text in texts ]
 
-	delimiters = re.compile(ur"""\?+|\n|\. |,pero|, pero|:\s+|, y|,y|,mientras|, mientras|,entonces|, entonces|, aunque|,aunque|, sin embargo|,sin embargo|, no obstante|,no obstante|!+|; |\.\.\.|, pues|,pues""", re.U|re.I)
+	delimiters = re.compile(ur"""\?+|\n|\. |\.$|,pero|, pero|:\s+|, y|,y|,mientras|, mientras|,entonces|, entonces|, aunque|,aunque|, sin embargo|,sin embargo|, no obstante|,no obstante|!+|; |\.\.\.|, pues|,pues""", re.U|re.I)
 	textCleaner = TextCleaner()

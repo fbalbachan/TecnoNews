@@ -32,13 +32,7 @@ class TestClauseAnalyzer(unittest.TestCase):
                 frame = { "paragraph" : paragraph }
 
                 if len(paragraph.sentences) == 1:
-                    sentence = paragraph.sentences[0]
-                    frame = { "sentence" : sentence }
-
-                    if len(sentence.clauses) == 1:
-                        frame["clause"] = sentence.clauses[0]
-
-                    self.show_info_for(sentence)
+                    self.sentence(line, frame)
 
     def show_info_for(self, sentence):
         print sentence.parse_node.tree_representation()
@@ -53,7 +47,12 @@ class TestClauseAnalyzer(unittest.TestCase):
         paragraph = frame["paragraph"]
         sentences = filter(lambda sentence: str(sentence) == assertion, paragraph.sentences)
         self.assertTrue(len(sentences) == 1, "No se encontró la oración " + assertion)
-        frame["sentence"] = sentences[0]
+
+        sentence = sentences[0]
+        frame["sentence"] = sentence
+        self.show_info_for(sentence)
+
+        if len(sentence.clauses) == 1: self.clause(str(sentence.clauses[0]), frame)
 
     def update_frame_and_assert(self, assertion, frame):
         string = assertion
@@ -121,7 +120,7 @@ class TestClauseAnalyzer(unittest.TestCase):
         return string.startswith("#")
 
     structure_keywords = [ "subject", "od", "oi", "equative", "regimen", "adjuncts", "verb" ]
-    keywords = [ "clause", "lemma", "msi", "entity" ] + structure_keywords
+    keywords = [ "clause", "lemma", "msi", "entity", "sentence" ] + structure_keywords
 
 if __name__ == '__main__':
     unittest.main()
