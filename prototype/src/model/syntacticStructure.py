@@ -6,6 +6,13 @@ class SyntacticStructure:
         self.entities = []
         self.tacit_entities = []
 
+    def replace(self, old_entity, new_entity):
+        for entity_list in [ self.entities, self.tacit_entities ]:
+            if old_entity in entity_list:
+                entity_list.remove(old_entity)
+                entity_list.append(new_entity)
+                break
+
     def msi(self):
         return self.entity().msi
 

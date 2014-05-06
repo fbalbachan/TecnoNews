@@ -10,7 +10,7 @@ from src.parser.freelingTreeParser import FreelingTreeParser
 class SentenceAnalyzer:
     def __init__(self, tree_parser = FreelingTreeParser()):
         self.tree_parser = tree_parser
-        self.context = {}
+        self.context = { "sentences" : [] }
 
     def analyze(self, sentence):
         self.set_parse_tree_to(sentence)

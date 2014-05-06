@@ -7,9 +7,10 @@ import sys
 from traceback import format_exc, format_stack
 
 from src.entinews import Entinews
+from src.model.paragraph import Paragraph
+from src.model.paragraphAnalyzer import ParagraphAnalyzer
 from src.model.sentence import Sentence
 from src.model.sentenceAnalyzer import SentenceAnalyzer
-from src.model.sentenceSplitter import SentenceSplitter
 from src.webOutputUtils import WebOutputUtils
 
 
@@ -24,13 +25,11 @@ def analyze():
 		input_text = web_input.text
 		if type(input_text) == unicode: input_text = input_text.encode("utf-8") # unicode -> str (encoded)
 
-		analyzer = SentenceAnalyzer()
-		sentenceSplitter = SentenceSplitter()
+		analyzer = ParagraphAnalyzer()
+		paragraph = Paragraph.from_text(input_text)
+		analyzer.analyze(paragraph)
 
-		sentences = sentenceSplitter.sentences_in(input_text)
-		for sentence in sentences:
-			analyzer.analyze(sentence)
-		return sentences
+		return paragraph.sentences
 	except Exception:
 		print format_exc()
 		#web.template.render().exception(format_exc(), "")

@@ -5,6 +5,7 @@ from src.model.entityExtractor import EntityExtractor
 from src.model.gerundSubjectSolver import GerundSubjectSolver
 from src.model.linkedEntityExtractor import LinkedEntityExtractor
 from src.model.passiveVoiceSyntacticAnalyzer import PassiveVoiceSyntacticAnalyzer
+from src.model.personalPronounSolver import PersonalPronounSolver
 from src.model.relativePronounSolver import RelativePronounSolver
 from src.model.syntacticAnalyzer import SyntacticAnalyzer
 from src.model.verb import Verb
@@ -22,12 +23,21 @@ class ClauseAnalyzer:
         clause.entities = self.entities_of(clause)
         self.analyze_syntactically(clause)
 
+        reference_solvers = [ self.solve_relative, self.solve_gerund, self.solve_personal_pronouns ]
+        for solver_method in reference_solvers:
+            solver_method(clause)
+
+    def solve_relative(self, clause):
         if clause.is_relative():
             clause.relative_entity = self.relative_entity_of(clause)
             RelativePronounSolver(clause).solve()
 
+    def solve_gerund(self, clause):
         if clause.voice and clause.is_gerund():
             GerundSubjectSolver(clause).solve()
+
+    def solve_personal_pronouns(self, clause):
+        PersonalPronounSolver(clause, self.context).solve()
 
     def analyze_syntactically(self, clause):
         syntactic_analyzer_by_voice = { "active" : ActiveVoiceSyntacticAnalyzer,

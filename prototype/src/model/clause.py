@@ -11,6 +11,7 @@ class Clause:
         self.voice = None
 
         self.entities = []
+        self.linked_entities = []
         self.relative_entity = None
 
         self.verb = None

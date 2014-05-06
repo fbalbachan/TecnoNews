@@ -47,7 +47,6 @@ class SyntacticAnalyzer:
         clause = self.clause
         entities = clause.entities_closest_to_verb_at("left", distance_at_left) \
                     + clause.entities_closest_to_verb_at("right", distance_at_right)
-        print entities
         valid_subject_entities = self.only_valid_subject_entities_of(entities)
         return valid_subject_entities
 

@@ -80,6 +80,12 @@ $def with (sentences, printer)
                     <br><li title="$printer.entity_tooltip(entity)">$entity</li>
             </p>
             <p class="normal">
+            $if clause.linked_entities:
+                <br><b>Linked entities</b>
+                $for entity in clause.linked_entities:
+                    <br><li title="$printer.entity_tooltip(entity)">$entity</li>
+            </p>
+            <p class="normal">
             $if clause.relative_entity:
                 <b>Relative entities</b>
                 <br><li title="$printer.entity_tooltip(clause.relative_entity)">$clause.relative_entity</li>

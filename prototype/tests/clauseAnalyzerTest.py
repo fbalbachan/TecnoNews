@@ -3,6 +3,8 @@
 from ast import literal_eval
 import unittest
 
+from src.model.paragraph import Paragraph
+from src.model.paragraphAnalyzer import ParagraphAnalyzer
 from src.model.sentence import Sentence
 from src.model.sentenceAnalyzer import SentenceAnalyzer
 from tests.freelingTreeRepository import FreelingTreeRepository
@@ -11,7 +13,8 @@ from tests.freelingTreeRepository import FreelingTreeRepository
 class TestClauseAnalyzer(unittest.TestCase):
 
     def test(self):
-        analyzer = SentenceAnalyzer(FreelingTreeRepository("tests/input/trees"))
+        sentenceAnalyzer = SentenceAnalyzer(FreelingTreeRepository("tests/input/trees"))
+        analyzer = ParagraphAnalyzer(sentenceAnalyzer)
 
         frame = {}
 
@@ -24,14 +27,18 @@ class TestClauseAnalyzer(unittest.TestCase):
                 self.update_frame_and_assert(line, frame)
             else:
                 print "Analyzing:", line
-                sentence = Sentence(line)
-                analyzer.analyze(sentence)
-                frame = { "sentence" : sentence }
+                paragraph = Paragraph.from_text(line)
+                analyzer.analyze(paragraph)
+                frame = { "paragraph" : paragraph }
 
-                if len(sentence.clauses) == 1:
-                    frame["clause"] = sentence.clauses[0]
+                if len(paragraph.sentences) == 1:
+                    sentence = paragraph.sentences[0]
+                    frame = { "sentence" : sentence }
 
-                self.show_info_for(sentence)
+                    if len(sentence.clauses) == 1:
+                        frame["clause"] = sentence.clauses[0]
+
+                    self.show_info_for(sentence)
 
     def show_info_for(self, sentence):
         print sentence.parse_node.tree_representation()
@@ -41,6 +48,12 @@ class TestClauseAnalyzer(unittest.TestCase):
             for structure in clause.syntactic_structures:
                 print "\t  ", structure.name, structure
         print "--"
+
+    def sentence(self, assertion, frame):
+        paragraph = frame["paragraph"]
+        sentences = filter(lambda sentence: str(sentence) == assertion, paragraph.sentences)
+        self.assertTrue(len(sentences) == 1, "No se encontró la oración " + assertion)
+        frame["sentence"] = sentences[0]
 
     def update_frame_and_assert(self, assertion, frame):
         string = assertion
