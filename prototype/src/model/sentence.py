@@ -8,5 +8,9 @@ class Sentence(object):
         self.parse_node = None
         self.clauses = []
 
+    def main_clause(self):
+        root_clauses = filter(lambda clause: clause.is_root(), self.clauses)
+        return root_clauses[0]
+
     def __repr__(self):
         return self.text
