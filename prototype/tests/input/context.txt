@@ -126,6 +126,11 @@ La del albergue dijo eso
     verb: dijo
     od: eso
 
+Mi vieja mula murió
+    subject: Mi vieja mula
+        msi: { "number" : "singular", "gender" : "feminine", "person" : 3 }
+    verb: murió
+
 Eso fue dicho por los de la espada de escamas
     subject: los de la espada de escamas
         msi: { "number" : "plural", "gender" : "masculine", "person" : 3 }

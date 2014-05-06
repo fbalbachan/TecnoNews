@@ -1,0 +1,26 @@
++grup-verb_[
+  sn_[
+    espec-fs_[
+      +pos-fs_[
+        +(Mi mi DP1CSS -)
+      ]
+    ]
+    +grup-nom-fs_[
+      s-a-fs_[
+        +a-fs_[
+          +(vieja viejo AQ0FS0 -)
+        ]
+      ]
+      +grup-nom-fs_[
+        +n-fs_[
+          +(mula mulo NCFS000 -)
+        ]
+      ]
+    ]
+  ]
+  +verb_[
+    +(murió morir VMIS3S0 -)
+  ]
+]
+
+
