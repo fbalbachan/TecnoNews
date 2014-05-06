@@ -1,0 +1,48 @@
++verb-pass_[
+  sn_[
+    +grup-nom-ms_[
+      +w-ms_[
+        +(Melina melina NP00000 -)
+      ]
+    ]
+    Fc_[
+      +(, , Fc -)
+    ]
+    subord-rel_[
+      j-fs_[
+        +(la el DA0FS0 -)
+      ]
+      +cual-s_[
+        +(cual cual PR0CS000 -)
+      ]
+      grup-verb_[
+        +verb_[
+          vaux_[
+            +(estaba estar VAII3S0 -)
+          ]
+          +parti-flex_[
+            +parti-fs_[
+              +(implicada implicar VMP00SF -)
+            ]
+          ]
+        ]
+      ]
+    ]
+    Fc_[
+      +(, , Fc -)
+    ]
+  ]
+  vaux_[
+    +(había haber VAII3S0 -)
+  ]
+  parti-ser_[
+    +(sido ser VSP00SM -)
+  ]
+  +parti-flex_[
+    +parti-fs_[
+      +(detenida detener VMP00SF -)
+    ]
+  ]
+]
+
+
