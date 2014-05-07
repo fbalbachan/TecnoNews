@@ -67,6 +67,9 @@ class SyntacticAnalyzer:
     def only_pronouns_of(self, entities):
         return filter(lambda entity: entity.category() == "pronoun", entities)
 
+    def only_acusative_pronouns_of(self, entities):
+        return filter(lambda entity: entity.category() == "pronoun" and entity.msi["case"] == "acusative", entities)
+
     def only_valid_subject_entities_of(self, entities):
         is_valid_pronoun = lambda entity: entity.category() == "pronoun" and entity.msi["case"] \
             in [None, "personal", "demostrative"]

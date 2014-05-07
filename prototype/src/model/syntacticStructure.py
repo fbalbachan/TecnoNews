@@ -13,6 +13,9 @@ class SyntacticStructure:
                 entity_list.append(new_entity)
                 break
 
+    def category(self):
+        return self.msi()["category"]
+
     def msi(self):
         return self.entity().msi
 

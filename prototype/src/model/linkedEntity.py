@@ -7,5 +7,8 @@ class LinkedEntity(TacitEntity):
         self.entity = entity
         self.referenced_entity = referenced_entity
 
+    def contains(self, other):
+        return self.entity.contains(other)
+
     def __repr__(self):
-        return self.entity.lexical_form + " -> " + self.lexical_form
+        return self.entity.lexical_form + " (" + self.lexical_form + ")"

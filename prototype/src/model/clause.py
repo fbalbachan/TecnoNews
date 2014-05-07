@@ -53,6 +53,12 @@ class Clause:
         by_component = zip(*self.to_entities_with_node(self.verb_level_nodes(), entities = self.entities))
         return list(by_component[0]) if by_component else []
 
+    def entities_closest_to_verb(self, *sides_and_distances):
+        entities = []
+        for side, distance in sides_and_distances:
+            entities.extend(self.entities_closest_to_verb_at(side, distance))
+        return entities
+
     def entities_closest_to_verb_at(self, side, allowed_distance = float("inf")):
         by_component = zip(*self.to_entities_with_node(self.nodes_closest_to_verb_at(side, allowed_distance)))
         entities = list(by_component[0]) if by_component else []
