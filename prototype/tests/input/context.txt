@@ -271,3 +271,19 @@ Se los tragó a los hombres
     od:
         entity: los -> los hombres
         entity: los hombres
+
+# Resolución de pronombres acusativos inter-oracional
+Leandro era bueno. Gustavo se lo comió.
+    sentence: Leandro era bueno
+        subject: Leandro
+    sentence: Gustavo se lo comió
+        subject: Gustavo
+        od: lo -> Leandro
+
+# No se resuelve "los" porque no coincide en número con "Leandro"
+Leandro era bueno. Gustavo se los comió.
+    sentence: Leandro era bueno
+        subject: Leandro
+    sentence: Gustavo se los comió
+        subject: Gustavo
+        od: los
