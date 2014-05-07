@@ -344,11 +344,31 @@ El hombre fue asesinado por la mujer en su casa. La hallaron shockeada.
         subject: ellos/ellas
         od: La -> la mujer
 
-# Caso anómalo. Nos damos cuenta que "Lo" refiere al hombre, luego el ST no puede referir también a él, sino a la mujer.
-El hombre fue asesinado por la mujer en su casa. Lo mató con saña.
-    sentence: El hombre fue asesinado por la mujer en su casa
-        subject: la mujer
-        od: El hombre
-    sentence: Lo mató con saña
-        subject: él/ella -> la mujer
-        od: Lo -> El hombre
+# Gerundio con enclítico
+Los charrúas comieron a Solís, condenándolo eternamente
+    clause: Los charrúas comieron a Solís , eternamente
+        subject: Los charrúas
+        od: Solís
+    clause: condenando lo
+        subject: Los charrúas
+        od: lo -> Solís
+
+Leandro murió. Fernando dijo que lo mató.
+    sentence: Leandro murió
+        subject: Leandro
+    sentence: Fernando dijo que lo mató
+        clause: Fernando dijo
+            subject: Fernando
+        clause: que lo mató
+            subject: él/ella -> Fernando
+            od: lo -> Leandro
+
+Leandro murió. Fernando quien lo mató era alto.
+    sentence: Leandro murió
+        subject: Leandro
+    sentence: Fernando quien lo mató era alto
+        clause: Fernando era alto
+            subject: Fernando
+        clause: quien lo mató
+            subject: Fernando
+            od: lo -> Leandro
