@@ -240,14 +240,14 @@ Leandro es bueno. Él comió la manzana.
     sentence: Leandro es bueno
         subject: Leandro
     sentence: Él comió la manzana
-        subject: Leandro
+        subject: Él -> Leandro
 
 # Tácito
 Leandro es bueno. Comió las manzanas.
     sentence: Leandro es bueno
         subject: Leandro
     sentence: Comió las manzanas
-        subject: Leandro
+        subject: él -> Leandro
 
 # Alteración del orden de búsqueda con pasivas
 Leandro es bueno. Fue comido por Pedro. Finalmente murió.
@@ -255,6 +255,19 @@ Leandro es bueno. Fue comido por Pedro. Finalmente murió.
         subject: Leandro
     sentence: Fue comido por Pedro
         subject: Pedro
-        od: Leandro
+        od: él -> Leandro
     sentence: Finalmente murió
-        subject: Leandro
+        subject: él -> Leandro
+
+# Duplicación de OD
+Las comió a ellas
+    subject: él
+    od:
+        entity: Las -> ellas
+        entity: ellas
+
+Se los tragó a los hombres
+    subject: él
+    od:
+        entity: los -> los hombres
+        entity: los hombres
