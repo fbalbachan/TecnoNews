@@ -31,7 +31,7 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         nominal_at_left  = lambda: self.search_nominal_od_at("left", 2)
         pronominal_at_left  = lambda: self.search_pronoun_at("left", 2)
         pronominal_at_right  = lambda: self.search_pronoun_at("right", 2)
-        od = self.extract_searching("od", nominal_at_right, nominal_at_left, pronominal_at_right, pronominal_at_left)
+        od = self.extract_searching("od", nominal_at_right, nominal_at_left, pronominal_at_left, pronominal_at_right)
 
         acusative_pronoun = self.search_duplicated_od_for(od)
         if acusative_pronoun: od.entities.append(LinkedEntity(acusative_pronoun, od.entity()))
