@@ -46,8 +46,14 @@ class ClauseExtractor:
     def without_invalid_clauses(self, clauses):
         is_cc = lambda leaf: leaf.msi["category"] == "conjunction" and leaf.msi["type"] == "coordinated"
         is_punctuation  = lambda leaf: leaf.msi["category"] == "punctuation"
-        return filter(lambda clause: not all([ is_cc(leaf) or is_punctuation(leaf)
+        invalids = filter(lambda clause: all([ is_cc(leaf) or is_punctuation(leaf)
                                               for leaf in clause.proper_tree().leaves() ]), clauses)
+        only_valid_clauses = lambda clause: clause not in invalids
+        clauses = filter(only_valid_clauses, clauses)
+        for clause in clauses:
+            if clause.father in invalids: clause.father = None
+            clause.children = filter(only_valid_clauses, clause.children)
+        return clauses
 
     def compute_proper_tree_for(self, clauses):
         for clause in clauses:
