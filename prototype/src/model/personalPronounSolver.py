@@ -9,7 +9,7 @@ class PersonalPronounSolver:
     def solve(self):
         clause = self.clause
         is_personal_pronoun = lambda entity: entity.category() == "pronoun" and entity.msi["type"] == "personal" \
-            and entity.msi["person"] == 3 and entity.msi["case"] == None
+            and entity.msi["person"] == 3 and entity.msi["case"] in [None, "acusative"]
 
         for structure in clause.syntactic_structures:
             personal_pronouns = filter(is_personal_pronoun, structure.all_entities())
