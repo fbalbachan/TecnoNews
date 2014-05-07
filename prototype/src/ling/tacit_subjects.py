@@ -11,24 +11,24 @@ tacit_subjects = {
     (2, 'singular', 'neutral') : 'tú',
 
     (3, 'invariable', 'neutral') : 'lo',
-    (3, 'singular', 'neutral')   : 'él',
+    (3, 'singular', 'neutral')   : 'él/ella',
     (3, 'singular', 'masculine') : 'él',
     (3, 'singular', 'feminine')  : 'ella',
 
-    (1, 'plural', 'neutral')   : 'nosotros',
+    (1, 'plural', 'neutral')   : 'nosotros/nosotras',
     (1, 'plural', 'masculine') : 'nosotros',
     (1, 'plural', 'feminine')  : 'nosotras',
 
     (2, 'plural', 'neutral')   : 'ustedes',
 
-    (3, 'plural', 'neutral')   : 'ellos',
+    (3, 'plural', 'neutral')   : 'ellos/ellas',
     (3, 'plural', 'masculine') : 'ellos',
     (3, 'plural', 'feminine')  : 'ellas',
 }
 
 def somebody():
     return TacitEntity("alguien", { "category" : "pronoun", "number" : "singular", "gender" : "neutral",
-                                   "person" : 3, "type" : "personal", "case" : None })
+                                   "person" : 3, "type" : "indefinite", "case" : None })
 
 def tacit_subject_for(verb):
     gender = verb.msi['gender']
