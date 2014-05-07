@@ -80,15 +80,24 @@ class TestClauseAnalyzer(unittest.TestCase):
             self.assertEqual("", assertion, "Existe más de una entidad para " + structure_name)
 
     def entity(self, assertion, frame):
-        entities = filter(lambda entity: entity.lexical_form == assertion, frame["structure"].all_entities())
+        entities = frame["structure"].all_entities()
+        asserted_lexical_forms = assertion.split(" -> ")
+        if len(asserted_lexical_forms) > 1:
+            entities = self.search_linked_entity(asserted_lexical_forms, entities)
+        else:
+            entities = self.search_non_linked_entity(assertion, entities)
+
         self.assertTrue(len(entities) == 1, "No se encontró la entidad " + assertion + " en " + frame["structure"].name)
 
         entity = entities[0]
         frame["entity"] = entity
 
-        lexical_form = entity.lexical_form
-        message = "Error '" + assertion + "' != '" + lexical_form + "'"
-        self.assertEqual(assertion, lexical_form, message)
+    def search_non_linked_entity(self, lexical_form, entities):
+        return filter(lambda entity: not entity.is_linked() and entity.lexical_form == lexical_form, entities)
+
+    def search_linked_entity(self, lexical_forms, entities):
+        return filter(lambda entity: entity.is_linked() and entity.lexical_form == lexical_forms[1]
+                          and entity.source.lexical_form == lexical_forms[0], entities)
 
     def lemma(self, assertion, frame):
         entity = frame["entity"]

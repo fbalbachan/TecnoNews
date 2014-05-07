@@ -18,5 +18,8 @@ class TacitEntity:
         msi = self.msi
         return msi["gender"] == "neutral" or entity.msi["gender"] == "neutral" or msi["gender"] == entity.msi["gender"]
 
+    def is_linked(self):
+        return False
+
     def __repr__(self):
         return "(tacit) " + self.lexical_form
