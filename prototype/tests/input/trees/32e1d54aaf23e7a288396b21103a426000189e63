@@ -1,0 +1,43 @@
++grup-verb_[
+  sn_[
+    espec-mp_[
+      +j-mp_[
+        +(Los el DA0MP0 -)
+      ]
+    ]
+    +grup-nom-mp_[
+      +n-mp_[
+        +(charrúas charrúa NCCP000 -)
+      ]
+    ]
+  ]
+  +verb_[
+    +(comieron comer VMIS3P0 -)
+  ]
+  grup-sp_[
+    +prep_[
+      +(a a SPS00 -)
+    ]
+    sn_[
+      +grup-nom-ms_[
+        +w-ms_[
+          +(Solís solís NP00000 -)
+        ]
+      ]
+    ]
+  ]
+  Fc_[
+    +(, , Fc -)
+  ]
+  subord-ger_[
+    +(condenando condenar VMG0000 -)
+    patons_[
+      +(lo lo PP3MSA00 -)
+    ]
+  ]
+  sadv_[
+    +(eternamente eterno RG -)
+  ]
+]
+
+

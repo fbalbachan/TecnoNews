@@ -1,13 +1,9 @@
 +grup-verb_[
   patons_[
-    +paton-s_[
-      +(Me me PP1CS000 -)
-    ]
+    +(Me me PP1CS000 -)
   ]
   patons_[
-    +paton-fs_[
-      +(la lo PP3FSA00 -)
-    ]
+    +(la lo PP3FSA00 -)
   ]
   +verb_[
     +(jugué jugar VMIS1S0 -)
