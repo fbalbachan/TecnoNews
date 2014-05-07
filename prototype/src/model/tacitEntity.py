@@ -21,5 +21,8 @@ class TacitEntity:
     def is_linked(self):
         return False
 
+    def is_tacit(self):
+        return True
+
     def __repr__(self):
         return "(tacit) " + self.lexical_form

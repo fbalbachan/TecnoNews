@@ -29,5 +29,8 @@ class Entity (TacitEntity):
         path_to_root = self.node.path_to_root()
         return filter(lambda node: node.label in [ "coor-sp", "grup-sp", "sp-de" ], path_to_root)
 
+    def is_tacit(self):
+        return False
+
     def __repr__(self):
         return " ".join([ str(leaf) for leaf in self.node.leaves() if leaf.msi["category"] != "punctuation" ])
