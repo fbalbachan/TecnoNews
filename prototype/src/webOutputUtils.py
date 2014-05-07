@@ -8,7 +8,7 @@ class WebOutputUtils:
             if name == "verb":
                 return structure.entity().lemma()
             else:
-                return ", ".join([ entity.lexical_form for entity in structure.all_entities() ])
+                return ", ".join([ str(entity) for entity in structure.all_entities() ])
         else:
             return ""
 
