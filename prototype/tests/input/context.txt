@@ -22,7 +22,7 @@ Me la jugué por vos
 
 # Verbo modal
 Podíamos comer una pizza
-    subject: nosotros
+    subject: nosotros/nosotras
     od: una pizza
     verb: Podíamos comer
         lemma: comer
@@ -35,7 +35,7 @@ Fernando y Juan hicieron eso
 
 # Entidades en infinitivo
 Odiamos comer en un bar
-    subject: nosotros
+    subject: nosotros/nosotras
     verb: Odiamos
         lemma: odiar
     od: comer en un bar
@@ -52,7 +52,7 @@ Las manzanas comió Leandro
     od: Las manzanas
 
 Lo hizo para comer en su casa
-    subject: él
+    subject: él/ella
     verb: hizo
         lemma: hacer
 
@@ -116,7 +116,7 @@ Buscando ver a su padre, Leandro peleó sin pausa
 
 # Construcciones de infinitivo anidadas (no se considera "para comer en McDonals", sólo "McDonals")
 Lo dijo para comer en McDonals
-    subject: él
+    subject: él/ella
     adjuncts: McDonals
 
 # Prioridad de asignación de MSI a entidades con subordinación interna
@@ -192,7 +192,7 @@ El hombre con quien lidió era alto
     clause: El hombre era alto
         subject: El hombre
     clause: con quien lidió
-        subject: él
+        subject: él/ella
         regimen: El hombre
 
 Melina, la cual estaba implicada, había sido detenida
@@ -227,13 +227,13 @@ El hombre cuyo hijo era bueno salió
     clause: El hombre salió
         subject: El hombre
     clause: cuyo hijo era bueno
-        subject: él
+        subject: él/ella
 
 El hombre buscó, lo cual llevó minutos
     clause: El hombre buscó ,
         subject: El hombre
     clause: lo cual llevó minutos
-        subject: él
+        subject: él/ella
 
 # Resolución de PP y ST inter-oracional
 Leandro es bueno. Él comió la manzana.
@@ -247,7 +247,7 @@ Leandro es bueno. Comió las manzanas.
     sentence: Leandro es bueno
         subject: Leandro
     sentence: Comió las manzanas
-        subject: él -> Leandro
+        subject: él/ella -> Leandro
 
 # Alteración del orden de búsqueda con pasivas
 Leandro es bueno. Fue comido por Pedro. Finalmente murió.
@@ -257,17 +257,17 @@ Leandro es bueno. Fue comido por Pedro. Finalmente murió.
         subject: Pedro
         od: él -> Leandro
     sentence: Finalmente murió
-        subject: él -> Leandro
+        subject: él/ella -> Leandro
 
 # Duplicación de OD
 Las comió a ellas
-    subject: él
+    subject: él/ella
     od:
         entity: Las -> ellas
         entity: ellas
 
 Se los tragó a los hombres
-    subject: él
+    subject: él/ella
     od:
         entity: los -> los hombres
         entity: los hombres
@@ -287,3 +287,68 @@ Leandro era bueno. Gustavo se los comió.
     sentence: Gustavo se los comió
         subject: Gustavo
         od: los
+
+# Correcta resolución de PA con OD
+Leandro criticó a Gustavo y lo mató
+    clause: Leandro criticó a Gustavo
+        subject: Leandro
+        od: Gustavo
+    clause: lo mató
+        subject: él/ella -> Leandro
+        od: lo -> Gustavo
+
+# Llenar con entidades maximales
+#La presidenta saludó al intendente de Buenos Aires. Yo me crucé con él y le pregunté por ella.
+
+La presidenta saludó a José. Yo me crucé con él y le pregunté por ella.
+    sentence: La presidenta saludó a José
+        subject: La presidenta
+        od: José
+    sentence: Yo me crucé con él y le pregunté por ella
+        clause: Yo me crucé con él
+            adjuncts: él -> José
+                msi: { "gender" : "masculine" }
+        clause: le pregunté por ella
+            adjuncts: ella -> La presidenta
+
+# Resolución de PPN (ST) en cláusula subordinada (no relativa)
+Leandro dijo que mataría a alguien
+    clause: Leandro dijo
+    clause: que mataría a alguien
+        subject: él/ella -> Leandro
+
+# Resolución de PPN (ST) en cláusula subordinada relativa
+Fernando se quejaba de su destino. Las mujeres con quienes lidió eran altas.
+    sentence: Fernando se quejaba de su destino
+        subject: Fernando
+    sentence: Las mujeres con quienes lidió eran altas
+        clause: Las mujeres eran altas
+            subject: Las mujeres
+        clause: con quienes lidió
+            subject: él/ella -> Fernando
+
+Fernando se quejaba de su destino. El hombre con quien lidió era alto.
+    sentence: Fernando se quejaba de su destino
+        subject: Fernando
+    sentence: El hombre con quien lidió era alto
+        clause: El hombre era alto
+            subject: El hombre
+        clause: con quien lidió
+            subject: él/ella -> Fernando
+
+El hombre fue asesinado por la mujer en su casa. La hallaron shockeada.
+    sentence: El hombre fue asesinado por la mujer en su casa
+        subject: la mujer
+        od: El hombre
+    sentence: La hallaron shockeada
+        subject: ellos/ellas
+        od: La -> la mujer
+
+# Caso anómalo. Nos damos cuenta que "Lo" refiere al hombre, luego el ST no puede referir también a él, sino a la mujer.
+El hombre fue asesinado por la mujer en su casa. Lo mató con saña.
+    sentence: El hombre fue asesinado por la mujer en su casa
+        subject: la mujer
+        od: El hombre
+    sentence: Lo mató con saña
+        subject: él/ella -> la mujer
+        od: Lo -> El hombre

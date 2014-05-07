@@ -1,0 +1,37 @@
++coor-vb_[
+  grup-verb_[
+    sn_[
+      +grup-nom-ms_[
+        +w-ms_[
+          +(Leandro leandro NP00000 -)
+        ]
+      ]
+    ]
+    +verb_[
+      +(criticó criticar VMIS3S0 -)
+    ]
+    grup-sp_[
+      +prep_[
+        +(a a SPS00 -)
+      ]
+      sn_[
+        +grup-nom-ms_[
+          +w-ms_[
+            +(Gustavo gustavo NP00000 -)
+          ]
+        ]
+      ]
+    ]
+  ]
+  +(y y CC -)
+  grup-verb_[
+    patons_[
+      +(lo lo PP3MSA00 -)
+    ]
+    +verb_[
+      +(mató matar VMIS3S0 -)
+    ]
+  ]
+]
+
+

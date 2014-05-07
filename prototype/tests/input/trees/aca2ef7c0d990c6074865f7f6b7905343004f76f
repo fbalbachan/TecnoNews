@@ -1,0 +1,48 @@
++coor-vb_[
+  grup-verb_[
+    patons_[
+      +(Yo yo PP1CSN00 -)
+    ]
+    patons_[
+      +(me me PP1CS000 -)
+    ]
+    +verb_[
+      +(crucé cruzar VMIS1S0 -)
+    ]
+    grup-sp_[
+      +prep_[
+        +(con con SPS00 -)
+      ]
+      sn_[
+        +pron-ms_[
+          +psubj-ms_[
+            +(él él PP3MS000 -)
+          ]
+        ]
+      ]
+    ]
+  ]
+  +(y y CC -)
+  grup-verb_[
+    patons_[
+      +(le le PP3CSD00 -)
+    ]
+    +verb_[
+      +(pregunté preguntar VMIS1S0 -)
+    ]
+    grup-sp_[
+      +prep_[
+        +(por por SPS00 -)
+      ]
+      sn_[
+        +pron-fs_[
+          +psubj-fs_[
+            +(ella él PP3FS000 -)
+          ]
+        ]
+      ]
+    ]
+  ]
+]
+
+

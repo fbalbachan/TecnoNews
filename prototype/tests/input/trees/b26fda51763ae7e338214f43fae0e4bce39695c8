@@ -1,0 +1,22 @@
++grup-verb_[
+  patons_[
+    +(Lo lo PP3MSA00 -)
+  ]
+  +verb_[
+    +(mató matar VMIS3S0 -)
+  ]
+  grup-sp_[
+    +prep_[
+      +(con con SPS00 -)
+    ]
+    sn_[
+      +grup-nom-fs_[
+        +n-fs_[
+          +(saña saña NCFS000 -)
+        ]
+      ]
+    ]
+  ]
+]
+
+

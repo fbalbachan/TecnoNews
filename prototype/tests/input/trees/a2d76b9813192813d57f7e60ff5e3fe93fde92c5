@@ -1,0 +1,58 @@
++verb-pass_[
+  sn_[
+    espec-ms_[
+      +j-ms_[
+        +(El el DA0MS0 -)
+      ]
+    ]
+    +grup-nom-ms_[
+      +n-ms_[
+        +(hombre hombre NCMS000 -)
+      ]
+    ]
+  ]
+  vser_[
+    +(fue ser VSIS3S0 -)
+  ]
+  +parti-flex_[
+    +parti-ms_[
+      +(asesinado asesinar VMP00SM -)
+    ]
+  ]
+  grup-sp_[
+    +prep_[
+      +(por por SPS00 -)
+    ]
+    sn_[
+      espec-fs_[
+        +j-fs_[
+          +(la el DA0FS0 -)
+        ]
+      ]
+      +grup-nom-fs_[
+        +n-fs_[
+          +(mujer mujer NCFS000 -)
+        ]
+      ]
+    ]
+  ]
+  grup-sp_[
+    +prep_[
+      +(en en SPS00 -)
+    ]
+    sn_[
+      espec-fs_[
+        +pos-fs_[
+          +(su su DP3CS0 -)
+        ]
+      ]
+      +grup-nom-fs_[
+        +n-fs_[
+          +(casa casa NCFS000 -)
+        ]
+      ]
+    ]
+  ]
+]
+
+

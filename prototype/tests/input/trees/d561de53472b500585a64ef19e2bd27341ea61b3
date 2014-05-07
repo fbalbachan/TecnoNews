@@ -1,0 +1,32 @@
++grup-verb_[
+  sn_[
+    +grup-nom-ms_[
+      +w-ms_[
+        +(Fernando fernando NP00000 -)
+      ]
+    ]
+  ]
+  morfema-verbal_[
+    +(se se P00CN000 -)
+  ]
+  +verb_[
+    +(quejaba quejar VMII3S0 -)
+  ]
+  sp-de_[
+    +(de de SPS00 -)
+    sn_[
+      espec-ms_[
+        +pos-ms_[
+          +(su su DP3CS0 -)
+        ]
+      ]
+      +grup-nom-ms_[
+        +n-ms_[
+          +(destino destino NCMS000 -)
+        ]
+      ]
+    ]
+  ]
+]
+
+

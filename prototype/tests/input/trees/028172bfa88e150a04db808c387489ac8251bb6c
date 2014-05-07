@@ -1,0 +1,34 @@
++grup-verb_[
+  sn_[
+    +grup-nom-ms_[
+      +w-ms_[
+        +(Leandro leandro NP00000 -)
+      ]
+    ]
+  ]
+  +verb_[
+    +(dijo decir VMIS3S0 -)
+  ]
+  subord_[
+    +(que que CS -)
+    grup-verb_[
+      +verb_[
+        +(mataría matar VMIC3S0 -)
+      ]
+      grup-sp_[
+        +prep_[
+          +(a a SPS00 -)
+        ]
+        sn_[
+          +pron-ms_[
+            +pindef-ms_[
+              +(alguien alguien PI0CS000 -)
+            ]
+          ]
+        ]
+      ]
+    ]
+  ]
+]
+
+
