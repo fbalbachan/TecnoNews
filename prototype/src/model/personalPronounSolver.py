@@ -8,13 +8,18 @@ class PersonalPronounSolver:
 
     def solve(self):
         clause = self.clause
-        is_personal_pronoun = lambda entity: entity.category() == "pronoun" and entity.msi["type"] == "personal" \
-            and entity.msi["person"] == 3 and entity.msi["case"] == None
 
         for structure in clause.syntactic_structures:
-            personal_pronouns = filter(is_personal_pronoun, structure.all_entities())
-            for pronoun in personal_pronouns:
+            pronouns = filter(self.is_valid_pronoun, structure.all_entities())
+            for pronoun in pronouns:
                 self.link(clause, structure, pronoun)
+
+    def is_valid_pronoun(self, entity):
+        is_personal_pronoun = lambda entity: entity.category() == "pronoun" and entity.msi["type"] == "personal" \
+            and entity.msi["person"] == 3 and entity.msi["case"] == None
+        is_valid_demostrative_pronoun = lambda entity: entity.category() == "pronoun" \
+            and entity.msi["type"] == "demostrative" and entity.lexical_form.lower() not in [ "eso", "esto", "aquello" ]
+        return is_personal_pronoun(entity) or is_valid_demostrative_pronoun(entity)
 
     def link(self, clause, structure, entity):
         referenced_entity = self.search_referenced_entity_for(entity)
