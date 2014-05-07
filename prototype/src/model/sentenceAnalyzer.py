@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from logging import getLogger
-
 from src.model.clauseAnalyzer import ClauseAnalyzer
 from src.model.clauseExtractor import ClauseExtractor
 from src.parser.freelingTreeParser import FreelingTreeParser
@@ -27,7 +25,7 @@ class SentenceAnalyzer:
     def set_parse_tree_to(self, sentence):
         node = self.tree_parser.from_text(sentence.text)
         sentence.parse_node = node
-        print node.tree_representation()
-        self.logger.debug(node.tree_representation())
 
-    logger = getLogger("SentenceAnalyzer")
+        print node.tree_representation()
+        for leaf in node.leaves():  print leaf.lexical_form, leaf.msi
+        print "--"
