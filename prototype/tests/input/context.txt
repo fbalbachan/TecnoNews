@@ -372,3 +372,12 @@ Leandro murió. Fernando quien lo mató era alto.
         clause: quien lo mató
             subject: Fernando
             od: lo -> Leandro
+
+# Gender detection
+Leandro saludó a Mariel. Ella lo abrazó.
+    sentence: Leandro saludó a Mariel
+        subject: Leandro
+        od: Mariel
+    sentence: Ella lo abrazó
+        subject: Ella -> Mariel
+        od: lo -> Leandro
