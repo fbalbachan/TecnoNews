@@ -32,7 +32,9 @@
   subord-ger_[
     +(condenando condenar VMG0000 -)
     patons_[
-      +(lo lo PP3MSA00 -)
+      +paton-ms_[
+        +(lo lo PP3MSA00 -)
+      ]
     ]
   ]
   sadv_[

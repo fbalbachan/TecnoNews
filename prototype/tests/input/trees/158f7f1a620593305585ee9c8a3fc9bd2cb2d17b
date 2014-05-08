@@ -1,0 +1,35 @@
++grup-verb_[
+  coor-n_[
+    sn_[
+      +pron-ms_[
+        +psubj-ms_[
+          +(vos vos PP2CS00P -)
+        ]
+      ]
+    ]
+    +(y y CC -)
+    sn_[
+      +pron_[
+        +psubj-s_[
+          +(yo yo PP1CSN00 -)
+        ]
+      ]
+    ]
+  ]
+  +verb_[
+    +(somos ser VSIP1P0 -)
+  ]
+  espec-ms_[
+    +dem-ms_[
+      +(tal tal DD0CS0 -)
+    ]
+  ]
+  relatiu_[
+    +(para para SPS00 -)
+    cual-s_[
+      +(cual cual PR0CS000 -)
+    ]
+  ]
+]
+
+

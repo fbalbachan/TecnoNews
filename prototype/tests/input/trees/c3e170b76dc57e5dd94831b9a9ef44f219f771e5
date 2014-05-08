@@ -1,0 +1,58 @@
++grup-verb_[
+  sn_[
+    +grup-nom-ms_[
+      +n-ms_[
+        +(cuchillo cuchillo NCMS000 -)
+      ]
+    ]
+  ]
+  grup-sp_[
+    +prep_[
+      +(en en SPS00 -)
+    ]
+    sn_[
+      +grup-nom-fs_[
+        +n-fs_[
+          +(mano mano NCFS000 -)
+        ]
+      ]
+    ]
+    Fc_[
+      +(, , Fc -)
+    ]
+  ]
+  sn_[
+    espec-ms_[
+      +j-ms_[
+        +(el el DA0MS0 -)
+      ]
+    ]
+    +grup-nom-ms_[
+      +n-ms_[
+        +(hombre hombre NCMS000 -)
+      ]
+    ]
+  ]
+  +verb_[
+    +(ataca atacar VMIP3S0 -)
+  ]
+  grup-sp_[
+    +prep_[
+      +(a a SPS00 -)
+    ]
+    sn_[
+      espec-fs_[
+        +j-fs_[
+          +(la el DA0FS0 -)
+        ]
+      ]
+      +grup-nom-fs_[
+        +n-fs_[
+          +(bestia bestia NCCS000 -)
+        ]
+      ]
+    ]
+  ]
+]
+
+

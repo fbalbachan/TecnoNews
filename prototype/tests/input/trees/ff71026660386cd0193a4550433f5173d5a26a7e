@@ -1,0 +1,60 @@
++grup-verb_[
+  sn_[
+    espec-mp_[
+      +grup-complex-spec-mp_[
+        +indef-mp_[
+          +(todos todo DI0MP0 -)
+        ]
+        j-mp_[
+          +(los el DA0MP0 -)
+        ]
+      ]
+    ]
+    +grup-nom-mp_[
+      +n-mp_[
+        +(meses mes NCMP000 -)
+      ]
+    ]
+  ]
+  +verb_[
+    +(llegaba llegar VMII3S0 -)
+  ]
+  sn_[
+    espec-ms_[
+      +j-ms_[
+        +(el el DA0MS0 -)
+      ]
+    ]
+    +grup-nom-ms_[
+      +n-ms_[
+        +(cartero cartero NCMS000 -)
+      ]
+    ]
+  ]
+  grup-sp_[
+    +prep_[
+      +(con con SPS00 -)
+    ]
+    sn_[
+      espec-fs_[
+        +indef-fs_[
+          +(una uno DI0FS0 -)
+        ]
+      ]
+      +grup-nom-fs_[
+        s-a-fs_[
+          +a-fs_[
+            +(excelente excelente AQ0CS0 -)
+          ]
+        ]
+        +grup-nom-fs_[
+          +n-fs_[
+            +(noticia noticia NCFS000 -)
+          ]
+        ]
+      ]
+    ]
+  ]
+]
+
+

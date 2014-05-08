@@ -1,0 +1,39 @@
++grup-verb_[
+  sn_[
+    espec-ms_[
+      +j-ms_[
+        +(el el DA0MS0 -)
+      ]
+    ]
+    +grup-nom-ms_[
+      +n-ms_[
+        +(golpeador golpeador NCMS000 -)
+      ]
+    ]
+  ]
+  +verb_[
+    +(golpeó golpear VMIS3S0 -)
+  ]
+  sadv_[
+    +(mucho mucho RG -)
+  ]
+  grup-sp_[
+    +prep_[
+      +(a a SPS00 -)
+    ]
+    sn_[
+      espec-fs_[
+        +pos-fs_[
+          +(su su DP3CS0 -)
+        ]
+      ]
+      +grup-nom-fs_[
+        +n-fs_[
+          +(esposa esposo NCFS000 -)
+        ]
+      ]
+    ]
+  ]
+]
+
+

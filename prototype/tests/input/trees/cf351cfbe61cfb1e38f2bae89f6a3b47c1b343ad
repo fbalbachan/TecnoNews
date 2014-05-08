@@ -10,7 +10,9 @@
     +(se se P00CN000 -)
   ]
   patons_[
-    +(lo lo PP3MSA00 -)
+    +paton-ms_[
+      +(lo lo PP3MSA00 -)
+    ]
   ]
   +verb_[
     +(comió comer VMIS3S0 -)

@@ -1,0 +1,40 @@
++grup-verb_[
+  grup-verb-inf_[
+    +infinitiu_[
+      +inf_[
+        +forma-inf_[
+          +(caminar caminar VMN0000 -)
+        ]
+      ]
+    ]
+    grup-sp_[
+      +prep_[
+        +(por por SPS00 -)
+      ]
+      sn_[
+        espec-ms_[
+          +j-ms_[
+            +(el el DA0MS0 -)
+          ]
+        ]
+        +grup-nom-ms_[
+          +n-ms_[
+            +(bosque bosque NCMS000 -)
+          ]
+        ]
+      ]
+    ]
+  ]
+  +verb_[
+    +(es ser VSIP3S0 -)
+  ]
+  s-adj_[
+    +s-a-ms_[
+      +a-ms_[
+        +(peligroso peligroso AQ0MS0 -)
+      ]
+    ]
+  ]
+]
+
+

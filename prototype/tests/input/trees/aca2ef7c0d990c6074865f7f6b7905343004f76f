@@ -1,10 +1,16 @@
 +coor-vb_[
   grup-verb_[
-    patons_[
-      +(Yo yo PP1CSN00 -)
+    sn_[
+      +pron_[
+        +psubj-s_[
+          +(Yo yo PP1CSN00 -)
+        ]
+      ]
     ]
     patons_[
-      +(me me PP1CS000 -)
+      +paton-s_[
+        +(me me PP1CS000 -)
+      ]
     ]
     +verb_[
       +(crucé cruzar VMIS1S0 -)
@@ -25,7 +31,9 @@
   +(y y CC -)
   grup-verb_[
     patons_[
-      +(le le PP3CSD00 -)
+      +paton-s_[
+        +(le le PP3CSD00 -)
+      ]
     ]
     +verb_[
       +(pregunté preguntar VMIS1S0 -)

@@ -3,7 +3,9 @@
     +(Se se P00CN000 -)
   ]
   patons_[
-    +(los lo PP3MPA00 -)
+    +paton-mp_[
+      +(los lo PP3MPA00 -)
+    ]
   ]
   +verb_[
     +(tragó tragar VMIS3S0 -)

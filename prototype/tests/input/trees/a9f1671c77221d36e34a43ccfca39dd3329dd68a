@@ -13,7 +13,9 @@
     +(que que CS -)
     grup-verb_[
       patons_[
-        +(lo lo PP3MSA00 -)
+        +paton-ms_[
+          +(lo lo PP3MSA00 -)
+        ]
       ]
       +verb_[
         +(mató matar VMIS3S0 -)

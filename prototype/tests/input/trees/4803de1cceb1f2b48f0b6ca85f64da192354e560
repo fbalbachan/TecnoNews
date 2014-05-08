@@ -1,9 +1,15 @@
-grup-verb_[
-  patons_[
-    +(Él él PP3MS000 -)
++grup-verb_[
+  sn_[
+    +pron-ms_[
+      +psubj-ms_[
+        +(Él él PP3MS000 -)
+      ]
+    ]
   ]
   patons_[
-    +(nos nos PP1CP000 -)
+    +paton-p_[
+      +(nos nos PP1CP000 -)
+    ]
   ]
   +verb_[
     +(golpeó golpear VMIS3S0 -)
