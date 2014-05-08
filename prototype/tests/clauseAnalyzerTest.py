@@ -3,10 +3,10 @@
 from ast import literal_eval
 import unittest
 
-from src.model.paragraph import Paragraph
-from src.model.paragraphAnalyzer import ParagraphAnalyzer
-from src.model.sentence import Sentence
-from src.model.sentenceAnalyzer import SentenceAnalyzer
+from src.model.paragraph.paragraph import Paragraph
+from src.model.paragraph.paragraphAnalyzer import ParagraphAnalyzer
+from src.model.sentence.sentence import Sentence
+from src.model.sentence.sentenceAnalyzer import SentenceAnalyzer
 from tests.freelingTreeRepository import FreelingTreeRepository
 
 

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from src.model.entity import Entity
-from src.model.tacitEntity import TacitEntity
+from src.model.entity.entity import Entity
+from src.model.entity.tacitEntity import TacitEntity
 
 
 class LinkedEntity(Entity):

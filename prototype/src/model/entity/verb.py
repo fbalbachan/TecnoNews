@@ -6,7 +6,7 @@ from itertools import groupby
 from src.ling.head_labels import *
 from src.ling.tacit_subjects import tacit_subjects
 from src.ling.verb_info import get_script_class, get_transitivity
-from src.model.entity import Entity
+from src.model.entity.entity import Entity
 
 
 # Que el verbo sea una entidad es una licencia como también que exista una función sintáctica superior "verbo".

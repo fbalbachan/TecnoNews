@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import re
-from src.model.sentence import *
-from src.model.textCleaner import *
+from src.model.sentence.sentence import *
+from src.utils.textCleaner import *
 
 class SentenceSplitter:
 	def sentences_in(self, text):

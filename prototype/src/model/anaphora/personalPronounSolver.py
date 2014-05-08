@@ -1,5 +1,5 @@
 #-*- coding: utf-8 -*-
-from src.model.linkedEntity import LinkedEntity
+from src.model.entity.linkedEntity import LinkedEntity
 
 class PersonalPronounSolver:
     def __init__(self, clause, context):

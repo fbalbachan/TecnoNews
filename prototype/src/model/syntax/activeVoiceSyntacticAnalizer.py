@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
 from src.ling.tacit_subjects import tacit_subject_for
-from src.model.linkedEntity import LinkedEntity
-from src.model.syntacticAnalyzer import SyntacticAnalyzer
-from src.model.syntacticStructure import SyntacticStructure
-from src.model.tacitEntity import TacitEntity
+from src.model.entity.linkedEntity import LinkedEntity
+from src.model.syntax.syntacticAnalyzer import SyntacticAnalyzer
+from src.model.syntax.syntacticStructure import SyntacticStructure
+from src.model.entity.tacitEntity import TacitEntity
 
 
 class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):

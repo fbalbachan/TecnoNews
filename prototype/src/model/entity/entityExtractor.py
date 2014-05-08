@@ -1,6 +1,6 @@
 #-*- coding: utf-8 -*-
-from src.model.entity import Entity
-from src.model.entityMSISeer import EntityMSISeer
+from src.model.entity.entity import Entity
+from src.model.entity.entityMSISeer import EntityMSISeer
 
 class EntityExtractor:
 

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from src.model.sentenceAnalyzer import SentenceAnalyzer
+from src.model.sentence.sentenceAnalyzer import SentenceAnalyzer
 
 
 class ParagraphAnalyzer:

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from src.model.clauseAnalyzer import ClauseAnalyzer
-from src.model.clauseExtractor import ClauseExtractor
+from src.model.clause.clauseAnalyzer import ClauseAnalyzer
+from src.model.clause.clauseExtractor import ClauseExtractor
 from src.parser.freelingTreeParser import FreelingTreeParser
 
 
