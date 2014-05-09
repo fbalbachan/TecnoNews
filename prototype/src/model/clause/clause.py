@@ -20,10 +20,14 @@ class Clause:
     def is_root(self):
         return not bool(self.father)
 
+    def original_by_proper(self, proper):
+        original_by_proper = { v : k for k, v in self.proper_by_original.items()}
+        return original_by_proper[proper]
+
     def entity_by_original(self, node):
         proper_node = self.proper_by_original[node]
         entities = filter(lambda entity: entity.node == proper_node, self.entities)
-        return entities[0]
+        return entities[0] if entities else None
 
     def proper_tree(self):
         return self.proper_by_original[self.node]
