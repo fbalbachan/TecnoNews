@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-from src.model.entity.entity import Entity
 from src.model.entity.tacitEntity import TacitEntity
+from src.utils.proxy import Proxy
 
 
-class LinkedEntity(Entity):
+class LinkedEntity(TacitEntity, Proxy):
     def __init__(self, source, referenced_entity):
-        Entity.__init__(self, referenced_entity.node)
         TacitEntity.__init__(self, referenced_entity.lexical_form, self.enriched_msi(source, referenced_entity))
+        Proxy.__init__(self, referenced_entity)
 
         self.source = source
         self.referenced_entity = referenced_entity
@@ -25,7 +25,7 @@ class LinkedEntity(Entity):
         return True
 
     def is_tacit(self):
-        return False
+        return self.referenced_entity.is_tacit()
 
     def __repr__(self):
         return self.source.lexical_form + " (" + self.lexical_form + ")"
