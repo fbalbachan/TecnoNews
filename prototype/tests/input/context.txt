@@ -381,3 +381,26 @@ Leandro saludó a Mariel. Ella lo abrazó.
     sentence: Ella lo abrazó
         subject: Ella -> Mariel
         od: lo -> Leandro
+
+# Bugs en pronombres relativos con árboles anómalos
+Mariel, quien habló, era linda
+    clause: Mariel , , era linda
+        subject: Mariel
+    clause: quien habló
+        subject: Mariel
+
+La que habló era linda
+    clause: La que habló
+        subject: él/ella
+    clause: era linda
+        subject: él/ella
+
+Quien habló era linda
+    clause: Quien habló era linda
+        subject: alguien
+
+# Caso anómalo, se testea al menos que no lanze excepción
+Lo que quiero es que te vayas
+    clause: Lo que quiero
+        subject: yo
+    clause: es que te vayas
