@@ -1,4 +1,6 @@
 #-*- coding: utf-8 -*-
+from src.ling.tacit_subjects import somebody
+
 
 class LinkedEntityExtractor:
 
@@ -20,10 +22,16 @@ class LinkedEntityExtractor:
         brothers = root.father.children
         brothers_at_left = brothers[:brothers.index(root)]
 
-        return father.entity_by_original(brothers_at_left[0])
+        entity = None
+        if brothers_at_left:
+            entity = father.entity_by_original(brothers_at_left[0])
+        if not entity: entity = self.extract_from_relative()
+        return entity
 
     def extract_from_relative(self):
         clause = self.clause
-        father = clause.father
-        entity_node = clause.node.father
-        return father.entity_by_original(entity_node)
+        if not clause.is_root():
+            father = clause.father
+            entity_node = clause.node.father
+            return father.entity_by_original(entity_node)
+        return None

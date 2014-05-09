@@ -7,11 +7,18 @@ class SyntacticStructure:
         self.tacit_entities = []
 
     def replace(self, old_entity, new_entity):
+        self.remove(old_entity)
+        self.append(new_entity)
+
+    def remove(self, entity):
         for entity_list in [ self.entities, self.tacit_entities ]:
-            if old_entity in entity_list:
-                entity_list.remove(old_entity)
-                entity_list.append(new_entity)
+            if entity in entity_list:
+                entity_list.remove(entity)
                 break
+
+    def append(self, entity):
+        entity_list = self.tacit_entities if entity.is_tacit() else self.entities
+        entity_list.append(entity)
 
     def category(self):
         return self.msi()["category"]

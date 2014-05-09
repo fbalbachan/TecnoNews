@@ -56,7 +56,7 @@ class PersonalPronounSolver:
             if not clause.has_structure(structure_name): continue
             structure = clause.structure(structure_name)
 
-            matching_entities = filter(lambda entity: entity.matches(actual_entity), structure.all_entities())
+            matching_entities = filter(lambda entity: entity.matches(actual_entity), structure.entities)
 
             linked_entities = [ entity.referenced_entity for entity in self.clause.linked_entities ]
             non_linked_entities = filter(lambda entity: entity not in linked_entities, matching_entities)
