@@ -1,0 +1,35 @@
++grup-verb_[
+  sn_[
+    +grup-nom-ms_[
+      +w-ms_[
+        +(Mariel mariel NP00000 -)
+      ]
+    ]
+    Fc_[
+      +(, , Fc -)
+    ]
+    subord-rel_[
+      +(quien quien PR0CS000 -)
+      grup-verb_[
+        +verb_[
+          +(habló hablar VMIS3S0 -)
+        ]
+      ]
+    ]
+    Fc_[
+      +(, , Fc -)
+    ]
+  ]
+  +verb_[
+    +(era ser VSII3S0 -)
+  ]
+  s-adj_[
+    +s-a-fs_[
+      +a-fs_[
+        +(linda lindo AQ0FS0 -)
+      ]
+    ]
+  ]
+]
+
+

@@ -1,5 +1,5 @@
 #-*- coding: utf-8 -*-
-from src.model.syntacticStructure import SyntacticStructure
+from src.model.syntax.syntacticStructure import SyntacticStructure
 
 class SyntacticAnalyzer:
     def __init__(self, clause):

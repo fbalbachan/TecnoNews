@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from src.ling.tacit_subjects import tacit_subject_for
-from src.model.linkedEntity import LinkedEntity
-from src.model.syntacticAnalyzer import SyntacticAnalyzer
-from src.model.syntacticStructure import SyntacticStructure
-from src.model.tacitEntity import TacitEntity
+from src.ling.tacit_subjects import tacit_subject_for, somebody
+from src.model.entity.linkedEntity import LinkedEntity
+from src.model.entity.tacitEntity import TacitEntity
+from src.model.syntax.syntacticAnalyzer import SyntacticAnalyzer
+from src.model.syntax.syntacticStructure import SyntacticStructure
 
 
 class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
@@ -12,14 +12,16 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         SyntacticAnalyzer.__init__(self, clause)
 
     def subject(self):
+        clause = self.clause
         structure = SyntacticStructure("subject")
-        if not self.clause.is_gerund():
+        if not clause.is_gerund():
             entities = self.verb_matching_subject_entities(3, 2)
 
             if entities:
                 structure.entities = [ entities[0] ]
             else:
-                structure.tacit_entities = [ self.tacit_subject() ]
+                subject = somebody() if clause.is_relative() and clause.is_root() else self.tacit_subject()
+                structure.tacit_entities = [ subject ]
         return structure
 
     def tacit_subject(self):

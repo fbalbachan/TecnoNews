@@ -1,12 +1,21 @@
 # -*- coding: utf-8 -*-
+from src.utils.genderDetection.genderDetector import GenderDetector
 
 class EntityMSISeer:
     def msi_of(self, entity):
         label = entity.node.label
-        if label in self.msi_seer_by_label:
-            return self.msi_seer_by_label[label](self, entity.node)
-        else:
-            return {}
+        msi = self.msi_seer_by_label[label](self, entity.node) if label in self.msi_seer_by_label else {}
+        self.detect_gender_if_necessary(msi, entity)
+        return msi
+
+    def detect_gender_if_necessary(self, msi, entity):
+        if not (msi["category"] == "noun" and msi["type"] == "proper" and msi["gender"] == "neutral"): return
+        words = entity.lexical_form.split("_")
+        genders = [ EntityMSISeer.gender_detector.gender_of(word) for word in words ]
+        for gender in [ "masculine", "feminine" ]:
+            if gender in genders:
+                msi["gender"] = gender
+                return
 
     def msi_of_single_nominal_node(self, node):
         banned_nodes = set(filter(lambda child: not child.is_leaf() and child.label in ["grup-sp"], node.children))
@@ -22,7 +31,7 @@ class EntityMSISeer:
         return msi
 
     def msi_of_coordinated_nominal_node(self, node):
-        msi = { "category" : "noun", "number" : "plural" }
+        msi = { "category" : "noun", "number" : "plural", "type" : None }
 
         pronouns = sorted(node.leaves_of_category("pronoun"), key=lambda pronoun: pronoun.msi["person"])
         msi["person"] = pronouns[0].msi["person"] if pronouns else 3
@@ -42,10 +51,12 @@ class EntityMSISeer:
         return node.leaves()[0].msi
 
     def msi_of_infinity(self, node):
-        return { "category" : "noun", "gender" : "neutral", "person" : 3, "number" : "singular" }
+        return { "category" : "noun", "gender" : "neutral", "person" : 3, "number" : "singular", "type" : None }
 
     msi_seer_by_label = { "sn" : msi_of_single_nominal_node,
                            "coor-n" : msi_of_coordinated_nominal_node,
                            "patons" : msi_of_leaf,
                            "ptonic" : msi_of_leaf,
                            "grup-verb-inf" : msi_of_infinity }
+
+    gender_detector = GenderDetector()

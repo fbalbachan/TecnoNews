@@ -2,8 +2,8 @@
 #-*- coding: utf-8 -*-
 import unittest
 
-from src.model.sentenceAnalyzer import SentenceAnalyzer
-from src.model.sentence import Sentence
+from src.model.sentence.sentenceAnalyzer import SentenceAnalyzer
+from src.model.sentence.sentence import Sentence
 from tests.csv_file_reader import load_csv_test_file
 from tests.freelingTreeRepository import FreelingTreeRepository
 

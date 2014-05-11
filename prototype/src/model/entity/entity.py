@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from src.model.tacitEntity import TacitEntity
+from src.model.entity.tacitEntity import TacitEntity
 
 class Entity (TacitEntity):
 

@@ -1,14 +1,14 @@
 #-*- coding: utf-8 -*-
 from src.ling.verb_info import allowed_boxes, allowed_boxes_for_passive_verbs, allowed_boxes_for_unimember_sentences
-from src.model.activeVoiceSyntacticAnalizer import ActiveVoiceSyntacticAnalyzer
-from src.model.entityExtractor import EntityExtractor
-from src.model.gerundSubjectSolver import GerundSubjectSolver
-from src.model.linkedEntityExtractor import LinkedEntityExtractor
-from src.model.passiveVoiceSyntacticAnalyzer import PassiveVoiceSyntacticAnalyzer
-from src.model.personalPronounSolver import PersonalPronounSolver
-from src.model.relativePronounSolver import RelativePronounSolver
-from src.model.syntacticAnalyzer import SyntacticAnalyzer
-from src.model.verb import Verb
+from src.model.anaphora.gerundSubjectSolver import GerundSubjectSolver
+from src.model.anaphora.personalPronounSolver import PersonalPronounSolver
+from src.model.anaphora.relativePronounSolver import RelativePronounSolver
+from src.model.entity.entityExtractor import EntityExtractor
+from src.model.entity.linkedEntityExtractor import LinkedEntityExtractor
+from src.model.entity.verb import Verb
+from src.model.syntax.activeVoiceSyntacticAnalizer import ActiveVoiceSyntacticAnalyzer
+from src.model.syntax.passiveVoiceSyntacticAnalyzer import PassiveVoiceSyntacticAnalyzer
+from src.model.syntax.syntacticAnalyzer import SyntacticAnalyzer
 
 
 class ClauseAnalyzer:
@@ -30,7 +30,7 @@ class ClauseAnalyzer:
     def solve_relative(self, clause):
         if clause.is_relative():
             clause.relative_entity = self.relative_entity_of(clause)
-            RelativePronounSolver(clause).solve()
+            if clause.relative_entity: RelativePronounSolver(clause).solve()
 
     def solve_gerund(self, clause):
         if clause.voice and clause.is_gerund():

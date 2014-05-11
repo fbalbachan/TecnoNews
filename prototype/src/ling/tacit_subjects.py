@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from src.model.tacitEntity import TacitEntity
+from src.model.entity.tacitEntity import TacitEntity
 
 
 tacit_subjects = {

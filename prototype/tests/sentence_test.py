@@ -4,8 +4,8 @@ from ast import literal_eval
 import unittest
 
 from csv_file_reader import load_csv_test_file
-from src.model.sentenceAnalyzer import SentenceAnalyzer
-from src.model.sentence import *
+from src.model.sentence.sentenceAnalyzer import SentenceAnalyzer
+from src.model.sentence.sentence import *
 from tests.freelingTreeRepository import FreelingTreeRepository
 
 

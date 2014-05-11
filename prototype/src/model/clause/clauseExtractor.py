@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from src.model.clause import *
+from src.model.clause.clause import *
 from src.parser.inDepthNodeIterator import *
 from src.parser.parseNode import *
 
@@ -41,7 +41,7 @@ class ClauseExtractor:
 
     def sorted(self, clauses, sentence):
         leaves = sentence.parse_node.leaves()
-        return sorted(clauses, key = lambda clause: leaves.index(clause.node.leaves()[0]))
+        return sorted(clauses, key = lambda clause: leaves.index(clause.original_by_proper(clause.proper_leaves()[0])))
 
     def without_invalid_clauses(self, clauses):
         is_cc = lambda leaf: leaf.msi["category"] == "conjunction" and leaf.msi["type"] == "coordinated"
