@@ -19,28 +19,21 @@ class RelativePronounSolver:
 
     def solve_active_voice(self):
         clause = self.clause
-        destinations_by_preposition = { "por" : [ "adjuncts" ], "con" : [ "regimen", "adjuncts" ] }
-        first_linker_word = self.linker[0].lexical_form
+        first_linker_category = self.linker[0].msi["category"]
 
-        if first_linker_word in destinations_by_preposition:
-            destinations = destinations_by_preposition[first_linker_word]
-            for destination in destinations:
-                if not clause.has_structure(destination): continue
-                structure = clause.structure(destination)
-                structure.tacit_entities = []
-                structure.entities = [ clause.relative_entity ]
+        destinations = [ "regimen", "adjuncts" ] if first_linker_category == "adposition" else [ "subject" , "od" ]
+
+        for destination in destinations:
+            if not clause.has_structure(destination): continue
+            structure = clause.structure(destination)
+            if structure.is_empty():
+                structure.entities.append(clause.relative_entity)
                 break
-        else:
-            for destination in [ "subject" , "od" ]:
-                structure = clause.structure(destination)
-                if structure.is_tacit():
-                    tacit_entity = structure.tacit_entities[0]
-                    if tacit_entity.matches(clause.relative_entity):
-                        structure.tacit_entities = []
-                        structure.entities.append(clause.relative_entity)
-                        break
-                elif structure.is_empty():
-                        structure.entities.append(clause.relative_entity)
+            else:
+                entity = structure.entity()
+                if entity.matches(clause.relative_entity):
+                    structure.replace(entity, clause.relative_entity)
+                    break
 
     def solve_passive_voice(self):
         clause = self.clause
