@@ -202,6 +202,21 @@ Melina, la cual estaba implicada, había sido detenida
     clause: la cual estaba implicada
         subject: Melina
 
+La manzana de la que desconfío es una fruta prohibida
+    clause: La manzana es una fruta prohibida
+        subject: La manzana
+    clause: de la que desconfío
+        subject: yo
+        regimen: La manzana
+
+Destaco las buenas intenciones de la funcionaria, en favor de la cual debo decir mucho
+    clause: Destaco las buenas intenciones de la funcionaria ,
+        subject: yo
+        od: las buenas intenciones de la funcionaria
+    clause: en_favor_de la cual debo decir mucho
+        subject: yo
+        adjuncts: la funcionaria
+
 # Resolución de sujeto de gerundio
 Dejando solo los huesos
     clause: Dejando solo los huesos
