@@ -2,6 +2,7 @@
 from ConfigParser import ConfigParser
 from codecs import open
 from os.path import join
+from unidecode import unidecode
 
 def load_namelists():
     config = ConfigParser()
@@ -10,14 +11,14 @@ def load_namelists():
 
     names = {}
 
-    names["male"] = set([ line.split(',')[0] for line in
+    names["male"] = set([ unidecode(line.split(',')[0]) for line in
                          open(join(directory, "male.txt"), 'r', 'utf-8').readlines() ])
-    names["female"] = set([ line.split(',')[0] for line in
+    names["female"] = set([ unidecode(line.split(',')[0]) for line in
                            open(join(directory, "female.txt"), 'r', 'utf-8').readlines() ])
 
     names["neutral"] = set()
 
-    unisex_names_with_gender = [ (line.split(',')[0], line.split(',')[2]) for line in
+    unisex_names_with_gender = [ (unidecode(line.split(',')[0]), unidecode(line.split(',')[2])) for line in
                                 open(join(directory, "unisex.csv"), 'r', 'utf-8').readlines() ]
 
     for name, gender in unisex_names_with_gender:
@@ -31,7 +32,7 @@ def load_namelists():
 class GenderDetector:
 
     def gender_of(self, name):
-        name = name.upper()
+        name = unidecode(name.decode("utf-8")).upper()
 
         gender_preference = [ "male", "female", "neutral" ]
         for gender in gender_preference:
