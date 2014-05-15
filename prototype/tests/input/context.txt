@@ -520,3 +520,12 @@ María y Laura murieron. Ambas eran hermosas.
 Laura Alonso es mi amiga
     subject: Laura_Alonso
         msi: { "gender" : "feminine" }
+
+# Duplicación de OD sólo con preposición "a"
+Juan y Pedro fueron al río. La mujer los encontró muertos.
+    sentence: Juan y Pedro fueron al río
+        subject: Juan y Pedro
+    sentence: La mujer los encontró muertos
+        subject: La mujer
+        od: muertos
+        oi: los -> Juan y Pedro

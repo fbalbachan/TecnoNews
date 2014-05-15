@@ -48,6 +48,8 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
     def search_duplicated_od_for(self, structure):
         if structure.is_empty(): return
         source_od = structure.entity()
+        if not source_od.is_subordinated_with_preposition("a"): return
+
         entities = self.clause.entities_closest_to_verb(("left", 3), ("right", 2))
         acusative_pronouns = self.only_acusative_pronouns_of(entities)
         matching_pronouns = filter(lambda pronoun: source_od.matches(pronoun), acusative_pronouns)
