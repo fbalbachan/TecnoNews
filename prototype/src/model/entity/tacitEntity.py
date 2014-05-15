@@ -1,18 +1,35 @@
 # -*- coding: utf-8 -*-
+from itertools import chain
+
 
 class TacitEntity:
 
     def __init__(self, lexical_form, msi):
         self.lexical_form = lexical_form
         self.msi = msi
+        self.children = []
+
+    def leaf_entities(self):
+        if not self.children:
+            return [ self ]
+        else:
+            return list(chain(*[ child.leaf_entities() for child in self.children ]))
+
+    def children_of_category(self, category):
+        return filter(lambda entity: entity.category() == category, self.children)
 
     def category(self):
         return self.msi["category"]
 
     def matches(self, entity):
-        matches = self.msi["number"] == entity.msi["number"] and self.msi["person"] == entity.msi["person"] and \
-            self.matches_gender_of(entity)
+        matches = self.msi["person"] == entity.msi["person"] \
+            and self.matches_number_of(entity) and self.matches_gender_of(entity)
         return matches
+
+    def matches_number_of(self, entity):
+        msi = self.msi
+        return msi["number"] == "invariable" or entity.msi["number"] == "invariable" \
+            or msi["number"] == entity.msi["number"]
 
     def matches_gender_of(self, entity):
         neutral_genders = [ "neutral", "common" ]
