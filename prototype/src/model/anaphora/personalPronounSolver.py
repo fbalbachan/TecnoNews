@@ -1,5 +1,4 @@
 #-*- coding: utf-8 -*-
-from itertools import chain
 
 from src.model.entity.linkedEntity import LinkedEntity
 
@@ -59,7 +58,11 @@ class PersonalPronounSolver:
             if not clause.has_structure(structure_name): continue
             structure = clause.structure(structure_name)
 
-            entities = list(chain(*[ entity.leaf_entities() for entity in structure.entities ]))
+            entities = []
+            for entity in structure.entities:
+                entities.append(entity)
+                if not entity.is_tacit() and entity.is_coordinated(): entities.extend(entity.children)
+
             matching_entities = filter(lambda entity: entity.matches(actual_entity), entities)
 
             linked_entities = [ entity.referenced_entity for entity in self.clause.linked_entities ]

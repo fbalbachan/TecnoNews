@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from itertools import chain
 
 
 class TacitEntity:
@@ -8,12 +7,6 @@ class TacitEntity:
         self.lexical_form = lexical_form
         self.msi = msi
         self.children = []
-
-    def leaf_entities(self):
-        if not self.children:
-            return [ self ]
-        else:
-            return list(chain(*[ child.leaf_entities() for child in self.children ]))
 
     def children_of_category(self, category):
         return filter(lambda entity: entity.category() == category, self.children)

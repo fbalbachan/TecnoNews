@@ -9,6 +9,9 @@ class Entity (TacitEntity):
 
         TacitEntity.__init__(self, Entity.__repr__(self), {})
 
+    def is_coordinated(self):
+        return not self.node.is_leaf() and self.node.label == "coor-n"
+
     def level(self):
         return self.node.level()
 

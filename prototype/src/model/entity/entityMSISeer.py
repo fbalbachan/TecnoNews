@@ -33,12 +33,20 @@ class EntityMSISeer:
         if not "person" in msi or not msi["person"]: msi["person"] = 3
         if nouns: msi["category"] = "noun"
 
-        if useful_leaves:
-            additional_msi = useful_leaves[0].msi
-            msi["gender"] = additional_msi["gender"]
-            msi["number"] = additional_msi["number"]
+        self.disambiguate_if_necessary(msi, useful_leaves)
 
         return msi
+
+    def disambiguate_if_necessary(self, msi, leaves):
+        if not leaves: return
+        leaves = leaves[::-1]
+
+        non_neutral_attribute_values = { "gender" : [ "masculine", "feminine"], "number" : [ "singular", "plural"] }
+
+        for attribute, non_neutral_values in non_neutral_attribute_values.items():
+            if msi[attribute] not in non_neutral_values:
+                for leaf in leaves:
+                    if leaf.msi[attribute] in non_neutral_values: msi[attribute] = leaf.msi[attribute]
 
     def msi_of_coordinated(self, entity):
         msi = { "category" : "noun", "number" : "plural", "type" : None }
