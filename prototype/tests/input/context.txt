@@ -39,7 +39,7 @@ Odiamos comer en un bar
     verb: Odiamos
         lemma: odiar
     od: comer en un bar
-        msi: { "category" : "noun", "person" : 3, "number" : "singular", "gender" : "neutral" }
+        msi: { "category" : "noun", "person" : 3, "number" : "singular", "gender" : None }
 
 Toda la noche el cartero llegó con novedades
     subject: el cartero
@@ -457,6 +457,10 @@ Vieja intendente me busqué
     od: Vieja intendente
         msi: { "gender" : "feminine" }
 
+Las parejas disfuncionales murieron
+    subject: Las parejas disfuncionales
+        msi: { "gender" : "feminine", "number" : "plural" }
+
 # MSI de entidades coordinadas
 Nosotros y ella fuimos a correr
     subject: Nosotros y ella
@@ -484,3 +488,17 @@ María y José salieron. Él dijo a ella algo.
     sentence: Él dijo a ella algo
         subject: Él -> José
         od: ella -> María
+
+El intendente de Buenos Aires murió. Él se mató.
+    sentence: El intendente de Buenos Aires murió
+        subject: El intendente de Buenos_Aires
+    sentence: Él se mató
+        subject: Él -> El intendente de Buenos_Aires
+
+# Resolución de anáfora con entidades en infinitivo (no lo resolvemos). Además es un test de un bug con PP "Yo"
+Me molesta tomar vacaciones con mi novia. Yo la detesto.
+    sentence: Me molesta tomar vacaciones con mi novia
+        subject: tomar vacaciones con mi novia
+    sentence: Yo la detesto
+        subject: Yo
+        od: la
