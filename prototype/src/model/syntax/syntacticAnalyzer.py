@@ -69,7 +69,9 @@ class SyntacticAnalyzer:
         return all_subord_entities[0] if all_subord_entities else []
 
     def search_pronoun_at(self, side, distance):
-        return self.only_pronouns_of(self.clause.entities_closest_to_verb_at(side, distance))
+        pronouns = self.only_pronouns_of(self.clause.entities_closest_to_verb_at(side, distance))
+        if pronouns: pronouns = [ pronouns[0] ]
+        return pronouns
 
     def only_pronouns_of(self, entities):
         return filter(lambda entity: entity.category() == "pronoun", entities)
@@ -79,7 +81,7 @@ class SyntacticAnalyzer:
 
     def only_valid_subject_entities_of(self, entities):
         is_valid_pronoun = lambda entity: entity.category() == "pronoun" and entity.msi["case"] \
-            in [None, "personal", "demostrative"]
+            in [None, "personal", "demostrative", "nominative"]
         return filter(lambda entity: entity.category() == "noun" or entity.category() == "determinant" or
                       is_valid_pronoun(entity), entities)
 
