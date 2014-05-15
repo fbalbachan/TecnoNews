@@ -79,6 +79,10 @@ class TestClauseAnalyzer(unittest.TestCase):
         else:
             self.assertEqual("", assertion, "Existe más de una entidad para " + structure_name)
 
+    def count(self, assertion, frame):
+        entities = frame["structure"].all_entities()
+        self.assertEqual(len(entities), int(assertion))
+
     def entity(self, assertion, frame):
         entities = frame["structure"].all_entities()
         asserted_lexical_forms = assertion.split(" -> ")
@@ -129,7 +133,7 @@ class TestClauseAnalyzer(unittest.TestCase):
         return string.startswith("#")
 
     structure_keywords = [ "subject", "od", "oi", "equative", "regimen", "adjuncts", "verb" ]
-    keywords = [ "clause", "lemma", "msi", "entity", "sentence" ] + structure_keywords
+    keywords = [ "clause", "lemma", "msi", "entity", "sentence", "count" ] + structure_keywords
 
 if __name__ == '__main__':
     unittest.main()
