@@ -27,20 +27,18 @@ class EntityExtractor:
         entities_by_node = {}
 
         by_level = ParseNode.by_level(nodes)
-        level_parents = set()
 
         for level, nodes in sorted(by_level.items()):  # @UnusedVariable
             for node in nodes:
                 entity = Entity(node)
                 entities_by_node[node] = entity
 
-                parents = filter(lambda node: node in level_parents, node.path_to_root())
-                if parents:
-                    parent = parents[0]
-                    father = entities_by_node[parent]
-                    entity.father = father
-                    father.children.append(entity)
-            level_parents = set(nodes)
+                for parent in node.path_to_root():
+                    parent_level = parent.level()
+                    if parent_level in by_level and parent in by_level[parent.level()]:
+                        father = entities_by_node[parent]
+                        entity.father = father
+                        father.children.append(entity)
 
         return entities_by_node.values()
 
