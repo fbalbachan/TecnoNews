@@ -79,9 +79,13 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         return self.search_subord_with_preposition_at(side, distance, "a")
 
     def search_nominal_od_at(self, side, distance):
-        clause = self.clause
-        entities = self.only_nominal_of(clause.entities_closest_to_verb_at(side, distance))
-        if entities:
-            return [ entities[0] ]
-        else:
-            return self.search_subord_with_preposition_at(side, distance, "a")
+        non_subord_method = lambda side, distance: \
+            self.only_nominal_of(self.clause.entities_closest_to_verb_at(side, distance))
+        subord_method = lambda side, distance: self.search_subord_with_preposition_at(side, distance, "a")
+        search_methods = [ non_subord_method, subord_method ]
+
+        for method in search_methods:
+            entities = method(side, distance)
+            if entities:
+                return [ entities[0] ]
+        return []

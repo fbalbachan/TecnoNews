@@ -1,5 +1,8 @@
 #-*- coding: utf-8 -*-
+from src.model.entity.entity import Entity
 from src.model.syntax.syntacticStructure import SyntacticStructure
+from src.utils.collectionUtils import dict_by
+
 
 class SyntacticAnalyzer:
     def __init__(self, clause):
@@ -24,7 +27,7 @@ class SyntacticAnalyzer:
 
     def adjuncts(self):
         structure = SyntacticStructure("adjuncts")
-        structure.entities = self.clause.lonely_entities()
+        structure.entities = Entity.only_maximal(self.clause.lonely_entities())
         return structure
 
     def extract_searching(self, name, *methods):
@@ -55,10 +58,14 @@ class SyntacticAnalyzer:
             first_leaf = node.leaves()[0]
             return first_leaf.msi["type"] == "preposition" and \
                 first_leaf.lexical_form.lower() in accepted_prepositions if accepted_prepositions else True
-        return self.search_subord_at(side, distance, which)
+        entities = self.search_subord_at(side, distance, which)
+        if entities: entities = [ entities[0] ]
+        return entities
 
     def search_subord_at(self, side, distance, which = lambda node: True):
         all_subord_entities = self.clause.subord_entities_closest_to_verb_at(side, distance, which)
+        all_subord_entities = [ sorted(entities, key = lambda entity: entity.level())
+                               for entities in all_subord_entities ]
         return all_subord_entities[0] if all_subord_entities else []
 
     def search_pronoun_at(self, side, distance):

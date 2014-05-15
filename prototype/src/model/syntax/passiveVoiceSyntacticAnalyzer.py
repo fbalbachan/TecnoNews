@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from src.ling.tacit_subjects import somebody
+from src.model.entity.tacitEntity import TacitEntity
 from src.model.syntax.syntacticAnalyzer import SyntacticAnalyzer
 from src.model.syntax.syntacticStructure import SyntacticStructure
-from src.model.entity.tacitEntity import TacitEntity
 
 
 class PassiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
