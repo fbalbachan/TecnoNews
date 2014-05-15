@@ -11,9 +11,9 @@ class EntityMSISeer:
     def detect_gender_if_necessary(self, msi, entity):
         if not (msi["category"] == "noun" and msi["type"] == "proper" and msi["gender"] == "neutral"): return
         words = entity.lexical_form.split("_")
-        genders = [ EntityMSISeer.gender_detector.gender_of(word) for word in words ]
-        for gender in [ "masculine", "feminine" ]:
-            if gender in genders:
+        for word in words:
+            gender = EntityMSISeer.gender_detector.gender_of(word)
+            if gender in [ "masculine", "feminine" ]:
                 msi["gender"] = gender
                 return
 

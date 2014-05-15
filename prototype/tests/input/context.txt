@@ -515,3 +515,8 @@ María y Laura murieron. Ambas eran hermosas.
     verb: compró
     od: esto
     oi: Juan
+
+# Bug en detección de género de entidades
+Laura Alonso es mi amiga
+    subject: Laura_Alonso
+        msi: { "gender" : "feminine" }
