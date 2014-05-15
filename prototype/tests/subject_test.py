@@ -2,8 +2,8 @@
 #-*- coding: utf-8 -*-
 import unittest
 
-from src.model.sentence.sentenceAnalyzer import SentenceAnalyzer
 from src.model.sentence.sentence import Sentence
+from src.model.sentence.sentenceAnalyzer import SentenceAnalyzer
 from tests.csv_file_reader import load_csv_test_file
 from tests.freelingTreeRepository import FreelingTreeRepository
 
@@ -58,6 +58,8 @@ class TestSubject(unittest.TestCase):
             clause = sentence.clauses[0]
 
             subject = clause.structure("subject")
+
+            if expected_subject_gender == "None": expected_subject_gender = None
 
             self.assertEqual(int(expected_subject_person), subject.msi()['person'])
             self.assertEqual(expected_subject_number, subject.msi()['number'])

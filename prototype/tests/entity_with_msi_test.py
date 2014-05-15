@@ -2,8 +2,8 @@
 #-*- coding: utf-8 -*-
 import unittest
 
-from src.model.sentence.sentenceAnalyzer import SentenceAnalyzer
 from src.model.sentence.sentence import Sentence
+from src.model.sentence.sentenceAnalyzer import SentenceAnalyzer
 from tests.freelingTreeRepository import FreelingTreeRepository
 
 
@@ -73,7 +73,7 @@ class TestStructureHead(unittest.TestCase):
         clause = sentence.clauses[0]
 
         entity = filter(lambda x: str(x) == 'caminar por el bosque'.encode('utf-8'), clause.entities)[0]
-        expected_MSI = {'person': 3, 'number': 'singular', 'gender': 'neutral'}
+        expected_MSI = {'person': 3, 'number': 'singular', 'gender': None}
 
         print ("trying: %s" % entity), "..",
 

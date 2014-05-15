@@ -71,7 +71,7 @@ class EntityMSISeer:
         return node.leaves()[0].msi
 
     def msi_of_infinity(self, entity):
-        return { "category" : "noun", "gender" : "neutral", "person" : 3, "number" : "singular", "type" : None }
+        return { "category" : "noun", "gender" : None, "person" : 3, "number" : "singular", "type" : None }
 
     msi_seer_by_label = { "sn" : msi_of_single,
                            "coor-n" : msi_of_coordinated,
