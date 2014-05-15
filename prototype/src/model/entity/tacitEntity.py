@@ -15,8 +15,10 @@ class TacitEntity:
         return matches
 
     def matches_gender_of(self, entity):
+        neutral_genders = [ "neutral", "common" ]
         msi = self.msi
-        return msi["gender"] == "neutral" or entity.msi["gender"] == "neutral" or msi["gender"] == entity.msi["gender"]
+        return msi["gender"] in neutral_genders or entity.msi["gender"] in neutral_genders \
+            or msi["gender"] == entity.msi["gender"]
 
     def is_linked(self):
         return False
