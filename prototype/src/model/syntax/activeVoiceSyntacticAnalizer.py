@@ -36,7 +36,13 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         od = self.extract_searching("od", nominal_at_right, nominal_at_left, pronominal_at_right, pronominal_at_left)
 
         acusative_pronoun = self.search_duplicated_od_for(od)
-        if acusative_pronoun: od.entities.append(LinkedEntity(acusative_pronoun, od.entity()))
+        if acusative_pronoun:
+            linked_pronoun = LinkedEntity(acusative_pronoun, od.entity())
+
+            self.clause.entities.remove(acusative_pronoun)
+            self.clause.linked_entities.append(linked_pronoun)
+
+            od.entities.append(linked_pronoun)
         return od
 
     def search_duplicated_od_for(self, structure):
