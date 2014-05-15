@@ -1,0 +1,24 @@
++grup-verb_[
+  coor-n_[
+    sn_[
+      +grup-nom-ms_[
+        +w-ms_[
+          +(María maría NP00000 -)
+        ]
+      ]
+    ]
+    +(y y CC -)
+    sn_[
+      +grup-nom-ms_[
+        +w-ms_[
+          +(José josé NP00000 -)
+        ]
+      ]
+    ]
+  ]
+  +verb_[
+    +(salieron salir VMIS3P0 -)
+  ]
+]
+
+
