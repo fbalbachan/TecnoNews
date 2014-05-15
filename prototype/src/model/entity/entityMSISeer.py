@@ -18,15 +18,24 @@ class EntityMSISeer:
                 return
 
     def msi_of_single_nominal_node(self, node):
-        banned_nodes = set(filter(lambda child: not child.is_leaf() and child.label in ["grup-sp"], node.children))
+        banned_labels = ["grup-sp", "sp-de"]
+        banned_nodes = set(filter(lambda child: not child.is_leaf() and child.label in banned_labels, node.children))
 
         nouns = node.leaves_of_category("noun")
-        useful_leaves = nouns + node.leaves_of_category("pronoun") + node.leaves_of_category("determinant")
+        useful_leaves = nouns + node.leaves_of_category("pronoun") + node.leaves_of_category("determinant") \
+            + node.leaves_of_category("adjective")
         useful_leaves = filter(lambda leaf: not banned_nodes & set(leaf.path_to_root()), useful_leaves)
 
-        msi = useful_leaves[0].msi
+        useful_leaves.reverse()
+        msi = useful_leaves.pop().msi
+
         if not "person" in msi or not msi["person"]: msi["person"] = 3
         if nouns: msi["category"] = "noun"
+
+        if useful_leaves:
+            additional_msi = useful_leaves[0].msi
+            msi["gender"] = additional_msi["gender"]
+            msi["number"] = additional_msi["number"]
 
         return msi
 
