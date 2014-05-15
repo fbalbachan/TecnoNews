@@ -508,3 +508,10 @@ María y Laura murieron. Ambas eran hermosas.
         subject: María y Laura
     sentence: Ambas eran hermosas
         subject: Ambas -> María y Laura
+
+# OI con preposición "para"
+Él compró esto para Juan
+    subject: Él
+    verb: compró
+    od: esto
+    oi: Juan

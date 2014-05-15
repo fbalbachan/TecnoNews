@@ -82,7 +82,7 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         return self.search_subord_with_preposition_at(side, distance)
 
     def search_nominal_oi_at(self, side, distance):
-        return self.search_subord_with_preposition_at(side, distance, "a")
+        return self.search_subord_with_preposition_at(side, distance, "a", "para")
 
     def search_nominal_od_at(self, side, distance):
         non_subord_method = lambda side, distance: \
