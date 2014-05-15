@@ -4,7 +4,7 @@ from src.utils.genderDetection.genderDetector import GenderDetector
 class EntityMSISeer:
     def msi_of(self, entity):
         label = entity.node.label
-        msi = self.msi_seer_by_label[label](self, entity.node) if label in self.msi_seer_by_label else {}
+        msi = self.msi_seer_by_label[label](self, entity) if label in self.msi_seer_by_label else {}
         self.detect_gender_if_necessary(msi, entity)
         return msi
 
@@ -17,7 +17,8 @@ class EntityMSISeer:
                 msi["gender"] = gender
                 return
 
-    def msi_of_single_nominal_node(self, node):
+    def msi_of_single(self, entity):
+        node = entity.node
         banned_labels = ["grup-sp", "sp-de"]
         banned_nodes = set(filter(lambda child: not child.is_leaf() and child.label in banned_labels, node.children))
 
@@ -39,13 +40,14 @@ class EntityMSISeer:
 
         return msi
 
-    def msi_of_coordinated_nominal_node(self, node):
+    def msi_of_coordinated(self, entity):
         msi = { "category" : "noun", "number" : "plural", "type" : None }
 
-        pronouns = sorted(node.leaves_of_category("pronoun"), key=lambda pronoun: pronoun.msi["person"])
+        pronouns = sorted(entity.children_of_category("pronoun"), key=lambda pronoun: pronoun.msi["person"])
         msi["person"] = pronouns[0].msi["person"] if pronouns else 3
 
-        genders = [ node.msi["gender"] for node in node.leaves_of_category("noun") + node.leaves_of_category("pronoun")]
+        genders = [ child.msi["gender"] for child in \
+                   entity.children_of_category("noun") + entity.children_of_category("pronoun")]
         if "masculine" in genders:
             gender = "masculine"
         elif all(map(lambda gender: gender == "feminine", genders)):
@@ -56,14 +58,15 @@ class EntityMSISeer:
         msi["gender"] = gender
         return msi
 
-    def msi_of_leaf(self, node):
+    def msi_of_leaf(self, entity):
+        node = entity.node
         return node.leaves()[0].msi
 
-    def msi_of_infinity(self, node):
+    def msi_of_infinity(self, entity):
         return { "category" : "noun", "gender" : "neutral", "person" : 3, "number" : "singular", "type" : None }
 
-    msi_seer_by_label = { "sn" : msi_of_single_nominal_node,
-                           "coor-n" : msi_of_coordinated_nominal_node,
+    msi_seer_by_label = { "sn" : msi_of_single,
+                           "coor-n" : msi_of_coordinated,
                            "patons" : msi_of_leaf,
                            "ptonic" : msi_of_leaf,
                            "grup-verb-inf" : msi_of_infinity }
