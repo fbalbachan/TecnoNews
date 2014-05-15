@@ -5,6 +5,10 @@ class Entity (TacitEntity):
 
     def __init__(self, node):
         self.node = node
+
+        self.children = []
+        self.father = None
+
         TacitEntity.__init__(self, Entity.__repr__(self), {})
 
     def level(self):
@@ -14,7 +18,7 @@ class Entity (TacitEntity):
         return self.node.leaves()
 
     def contains(self, other):
-        return self.node.contains(other.node)
+        return other in self.children
 
     def highest_subordinating_level(self):
         return self.highest_subordinating_node().level()
@@ -34,3 +38,7 @@ class Entity (TacitEntity):
 
     def __repr__(self):
         return " ".join([ str(leaf) for leaf in self.node.leaves() if leaf.msi["category"] != "punctuation" ])
+
+    @staticmethod
+    def only_maximal(entities):
+        return filter(lambda entity: not any([ other.contains(entity) for other in entities ]), entities)

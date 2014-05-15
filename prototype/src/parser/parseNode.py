@@ -1,10 +1,9 @@
 #-*- coding: utf-8 -*-
 
 from copy import copy
-from itertools import groupby
 
 from inDepthNodeIterator import *
-
+from src.utils.collectionUtils import dict_by
 
 class ParseNode:
     def level(self):
@@ -140,6 +139,4 @@ class ParseNode:
     @staticmethod
     def by_level(nodes):
         level_getter = lambda node: node.level()
-        by_level = groupby(sorted(nodes, key=level_getter), level_getter)
-        by_level = { level: list(nodes) for level, nodes in by_level }
-        return by_level
+        return dict_by(nodes, level_getter)

@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from src.model.clause.clause import *
-from src.parser.inDepthNodeIterator import *
-from src.parser.parseNode import *
+from src.parser.parseNode import ParseNode
 
 
 class ClauseExtractor:
