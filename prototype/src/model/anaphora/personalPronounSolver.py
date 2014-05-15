@@ -21,18 +21,26 @@ class PersonalPronounSolver:
 
     def pronouns_in_order(self):
         clause = self.clause
-        is_valid_pronoun = lambda entity: entity.category() == "pronoun" and entity.msi["type"] == "personal" \
-            and entity.msi["person"] == 3 and entity.msi["case"] in [None, "acusative"]
-
         pronouns_with_structure = []
         for structure in clause.syntactic_structures:
-            pronouns = filter(is_valid_pronoun, structure.all_entities())
+            pronouns = self.only_valid_pronouns(structure.all_entities())
             for pronoun in pronouns:
                 pronouns_with_structure.append( (pronoun, structure) )
 
         ordered = sorted(pronouns_with_structure, key = lambda (pronoun, structure): float("-inf") if pronoun.is_tacit()
                          else clause.proper_leaves().index(pronoun.leaves()[0]) )
         return ordered
+
+    def only_valid_pronouns(self, entities):
+        is_valid_personal_pronoun = lambda entity: entity.category() == "pronoun" and entity.msi["type"] == "personal"\
+            and entity.msi["person"] == 3 and entity.msi["case"] in [None, "acusative"]
+
+        is_valid_indefinite_pronoun = lambda entity: entity.category() == "pronoun" \
+            and entity.msi["type"] == "indefinite" and entity.lexical_form.lower() in [ "ambos", "ambas" ]
+
+        is_valid_pronoun = lambda entity: is_valid_personal_pronoun(entity) or is_valid_indefinite_pronoun(entity)
+
+        return filter(is_valid_pronoun, entities)
 
     def search_referenced_entity_for(self, actual_entity):
         if not self.clause.is_relative():
