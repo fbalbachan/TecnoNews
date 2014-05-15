@@ -426,3 +426,61 @@ Lo que quiero es que te vayas
     clause: Lo que quiero
         subject: yo
     clause: es que te vayas
+
+La presidenta murió de leucemia y tétanos
+    subject: La presidenta
+    adjuncts:
+        count: 2
+        entity: leucemia
+        entity: tétanos
+
+La presidenta saludó al intendente de Buenos Aires
+    subject: La presidenta
+    od: el intendente de Buenos_Aires
+
+# Desambiguación de número por artículo
+Los virus murieron
+    subject: Los virus
+        msi: { "number" : "plural" }
+
+# Desambiguación de género por artículo
+El intendente murió
+    subject: El intendente
+        msi: { "gender" : "masculine" }
+
+# Desambiguación de género por adjetivo
+Viejo intendente me busqué
+    od: Viejo intendente
+        msi: { "gender" : "masculine" }
+
+Vieja intendente me busqué
+    od: Vieja intendente
+        msi: { "gender" : "feminine" }
+
+# MSI de entidades coordinadas
+Nosotros y ella fuimos a correr
+    subject: Nosotros y ella
+        msi: { "person" : 1, "number" : "plural" }
+
+El intendente y ella fueron a correr
+    subject: El intendente y ella
+        msi: { "person" : 3, "number" : "plural", "gender" : "masculine" }
+
+# Macheo de entidades con número invariable
+La presidenta encontró virus, dejándolos en un tubo de ensayo
+    clause: La presidenta encontró virus ,
+        subject: La presidenta
+        od: virus
+            msi: { "number" : "invariable" }
+    clause: dejando los en un tubo de ensayo
+        subject: La presidenta
+        od: los -> virus
+        adjuncts: un tubo de ensayo
+
+# Resolución de anáfora de PP con entidades coordinadas
+María y José salieron. Él dijo a ella algo.
+    sentence: María y José salieron
+        subject: María y José
+    sentence: Él dijo a ella algo
+        subject: Él -> José
+        od: ella -> María
