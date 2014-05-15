@@ -502,3 +502,9 @@ Me molesta tomar vacaciones con mi novia. Yo la detesto.
     sentence: Yo la detesto
         subject: Yo
         od: la
+
+María y Laura murieron. Ambas eran hermosas.
+    sentence: María y Laura murieron
+        subject: María y Laura
+    sentence: Ambas eran hermosas
+        subject: Ambas -> María y Laura
