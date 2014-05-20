@@ -9,8 +9,10 @@ class Sentence(object):
         self.clauses = []
 
     def main_clause(self):
-        root_clauses = filter(lambda clause: clause.is_root(), self.clauses)
-        return root_clauses[0]
+        return self.clauses_of_level(0)[0]
+
+    def clauses_of_level(self, level):
+        return filter(lambda clause: clause.level() == level, self.clauses)
 
     def __repr__(self):
         return self.text

@@ -1,12 +1,13 @@
 #-*- coding: utf-8 -*-
+from src.utils.treeNode import TreeNode
 
-class Clause:
+
+class Clause(TreeNode):
     def __init__(self, node):
+        TreeNode.__init__(self)
+
         self.node = node
         self.proper_by_original = {}
-
-        self.children = []
-        self.father = None
 
         self.voice = None
 
@@ -16,9 +17,6 @@ class Clause:
 
         self.verb = None
         self.syntactic_structures = []
-
-    def is_root(self):
-        return not bool(self.father)
 
     def original_by_proper(self, proper):
         original_by_proper = { v : k for k, v in self.proper_by_original.items()}
