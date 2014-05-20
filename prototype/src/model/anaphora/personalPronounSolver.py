@@ -1,6 +1,9 @@
 #-*- coding: utf-8 -*-
 
+from itertools import chain
+
 from src.model.entity.linkedEntity import LinkedEntity
+from src.utils.treeNode import TreeNode
 
 
 class PersonalPronounSolver:
@@ -51,8 +54,13 @@ class PersonalPronounSolver:
     def search_referenced_entity_in_sentences_for(self, actual_entity):
         previous_sentences = self.context["sentences"]
         if not previous_sentences: return None
-        selected_sentences = previous_sentences[::-1][0:3]
-        clauses = [sentence.main_clause() for sentence in selected_sentences]
+        selected_sentences = previous_sentences[::-1][0:1]
+        clauses = []
+        for sentence in selected_sentences:
+            clauses_by_level = TreeNode.by_level(sentence.clauses)
+            clauses_lists = zip(*sorted(clauses_by_level.items()))[1]
+            clauses.extend(list(chain(*clauses_lists))[::-1])
+
         return self.search_referenced_entity_in_clauses(clauses, actual_entity)
 
     def search_referenced_entity_in_clauses(self, clauses, actual_entity):
