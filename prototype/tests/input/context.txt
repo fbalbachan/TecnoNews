@@ -538,3 +538,12 @@ Juana, quien estudia literatura, adora a Cortázar
     clause: quien estudia literatura
         subject: Juana
         od: literatura
+
+# Bug en OD con bisagra "a quien"
+El autor, a quien nombra la obra, es Cortázar
+    clause: El autor , , es Cortázar
+        subject: El autor
+        equative: Cortázar
+    clause: a quien nombra la obra
+        subject: la obra
+        od: El autor
