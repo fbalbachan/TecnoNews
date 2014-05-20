@@ -31,7 +31,7 @@ class RelativePronounSolver:
                 break
             else:
                 entity = structure.entity()
-                if entity.matches(clause.relative_entity):
+                if entity.matches(clause.relative_entity) and entity.is_tacit():
                     structure.replace(entity, clause.relative_entity)
                     break
 
@@ -44,8 +44,10 @@ class RelativePronounSolver:
             else "od"
 
         structure = clause.structure(destination)
-        structure.tacit_entities = []
-        structure.entities = [ clause.relative_entity ]
+        entity = clause.relative_entity
+        if structure.accept(entity):
+            structure.tacit_entities = []
+            structure.entities = [ clause.relative_entity ]
 
     def guess_linker_leaves(self):
         clause = self.clause

@@ -1,41 +1,30 @@
 #-*- coding: utf-8 -*-
 from src.model.entity.entity import Entity
 from src.model.syntax.syntacticStructure import SyntacticStructure
-from src.utils.collectionUtils import dict_by
 
 
 class SyntacticAnalyzer:
     def __init__(self, clause):
         self.clause = clause
 
-    def analyze(self, structures_to_analyze):
+    def analyze(self, clause):
         # El orden en que se extraen las FSS es importante.
-        for name in structures_to_analyze:
-            structure = getattr(self, name, lambda: SyntacticStructure(name))()
-            self.clause.syntactic_structures.append(structure)
+        for structure in clause.syntactic_structures:
+            if structure.is_empty():
+                entities = getattr(self, structure.name, lambda: [])()
+                structure.append_all(entities)
 
     def subject(self):
-        structure = SyntacticStructure("subject")
         entities = self.clause.lonely_entities()
-        structure.entities = [ entities[0] ] if entities else []
-        return structure
+        return [ entities[0] ] if entities else []
 
     def verb(self):
-        verb = SyntacticStructure("verb")
-        verb.entities.append(self.clause.verb)
-        return verb
+        return [ self.clause.verb ]
 
     def adjuncts(self):
-        structure = SyntacticStructure("adjuncts")
-        structure.entities = Entity.only_maximal(self.clause.lonely_entities())
-        return structure
+        return Entity.only_maximal(self.clause.lonely_entities())
 
-    def extract_searching(self, name, *methods):
-        structure = SyntacticStructure(name)
-        structure.entities = self.find_entities_by(methods)
-        return structure
-
-    def find_entities_by(self, methods):
+    def find_entities_by(self, *methods):
         for method in methods:
             entities = method()
             if entities: return entities

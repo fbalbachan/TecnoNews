@@ -1,10 +1,15 @@
 # -*- coding: utf-8 -*-
+from src.model.syntax.syntacticStructureEntityValidator import SyntacticStructureEntityValidator
 
 class SyntacticStructure:
-    def __init__(self, name):
+    def __init__(self, name, clause):
         self.name = name
+        self.clause = clause
         self.entities = []
         self.tacit_entities = []
+
+    def accept(self, entity):
+        return SyntacticStructureEntityValidator(self).accept(entity)
 
     def replace(self, old_entity, new_entity):
         self.remove(old_entity)
@@ -16,7 +21,12 @@ class SyntacticStructure:
                 entity_list.remove(entity)
                 break
 
+    def append_all(self, entities):
+        for entity in entities: self.append(entity)
+
     def append(self, entity):
+        if not self.accept(entity): raise Exception(self.name + " no acepta la entidad " + str(entity))
+
         entity_list = self.tacit_entities if entity.is_tacit() else self.entities
         entity_list.append(entity)
 

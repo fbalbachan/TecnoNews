@@ -13,16 +13,15 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
 
     def subject(self):
         clause = self.clause
-        structure = SyntacticStructure("subject")
         if not clause.is_gerund():
             entities = self.verb_matching_subject_entities(3, 2)
 
             if entities:
-                structure.entities = [ entities[0] ]
+                return [ entities[0] ]
             else:
                 subject = somebody() if clause.is_relative() and clause.is_root() else self.tacit_subject()
-                structure.tacit_entities = [ subject ]
-        return structure
+                return [ subject ]
+        return []
 
     def tacit_subject(self):
         verb = self.clause.verb
@@ -33,21 +32,22 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         nominal_at_left  = lambda: self.search_nominal_od_at("left", 2)
         pronominal_at_left  = lambda: self.search_pronoun_at("left", 2)
         pronominal_at_right  = lambda: self.search_pronoun_at("right", 2)
-        od = self.extract_searching("od", nominal_at_right, nominal_at_left, pronominal_at_right, pronominal_at_left)
 
-        acusative_pronoun = self.search_duplicated_od_for(od)
+        entities = self.find_entities_by(nominal_at_right, nominal_at_left, pronominal_at_right, pronominal_at_left)
+
+        acusative_pronoun = self.search_duplicated_od_for(entities)
         if acusative_pronoun:
-            linked_pronoun = LinkedEntity(acusative_pronoun, od.entity())
+            linked_pronoun = LinkedEntity(acusative_pronoun, entities[0])
 
             self.clause.entities.remove(acusative_pronoun)
             self.clause.linked_entities.append(linked_pronoun)
 
-            od.entities.append(linked_pronoun)
-        return od
+            entities.append(linked_pronoun)
+        return entities
 
-    def search_duplicated_od_for(self, structure):
-        if structure.is_empty(): return
-        source_od = structure.entity()
+    def search_duplicated_od_for(self, entities):
+        if not entities: return
+        source_od = entities[0]
         if not source_od.is_subordinated_with_preposition("a"): return
 
         entities = self.clause.entities_closest_to_verb(("left", 3), ("right", 2))
@@ -66,19 +66,18 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         nominal_at_left  = lambda: self.search_nominal_oi_at("left", 3)
         pronominal_at_left  = lambda: self.search_pronoun_at("left", 2)
         pronominal_at_right  = lambda: self.search_pronoun_at("right", 2)
-        return self.extract_searching("oi", nominal_at_right, nominal_at_left, pronominal_at_left, pronominal_at_right)
+        return self.find_entities_by(nominal_at_right, nominal_at_left, pronominal_at_left, pronominal_at_right)
 
     def regimen(self):
         at_right = lambda: self.search_regime_at("right", 3)
         at_left  = lambda: self.search_regime_at("left", 2)
-        return self.extract_searching("regimen", at_right, at_left)
+        return self.find_entities_by(at_right, at_left)
 
     def equative(self):
-        structure = SyntacticStructure("equative")
         entities = self.valid_subject_entities(2, 3) + \
             self.search_subord_with_preposition_at("right", 3, "de", "para")
-        if entities: structure.entities = [ entities[0] ]
-        return structure
+        if entities: entities = [ entities[0] ]
+        return entities
 
     def search_regime_at(self, side, distance):
         return self.search_subord_with_preposition_at(side, distance)

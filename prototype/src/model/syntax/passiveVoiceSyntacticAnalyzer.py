@@ -10,18 +10,11 @@ class PassiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         SyntacticAnalyzer.__init__(self, clause)
 
     def subject(self):
-        structure = SyntacticStructure("subject")
-
         at_right = lambda: self.search_subject_at("right", 3)
         at_left  = lambda: self.search_subject_at("left", 3)
 
-        entities = self.find_entities_by([at_right, at_left])
-        if entities:
-            structure.entities = [ entities[0] ]
-        else:
-            structure.tacit_entities = [ self.tacit_subject() ]
-
-        return structure
+        entities = self.find_entities_by(at_right, at_left)
+        return [ entities[0] ] if entities else [ self.tacit_subject() ]
 
     def search_subject_at(self, side, distance):
         def which(node):
@@ -33,13 +26,8 @@ class PassiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         return somebody()
 
     def od(self):
-        structure = SyntacticStructure("od")
         entities = self.verb_matching_subject_entities(3, 2)
-        if entities:
-            structure.entities = [ entities[0] ]
-        else:
-            structure.tacit_entities = [ self.tacit_od() ]
-        return structure
+        return [ entities[0] ] if entities else [ self.tacit_od() ]
 
     def tacit_od(self):
         verb = self.clause.verb

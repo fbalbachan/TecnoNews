@@ -9,6 +9,7 @@ from src.model.entity.verb import Verb
 from src.model.syntax.activeVoiceSyntacticAnalizer import ActiveVoiceSyntacticAnalyzer
 from src.model.syntax.passiveVoiceSyntacticAnalyzer import PassiveVoiceSyntacticAnalyzer
 from src.model.syntax.syntacticAnalyzer import SyntacticAnalyzer
+from src.model.syntax.syntacticStructure import SyntacticStructure
 
 
 class ClauseAnalyzer:
@@ -21,11 +22,19 @@ class ClauseAnalyzer:
         if clause.voice: clause.verb = self.verb_of(clause)
 
         clause.entities = self.entities_of(clause)
-        self.analyze_syntactically(clause)
+        self.create_empty_syntactic_structures_for(clause)
 
-        reference_solvers = [ self.solve_relative, self.solve_gerund, self.solve_personal_pronouns ]
-        for solver_method in reference_solvers:
-            solver_method(clause)
+        for method in self.analyze_order_for(clause): method(clause)
+
+    def analyze_order_for(self, clause):
+        relative_solver_order = [ self.analyze_syntactically, self.solve_relative ]
+        if clause.is_relative() and clause.proper_leaves()[0].lexical_form.lower() == "quien":
+            relative_solver_order.reverse()
+        return relative_solver_order + [ self.solve_gerund, self.solve_personal_pronouns ]
+
+    def create_empty_syntactic_structures_for(self, clause):
+        for name in self.allowed_syntactic_structures_for(clause):
+            clause.syntactic_structures.append(SyntacticStructure(name, clause))
 
     def solve_relative(self, clause):
         if clause.is_relative():
@@ -44,7 +53,7 @@ class ClauseAnalyzer:
                                        "passive" : PassiveVoiceSyntacticAnalyzer,
                                        None : SyntacticAnalyzer }
         analyzer = syntactic_analyzer_by_voice[clause.voice](clause)
-        analyzer.analyze(self.allowed_syntactic_structures_for(clause))
+        analyzer.analyze(clause)
 
     def allowed_syntactic_structures_for(self, clause):
         active_voice_structures  = lambda clause: allowed_boxes(clause.verb.transitivity)
