@@ -80,7 +80,7 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         return entities
 
     def search_regime_at(self, side, distance):
-        return self.search_subord_with_preposition_at(side, distance, "a", "por", "en", "de", "contra", "con")
+        return self.search_subord_with_preposition_at(side, distance, "a", "por", "en", "de", "contra", "con", "sobre")
 
     def search_nominal_oi_at(self, side, distance):
         return self.search_subord_with_preposition_at(side, distance, "a", "para")
