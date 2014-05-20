@@ -553,3 +553,18 @@ Han debido lidiar durante años con él
     subject: ellos/ellas
     regimen: él
     adjuncts: años
+
+# Resolución de anáfora de PP estructuralmente en oraciones anteriores (por niveles en las cláusulas)
+Dijo que Juan y Pedro habían muerto. Ambos eran lindos.
+    sentence: Dijo que Juan y Pedro habían muerto
+        clause: Dijo
+            subject: él/ella
+        clause: que Juan y Pedro habían muerto
+            subject: Juan y Pedro
+    sentence: Ambos eran lindos
+        subject: Ambos -> Juan y Pedro
+
+Dijo que Juan y Pedro habían muerto y mencionó que Augusto y Luis habían sobrevivido. Ambos eran lindos.
+    sentence: Dijo que Juan y Pedro habían muerto y mencionó que Augusto y Luis habían sobrevivido
+    sentence: Ambos eran lindos
+        subject: Ambos -> Augusto y Luis
