@@ -547,3 +547,9 @@ El autor, a quien nombra la obra, es Cortázar
     clause: a quien nombra la obra
         subject: la obra
         od: El autor
+
+# Bug en preposiciones aceptadas para llenar "regimen"
+Han debido lidiar durante años con él
+    subject: ellos/ellas
+    regimen: él
+    adjuncts: años
