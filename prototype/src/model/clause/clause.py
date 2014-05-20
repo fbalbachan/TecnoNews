@@ -67,9 +67,15 @@ class Clause(TreeNode):
         return entities
 
     def lonely_entities(self):
-        assigned_entities = sum([ structure.entities for structure in self.syntactic_structures ], [])
+        assigned_entities = self.assigned_entities()
         return [ entity for entity in self.entities if entity not in assigned_entities
                 and not any([ assigned.contains(entity) for assigned in assigned_entities ]) ]
+
+    def assigned_entities(self):
+        return sum([ structure.entities for structure in self.syntactic_structures ], [])
+
+    def assigned_entities_with_referenced_ones(self):
+        return [ entity.referenced_entity if entity.is_linked() else entity for entity in self.assigned_entities()]
 
     def grouped_by_node(self, entities_with_node):
         entities = []

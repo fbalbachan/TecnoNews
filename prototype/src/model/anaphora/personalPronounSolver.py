@@ -46,10 +46,25 @@ class PersonalPronounSolver:
         return filter(is_valid_pronoun, entities)
 
     def search_referenced_entity_for(self, actual_entity):
-        if not self.clause.is_relative():
-            entity = self.search_referenced_entity_in_clauses(self.context["clauses"][::-1], actual_entity)
-            if entity: return entity
+        if not self.clause.is_root():
+            for parent in self.clause.path_to_root():
+                entity = self.search_referenced_entity_in(parent, actual_entity)
+                if entity: return entity
+
+        entity = self.search_referenced_entity_in_previous_clauses_for(actual_entity)
+        if entity: return entity
+
         return self.search_referenced_entity_in_sentences_for(actual_entity)
+
+    def search_referenced_entity_in_previous_clauses_for(self, actual_entity):
+        actual_root = self.clause.root()
+        previous_root_clauses = filter(lambda clause: clause.is_root() and clause != actual_root,
+                                       self.context["clauses"][::-1])
+        for root_clause in previous_root_clauses:
+            sorted_by_level = self.sorted_by_level_in_reverse_order(list(root_clause))
+            entity = self.search_referenced_entity_in_clauses(sorted_by_level, actual_entity)
+            if entity: return entity
+        return None
 
     def search_referenced_entity_in_sentences_for(self, actual_entity):
         previous_sentences = self.context["sentences"]
@@ -57,11 +72,14 @@ class PersonalPronounSolver:
         selected_sentences = previous_sentences[::-1][0:1]
         clauses = []
         for sentence in selected_sentences:
-            clauses_by_level = TreeNode.by_level(sentence.clauses)
-            clauses_lists = zip(*sorted(clauses_by_level.items()))[1]
-            clauses.extend(list(chain(*clauses_lists))[::-1])
-
+            clauses.extend(self.sorted_by_level_in_reverse_order(sentence.clauses))
         return self.search_referenced_entity_in_clauses(clauses, actual_entity)
+
+    def sorted_by_level_in_reverse_order(self, clauses):
+        clauses_by_level = TreeNode.by_level(clauses)
+        clauses_lists = zip(*sorted(clauses_by_level.items()))[1]
+        clauses_lists = [ list_for_level[::-1] for list_for_level in clauses_lists ] # En orden reverso de lectura
+        return list(chain(*clauses_lists))
 
     def search_referenced_entity_in_clauses(self, clauses, actual_entity):
         for clause in clauses:
@@ -81,8 +99,8 @@ class PersonalPronounSolver:
 
             matching_entities = filter(lambda entity: entity.matches(actual_entity), entities)
 
-            linked_entities = [ entity.referenced_entity for entity in self.clause.linked_entities ]
-            non_linked_entities = filter(lambda entity: entity not in linked_entities, matching_entities)
+            already_placed_entities = self.clause.assigned_entities_with_referenced_ones()
+            non_linked_entities = filter(lambda entity: entity not in already_placed_entities, matching_entities)
 
             if non_linked_entities: return non_linked_entities[0]
         return None
