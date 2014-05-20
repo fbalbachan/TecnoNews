@@ -19,11 +19,7 @@ class RelativePronounSolver:
 
     def solve_active_voice(self):
         clause = self.clause
-        first_linker_category = self.linker[0].msi["category"]
-
-        destinations = [ "regimen", "adjuncts" ] if first_linker_category == "adposition" else [ "subject" , "od" ]
-
-        for destination in destinations:
+        for destination in self.possible_entity_structures():
             if not clause.has_structure(destination): continue
             structure = clause.structure(destination)
             if structure.is_empty():
@@ -34,6 +30,17 @@ class RelativePronounSolver:
                 if entity.matches(clause.relative_entity) and entity.is_tacit():
                     structure.replace(entity, clause.relative_entity)
                     break
+
+    def possible_entity_structures(self):
+        first_linker_leaf = self.linker[0]
+        first_linker_category = first_linker_leaf.msi["category"]
+
+        if first_linker_category == "adposition":
+            structures = [ "regimen", "adjuncts" ]
+            if first_linker_leaf.lexical_form.lower() == "a": structures = [ "od" ] + structures
+        else:
+            structures = [ "subject" , "od" ]
+        return structures
 
     def solve_passive_voice(self):
         clause = self.clause
