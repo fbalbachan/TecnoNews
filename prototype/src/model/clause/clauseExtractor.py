@@ -9,7 +9,7 @@ class ClauseExtractor:
     def extract_from(self, sentence):
         root = sentence.parse_node
         potential_clause_roots = set(root.nodes_with_labels(self.CLAUSE_SEPARATORS))
-        clause_roots = self.filter_invalid_active_voice_clauses(potential_clause_roots) + [root]
+        clause_roots = self.filter_invalid_subordinated_clauses(potential_clause_roots) + [root]
 
         roots_by_level = ParseNode.by_level(clause_roots)
 
@@ -60,7 +60,8 @@ class ClauseExtractor:
             foreign_nodes = [ child.node for child in clause.children ]
             clause.proper_by_original = original.cloned_by_original(foreign_nodes)
 
-    def filter_invalid_active_voice_clauses(self, nodes):
-        return filter(lambda node : not node.is_subordinate(), nodes)
+    def filter_invalid_subordinated_clauses(self, nodes):
+        return filter(lambda node : not node.is_subordinate()
+                      or (node.is_subordinate() and node.label not in ["grup-verb", "verb-pass"]), nodes)
 
     CLAUSE_SEPARATORS = ["grup-verb", "subord-rel", "subord", "subord-ger", "verb-pass"]
