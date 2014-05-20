@@ -529,3 +529,12 @@ Juan y Pedro fueron al río. La mujer los encontró muertos.
         subject: La mujer
         od: muertos
         oi: los -> Juan y Pedro
+
+# Bug en resolución de "quien" relativo
+Juana, quien estudia literatura, adora a Cortázar
+    clause: Juana , , adora a Cortázar
+        subject: Juana
+        od: Cortázar
+    clause: quien estudia literatura
+        subject: Juana
+        od: literatura
