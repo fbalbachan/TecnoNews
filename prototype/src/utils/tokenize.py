@@ -14,12 +14,12 @@ re.sub(r'([a-z])\1+', r'\1', 'ffffffbbbbbbbqqq')
 
 def detroll(text):
     def por_token(index, token):
+        token = token.decode("utf-8")
         if index == 0:
-            return token[0].upper() + token[1:].lower()
+            token = token[0].upper() + token[1:].lower()
         elif not (token[0].upper() == token[0] and token[1:].lower() == token[1:]):
-            return token.lower()
-        else:
-            return token
+            token = token.lower()
+        return token.encode("utf-8")
     return ' '.join([por_token(index, token) for index, token in enumerate(text.split())])
 
 def limpieza_inicial(s):
