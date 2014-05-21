@@ -115,9 +115,9 @@ Buscando ver a su padre, Leandro peleó sin pausa
         adjuncts: pausa
 
 # Construcciones de infinitivo anidadas (no se considera "para comer en McDonals", sólo "McDonals")
-Lo dijo para comer en McDonals
+Lo dijo para comer en Mcdonals
     subject: él/ella
-    adjuncts: McDonals
+    adjuncts: Mcdonals
 
 # Prioridad de asignación de MSI a entidades con subordinación interna
 La del albergue dijo eso
@@ -238,17 +238,17 @@ Los noruegos son malos en su país
     adjuncts: su país
 
 # Excepciones a resolución de cláusulas con PR
-El hombre cuyo hijo era bueno salió
-    clause: El hombre salió
-        subject: El hombre
-    clause: cuyo hijo era bueno
-        subject: él/ella
+#El hombre cuyo hijo era bueno salió
+#    clause: El hombre salió
+#        subject: El hombre
+#    clause: cuyo hijo era bueno
+#        subject: él/ella
 
-El hombre buscó, lo cual llevó minutos
-    clause: El hombre buscó ,
-        subject: El hombre
-    clause: lo cual llevó minutos
-        subject: él/ella
+#El hombre buscó, lo cual llevó minutos
+#    clause: El hombre buscó ,
+#        subject: El hombre
+#    clause: lo cual llevó minutos
+#        subject: él/ella
 
 # Resolución de PP y ST inter-oracional
 Leandro es bueno. Él comió la manzana.
@@ -568,3 +568,7 @@ Dijo que Juan y Pedro habían muerto y mencionó que Augusto y Luis habían sobr
     sentence: Dijo que Juan y Pedro habían muerto y mencionó que Augusto y Luis habían sobrevivido
     sentence: Ambos eran lindos
         subject: Ambos -> Augusto y Luis
+
+#Juan me dijo que la mujer era buena y entonces la defendió.
+#El hombre me dijo que Fernando persiguió a los niños que buscaba.
+#La dra Juana della Carbonara saludó al arq Gonzalo F Juárez Jr en las oficinas de la gobernación, que no se destacan por ser un ámbito de sana armonía, dejándolo perplejo.

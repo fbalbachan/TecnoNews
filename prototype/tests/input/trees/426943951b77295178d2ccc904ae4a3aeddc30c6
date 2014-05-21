@@ -1,0 +1,38 @@
++grup-verb_[
+  patons_[
+    +paton-ms_[
+      +(Lo lo PP3MSA00 -)
+    ]
+  ]
+  +verb_[
+    +(dijo decir VMIS3S0 -)
+  ]
+  grup-sp-inf_[
+    +prep_[
+      +(para para SPS00 -)
+    ]
+    grup-verb-inf_[
+      +infinitiu_[
+        +inf_[
+          +forma-inf_[
+            +(comer comer VMN0000 -)
+          ]
+        ]
+      ]
+      grup-sp_[
+        +prep_[
+          +(en en SPS00 -)
+        ]
+        sn_[
+          +grup-nom-ms_[
+            +w-ms_[
+              +(Mcdonals mcdonals NP00000 -)
+            ]
+          ]
+        ]
+      ]
+    ]
+  ]
+]
+
+
