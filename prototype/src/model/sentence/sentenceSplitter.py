@@ -7,7 +7,7 @@ class SentenceSplitter:
 	def sentences_in(self, text):
 		texts = [ text.strip() for text in self.split(text)]
 		clean_texts = [ self.textCleaner.clean(text) for text in texts]
-		non_empty_texts = filter(lambda text: text != u'' and text != None, texts)
+		non_empty_texts = filter(lambda text: text != u'' and text != None, clean_texts)
 		return self.to_sentences(non_empty_texts)
 
 	def split(self, text):

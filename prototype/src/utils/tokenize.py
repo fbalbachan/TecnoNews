@@ -5,19 +5,22 @@ import re #, unidecode
 token_regex = re.compile(r'\w+|\w+\'\w+|[\w$]+', re.U|re.I)
 question_regex = re.compile(ur"""[.,¿]?([_\-$\w\s]+)\?+""", re.U|re.I)
 
-repeat_regex = re.compile(r'([abdefghijkmnñopqstuvwxyzABDEFGHIJKMNÑOPQSTUVWXYZáéíóúÁÉÍÓÚ])\1+')
+#repeat_regex = re.compile(r'([abdefghijkmnñopqstuvwxyzABDEFGHIJKMNÑOPQSTUVWXYZáéíóúÁÉÍÓÚ])\1+')
+repeat_regex = re.compile(r'([abdefghijkmnñopqstuvwxyzABDEFGHIJKMNÑOPQSTUVWXYZáéíóúÁÉÍÓÚ])\1\1+')
+#replacement = r'\1\1'
+replacement = r'\1'
 
 re.sub(r'([a-z])\1+', r'\1', 'ffffffbbbbbbbqqq')
 
-replacement = r'\1'
-
 def detroll(text):
-    def por_token(token):
-        if token.upper() == token:
+    def por_token(index, token):
+        if index == 0:
+            return token[0].upper() + token[1:].lower()
+        elif not (token[0].upper() == token[0] and token[1:].lower() == token[1:]):
             return token.lower()
         else:
             return token
-    return ' '.join([por_token(token) for token in text.split()])
+    return ' '.join([por_token(index, token) for index, token in enumerate(text.split())])
 
 def limpieza_inicial(s):
     # estos replaces están porque Freeling reemplaza estos signos (si están solos) por 'y'
