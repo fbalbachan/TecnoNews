@@ -1,21 +1,55 @@
 # -*- coding: utf-8 -*-
+from src.model.entity.tacitEntity import TacitEntity
 
 class RelativePronounSolver:
     def __init__(self, clause):
         self.clause = clause
-        self.linker = self.guess_linker_leaves()
+        self.linker = clause.relative_linker
 
     def solve(self):
         clause = self.clause
 
-        if self.is_valid_linker():
+        if self.is_possesive_relative():
+            self.solve_possesive_relative()
+        elif self.is_undefined_relative():
+            self.solve_undefined_relative()
+        elif self.is_valid_linker():
             solve_method_by_voice = { "active" : self.solve_active_voice, "passive" : self.solve_passive_voice }
             solve_method_by_voice[clause.voice]()
 
+    def is_undefined_relative(self):
+        linker_words = [ leaf.lexical_form for leaf in self.linker ]
+        return linker_words == ["lo", "cual"]
+
+    def solve_undefined_relative(self):
+        clause = self.clause
+        clause.relative_entity = None
+
+        destination_by_voice = { "active" : "subject", "passive" : "od" }
+        destination = clause.structure(destination_by_voice[clause.voice])
+
+        msi = { "category" : "pronoun", "type" : "demostrative", "gender" : "neutral", "person" : 3,
+               "number" : "singular", "case" : None}
+        undefined_pronoun = TacitEntity("eso", msi)
+
+        destination.append(undefined_pronoun)
+
+    def is_possesive_relative(self):
+        pronoun = self.linker[0].lexical_form
+        return pronoun in [ "cuyo", "cuya", "cuyos", "cuyas" ]
+
+    def solve_possesive_relative(self):
+        clause = self.clause
+        possessed_entity = clause.sorted(clause.lonely_entities(), False)[0]
+        possessed_entity.owner = clause.relative_entity
+
+        destination_by_voice = { "active" : "subject", "passive" : "od" }
+        destination = clause.structure(destination_by_voice[clause.voice])
+        destination.append(possessed_entity)
 
     def is_valid_linker(self):
-        linker_words = [ leaf.lexical_form for leaf in self.linker ]
-        return linker_words not in [ ["cuyo"], ["cuya"], ["cuyos"], ["cuyas"], ["donde"], ["adonde"], ["lo", "cual"] ]
+        word = self.linker[0].lexical_form
+        return word not in [ "donde", "adonde" ]
 
     def solve_active_voice(self):
         clause = self.clause
@@ -56,8 +90,8 @@ class RelativePronounSolver:
             structure.tacit_entities = []
             structure.entities = [ clause.relative_entity ]
 
-    def guess_linker_leaves(self):
-        clause = self.clause
+    @staticmethod
+    def guess_linker_leaves(clause):
         leaves = clause.proper_tree().leaves()
         linker = []
         last_leaf_of_relative = clause.relative_entity.leaves()[-1] # Parche por bug de freeling (ej. 'con la que')

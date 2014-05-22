@@ -27,8 +27,7 @@ class PersonalPronounSolver:
             for pronoun in pronouns:
                 pronouns_with_structure.append( (pronoun, structure) )
 
-        ordered = sorted(pronouns_with_structure, key = lambda (pronoun, structure): float("-inf") if pronoun.is_tacit()
-                         else clause.proper_leaves().index(pronoun.leaves()[0]) )
+        ordered = sorted(pronouns_with_structure, key = lambda (pronoun, structure): clause.index_of(pronoun, True) )
         return ordered
 
     def only_valid_pronouns(self, entities):

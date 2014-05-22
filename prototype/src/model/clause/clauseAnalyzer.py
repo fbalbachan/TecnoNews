@@ -2,9 +2,9 @@
 from src.ling.verb_info import allowed_boxes, allowed_boxes_for_passive_verbs, allowed_boxes_for_unimember_sentences
 from src.model.anaphora.gerundSubjectSolver import GerundSubjectSolver
 from src.model.anaphora.personalPronounSolver import PersonalPronounSolver
+from src.model.anaphora.relativeEntityExtractor import RelativeEntityExtractor
 from src.model.anaphora.relativePronounSolver import RelativePronounSolver
 from src.model.entity.entityExtractor import EntityExtractor
-from src.model.anaphora.relativeEntityExtractor import RelativeEntityExtractor
 from src.model.entity.verb import Verb
 from src.model.syntax.activeVoiceSyntacticAnalizer import ActiveVoiceSyntacticAnalyzer
 from src.model.syntax.passiveVoiceSyntacticAnalyzer import PassiveVoiceSyntacticAnalyzer
@@ -23,23 +23,30 @@ class ClauseAnalyzer:
 
         clause.entities = self.entities_of(clause)
         self.create_empty_syntactic_structures_for(clause)
+        self.perform_prior_relative_analysis_of(clause)
 
         for method in self.analyze_order_for(clause): method(clause)
 
     def analyze_order_for(self, clause):
+        unique_destination_linkers = [ ["quien"], ["cuyo"], ["cuya"], ["cuyos"], ["cuyas"], ["lo", "cual"] ]
         relative_solver_order = [ self.analyze_syntactically, self.solve_relative ]
-        if clause.is_relative() and clause.proper_leaves()[0].lexical_form.lower() == "quien":
+        if clause.is_relative() and clause.relative_linker_words() in unique_destination_linkers:
             relative_solver_order.reverse()
+
         return relative_solver_order + [ self.solve_gerund, self.solve_personal_pronouns ]
+
+    def perform_prior_relative_analysis_of(self, clause):
+        if clause.is_relative():
+            clause.relative_entity = RelativeEntityExtractor(clause).extract()
+            if clause.relative_entity:
+                clause.relative_linker = RelativePronounSolver.guess_linker_leaves(clause)
 
     def create_empty_syntactic_structures_for(self, clause):
         for name in self.allowed_syntactic_structures_for(clause):
             clause.syntactic_structures.append(SyntacticStructure(name, clause))
 
     def solve_relative(self, clause):
-        if clause.is_relative():
-            clause.relative_entity = self.relative_entity_of(clause)
-            if clause.relative_entity: RelativePronounSolver(clause).solve()
+        if clause.is_relative() and clause.relative_entity: RelativePronounSolver(clause).solve()
 
     def solve_gerund(self, clause):
         if clause.voice and clause.is_gerund():
@@ -106,10 +113,6 @@ class ClauseAnalyzer:
 
     def entities_of(self, clause):
         return EntityExtractor(clause).extract()
-
-    def relative_entity_of(self, clause):
-        linked_entity = RelativeEntityExtractor(clause).extract()
-        return linked_entity
 
     def voice_of(self, clause):
         root = clause.proper_tree()

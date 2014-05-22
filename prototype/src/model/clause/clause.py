@@ -13,10 +13,15 @@ class Clause(TreeNode):
 
         self.entities = []
         self.linked_entities = []
+
         self.relative_entity = None
+        self.relative_linker = []
 
         self.verb = None
         self.syntactic_structures = []
+
+    def relative_linker_words(self):
+        return [ leaf.lexical_form.lower() for leaf in self.relative_linker ]
 
     def original_by_proper(self, proper):
         original_by_proper = { v : k for k, v in self.proper_by_original.items()}
@@ -65,6 +70,13 @@ class Clause(TreeNode):
         by_component = zip(*self.to_entities_with_node(self.nodes_closest_to_verb_at(side, allowed_distance)))
         entities = list(by_component[0]) if by_component else []
         return entities
+
+    def index_of(self, entity, tacit_first):
+        tacit_value = float("-inf") if tacit_first else float("inf")
+        return tacit_value if entity.is_tacit() else self.proper_leaves().index(entity.leaves()[0])
+
+    def sorted(self, entities, tacit_first):
+        return sorted(entities, key = lambda entity: self.index_of(entity, tacit_first) )
 
     def lonely_entities(self):
         assigned_entities = self.assigned_entities()
