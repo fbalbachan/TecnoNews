@@ -10,7 +10,8 @@ class EntityExtractor:
 
     def extract(self):
         root = self.clause.proper_tree()
-        entity_nodes = root.nodes_with_labels(self.entity_labels) + self.verb_level_infinitive_structures()
+        entity_nodes = root.nodes_with_labels(self.entity_labels) + self.verb_level_infinitive_structures() \
+            + self.relative_abnormal_nodes()
 
         entities = self.entities_for(entity_nodes)
         entities = sorted(entities, key = lambda entity: entity.node.level(), reverse = True)
@@ -45,6 +46,11 @@ class EntityExtractor:
     def assign_msi(self, entities):
         entity_msi_seer = EntityMSISeer()
         for entity in entities: entity.msi = entity_msi_seer.msi_of(entity)
+
+    def relative_abnormal_nodes(self):
+        desired_labels = [ "grup-nom-ms", "grup-nom-fs", "grup-nom-mp", "grup-nom-fp" ]
+        root = self.clause.proper_tree()
+        return filter(lambda node: node.father.subordinates_others(), root.nodes_with_labels(desired_labels))
 
     def verb_level_infinitive_structures(self):
         clause = self.clause

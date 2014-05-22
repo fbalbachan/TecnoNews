@@ -73,10 +73,14 @@ class EntityMSISeer:
     def msi_of_infinity(self, entity):
         return { "category" : "noun", "gender" : None, "person" : 3, "number" : "singular", "type" : None }
 
-    msi_seer_by_label = { "sn" : msi_of_single,
-                           "coor-n" : msi_of_coordinated,
-                           "patons" : msi_of_leaf,
-                           "ptonic" : msi_of_leaf,
-                           "grup-verb-inf" : msi_of_infinity }
+    msi_seer_by_label = {   "sn" : msi_of_single,
+                            "grup-nom-ms" : msi_of_single,
+                            "grup-nom-fs" : msi_of_single,
+                            "grup-nom-mp" : msi_of_single,
+                            "grup-nom-fp" : msi_of_single,
+                            "coor-n" : msi_of_coordinated,
+                            "patons" : msi_of_leaf,
+                            "ptonic" : msi_of_leaf,
+                            "grup-verb-inf" : msi_of_infinity }
 
     gender_detector = GenderDetector()
