@@ -7,7 +7,7 @@ class Entity (TacitEntity):
         self.node = node
         self.father = None
 
-        TacitEntity.__init__(self, Entity.__repr__(self), {})
+        TacitEntity.__init__(self, self.lexical_form(), {})
 
     def is_coordinated(self):
         return not self.node.is_leaf() and self.node.label == "coor-n"
@@ -41,8 +41,13 @@ class Entity (TacitEntity):
     def is_tacit(self):
         return False
 
-    def __repr__(self):
+    def lexical_form(self):
         return " ".join([ str(leaf) for leaf in self.node.leaves() if leaf.msi["category"] != "punctuation" ])
+
+    def __repr__(self):
+        representation = self.lexical_form
+        if self.is_possessed(): representation = representation + " (of " + repr(self.owner) + ")"
+        return representation
 
     @staticmethod
     def only_maximal(entities):

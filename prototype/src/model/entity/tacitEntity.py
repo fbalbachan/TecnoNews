@@ -7,6 +7,7 @@ class TacitEntity:
         self.lexical_form = lexical_form
         self.msi = msi
         self.children = []
+        self.owner = None
 
     def children_of_category(self, category):
         return filter(lambda entity: entity.category() == category, self.children)
@@ -35,6 +36,9 @@ class TacitEntity:
 
     def is_tacit(self):
         return True
+
+    def is_possessed(self):
+        return bool(self.owner)
 
     def __repr__(self):
         return "(tacit) " + self.lexical_form
