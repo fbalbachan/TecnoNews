@@ -4,7 +4,7 @@ from src.model.anaphora.gerundSubjectSolver import GerundSubjectSolver
 from src.model.anaphora.personalPronounSolver import PersonalPronounSolver
 from src.model.anaphora.relativePronounSolver import RelativePronounSolver
 from src.model.entity.entityExtractor import EntityExtractor
-from src.model.entity.linkedEntityExtractor import LinkedEntityExtractor
+from src.model.anaphora.relativeEntityExtractor import RelativeEntityExtractor
 from src.model.entity.verb import Verb
 from src.model.syntax.activeVoiceSyntacticAnalizer import ActiveVoiceSyntacticAnalyzer
 from src.model.syntax.passiveVoiceSyntacticAnalyzer import PassiveVoiceSyntacticAnalyzer
@@ -108,7 +108,7 @@ class ClauseAnalyzer:
         return EntityExtractor(clause).extract()
 
     def relative_entity_of(self, clause):
-        linked_entity = LinkedEntityExtractor(clause).extract()
+        linked_entity = RelativeEntityExtractor(clause).extract()
         return linked_entity
 
     def voice_of(self, clause):

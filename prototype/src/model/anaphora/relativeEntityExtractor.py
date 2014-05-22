@@ -2,7 +2,7 @@
 from src.ling.tacit_subjects import somebody
 
 
-class LinkedEntityExtractor:
+class RelativeEntityExtractor:
 
     def __init__(self, clause):
         self.clause = clause
