@@ -238,17 +238,17 @@ Los noruegos son malos en su país
     adjuncts: su país
 
 # Excepciones a resolución de cláusulas con PR
-#El hombre cuyo hijo era bueno salió
-#    clause: El hombre salió
-#        subject: El hombre
-#    clause: cuyo hijo era bueno
-#        subject: él/ella
+El hombre cuyo hijo era bueno salió
+    clause: El hombre salió
+        subject: El hombre
+    clause: cuyo hijo era bueno
+        subject: hijo
 
-#El hombre buscó, lo cual llevó minutos
-#    clause: El hombre buscó ,
-#        subject: El hombre
-#    clause: lo cual llevó minutos
-#        subject: él/ella
+El hombre buscó, lo cual llevó minutos
+    clause: El hombre buscó ,
+        subject: El hombre
+    clause: lo cual llevó minutos
+        subject: eso
 
 # Resolución de PP y ST inter-oracional
 Leandro es bueno. Él comió la manzana.
