@@ -1,0 +1,116 @@
++grup-verb_[
+  sn_[
+    +grup-nom-ms_[
+      +w-ms_[
+        +(María maría NP00000 -)
+      ]
+    ]
+  ]
+  +verb_[
+    +(saludó saludar VMIS3S0 -)
+  ]
+  grup-sp_[
+    +prep_[
+      +(a a SPS00 -)
+    ]
+    sn_[
+      +grup-nom-ms_[
+        +w-ms_[
+          +(Pedro pedro NP00000 -)
+        ]
+      ]
+    ]
+  ]
+  grup-sp_[
+    +prep_[
+      +(en en SPS00 -)
+    ]
+    sn_[
+      espec-fp_[
+        +j-fp_[
+          +(las el DA0FP0 -)
+        ]
+      ]
+      +grup-nom-fp_[
+        +n-fp_[
+          +(oficinas oficina NCFP000 -)
+        ]
+      ]
+    ]
+  ]
+  Fc_[
+    +(, , Fc -)
+  ]
+  subord_[
+    +(que que CS -)
+    grup-verb_[
+      neg_[
+        +(no no RN -)
+      ]
+      +verb_[
+        +(se_destacan destacarse VMIP3P0 -)
+      ]
+      grup-sp-inf_[
+        +prep_[
+          +(por por SPS00 -)
+        ]
+        grup-verb-inf_[
+          +infinitiu_[
+            +infaux-ser_[
+              +(ser ser VSN0000 -)
+            ]
+          ]
+          sn_[
+            espec-ms_[
+              +indef-ms_[
+                +(un uno DI0MS0 -)
+              ]
+            ]
+            +grup-nom-ms_[
+              +n-ms_[
+                +(ámbito ámbito NCMS000 -)
+              ]
+            ]
+          ]
+          sp-de_[
+            +(de de SPS00 -)
+            sn_[
+              +grup-nom-fs_[
+                s-a-fs_[
+                  +a-fs_[
+                    +(sana sano AQ0FS0 -)
+                  ]
+                ]
+                +grup-nom-fs_[
+                  +n-fs_[
+                    +(armonía armonía NCFS000 -)
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ]
+      ]
+    ]
+  ]
+  Fc_[
+    +(, , Fc -)
+  ]
+  subord-ger_[
+    +(dejando dejar VMG0000 -)
+    patons_[
+      +paton-ms_[
+        +(lo lo PP3MSA00 -)
+      ]
+    ]
+  ]
+  s-adj_[
+    +s-a-ms_[
+      +a-ms_[
+        +(perplejo perplejo AQ0MS0 -)
+      ]
+    ]
+  ]
+]
+
+

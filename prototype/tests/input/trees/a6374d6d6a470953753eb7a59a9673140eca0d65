@@ -1,0 +1,62 @@
++coor-vb_[
+  grup-verb_[
+    sn_[
+      +grup-nom-ms_[
+        +w-ms_[
+          +(Juan juan NP00000 -)
+        ]
+      ]
+    ]
+    patons_[
+      +paton-s_[
+        +(me me PP1CS000 -)
+      ]
+    ]
+    +verb_[
+      +(dijo decir VMIS3S0 -)
+    ]
+    subord_[
+      +(que que CS -)
+      grup-verb_[
+        sn_[
+          espec-fs_[
+            +j-fs_[
+              +(la el DA0FS0 -)
+            ]
+          ]
+          +grup-nom-fs_[
+            +n-fs_[
+              +(mujer mujer NCFS000 -)
+            ]
+          ]
+        ]
+        +verb_[
+          +(era ser VSII3S0 -)
+        ]
+        s-adj_[
+          +s-a-fs_[
+            +a-fs_[
+              +(buena bueno AQ0FS0 -)
+            ]
+          ]
+        ]
+      ]
+    ]
+  ]
+  +(y y CC -)
+  grup-verb_[
+    sadv_[
+      +(entonces entonces RG -)
+    ]
+    patons_[
+      +paton-fs_[
+        +(la lo PP3FSA00 -)
+      ]
+    ]
+    +verb_[
+      +(defendió defender VMIS3S0 -)
+    ]
+  ]
+]
+
+
