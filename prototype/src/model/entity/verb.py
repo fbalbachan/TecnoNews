@@ -3,6 +3,7 @@
 from copy import copy
 from itertools import groupby
 
+from src.ling import verb_info
 from src.ling.head_labels import *
 from src.ling.tacit_subjects import tacit_subjects
 from src.ling.verb_info import get_script_class, get_transitivity
@@ -26,7 +27,8 @@ class Verb(Entity):
         self.transitivity = get_transitivity(lemma) # Idem
 
         if not self.transitivity:
-            raise Exception("No se encontró información de transitividad para " + self.leaf().lexical_form)
+            self.transitivity = verb_info.transitivities["I"]
+            self.script_class = verb_info.scripts["N"]
 
     def lemma(self):
         return self.leaf().lemma
