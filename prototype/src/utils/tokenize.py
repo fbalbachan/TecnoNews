@@ -37,6 +37,7 @@ def limpieza_inicial(s):
     s = s.replace("‘", '')
     s = s.replace("˶", '')
     s = s.replace("”", '')
+    s = s.replace("/", '')
     s = re.sub(r'\bq\b', 'que', s)
     s = re.sub(r'\bQ\b', 'que', s)
     s = re.sub(r'\?+', '?', s)
