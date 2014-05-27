@@ -1,0 +1,38 @@
++grup-verb_[
+  +verb_[
+    +(Me_comprometo comprometerse VMIP1S0 -)
+  ]
+  grup-sp-inf_[
+    +prep_[
+      +(a a SPS00 -)
+    ]
+    grup-verb-inf_[
+      +infinitiu_[
+        +inf_[
+          +forma-inf_[
+            +(cumplir cumplir VMN0000 -)
+          ]
+        ]
+      ]
+      grup-sp_[
+        +prep_[
+          +(con con SPS00 -)
+        ]
+        sn_[
+          espec-ms_[
+            +j-ms_[
+              +(el el DA0MS0 -)
+            ]
+          ]
+          +grup-nom-ms_[
+            +n-ms_[
+              +(pacto pacto NCMS000 -)
+            ]
+          ]
+        ]
+      ]
+    ]
+  ]
+]
+
+

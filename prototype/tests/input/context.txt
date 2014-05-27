@@ -114,11 +114,6 @@ Buscando ver a su padre, Leandro peleó sin pausa
         verb: peleó
         adjuncts: pausa
 
-# Construcciones de infinitivo anidadas (no se considera "para comer en McDonals", sólo "McDonals")
-Lo dijo para comer en Mcdonals
-    subject: él/ella
-    adjuncts: Mcdonals
-
 # Prioridad de asignación de MSI a entidades con subordinación interna
 La del albergue dijo eso
     subject: La de el albergue
@@ -599,3 +594,10 @@ María saludó a Pedro en las oficinas, que no se destacan por ser un ámbito de
     clause: dejando lo
         subject: María
         od: lo -> Pedro
+
+# Construcciones de infinitivo subordinadas en estructuras
+Me dediqué a cumplir el pacto
+    od: cumplir el pacto
+
+Me comprometo a cumplir con el pacto
+    regimen: cumplir con el pacto

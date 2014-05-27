@@ -1,0 +1,38 @@
++grup-verb_[
+  patons_[
+    +paton-s_[
+      +(Me me PP1CS000 -)
+    ]
+  ]
+  +verb_[
+    +(dediqué dedicar VMIS1S0 -)
+  ]
+  grup-sp-inf_[
+    +prep_[
+      +(a a SPS00 -)
+    ]
+    grup-verb-inf_[
+      +infinitiu_[
+        +inf_[
+          +forma-inf_[
+            +(cumplir cumplir VMN0000 -)
+          ]
+        ]
+      ]
+      sn_[
+        espec-ms_[
+          +j-ms_[
+            +(el el DA0MS0 -)
+          ]
+        ]
+        +grup-nom-ms_[
+          +n-ms_[
+            +(pacto pacto NCMS000 -)
+          ]
+        ]
+      ]
+    ]
+  ]
+]
+
+
