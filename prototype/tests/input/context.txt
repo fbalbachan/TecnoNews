@@ -601,3 +601,9 @@ Me dediqué a cumplir el pacto
 
 Me comprometo a cumplir con el pacto
     regimen: cumplir con el pacto
+
+#Neologismos
+Leandro boludeó a Pedro
+    subject: Leandro
+    verb: boludeó
+    oi: Pedro
