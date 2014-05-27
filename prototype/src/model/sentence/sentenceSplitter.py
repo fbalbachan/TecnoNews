@@ -9,9 +9,7 @@ class SentenceSplitter:
 		texts = [ text.strip().encode("utf-8") for text in self.split(text)]
 		clean_texts = [ self.textCleaner.clean(text) for text in texts]
 		non_empty_texts = filter(lambda text: text != u'' and text != None, clean_texts)
-		s = self.to_sentences(non_empty_texts)
-		print "sent", s
-		return s
+		return self.to_sentences(non_empty_texts)
 
 	def split(self, text):
 		texts = re.split(self.delimiters, text, re.U)
