@@ -607,3 +607,15 @@ Leandro boludeó a Pedro
     subject: Leandro
     verb: boludeó
     oi: Pedro
+
+# Bugfix: resolución de anáfora sólo con aquello que "fue leído" y no algo que está a derecha del pronombre.
+Leandro murió. Juan, quien lo había matado era un genio.
+    sentence: Leandro murió
+        subject: Leandro
+    sentence: Juan, quien lo había matado era un genio
+        clause: Juan , era un genio
+            subject: Juan
+        clause: quien lo había matado
+            subject: Juan
+            od: lo -> Leandro
+
