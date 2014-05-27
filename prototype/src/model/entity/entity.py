@@ -36,7 +36,7 @@ class Entity (TacitEntity):
 
     def subordinating_nodes(self):
         path_to_root = self.node.path_to_root()
-        return filter(lambda node: node.label in [ "coor-sp", "grup-sp", "sp-de" ], path_to_root)
+        return filter(lambda node: node.label in [ "coor-sp", "grup-sp", "sp-de", "grup-sp-inf" ], path_to_root)
 
     def is_tacit(self):
         return False
