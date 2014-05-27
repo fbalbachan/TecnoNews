@@ -71,6 +71,9 @@ class Clause(TreeNode):
         entities = list(by_component[0]) if by_component else []
         return entities
 
+    def index_in_root_of(self, node):
+        return self.root().node.leaves().index(self.original_by_proper(node.leaves()[0]))
+
     def index_of(self, entity, tacit_first):
         tacit_value = float("-inf") if tacit_first else float("inf")
         return tacit_value if entity.is_tacit() else self.proper_leaves().index(entity.leaves()[0])

@@ -6,7 +6,9 @@ class PersonalPronounCoreferenceSearcher:
     def __init__(self, clause, context, pronoun):
         self.clause = clause
         self.context = context
+
         self.pronoun = pronoun
+        self.pronoun_index = self.compute_pronoun_index()
 
     def search(self):
         methods = [ self.search_in_parent_clauses, self.search_in_previous_clauses, self.search_in_previous_sentences ]
@@ -36,6 +38,7 @@ class PersonalPronounCoreferenceSearcher:
 
     def search_in(self, clause):
         pronoun = self.pronoun
+
         for structure_name in self.search_order_for(clause):
             if not clause.has_structure(structure_name): continue
             structure = clause.structure(structure_name)
@@ -46,6 +49,9 @@ class PersonalPronounCoreferenceSearcher:
                 if not entity.is_tacit() and entity.is_coordinated(): entities.extend(entity.children)
 
             matching_entities = filter(lambda entity: entity.matches(pronoun), entities)
+            if clause.root() == self.clause.root():
+                matching_entities = filter(lambda entity: clause.index_in_root_of(entity.node) < self.pronoun_index,
+                                           matching_entities)
 
             already_placed_entities = self.clause.assigned_entities_with_referenced_ones()
             non_linked_entities = filter(lambda entity: entity not in already_placed_entities, matching_entities)
@@ -60,6 +66,10 @@ class PersonalPronounCoreferenceSearcher:
 
     def first_non_none(self, generator):
         return next( (x for x in generator if x is not None), None)
+
+    def compute_pronoun_index(self):
+        node_for_index = self.pronoun.node if not self.pronoun.is_tacit() else self.clause.proper_tree().leaves()[0]
+        return self.clause.index_in_root_of(node_for_index)
 
     def search_order_for(self, clause):
         pronoun_case = self.pronoun.msi["case"]
