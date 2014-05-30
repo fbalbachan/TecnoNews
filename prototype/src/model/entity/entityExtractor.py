@@ -10,8 +10,8 @@ class EntityExtractor:
 
     def extract(self):
         root = self.clause.proper_tree()
-        entity_nodes = root.nodes_with_labels(self.entity_labels) + self.verb_level_infinitive_structures() \
-            + self.relative_abnormal_nodes()
+        entity_nodes = root.nodes_with_labels(self.entity_labels) + self.infinitive_structures() + \
+            self.relative_abnormal_nodes()
 
         entities = self.entities_for(entity_nodes)
         entities = sorted(entities, key = lambda entity: entity.node.level(), reverse = True)
@@ -24,7 +24,7 @@ class EntityExtractor:
     def remove_invalid_coordinated(self, entities):
         return filter(lambda entity: not (entity.node.label == "coor-n" and len(entity.children) == 1), entities)
 
-    def entities_for(self, nodes):
+    def entities_for(self, nodes, attributes = []):
         entities_by_node = {}
 
         by_level = ParseNode.by_level(nodes)
@@ -32,6 +32,11 @@ class EntityExtractor:
         for level, nodes in sorted(by_level.items()):  # @UnusedVariable
             for node in nodes:
                 entity = Entity(node)
+
+                label = node.label
+                if label in self.attributes_by_label: entity.attributes.extend(self.attributes_by_label[label])
+
+                entity.attributes.extend(attributes)
                 entities_by_node[node] = entity
 
                 for parent in node.path_to_root():
@@ -52,9 +57,11 @@ class EntityExtractor:
         root = self.clause.proper_tree()
         return filter(lambda node: node.father.subordinates_others(), root.nodes_with_labels(desired_labels))
 
-    def verb_level_infinitive_structures(self):
+    def infinitive_structures(self):
         clause = self.clause
         root = clause.proper_tree()
         return root.nodes_with_labels(["grup-verb-inf"])
+
+    attributes_by_label = { "grup-verb-inf" : ["infinitive"] }
 
     entity_labels = ["sn", "patons", "ptonic", "coor-n"]
