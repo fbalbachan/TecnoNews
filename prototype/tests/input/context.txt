@@ -597,7 +597,7 @@ María saludó a Pedro en las oficinas, que no se destacan por ser un ámbito de
 
 # Construcciones de infinitivo subordinadas en estructuras
 Me dediqué a cumplir el pacto
-    od: cumplir el pacto
+    adjuncts: cumplir el pacto
 
 Me comprometo a cumplir con el pacto
     regimen: cumplir con el pacto
