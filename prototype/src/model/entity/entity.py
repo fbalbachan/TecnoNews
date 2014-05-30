@@ -7,7 +7,7 @@ class Entity (TacitEntity):
         self.node = node
         self.father = None
 
-        TacitEntity.__init__(self, self.lexical_form(), {})
+        TacitEntity.__init__(self, self.lexical_form(), {}, [])
 
     def is_coordinated(self):
         return not self.node.is_leaf() and self.node.label == "coor-n"

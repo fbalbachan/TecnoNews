@@ -5,7 +5,8 @@ from src.utils.proxy import Proxy
 
 class LinkedEntity(TacitEntity, Proxy):
     def __init__(self, source, referenced_entity):
-        TacitEntity.__init__(self, referenced_entity.lexical_form, self.enriched_msi(source, referenced_entity))
+        TacitEntity.__init__(self, referenced_entity.lexical_form, self.enriched_msi(source, referenced_entity),
+                             ["linked"])
         Proxy.__init__(self, referenced_entity)
 
         self.source = source

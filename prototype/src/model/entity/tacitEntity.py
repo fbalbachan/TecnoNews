@@ -3,11 +3,12 @@
 
 class TacitEntity:
 
-    def __init__(self, lexical_form, msi):
+    def __init__(self, lexical_form, msi, attributes = ["tacit"]):
         self.lexical_form = lexical_form
         self.msi = msi
         self.children = []
         self.owner = None
+        self.attributes = attributes
 
     def children_of_category(self, category):
         return filter(lambda entity: entity.category() == category, self.children)
@@ -32,10 +33,13 @@ class TacitEntity:
             or msi["gender"] == entity.msi["gender"]
 
     def is_linked(self):
-        return False
+        return self.Is("linked")
 
     def is_tacit(self):
-        return True
+        return self.Is("tacit")
+
+    def Is(self, attribute):
+        return attribute in self.attributes
 
     def is_possessed(self):
         return bool(self.owner)
