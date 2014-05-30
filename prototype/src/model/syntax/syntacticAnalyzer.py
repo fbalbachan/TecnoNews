@@ -42,7 +42,10 @@ class SyntacticAnalyzer:
         valid_subject_entities = self.only_valid_subject_entities_of(entities)
         return valid_subject_entities
 
-    def search_subord_with_preposition_at(self, side, distance, *accepted_prepositions):
+    def without_infs(self, entities):
+        return filter(lambda entity: not entity.Is("infinitive"), entities)
+
+    def search_subord_with_prep_at(self, side, distance, *accepted_prepositions):
         def which(node):
             first_leaf = node.leaves()[0]
             return first_leaf.msi["type"] == "preposition" and \
