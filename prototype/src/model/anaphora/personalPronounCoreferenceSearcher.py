@@ -37,8 +37,6 @@ class PersonalPronounCoreferenceSearcher:
         return self.first_non_none( ( self.search_in(clause) for clause in clauses ) )
 
     def search_in(self, clause):
-        pronoun = self.pronoun
-
         for structure_name in self.search_order_for(clause):
             if not clause.has_structure(structure_name): continue
             structure = clause.structure(structure_name)
@@ -48,15 +46,22 @@ class PersonalPronounCoreferenceSearcher:
                 entities.append(entity)
                 if not entity.is_tacit() and entity.is_coordinated(): entities.extend(entity.children)
 
-            matching_entities = filter(lambda entity: entity.matches(pronoun), entities)
-            if clause.root() == self.clause.root():
-                matching_entities = filter(lambda entity: clause.index_in_root_of(entity.node) < self.pronoun_index,
-                                           matching_entities)
-
+            matching_entities = self.only_matching_entities(entities, clause)
             already_placed_entities = self.clause.assigned_entities_with_referenced_ones()
             non_linked_entities = filter(lambda entity: entity not in already_placed_entities, matching_entities)
 
             if non_linked_entities: return non_linked_entities[0]
+
+    def only_matching_entities(self, entities, entities_clause):
+        matching_entities = filter(lambda entity: entity.matches(self.pronoun), entities)
+        if entities_clause.root() == self.clause.root():
+            matching_entities = self.only_already_read_entities(matching_entities, entities_clause)
+        return matching_entities
+
+    def only_already_read_entities(self, entities, entities_clause):
+        clause = entities_clause
+        return filter(lambda entity: entity.is_linked() or (clause.index_in_root_of(entity.node) < self.pronoun_index),
+                      entities)
 
     def sorted(self, clauses):
         clauses_by_level = TreeNode.by_level(clauses)
