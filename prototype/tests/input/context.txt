@@ -496,7 +496,7 @@ Me molesta tomar vacaciones con mi novia. Yo la detesto.
         subject: tomar vacaciones con mi novia
     sentence: Yo la detesto
         subject: Yo
-        od: la
+        od: la -> mi novia
 
 María y Laura murieron. Ambas eran hermosas.
     sentence: María y Laura murieron
