@@ -38,6 +38,9 @@ class TacitEntity:
     def is_tacit(self):
         return self.Is("tacit")
 
+    def is_coordinated(self):
+        return self.Is("coordinated")
+
     def Is(self, attribute):
         return attribute in self.attributes
 

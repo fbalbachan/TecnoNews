@@ -9,9 +9,6 @@ class Entity (TacitEntity):
 
         TacitEntity.__init__(self, self.lexical_form(), {}, [])
 
-    def is_coordinated(self):
-        return not self.node.is_leaf() and self.node.label == "coor-n"
-
     def is_subordinated_with_preposition(self, preposition):
         father = self.node.father
         return father.label in [ "grup-sp", "sp-de" ] and father.leaves()[0].lexical_form.lower() == preposition

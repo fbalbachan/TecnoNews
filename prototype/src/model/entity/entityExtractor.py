@@ -62,6 +62,6 @@ class EntityExtractor:
         root = clause.proper_tree()
         return root.nodes_with_labels(["grup-verb-inf"])
 
-    attributes_by_label = { "grup-verb-inf" : ["infinitive"] }
+    attributes_by_label = { "grup-verb-inf" : ["infinitive"], "coor-n": ["coordinated"] }
 
     entity_labels = ["sn", "patons", "ptonic", "coor-n"]
