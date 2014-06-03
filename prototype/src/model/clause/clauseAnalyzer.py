@@ -28,12 +28,19 @@ class ClauseAnalyzer:
         for method in self.analyze_order_for(clause): method(clause)
 
     def analyze_order_for(self, clause):
-        unique_destination_linkers = [ ["quien"], ["cuyo"], ["cuya"], ["cuyos"], ["cuyas"], ["lo", "cual"] ]
         relative_solver_order = [ self.analyze_syntactically, self.solve_relative ]
-        if clause.is_relative() and clause.relative_linker_words() in unique_destination_linkers:
+        if self.relative_needs_to_be_solved_first(clause):
             relative_solver_order.reverse()
 
         return relative_solver_order + [ self.solve_gerund, self.solve_personal_pronouns ]
+
+    def relative_needs_to_be_solved_first(self, clause):
+        if not clause.is_relative(): return False
+
+        unique_destination_linkers = [ ["quien"], ["cuyo"], ["cuya"], ["cuyos"], ["cuyas"], ["lo", "cual"] ]
+        is_equative_que = lambda clause: clause.relative_linker_words() == ["que"] and clause.voice and \
+            clause.verb.transitivity == "EQUATIVE"
+        if clause.relative_linker_words() in unique_destination_linkers or is_equative_que(clause): return True
 
     def perform_prior_relative_analysis_of(self, clause):
         if clause.is_relative():
