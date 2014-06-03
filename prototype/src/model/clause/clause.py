@@ -20,6 +20,11 @@ class Clause(TreeNode):
         self.verb = None
         self.syntactic_structures = []
 
+        self.global_operators = []
+
+    def has_global_operator_of(self, klass):
+        return bool(filter(lambda operator: operator.klass == klass, self.global_operators))
+
     def relative_linker_words(self):
         return [ leaf.lexical_form for leaf in self.relative_linker ]
 

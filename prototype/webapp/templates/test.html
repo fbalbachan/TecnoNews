@@ -60,6 +60,11 @@ $def with (sentences, printer)
             margin-left: 60px;
         }
 
+        .operators {
+            font-family: "monofur";
+            margin-left: 60px;
+        }
+
     </style>
   </head>
   <body>
@@ -89,6 +94,13 @@ $def with (sentences, printer)
             $if clause.relative_entity:
                 <b>Relative entities</b>
                 <br><li title="$printer.entity_tooltip(clause.relative_entity)">$clause.relative_entity</li>
+            </p>
+            <p class="normal">
+            <b>Global operators</b><br>
+            <div class="operators">
+            $for klass, name in [("negation", "Negation"), ("question", "Question"), ("posibility", "Posibility"), ("conditional", "Conditional"), ("imperative", "Imperative"), ("future", "Future")]:
+                $printer.global_operator_bullet_for(clause, klass) $name &nbsp &nbsp &nbsp &nbsp
+            </div>
             </p>
             <p class="normal">
             <b>Syntactic Structures</b><br>

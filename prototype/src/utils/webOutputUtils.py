@@ -28,6 +28,9 @@ class WebOutputUtils:
         return str(msi["person"]) + "° " + str(msi["gender"]) + " " + str(msi["number"]) + " (" + str(msi["category"]) + ")"
         #return ", ".join([ key + " = " + str(value) for (key, value) in msi.items() ])
 
+    def global_operator_bullet_for(self, clause, klass):
+        return "✓" if clause.has_global_operator_of(klass) else "☐"
+
     def clause_number(self, clause, sentence):
         number_string = ""
         while not clause.is_root():
