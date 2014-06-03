@@ -1,0 +1,62 @@
++verb-pass_[
+  sn_[
+    +grup-nom-ms_[
+      +w-ms_[
+        +(Hawaii hawaii NP00000 -)
+      ]
+    ]
+    Fc_[
+      +(, , Fc -)
+    ]
+    subord-rel_[
+      +(que que PR0CN000 -)
+      grup-verb_[
+        +verb_[
+          +(es ser VSIP3S0 -)
+        ]
+        sn_[
+          espec-ms_[
+            +pos-ms_[
+              +(mi mi DP1CSS -)
+            ]
+          ]
+          +grup-nom-ms_[
+            +n-ms_[
+              +(lugar lugar NCMS000 -)
+            ]
+            s-a-ms_[
+              +a-ms_[
+                +(favorito favorito AQ0MS0 -)
+              ]
+            ]
+          ]
+        ]
+      ]
+    ]
+    Fc_[
+      +(, , Fc -)
+    ]
+  ]
+  vser_[
+    +(fue ser VSIS3S0 -)
+  ]
+  +parti-flex_[
+    +parti-ms_[
+      +(descubierto descubrir VMP00SM -)
+    ]
+  ]
+  grup-sp_[
+    +prep_[
+      +(en en SPS00 -)
+    ]
+    sn_[
+      +grup-nom-fs_[
+        +n-fs_[
+          +(1806 1806 NCFS000 -)
+        ]
+      ]
+    ]
+  ]
+]
+
+

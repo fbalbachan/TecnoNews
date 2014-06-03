@@ -619,3 +619,10 @@ Leandro murió. Juan, quien lo había matado era un genio.
             subject: Juan
             od: lo -> Leandro
 
+# 'que' equativo tiene un único destino posible (sujeto)
+Hawaii, que es mi lugar favorito, fue descubierto en 1806
+    clause: Hawaii , , fue descubierto en 1806
+        od: Hawaii
+    clause: que es mi lugar favorito
+        subject: Hawaii
+        equative: mi lugar favorito
