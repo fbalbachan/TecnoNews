@@ -49,7 +49,7 @@ class SyntacticAnalyzer:
         def which(node):
             first_leaf = node.leaves()[0]
             return first_leaf.msi["type"] == "preposition" and \
-                first_leaf.lexical_form.lower() in accepted_prepositions if accepted_prepositions else True
+                first_leaf.lexical_form in accepted_prepositions if accepted_prepositions else True
         entities = self.search_subord_at(side, distance, which)
         if entities: entities = [ entities[0] ]
         return entities

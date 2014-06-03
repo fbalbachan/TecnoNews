@@ -19,7 +19,7 @@ class PassiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
     def search_subject_at(self, side, distance):
         def which(node):
             first_leaf = node.leaves()[0]
-            return first_leaf.msi["type"] == "preposition" and first_leaf.lexical_form.lower() == "por"
+            return first_leaf.msi["type"] == "preposition" and first_leaf.lexical_form == "por"
         return self.search_subord_at(side, distance, which)
 
     def tacit_subject(self):

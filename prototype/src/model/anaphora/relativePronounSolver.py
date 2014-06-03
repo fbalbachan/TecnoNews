@@ -71,7 +71,7 @@ class RelativePronounSolver:
 
         if first_linker_category == "adposition":
             structures = [ "regimen", "adjuncts" ]
-            if first_linker_leaf.lexical_form.lower() == "a": structures = [ "od" ] + structures
+            if first_linker_leaf.lexical_form == "a": structures = [ "od" ] + structures
         else:
             structures = [ "subject" , "od" ]
         return structures

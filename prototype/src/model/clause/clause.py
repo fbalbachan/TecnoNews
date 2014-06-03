@@ -21,7 +21,7 @@ class Clause(TreeNode):
         self.syntactic_structures = []
 
     def relative_linker_words(self):
-        return [ leaf.lexical_form.lower() for leaf in self.relative_linker ]
+        return [ leaf.lexical_form for leaf in self.relative_linker ]
 
     def original_by_proper(self, proper):
         original_by_proper = { v : k for k, v in self.proper_by_original.items()}

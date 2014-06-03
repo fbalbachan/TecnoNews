@@ -2,8 +2,8 @@
 #-*- coding: utf-8 -*-
 import unittest
 
-from src.model.sentence.sentenceAnalyzer import SentenceAnalyzer
 from src.model.sentence.sentence import Sentence
+from src.model.sentence.sentenceAnalyzer import SentenceAnalyzer
 from tests.freelingTreeRepository import FreelingTreeRepository
 
 
@@ -34,7 +34,7 @@ class TestWord(unittest.TestCase):
         ]
 
         for ((expected_form, expected_lemma, expected_tag), result_word) in zip(expected, clause.proper_leaves()):
-            self.assertEqual(expected_form,     result_word.lexical_form)
+            self.assertEqual(expected_form,     result_word.original_lexical_form)
             self.assertEqual(expected_lemma,    result_word.lemma)
             #self.assertEqual(expected_tag,      result_word.tag)
 
@@ -55,8 +55,8 @@ class TestWord(unittest.TestCase):
         entity_primer_ministro = filter(lambda e: str(e) == 'el Primer_Ministro', clause.entities)[0]
         primer_ministro_words = entity_primer_ministro.leaves()
 
-        self.assertEqual('el', primer_ministro_words[0].lexical_form)
-        self.assertEqual('Primer_Ministro', primer_ministro_words[1].lexical_form)
+        self.assertEqual('el', primer_ministro_words[0].original_lexical_form)
+        self.assertEqual('Primer_Ministro', primer_ministro_words[1].original_lexical_form)
 
         print "OK"
 
