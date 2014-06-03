@@ -626,3 +626,9 @@ Hawaii, que es mi lugar favorito, fue descubierto en 1806
     clause: que es mi lugar favorito
         subject: Hawaii
         equative: mi lugar favorito
+
+# Fix en selección de verbo para construcciones "estar + participio"
+La manzana estaba podrida
+    subject: La manzana
+    verb: estaba
+        lemma: estar
