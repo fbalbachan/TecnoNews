@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
+from src.model.go.coordinatedNegationAnalyzer import CoordinatedNegationAnalyzer
 from src.model.go.negativeParticleFinder import NegativeParticleFinder
+
 
 class GlobalOperatorAnalyzer:
 
@@ -7,6 +9,10 @@ class GlobalOperatorAnalyzer:
         self.sentence = sentence
 
     def analyze(self):
+        sentence_analyzers = [ CoordinatedNegationAnalyzer ]
+        for analyzer in sentence_analyzers:
+            analyzer(self.sentence).analyze()
+
         for clause in self.sentence.clauses:
             self.analyze_clause(clause)
 

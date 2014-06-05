@@ -8,7 +8,7 @@ class NegativeParticleFinder:
 
     def find(self):
         clause = self.clause
-        negation_lemmas = [ "nunca", "nadie", "nada", "jamás", "tampoco", "ninguno" ]
+        negation_lemmas = [ "nunca", "nadie", "nada", "jamás", "tampoco", "ninguno", "ni" ]
         leaves = filter(lambda leaf: leaf.lemma in negation_lemmas, clause.proper_leaves())
 
         no_leaf = self.find_no_negation_leaf()
@@ -28,5 +28,4 @@ class NegativeParticleFinder:
 
         no_leaf = no_leaves[0]
         middle_leaves = leaves[leaves.index(no_leaf)+1:verb_index]
-        print middle_leaves
         if all([ leaf.msi["category"] == "pronoun" for leaf in middle_leaves ]): return no_leaf
