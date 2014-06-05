@@ -98,7 +98,7 @@ $def with (sentences, printer)
             <p class="normal">
             <b>Global operators</b><br>
             <div class="operators">
-            $for klass, name in [("negation", "Negation"), ("question", "Yes/No Question"), ("possibility", "Possibility"), ("conditional", "Conditional"), ("imperative", "Imperative"), ("future", "Future")]:
+            $for klass, name in [("negation", "Negation"), ("question", "Yes/No Question"), ("possibility", "Possibility"), ("condition", "Condition"), ("imperative", "Imperative"), ("future", "Future")]:
                 $printer.global_operator_bullet_for(clause, klass) $name &nbsp &nbsp &nbsp &nbsp
             </div>
             </p>
