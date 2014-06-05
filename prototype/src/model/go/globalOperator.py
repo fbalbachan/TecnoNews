@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 class GlobalOperator:
-    def __init__(self, klass, node = None):
+    def __init__(self, klass, object = None):  # @ReservedAssignment
         self.klass = klass
-        self.node = node
+        self.object = object
 
     def __repr__(self):
-        return self.klass + (" " + str(self.node)) if self.node else ""
+        return self.klass + (" " + str(self.object)) if self.object else ""
