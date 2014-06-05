@@ -17,6 +17,9 @@ class TreeNode:
     def leaves(self):
         return filter(lambda node: node.is_leaf(), self)
 
+    def is_subordinated(self):
+        return not self.is_root()
+
     def is_leaf(self):
         return not self.children
 

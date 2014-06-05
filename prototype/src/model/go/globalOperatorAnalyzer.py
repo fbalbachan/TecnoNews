@@ -19,7 +19,7 @@ class GlobalOperatorAnalyzer:
 
     def analyze_clause(self, clause):
         finders = [ self.negation_finder, self.conditional_verb_finder, self.imperative_finder,
-                   self.possibility_word_finder, self.subjuntive_in_relative_finder ]
+                   self.possibility_word_finder, self.subjuntive_finder ]
 
         for finder in finders:
             found = finder(clause)
@@ -29,8 +29,9 @@ class GlobalOperatorAnalyzer:
         print "Clause:", clause
         print "  global operators:", clause.global_operators
 
-    def subjuntive_in_relative_finder(self, clause):
-        if clause.voice and clause.verb.leaves[0].msi["mode"] == "subjuntive" and clause.is_relative():
+    def subjuntive_finder(self, clause):
+        if clause.voice and clause.verb.leaves[0].msi["mode"] == "subjuntive" and (clause.is_relative() or \
+            (clause.is_subordinated() and clause.proper_leaves()[0].lexical_form == "cuando")):
             return [ GlobalOperator("possibility", clause.verb)]
 
     def possibility_word_finder(self, clause):
