@@ -25,7 +25,7 @@ def detroll(text):
 def limpieza_inicial(s):
     # estos replaces están porque Freeling reemplaza estos signos (si están solos) por 'y'
     s = s.replace('¡', '')
-    s = s.replace('!', '')
+    #s = s.replace('!', '')
     s = s.replace('¿', '')
     s = s.replace('"', '')
     s = s.replace("'", '')

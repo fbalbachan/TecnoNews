@@ -12,15 +12,31 @@ class SentenceSplitter:
 		return self.to_sentences(non_empty_texts)
 
 	def split(self, text):
-		texts = re.split(self.delimiters, text, re.U)
-		return sum([ self.split_by_period(text) for text in texts ], [])
+		validator = lambda match: self.is_valid_delimiter_before_period(match.group(1))
 
-	def split_by_period(self, text):
+		def replace_signs(text, index, match):
+			signs = match.group(0)
+			if "!" in signs and "?"  in signs:	replacement = "!?"
+			elif "!" in signs: 					replacement = "!"
+			else:								replacement = "?"
+
+			return text[index:match.start(0)] + replacement
+
+		def default_replace(text, index, match):
+			return text[index:match.end(1)]
+
+		texts = re.split(self.delimiters, text, re.U)
+		texts = sum([ self.split_by("(\w+)\.\s", text, default_replace, validator) for text in texts ], [])
+		texts = sum([ self.split_by("[!\?]+[!\? ]*", text, replace_signs) for text in texts ], [])
+		return texts
+
+	# Dirty
+	def split_by(self, regex, text, append_method, validator = lambda match: True):
 		start_index = 0
 		texts = []
-		for match in re.finditer("(\w+)\.\s", text, re.U):
-			if self.is_valid_delimiter_before_period(match.group(1)):
-				texts.append(text[start_index:match.end(1)])
+		for match in re.finditer(regex, text, re.U):
+			if validator(match):
+				texts.append(append_method(text, start_index, match))
 				start_index = match.end()
 		if start_index < len(text):
 			texts.append(text[start_index:])
@@ -33,5 +49,7 @@ class SentenceSplitter:
 		return [ Sentence(text) for text in texts ]
 
 	abbreviation_regex = re.compile("^(jr|mr|inc|ltd|co|ing|lic|dr|dra|arq|mag|phd|ph|prof|excmo|excma|mrs|gmbh|md|mons|cap|tte|col|lt|sgt|cnel|gral|brig|pref|prov|sr|sra|srta|dir|etc|fed)$", re.U | re.I)
-	delimiters = re.compile(ur"""\?+|\.$|\n|,pero|, pero|:\s+|, y|,y|,mientras|, mientras|,entonces|, entonces|, aunque|,aunque|, sin embargo|,sin embargo|, no obstante|,no obstante|!+|; |\.\.\.|, pues|,pues""", re.U|re.I)
+	#|(?<=\?)\?*
+	#[!\?]*(?<=(!\?|\?!))[!\?]*
+	delimiters = re.compile(ur"""\.$|\n|,pero|, pero|:\s+|, y|,y|,mientras|, mientras|,entonces|, entonces|, aunque|,aunque|, sin embargo|,sin embargo|, no obstante|,no obstante|; |\.\.\.|, pues|,pues""", re.U|re.I)
 	textCleaner = TextCleaner()

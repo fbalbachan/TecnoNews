@@ -67,7 +67,8 @@ attribute_map = {"A": {1: ("type", {"Q": u"calificative", "O": u"ordinal", "0": 
                  # Esto parece ser incorrercto.
                  #"F": {1: ("category", {"Z": u"number"}),
                  #      2: ("type", {"d": u"partitive", "m": u"money", "p": u"percentage", "u": u"unit"})},
-                 "F": {1: ("type", {"p": u".", "c" : u",", "s" : u"abbreviation" })}, # Completar
+                 "F": {1: ("type", {"p": u".", "c" : u",", "s" : u"abbreviation", "i" : "?", "a" : "!" }),
+                       2: ("function", { "a": "open", "t" : "close" })}, # Completar
 
                  "W": {},
 
