@@ -19,15 +19,32 @@ class GlobalOperatorAnalyzer:
 
     def analyze_clause(self, clause):
         finders = [ self.negation_finder, self.conditional_verb_finder, self.imperative_finder,
-                   self.possibility_word_finder, self.subjuntive_finder ]
+                   self.possibility_word_finder, self.subjuntive_finder, self.verb_poder_finder,
+                   self.deontic_modality_finder, self.future_finder ]
 
         for finder in finders:
             found = finder(clause)
-            if found: clause.global_operators.extend(found)
+            if found: clause.global_operators.update(found)
 
         print "--"
         print "Clause:", clause
         print "  global operators:", clause.global_operators
+
+    def future_finder(self, clause):
+        if clause.voice:
+            leaf = clause.verb.leaves[0]
+            if leaf.msi["time"] == "futuro" and leaf.msi["mode"] == "indicative":
+                return [ GlobalOperator("future", clause.verb)]
+
+    def deontic_modality_finder(self, clause):
+        if clause.voice:
+            leaf = clause.verb.leaves[0]
+            if leaf.lemma == "deber" and leaf.size() == 2 and leaf.components()[1] == "que":
+                return [ GlobalOperator("imperative", clause.verb)]
+
+    def verb_poder_finder(self, clause):
+        if clause.voice and clause.verb.leaves[0].lemma == "poder":
+            return [ GlobalOperator("possibility", clause.verb)]
 
     def subjuntive_finder(self, clause):
         if clause.voice and clause.verb.leaves[0].msi["mode"] == "subjuntive" and (clause.is_relative() or \
@@ -35,7 +52,8 @@ class GlobalOperatorAnalyzer:
             return [ GlobalOperator("possibility", clause.verb)]
 
     def possibility_word_finder(self, clause):
-        possibility_forms = [ "probablemente", "posiblemente", "supuestamente", "aparentemente" ]
+        possibility_forms = [ "probablemente", "posiblemente", "supuestamente", "aparentemente", "tal_vez", "acaso",
+                             "quizá", "quizás" ]
         leaves = filter(lambda leaf: leaf.lexical_form in possibility_forms, clause.proper_leaves())
         return [ GlobalOperator("possibility", leaf) for leaf in leaves ]
 

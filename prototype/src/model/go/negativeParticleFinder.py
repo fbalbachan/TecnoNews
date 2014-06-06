@@ -8,8 +8,12 @@ class NegativeParticleFinder:
 
     def find(self):
         clause = self.clause
+
         negation_lemmas = [ "nunca", "nadie", "nada", "jamás", "tampoco", "ninguno", "ni" ]
-        leaves = filter(lambda leaf: leaf.lemma in negation_lemmas, clause.proper_leaves())
+        negation_lexical_forms = [ "difícilmente" ]
+
+        leaves = filter(lambda leaf: leaf.lemma in negation_lemmas or leaf.lexical_form in negation_lexical_forms,
+                        clause.proper_leaves())
 
         no_leaf = self.find_no_negation_leaf()
         if no_leaf: leaves.append(no_leaf)

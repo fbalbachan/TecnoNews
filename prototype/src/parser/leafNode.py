@@ -10,6 +10,12 @@ class LeafNode(ParseNode):
         self.lemma = lemma
         self.msi = msi
 
+    def components(self):
+        return self.lexical_form.split("_")
+
+    def size(self):
+        return len(self.components())
+
     def __repr__(self):
         return self.original_lexical_form
 

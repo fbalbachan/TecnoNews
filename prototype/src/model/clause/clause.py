@@ -20,7 +20,7 @@ class Clause(TreeNode):
         self.verb = None
         self.syntactic_structures = []
 
-        self.global_operators = []
+        self.global_operators = set()
 
     def has_global_operator_of(self, klass):
         return bool(filter(lambda operator: operator.klass == klass, self.global_operators))
