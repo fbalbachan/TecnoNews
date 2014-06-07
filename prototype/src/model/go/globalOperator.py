@@ -6,7 +6,7 @@ class GlobalOperator:
         self.object = object
 
     def __repr__(self):
-        return self.klass + (" " + str(self.object)) if self.object else ""
+        return self.klass + ((" " + str(self.object)) if self.object else "")
 
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
