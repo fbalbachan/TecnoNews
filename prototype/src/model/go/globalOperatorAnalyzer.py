@@ -2,6 +2,7 @@
 from src.model.go.coordinatedNegationAnalyzer import CoordinatedNegationAnalyzer
 from src.model.go.globalOperator import GlobalOperator
 from src.model.go.negativeParticleFinder import NegativeParticleFinder
+from src.model.go.totalQuestionAnalyzer import TotalQuestionAnalyzer
 
 
 class GlobalOperatorAnalyzer:
@@ -10,7 +11,7 @@ class GlobalOperatorAnalyzer:
         self.sentence = sentence
 
     def analyze(self):
-        sentence_analyzers = [ CoordinatedNegationAnalyzer ]
+        sentence_analyzers = [ CoordinatedNegationAnalyzer, TotalQuestionAnalyzer ]
         for analyzer in sentence_analyzers:
             analyzer(self.sentence).analyze()
 
