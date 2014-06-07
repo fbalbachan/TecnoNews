@@ -21,4 +21,4 @@ class CoordinatedNegationAnalyzer:
             affected_clauses = sum([ list(clause) for clause in affected_clauses ], [])
             for clause in affected_clauses:
                 operator = GlobalOperator("negation", leaf)
-                clause.global_operators.append(operator)
+                clause.global_operators.add(operator)
