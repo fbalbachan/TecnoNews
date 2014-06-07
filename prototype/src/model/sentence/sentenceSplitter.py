@@ -11,9 +11,8 @@ class SentenceSplitter:
 		non_empty_texts = filter(lambda text: text != u'' and text != None, clean_texts)
 		return self.to_sentences(non_empty_texts)
 
+	# Dirty
 	def split(self, text):
-		validator = lambda match: self.is_valid_delimiter_before_period(match.group(1))
-
 		def replace_signs(text, index, match):
 			signs = match.group(0)
 			if "!" in signs and "?"  in signs:	replacement = "!?"
@@ -22,11 +21,12 @@ class SentenceSplitter:
 
 			return text[index:match.start(0)] + replacement
 
+		validator = lambda match: self.is_valid_delimiter_before_period(match.group(1))
 		def default_replace(text, index, match):
 			return text[index:match.end(1)]
 
 		texts = re.split(self.delimiters, text, re.U)
-		texts = sum([ self.split_by("(\w+)\.\s", text, default_replace, validator) for text in texts ], [])
+		texts = sum([ self.split_by("(\w+)\.(?=[^\.])", text, default_replace, validator) for text in texts ], [])
 		texts = sum([ self.split_by("[!\?]+[!\? ]*", text, replace_signs) for text in texts ], [])
 		return texts
 
@@ -49,7 +49,5 @@ class SentenceSplitter:
 		return [ Sentence(text) for text in texts ]
 
 	abbreviation_regex = re.compile("^(jr|mr|inc|ltd|co|ing|lic|dr|dra|arq|mag|phd|ph|prof|excmo|excma|mrs|gmbh|md|mons|cap|tte|col|lt|sgt|cnel|gral|brig|pref|prov|sr|sra|srta|dir|etc|fed)$", re.U | re.I)
-	#|(?<=\?)\?*
-	#[!\?]*(?<=(!\?|\?!))[!\?]*
-	delimiters = re.compile(ur"""\.$|\n|,pero|, pero|:\s+|, y|,y|,mientras|, mientras|,entonces|, entonces|, aunque|,aunque|, sin embargo|,sin embargo|, no obstante|,no obstante|; |\.\.\.|, pues|,pues""", re.U|re.I)
+	delimiters = re.compile(ur"""\.$|\n|, ?pero|:\s+|, ?y|, ?mientras|, ?entonces|, ?aunque|, ?sin embargo|, ?no obstante|;|\.\.\.|, ?pues""", re.U|re.I)
 	textCleaner = TextCleaner()
