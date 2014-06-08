@@ -12,13 +12,19 @@ from tests.freelingTreeRepository import FreelingTreeRepository
 
 class TestClauseAnalyzer(unittest.TestCase):
 
+    def setUp(self):
+        self.sentenceAnalyzer = SentenceAnalyzer(FreelingTreeRepository("tests/input/trees"))
+        self.analyzer = ParagraphAnalyzer(self.sentenceAnalyzer)
+
     def test(self):
-        sentenceAnalyzer = SentenceAnalyzer(FreelingTreeRepository("tests/input/trees"))
-        analyzer = ParagraphAnalyzer(sentenceAnalyzer)
+        self.run_test_file("tests/input/context.txt")
+        self.run_test_file("tests/input/global_operators.txt")
+
+    def run_test_file(self, file):
 
         frame = {}
 
-        test_file = open("tests/input/context.txt")
+        test_file = open(file)
         for line in test_file:
             line = line.strip("\n").strip(" ").replace("\t", "")
             if not line or self.is_comment(line): continue
@@ -28,7 +34,7 @@ class TestClauseAnalyzer(unittest.TestCase):
             else:
                 print "Analyzing:", line
                 paragraph = Paragraph.from_text(line)
-                analyzer.analyze(paragraph)
+                self.analyzer.analyze(paragraph)
                 frame = { "paragraph" : paragraph }
 
                 if len(paragraph.sentences) == 1:
@@ -41,6 +47,7 @@ class TestClauseAnalyzer(unittest.TestCase):
             print "\t", clause
             for structure in clause.syntactic_structures:
                 print "\t  ", structure.name, structure
+            print "\t   Global operators", list(clause.global_operators)
         print "--"
 
     def sentence(self, assertion, frame):
@@ -125,6 +132,11 @@ class TestClauseAnalyzer(unittest.TestCase):
         self.assertTrue(len(clauses) == 1, "No se encontró la cláusula " + assertion)
         frame["clause"] = clauses[0]
 
+    def go(self, assertion, frame):
+        clause = frame["clause"]
+        self.assertTrue(clause.has_global_operator_of(assertion),
+                        "La cláusula no tiene un operador global de tipo " + assertion)
+
     def begin_with_keyword(self, string):
         string = string.replace(" ", "")
         return any(( string.startswith(keyword + ":") for keyword in self.keywords ))
@@ -133,7 +145,7 @@ class TestClauseAnalyzer(unittest.TestCase):
         return string.startswith("#")
 
     structure_keywords = [ "subject", "od", "oi", "equative", "regimen", "adjuncts", "verb" ]
-    keywords = [ "clause", "lemma", "msi", "entity", "sentence", "count" ] + structure_keywords
+    keywords = [ "clause", "lemma", "msi", "entity", "sentence", "count", "go" ] + structure_keywords
 
 if __name__ == '__main__':
     unittest.main()
