@@ -37,6 +37,8 @@ class PersonalPronounCoreferenceSearcher:
         return self.first_non_none( ( self.search_in(clause) for clause in clauses ) )
 
     def search_in(self, clause):
+        if not self.is_already_read(clause): return
+
         for structure_name in self.search_order_for(clause):
             if not clause.has_structure(structure_name): continue
 
@@ -48,6 +50,9 @@ class PersonalPronounCoreferenceSearcher:
             non_linked_entities = filter(lambda entity: entity not in already_placed_entities, matching_entities)
 
             if non_linked_entities: return non_linked_entities[0]
+
+    def is_already_read(self, clause):
+        return self.clause.root() != clause.root() or clause in self.context["clauses"]
 
     def entities_to_be_searched_in(self, structure):
         entities = []
@@ -88,4 +93,5 @@ class PersonalPronounCoreferenceSearcher:
                                           "acusative"   : ["od", "subject", "regimen", "oi", "equative", "adjuncts" ]},
                              "passive" : { None         : [ "od", "subject", "adjuncts" ],
                                           "acusative"   : ["subject", "od", "adjuncts"] },
-                             None      : { None         : [ "subject" ] } }
+                             None      : { None         : [ "subject" ],
+                                          "acusative"   : [ "subject" ] } }
