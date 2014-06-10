@@ -632,3 +632,11 @@ La manzana estaba podrida
     subject: La manzana
     verb: estaba
         lemma: estar
+
+# Bug PP acusativo buscado en oraciones unimembres
+Hermoso banquete. Lo disfruté mucho.
+    sentence: Hermoso banquete
+        subject: Hermoso banquete
+    sentence: Lo disfruté mucho
+        subject: yo
+        od: Lo -> Hermoso banquete
