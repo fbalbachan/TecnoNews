@@ -11,3 +11,10 @@ Para cuántos meses pagaste?
 
 Qué precio pagaste?
     count: go = 0
+
+Yo quiero comer eso
+    count: go = 1
+    go: volitive
+
+Yo quiero eso
+    count: go = 0
