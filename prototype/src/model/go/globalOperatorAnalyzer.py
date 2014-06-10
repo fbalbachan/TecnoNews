@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from src.model.go.conditionAnalyzer import ConditionAnalyzer
 from src.model.go.coordinatedNegationAnalyzer import CoordinatedNegationAnalyzer
 from src.model.go.globalOperator import GlobalOperator
 from src.model.go.negativeParticleFinder import NegativeParticleFinder
@@ -11,7 +12,7 @@ class GlobalOperatorAnalyzer:
         self.sentence = sentence
 
     def analyze(self):
-        sentence_analyzers = [ CoordinatedNegationAnalyzer, TotalQuestionAnalyzer ]
+        sentence_analyzers = [ CoordinatedNegationAnalyzer, TotalQuestionAnalyzer, ConditionAnalyzer ]
         for analyzer in sentence_analyzers:
             analyzer(self.sentence).analyze()
 
