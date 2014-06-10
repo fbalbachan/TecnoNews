@@ -21,15 +21,21 @@ class GlobalOperatorAnalyzer:
     def analyze_clause(self, clause):
         finders = [ self.negation_finder, self.conditional_verb_finder, self.imperative_finder,
                    self.possibility_word_finder, self.subjuntive_finder, self.verb_poder_finder,
-                   self.deontic_modality_finder, self.future_finder ]
+                   self.deontic_modality_finder, self.future_finder, self.volitive_finder ]
 
         for finder in finders:
             found = finder(clause)
             if found: clause.global_operators.update(found)
 
-        print "--"
         print "Clause:", clause
         print "  global operators:", clause.global_operators
+        print "--"
+
+    def volitive_finder(self, clause):
+        if clause.voice:
+            leaf = clause.verb.leaves[0]
+            if leaf.lemma == "querer" and clause.verb.is_compound():
+                return [ GlobalOperator("volitive", clause.verb)]
 
     def future_finder(self, clause):
         if clause.voice:
