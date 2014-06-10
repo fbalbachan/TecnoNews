@@ -1,0 +1,13 @@
+Leandro no mató a Pedro
+    count: go = 1
+    go: negation
+
+Leandro mató a Pedro?
+    count: go = 1
+    go: question
+
+Para cuántos meses pagaste?
+    count: go = 0
+
+Qué precio pagaste?
+    count: go = 0

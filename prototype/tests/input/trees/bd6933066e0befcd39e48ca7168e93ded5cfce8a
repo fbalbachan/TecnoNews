@@ -1,0 +1,27 @@
++grup-verb_[
+  grup-sp_[
+    +prep_[
+      +(Para para SPS00 -)
+    ]
+    sn_[
+      espec-mp_[
+        +int-mp_[
+          +(cuántos cuánto DT0MP0 -)
+        ]
+      ]
+      +grup-nom-mp_[
+        +n-mp_[
+          +(meses mes NCMP000 -)
+        ]
+      ]
+    ]
+  ]
+  +verb_[
+    +(pagaste pagar VMIS2S0 -)
+  ]
+  F-term_[
+    +(? ? Fit -)
+  ]
+]
+
+
