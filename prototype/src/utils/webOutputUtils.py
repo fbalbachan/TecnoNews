@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from src.utils.factNormalizer import FactNormalizer
 
 class WebOutputUtils:
 
@@ -43,3 +44,9 @@ class WebOutputUtils:
         number_string = str(number) + number_string
 
         return number_string
+
+    def fact(self, clause):
+        return FactNormalizer(clause).fact()
+
+    def fact_real_or_not(self, clause):
+        return "(Not a real fact. See checked flags for global operators.)" if clause.global_operators else ""
