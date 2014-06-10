@@ -1,0 +1,34 @@
++grup-verb_[
+  grup-sp_[
+    +prep_[
+      +(En_caso_de en_caso_de SPS00 -)
+    ]
+    sn_[
+      +grup-nom-ms_[
+        +n-ms_[
+          +(incendio incendio NCMS000 -)
+        ]
+      ]
+    ]
+    Fc_[
+      +(, , Fc -)
+    ]
+  ]
+  +verb_[
+    +(use usar VMSP3S0 -)
+  ]
+  sn_[
+    espec-ms_[
+      +j-ms_[
+        +(el el DA0MS0 -)
+      ]
+    ]
+    +grup-nom-ms_[
+      +n-ms_[
+        +(ascensor ascensor NCMS000 -)
+      ]
+    ]
+  ]
+]
+
+

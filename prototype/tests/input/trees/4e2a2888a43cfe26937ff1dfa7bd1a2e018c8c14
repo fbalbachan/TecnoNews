@@ -1,0 +1,35 @@
++grup-verb_[
+  subord_[
+    +(Si si CS -)
+    grup-verb_[
+      patons_[
+        +paton-ms_[
+          +(lo lo PP3MSA00 -)
+        ]
+      ]
+      +verb_[
+        +(mata matar VMIP3S0 -)
+      ]
+    ]
+    Fc_[
+      +(, , Fc -)
+    ]
+  ]
+  +verb_[
+    +(será ser VSIF3S0 -)
+  ]
+  sn_[
+    espec-fs_[
+      +indef-fs_[
+        +(una uno DI0FS0 -)
+      ]
+    ]
+    +grup-nom-fs_[
+      +n-fs_[
+        +(tragedia tragedia NCFS000 -)
+      ]
+    ]
+  ]
+]
+
+

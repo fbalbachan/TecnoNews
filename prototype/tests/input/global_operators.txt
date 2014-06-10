@@ -34,3 +34,37 @@ Lo hice apenas llegó el hombre
     clause: Lo hice
     clause: apenas llegó el hombre
         count: go = 0
+
+Si lo mata, será una tragedia
+    clause: Si lo mata ,
+        count: go = 1
+        go: condition
+    clause: será una tragedia
+        count: go = 2
+        go: condition
+        go: future
+
+En caso de que sea rico, me compro un yate
+    clause: En_caso_de
+        count: go = 1
+        go: condition
+    clause: que sea rico ,
+        count: go = 1
+        go: condition
+    clause: me compro un yate
+        count: go = 1
+        go: condition
+
+En caso de incendio, use el ascensor
+    count: go = 0
+
+Lo mato siempre y cuando sea correcto
+    clause: Lo mato siempre_y_cuando
+        count: go = 1
+        go: condition
+    clause: sea correcto
+        count: go = 1
+        go: condition
+
+Dijo que sí
+    count: go = 0
