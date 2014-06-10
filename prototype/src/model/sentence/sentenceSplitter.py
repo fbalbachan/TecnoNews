@@ -49,5 +49,5 @@ class SentenceSplitter:
 		return [ Sentence(text) for text in texts ]
 
 	abbreviation_regex = re.compile("^(jr|mr|inc|ltd|co|ing|lic|dr|dra|arq|mag|phd|ph|prof|excmo|excma|mrs|gmbh|md|mons|cap|tte|col|lt|sgt|cnel|gral|brig|pref|prov|sr|sra|srta|dir|etc|fed)$", re.U | re.I)
-	delimiters = re.compile(ur"""\.$|\n|, ?pero|:\s+|, ?y|, ?mientras|, ?entonces|, ?aunque|, ?sin embargo|, ?no obstante|;|\.\.\.|, ?pues""", re.U|re.I)
+	delimiters = re.compile(ur"""\.$|\n|, ?pero\b|:\s+|, ?y\b|, ?mientras|, ?entonces|, ?aunque|, ?sin embargo\b|, ?no obstante|;|\.\.\.|, ?pues\b""", re.U|re.I)
 	textCleaner = TextCleaner()
