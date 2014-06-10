@@ -55,7 +55,7 @@ class GlobalOperatorAnalyzer:
 
     def subjuntive_finder(self, clause):
         if clause.voice and clause.verb.leaves[0].msi["mode"] == "subjuntive" and (clause.is_relative() or \
-            (clause.is_subordinated() and clause.proper_leaves()[0].lexical_form == "cuando")):
+            (clause.is_subordinated() and clause.proper_leaves()[0].lemma == "cuando")):
             return [ GlobalOperator("possibility", clause.verb)]
 
     def possibility_word_finder(self, clause):
