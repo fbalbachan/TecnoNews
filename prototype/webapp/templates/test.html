@@ -102,8 +102,8 @@ $def with (sentences, printer)
             <p class="normal">
             <br><br><br><b><u>Global operators</u></b> <font size=2>(any checked flag indicates the utterance is not a real fact but an hypothetical situation that didn't happen)</font><br>
             <div class="operators">
-            $for klass, name in [("negation", "Negation"), ("question", "Yes/No Question"), ("possibility", "Possibility"), ("condition", "Condition"), ("imperative", "Imperative"), ("future", "Future")]:
-                $printer.global_operator_bullet_for(clause, klass) $name &nbsp &nbsp &nbsp &nbsp
+            $for klass, name in [("negation", "Negation"), ("question", "Yes/No Question"), ("possibility", "Possibility"), ("condition", "Condition"), ("imperative", "Imperative"), ("future", "Future"), ("volitive", "Volitive")]:
+                $printer.global_operator_bullet_for(clause, klass) $name &nbsp &nbsp &nbsp
             </div>
             </p>
             <p class="normal">
