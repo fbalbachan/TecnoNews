@@ -18,3 +18,19 @@ Yo quiero comer eso
 
 Yo quiero eso
     count: go = 0
+
+Lo haré apenas llegue el hombre
+    clause: Lo haré
+        count: go = 1
+        go: future
+    clause: apenas llegue el hombre
+        count: go = 1
+        go: possibility
+
+Apenas lo hizo
+    count: go = 0
+
+Lo hice apenas llegó el hombre
+    clause: Lo hice
+    clause: apenas llegó el hombre
+        count: go = 0

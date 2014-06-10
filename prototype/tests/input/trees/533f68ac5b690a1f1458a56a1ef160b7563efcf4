@@ -1,0 +1,32 @@
++grup-verb_[
+  patons_[
+    +paton-ms_[
+      +(Lo lo PP3MSA00 -)
+    ]
+  ]
+  +verb_[
+    +(haré hacer VMIF1S0 -)
+  ]
+  subord_[
+    +(apenas cuando CS -)
+    grup-verb_[
+      +verb_[
+        +(llegue llegar VMSP3S0 -)
+      ]
+      sn_[
+        espec-ms_[
+          +j-ms_[
+            +(el el DA0MS0 -)
+          ]
+        ]
+        +grup-nom-ms_[
+          +n-ms_[
+            +(hombre hombre NCMS000 -)
+          ]
+        ]
+      ]
+    ]
+  ]
+]
+
+
