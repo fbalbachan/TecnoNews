@@ -87,8 +87,15 @@ class TestClauseAnalyzer(unittest.TestCase):
             self.assertEqual("", assertion, "Existe más de una entidad para " + structure_name)
 
     def count(self, assertion, frame):
-        entities = frame["structure"].all_entities()
-        self.assertEqual(len(entities), int(assertion))
+        splitted = assertion.split("=")
+        assertions = { "entities" : lambda: len(frame["structure"].all_entities()),
+                       "go": lambda: len(frame["clause"].global_operators) }
+        if len(splitted) == 1: splitted = [ "entities", splitted[0] ]
+
+        assertion = splitted[0].strip()
+        expected = int(splitted[1].strip())
+
+        self.assertEqual(assertions[assertion](), expected, "Count for '" + assertion + "' is not " + str(expected))
 
     def entity(self, assertion, frame):
         entities = frame["structure"].all_entities()
