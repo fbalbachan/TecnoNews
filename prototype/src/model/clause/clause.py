@@ -46,6 +46,13 @@ class Clause(TreeNode):
         return root.label in [ "subord", "subord-rel" ] and \
             bool(filter(lambda leaf: leaf.msi["category"] == "pronoun" and leaf.msi["type"] == "relative", leaves))
 
+    def is_subordinated_with(self, header_lexical_form):
+        if self.is_subordinated() and not self.is_relative():
+            header = self.proper_leaves()[0]
+            return header.msi["category"] == "conjunction" and header.msi["type"] == "subordinated" and \
+                header.lexical_form == header_lexical_form
+        return False
+
     def is_gerund(self):
         return self.verb.msi["mode"] == "gerundio"
 

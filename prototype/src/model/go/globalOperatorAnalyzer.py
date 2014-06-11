@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from src.model.go.VolitiveModalityFinder import VolitiveModalityFinder
 from src.model.go.conditionAnalyzer import ConditionAnalyzer
 from src.model.go.coordinatedNegationAnalyzer import CoordinatedNegationAnalyzer
 from src.model.go.globalOperator import GlobalOperator
@@ -33,10 +34,7 @@ class GlobalOperatorAnalyzer:
         print "--"
 
     def volitive_finder(self, clause):
-        if clause.voice:
-            leaf = clause.verb.leaves[0]
-            if leaf.lemma == "querer" and clause.verb.is_compound():
-                return [ GlobalOperator("volitive", clause.verb)]
+        return VolitiveModalityFinder(clause).find()
 
     def future_finder(self, clause):
         if clause.voice:

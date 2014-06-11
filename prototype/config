@@ -9,3 +9,4 @@ tagger_port = 9999
 
 verbal_scripts = %(resources_dir)s/scripts_verbales.csv
 resources_dir = /home/leandro/tecnolecto/entinews/prototype/resources
+general_resources = %(resources_dir)s/general_resources
