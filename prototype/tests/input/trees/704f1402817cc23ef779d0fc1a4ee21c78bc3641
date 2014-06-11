@@ -1,0 +1,29 @@
++grup-verb_[
+  sn_[
+    +grup-nom-ms_[
+      +w-ms_[
+        +(Leandro leandro NP00000 -)
+      ]
+    ]
+  ]
+  +verb_[
+    +(necesita necesitar VMIP3S0 -)
+  ]
+  subord_[
+    +(que que CS -)
+    grup-verb_[
+      sn_[
+        +grup-nom-ms_[
+          +w-ms_[
+            +(Juan juan NP00000 -)
+          ]
+        ]
+      ]
+      +verb_[
+        +(muera morir VMSP3S0 -)
+      ]
+    ]
+  ]
+]
+
+

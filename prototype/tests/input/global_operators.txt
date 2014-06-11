@@ -68,3 +68,11 @@ Lo mato siempre y cuando sea correcto
 
 Dijo que sí
     count: go = 0
+
+# Volitive en cláusula subord con 'que' (CS) + verbos específicos
+Leandro necesita que Juan muera
+    clause: Leandro necesita
+        count: go = 0
+    clause: que Juan muera
+        count: go = 1
+        go: volitive
