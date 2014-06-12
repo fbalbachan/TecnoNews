@@ -76,3 +76,7 @@ Leandro necesita que Juan muera
     clause: que Juan muera
         count: go = 1
         go: volitive
+
+Ojalá seas feliz
+    count: go = 1
+    go: volitive
