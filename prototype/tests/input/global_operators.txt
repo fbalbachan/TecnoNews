@@ -80,3 +80,10 @@ Leandro necesita que Juan muera
 Ojalá seas feliz
     count: go = 1
     go: volitive
+
+Leandro niega que sea así
+    clause: Leandro niega
+        count: go = 0
+    clause: que sea así
+        count: go = 1
+        go: negation
