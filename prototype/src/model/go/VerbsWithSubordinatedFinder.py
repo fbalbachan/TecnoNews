@@ -15,7 +15,6 @@ def load_verbs():
                     verbs[verb].append(klass)
                 else:
                     verbs[verb] = [ klass ]
-    print verbs
     return verbs
 
 class VerbsWithSubordinatedFinder():
