@@ -13,3 +13,5 @@ class GlobalOperator:
 
     def __hash__(self):
         return hash(tuple(self.__dict__.values()))
+
+    classes = [ "negation", "volitive", "question", "possibility", "imperative", "conditional", "future"]

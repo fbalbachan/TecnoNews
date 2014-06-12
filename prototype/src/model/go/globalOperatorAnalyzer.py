@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from src.model.go.VerbsWithSubordinatedFinder import VerbsWithSubordinatedFinder
 from src.model.go.VolitiveModalityFinder import VolitiveModalityFinder
 from src.model.go.conditionAnalyzer import ConditionAnalyzer
 from src.model.go.coordinatedNegationAnalyzer import CoordinatedNegationAnalyzer
@@ -11,6 +12,7 @@ class GlobalOperatorAnalyzer:
 
     def __init__(self, sentence):
         self.sentence = sentence
+        self.setup_finders()
 
     def analyze(self):
         sentence_analyzers = [ CoordinatedNegationAnalyzer, TotalQuestionAnalyzer, ConditionAnalyzer ]
@@ -21,17 +23,21 @@ class GlobalOperatorAnalyzer:
             self.analyze_clause(clause)
 
     def analyze_clause(self, clause):
-        finders = [ self.negation_finder, self.conditional_verb_finder, self.imperative_finder,
-                   self.possibility_word_finder, self.subjuntive_finder, self.verb_poder_finder,
-                   self.deontic_modality_finder, self.future_finder, self.volitive_finder ]
-
-        for finder in finders:
+        for finder in self.finders:
             found = finder(clause)
             if found: clause.global_operators.update(found)
 
         print "Clause:", clause
         print "  global operators:", clause.global_operators
         print "--"
+
+    def setup_finders(self):
+        self.finders = [ self.negation_finder, self.conditional_verb_finder, self.imperative_finder,
+            self.possibility_word_finder, self.subjuntive_finder, self.verb_poder_finder, self.deontic_modality_finder,
+            self.future_finder, self.volitive_finder, self.verbs_with_subordinated_finder ]
+
+    def verbs_with_subordinated_finder(self, clause):
+        return VerbsWithSubordinatedFinder(clause).find()
 
     def volitive_finder(self, clause):
         return VolitiveModalityFinder(clause).find()

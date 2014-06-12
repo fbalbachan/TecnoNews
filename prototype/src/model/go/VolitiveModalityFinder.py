@@ -2,19 +2,8 @@
 import ConfigParser
 
 from src.model.go.globalOperator import GlobalOperator
+from src.utils import resources
 
-
-def load_volitive_verbs():
-    Config = ConfigParser.ConfigParser()
-    Config.read("config")
-    resources_file = dict(Config.items("resources"))["general_resources"]
-
-    Config.read(resources_file)
-    string = dict(Config.items("go"))["volitive_verbs"]
-    verbs = set()
-    for verb in string.split(","):
-        verbs.add(verb.strip())
-    return verbs
 
 class VolitiveModalityFinder:
 
@@ -23,7 +12,7 @@ class VolitiveModalityFinder:
 
     def find(self):
         operators = []
-        methods = [ self.find_subordinated, self.find_selected_verbs, self.find_selected_words ]
+        methods = [ self.find_selected_verbs, self.find_selected_words ]
         for method in methods: operators.extend(method())
         return operators
 
@@ -41,13 +30,3 @@ class VolitiveModalityFinder:
             if leaf.lemma == "querer" and clause.verb.is_compound():
                 return [ GlobalOperator("volitive", clause.verb)]
         return []
-
-    def find_subordinated(self):
-        clause = self.clause
-        if clause.is_subordinated_with("que") and clause.father.voice:
-            father_verb_lemma = clause.father.verb.lemma()
-            if father_verb_lemma in self.volitive_verbs:
-                return [ GlobalOperator("volitive", father_verb_lemma + " + subord 'que' (CS)")]
-        return []
-
-    volitive_verbs = load_volitive_verbs()
