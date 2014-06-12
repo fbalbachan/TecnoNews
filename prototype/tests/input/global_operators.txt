@@ -87,3 +87,7 @@ Leandro niega que sea así
     clause: que sea así
         count: go = 1
         go: negation
+
+Voy a viajar
+    count: go = 1
+    go: future
