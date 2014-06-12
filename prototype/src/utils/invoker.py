@@ -1,0 +1,25 @@
+# -*- coding: utf-8 -*-
+from ConfigParser import ConfigParser
+from ast import literal_eval
+import logging
+from traceback import format_exc
+
+
+def default_raise_exception():
+    Config = ConfigParser()
+    Config.read("config")
+    string = dict(Config.items("debug"))["raise_exception"]
+    return literal_eval(string)
+
+class Invoker:
+    def __init__(self, raise_exception = default_raise_exception()):
+        self.raise_exception = raise_exception
+
+    def invoke(self, method, *args):
+        try:
+            method(*args)
+        except Exception as exception:
+            if self.raise_exception:
+                print format_exc()
+                raise exception
+            logging.error("[Unraised exception] " + format_exc())
