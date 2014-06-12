@@ -22,13 +22,18 @@ class EntityMSISeer:
         banned_labels = ["grup-sp", "sp-de"]
         banned_nodes = set(filter(lambda child: not child.is_leaf() and child.label in banned_labels, node.children))
 
-        nouns = node.leaves_of_category("noun")
+        nouns = node.leaves_of_category("noun") + node.leaves_of_category("number")
         useful_leaves = nouns + node.leaves_of_category("pronoun") + node.leaves_of_category("determinant") \
             + node.leaves_of_category("adjective")
         useful_leaves = filter(lambda leaf: not banned_nodes & set(leaf.path_to_root()), useful_leaves)
 
         useful_leaves.reverse()
         msi = useful_leaves.pop().msi
+
+        if msi["category"] == "number":
+            msi["gender"] = "neutral"
+            msi["number"] = "invariable"
+            msi["type"] = "common"
 
         if not "person" in msi or not msi["person"]: msi["person"] = 3
         if nouns: msi["category"] = "noun"
