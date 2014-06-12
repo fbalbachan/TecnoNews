@@ -4,18 +4,23 @@ from src.model.clause.clauseAnalyzer import ClauseAnalyzer
 from src.model.clause.clauseExtractor import ClauseExtractor
 from src.model.go.globalOperatorAnalyzer import GlobalOperatorAnalyzer
 from src.parser.freelingTreeParser import FreelingTreeParser
+from src.utils.invoker import Invoker
 
 
 class SentenceAnalyzer:
     def __init__(self, tree_parser = FreelingTreeParser()):
         self.tree_parser = tree_parser
         self.context = { "sentences" : [] }
+        self.invoker = Invoker()
 
     def analyze(self, sentence):
         self.set_parse_tree_to(sentence)
 
         sentence.clauses = ClauseExtractor().extract_from(sentence)
-        self.analyze_clauses_of(sentence)
+        self.invoker.invoke(self.analyze_clauses_of, sentence)
+        self.invoker.invoke(self.analyze_global_operators_of, sentence)
+
+    def analyze_global_operators_of(self, sentence):
         GlobalOperatorAnalyzer(sentence).analyze()
 
     def analyze_clauses_of(self, sentence):

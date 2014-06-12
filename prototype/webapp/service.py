@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+
 from StringIO import StringIO
+import logging
 import os, web
 from sys import exc_info
 import sys
@@ -11,7 +13,6 @@ from src.model.paragraph.paragraphAnalyzer import ParagraphAnalyzer
 from src.model.sentence.sentence import Sentence
 from src.model.sentence.sentenceAnalyzer import SentenceAnalyzer
 from src.utils.webOutputUtils import WebOutputUtils
-
 
 def write_pidfile():
 	pid = str(os.getpid())
@@ -31,6 +32,7 @@ def analyze():
 		return paragraph.sentences
 	except Exception:
 		print format_exc()
+		return []
 		#web.template.render().exception(format_exc(), "")
 
 class Favicon_request:
@@ -70,6 +72,7 @@ if __name__ == '__main__':
 	)
 
 	write_pidfile()
+	logging.basicConfig(filename='logger.log',level=logging.ERROR)
 
 	app = web.application(urls, globals())
 	app.run()

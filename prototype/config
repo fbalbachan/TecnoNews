@@ -1,3 +1,7 @@
+[debug]
+
+raise_exception = True
+
 [freeling]
 
 host        = tecnolecto.com
