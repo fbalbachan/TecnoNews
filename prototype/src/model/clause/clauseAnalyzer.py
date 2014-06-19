@@ -10,6 +10,7 @@ from src.model.syntax.activeVoiceSyntacticAnalizer import ActiveVoiceSyntacticAn
 from src.model.syntax.passiveVoiceSyntacticAnalyzer import PassiveVoiceSyntacticAnalyzer
 from src.model.syntax.syntacticAnalyzer import SyntacticAnalyzer
 from src.model.syntax.syntacticStructure import SyntacticStructure
+from src.model.syntax.valuatedAdverbFinder import ValuatedAdverbFinder
 
 
 class ClauseAnalyzer:
@@ -32,7 +33,7 @@ class ClauseAnalyzer:
         if self.relative_needs_to_be_solved_first(clause):
             relative_solver_order.reverse()
 
-        return relative_solver_order + [ self.solve_gerund, self.solve_personal_pronouns ]
+        return relative_solver_order + [ self.solve_gerund, self.solve_personal_pronouns, self.find_adverbs ]
 
     def relative_needs_to_be_solved_first(self, clause):
         if not clause.is_relative(): return False
@@ -51,6 +52,9 @@ class ClauseAnalyzer:
     def create_empty_syntactic_structures_for(self, clause):
         for name in self.allowed_syntactic_structures_for(clause):
             clause.syntactic_structures.append(SyntacticStructure(name, clause))
+
+    def find_adverbs(self, clause):
+        clause.valuated_adverbs = ValuatedAdverbFinder(clause).find()
 
     def solve_relative(self, clause):
         if clause.is_relative() and clause.relative_entity: RelativePronounSolver(clause).solve()
