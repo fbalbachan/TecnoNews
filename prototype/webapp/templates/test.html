@@ -52,7 +52,7 @@ $def with (sentences, printer)
             font-family: "monofur";
             padding: 10px;
             text-align: center;
-            min-width:130px
+            min-width:110px
         }
 
         .str_table {
@@ -111,6 +111,7 @@ $def with (sentences, printer)
 
             <table class="str_table" border="0">
             <tr>
+              <th>Opinioned Modal<br>Adverb</th>
               <th>Subject</th>
               <th>Verb</th>
               <th>Direct<br>Object</th>
@@ -121,11 +122,19 @@ $def with (sentences, printer)
             </tr>
 
             <tr>
+                <!-- ADVERVIOS VALUADOS -->
+                $ if clause.valuated_adverbs: bg_color = '#5FB404'
+                $ else: bg_color = "#8A0808"
+                <td class="structures" bgcolor=$bg_color>
+                    $printer.valuated_adverbs(clause)
+                </td>
+
+                <!-- ESTRUCTURAS SINTACTICAS -->
                 $for name in ["subject", "verb", "od", "oi", "regimen", "equative", "adjuncts"]:
                     $ if clause.has_structure(name): bg_color = '#5FB404'
                     $ else: bg_color = "#8A0808"
 
-                    <td class="structures" bgcolor=$bg_color title="$printer.tooltip(clause, name)")>
+                    <td class="structures" bgcolor=$bg_color title="$printer.tooltip(clause, name)">
                         $printer.structure(clause, name)
                     </td>
             </tr>

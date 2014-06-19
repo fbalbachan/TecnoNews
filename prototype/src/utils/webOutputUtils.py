@@ -13,6 +13,9 @@ class WebOutputUtils:
         else:
             return ""
 
+    def valuated_adverbs(self, clause):
+        return ", ".join([ str(adverb) for adverb in clause.valuated_adverbs ])
+
     def tooltip(self, clause, name):
         if clause.has_structure(name):
             return ", ".join([ self.entity_tooltip(entity) for entity in clause.structure(name).all_entities() ])
