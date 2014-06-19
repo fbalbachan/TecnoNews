@@ -46,7 +46,6 @@ class GlobalOperatorAnalyzer:
         if clause.voice:
             verb_leaves = clause.verb.leaves
             lemmas = [ leaf.lemma for leaf in clause.verb.node.leaves() ]
-            print lemmas
             leaf = verb_leaves[0]
             if (leaf.msi["time"] == "futuro" and leaf.msi["mode"] == "indicative") or lemmas[:2] == ["ir", "a"]:
                 return [ GlobalOperator("future", clause.verb)]
