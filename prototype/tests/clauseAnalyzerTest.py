@@ -19,6 +19,7 @@ class TestClauseAnalyzer(unittest.TestCase):
     def test(self):
         self.run_test_file("tests/input/context.txt")
         self.run_test_file("tests/input/global_operators.txt")
+        self.run_test_file("tests/input/valuated_adverbs.txt")
 
     def run_test_file(self, file):
 
@@ -48,6 +49,7 @@ class TestClauseAnalyzer(unittest.TestCase):
             for structure in clause.syntactic_structures:
                 print "\t  ", structure.name, structure
             print "\t   Global operators", list(clause.global_operators)
+            print "\t   Valuated adverbs", list(clause.valuated_adverbs)
         print "--"
 
     def sentence(self, assertion, frame):
@@ -89,7 +91,9 @@ class TestClauseAnalyzer(unittest.TestCase):
     def count(self, assertion, frame):
         splitted = assertion.split("=")
         assertions = { "entities" : lambda: len(frame["structure"].all_entities()),
-                       "go": lambda: len(frame["clause"].global_operators) }
+                       "go": lambda: len(frame["clause"].global_operators),
+                       "adverbs": lambda:  len(frame["clause"].valuated_adverbs)
+                       }
         if len(splitted) == 1: splitted = [ "entities", splitted[0] ]
 
         assertion = splitted[0].strip()
@@ -139,6 +143,12 @@ class TestClauseAnalyzer(unittest.TestCase):
         self.assertTrue(len(clauses) == 1, "No se encontró la cláusula " + assertion)
         frame["clause"] = clauses[0]
 
+    def adverb(self, assertion, frame):
+        clause = frame["clause"]
+        adverb_lexical_forms = [ adverb.lexical_form for adverb in clause.valuated_adverbs ]
+        self.assertTrue(assertion in adverb_lexical_forms,
+                        "La cláusula no tiene un adverbio valuado sentimentalmente de forma léxica " + assertion)
+
     def go(self, assertion, frame):
         clause = frame["clause"]
         self.assertTrue(clause.has_global_operator_of(assertion),
@@ -152,7 +162,7 @@ class TestClauseAnalyzer(unittest.TestCase):
         return string.startswith("#")
 
     structure_keywords = [ "subject", "od", "oi", "equative", "regimen", "adjuncts", "verb" ]
-    keywords = [ "clause", "lemma", "msi", "entity", "sentence", "count", "go" ] + structure_keywords
+    keywords = [ "clause", "lemma", "msi", "entity", "sentence", "count", "go", "adverb" ] + structure_keywords
 
 if __name__ == '__main__':
     unittest.main()
