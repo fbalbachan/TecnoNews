@@ -1,0 +1,12 @@
+Lo mató rápidamente
+    count: adverbs = 1
+    adverb: rápidamente
+
+Trabajó a brazo partido
+    count: adverbs = 1
+    adverb: a_brazo_partido
+
+Afortunadamente trabajó bien
+    count: adverbs = 2
+    adverb: afortunadamente
+    adverb: bien
