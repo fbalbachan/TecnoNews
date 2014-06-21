@@ -25,7 +25,7 @@ class SyntacticAnalyzer:
         def which(node):
             return self.starts_with_accepted_preposition(node, *self.instrument_goal_preps)
         entities = self.clause.subord_entities(which)
-        return sum(entities, [])
+        return Entity.only_maximal(sum(entities, []))
 
     def adjuncts(self):
         return Entity.only_maximal(self.clause.lonely_entities())
