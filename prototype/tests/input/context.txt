@@ -674,3 +674,7 @@ El hombre en quien pienso está muerto
     clause: en quien pienso
         subject: yo
         adjuncts: El hombre
+
+# Sólo entidades maximales en I/G al igual que en adjuntos
+No podés vivir sin amar a alguien
+    instrument_goal: amar a alguien
