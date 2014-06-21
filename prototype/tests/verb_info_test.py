@@ -12,7 +12,7 @@ class TestVerbInfo(unittest.TestCase):
             (u'charlatanear',
              'AGENTIVE',
              'INTRANSITIVE',
-             [ 'verb', 'subject', 'oi', 'adjuncts' ]),
+             [ 'verb', 'subject', 'oi', 'instrument_goal', 'adjuncts' ]),
         ]
 
         for (input_verb, expected_script, expected_transitivity, expected_boxes) in examples:

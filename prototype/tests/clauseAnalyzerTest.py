@@ -26,14 +26,16 @@ class TestClauseAnalyzer(unittest.TestCase):
         frame = {}
 
         test_file = open(file)
+        line_number = 0
         for line in test_file:
+            line_number = line_number + 1
             line = line.strip("\n").strip(" ").replace("\t", "")
             if not line or self.is_comment(line): continue
 
             if self.begin_with_keyword(line):
                 self.update_frame_and_assert(line, frame)
             else:
-                print "Analyzing:", line
+                print "Analyzing [" + file + ":" + str(line_number) + "]:", line
                 paragraph = Paragraph.from_text(line)
                 self.analyzer.analyze(paragraph)
                 frame = { "paragraph" : paragraph }
@@ -42,7 +44,7 @@ class TestClauseAnalyzer(unittest.TestCase):
                     self.sentence(line, frame)
 
     def show_info_for(self, sentence):
-        print sentence.parse_node.tree_representation()
+        #print sentence.parse_node.tree_representation()
         print "Clauses"
         for clause in sentence.clauses:
             print "\t", clause
@@ -86,7 +88,7 @@ class TestClauseAnalyzer(unittest.TestCase):
             frame["entity"] = structure.all_entities()[0]
             self.entity(assertion, frame)
         else:
-            self.assertEqual("", assertion, "Existe más de una entidad para " + structure_name)
+            self.assertEqual("", assertion, "Existe más de una entidad (o ninguna) para " + structure_name)
 
     def count(self, assertion, frame):
         splitted = assertion.split("=")
@@ -161,7 +163,7 @@ class TestClauseAnalyzer(unittest.TestCase):
     def is_comment(self, string):
         return string.startswith("#")
 
-    structure_keywords = [ "subject", "od", "oi", "equative", "regimen", "adjuncts", "verb" ]
+    structure_keywords = [ "subject", "od", "oi", "equative", "regimen", "instrument_goal", "adjuncts", "verb" ]
     keywords = [ "clause", "lemma", "msi", "entity", "sentence", "count", "go", "adverb" ] + structure_keywords
 
 if __name__ == '__main__':
