@@ -43,9 +43,8 @@ Odiamos comer en un bar
 
 Toda la noche el cartero llegó con novedades
     subject: el cartero
-    adjuncts:
-        entity: Toda la noche
-        entity: novedades
+    instrument_goal: novedades
+    adjuncts: Toda la noche
 
 Las manzanas comió Leandro
     subject: Leandro
@@ -112,7 +111,7 @@ Buscando ver a su padre, Leandro peleó sin pausa
     clause: Leandro peleó sin pausa
         subject: Leandro
         verb: peleó
-        adjuncts: pausa
+        instrument_goal: pausa
 
 # Prioridad de asignación de MSI a entidades con subordinación interna
 La del albergue dijo eso
@@ -168,7 +167,7 @@ El hombre con el que jugué había muerto
         subject: El hombre
     clause: con el que jugué
         subject: yo
-        adjuncts: El hombre
+        instrument_goal: El hombre
 
 El hombre quien salió a jugar murió
     clause: El hombre murió
@@ -210,7 +209,7 @@ Destaco las buenas intenciones de la funcionaria, en favor de la cual debo decir
         od: las buenas intenciones de la funcionaria
     clause: en_favor_de la cual debo decir mucho
         subject: yo
-        adjuncts: la funcionaria
+        instrument_goal: la funcionaria
 
 # Resolución de sujeto de gerundio
 Dejando solo los huesos
@@ -316,7 +315,7 @@ La presidenta saludó a José. Yo me crucé con él y le pregunté por ella.
         od: José
     sentence: Yo me crucé con él y le pregunté por ella
         clause: Yo me crucé con él
-            adjuncts: él -> José
+            instrument_goal: él -> José
                 msi: { "gender" : "masculine" }
         clause: le pregunté por ella
             adjuncts: ella -> La presidenta
@@ -640,3 +639,38 @@ Hermoso banquete. Lo disfruté mucho.
     sentence: Lo disfruté mucho
         subject: yo
         od: Lo -> Hermoso banquete
+
+# Instrument/Goal múltiple
+Lo hizo en contra de la hinchada y a favor de su padre
+    subject: él/ella
+    instrument_goal:
+        count: 2
+        entity: la hinchada
+        entity: su padre
+
+# I/G en OU
+Muy buena la cena sin Leandro
+    subject: la cena
+    instrument_goal: Leandro
+
+# AR-PP con I/G
+Leandro mató a Pedro con una vaina. Más tarde la tiró.
+    sentence: Leandro mató a Pedro con una vaina
+        subject: Leandro
+        od: Pedro
+        instrument_goal: una vaina
+    sentence: Más tarde la tiró
+        subject: él/ella -> Leandro
+        od: la -> una vaina
+
+Muy buena la cena sin Leandro. Él es horrible.
+    sentence: Muy buena la cena sin Leandro
+        instrument_goal: Leandro
+    sentence: Él es horrible
+        subject: Él -> Leandro
+
+El hombre en quien pienso está muerto
+    clause: El hombre está muerto
+    clause: en quien pienso
+        subject: yo
+        adjuncts: El hombre
