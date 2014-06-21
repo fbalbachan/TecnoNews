@@ -10,17 +10,17 @@ from src.utils.logger_utils import *
 # logger = get_logger('entinews')
 allowed_boxes_according_to_verb_transitivity = {
     # verb_category : available_boxes
-    'TRANSITIVE'   : [ 'verb', 'subject', 'od', 'oi', 'adjuncts' ],
-    'INTRANSITIVE' : ['verb', 'subject', 'oi', 'adjuncts' ],
-    'REGIMEN'      : ['verb', 'subject', 'regimen', 'adjuncts' ],
-    'EQUATIVE'     : ['verb', 'subject', 'oi', 'equative', 'adjuncts' ],
-    'EXISTENTIAL'  : ['verb', 'od', 'adjuncts' ],
-    'IMPERSONAL'   : ['verb', 'adjuncts' ],
+    'TRANSITIVE'   : [ 'verb', 'subject', 'od', 'oi', 'instrument_goal', 'adjuncts' ],
+    'INTRANSITIVE' : ['verb', 'subject', 'oi', 'instrument_goal', 'adjuncts' ],
+    'REGIMEN'      : ['verb', 'subject', 'regimen', 'instrument_goal', 'adjuncts' ],
+    'EQUATIVE'     : ['verb', 'subject', 'oi', 'equative', 'instrument_goal', 'adjuncts' ],
+    'EXISTENTIAL'  : ['verb', 'od', 'instrument_goal', 'adjuncts' ],
+    'IMPERSONAL'   : ['verb', 'instrument_goal', 'adjuncts' ],
 }
 
-allowed_boxes_for_passive_verbs = [ 'verb', 'subject', 'od', 'adjuncts' ]
+allowed_boxes_for_passive_verbs = [ 'verb', 'subject', 'od', 'instrument_goal', 'adjuncts' ]
 
-allowed_boxes_for_unimember_sentences = [ 'subject', 'adjuncts' ]
+allowed_boxes_for_unimember_sentences = [ 'instrument_goal', 'subject', 'adjuncts' ]
 
 transitivities = {
     'T': 'TRANSITIVE',

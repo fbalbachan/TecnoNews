@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from src.model.entity.tacitEntity import TacitEntity
+from src.model.syntax.syntacticAnalyzer import SyntacticAnalyzer
 
 class RelativePronounSolver:
     def __init__(self, clause):
@@ -70,7 +71,10 @@ class RelativePronounSolver:
         first_linker_category = first_linker_leaf.msi["category"]
 
         if first_linker_category == "adposition":
-            structures = [ "regimen", "adjuncts" ]
+            structures = [ "regimen" ]
+            if first_linker_leaf.lexical_form in SyntacticAnalyzer.instrument_goal_preps:
+                structures.append("instrument_goal")
+            structures.append("adjuncts")
             if first_linker_leaf.lexical_form == "a": structures = [ "od" ] + structures
         else:
             structures = [ "subject" , "od" ]
@@ -78,7 +82,7 @@ class RelativePronounSolver:
 
     def solve_passive_voice(self):
         clause = self.clause
-        destination_by_preposition = { "por" : "subject", "con" : "adjuncts" }
+        destination_by_preposition = { "por" : "subject", "con" : "instrument_goal" }
         first_linker_word = self.linker[0].lexical_form
 
         destination = destination_by_preposition[first_linker_word] if first_linker_word in destination_by_preposition\

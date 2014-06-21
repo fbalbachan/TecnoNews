@@ -89,9 +89,11 @@ class PersonalPronounCoreferenceSearcher:
         pronoun_case = self.pronoun.msi["case"]
         return PersonalPronounCoreferenceSearcher.search_order_by_voice[clause.voice][pronoun_case]
 
-    search_order_by_voice = { "active" : { None         : [ "subject", "od", "oi", "regimen", "equative", "adjuncts" ],
-                                          "acusative"   : ["od", "subject", "regimen", "oi", "equative", "adjuncts" ]},
-                             "passive" : { None         : [ "od", "subject", "adjuncts" ],
-                                          "acusative"   : ["subject", "od", "adjuncts"] },
-                             None      : { None         : [ "subject" ],
-                                          "acusative"   : [ "subject" ] } }
+    search_order_by_voice = { "active" : { None         : [ "subject", "od", "oi", "regimen", "equative",
+                                                           "instrument_goal", "adjuncts" ],
+                                          "acusative"   : ["od", "subject", "regimen", "oi", "equative",
+                                                           "instrument_goal", "adjuncts" ]},
+                             "passive" : { None         : [ "od", "subject", "instrument_goal", "adjuncts" ],
+                                          "acusative"   : ["subject", "od", "instrument_goal", "adjuncts"] },
+                             None      : { None         : [ "subject", "instrument_goal" ],
+                                          "acusative"   : [ "subject", "instrument_goal" ] } }

@@ -75,20 +75,20 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
 
     def equative(self):
         entities = self.valid_subject_entities(2, 3) + \
-            self.search_subord_with_prep_at("right", 3, "de", "para")
+            self.search_first_subord_with_prep_at("right", 3, "de", "para")
         if entities: entities = [ entities[0] ]
         return entities
 
     def search_regime_at(self, side, distance):
-        return self.search_subord_with_prep_at(side, distance, "a", "por", "en", "de", "contra", "con", "sobre")
+        return self.search_first_subord_with_prep_at(side, distance, "a", "por", "en", "de", "contra", "con", "sobre")
 
     def search_nominal_oi_at(self, side, distance):
-        return self.without_infs(self.search_subord_with_prep_at(side, distance, "a", "para"))
+        return self.without_infs(self.search_first_subord_with_prep_at(side, distance, "a", "para"))
 
     def search_nominal_od_at(self, side, distance):
         non_subord_method = lambda side, distance: \
             self.only_nominal_of(self.clause.entities_closest_to_verb_at(side, distance))
-        subord_method = lambda side, distance: self.without_infs(self.search_subord_with_prep_at(side, distance, "a"))
+        subord_method = lambda side, distance: self.without_infs(self.search_first_subord_with_prep_at(side, distance, "a"))
         search_methods = [ non_subord_method, subord_method ]
 
         for method in search_methods:

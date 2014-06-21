@@ -70,6 +70,12 @@ class Clause(TreeNode):
         entities_with_node = self.to_entities_with_node(self.nodes_closest_to_verb_at(side, allowed_distance), which)
         return self.grouped_by_node(entities_with_node)
 
+    def subord_entities(self, which_node = lambda node: True):
+        which = lambda entity, node: entity.is_subordinated() and entity.highest_subordinating_node() == node \
+                    and which_node(node)
+        entities_with_node = self.to_entities_with_node(list(self.proper_tree()), which)
+        return self.grouped_by_node(entities_with_node)
+
     def verb_level_entities(self):
         by_component = zip(*self.to_entities_with_node(self.verb_level_nodes(), entities = self.entities))
         return list(by_component[0]) if by_component else []

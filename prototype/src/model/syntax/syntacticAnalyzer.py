@@ -21,8 +21,17 @@ class SyntacticAnalyzer:
     def verb(self):
         return [ self.clause.verb ]
 
+    def instrument_goal(self):
+        def which(node):
+            return self.starts_with_accepted_preposition(node, *self.instrument_goal_preps)
+        entities = self.clause.subord_entities(which)
+        return sum(entities, [])
+
     def adjuncts(self):
         return Entity.only_maximal(self.clause.lonely_entities())
+
+    def search_instrument_goal_at(self, side, distance):
+        return self.without_infs(self.search_subord_with_prep_at(side, distance, ))
 
     def find_entities_by(self, *methods):
         for method in methods:
@@ -47,11 +56,18 @@ class SyntacticAnalyzer:
 
     def search_subord_with_prep_at(self, side, distance, *accepted_prepositions):
         def which(node):
-            first_leaf = node.leaves()[0]
-            return first_leaf.msi["type"] == "preposition" and \
-                first_leaf.lexical_form in accepted_prepositions if accepted_prepositions else True
+            return self.starts_with_accepted_preposition(node, *accepted_prepositions)
         entities = self.search_subord_at(side, distance, which)
-        if entities: entities = [ entities[0] ]
+        return entities
+
+    def starts_with_accepted_preposition(self, node, *accepted_prepositions):
+        first_leaf = node.leaves()[0]
+        return first_leaf.msi["type"] == "preposition" and \
+            first_leaf.lexical_form in accepted_prepositions if accepted_prepositions else True
+
+    def search_first_subord_with_prep_at(self, side, distance, *accepted_prepositions):
+        entities = self.search_subord_with_prep_at(side, distance, *accepted_prepositions)
+        if entities: return [ entities[0] ]
         return entities
 
     def search_subord_at(self, side, distance, which = lambda node: True):
@@ -79,3 +95,6 @@ class SyntacticAnalyzer:
 
     def only_nominal_of(self, entities):
         return filter(lambda entity: entity.category() == "noun", entities)
+
+    instrument_goal_preps = ["sin", "con", "contra", "en_favor_de", "a_favor_de", "en_contra_de", "en_pos_de",
+                             "mediante", "a_través_de", "por_medio_de"]

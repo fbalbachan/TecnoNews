@@ -7,7 +7,7 @@ class FactNormalizer():
     def fact(self):
         fact = ""
         clause = self.clause
-        structure_order = [ "subject", "verb", "od", "oi", "regimen", "equative", "adjuncts" ]
+        structure_order = [ "subject", "verb", "od", "oi", "regimen", "equative", "instrument_goal", "adjuncts" ]
 
         for structure_name in structure_order:
             if clause.has_structure(structure_name):
