@@ -52,7 +52,7 @@ $def with (sentences, printer)
             font-family: "monofur";
             padding: 10px;
             text-align: center;
-            min-width:110px
+            min-width:100px
         }
 
         .str_table {
@@ -118,6 +118,7 @@ $def with (sentences, printer)
               <th>Indirect Object<br>Experiencer</th>
               <th>Phrasal-Verb<br>Complement</th>
               <th>Equative</th>
+              <th>Instrument<br>or Goal</th>
               <th>Adjuncts</th>
             </tr>
 
@@ -130,7 +131,7 @@ $def with (sentences, printer)
                 </td>
 
                 <!-- ESTRUCTURAS SINTACTICAS -->
-                $for name in ["subject", "verb", "od", "oi", "regimen", "equative", "adjuncts"]:
+                $for name in ["subject", "verb", "od", "oi", "regimen", "equative", "instrument_goal", "adjuncts"]:
                     $ if clause.has_structure(name): bg_color = '#5FB404'
                     $ else: bg_color = "#8A0808"
 
