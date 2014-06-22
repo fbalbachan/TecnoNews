@@ -91,6 +91,11 @@ class Clause(TreeNode):
         entities = list(by_component[0]) if by_component else []
         return entities
 
+    def leaves_at_left(self):
+        root_leaves = self.root().node.leaves()
+        first_leaf = self.proper_leaves()[0]
+        return root_leaves[:self.index_in_root_of(first_leaf)]
+
     def index_in_root_of(self, node):
         return self.root().node.leaves().index(self.original_by_proper(node.leaves()[0]))
 
