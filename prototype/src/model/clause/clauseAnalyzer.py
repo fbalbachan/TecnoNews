@@ -38,7 +38,7 @@ class ClauseAnalyzer:
     def relative_needs_to_be_solved_first(self, clause):
         if not clause.is_relative(): return False
 
-        unique_destination_linkers = [ ["quien"], ["cuyo"], ["cuya"], ["cuyos"], ["cuyas"], ["lo", "cual"] ]
+        unique_destination_linkers = [ ["quien"], ["quienes"], ["cuyo"], ["cuya"], ["cuyos"], ["cuyas"], ["lo", "cual"]]
         is_equative_que = lambda clause: clause.relative_linker_words() == ["que"] and clause.voice and \
             clause.verb.transitivity == "EQUATIVE"
         if clause.relative_linker_words() in unique_destination_linkers or is_equative_que(clause): return True
