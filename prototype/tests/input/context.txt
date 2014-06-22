@@ -678,3 +678,11 @@ El hombre en quien pienso está muerto
 # Sólo entidades maximales en I/G al igual que en adjuntos
 No podés vivir sin amar a alguien
     instrument_goal: amar a alguien
+
+# Resolución de 'quienes' igual que 'quien'
+Los hombres, quienes mataron mujeres, son criminales
+    clause: Los hombres , , son criminales
+        subject: Los hombres
+    clause: quienes mataron mujeres
+        subject: Los hombres
+        od: mujeres

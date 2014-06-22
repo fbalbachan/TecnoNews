@@ -1,0 +1,47 @@
++grup-verb_[
+  sn_[
+    espec-mp_[
+      +j-mp_[
+        +(Los el DA0MP0 -)
+      ]
+    ]
+    +grup-nom-mp_[
+      +n-mp_[
+        +(hombres hombre NCMP000 -)
+      ]
+    ]
+    Fc_[
+      +(, , Fc -)
+    ]
+    subord-rel_[
+      +(quienes quien PR0CP000 -)
+      grup-verb_[
+        +verb_[
+          +(mataron matar VMIS3P0 -)
+        ]
+        sn_[
+          +grup-nom-fp_[
+            +n-fp_[
+              +(mujeres mujer NCFP000 -)
+            ]
+          ]
+        ]
+      ]
+    ]
+    Fc_[
+      +(, , Fc -)
+    ]
+  ]
+  +verb_[
+    +(son ser VSIP3P0 -)
+  ]
+  s-adj_[
+    +s-a-mp_[
+      +a-mp_[
+        +(criminales criminal AQ0CP0 -)
+      ]
+    ]
+  ]
+]
+
+
