@@ -40,28 +40,24 @@ Si lo mata, será una tragedia
         count: go = 1
         go: condition
     clause: será una tragedia
-        count: go = 2
-        go: condition
+        count: go = 1
         go: future
 
 En caso de que sea rico, me compro un yate
     clause: En_caso_de
-        count: go = 1
-        go: condition
+        count: go = 0
     clause: que sea rico ,
         count: go = 1
         go: condition
     clause: me compro un yate
-        count: go = 1
-        go: condition
+        count: go = 0
 
 En caso de incendio, use el ascensor
     count: go = 0
 
 Lo mato siempre y cuando sea correcto
     clause: Lo mato siempre_y_cuando
-        count: go = 1
-        go: condition
+        count: go = 0
     clause: sea correcto
         count: go = 1
         go: condition
