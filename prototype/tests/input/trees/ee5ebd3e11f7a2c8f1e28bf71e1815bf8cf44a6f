@@ -1,0 +1,36 @@
++grup-verb_[
+  sn_[
+    +pron-ms_[
+      +psubj-ms_[
+        +(Él él PP3MS000 -)
+      ]
+    ]
+  ]
+  +verb_[
+    vaux_[
+      +(habría haber VAIC1S0 -)
+    ]
+    (debido deber VMP00SM -)
+    +infinitiu_[
+      +inf_[
+        +forma-inf_[
+          +(pagar pagar VMN0000 -)
+        ]
+      ]
+    ]
+  ]
+  sn_[
+    espec-fs_[
+      +pos-fs_[
+        +(su su DP3CS0 -)
+      ]
+    ]
+    +grup-nom-fs_[
+      +n-fs_[
+        +(deuda deuda NCFS000 -)
+      ]
+    ]
+  ]
+]
+
+
