@@ -35,7 +35,12 @@ class GlobalOperatorAnalyzer:
         self.finders = [ self.negation_finder, self.conditional_verb_finder, self.imperative_finder,
             self.possibility_word_finder, self.subjuntive_finder, self.verb_poder_finder, self.deontic_modality_finder,
             self.future_finder, self.volitive_finder, self.verbs_with_subordinated_finder, self.condition_finder,
-            self.subord_with_header_finder, self.modal_verb_deber_finder ]
+            self.subord_with_header_finder, self.modal_verb_deber_finder, self.modal_verbs_of_possibility_finder ]
+
+    def modal_verbs_of_possibility_finder(self, clause):
+        if clause.voice and clause.verb.modal_verb():
+            lemma = clause.verb.modal_verb().lemma
+            if lemma in ["intentar", "tratar"]: return [ GlobalOperator("possibility", clause.verb) ]
 
     def modal_verb_deber_finder(self, clause):
         if clause.voice and clause.verb.is_modal_of("deber"):
