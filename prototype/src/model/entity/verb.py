@@ -36,6 +36,15 @@ class Verb(Entity):
     def leaf(self):
         return self.leaves[-1]
 
+    def modal_verb(self):
+        if not self.is_compound(): return None
+        leaves = self.leaves[-2:]
+        if leaves[1].msi["mode"] == "infinitive": return leaves[0]
+
+    def is_modal_of(self, lemma):
+        modal = self.modal_verb()
+        return modal and modal.lemma == lemma
+
     def is_compound(self):
         return len(self.leaves) > 1
 

@@ -26,7 +26,5 @@ class VolitiveModalityFinder:
     def find_selected_verbs(self):
         clause = self.clause
         if clause.voice:
-            leaf = clause.verb.leaves[0]
-            if leaf.lemma == "querer" and clause.verb.is_compound():
-                return [ GlobalOperator("volitive", clause.verb)]
+            if clause.verb.is_modal_of("querer"): return [ GlobalOperator("volitive", clause.verb)]
         return []

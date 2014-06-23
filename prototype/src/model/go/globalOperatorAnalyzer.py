@@ -35,16 +35,17 @@ class GlobalOperatorAnalyzer:
         self.finders = [ self.negation_finder, self.conditional_verb_finder, self.imperative_finder,
             self.possibility_word_finder, self.subjuntive_finder, self.verb_poder_finder, self.deontic_modality_finder,
             self.future_finder, self.volitive_finder, self.verbs_with_subordinated_finder, self.condition_finder,
-            self.subord_with_header_finder ]
+            self.subord_with_header_finder, self.modal_verb_deber_finder ]
+
+    def modal_verb_deber_finder(self, clause):
+        if clause.voice and clause.verb.is_modal_of("deber"):
+            return GlobalOperator.For(clause.verb, "possibility", "imperative")
 
     def subord_with_header_finder(self, clause):
         headers = [ "a_menos_que", "a_no_ser_que" ]
         if clause.is_subordinated_with_any(headers):
-            operators = []
-            classes = [ "negation", "condition" ]
             header = clause.proper_leaves()[0]
-            for klass in classes: operators.append(GlobalOperator(klass, header))
-            return operators
+            return GlobalOperator.For(header, "negation", "condition")
 
     def condition_finder(self, clause):
         return ConditionFinder(clause).find()
