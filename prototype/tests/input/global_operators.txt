@@ -134,3 +134,11 @@ Ella habría querido viajar
     count: go = 2
     go: possibility
     go: imperative
+
+Ella intentó pagar su deuda
+    count: go = 1
+    go: possibility
+
+Ella trató de pagar su deuda
+    count: go = 1
+    go: possibility

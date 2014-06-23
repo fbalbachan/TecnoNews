@@ -1,0 +1,34 @@
++grup-verb_[
+  sn_[
+    +pron-fs_[
+      +psubj-fs_[
+        +(Ella él PP3FS000 -)
+      ]
+    ]
+  ]
+  +verb_[
+    (trató tratar VMIS3S0 -)
+    (de de SPS00 -)
+    +infinitiu_[
+      +inf_[
+        +forma-inf_[
+          +(pagar pagar VMN0000 -)
+        ]
+      ]
+    ]
+  ]
+  sn_[
+    espec-fs_[
+      +pos-fs_[
+        +(su su DP3CS0 -)
+      ]
+    ]
+    +grup-nom-fs_[
+      +n-fs_[
+        +(deuda deuda NCFS000 -)
+      ]
+    ]
+  ]
+]
+
+
