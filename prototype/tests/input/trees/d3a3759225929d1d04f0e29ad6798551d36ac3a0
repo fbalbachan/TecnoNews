@@ -1,0 +1,20 @@
++grup-verb_[
+  patons_[
+    +paton-ms_[
+      +(Lo lo PP3MSA00 -)
+    ]
+  ]
+  +verb_[
+    +(haré hacer VMIF1S0 -)
+  ]
+  subord_[
+    +(a_menos_que a_menos_que CS -)
+    grup-verb_[
+      +verb_[
+        +(muera morir VMSP3S0 -)
+      ]
+    ]
+  ]
+]
+
+

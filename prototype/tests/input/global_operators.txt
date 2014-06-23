@@ -87,3 +87,31 @@ Leandro niega que sea así
 Voy a viajar
     count: go = 1
     go: future
+
+Lo haré a menos que muera
+    clause: Lo haré
+        count: go = 1
+        go: future
+    clause: a_menos_que muera
+        count: go = 2
+        go: condition
+        go: negation
+
+# En la segunda cláusula hay 3 operadores pues hay 2 negation: "no" y "a_no_ser_que"
+Será así a no ser que no sea así
+    clause: Será así
+        count: go = 1
+        go: future
+    clause: a_no_ser_que no sea así
+        count: go = 3
+        go: condition
+        go: negation
+
+A menos que trabajes mucho, serás pobre
+    clause: A_menos_que trabajes mucho ,
+        count: go = 2
+        go: condition
+        go: negation
+    clause: serás pobre
+        count: go = 1
+        go: future
