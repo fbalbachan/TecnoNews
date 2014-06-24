@@ -18,8 +18,15 @@ class EntityExtractor:
         entities = self.remove_invalid_coordinated(entities)
 
         self.assign_msi(entities)
+        self.compute_proper_tree_for(entities)
 
         return entities
+
+    def compute_proper_tree_for(self, entities):
+        for entity in entities:
+            original = entity.node
+            foreign_nodes = [ child.node for child in entity.children ]
+            entity.proper_node = original.cloned_by_original(foreign_nodes)[entity.node]
 
     def remove_invalid_coordinated(self, entities):
         return filter(lambda entity: not (entity.node.label == "coor-n" and len(entity.children) == 1), entities)

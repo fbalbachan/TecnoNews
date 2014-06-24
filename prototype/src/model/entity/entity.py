@@ -6,6 +6,7 @@ class Entity (TacitEntity):
     def __init__(self, node):
         self.node = node
         self.father = None
+        self.proper_node = None
 
         TacitEntity.__init__(self, self.lexical_form(), {}, [])
 
