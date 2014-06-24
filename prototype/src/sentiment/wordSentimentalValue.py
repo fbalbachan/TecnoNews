@@ -5,9 +5,15 @@ class WordSentimentalValue:
         self.lemma = lemma
         self.value = value
 
+    def joined_value(self):
+        return self.value[0] - self.value[1]
+
+    def is_neutral(self):
+        return self.joined_value() == 0
+
     def __repr__(self):
         return self.lemma + " " + str(self.value)
 
     @staticmethod
     def default_for(lemma):
-        return WordSentimentalValue(lemma, 0)
+        return WordSentimentalValue(lemma, (0, 0))

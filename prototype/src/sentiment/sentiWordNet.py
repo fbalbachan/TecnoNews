@@ -13,8 +13,8 @@ def load_sentiwordnet():
     reader = unicode_csv_reader(open(sentiwordnet_file, 'r'), first_line_is_header=False, delimiter=',')
     values_by_lemma = {}
 
-    for lemma, verb_mark, positive, negative in reader:
-        value = int(positive) - int(negative)
+    for lemma, verb_mark, positive, negative in reader:  # @UnusedVariable
+        value = (int(positive), int(negative))
         word_value = WordSentimentalValue(lemma, value)
         values_by_lemma[lemma] = word_value
     return values_by_lemma
