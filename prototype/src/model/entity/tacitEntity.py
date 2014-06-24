@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from src.sentiment.entitySentimentalValue import EntitySentimentalValue
 
 
 class TacitEntity:
@@ -9,6 +10,7 @@ class TacitEntity:
         self.children = []
         self.owner = None
         self.attributes = attributes
+        self.sentimental_value = EntitySentimentalValue(self)
 
     def children_of_category(self, category):
         return filter(lambda entity: entity.category() == category, self.children)
