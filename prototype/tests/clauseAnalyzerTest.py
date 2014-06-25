@@ -20,6 +20,7 @@ class TestClauseAnalyzer(unittest.TestCase):
         self.run_test_file("tests/input/context.txt")
         self.run_test_file("tests/input/global_operators.txt")
         self.run_test_file("tests/input/valuated_adverbs.txt")
+        self.run_test_file("tests/input/sentiment.txt")
 
     def run_test_file(self, file):
 
@@ -50,8 +51,13 @@ class TestClauseAnalyzer(unittest.TestCase):
             print "\t", clause
             for structure in clause.syntactic_structures:
                 print "\t  ", structure.name, structure
+            print
             print "\t   Global operators", list(clause.global_operators)
             print "\t   Valuated adverbs", list(clause.valuated_adverbs)
+            print
+            print "\t Entities"
+            for entity in clause.entities:
+                print "\t  ", entity.sentimental_value
         print "--"
 
     def sentence(self, assertion, frame):
@@ -94,7 +100,8 @@ class TestClauseAnalyzer(unittest.TestCase):
         splitted = assertion.split("=")
         assertions = { "entities" : lambda: len(frame["structure"].all_entities()),
                        "go": lambda: len(frame["clause"].global_operators),
-                       "adverbs": lambda:  len(frame["clause"].valuated_adverbs)
+                       "adverbs": lambda: len(frame["clause"].valuated_adverbs),
+                       "sent_ev": lambda: len(frame["entity"].sentimental_value.evidence)
                        }
         if len(splitted) == 1: splitted = [ "entities", splitted[0] ]
 
@@ -122,6 +129,12 @@ class TestClauseAnalyzer(unittest.TestCase):
     def search_linked_entity(self, lexical_forms, entities):
         return filter(lambda entity: entity.is_linked() and entity.lexical_form == lexical_forms[1]
                           and entity.source.lexical_form == lexical_forms[0], entities)
+
+    def sent_ev(self, assertion, frame):
+        entity = frame["entity"]
+        evidence = entity.sentimental_value.evidence
+        found = filter(lambda each: each.object.lexical_form == assertion, evidence)
+        self.assertTrue(len(found) == 1, "No se encontró (o hay más de una) evidencia con forma léxica " + assertion)
 
     def lemma(self, assertion, frame):
         entity = frame["entity"]
@@ -164,7 +177,8 @@ class TestClauseAnalyzer(unittest.TestCase):
         return string.startswith("#")
 
     structure_keywords = [ "subject", "od", "oi", "equative", "regimen", "instrument_goal", "adjuncts", "verb" ]
-    keywords = [ "clause", "lemma", "msi", "entity", "sentence", "count", "go", "adverb" ] + structure_keywords
+    keywords = [ "clause", "lemma", "msi", "entity", "sentence", "count", "go", "adverb", "sent_ev" ] + \
+        structure_keywords
 
 if __name__ == '__main__':
     unittest.main()
