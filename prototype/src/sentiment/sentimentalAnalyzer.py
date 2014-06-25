@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from src.sentiment.sentiWordNet import SentiWordNet
+from src.sentiment.sentimentalValuedObject import SentimentalValuedObject
 
 
 class SentimentalAnalyzer:
@@ -29,5 +30,5 @@ class SentimentalAnalyzer:
         valuated = []
         for hint in hints:
             word_value = SentiWordNet.get(hint.lemma)
-            if not word_value.is_neutral(): valuated.append(word_value)
+            if not word_value.is_neutral(): valuated.append(SentimentalValuedObject(hint, word_value.value))
         return valuated

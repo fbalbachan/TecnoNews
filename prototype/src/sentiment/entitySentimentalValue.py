@@ -1,13 +1,10 @@
 # -*- coding: utf-8 -*-
+from src.sentiment.sentimentalValuedObject import SentimentalValuedObject
 
-class EntitySentimentalValue:
+class EntitySentimentalValue(SentimentalValuedObject):
     def __init__(self, entity):
-        self.entity = entity
+        SentimentalValuedObject.__init__(self, entity)
         self.evidence = []
-        self.value = (0, 0)
-
-    def object(self):
-        return self.entity
 
     def add_evidence(self, *evidence):
         self.evidence.extend(evidence)
@@ -24,4 +21,4 @@ class EntitySentimentalValue:
         return filter(lambda evidence: evidence.value[1], self.evidence)
 
     def __repr__(self):
-        return str(self.entity) + " " + str(self.value) + " " + str(self.evidence)
+        return SentimentalValuedObject.__repr__(self) + " " + str(self.evidence)

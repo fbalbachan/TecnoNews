@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import ConfigParser
 
-from src.sentiment.wordSentimentalValue import WordSentimentalValue
+from src.sentiment.sentimentalValuedObject import SentimentalValuedObject
 from src.utils.csvwrapper import unicode_csv_reader
 
 
@@ -15,7 +15,7 @@ def load_sentiwordnet():
 
     for lemma, verb_mark, positive, negative in reader:  # @UnusedVariable
         value = (int(positive), int(negative))
-        word_value = WordSentimentalValue(lemma, value)
+        word_value = SentimentalValuedObject(lemma, value)
         values_by_lemma[lemma] = word_value
     return values_by_lemma
 
@@ -24,6 +24,6 @@ class SentiWordNet:
     def get(lemma):
         repository = SentiWordNet.values_by_lemma
         if lemma in repository: return repository[lemma]
-        return WordSentimentalValue.default_for(lemma)
+        return SentimentalValuedObject(lemma)
 
     values_by_lemma = load_sentiwordnet()

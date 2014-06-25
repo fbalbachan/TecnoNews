@@ -35,7 +35,7 @@ class WebOutputUtils:
         return self.evidence_string(entity, 0, entity.sentimental_value.positive_evidence())
 
     def evidence_string(self, entity, component, evidence_list):
-        return ", ".join([ str(evidence.object()) + " (" + str(evidence.value[component]) + ")" for evidence in
+        return ", ".join([ str(evidence.object) + " (" + str(evidence.value[component]) + ")" for evidence in
                           evidence_list])
 
     def msi_string(self, msi):
