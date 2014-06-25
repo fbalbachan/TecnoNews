@@ -28,6 +28,16 @@ class WebOutputUtils:
             tooltip = tooltip + " - Transitivity " + entity.transitivity + " - Sentiment script " + entity.script_class
         return tooltip
 
+    def e_sv_neg_ev(self, entity):
+        return self.evidence_string(entity, 1, entity.sentimental_value.negative_evidence())
+
+    def e_sv_pos_ev(self, entity):
+        return self.evidence_string(entity, 0, entity.sentimental_value.positive_evidence())
+
+    def evidence_string(self, entity, component, evidence_list):
+        return ", ".join([ str(evidence.object()) + " (" + str(evidence.value[component]) + ")" for evidence in
+                          evidence_list])
+
     def msi_string(self, msi):
         return str(msi["person"]) + "° " + str(msi["gender"]) + " " + str(msi["number"]) + " (" + str(msi["category"]) + ")"
         #return ", ".join([ key + " = " + str(value) for (key, value) in msi.items() ])
