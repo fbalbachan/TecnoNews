@@ -14,6 +14,9 @@ class WordSentimentalValue:
     def __repr__(self):
         return self.lemma + " " + str(self.value)
 
+    def object(self):
+        return self.lemma
+
     @staticmethod
     def default_for(lemma):
         return WordSentimentalValue(lemma, (0, 0))

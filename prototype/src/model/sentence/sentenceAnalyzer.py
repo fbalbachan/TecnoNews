@@ -4,6 +4,7 @@ from src.model.clause.clauseAnalyzer import ClauseAnalyzer
 from src.model.clause.clauseExtractor import ClauseExtractor
 from src.model.go.globalOperatorAnalyzer import GlobalOperatorAnalyzer
 from src.parser.freelingTreeParser import FreelingTreeParser
+from src.sentiment.sentimentalAnalyzer import SentimentalAnalyzer
 from src.utils.invoker import Invoker
 
 
@@ -17,8 +18,8 @@ class SentenceAnalyzer:
         self.set_parse_tree_to(sentence)
 
         sentence.clauses = ClauseExtractor().extract_from(sentence)
-        self.invoker.invoke(self.analyze_clauses_of, sentence)
-        self.invoker.invoke(self.analyze_global_operators_of, sentence)
+        for method in [ self.analyze_clauses_of, self.analyze_global_operators_of ]:
+            self.invoker.invoke(method, sentence)
 
     def analyze_global_operators_of(self, sentence):
         GlobalOperatorAnalyzer(sentence).analyze()
@@ -26,10 +27,13 @@ class SentenceAnalyzer:
     def analyze_clauses_of(self, sentence):
         self.context["clauses"] = []
         clauseAnalyzer = ClauseAnalyzer()
+        sentimentalAnalyzer =  SentimentalAnalyzer()
         clauseAnalyzer.context = self.context
         for clause in sentence.clauses:
             clauseAnalyzer.analyze(clause)
             self.context["clauses"].append(clause)
+
+            sentimentalAnalyzer.analyze(clause)
 
     def set_parse_tree_to(self, sentence):
         node = self.tree_parser.from_text(sentence.text)
