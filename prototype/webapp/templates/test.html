@@ -72,7 +72,7 @@ $def with (sentences, printer)
     $for sentence in sentences:
 	<hr size=5 noshade>
 
-        <h2>Sentence $(sentences.index(sentence) + 1) <font size=2>(mouse hover SVO slots and  entities for specific attributes to appear)</font></h2>
+        <h2>Sentence $(sentences.index(sentence) + 1) <font size=2>(mouse over SVO slots and  entities for specific attributes to appear)</font></h2>
         <p class="grande">$sentence</p>
 
         $for clause in sentence.clauses:
@@ -84,42 +84,42 @@ $def with (sentences, printer)
             <b>Voice</b> $clause.voice<br>
 
             $if clause.entities:
-                <br><b><u>Entities</u></b>
+                <br><b><u>Total Entities</u></b>
                 $for entity in clause.entities:
                     <br><li title="$printer.entity_tooltip(entity)">$entity</li>
             </p>
             <p class="normal">
             $if clause.linked_entities:
-                <br><b>Co-reference</b>
+                <br><b>Entities in co-reference</b> (anaphora resolution in personal pronouns)
                 $for entity in clause.linked_entities:
                     <br><li title="$printer.entity_tooltip(entity)">$entity</li>
             </p>
             <p class="normal">
             $if clause.relative_entity:
-                <b>Relative entities</b>
+                <b>Relative entities</b> (anaphora resolution in relative pronouns)
                 <br><li title="$printer.entity_tooltip(clause.relative_entity)">$clause.relative_entity</li>
             </p>
             <p class="normal">
-            <br><br><br><b><u>Global operators</u></b> <font size=2>(any checked flag indicates the utterance is not a real fact but an hypothetical situation that didn't happen)</font><br>
+            <br><b><u>Global operators</u></b> <font size=2>(any checked flag indicates the utterance mapped onto the following SVO slots is not a real fact but an hypothetical situation that didn't happen)</font><br>
             <div class="operators">
             $for klass, name in [("negation", "Negation"), ("question", "Yes/No Question"), ("possibility", "Possibility"), ("condition", "Condition"), ("imperative", "Imperative"), ("future", "Future"), ("volitive", "Volitive")]:
                 $printer.global_operator_bullet_for(clause, klass) $name &nbsp &nbsp &nbsp
             </div>
             </p>
             <p class="normal">
-            <b><u>Syntactic Structures</u></b><br>
+            <b><u>Syntactic Structures</u></b> (SVO slots) <br>
 
             <table class="str_table" border="0">
             <tr>
-              <th>Opinioned Modal<br>Adverb</th>
+              <th>Opinionated Modal<br>Adverb</th>
               <th>Subject</th>
               <th>Verb</th>
               <th>Direct<br>Object</th>
               <th>Indirect Object<br>Experiencer</th>
               <th>Phrasal-Verb<br>Complement</th>
               <th>Equative</th>
-              <th>Instrument<br>Goal</th>
-              <th>Adjuncts</th>
+              <th>Instrument/Company<br>Goal/Beneficiary</th>
+              <th>Adjuncts<br>(Time, Space, etc.)</th>
             </tr>
 
             <tr>
