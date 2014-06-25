@@ -1,0 +1,36 @@
++grup-verb_[
+  sn_[
+    espec-ms_[
+      +j-ms_[
+        +(El el DA0MS0 -)
+      ]
+    ]
+    +grup-nom-ms_[
+      s-a-ms_[
+        +a-ms_[
+          +(buen bueno AQ0MS0 -)
+        ]
+      ]
+      +grup-nom-ms_[
+        +n-ms_[
+          +(hombre hombre NCMS000 -)
+        ]
+      ]
+    ]
+    sp-de_[
+      +(de de SPS00 -)
+      sn_[
+        +grup-nom-fs_[
+          +n-fs_[
+            +(mierda mierda NCFS000 -)
+          ]
+        ]
+      ]
+    ]
+  ]
+  +verb_[
+    +(murió morir VMIS3S0 -)
+  ]
+]
+
+

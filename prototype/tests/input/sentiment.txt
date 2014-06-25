@@ -1,0 +1,33 @@
+El buen hombre murió
+    subject: El buen hombre
+        count: sent_ev = 1
+        sent_ev: buen
+
+El hombre de mierda murió
+    subject: El hombre de mierda
+        count: sent_ev = 1
+        sent_ev: mierda
+
+# Faltaría poder testear la entidad subordinada "mala mierda" con dos evidencias, una adjetival y otra nominal
+El hombre de mala mierda murió
+    subject: El hombre de mala mierda
+        count: sent_ev = 1
+        sent_ev: mala mierda
+
+El buen hombre de mierda murió
+    subject: El buen hombre de mierda
+        count: sent_ev = 2
+        sent_ev: buen
+        sent_ev: mierda
+
+# Nominal con infinitivos
+Odio agradecer así
+    od: agradecer
+        count: sent_ev = 1
+        sent_ev: agradecer
+
+# Adjetival con participios
+La mujer odiada creció
+    subject: La mujer odiada
+        count: sent_ev = 1
+        sent_ev: odiada
