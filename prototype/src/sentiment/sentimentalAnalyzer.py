@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from src.sentiment.entitySentimentalValue import EntitySentimentalValue
 from src.sentiment.sentiWordNet import SentiWordNet
 
 
