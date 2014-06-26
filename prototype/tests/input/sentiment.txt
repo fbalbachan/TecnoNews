@@ -31,3 +31,19 @@ La mujer odiada creció
     subject: La mujer odiada
         count: sent_ev = 1
         sent_ev: odiada
+
+# Adverbial
+Leandro comió bien
+    subject: Leandro
+        count: sent_ev = 1
+        sent_ev: bien
+
+Comió rápidamente
+    subject: él/ella
+        count: sent_ev = 1
+        sent_ev: rápidamente
+
+Rápidamente hay noticias
+    od: noticias
+        count: sent_ev = 1
+        sent_ev: rápidamente
