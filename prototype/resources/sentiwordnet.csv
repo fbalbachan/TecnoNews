@@ -1,3 +1,18 @@
+grillete,,0,30
+cautiverio,,0,50
+damnificado,,0,60
+barrabrava,,0,50
+sueño,,20,0
+disfuncional,,0,40
+sano,,30,0
+armonía,,40,0
+próspero,,70,0
+jocoso,,30,0
+en_favor_de,,40,0
+a_favor_de,,40,0
+en_contra_de,,0,40
+contra,,0,40
+en_pos_de,,20,0
 a_bocajarro,,0,15
 a_brazo_partido,,15,0
 a_buen_recaudo,,15,0
@@ -2465,7 +2480,6 @@ subsanar,VERBO,40,0
 subvalorar,VERBO,0,20
 subvertir,VERBO,0,40
 sucio,,0,35
-suerte,,50,0
 sufra,,0,30
 sufrido,,0,25
 sufrimiento,,0,15
