@@ -55,9 +55,18 @@ class TestClauseAnalyzer(unittest.TestCase):
             print "\t   Global operators", list(clause.global_operators)
             print "\t   Valuated adverbs", list(clause.valuated_adverbs)
             print
-            print "\t Entities"
-            for entity in clause.entities:
-                print "\t  ", entity.sentimental_value
+
+            entities = clause.entities
+            if entities:
+                print "\t Entities"
+                for entity in clause.entities:
+                    print "\t  ", entity.sentimental_value
+
+            entities = clause.tacit_entities()
+            if entities:
+                print "\t Tacit entities"
+                for entity in entities:
+                    print "\t  ", entity.sentimental_value
         print "--"
 
     def sentence(self, assertion, frame):

@@ -114,6 +114,9 @@ class Clause(TreeNode):
         return [ entity for entity in self.entities if entity not in assigned_entities
                 and not any([ assigned.contains(entity) for assigned in assigned_entities ]) ]
 
+    def tacit_entities(self):
+        return sum([ structure.tacit_entities for structure in self.syntactic_structures ], [])
+
     def assigned_entities(self):
         return sum([ structure.entities for structure in self.syntactic_structures ], [])
 
