@@ -5,6 +5,20 @@ from src.sentiment.sentimentalValuedObject import SentimentalValuedObject
 
 class SentimentalAnalyzer:
     def analyze(self, clause):
+        self.analyze_adverbial(clause)
+        self.perform_entity_level_analysis_of(clause)
+
+    def analyze_adverbial(self, clause):
+        hints = clause.valuated_adverbs
+        evidence = [ SentimentalValuedObject(adverb, SentiWordNet.get(adverb.lemma).value) for adverb in hints ]
+        structures = [ "subject", "od" ]
+        for structure in structures:
+            if clause.has_structure(structure) and not clause.structure(structure).is_empty():
+                entity = clause.structure(structure).entity()
+                entity.sentimental_value.add_evidence(*evidence)
+                break
+
+    def perform_entity_level_analysis_of(self, clause):
         for entity in clause.entities:
             self.analyze_entity(entity)
 
