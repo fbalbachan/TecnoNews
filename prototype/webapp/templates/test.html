@@ -20,8 +20,7 @@ $def with (sentences, printer)
 
             $code:
                 entities_data = [
-                    (clause.entities, "Opinionated Entities", ""),
-                    (clause.tacit_entities(), "Opinionated Tacit Entities", ""),
+                    (clause.entities + clause.tacit_entities(), "Opinionated Entities", ""),
                     (clause.linked_entities, "Entities in co-reference", "(anaphora resolution in personal pronouns)")
                 ]
 
