@@ -18,30 +18,32 @@ $def with (sentences, printer)
             <h3>Clause $(sentences.index(sentence) + 1).$printer.clause_number(clause, sentence)</h3>
             <p class="grande">$clause</p>
 
-            <p class="normal">
-            $if clause.entities:
-                <br><b><u>Opinionated Entities:</u></b>
-                <table id="entities">
-                    <tr><th/><th>Positive</th><th>Negative</th></tr>
-                $for entity in clause.entities:
-                    <tr>
-                        <td title="$printer.entity_tooltip(entity)">$entity</td>
-                        <td title="$printer.e_sv_pos_ev(entity)" align="center" width=100>$entity.sentimental_value.value[0]</td>
-                        <td title="$printer.e_sv_neg_ev(entity)" align="center" width=100>$entity.sentimental_value.value[1]</td>
-                    </tr>
-                </table>
-            </p>
-            <p class="normal">
-            $if clause.linked_entities:
-                <br><b>Entities in co-reference</b> (anaphora resolution in personal pronouns)
-                $for entity in clause.linked_entities:
-                    <br><li title="$printer.entity_tooltip(entity)">$entity</li>
-            </p>
-            <p class="normal">
-            $if clause.relative_entity:
-                <b>Relative entities</b> (anaphora resolution in relative pronouns)
-                <br><li title="$printer.entity_tooltip(clause.relative_entity)">$clause.relative_entity</li>
-            </p>
+            $code:
+                entities_data = [
+                    (clause.entities, "Opinionated Entities", ""),
+                    (clause.tacit_entities(), "Opinionated Tacit Entities", ""),
+                    (clause.linked_entities, "Entities in co-reference", "(anaphora resolution in personal pronouns)")
+                ]
+
+                if clause.relative_entity:
+                    entities_data.append(
+                        ([clause.relative_entity], "Relative entities", "(anaphora resolution in relative pronouns)"))
+
+            $for list, title, subtitle in entities_data:
+                $if list:
+                    <p class="normal">
+                    <br><b><u>$title</u></b> $subtitle
+                    <table id="entities">
+                        <tr><th/><th>Positive</th><th>Negative</th></tr>
+                    $for entity in list:
+                        <tr>
+                            <td title="$printer.entity_tooltip(entity)">$entity</td>
+                            <td title="$printer.e_sv_pos_ev(entity)" align="center" width=100>$entity.sentimental_value.value[0]</td>
+                            <td title="$printer.e_sv_neg_ev(entity)" align="center" width=100>$entity.sentimental_value.value[1]</td>
+                        </tr>
+                    </table>
+                    </p>
+
             <p class="normal">
             <br><b><u>Global operators</u></b> <font size=2>(any checked flag indicates the utterance mapped onto the following SVO slots is not a real fact but an hypothetical situation that didn't happen)</font><br>
             <div class="operators">
