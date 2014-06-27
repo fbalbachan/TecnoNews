@@ -29,6 +29,13 @@ class Entity (TacitEntity):
     def highest_subordinating_node(self):
         return sorted(self.subordinating_nodes(), key = lambda node: node.level())[0]
 
+    def header(self):
+        if not self.is_subordinated(): return None
+        node = self.highest_subordinating_node()
+        first_leaf = node.leaves()[0]
+        if first_leaf.msi["type"] != "preposition": return None
+        return first_leaf
+
     def is_subordinated(self):
         return bool(self.subordinating_nodes())
 

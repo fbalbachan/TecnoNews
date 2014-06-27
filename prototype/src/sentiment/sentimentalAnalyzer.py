@@ -5,8 +5,46 @@ from src.sentiment.sentimentalValuedObject import SentimentalValuedObject
 
 class SentimentalAnalyzer:
     def analyze(self, clause):
-        self.analyze_adverbial(clause)
         self.perform_entity_level_analysis_of(clause)
+        self.analyze_adverbial(clause)
+        self.analyze_instrument_goal(clause)
+
+    def analyze_instrument_goal(self, clause):
+        name = "instrument_goal"
+        if not clause.has_structure(name): return
+
+        structure = clause.structure(name)
+        for entity in structure.entities:
+            header = entity.header()
+            if not header: header = clause.relative_linker[0]
+            header_lemma = header.lemma
+            if header_lemma in self.method_by_header:
+                self.method_by_header[header_lemma](self, header_lemma, entity, clause)
+            else:
+                self.prepositional_assignation(header, entity, clause)
+
+    def prepositional_assignation(self, header, entity, clause):
+        valued_header = SentiWordNet.get(header.lemma)
+        if valued_header.is_neutral(): return
+        entity.sentimental_value.add_evidence(SentimentalValuedObject(header, valued_header.value))
+
+    def instrument_assignation(self, header, entity, clause):
+        self.assign_over_subject(entity, clause)
+
+    def privative_assignation(self, header, entity, clause):
+        self.assign_over_subject(entity, clause, 0.5, True)
+
+    def assign_over_subject(self, entity, clause, coef = 1, reverse_polarity = False):
+        if entity.sentimental_value.is_neutral(): return
+        if not clause.has_structure("subject") or clause.structure("subject").is_empty(): return
+
+        destination = clause.structure("subject").entity()
+
+        entity_value = entity.sentimental_value.value
+        if reverse_polarity: entity_value = (entity_value[1], entity_value[0])
+
+        evidence = SentimentalValuedObject(entity, (int(coef * entity_value[0]), int(coef * entity_value[1])))
+        destination.sentimental_value.add_evidence(evidence)
 
     def analyze_adverbial(self, clause):
         hints = clause.valuated_adverbs
@@ -46,3 +84,6 @@ class SentimentalAnalyzer:
             word_value = SentiWordNet.get(hint.lemma)
             if not word_value.is_neutral(): valuated.append(SentimentalValuedObject(hint, word_value.value))
         return valuated
+
+    method_by_header = {"sin": privative_assignation, "con": instrument_assignation, "mediante": instrument_assignation,
+                        "a_través_de": instrument_assignation, "por_medio_de": instrument_assignation }
