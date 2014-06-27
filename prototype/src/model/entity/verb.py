@@ -1,12 +1,6 @@
 # -*- coding: utf-8 -*-
-
-from copy import copy
-from itertools import groupby
-
-from src.ling import verb_info
-from src.ling.head_labels import *
 from src.ling.tacit_subjects import tacit_subjects
-from src.ling.verb_info import get_script_class, get_transitivity
+from src.ling.verb_info import get_sentimental_script_of, get_transitivity
 from src.model.entity.entity import Entity
 
 
@@ -23,12 +17,8 @@ class Verb(Entity):
         self.msi = self.guess_msi()
         self.lexical_form = " ".join([ str(leaf) for leaf in self.leaves])
 
-        self.script_class = get_script_class(lemma) # Reificar como método de clase
-        self.transitivity = get_transitivity(lemma) # Idem
-
-        if not self.transitivity:
-            self.transitivity = verb_info.transitivities["I"]
-            self.script_class = verb_info.scripts["N"]
+        self.sentimental_script = get_sentimental_script_of(lemma)
+        self.transitivity = get_transitivity(lemma)
 
     def lemma(self):
         return self.leaf().lemma
@@ -74,4 +64,4 @@ class Verb(Entity):
 
     def __repr__(self):
         return " ".join([ str(leaf) for leaf in self.leaves]) + " (" + self.lemma() + ") " + \
-            str([ self.voice, self.script_class, self.transitivity ]) + " " + str(self.msi["person"]) + "°"
+            str([ self.voice, self.sentimental_script.klass, self.transitivity ]) + " " + str(self.msi["person"]) + "°"

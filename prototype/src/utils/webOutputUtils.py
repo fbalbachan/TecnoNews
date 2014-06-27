@@ -25,7 +25,8 @@ class WebOutputUtils:
     def entity_tooltip(self, entity):
         tooltip = self.msi_string(entity.msi)
         if entity.category() == "verb":
-            tooltip = tooltip + " - Transitivity " + entity.transitivity + " - Sentiment script " + entity.script_class
+            tooltip = tooltip + " - Transitivity " + entity.transitivity + " - Sentiment script " + \
+                entity.sentimental_script.klass
         return tooltip
 
     def e_sv_neg_ev(self, entity):
