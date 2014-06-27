@@ -15,7 +15,7 @@ class SentimentalAnalyzer:
 
         structure = clause.structure(name)
         for entity in structure.entities:
-            header = entity.header()
+            header = entity.source.header() if entity.is_linked() else entity.header()
             if not header: header = clause.relative_linker[0]
             header_lemma = header.lemma
             if header_lemma in self.method_by_header:
