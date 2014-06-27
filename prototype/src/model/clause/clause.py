@@ -23,6 +23,7 @@ class Clause(TreeNode):
         self.global_operators = set()
 
         self.valuated_adverbs = []
+        self.isolated_adjectives = []
 
     def has_global_operator_of(self, klass):
         return bool(filter(lambda operator: operator.klass == klass, self.global_operators))

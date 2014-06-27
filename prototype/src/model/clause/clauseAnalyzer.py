@@ -33,7 +33,8 @@ class ClauseAnalyzer:
         if self.relative_needs_to_be_solved_first(clause):
             relative_solver_order.reverse()
 
-        return relative_solver_order + [ self.solve_gerund, self.solve_personal_pronouns, self.find_adverbs ]
+        return relative_solver_order + [self.solve_gerund, self.solve_personal_pronouns, self.find_adverbs,
+                                        self.find_unassigned_adjectives ]
 
     def relative_needs_to_be_solved_first(self, clause):
         if not clause.is_relative(): return False
@@ -52,6 +53,11 @@ class ClauseAnalyzer:
     def create_empty_syntactic_structures_for(self, clause):
         for name in self.allowed_syntactic_structures_for(clause):
             clause.syntactic_structures.append(SyntacticStructure(name, clause))
+
+    def find_unassigned_adjectives(self, clause):
+        all_assigned_leaves = sum([ entity.proper_node.leaves() for entity in clause.entities ], [])
+        clause.isolated_adjectives = filter(lambda leaf: leaf not in all_assigned_leaves,
+                                            clause.proper_tree().leaves_of_category("adjective"))
 
     def find_adverbs(self, clause):
         clause.valuated_adverbs = ValuatedAdverbFinder(clause).find()
