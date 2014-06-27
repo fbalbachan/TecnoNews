@@ -1,0 +1,69 @@
++grup-verb_[
+  +verb_[
+    +(Destaco destacar VMIP1S0 -)
+  ]
+  sn_[
+    espec-fp_[
+      +j-fp_[
+        +(las el DA0FP0 -)
+      ]
+    ]
+    +grup-nom-fp_[
+      s-a-fp_[
+        +a-fp_[
+          +(buenas bueno AQ0FP0 -)
+        ]
+      ]
+      +grup-nom-fp_[
+        +n-fp_[
+          +(intenciones intención NCFP000 -)
+        ]
+      ]
+    ]
+    sp-de_[
+      +(de de SPS00 -)
+      sn_[
+        +grup-nom-ms_[
+          +w-ms_[
+            +(Juana juana NP00000 -)
+          ]
+        ]
+        subord-rel_[
+          +(en_favor_de en_favor_de SPS00 -)
+          prel-comp_[
+            j-fs_[
+              +(la el DA0FS0 -)
+            ]
+            +cual-s_[
+              +(cual cual PR0CS000 -)
+            ]
+            grup-verb_[
+              +verb_[
+                (debo deber VMIP1S0 -)
+                +infinitiu_[
+                  +inf_[
+                    +forma-inf_[
+                      +(decir decir VMN0000 -)
+                    ]
+                  ]
+                ]
+              ]
+              sn_[
+                +grup-nom-fp_[
+                  +n-fp_[
+                    +(cosas cosa NCFP000 -)
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ]
+      ]
+    ]
+  ]
+  Fc_[
+    +(, , Fc -)
+  ]
+]
+
+

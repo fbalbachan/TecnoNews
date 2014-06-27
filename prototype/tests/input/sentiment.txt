@@ -79,3 +79,23 @@ El odio con el que viví había desaparecido
             sent_ev: El odio
         instrument_goal: El odio
             sent_ev: odio
+
+Destaco las buenas intenciones de Juana, en favor de la cual debo decir cosas
+    clause: Destaco las buenas intenciones de Juana ,
+    clause: en_favor_de la cual debo decir cosas
+        instrument_goal: Juana
+            count: sent_ev = 1
+            sent_ev: en_favor_de
+                value: (40, 0)
+
+El hombre en favor de quien jugué contra Leandro murió
+    clause: El hombre murió
+    clause: en_favor_de quien jugué contra Leandro
+        instrument_goal:
+            count: 2
+            entity: El hombre
+                count: sent_ev = 1
+                sent_ev: en_favor_de
+            entity: Leandro
+                count: sent_ev = 1
+                sent_ev: contra
