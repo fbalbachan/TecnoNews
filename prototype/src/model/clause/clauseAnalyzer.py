@@ -55,8 +55,9 @@ class ClauseAnalyzer:
             clause.syntactic_structures.append(SyntacticStructure(name, clause))
 
     def find_unassigned_adjectives(self, clause):
-        all_assigned_leaves = sum([ entity.proper_node.leaves() for entity in clause.entities ], [])
-        clause.isolated_adjectives = filter(lambda leaf: leaf not in all_assigned_leaves,
+        all_assigned_leaves = sum([ entity.node.leaves() for entity in clause.entities if not entity.father ], [])
+        print [ entity.proper_node.leaves() for entity in clause.entities ]
+        clause.isolated_adjectives = filter(lambda leaf: not leaf in all_assigned_leaves,
                                             clause.proper_tree().leaves_of_category("adjective"))
 
     def find_adverbs(self, clause):

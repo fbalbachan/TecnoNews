@@ -10,9 +10,20 @@ class SentimentalAnalyzer:
         self.analyze_adverbial(clause)
         self.analyze_instrument_goal(clause)
         self.analyze_verbal(clause)
+        self.analyze_isolated_adjectives(clause)
+
+    def analyze_isolated_adjectives(self, clause):
+        if not clause.has_structure("subject") or clause.structure("subject").is_empty(): return
+        destination = clause.structure("subject").entity()
+        evidences = []
+        for hint in clause.isolated_adjectives:
+            valued = SentiWordNet.get(hint.lemma)
+            if valued.is_neutral(): continue
+            evidences.append(SentimentalValuedObject(hint, valued.value))
+        destination.sentimental_value.add_evidence(*evidences)
 
     def analyze_verbal(self, clause):
-        VerbalSentimentAnalyzer(clause).analyze()
+        if clause.voice: VerbalSentimentAnalyzer(clause).analyze()
 
     def analyze_instrument_goal(self, clause):
         name = "instrument_goal"

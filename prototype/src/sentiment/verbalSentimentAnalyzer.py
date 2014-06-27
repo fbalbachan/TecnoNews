@@ -2,6 +2,7 @@
 from src.sentiment.sentiWordNet import SentiWordNet
 from src.sentiment.sentimentalValuedObject import SentimentalValuedObject
 
+
 class VerbalSentimentAnalyzer:
     def __init__(self, clause):
         self.clause = clause
@@ -16,19 +17,11 @@ class VerbalSentimentAnalyzer:
 
     def analyze_equative(self):
         clause = self.clause
-        if clause.structure("subject").is_empty(): return
-        destination = clause.structure("subject").entity()
+        if clause.structure("equative").is_empty() or clause.structure("subject").is_empty(): return
 
-        if clause.structure("equative").is_empty():
-            evidences = []
-            for hint in clause.isolated_adjectives:
-                valued = SentiWordNet.get(hint.lemma)
-                if valued.is_neutral(): continue
-                evidences.append(SentimentalValuedObject(hint, valued.value))
-            destination.sentimental_value.add_evidence(*evidences)
-        else:
-            source = clause.structure("equative").entity()
-            destination.sentimental_value.add_evidence(source.sentimental_value)
+        destination = clause.structure("subject").entity()
+        source = clause.structure("equative").entity()
+        destination.sentimental_value.add_evidence(source.sentimental_value)
 
     def analyze_agentive(self):
         self.shed_on(1, "subject")
