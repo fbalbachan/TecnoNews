@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from src.sentiment.sentiWordNet import SentiWordNet
 from src.sentiment.sentimentalValuedObject import SentimentalValuedObject
+from src.sentiment.verbalSentimentAnalyzer import VerbalSentimentAnalyzer
 
 
 class SentimentalAnalyzer:
@@ -8,6 +9,10 @@ class SentimentalAnalyzer:
         self.perform_entity_level_analysis_of(clause)
         self.analyze_adverbial(clause)
         self.analyze_instrument_goal(clause)
+        self.analyze_verbal(clause)
+
+    def analyze_verbal(self, clause):
+        VerbalSentimentAnalyzer(clause).analyze()
 
     def analyze_instrument_goal(self, clause):
         name = "instrument_goal"
