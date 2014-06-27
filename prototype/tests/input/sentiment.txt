@@ -47,3 +47,35 @@ Rápidamente hay noticias
     od: noticias
         count: sent_ev = 1
         sent_ev: rápidamente
+
+Leandro actuó sin odio
+    instrument_goal: odio
+        sent_ev: odio
+            value: (0, 80)
+    subject: Leandro
+        sent_ev: odio
+            value: (40, 0)
+
+Leandro actuó con odio
+    instrument_goal: odio
+        sent_ev: odio
+            value: (0, 80)
+    subject: Leandro
+        sent_ev: odio
+            value: (0, 80)
+
+Leandro actuó contra el odio
+    instrument_goal: el odio
+        count: sent_ev = 2
+        sent_ev: odio
+        sent_ev: contra
+
+El odio con el que viví había desaparecido
+    clause: El odio había desaparecido
+        subject: El odio
+            sent_ev: odio
+    clause: con el que viví
+        subject: yo
+            sent_ev: El odio
+        instrument_goal: El odio
+            sent_ev: odio
