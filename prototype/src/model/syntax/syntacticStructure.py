@@ -54,3 +54,6 @@ class SyntacticStructure:
     def __repr__(self):
         entities = self.entities + self.tacit_entities
         return str(entities[0] if len(entities) == 1 else entities)
+
+    def is_multiple(self):
+        return self.name in ["adjuncts", "instrument_goal"]

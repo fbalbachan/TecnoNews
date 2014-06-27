@@ -57,7 +57,7 @@ class RelativePronounSolver:
         for destination in self.possible_entity_structures():
             if not clause.has_structure(destination): continue
             structure = clause.structure(destination)
-            if structure.is_empty():
+            if structure.is_empty() or structure.is_multiple():
                 structure.entities.append(clause.relative_entity)
                 break
             else:
