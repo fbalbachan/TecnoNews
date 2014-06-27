@@ -144,6 +144,11 @@ class TestClauseAnalyzer(unittest.TestCase):
         evidence = entity.sentimental_value.evidence
         found = filter(lambda each: each.object.lexical_form == assertion, evidence)
         self.assertTrue(len(found) == 1, "No se encontró (o hay más de una) evidencia con forma léxica " + assertion)
+        frame["sent_ev"] = found[0]
+
+    def value(self, assertion, frame):
+        evaluation = frame["sent_ev"]
+        self.assertEqual(evaluation.value, literal_eval(assertion))
 
     def lemma(self, assertion, frame):
         entity = frame["entity"]
@@ -186,7 +191,7 @@ class TestClauseAnalyzer(unittest.TestCase):
         return string.startswith("#")
 
     structure_keywords = [ "subject", "od", "oi", "equative", "regimen", "instrument_goal", "adjuncts", "verb" ]
-    keywords = [ "clause", "lemma", "msi", "entity", "sentence", "count", "go", "adverb", "sent_ev" ] + \
+    keywords = [ "clause", "lemma", "msi", "entity", "sentence", "count", "go", "adverb", "sent_ev", "value" ] + \
         structure_keywords
 
 if __name__ == '__main__':
