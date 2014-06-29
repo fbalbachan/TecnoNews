@@ -11,5 +11,10 @@ class SentimentalValuedObject:
     def is_neutral(self):
         return self.joined_value() == 0
 
+    def apply_coef(self, coef):
+        value = (int(self.value[0] * abs(coef)), int(self.value[1] * abs(coef)))
+        if coef < 0: value = (value[1], value[0])
+        self.value = value
+
     def __repr__(self):
         return str(self.object) + " " + str(self.joined_value())

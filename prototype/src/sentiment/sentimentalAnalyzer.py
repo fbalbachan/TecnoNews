@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from src.model.go.globalOperator import GlobalOperator
 from src.sentiment.sentiWordNet import SentiWordNet
 from src.sentiment.sentimentalValuedObject import SentimentalValuedObject
 from src.sentiment.verbalSentimentAnalyzer import VerbalSentimentAnalyzer
@@ -9,17 +10,35 @@ class SentimentalAnalyzer:
         self.perform_entity_level_analysis_of(clause)
         self.analyze_adverbial(clause)
         self.analyze_instrument_goal(clause)
-        self.analyze_verbal(clause)
-        self.analyze_isolated_adjectives(clause)
 
-    def analyze_isolated_adjectives(self, clause):
+        needs_to_be_verbally_analyzed = self.needs_to_be_verbally_analyzed(clause)
+        if needs_to_be_verbally_analyzed: self.analyze_verbal(clause)
+
+        self.analyze_isolated_adjectives(clause, needs_to_be_verbally_analyzed)
+
+    def needs_to_be_verbally_analyzed(self, clause):
+        suspend_assignation_classes = set(GlobalOperator.classes) - set(["negation", "future"])
+        clause_classes = set([ go.klass for go in clause.global_operators ]) & suspend_assignation_classes
+        print "clause_classes", clause_classes
+        return not bool(clause_classes)
+
+    def analyze_isolated_adjectives(self, clause, needs_to_be_verbally_analyzed):
         if not clause.has_structure("subject") or clause.structure("subject").is_empty(): return
+
+        coef = 1
+        if clause.voice and clause.verb.transitivity == "EQUATIVE":
+            if not needs_to_be_verbally_analyzed: return
+            elif clause.is_negated(): coef = -0.5
+
         destination = clause.structure("subject").entity()
         evidences = []
         for hint in clause.isolated_adjectives:
             valued = SentiWordNet.get(hint.lemma)
             if valued.is_neutral(): continue
-            evidences.append(SentimentalValuedObject(hint, valued.value))
+            evidence = SentimentalValuedObject(hint, valued.value)
+            evidence.apply_coef(coef)
+
+            evidences.append(evidence)
         destination.sentimental_value.add_evidence(*evidences)
 
     def analyze_verbal(self, clause):

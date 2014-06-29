@@ -18,8 +18,13 @@ class SentenceAnalyzer:
         self.set_parse_tree_to(sentence)
 
         sentence.clauses = ClauseExtractor().extract_from(sentence)
-        for method in [ self.analyze_clauses_of, self.analyze_global_operators_of ]:
+        for method in [ self.analyze_clauses_of, self.analyze_global_operators_of, self.analyze_sentimentally ]:
             self.invoker.invoke(method, sentence)
+
+    def analyze_sentimentally(self, sentence):
+        sentimentalAnalyzer =  SentimentalAnalyzer()
+        for clause in sentence.clauses:
+            sentimentalAnalyzer.analyze(clause)
 
     def analyze_global_operators_of(self, sentence):
         GlobalOperatorAnalyzer(sentence).analyze()
@@ -27,13 +32,10 @@ class SentenceAnalyzer:
     def analyze_clauses_of(self, sentence):
         self.context["clauses"] = []
         clauseAnalyzer = ClauseAnalyzer()
-        sentimentalAnalyzer =  SentimentalAnalyzer()
         clauseAnalyzer.context = self.context
         for clause in sentence.clauses:
             clauseAnalyzer.analyze(clause)
             self.context["clauses"].append(clause)
-
-            sentimentalAnalyzer.analyze(clause)
 
     def set_parse_tree_to(self, sentence):
         node = self.tree_parser.from_text(sentence.text)

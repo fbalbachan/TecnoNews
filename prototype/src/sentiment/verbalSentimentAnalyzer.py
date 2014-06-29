@@ -21,7 +21,13 @@ class VerbalSentimentAnalyzer:
 
         destination = clause.structure("subject").entity()
         source = clause.structure("equative").entity()
-        destination.sentimental_value.add_evidence(source.sentimental_value)
+        evidence = source.sentimental_value
+
+        if clause.is_negated():
+            evidence = SentimentalValuedObject(evidence.object, evidence.value)
+            evidence.apply_coef(-0.5)
+
+        destination.sentimental_value.add_evidence(evidence)
 
     def analyze_agentive(self):
         self.shed_on(1, "subject")
@@ -44,14 +50,14 @@ class VerbalSentimentAnalyzer:
         clause = self.clause
         verb = clause.verb
         valued = SentiWordNet.get(verb.lemma())
+        if clause.is_negated(): coef = coef * -0.5
 
         for destination in destinations:
             if not clause.has_structure(destination) or clause.structure(destination).is_empty(): continue
             entity = clause.structure(destination).entity()
 
-            value = (int(valued.value[0] * abs(coef)), int(valued.value[1] * abs(coef)))
-            if coef < 0: value = (value[1], value[0])
+            evidence = SentimentalValuedObject(verb, valued.value)
+            evidence.apply_coef(coef)
 
-            evidence = SentimentalValuedObject(verb, value)
             entity.sentimental_value.add_evidence(evidence)
             break

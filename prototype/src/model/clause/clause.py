@@ -25,6 +25,9 @@ class Clause(TreeNode):
         self.valuated_adverbs = []
         self.isolated_adjectives = []
 
+    def is_negated(self):
+        return self.has_global_operator_of("negation")
+
     def has_global_operator_of(self, klass):
         return bool(filter(lambda operator: operator.klass == klass, self.global_operators))
 
