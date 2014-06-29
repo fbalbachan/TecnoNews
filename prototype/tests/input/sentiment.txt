@@ -126,8 +126,10 @@ Pedro otorgó un premio
 Leandro parece una buena persona
     subject: Leandro
         sent_ev: una buena persona
+            value: (60, 0)
     equative: una buena persona
         sent_ev: buena
+            value: (60, 0)
 
 # 5. Switch
 Leandro perdonó a Pedro
@@ -147,3 +149,35 @@ Leandro es bueno como el horrible Pedro
     subject: Leandro
         count: sent_ev = 1
         sent_ev: bueno
+
+# Suspensión de asignación por GO
+Leandro asesinaría
+    subject: Leandro
+        count: sent_ev = 0
+
+# Negación (inversión de polaridad y coeficiente)
+Leandro no perdonó a Pedro
+    subject: Leandro
+        sent_ev: perdonó
+            value: (0, 12)
+    od: Pedro
+        sent_ev: perdonó
+            value: (6, 0)
+
+Leandro no parece una buena persona
+    subject: Leandro
+        sent_ev: una buena persona
+            value: (0, 30)
+    equative: una buena persona
+        sent_ev: buena
+            value: (60, 0)
+
+Leandro no es bueno
+    subject: Leandro
+        sent_ev: bueno
+            value: (0, 30)
+
+# Asignación de adjetivos aislados se suspende en presencia de ciertos GO y verbo ecuativo
+Leandro parecería bueno
+    subject: Leandro
+        count: sent_ev = 0
