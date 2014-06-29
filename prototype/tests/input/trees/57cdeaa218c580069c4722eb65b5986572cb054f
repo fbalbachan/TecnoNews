@@ -1,0 +1,26 @@
++grup-verb_[
+  sn_[
+    +grup-nom-ms_[
+      +w-ms_[
+        +(Pedro pedro NP00000 -)
+      ]
+    ]
+  ]
+  +verb_[
+    +(otorgó otorgar VMIS3S0 -)
+  ]
+  sn_[
+    espec-ms_[
+      +indef-ms_[
+        +(un uno DI0MS0 -)
+      ]
+    ]
+    +grup-nom-ms_[
+      +n-ms_[
+        +(premio premio NCMS000 -)
+      ]
+    ]
+  ]
+]
+
+

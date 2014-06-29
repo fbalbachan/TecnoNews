@@ -21,7 +21,7 @@ El buen hombre de mierda murió
         sent_ev: mierda
 
 # Nominal con infinitivos
-Odio agradecer así
+Olvido agradecer así
     od: agradecer
         count: sent_ev = 1
         sent_ev: agradecer
@@ -99,3 +99,51 @@ El hombre en favor de quien jugué contra Leandro murió
             entity: Leandro
                 count: sent_ev = 1
                 sent_ev: contra
+
+# Asignación verbal
+# 1. Agentiva
+Leandro ofendió a Pedro
+    subject: Leandro
+        sent_ev: ofendió
+    od: Pedro
+        count: sent_ev = 0
+
+# 2. Objetiva
+Leandro odia a Pedro
+    subject: Leandro
+        count: sent_ev = 0
+    od: Pedro
+        sent_ev: odia
+
+# 3. Dos aguas
+Pedro otorgó un premio
+    subject: Pedro
+        sent_ev: otorgó
+    od: un premio
+        sent_ev: otorgó
+
+# 4. Ecuativo
+Leandro parece una buena persona
+    subject: Leandro
+        sent_ev: una buena persona
+    equative: una buena persona
+        sent_ev: buena
+
+# 5. Switch
+Leandro perdonó a Pedro
+    subject: Leandro
+        sent_ev: perdonó
+            value: (24, 0)
+    od: Pedro
+        sent_ev: perdonó
+            value: (0, 12)
+
+# Adjetivos aislados
+Leandro es bueno
+    subject: Leandro
+        sent_ev: bueno
+
+Leandro es bueno como el horrible Pedro
+    subject: Leandro
+        count: sent_ev = 1
+        sent_ev: bueno

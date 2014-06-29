@@ -1,0 +1,26 @@
++grup-verb_[
+  sn_[
+    +grup-nom-ms_[
+      +w-ms_[
+        +(Leandro leandro NP00000 -)
+      ]
+    ]
+  ]
+  +verb_[
+    +(odia odiar VMIP3S0 -)
+  ]
+  grup-sp_[
+    +prep_[
+      +(a a SPS00 -)
+    ]
+    sn_[
+      +grup-nom-ms_[
+        +w-ms_[
+          +(Pedro pedro NP00000 -)
+        ]
+      ]
+    ]
+  ]
+]
+
+
