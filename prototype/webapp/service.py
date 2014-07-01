@@ -4,15 +4,13 @@
 from StringIO import StringIO
 import logging
 import os, web
-from sys import exc_info
 import sys
-from traceback import format_exc, format_stack
+import time
 
 from src.model.paragraph.paragraph import Paragraph
 from src.model.paragraph.paragraphAnalyzer import ParagraphAnalyzer
-from src.model.sentence.sentence import Sentence
-from src.model.sentence.sentenceAnalyzer import SentenceAnalyzer
 from src.utils.webOutputUtils import WebOutputUtils
+
 
 def write_pidfile():
 	pid = str(os.getpid())
@@ -22,6 +20,7 @@ def write_pidfile():
 def analyze():
 	try:
 		web_input = web.input()
+
 		input_text = web_input.text
 		if type(input_text) == unicode: input_text = input_text.encode("utf-8") # unicode -> str (encoded)
 
@@ -31,7 +30,6 @@ def analyze():
 
 		return paragraph.sentences
 	except Exception:
-		print format_exc()
 		return []
 		#web.template.render().exception(format_exc(), "")
 
@@ -56,10 +54,20 @@ class Debug_request:
 
 class EntiNews_request:
 	def GET(self):
+		logger = logging.getLogger("requests")
+		logger.info(time.strftime("%d/%m/%Y %H:%M:%S") + "\t" + web.ctx["ip"] + "\t" + web.ctx["fullpath"])
+
 		sentences = analyze()
 		return web.template.render().test(sentences, WebOutputUtils())
 
 ### MAIN ###
+
+def setup_loggers():
+	logger_names = ["requests", "exceptions"]
+	for name in logger_names:
+		logger = logging.getLogger(name)
+		logger.addHandler(logging.FileHandler(name + ".log"))
+		logger.setLevel(logging.INFO)
 
 if __name__ == '__main__':
 	print 'launching...'
@@ -72,7 +80,7 @@ if __name__ == '__main__':
 	)
 
 	write_pidfile()
-	logging.basicConfig(filename='logger.log',level=logging.ERROR)
+	setup_loggers()
 
 	app = web.application(urls, globals())
 	app.run()

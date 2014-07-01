@@ -22,4 +22,4 @@ class Invoker:
             if self.raise_exception:
                 print format_exc()
                 raise exception
-            logging.error("[Unraised exception] " + format_exc())
+            logging.getLogger("exceptions").error("[Unraised exception] " + format_exc())
