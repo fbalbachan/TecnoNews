@@ -1,3 +1,5 @@
+$def with (request_id)
+$ captcha_src = "static/captcha/captcha_" + request_id + ".png"
 <!DOCTYPE html>
 <html lang="es">
   <head>
@@ -50,18 +52,21 @@
       <h2 style="padding-top:60px;padding-bottom:10px;"></h2>
 
       <div>
-	<form class="well form-search" action="result" method="GET">
-	  <fieldset>
-	    <div class="control-group">
-	      <label class="control-label" for="text">Input Text (only Spanish):</label>
-	      <!-- <p></p> -->
-	      <div class="controls">
-		<textarea class="input-xlarge" id="textarea" rows="14" style="width: 950px;" name="text">Los noruegos, quienes son un pueblo agresivo, exportan el exquisito bacalao. A ellos les molesta tomar vacaciones en Hawaii, aunque no odian el calor. Afortunadamente, no fueron conquistados por los ingleses en el año 1066, y en cambio desarrollaron su propia cultura, confiando en su herencia vikinga y no formando parte de la Unión Europea.</textarea>
-	      </div>
-	      <button type="submit" style="margin-top: 10px;" class="btn btn-primary">Analize!</button>
-	    </div>
-	  </fieldset>
-	</form>
+        <form class="well form-search" action="result" method="GET">
+            <fieldset>
+                <div class="control-group">
+                    <label class="control-label" for="text">Input Text (only Spanish):</label>
+                    <div class="controls">
+                        <textarea class="input-xlarge" id="textarea" rows="14" style="width: 950px;" name="text">Los noruegos, quienes son un pueblo agresivo, exportan el exquisito bacalao. A ellos les molesta tomar vacaciones en Hawaii, aunque no odian el calor. Afortunadamente, no fueron conquistados por los ingleses en el año 1066, y en cambio desarrollaron su propia cultura, confiando en su herencia vikinga y no formando parte de la Unión Europea.</textarea>
+                        <br><br>
+                        Enter the number you see <input class="input" type="text" style="width: 50px;" maxlength=4 name="captcha"/>&nbsp;
+                        <img src="$captcha_src">
+                    </div>
+                    <textarea name="request" style="display:none;">$request_id</textarea>
+                    <button type="submit" style="margin-top: 10px;" class="btn btn-primary">Analize!</button>
+                </div>
+            </fieldset>
+        </form>
       </div>
 
       <p>This Entity-based Sentiment Analysis (ESA) solution yields a highly fine-grained representation for the sentiment values involved in each opinion. Unlike other approaches, this solution can deal with polarity shifting in the same sentence ('<i>I like chocolate but I hate strawberry ice-cream</i>') or even within embedded clauses ('<i>Norwegians, who are an aggresive People, export the exquisite herring</i>').
