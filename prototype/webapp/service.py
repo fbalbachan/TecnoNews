@@ -98,7 +98,10 @@ class EntiNews_request:
 
 			if request_captcha == right_captcha:
 				logger = logging.getLogger("requests")
-				logger.info(time.strftime("%d/%m/%Y %H:%M:%S") + "\t" + web.ctx["ip"] + "\t" + web.ctx["fullpath"])
+
+				web_env = web.ctx["environ"]
+				ip = web_env["HTTP_X_FORWARDED_FOR"] if "HTTP_X_FORWARDED_FOR" in web_env else web.ctx["ip"]
+				logger.info(time.strftime("%d/%m/%Y %H:%M:%S") + "\t" + ip + "\t" + web.ctx["fullpath"])
 
 				sentences = analyze()
 				return web.template.render().test(sentences, WebOutputUtils())
