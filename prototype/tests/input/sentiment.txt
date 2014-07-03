@@ -155,14 +155,14 @@ Leandro asesinaría
     subject: Leandro
         count: sent_ev = 0
 
-# Negación (inversión de polaridad y coeficiente)
+# Negación en switch (inversión de polaridad en agente y coeficiente)
 Leandro no perdonó a Pedro
     subject: Leandro
         sent_ev: perdonó
             value: (0, 12)
     od: Pedro
         sent_ev: perdonó
-            value: (6, 0)
+            value: (0, 6)
 
 Leandro no parece una buena persona
     subject: Leandro
