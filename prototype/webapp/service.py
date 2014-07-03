@@ -85,6 +85,11 @@ class Debug_request:
 		analyze()
 		return web.template.render().debug(output.getvalue())
 
+class HiddenEntiNews_request:
+	def GET(self):
+		sentences = analyze()
+		return web.template.render().test(sentences, WebOutputUtils())
+
 class EntiNews_request:
 	def GET(self):
 		web_input = web.input()
@@ -101,7 +106,7 @@ class EntiNews_request:
 
 				web_env = web.ctx["environ"]
 				ip = web_env["HTTP_X_FORWARDED_FOR"] if "HTTP_X_FORWARDED_FOR" in web_env else web.ctx["ip"]
-				logger.info(time.strftime("%d/%m/%Y %H:%M:%S") + "\t" + ip + "\t" + web.ctx["fullpath"])
+				logger.info(time.strftime("%d/%m/%Y %H:%M:%S") + "\t" + ip + "\t" + web_input.text)
 
 				sentences = analyze()
 				return web.template.render().test(sentences, WebOutputUtils())
@@ -122,6 +127,7 @@ if __name__ == '__main__':
 	urls = (
  	  '/favicon.ico', 'Favicon_request',
  	  '/result', 'EntiNews_request',
+ 	  '/hidden', 'HiddenEntiNews_request',
  	  '/', 'Index_request',
  	  '/debug', "Debug_request"
 	)
