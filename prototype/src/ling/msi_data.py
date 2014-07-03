@@ -72,5 +72,5 @@ attribute_map = {"A": {1: ("type", {"Q": u"calificative", "O": u"ordinal", "0": 
 
                  "W": {},
 
-                 "Z": {}
+                 "Z": {1: ("type", {"d": "partitive", "m": "currency", "p": "percentage", "u": "unit"})}
                 }
