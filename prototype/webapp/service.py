@@ -106,7 +106,7 @@ class EntiNews_request:
 
 				web_env = web.ctx["environ"]
 				ip = web_env["HTTP_X_FORWARDED_FOR"] if "HTTP_X_FORWARDED_FOR" in web_env else web.ctx["ip"]
-				logger.info(time.strftime("%d/%m/%Y %H:%M:%S") + "\t" + ip + "\t" + web_input.text)
+				logger.info(time.strftime("%d/%m/%Y %H:%M:%S") + "\t" + ip + "\t" + web.ctx["fullpath"])
 
 				sentences = analyze()
 				return web.template.render().test(sentences, WebOutputUtils())
