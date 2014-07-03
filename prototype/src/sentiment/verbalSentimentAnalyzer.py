@@ -36,15 +36,18 @@ class VerbalSentimentAnalyzer:
         self.shed_on(1, "od", "regimen", "oi")
 
     def analyze_dosaguas(self):
-        self.analyze_dosaguas_or_switch()
+        script = self.clause.verb.sentimental_script
+        self.analyze_dosaguas_or_switch(script.agentive_coef, script.objective_coef)
 
     def analyze_switch(self):
-        self.analyze_dosaguas_or_switch()
-
-    def analyze_dosaguas_or_switch(self):
         script = self.clause.verb.sentimental_script
-        self.shed_on(script.agentive_coef, "subject")
-        self.shed_on(script.objective_coef, "od", "regimen", "oi")
+        objective_coef = script.objective_coef
+        if self.clause.is_negated(): objective_coef = abs(objective_coef)
+        self.analyze_dosaguas_or_switch(script.agentive_coef, objective_coef)
+
+    def analyze_dosaguas_or_switch(self, agentive_coef, objective_coef):
+        self.shed_on(agentive_coef, "subject")
+        self.shed_on(objective_coef, "od", "regimen", "oi")
 
     def shed_on(self, coef, *destinations):
         clause = self.clause
