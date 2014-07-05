@@ -64,4 +64,4 @@ class Verb(Entity):
 
     def __repr__(self):
         return " ".join([ str(leaf) for leaf in self.leaves]) + " (" + self.lemma() + ") " + \
-            str([ self.voice, self.sentimental_script.klass, self.transitivity ]) + " " + str(self.msi["person"]) + "°"
+            " ".join([ self.voice, self.sentimental_script.klass, self.transitivity ]) + " " + str(self.msi["person"]) + "°"

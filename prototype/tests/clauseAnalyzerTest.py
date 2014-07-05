@@ -48,9 +48,14 @@ class TestClauseAnalyzer(unittest.TestCase):
         #print sentence.parse_node.tree_representation()
         print "Clauses"
         for clause in sentence.clauses:
+            empty_structures = []
             print "\t", clause
             for structure in clause.syntactic_structures:
-                print "\t  ", structure.name, structure
+                if structure.is_empty():
+                    empty_structures.append(structure.name)
+                else:
+                    print "\t  ", structure.name, structure
+            print "\t   Empty structures", ", ".join(empty_structures)
             print
             print "\t   Global operators", list(clause.global_operators)
             print "\t   Valuated adverbs", list(clause.valuated_adverbs)
