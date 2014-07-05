@@ -28,6 +28,12 @@ class ClauseAnalyzer:
 
         for method in self.analyze_order_for(clause): method(clause)
 
+        self.analyze_kind_of_cataphoric_structure_of(clause)
+
+    def analyze_kind_of_cataphoric_structure_of(self, clause):
+        if clause.has_structure("subject") and clause.structure("subject").is_tacit() and \
+            clause.has_kind_of_cataphoric_structure(): clause.attributes.append("pseudo_cataphoric")
+
     def analyze_order_for(self, clause):
         relative_solver_order = [ self.analyze_syntactically, self.solve_relative ]
         if self.relative_needs_to_be_solved_first(clause):

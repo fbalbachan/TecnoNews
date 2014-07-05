@@ -25,8 +25,17 @@ class Clause(TreeNode):
         self.valuated_adverbs = []
         self.isolated_adjectives = []
 
+        self.attributes = []
+
+    def Is(self, attribute):
+        return attribute in self.attributes
+
     def is_negated(self):
         return self.has_global_operator_of("negation")
+
+    def has_kind_of_cataphoric_structure(self):
+        return self.verb.transitivity == "EQUATIVE" and \
+            any(( child.is_subordinated_with("que") for child in self.children ))
 
     def has_global_operator_of(self, klass):
         return bool(filter(lambda operator: operator.klass == klass, self.global_operators))

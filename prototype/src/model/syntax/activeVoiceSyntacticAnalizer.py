@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from src.ling.tacit_subjects import tacit_subject_for, somebody
+from src.ling.tacit_subjects import tacit_subject_for, somebody, this
 from src.model.entity.linkedEntity import LinkedEntity
 from src.model.entity.tacitEntity import TacitEntity
 from src.model.syntax.syntacticAnalyzer import SyntacticAnalyzer
@@ -16,12 +16,19 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         if not clause.is_gerund():
             entities = self.verb_matching_subject_entities(3, 2)
 
-            if entities:
-                return [ entities[0] ]
-            else:
-                subject = somebody() if clause.is_relative() and clause.is_root() else self.tacit_subject()
-                return [ subject ]
+            if entities: return [ entities[0] ]
+            else:        return [ self.implicit_subject() ]
         return []
+
+    def implicit_subject(self):
+        criteria = [ (self.is_root_relative_clause, somebody), (self.clause.has_kind_of_cataphoric_structure, this) ]
+        for criterion, subject in criteria:
+            if criterion(): return subject()
+        return self.tacit_subject()
+
+    def is_root_relative_clause(self):
+        clause = self.clause
+        return clause.is_relative() and clause.is_root()
 
     def tacit_subject(self):
         verb = self.clause.verb
