@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from src.model.go.globalOperator import GlobalOperator
+from src.sentiment.isolatedAdjectiveAnalyzer import IsolatedAdjectiveAnalyzer
 from src.sentiment.sentiWordNet import SentiWordNet
 from src.sentiment.sentimentalValuedObject import SentimentalValuedObject
 from src.sentiment.verbalSentimentAnalyzer import VerbalSentimentAnalyzer
@@ -22,23 +23,7 @@ class SentimentalAnalyzer:
         return not bool(clause_classes)
 
     def analyze_isolated_adjectives(self, clause, needs_to_be_verbally_analyzed):
-        if not clause.has_structure("subject") or clause.structure("subject").is_empty(): return
-
-        coef = 1
-        if clause.voice and clause.verb.transitivity == "EQUATIVE":
-            if not needs_to_be_verbally_analyzed: return
-            elif clause.is_negated(): coef = -0.5
-
-        destination = clause.structure("subject").entity()
-        evidences = []
-        for hint in clause.isolated_adjectives:
-            valued = SentiWordNet.get(hint.lemma)
-            if valued.is_neutral(): continue
-            evidence = SentimentalValuedObject(hint, valued.value)
-            evidence.apply_coef(coef)
-
-            evidences.append(evidence)
-        destination.sentimental_value.add_evidence(*evidences)
+        IsolatedAdjectiveAnalyzer(clause, needs_to_be_verbally_analyzed).analyze()
 
     def analyze_verbal(self, clause):
         if clause.voice: VerbalSentimentAnalyzer(clause).analyze()
