@@ -116,7 +116,7 @@ Buscando ver a su padre, Leandro peleó sin pausa
 # Prioridad de asignación de MSI a entidades con subordinación interna
 La del albergue dijo eso
     subject: La de el albergue
-        msi: { "number" : "singular", "gender" : "feminine", "person" : 3 }
+        msi: { "category": "determinant", "number" : "singular", "gender" : "feminine", "person" : 3 }
     verb: dijo
     od: eso
 
