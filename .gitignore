@@ -1,5 +1,7 @@
 *.pdf
 *.pyc
+*.swp
+*.log
 *~
 .classpath
 .project
@@ -16,3 +18,4 @@ prototype/logs
 prototype/sentence.txt
 prototype/no/*
 prototype/webapp/webapp_path
+prototype/.ropeproject
