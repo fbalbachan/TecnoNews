@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from src.sentiment.sentiWordNet import SentiWordNet
 from src.sentiment.sentimentalValuedObject import SentimentalValuedObject
-
+from src.sentiment.verbalSentimentAnalyzer import VerbalSentimentAnalyzer
 
 class IsolatedAdjectiveAnalyzer:
     def __init__(self, clause, needs_to_be_verbally_analyzed):
@@ -18,7 +18,8 @@ class IsolatedAdjectiveAnalyzer:
         coef = 1
         if clause.voice and clause.verb.transitivity == "EQUATIVE":
             if not self.needs_to_be_verbally_analyzed: return
-            elif clause.is_negated(): coef = -0.5
+            if clause.is_negated(): coef = VerbalSentimentAnalyzer.NEGATION_COEF
+            elif clause.has_global_operator_of("possibility", "volitive"): coef = VerbalSentimentAnalyzer.POSSIBILITY_COEF
 
             cataphoric_destination_subjects = self.cataphoric_destination_subjects()
             if cataphoric_destination_subjects: destinations = cataphoric_destination_subjects

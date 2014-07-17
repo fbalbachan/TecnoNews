@@ -18,7 +18,7 @@ class SentimentalAnalyzer:
         self.analyze_isolated_adjectives(clause, needs_to_be_verbally_analyzed)
 
     def needs_to_be_verbally_analyzed(self, clause):
-        suspend_assignation_classes = set(GlobalOperator.classes) - set(["negation", "future"])
+        suspend_assignation_classes = set(GlobalOperator.classes) - set(["negation", "future", "possibility", "volitive"])
         clause_classes = set([ go.klass for go in clause.global_operators ]) & suspend_assignation_classes
         return not bool(clause_classes)
 

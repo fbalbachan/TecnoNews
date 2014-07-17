@@ -24,8 +24,9 @@ class VerbalSentimentAnalyzer:
         evidence = source.sentimental_value
 
         if clause.is_negated():
-            evidence = SentimentalValuedObject(evidence.object, evidence.value)
-            evidence.apply_coef(-0.5)
+            evidence = SentimentalValuedObject.cloned(evidence, self.NEGATION_COEF)
+        elif clause.has_global_operator_of("possibility", "volitive"):
+            evidence = SentimentalValuedObject.cloned(evidence, self.POSSIBILITY_COEF)
 
         destination.sentimental_value.add_evidence(evidence)
 
@@ -53,7 +54,9 @@ class VerbalSentimentAnalyzer:
         clause = self.clause
         verb = clause.verb
         valued = SentiWordNet.get(verb.lemma())
-        if clause.is_negated(): coef = coef * -0.5
+
+        if clause.is_negated(): coef = coef * self.NEGATION_COEF
+        elif clause.has_global_operator_of("possibility", "volitive"): coef = coef * self.POSSIBILITY_COEF 
 
         for destination in destinations:
             if not clause.has_structure(destination) or clause.structure(destination).is_empty(): continue
@@ -64,3 +67,7 @@ class VerbalSentimentAnalyzer:
 
             entity.sentimental_value.add_evidence(evidence)
             break
+
+    NEGATION_COEF = -0.5
+    POSSIBILITY_COEF = 0.1
+
