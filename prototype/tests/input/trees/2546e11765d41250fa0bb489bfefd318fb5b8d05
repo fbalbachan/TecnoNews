@@ -1,0 +1,33 @@
++grup-verb_[
+  subord_[
+    +(Si si CS -)
+    grup-verb_[
+      +verb_[
+        +(amo amar VMIP1S0 -)
+      ]
+      sn_[
+        espec-ms_[
+          +j-ms_[
+            +(el el DA0MS0 -)
+          ]
+        ]
+        +grup-nom-ms_[
+          +n-ms_[
+            +(fútbol fútbol NCMS000 -)
+          ]
+        ]
+      ]
+    ]
+    Fc_[
+      +(, , Fc -)
+    ]
+  ]
+  +verb_[
+    +(estoy estar VAIP1S0 -)
+  ]
+  sadv_[
+    +(mal mal RG -)
+  ]
+]
+
+

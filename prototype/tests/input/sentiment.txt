@@ -199,28 +199,40 @@ Leandro quiere arreglar eso
         count: sent_ev = 1
 		sent_ev: quiere arreglar
 			value: (3, 0)
-    od: eso    
+    od: eso
         count: sent_ev = 1
 		sent_ev: quiere arreglar
 			value: (0, 4)
 
 # Volitive en verbo ecuativo
 Leandro quiere ser una mierda
-   subject: Leandro 
+   subject: Leandro
         count: sent_ev = 1
 		sent_ev: una mierda
 			value: (0, 10)
 
-# Volitive en adjetivos aislados y verbo ecuativo 
+# Volitive en adjetivos aislados y verbo ecuativo
 Leandro quiere ser malo
-   subject: Leandro 
+   subject: Leandro
         count: sent_ev = 1
 		sent_ev: malo
 			value: (0, 10)
- 
+
 # Negation tiene prioridad sobre volitive y no se combinan los coeficientes
 Leandro no quiere ser malo
-   subject: Leandro 
+   subject: Leandro
         count: sent_ev = 1
 		sent_ev: malo
 			value: (50, 0)
+
+# Bugfix: Condition también suspende asignación
+Si amo el fútbol, estoy mal
+    clause: Si amo el fútbol ,
+        subject: yo
+            count: sent_ev = 0
+        od: el fútbol
+            count: sent_ev = 0
+    clause: estoy mal
+        subject: yo
+            count: sent_ev = 1
+            sent_ev: mal

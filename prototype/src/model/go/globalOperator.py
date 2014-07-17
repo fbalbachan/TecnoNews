@@ -21,4 +21,4 @@ class GlobalOperator:
             operators.append(GlobalOperator(klass, object))
         return operators
 
-    classes = [ "negation", "volitive", "question", "possibility", "imperative", "conditional", "future"]
+    classes = [ "negation", "volitive", "question", "possibility", "imperative", "condition", "future"]
