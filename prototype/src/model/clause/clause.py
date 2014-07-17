@@ -37,8 +37,8 @@ class Clause(TreeNode):
         return self.verb.transitivity == "EQUATIVE" and \
             any(( child.is_subordinated_with("que") for child in self.children ))
 
-    def has_global_operator_of(self, klass):
-        return bool(filter(lambda operator: operator.klass == klass, self.global_operators))
+    def has_global_operator_of(self, *classes):
+        return bool(filter(lambda operator: operator.klass in classes, self.global_operators))
 
     def relative_linker_words(self):
         return [ leaf.lexical_form for leaf in self.relative_linker ]
