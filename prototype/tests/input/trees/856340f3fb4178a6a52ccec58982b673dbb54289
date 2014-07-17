@@ -1,0 +1,29 @@
++grup-verb_[
+  +verb_[
+    +(Es ser VSIP3S0 -)
+  ]
+  s-adj_[
+    +s-a-ms_[
+      +a-ms_[
+        +(malo malo AQ0MS0 -)
+      ]
+    ]
+  ]
+  subord_[
+    +(que que CS -)
+    grup-verb_[
+      sn_[
+        +grup-nom-ms_[
+          +w-ms_[
+            +(Leandro leandro NP00O00 -)
+          ]
+        ]
+      ]
+      +verb_[
+        +(mate matar VMSP3S0 -)
+      ]
+    ]
+  ]
+]
+
+

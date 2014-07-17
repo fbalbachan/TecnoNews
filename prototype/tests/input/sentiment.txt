@@ -181,3 +181,14 @@ Leandro no es bueno
 Leandro parecería bueno
     subject: Leandro
         count: sent_ev = 0
+
+# Estructuras catafóricas muy frecuentes
+Es malo que Leandro mate
+	clause: Es malo
+		subject: esto
+			count: sent_ev = 0
+	clause: que Leandro mate
+		subject: Leandro
+			count: sent_ev = 1
+			sent_ev: malo
+				value: (0, 100)
