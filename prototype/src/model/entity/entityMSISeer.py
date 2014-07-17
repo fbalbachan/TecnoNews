@@ -34,9 +34,9 @@ class EntityMSISeer:
             msi["gender"] = "neutral"
             msi["number"] = "invariable"
             msi["type"] = "common"
+            msi["category"] = "noun"
 
         if not "person" in msi or not msi["person"]: msi["person"] = 3
-        if nouns: msi["category"] = "noun"
 
         self.disambiguate_if_necessary(msi, useful_leaves)
 

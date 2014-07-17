@@ -1,0 +1,29 @@
++grup-verb_[
+  sn_[
+    +grup-nom-ms_[
+      +w-ms_[
+        +(Leandro leandro NP00SP0 -)
+      ]
+    ]
+  ]
+  neg_[
+    +(no no RN -)
+  ]
+  +verb_[
+    (quiere querer VMIP3S0 -)
+    +infinitiu_[
+      +infaux-ser_[
+        +(ser ser VSN0000 -)
+      ]
+    ]
+  ]
+  s-adj_[
+    +s-a-ms_[
+      +a-ms_[
+        +(malo malo AQ0MS0 -)
+      ]
+    ]
+  ]
+]
+
+

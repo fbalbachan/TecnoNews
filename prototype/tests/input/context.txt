@@ -116,7 +116,7 @@ Buscando ver a su padre, Leandro peleó sin pausa
 # Prioridad de asignación de MSI a entidades con subordinación interna
 La del albergue dijo eso
     subject: La de el albergue
-        msi: { "number" : "singular", "gender" : "feminine", "person" : 3 }
+        msi: { "category": "determinant", "number" : "singular", "gender" : "feminine", "person" : 3 }
     verb: dijo
     od: eso
 
@@ -686,3 +686,16 @@ Los hombres, quienes mataron mujeres, son criminales
     clause: quienes mataron mujeres
         subject: Los hombres
         od: mujeres
+
+# Entidades en infinitivo no satisfacen anáforas
+Según Juana, ellos pretenden desconocer los reconocimientos. Precisó que no comprenden.
+	sentence: Según Juana, ellos pretenden desconocer los reconocimientos 
+		subject: ellos
+		verb: pretenden
+		od: desconocer los reconocimientos
+	sentence: Precisó que no comprenden
+		clause: Precisó
+			subject: él/ella -> Juana
+		clause: que no comprenden
+			subject: ellos/ellas -> ellos
+ 

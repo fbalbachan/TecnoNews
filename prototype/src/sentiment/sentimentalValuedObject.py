@@ -18,3 +18,10 @@ class SentimentalValuedObject:
 
     def __repr__(self):
         return str(self.object) + " " + str(self.joined_value())
+
+    @staticmethod
+    def cloned(other, coef = 1):
+        clone = SentimentalValuedObject(other.object, other.value)
+        clone.apply_coef(coef)
+        return clone
+ 

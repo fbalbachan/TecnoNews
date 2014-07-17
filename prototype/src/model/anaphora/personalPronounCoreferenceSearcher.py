@@ -57,7 +57,7 @@ class PersonalPronounCoreferenceSearcher:
     def entities_to_be_searched_in(self, structure):
         entities = []
         for entity in structure.entities:
-            entities.append(entity)
+            if not entity.Is("infinitive"): entities.append(entity)
             if entity.is_coordinated() or entity.Is("infinitive"): entities.extend(entity.children)
         return entities
 
