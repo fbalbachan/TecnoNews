@@ -1,6 +1,8 @@
 *.pdf
 *.pyc
 *.swp
+*.swo
+*.swn
 *.log
 *~
 .classpath
