@@ -151,7 +151,7 @@ Leandro es bueno como el horrible Pedro
         sent_ev: bueno
 
 # Suspensión de asignación por GO
-Leandro asesinaría
+Leandro asesinaría?
     subject: Leandro
         count: sent_ev = 0
 
@@ -178,7 +178,7 @@ Leandro no es bueno
             value: (0, 30)
 
 # Asignación de adjetivos aislados se suspende en presencia de ciertos GO y verbo ecuativo
-Leandro parecería bueno
+Leandro debe parecer bueno
     subject: Leandro
         count: sent_ev = 0
 
@@ -192,3 +192,35 @@ Es malo que Leandro mate
 			count: sent_ev = 1
 			sent_ev: malo
 				value: (0, 100)
+
+# Asignación sentimental frente a possibility y volitive
+Leandro quiere arreglar eso
+    subject: Leandro
+        count: sent_ev = 1
+		sent_ev: quiere arreglar
+			value: (3, 0)
+    od: eso    
+        count: sent_ev = 1
+		sent_ev: quiere arreglar
+			value: (0, 4)
+
+# Volitive en verbo ecuativo
+Leandro quiere ser una mierda
+   subject: Leandro 
+        count: sent_ev = 1
+		sent_ev: una mierda
+			value: (0, 10)
+
+# Volitive en adjetivos aislados y verbo ecuativo 
+Leandro quiere ser malo
+   subject: Leandro 
+        count: sent_ev = 1
+		sent_ev: malo
+			value: (0, 10)
+ 
+# Negation tiene prioridad sobre volitive y no se combinan los coeficientes
+Leandro no quiere ser malo
+   subject: Leandro 
+        count: sent_ev = 1
+		sent_ev: malo
+			value: (50, 0)
