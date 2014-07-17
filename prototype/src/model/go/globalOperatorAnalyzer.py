@@ -40,7 +40,7 @@ class GlobalOperatorAnalyzer:
 
     def modal_verb_deber_finder(self, clause):
         if clause.voice and clause.verb.is_modal_of("deber"):
-            return GlobalOperator.For(clause.verb, "possibility", "imperative")
+            return GlobalOperator.For(clause.verb, "imperative")
 
     def subord_with_header_finder(self, clause):
         headers = [ "a_menos_que", "a_no_ser_que" ]
