@@ -5,6 +5,7 @@ class Entity (TacitEntity):
 
     def __init__(self, node):
         self.node = node
+        self.kernel = None
         self.father = None
         self.proper_node = None
 

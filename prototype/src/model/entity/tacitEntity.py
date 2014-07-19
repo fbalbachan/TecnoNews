@@ -12,6 +12,9 @@ class TacitEntity:
         self.attributes = attributes
         self.sentimental_value = EntitySentimentalValue(self)
 
+    def words(self):
+        return self.lexical_form.split("_")
+
     def children_of_category(self, category):
         return filter(lambda entity: entity.category() == category, self.children)
 

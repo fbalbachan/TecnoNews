@@ -1,17 +1,37 @@
 # -*- coding: utf-8 -*-
+from ConfigParser import ConfigParser
+from os.path import join
+
 from src.utils.genderDetection.genderDetector import GenderDetector
+
+
+def load_honorific_prefixes():
+    config = ConfigParser()
+    config.read("config")
+    _file = open(dict(config.items("resources"))["honorific_prefs"])
+    return [ pref.strip("\n") for pref in list(_file) ]
 
 class EntityMSISeer:
     def msi_of(self, entity):
         label = entity.node.label
         msi = self.msi_seer_by_label[label](self, entity) if label in self.msi_seer_by_label else {}
+
         self.detect_gender_if_necessary(msi, entity)
+        self.fix_org_classification(msi, entity)
+
         return msi
+
+    def fix_org_classification(self, msi, entity):
+        if "semantic_classification" in msi and msi["semantic_classification"] == "organization" and entity.kernel:
+            words = entity.kernel.components()
+            if words[0] not in self.honorific_prefixes: return
+            if any(( EntityMSISeer.gender_detector.gender_of(word) for word in words)):
+                msi["semantic_classification"] = "person"
 
     def detect_gender_if_necessary(self, msi, entity):
         if not (msi["category"] == "noun" and msi["type"] == "proper" and msi["gender"] == "neutral"): return
-        words = entity.lexical_form.split("_")
-        for word in words:
+
+        for word in entity.words():
             gender = EntityMSISeer.gender_detector.gender_of(word)
             if gender in [ "masculine", "feminine" ]:
                 msi["gender"] = gender
@@ -28,7 +48,8 @@ class EntityMSISeer:
         useful_leaves = filter(lambda leaf: not banned_nodes & set(leaf.path_to_root()), useful_leaves)
 
         useful_leaves.reverse()
-        msi = useful_leaves.pop().msi
+        entity.kernel = useful_leaves.pop()
+        msi = entity.kernel.msi
 
         if msi["category"] == "number":
             msi["gender"] = "neutral"
@@ -54,7 +75,7 @@ class EntityMSISeer:
                     if leaf.msi[attribute] in non_neutral_values: msi[attribute] = leaf.msi[attribute]
 
     def msi_of_coordinated(self, entity):
-        msi = { "category" : "noun", "number" : "plural", "type" : None }
+        msi = { "category" : "noun", "number" : "plural", "type" : None, "semantic_classification" : None }
 
         pronouns = sorted(entity.children_of_category("pronoun"), key=lambda pronoun: pronoun.msi["person"])
         msi["person"] = pronouns[0].msi["person"] if pronouns else 3
@@ -76,7 +97,8 @@ class EntityMSISeer:
         return node.leaves()[0].msi
 
     def msi_of_infinity(self, entity):
-        return { "category" : "noun", "gender" : None, "person" : 3, "number" : "singular", "type" : None }
+        return { "category" : "noun", "gender" : None, "person" : 3, "number" : "singular", "type" : None,
+                "semantic_classification" : None }
 
     msi_seer_by_label = {   "sn" : msi_of_single,
                             "grup-nom-ms" : msi_of_single,
@@ -89,3 +111,4 @@ class EntityMSISeer:
                             "grup-verb-inf" : msi_of_infinity }
 
     gender_detector = GenderDetector()
+    honorific_prefixes = load_honorific_prefixes()
