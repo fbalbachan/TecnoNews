@@ -6,21 +6,21 @@ $def with (sentences, printer)
     <link rel="stylesheet" type="text/css" href="static/css/sentilecto.css">
   </head>
   <body>
-
+    
     $for sentence in sentences:
 	<hr size=5 noshade>
 
-        <h2>Sentence $(sentences.index(sentence) + 1) <font size=2>(mouse over SVO slots and  entities for specific attributes to appear)</font></h2>
+        <h2>Sentence $(sentences.index(sentence) + 1) </h2>
         <p class="grande">$sentence</p>
 
         $for clause in sentence.clauses:
 	    <hr size=2 noshade>
-            <h3>Clause $(sentences.index(sentence) + 1).$printer.clause_number(clause, sentence)</h3>
+            <h3>Clause $(sentences.index(sentence) + 1).$printer.clause_number(clause, sentence) <font size=5>(mouse over <u>SVO slots</u>, <u>entities</u> and <u>sentiment scores</u> for specific attributes to appear)</font></h3>
             <p class="grande">$clause</p>
 
             $code:
                 entities_data = [
-                    (clause.entities + clause.tacit_entities(), "Opinionated Entities", ""),
+                    (clause.entities + clause.tacit_entities(), "Opinionated Entities (sentiment scores)", ""),
                     (clause.linked_entities, "Entities in co-reference", "(anaphora resolution in personal pronouns)")
                 ]
 
@@ -33,13 +33,27 @@ $def with (sentences, printer)
                     <p class="normal">
                     <br><b><u>$title</u></b> $subtitle
                     <table id="entities">
-                        <tr><th/><th>Positive</th><th>Negative</th></tr>
+                        <tr><th/><th>Positive</th><th>Negative</th><th>Named-Entity</th></tr>
                     $for entity in list:
-                        <tr>
-                            <td title="$printer.entity_tooltip(entity)">$entity</td>
-                            <td title="$printer.e_sv_pos_ev(entity)" align="center" width=100>$entity.sentimental_value.value[0]</td>
-                            <td title="$printer.e_sv_neg_ev(entity)" align="center" width=100>$entity.sentimental_value.value[1]</td>
-                        </tr>
+                        $if entity.category() == "noun" and entity.msi["type"] == "proper":
+                            <tr>
+                                <td title="$printer.entity_tooltip(entity)">$entity</td>
+                                <td title="$printer.e_sv_pos_ev(entity)" align="center" width=100>$entity.sentimental_value.value[0]</td>
+                                <td title="$printer.e_sv_neg_ev(entity)" align="center" width=100>$entity.sentimental_value.value[1]</td>
+                                <td title="$printer.entity_tooltip(entity)" align="center" width=100>$entity.msi["semantic_classification"].upper()</td>            
+                            </tr>
+                        $else:
+                            <tr>
+                                <td title="$printer.entity_tooltip(entity)">$entity</td>
+                                <td title="$printer.e_sv_pos_ev(entity)" align="center" width=100>$entity.sentimental_value.value[0]</td>
+                                <td title="$printer.e_sv_neg_ev(entity)" align="center" width=100>$entity.sentimental_value.value[1]</td>
+                                <td title="$printer.entity_tooltip(entity)" align="center" width=100>NONE</td>
+                            </tr>
+
+
+
+
+
                     </table>
                     </p>
 
