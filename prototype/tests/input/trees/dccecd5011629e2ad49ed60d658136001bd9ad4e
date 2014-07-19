@@ -1,0 +1,36 @@
++grup-verb_[
+  sn_[
+    +grup-nom-ms_[
+      +w-ms_[
+        +(Telefónica telefónica NP00O00 -)
+      ]
+    ]
+  ]
+  +verb_[
+    +(mejoró mejorar VMIS3S0 -)
+  ]
+  grup-sp_[
+    +prep_[
+      +(gracias_a gracias_a SPS00 -)
+    ]
+    sn_[
+      espec-fs_[
+        +pos-fs_[
+          +(su su DP3CS0 -)
+        ]
+      ]
+      +grup-nom-fs_[
+        +n-fs_[
+          +(estrategia estrategia NCFS000 -)
+        ]
+        s-a-fs_[
+          +a-fs_[
+            +(comercial comercial AQ0CS0 -)
+          ]
+        ]
+      ]
+    ]
+  ]
+]
+
+

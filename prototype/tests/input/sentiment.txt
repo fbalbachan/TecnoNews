@@ -236,3 +236,9 @@ Si amo el fútbol, estoy mal
         subject: yo
             count: sent_ev = 1
             sent_ev: mal
+
+# Asignación para I/G gracias_a
+Telefónica mejoró gracias a su estrategia comercial
+    instrument_goal: su estrategia comercial
+        count: sent_ev = 1
+        sent_ev: gracias_a

@@ -689,7 +689,7 @@ Los hombres, quienes mataron mujeres, son criminales
 
 # Entidades en infinitivo no satisfacen anáforas
 Según Juana, ellos pretenden desconocer los reconocimientos. Precisó que no comprenden.
-	sentence: Según Juana, ellos pretenden desconocer los reconocimientos 
+	sentence: Según Juana, ellos pretenden desconocer los reconocimientos
 		subject: ellos
 		verb: pretenden
 		od: desconocer los reconocimientos
@@ -698,4 +698,7 @@ Según Juana, ellos pretenden desconocer los reconocimientos. Precisó que no co
 			subject: él/ella -> Juana
 		clause: que no comprenden
 			subject: ellos/ellas -> ellos
- 
+
+# Gracias_a como I/G
+Telefónica mejoró gracias a su estrategia comercial
+    instrument_goal: su estrategia comercial
