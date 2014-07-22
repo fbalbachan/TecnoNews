@@ -702,3 +702,8 @@ Según Juana, ellos pretenden desconocer los reconocimientos. Precisó que no co
 # Gracias_a como I/G
 Telefónica mejoró gracias a su estrategia comercial
     instrument_goal: su estrategia comercial
+
+# NEC y Fix para detección errónea de ORG
+La dra. Fernanda murió
+    subject: La dra._Fernanda
+        msi: { "semantic_classification" : "person" }
