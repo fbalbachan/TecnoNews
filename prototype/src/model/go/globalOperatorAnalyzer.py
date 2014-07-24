@@ -59,7 +59,7 @@ class GlobalOperatorAnalyzer:
 
     def future_finder(self, clause):
         if clause.voice:
-            verb_leaves = clause.verb.leaves
+            verb_leaves = clause.verb.leaves()
             lemmas = [ leaf.lemma for leaf in clause.verb.node.leaves() ]
             leaf = verb_leaves[0]
             if (leaf.msi["time"] == "futuro" and leaf.msi["mode"] == "indicative") or lemmas[:2] == ["ir", "a"]:
@@ -67,16 +67,16 @@ class GlobalOperatorAnalyzer:
 
     def deontic_modality_finder(self, clause):
         if clause.voice:
-            leaf = clause.verb.leaves[0]
+            leaf = clause.verb.leaves()[0]
             if leaf.lemma == "deber" and leaf.size() == 2 and leaf.components()[1] == "que":
                 return [ GlobalOperator("imperative", clause.verb)]
 
     def verb_poder_finder(self, clause):
-        if clause.voice and clause.verb.leaves[0].lemma == "poder":
+        if clause.voice and clause.verb.leaves()[0].lemma == "poder":
             return [ GlobalOperator("possibility", clause.verb)]
 
     def subjuntive_finder(self, clause):
-        if clause.voice and clause.verb.leaves[0].msi["mode"] == "subjuntive" and (clause.is_relative() or \
+        if clause.voice and clause.verb.leaves()[0].msi["mode"] == "subjuntive" and (clause.is_relative() or \
             (clause.is_subordinated() and clause.proper_leaves()[0].lemma == "cuando")):
             return [ GlobalOperator("possibility", clause.verb)]
 
@@ -87,11 +87,11 @@ class GlobalOperatorAnalyzer:
         return [ GlobalOperator("possibility", leaf) for leaf in leaves ]
 
     def imperative_finder(self, clause):
-        if clause.voice and clause.verb.leaves[0].msi["mode"] == "imperative":
+        if clause.voice and clause.verb.leaves()[0].msi["mode"] == "imperative":
             return [ GlobalOperator("imperative", clause.verb)]
 
     def conditional_verb_finder(self, clause):
-        if clause.voice and clause.verb.leaves[0].msi["time"] == "condicional":
+        if clause.voice and clause.verb.leaves()[0].msi["time"] == "condicional":
             return [ GlobalOperator("possibility", clause.verb)]
 
     def negation_finder(self, clause):

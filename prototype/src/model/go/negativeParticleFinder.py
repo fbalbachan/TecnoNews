@@ -25,7 +25,7 @@ class NegativeParticleFinder:
         if not clause.voice: return
 
         leaves = clause.proper_leaves()
-        verb_index = leaves.index(clause.verb.leaves[0])
+        verb_index = leaves.index(clause.verb.leaves()[0])
 
         no_leaves = filter(lambda leaf: leaf.lemma == "no" and leaves.index(leaf) < verb_index, leaves)
         if not no_leaves: return

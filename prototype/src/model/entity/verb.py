@@ -11,24 +11,27 @@ class Verb(Entity):
         Entity.__init__(self, node)
 
         self.voice = voice
-        self.leaves = leaves
+        self._leaves = leaves
 
         lemma = self.lemma()
         self.msi = self.guess_msi()
-        self.lexical_form = " ".join([ str(leaf) for leaf in self.leaves])
+        self.lexical_form = " ".join([ str(leaf) for leaf in self._leaves])
 
         self.sentimental_script = get_sentimental_script_of(lemma)
         self.transitivity = get_transitivity(lemma)
+
+    def leaves(self):
+        return self._leaves
 
     def lemma(self):
         return self.leaf().lemma
 
     def leaf(self):
-        return self.leaves[-1]
+        return self._leaves[-1]
 
     def modal_verb(self):
         if not self.is_compound(): return None
-        leaves = self.leaves[-2:]
+        leaves = self._leaves[-2:]
         if leaves[1].msi["mode"] == "infinitive": return leaves[0]
 
     def is_modal_of(self, lemma):
@@ -36,10 +39,10 @@ class Verb(Entity):
         return modal and modal.lemma == lemma
 
     def is_compound(self):
-        return len(self.leaves) > 1
+        return len(self._leaves) > 1
 
     def guess_msi(self):
-        first_leaf = self.leaves[0]
+        first_leaf = self._leaves[0]
 
         person = first_leaf.msi["person"]
         gender = "neutral" if self.voice == "active" else (self.leaf().msi["gender"] or "neutral")
@@ -63,5 +66,5 @@ class Verb(Entity):
                 "type" : "personal", "case" : None }
 
     def __repr__(self):
-        return " ".join([ str(leaf) for leaf in self.leaves]) + " (" + self.lemma() + ") " + \
+        return " ".join([ str(leaf) for leaf in self._leaves]) + " (" + self.lemma() + ") " + \
             " ".join([ self.voice, self.sentimental_script.klass, self.transitivity ]) + " " + str(self.msi["person"]) + "°"

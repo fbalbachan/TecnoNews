@@ -62,9 +62,13 @@ class ClauseAnalyzer:
             clause.syntactic_structures.append(SyntacticStructure(name, clause))
 
     def find_unassigned_adjectives(self, clause):
-        all_assigned_leaves = sum([ entity.node.leaves() for entity in clause.entities if not entity.father ], [])
-        clause.isolated_adjectives = filter(lambda leaf: not leaf in all_assigned_leaves,
-                                            clause.proper_tree().leaves_of_category("adjective"))
+        entities_and_verb = clause.entities + [ clause.verb ] if clause.voice else []
+        all_assigned_leaves = sum([ entity.leaves() for entity in entities_and_verb if not entity.father ], [])
+
+        adjectives_and_participles = clause.proper_tree().leaves_of_category("adjective") + \
+            clause.proper_tree().leaves_of_msi({ "category" : "verb", "mode" : "participio" })
+
+        clause.isolated_adjectives = filter(lambda leaf: not leaf in all_assigned_leaves, adjectives_and_participles)
 
     def find_adverbs(self, clause):
         clause.valuated_adverbs = ValuatedAdverbFinder(clause).find()
