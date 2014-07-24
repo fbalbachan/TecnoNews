@@ -242,3 +242,9 @@ Telefónica mejoró gracias a su estrategia comercial
     instrument_goal: su estrategia comercial
         count: sent_ev = 1
         sent_ev: gracias_a
+
+# Asignación verbal en construcciones estar + gerundio
+Juan está robando
+    subject: Juan
+        count: sent_ev = 1
+        sent_ev: está robando

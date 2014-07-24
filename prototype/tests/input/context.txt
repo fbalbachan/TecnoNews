@@ -707,3 +707,8 @@ Telefónica mejoró gracias a su estrategia comercial
 La dra. Fernanda murió
     subject: La dra._Fernanda
         msi: { "semantic_classification" : "person" }
+
+# Verbo estar + gerundio agrupado
+Juan está robando
+    verb: está robando
+        lemma: robar
