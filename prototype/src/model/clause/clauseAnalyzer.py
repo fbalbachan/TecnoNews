@@ -6,6 +6,7 @@ from src.model.anaphora.relativeEntityExtractor import RelativeEntityExtractor
 from src.model.anaphora.relativePronounSolver import RelativePronounSolver
 from src.model.entity.entityExtractor import EntityExtractor
 from src.model.entity.verb import Verb
+from src.model.entity.verbExtractor import VerbExtractor
 from src.model.syntax.activeVoiceSyntacticAnalizer import ActiveVoiceSyntacticAnalyzer
 from src.model.syntax.passiveVoiceSyntacticAnalyzer import PassiveVoiceSyntacticAnalyzer
 from src.model.syntax.syntacticAnalyzer import SyntacticAnalyzer
@@ -96,46 +97,7 @@ class ClauseAnalyzer:
         return structures_getter_by_voice[clause.voice](clause)
 
     def verb_of(self, clause):
-        node = self.verb_node_of(clause)
-        leaves = self.verb_leaves_of(clause, node)
-        return Verb(node, clause.voice, leaves)
-
-    # Debido a que en voz passiva freeling no agrupa las hojas verbales
-    def verb_leaves_of(self, clause, node):
-        def leaves_of_passive_voice(clause, node):
-            leaves = []
-            root = clause.proper_tree()
-            auxiliar_node = root.nodes_with_labels("vaux")
-            if auxiliar_node: leaves.extend(auxiliar_node[0].leaves())
-
-            ser_node = root.nodes_with_labels(["vser", "parti-ser"])
-            if ser_node: leaves.extend(ser_node[0].leaves())
-
-            leaves.extend(node.leaves())
-            return leaves
-
-        def leaves_of_active_voice(clause, node):
-            root = clause.proper_tree()
-            leaves = node.leaves_of_category("verb")
-
-            if leaves[0].lemma == "estar": return [ leaves[0] ]
-
-            ser_node = filter(lambda child: not child.is_leaf() and child.label == "parti-ser", root.children)
-            if ser_node: leaves.extend(ser_node[0].leaves())
-            return leaves
-
-        verbal_leaves_by_voice = { "active" : leaves_of_active_voice, "passive" : leaves_of_passive_voice }
-
-        return verbal_leaves_by_voice[clause.voice](clause, node)
-
-    def verb_node_of(self, clause):
-        root = clause.proper_tree()
-        verb_nodes = root.nodes_with_labels([ "subord-ger", "verb", "parti-flex" ])
-        verb_nodes = sorted(verb_nodes, key = lambda node: node.level())
-
-        node = verb_nodes[0]
-        if node.label == "subord-ger": node = node.leaves()[0]
-        return node
+        return VerbExtractor(clause).extract()
 
     def entities_of(self, clause):
         return EntityExtractor(clause).extract()
