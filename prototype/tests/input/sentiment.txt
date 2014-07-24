@@ -248,3 +248,16 @@ Juan está robando
     subject: Juan
         count: sent_ev = 1
         sent_ev: está robando
+
+# Asignación de participios como adjetivos aislados (debería presentarse sólo frente a verbos ecuativos)
+# Se buscan por su lema verbal en SentiWordNet
+La manzana estaba podrida
+    subject: La manzana
+        count: sent_ev = 1
+        sent_ev: podrida
+
+La manzana está podrida y rota
+    subject: La manzana
+        count: sent_ev = 2
+        sent_ev: podrida
+        sent_ev: rota
