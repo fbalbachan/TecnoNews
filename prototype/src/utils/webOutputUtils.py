@@ -64,3 +64,7 @@ class WebOutputUtils:
 
     def fact_real_or_not(self, clause):
         return "(Not a real fact. See checked flags in global operators.)" if clause.global_operators else ""
+
+    def score_of(self, analysis, clause):
+        summary = analysis["summary"][clause]
+        return "%.2f,-%.2f" % (summary["positive"], summary["negative"])

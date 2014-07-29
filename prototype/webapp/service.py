@@ -11,6 +11,7 @@ import time
 from skimpyGimpy import skimpyAPI
 from src.model.paragraph.paragraph import Paragraph
 from src.model.paragraph.paragraphAnalyzer import ParagraphAnalyzer
+from src.sentiment.sentimentalSummarizer import SentimentalSummarizer
 from src.utils.webOutputUtils import WebOutputUtils
 
 
@@ -45,11 +46,16 @@ def analyze():
 		input_text = web_input.text
 		if type(input_text) == unicode: input_text = input_text.encode("utf-8") # unicode -> str (encoded)
 
+		analysis = {}
+
 		analyzer = ParagraphAnalyzer()
 		paragraph = Paragraph.from_text(input_text)
 		analyzer.analyze(paragraph)
 
-		return paragraph.sentences
+		analysis["paragraph"] = paragraph
+		analysis["summary"] = SentimentalSummarizer(paragraph).analyze()
+
+		return analysis
 	except Exception:
 		return []
 		#web.template.render().exception(format_exc(), "")
@@ -87,8 +93,8 @@ class Debug_request:
 
 class HiddenEntiNews_request:
 	def GET(self):
-		sentences = analyze()
-		return web.template.render().test(sentences, WebOutputUtils())
+		analysis = analyze()
+		return web.template.render().test(analysis, WebOutputUtils())
 
 class EntiNews_request:
 	def GET(self):
@@ -108,8 +114,8 @@ class EntiNews_request:
 				ip = web_env["HTTP_X_FORWARDED_FOR"] if "HTTP_X_FORWARDED_FOR" in web_env else web.ctx["ip"]
 				logger.info(time.strftime("%d/%m/%Y %H:%M:%S") + "\t" + ip + "\t" + web.ctx["fullpath"])
 
-				sentences = analyze()
-				return web.template.render().test(sentences, WebOutputUtils())
+				analysis = analyze()
+				return web.template.render().test(analysis, WebOutputUtils())
 		web.redirect("/")
 
 ### MAIN ###

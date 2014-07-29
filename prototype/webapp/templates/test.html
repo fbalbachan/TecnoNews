@@ -1,4 +1,4 @@
-$def with (sentences, printer)
+$def with (analysis, printer)
 <!DOCTYPE html>
 <html>
   <head>
@@ -6,17 +6,20 @@ $def with (sentences, printer)
     <link rel="stylesheet" type="text/css" href="static/css/sentilecto.css">
   </head>
   <body>
-    
+
+    <center><h2><font color="black">(Overall text score $printer.score_of(analysis,analysis["paragraph"]))</font></h2></center>
+
+    $ sentences = analysis["paragraph"].sentences
     $for sentence in sentences:
 	<hr size=5 noshade>
 
         <h2>Sentence $(sentences.index(sentence) + 1) </h2>
-        <p class="grande">$sentence</p>
+        <p class="grande">$sentence <font size=3>(sentence score $printer.score_of(analysis,sentence))</font></p>
 
         $for clause in sentence.clauses:
 	    <hr size=2 noshade>
             <h3>Clause $(sentences.index(sentence) + 1).$printer.clause_number(clause, sentence) <font size=5>(mouse over <u>SVO slots</u>, <u>entities</u> and <u>sentiment scores</u> for specific attributes to appear)</font></h3>
-            <p class="grande">$clause</p>
+            <p class="grande">$clause <font size=3>(clause score $printer.score_of(analysis,clause))</font></p>
 
             $code:
                 entities_data = [
@@ -40,7 +43,7 @@ $def with (sentences, printer)
                                 <td title="$printer.entity_tooltip(entity)">$entity</td>
                                 <td title="$printer.e_sv_pos_ev(entity)" align="center" width=100>$entity.sentimental_value.value[0]</td>
                                 <td title="$printer.e_sv_neg_ev(entity)" align="center" width=100>$entity.sentimental_value.value[1]</td>
-                                <td title="$printer.entity_tooltip(entity)" align="center" width=100>$entity.msi["semantic_classification"].upper()</td>            
+                                <td title="$printer.entity_tooltip(entity)" align="center" width=100>$entity.msi["semantic_classification"].upper()</td>
                             </tr>
                         $else:
                             <tr>
@@ -49,11 +52,6 @@ $def with (sentences, printer)
                                 <td title="$printer.e_sv_neg_ev(entity)" align="center" width=100>$entity.sentimental_value.value[1]</td>
                                 <td title="$printer.entity_tooltip(entity)" align="center" width=100>NONE</td>
                             </tr>
-
-
-
-
-
                     </table>
                     </p>
 
