@@ -115,7 +115,7 @@ class TestClauseAnalyzer(unittest.TestCase):
         assertions = { "entities" : lambda: len(frame["structure"].all_entities()),
                        "go": lambda: len(frame["clause"].global_operators),
                        "adverbs": lambda: len(frame["clause"].valuated_adverbs),
-                       "sent_ev": lambda: len(frame["entity"].sentimental_value.evidence)
+                       "sent_ev": lambda: len(frame["entity"].sentimental_value.evidence())
                        }
         if len(splitted) == 1: splitted = [ "entities", splitted[0] ]
 
@@ -146,7 +146,7 @@ class TestClauseAnalyzer(unittest.TestCase):
 
     def sent_ev(self, assertion, frame):
         entity = frame["entity"]
-        evidence = entity.sentimental_value.evidence
+        evidence = entity.sentimental_value.evidence()
         found = filter(lambda each: each.object.lexical_form == assertion, evidence)
         self.assertTrue(len(found) == 1, "No se encontró (o hay más de una) evidencia con forma léxica " + assertion)
         frame["sent_ev"] = found[0]

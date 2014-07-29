@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
+from src.utils.treeNode import TreeNode
 
-class SentimentalValuedObject:
+
+class SentimentalValuedObject(TreeNode):
     def __init__(self, object, value = (0,0)):  # @ReservedAssignment
+        TreeNode.__init__(self)
         self.object = object
         self.value = value
 
@@ -24,4 +27,4 @@ class SentimentalValuedObject:
         clone = SentimentalValuedObject(other.object, other.value)
         clone.apply_coef(coef)
         return clone
- 
+

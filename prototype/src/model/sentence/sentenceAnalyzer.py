@@ -5,6 +5,7 @@ from src.model.clause.clauseExtractor import ClauseExtractor
 from src.model.go.globalOperatorAnalyzer import GlobalOperatorAnalyzer
 from src.parser.freelingTreeParser import FreelingTreeParser
 from src.sentiment.sentimentalAnalyzer import SentimentalAnalyzer
+from src.sentiment.sentimentalSummarizer import SentimentalSummarizer
 from src.utils.invoker import Invoker
 
 
@@ -23,6 +24,7 @@ class SentenceAnalyzer:
 
     def analyze_sentimentally(self, sentence):
         sentimentalAnalyzer =  SentimentalAnalyzer()
+
         for clause in sentence.clauses:
             sentimentalAnalyzer.analyze(clause)
 
