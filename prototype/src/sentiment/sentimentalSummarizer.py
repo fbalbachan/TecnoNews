@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from math import log
 
 class SentimentalSummarizer:
     def __init__(self, paragraph):
@@ -42,9 +43,11 @@ class SentimentalSummarizer:
                     evidences_set.add(evidence)
                     _sum = _sum + abs(evidence.joined_value())
 
-            print "evidences_set", evidences_set
             n = len(evidences_set)
-            value = _sum * 0.8 if n < 2 else (_sum / (n - 0.5 * n))
+            value = 0
+
+            if n > 0: value = _sum* (1 / log(1 + n))
+
             summary[dimension] = value
 
         analysis[clause] = summary
