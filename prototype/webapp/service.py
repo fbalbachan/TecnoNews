@@ -4,14 +4,12 @@
 from StringIO import StringIO
 import logging
 import os, web
+from skimpyGimpy import skimpyAPI
 import sys
 from threading import Timer
 import time
 
-from skimpyGimpy import skimpyAPI
-from src.model.paragraph.paragraph import Paragraph
-from src.model.paragraph.paragraphAnalyzer import ParagraphAnalyzer
-from src.sentiment.sentimentalSummarizer import SentimentalSummarizer
+from src.model.sentilecto import Sentilecto
 from src.utils.webOutputUtils import WebOutputUtils
 
 
@@ -42,20 +40,7 @@ def write_pidfile():
 def analyze():
 	try:
 		web_input = web.input()
-
-		input_text = web_input.text
-		if type(input_text) == unicode: input_text = input_text.encode("utf-8") # unicode -> str (encoded)
-
-		analysis = {}
-
-		analyzer = ParagraphAnalyzer()
-		paragraph = Paragraph.from_text(input_text)
-		analyzer.analyze(paragraph)
-
-		analysis["paragraph"] = paragraph
-		analysis["summary"] = SentimentalSummarizer(paragraph).analyze()
-
-		return analysis
+		return Sentilecto().analyze(web_input.text)
 	except Exception:
 		return []
 		#web.template.render().exception(format_exc(), "")
