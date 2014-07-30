@@ -102,6 +102,11 @@ class Clause(TreeNode):
             entities.extend(self.entities_closest_to_verb_at(side, distance))
         return entities
 
+    def all_entities(self):
+        entities = self.entities + self.tacit_entities() + self.linked_entities
+        if self.relative_entity: entities.append(self.relative_entity)
+        return entities
+
     def entities_closest_to_verb_at(self, side, allowed_distance = float("inf")):
         by_component = zip(*self.to_entities_with_node(self.nodes_closest_to_verb_at(side, allowed_distance)))
         entities = list(by_component[0]) if by_component else []
@@ -126,6 +131,7 @@ class Clause(TreeNode):
         assigned_entities = self.assigned_entities()
         return [ entity for entity in self.entities if entity not in assigned_entities
                 and not any([ assigned.contains(entity) for assigned in assigned_entities ]) ]
+
 
     def tacit_entities(self):
         return sum([ structure.tacit_entities for structure in self.syntactic_structures ], [])

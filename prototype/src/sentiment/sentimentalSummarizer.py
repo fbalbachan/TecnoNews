@@ -28,7 +28,7 @@ class SentimentalSummarizer:
         return summary
 
     def analyze_clause(self, clause, analysis):
-        evidences = sum([ entity.sentimental_value.leaves() for entity in clause.entities ], [])
+        evidences = sum([ entity.sentimental_value.leaves() for entity in clause.all_entities() ], [])
 
         positive_dim = lambda ev: ev.joined_value() > 0
         dimensions = [ ("positive", positive_dim), ("negative", lambda ev: not positive_dim(ev)) ]
@@ -38,10 +38,11 @@ class SentimentalSummarizer:
             evidences_set = set()
             _sum = 0
             for evidence in evidences:
-                if belongs(evidence):
+                if not evidence.is_neutral() and belongs(evidence):
                     evidences_set.add(evidence)
                     _sum = _sum + abs(evidence.joined_value())
 
+            print "evidences_set", evidences_set
             n = len(evidences_set)
             value = _sum * 0.8 if n < 2 else (_sum / (n - 0.5 * n))
             summary[dimension] = value

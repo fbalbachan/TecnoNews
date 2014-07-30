@@ -38,20 +38,12 @@ $def with (analysis, printer)
                     <table id="entities">
                         <tr><th/><th>Positive</th><th>Negative</th><th>Named-Entity</th></tr>
                     $for entity in list:
-                        $if entity.category() == "noun" and entity.msi["type"] == "proper":
-                            <tr>
-                                <td title="$printer.entity_tooltip(entity)">$entity</td>
-                                <td title="$printer.e_sv_pos_ev(entity)" align="center" width=100>$entity.sentimental_value.value[0]</td>
-                                <td title="$printer.e_sv_neg_ev(entity)" align="center" width=100>$entity.sentimental_value.value[1]</td>
-                                <td title="$printer.entity_tooltip(entity)" align="center" width=100>$entity.msi["semantic_classification"].upper()</td>
-                            </tr>
-                        $else:
-                            <tr>
-                                <td title="$printer.entity_tooltip(entity)">$entity</td>
-                                <td title="$printer.e_sv_pos_ev(entity)" align="center" width=100>$entity.sentimental_value.value[0]</td>
-                                <td title="$printer.e_sv_neg_ev(entity)" align="center" width=100>$entity.sentimental_value.value[1]</td>
-                                <td title="$printer.entity_tooltip(entity)" align="center" width=100>NONE</td>
-                            </tr>
+                        <tr>
+                            <td title="$printer.entity_tooltip(entity)">$entity</td>
+                            <td title="$printer.e_sv_pos_ev(entity)" align="center" width=100>$entity.sentimental_value.value[0]</td>
+                            <td title="$printer.e_sv_neg_ev(entity)" align="center" width=100>$entity.sentimental_value.value[1]</td>
+                            <td title="$printer.entity_tooltip(entity)" align="center" width=100>$printer.semmantic_clasif(entity)</td>
+                        </tr>
                     </table>
                     </p>
 
