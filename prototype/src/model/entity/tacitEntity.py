@@ -11,6 +11,16 @@ class TacitEntity:
         self.owner = None
         self.attributes = attributes
         self.sentimental_value = EntitySentimentalValue(self)
+        self.coref_chain = []
+
+    def referenced(self):
+        return self.coref_chain[-1]
+
+    def add_coreference(self, referenced):
+        if not referenced.is_linked():
+            self.coref_chain.append(referenced)
+        else:
+            self.coref_chain.extend(referenced.coref_chain)
 
     def words(self):
         return self.lexical_form.split("_")
@@ -38,7 +48,7 @@ class TacitEntity:
             or msi["gender"] == entity.msi["gender"]
 
     def is_linked(self):
-        return self.Is("linked")
+        return bool(self.coref_chain)
 
     def is_tacit(self):
         return self.Is("tacit")
@@ -53,4 +63,6 @@ class TacitEntity:
         return bool(self.owner)
 
     def __repr__(self):
-        return "(tacit) " + self.lexical_form
+        _repr = "(tacit) " + self.lexical_form
+        if self.is_linked(): _repr = _repr + " (" + self.referenced().lexical_form + ")"
+        return _repr

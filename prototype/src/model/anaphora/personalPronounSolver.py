@@ -1,6 +1,5 @@
 #-*- coding: utf-8 -*-
 from src.model.anaphora.personalPronounCoreferenceSearcher import PersonalPronounCoreferenceSearcher
-from src.model.entity.linkedEntity import LinkedEntity
 
 
 class PersonalPronounSolver:
@@ -14,10 +13,7 @@ class PersonalPronounSolver:
 
     def link(self, structure, entity):
         referenced_entity = PersonalPronounCoreferenceSearcher(self.clause, self.context, entity).search()
-        if referenced_entity:
-            linked_entity = LinkedEntity(entity, referenced_entity)
-            structure.replace(entity, linked_entity)
-            self.clause.linked_entities.append(linked_entity)
+        if referenced_entity: entity.add_coreference(referenced_entity)
 
     def pronouns_in_order(self):
         clause = self.clause

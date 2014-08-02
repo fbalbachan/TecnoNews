@@ -12,7 +12,6 @@ class Clause(TreeNode):
         self.voice = None
 
         self.entities = []
-        self.linked_entities = []
 
         self.relative_entity = None
         self.relative_linker = []
@@ -103,7 +102,7 @@ class Clause(TreeNode):
         return entities
 
     def all_entities(self):
-        entities = self.entities + self.tacit_entities() + self.linked_entities
+        entities = self.entities + self.tacit_entities()
         if self.relative_entity: entities.append(self.relative_entity)
         return entities
 
@@ -140,7 +139,8 @@ class Clause(TreeNode):
         return sum([ structure.entities for structure in self.syntactic_structures ], [])
 
     def assigned_entities_with_referenced_ones(self):
-        return [ entity.referenced_entity if entity.is_linked() else entity for entity in self.assigned_entities()]
+        return [ entity.referenced() if entity.is_linked() else entity for entity in self.assigned_entities() + \
+                self.tacit_entities() ]
 
     def grouped_by_node(self, entities_with_node):
         entities = []

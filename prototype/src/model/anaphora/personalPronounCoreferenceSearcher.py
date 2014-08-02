@@ -47,6 +47,9 @@ class PersonalPronounCoreferenceSearcher:
 
             matching_entities = self.only_matching_entities(entities, clause)
             already_placed_entities = self.clause.assigned_entities_with_referenced_ones()
+
+            print "structure_name", structure_name, " - matching_entities", matching_entities, " - already_placed_entities", already_placed_entities
+
             non_linked_entities = filter(lambda entity: entity not in already_placed_entities, matching_entities)
 
             if non_linked_entities: return non_linked_entities[0]
@@ -56,7 +59,7 @@ class PersonalPronounCoreferenceSearcher:
 
     def entities_to_be_searched_in(self, structure):
         entities = []
-        for entity in structure.entities:
+        for entity in structure.all_entities():
             if not entity.Is("infinitive"): entities.append(entity)
             if entity.is_coordinated() or entity.Is("infinitive"): entities.extend(entity.children)
         return entities
@@ -69,8 +72,8 @@ class PersonalPronounCoreferenceSearcher:
 
     def only_already_read_entities(self, entities, entities_clause):
         clause = entities_clause
-        return filter(lambda entity: entity.is_linked() or (clause.index_in_root_of(entity.node) < self.pronoun_index),
-                      entities)
+        return filter(lambda entity: entity.is_linked() or entity.is_tacit() or \
+                      (clause.index_in_root_of(entity.node) < self.pronoun_index), entities)
 
     def sorted(self, clauses):
         clauses_by_level = TreeNode.by_level(clauses)

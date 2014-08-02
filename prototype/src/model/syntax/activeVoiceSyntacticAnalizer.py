@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from src.ling.tacit_subjects import tacit_subject_for, somebody, this
-from src.model.entity.linkedEntity import LinkedEntity
 from src.model.entity.tacitEntity import TacitEntity
 from src.model.syntax.syntacticAnalyzer import SyntacticAnalyzer
 from src.model.syntax.syntacticStructure import SyntacticStructure
@@ -44,12 +43,8 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
 
         acusative_pronoun = self.search_duplicated_od_for(entities)
         if acusative_pronoun:
-            linked_pronoun = LinkedEntity(acusative_pronoun, entities[0])
-
-            self.clause.entities.remove(acusative_pronoun)
-            self.clause.linked_entities.append(linked_pronoun)
-
-            entities.append(linked_pronoun)
+            acusative_pronoun.add_coreference(entities[0])
+            entities.append(acusative_pronoun)
         return entities
 
     def search_duplicated_od_for(self, entities):

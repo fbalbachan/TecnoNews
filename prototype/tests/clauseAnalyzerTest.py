@@ -141,8 +141,8 @@ class TestClauseAnalyzer(unittest.TestCase):
         return filter(lambda entity: not entity.is_linked() and entity.lexical_form == lexical_form, entities)
 
     def search_linked_entity(self, lexical_forms, entities):
-        return filter(lambda entity: entity.is_linked() and entity.lexical_form == lexical_forms[1]
-                          and entity.source.lexical_form == lexical_forms[0], entities)
+        return filter(lambda entity: entity.is_linked() and entity.lexical_form == lexical_forms[0]
+                          and entity.referenced().lexical_form == lexical_forms[1], entities)
 
     def sent_ev(self, assertion, frame):
         entity = frame["entity"]

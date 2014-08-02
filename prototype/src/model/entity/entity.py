@@ -51,9 +51,10 @@ class Entity (TacitEntity):
         return " ".join([ str(leaf) for leaf in self.node.leaves() if leaf.msi["category"] != "punctuation" ])
 
     def __repr__(self):
-        representation = self.lexical_form
-        if self.is_possessed(): representation = representation + " (of " + repr(self.owner) + ")"
-        return representation
+        _repr = self.lexical_form
+        if self.is_possessed(): _repr = _repr + " (of " + repr(self.owner) + ")"
+        if self.is_linked(): _repr = _repr + " (" + self.referenced().lexical_form + ")"
+        return _repr
 
     @staticmethod
     def only_maximal(entities):
