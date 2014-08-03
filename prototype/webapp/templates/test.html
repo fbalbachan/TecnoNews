@@ -23,8 +23,7 @@ $def with (analysis, printer)
 
             $code:
                 entities_data = [
-                    (clause.entities + clause.tacit_entities(), "Opinionated Entities (sentiment scores)", ""),
-                    (clause.linked_entities, "Entities in co-reference", "(anaphora resolution in personal pronouns)")
+                    (clause.entities + clause.tacit_entities(), "Opinionated Entities (sentiment scores)", "")
                 ]
 
                 if clause.relative_entity:
