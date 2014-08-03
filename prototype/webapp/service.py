@@ -79,7 +79,7 @@ class Debug_request:
 class HiddenEntiNews_request:
 	def GET(self):
 		analysis = analyze()
-		return web.template.render().test(analysis, WebOutputUtils())
+		return web.template.render().entinews(analysis, WebOutputUtils())
 
 class EntiNews_request:
 	def GET(self):
@@ -100,7 +100,7 @@ class EntiNews_request:
 				logger.info(time.strftime("%d/%m/%Y %H:%M:%S") + "\t" + ip + "\t" + web.ctx["fullpath"])
 
 				analysis = analyze()
-				return web.template.render().test(analysis, WebOutputUtils())
+				return web.template.render().entinews(analysis, WebOutputUtils())
 		web.redirect("/")
 
 ### MAIN ###
