@@ -24,14 +24,13 @@ class EntityMSISeer:
 
     def set_names_for_person(self, msi, entity):
         if "semantic_classification" in msi and msi["semantic_classification"] == "person" and entity.kernel:
-            names = []
-            not_names = []
-
             for word in entity.kernel.components():
-                list = names if EntityMSISeer.gender_detector.gender_of(word) else not_names  # @ReservedAssignment
-                list.append(word)
-            entity.attributes["names"] = names
-            entity.attributes["surnames"] = not_names
+                if word in self.honorific_prefixes: attribute = "honorifics"
+                elif EntityMSISeer.gender_detector.gender_of(word): attribute = "names"
+                else: attribute = "surnames"
+
+                if not attribute in entity.attributes: entity.attributes[attribute] = []
+                entity.attributes[attribute].append(word)
 
     def fix_org_classification(self, msi, entity):
         if "semantic_classification" in msi and msi["semantic_classification"] == "organization" and entity.kernel:

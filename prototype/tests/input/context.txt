@@ -735,3 +735,10 @@ Leandro Liptak Vieyto murió
     subject: Leandro_Liptak_Vieyto
         msi: { "semantic_classification" : "person" }
         attribute: surnames = ["liptak", "vieyto"]
+
+El Dr. Leandro Liptak murió
+    subject: El Dr._Leandro_Liptak
+        msi: { "semantic_classification" : "person" }
+        attribute: names = ["leandro"]
+        attribute: surnames = ["liptak"]
+        attribute: honorifics = ["dr."]
