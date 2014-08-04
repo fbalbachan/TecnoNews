@@ -41,9 +41,9 @@ class EntityExtractor:
                 entity = Entity(node)
 
                 label = node.label
-                if label in self.attributes_by_label: entity.attributes.extend(self.attributes_by_label[label])
+                if label in self.attributes_by_label: entity.attributes.update(self.attributes_by_label[label])
 
-                entity.attributes.extend(attributes)
+                entity.attributes.update(attributes)
                 entities_by_node[node] = entity
 
                 for parent in node.path_to_root():
@@ -69,6 +69,6 @@ class EntityExtractor:
         root = clause.proper_tree()
         return root.nodes_with_labels(["grup-verb-inf"])
 
-    attributes_by_label = { "grup-verb-inf" : ["infinitive"], "coor-n": ["coordinated"] }
+    attributes_by_label = { "grup-verb-inf" : [("infinitive", None)], "coor-n": [("coordinated", None)] }
 
     entity_labels = ["sn", "patons", "ptonic", "coor-n"]

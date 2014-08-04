@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
+from src.model.entity.referent import Referent
 from src.sentiment.entitySentimentalValue import EntitySentimentalValue
 
 
 class TacitEntity:
 
-    def __init__(self, lexical_form, msi, attributes = ["tacit"]):
+    def __init__(self, lexical_form, msi, attributes = { "tacit" : None }):
         self.lexical_form = lexical_form
         self.msi = msi
         self.children = []
@@ -12,6 +13,7 @@ class TacitEntity:
         self.attributes = attributes
         self.sentimental_value = EntitySentimentalValue(self)
         self.coref_chain = []
+        self.referent = Referent(self)
 
     def referenced(self):
         return self.coref_chain[-1]
@@ -21,6 +23,12 @@ class TacitEntity:
             self.coref_chain.append(referenced)
         else:
             self.coref_chain.extend(referenced.coref_chain)
+
+        self.update_referent(self.referenced().referent)
+
+    def update_referent(self, referent):
+        self.referent = referent
+        self.referent.add_reference(self)
 
     def words(self):
         return self.lexical_form.split("_")

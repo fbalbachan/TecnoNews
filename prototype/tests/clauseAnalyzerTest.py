@@ -155,6 +155,17 @@ class TestClauseAnalyzer(unittest.TestCase):
         evaluation = frame["sent_ev"]
         self.assertEqual(evaluation.value, literal_eval(assertion))
 
+    def attribute(self, assertion, frame):
+        entity = frame["entity"]
+
+        assertions = assertion.split("=")
+        attribute = assertions[0].strip()
+        self.assertTrue(entity.Is(attribute), "La entidad no contiene el atributo " + attribute)
+
+        if len(assertions) == 2:
+            value =  literal_eval(assertions[1].strip())
+            self.assertEqual(value, str(entity.attributes[attribute]))
+
     def lemma(self, assertion, frame):
         entity = frame["entity"]
         self.assertEqual(assertion, entity.lemma())
@@ -196,8 +207,8 @@ class TestClauseAnalyzer(unittest.TestCase):
         return string.startswith("#")
 
     structure_keywords = [ "subject", "od", "oi", "equative", "regimen", "instrument_goal", "adjuncts", "verb" ]
-    keywords = [ "clause", "lemma", "msi", "entity", "sentence", "count", "go", "adverb", "sent_ev", "value" ] + \
-        structure_keywords
+    keywords = ["clause", "lemma", "msi", "entity", "sentence", "count", "go", "adverb", "sent_ev", "value",
+                "attribute" ] + structure_keywords
 
 if __name__ == '__main__':
     unittest.main()

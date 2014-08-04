@@ -712,3 +712,14 @@ La dra. Fernanda murió
 Juan está robando
     verb: está robando
         lemma: robar
+
+# NEC prioridad a sustantivos propios para ser núcleo de entidad
+El mediador Leandro murió
+    subject: El mediador Leandro
+        msi: { "semantic_classification" : "person" }
+        attribute: class = "mediador"
+
+Estoy en la calle Florida
+    adjuncts: la calle Florida
+        msi: { "semantic_classification" : "place" }
+        attribute: class = "calle"

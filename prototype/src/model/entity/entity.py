@@ -9,7 +9,7 @@ class Entity (TacitEntity):
         self.father = None
         self.proper_node = None
 
-        TacitEntity.__init__(self, self.lexical_form(), {}, [])
+        TacitEntity.__init__(self, self.lexical_form(), {}, {})
 
     def is_subordinated_with_preposition(self, preposition):
         father = self.node.father
