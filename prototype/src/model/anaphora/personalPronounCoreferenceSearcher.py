@@ -48,8 +48,6 @@ class PersonalPronounCoreferenceSearcher:
             matching_entities = self.only_matching_entities(entities, clause)
             already_placed_entities = self.clause.assigned_entities_with_referenced_ones()
 
-            print "structure_name", structure_name, " - matching_entities", matching_entities, " - already_placed_entities", already_placed_entities
-
             non_linked_entities = filter(lambda entity: entity not in already_placed_entities, matching_entities)
 
             if non_linked_entities: return non_linked_entities[0]
