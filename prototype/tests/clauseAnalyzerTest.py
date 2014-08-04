@@ -164,7 +164,7 @@ class TestClauseAnalyzer(unittest.TestCase):
 
         if len(assertions) == 2:
             value =  literal_eval(assertions[1].strip())
-            self.assertEqual(value, str(entity.attributes[attribute]))
+            self.assertEqual(value, entity.attributes[attribute])
 
     def lemma(self, assertion, frame):
         entity = frame["entity"]

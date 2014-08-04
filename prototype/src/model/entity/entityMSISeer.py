@@ -18,8 +18,20 @@ class EntityMSISeer:
 
         self.detect_gender_if_necessary(msi, entity)
         self.fix_org_classification(msi, entity)
+        self.set_names_for_person(msi, entity)
 
         return msi
+
+    def set_names_for_person(self, msi, entity):
+        if "semantic_classification" in msi and msi["semantic_classification"] == "person" and entity.kernel:
+            names = []
+            not_names = []
+
+            for word in entity.kernel.components():
+                list = names if EntityMSISeer.gender_detector.gender_of(word) else not_names  # @ReservedAssignment
+                list.append(word)
+            entity.attributes["names"] = names
+            entity.attributes["surnames"] = not_names
 
     def fix_org_classification(self, msi, entity):
         if "semantic_classification" in msi and msi["semantic_classification"] == "organization" and entity.kernel:
@@ -44,7 +56,7 @@ class EntityMSISeer:
 
         nouns = node.leaves_of_category("noun") + node.leaves_of_category("number")
         if self.has_unexchangeable_appositional_relationship(nouns):
-            entity.attributes["class"] = nouns[0]
+            entity.attributes["class"] = nouns[0].lexical_form
             nouns = [ nouns[1] ]
 
         useful_leaves = nouns + node.leaves_of_category("pronoun") + node.leaves_of_category("determinant") \

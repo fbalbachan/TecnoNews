@@ -723,3 +723,15 @@ Estoy en la calle Florida
     adjuncts: la calle Florida
         msi: { "semantic_classification" : "place" }
         attribute: class = "calle"
+
+# Detección de nombres y apellidos para entidades de persona
+Leandro Gustavo Liptak murió
+    subject: Leandro_Gustavo_Liptak
+        msi: { "semantic_classification" : "person" }
+        attribute: names = ["leandro", "gustavo"]
+        attribute: surnames = ["liptak"]
+
+Leandro Liptak Vieyto murió
+    subject: Leandro_Liptak_Vieyto
+        msi: { "semantic_classification" : "person" }
+        attribute: surnames = ["liptak", "vieyto"]
