@@ -8,6 +8,7 @@ from skimpyGimpy import skimpyAPI
 import sys
 from threading import Timer
 import time
+from traceback import format_exc
 
 from src.model.sentilecto import Sentilecto
 from src.utils.webOutputUtils import WebOutputUtils
@@ -42,7 +43,8 @@ def analyze():
 		web_input = web.input()
 		return Sentilecto().analyze(web_input.text)
 	except Exception:
-		return []
+		print format_exc()
+		return None
 		#web.template.render().exception(format_exc(), "")
 
 def captcha_filename_for(request_id):
@@ -79,6 +81,7 @@ class Debug_request:
 class HiddenEntiNews_request:
 	def GET(self):
 		analysis = analyze()
+
 		return web.template.render().entinews(analysis, WebOutputUtils())
 
 class EntiNews_request:
@@ -100,6 +103,8 @@ class EntiNews_request:
 				logger.info(time.strftime("%d/%m/%Y %H:%M:%S") + "\t" + ip + "\t" + web.ctx["fullpath"])
 
 				analysis = analyze()
+				if not analysis: web.redirect("/")
+
 				return web.template.render().entinews(analysis, WebOutputUtils())
 		web.redirect("/")
 

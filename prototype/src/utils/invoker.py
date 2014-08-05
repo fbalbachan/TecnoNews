@@ -17,7 +17,7 @@ class Invoker:
 
     def invoke(self, method, *args):
         try:
-            method(*args)
+            return method(*args)
         except Exception as exception:
             if self.raise_exception:
                 print format_exc()

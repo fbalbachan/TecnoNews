@@ -70,6 +70,6 @@ class WebOutputUtils:
             return entity.msi["semantic_classification"].upper()
         return "NONE"
 
-    def score_of(self, analysis, clause):
-        summary = analysis["summary"][clause]
+    def score_of(self, analysis, object):
+        summary = analysis["summary"][object]
         return "%.2f,-%.2f" % (summary["positive"], summary["negative"])
