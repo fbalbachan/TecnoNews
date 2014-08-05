@@ -4,7 +4,7 @@ from src.utils.factNormalizer import FactNormalizer
 class WebOutputUtils:
 
     def structure(self, clause, name):
-        if clause.has_structure(name):
+        if clause.has_structure(name) and not clause.structure(name).is_empty():
             structure = clause.structure(name)
             if name == "verb":
                 return structure.entity().lemma()
