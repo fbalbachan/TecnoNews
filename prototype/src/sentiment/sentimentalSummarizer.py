@@ -11,9 +11,18 @@ class SentimentalSummarizer:
         for clause in self.paragraph.clauses(): self.analyze_clause(clause, analysis)
 
         for sentence in paragraph.sentences: analysis[sentence] = self.summarize_clauses(sentence.clauses, analysis)
+
         analysis[paragraph] = self.summarize_clauses(paragraph.clauses(), analysis)
+        self.normalize(analysis[paragraph])
 
         return analysis
+
+    def normalize(self, summary):
+        for dimension in ["positive", "negative"]:
+            value = summary[dimension]
+            if value >= 80:
+                value = 80 + ((value - 80) / 20)
+                summary[dimension] = value
 
     def summarize_clauses(self, clauses, analysis):
         summary = {}
