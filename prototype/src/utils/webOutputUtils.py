@@ -71,5 +71,8 @@ class WebOutputUtils:
         return "NONE"
 
     def score_of(self, analysis, object):
-        summary = analysis["summary"][object]
-        return "%.2f,-%.2f" % (summary["positive"], summary["negative"])
+        try:
+            summary = analysis["summary"][object]
+            return "%.2f,-%.2f" % (summary["positive"], summary["negative"])
+        except Exception:
+            return "--,--"

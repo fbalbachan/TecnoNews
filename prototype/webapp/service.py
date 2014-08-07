@@ -103,9 +103,10 @@ class EntiNews_request:
 				logger.info(time.strftime("%d/%m/%Y %H:%M:%S") + "\t" + ip + "\t" + web.ctx["fullpath"])
 
 				analysis = analyze()
-				if not analysis: web.redirect("/")
-
-				return web.template.render().entinews(analysis, WebOutputUtils())
+				if not analysis:
+					web.redirect("/")
+				else:
+					return web.template.render().entinews(analysis, WebOutputUtils())
 		web.redirect("/")
 
 ### MAIN ###
