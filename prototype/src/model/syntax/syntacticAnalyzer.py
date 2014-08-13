@@ -52,7 +52,7 @@ class SyntacticAnalyzer:
         return valid_subject_entities
 
     def without_infs(self, entities):
-        return filter(lambda entity: not entity.Is("infinitive"), entities)
+        return filter(lambda entity: not entity.has_attr("infinitive"), entities)
 
     def search_subord_with_prep_at(self, side, distance, *accepted_prepositions):
         def which(node):

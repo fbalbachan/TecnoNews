@@ -40,7 +40,7 @@ class IsolatedAdjectiveAnalyzer:
         return evidences
 
     def cataphoric_destination_subjects(self):
-        if not self.clause.Is("pseudo_cataphoric"): return []
+        if not self.clause.has_attr("pseudo_cataphoric"): return []
         clauses = filter(lambda clause: clause.is_subordinated_with("que") and clause.has_structure("subject") \
                       and not clause.structure("subject").is_empty(), self.clause.children)
         return [ clause.structure("subject").entity() for clause in clauses ]

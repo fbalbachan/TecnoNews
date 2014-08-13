@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from src.model.entity.referent import Referent
+from src.model.referent.referent import Referent
 from src.sentiment.entitySentimentalValue import EntitySentimentalValue
 
 
@@ -36,6 +36,9 @@ class TacitEntity:
     def children_of_category(self, category):
         return filter(lambda entity: entity.category() == category, self.children)
 
+    def classification(self):
+        return self.msi["semantic_classification"]
+
     def category(self):
         return self.msi["category"]
 
@@ -59,12 +62,12 @@ class TacitEntity:
         return bool(self.coref_chain)
 
     def is_tacit(self):
-        return self.Is("tacit")
+        return self.has_attr("tacit")
 
     def is_coordinated(self):
-        return self.Is("coordinated")
+        return self.has_attr("coordinated")
 
-    def Is(self, attribute):
+    def has_attr(self, attribute):
         return attribute in self.attributes
 
     def is_possessed(self):

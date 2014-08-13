@@ -26,7 +26,7 @@ class Clause(TreeNode):
 
         self.attributes = []
 
-    def Is(self, attribute):
+    def has_attr(self, attribute):
         return attribute in self.attributes
 
     def is_negated(self):

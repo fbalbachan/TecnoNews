@@ -5,6 +5,7 @@ import unittest
 
 from src.model.paragraph.paragraph import Paragraph
 from src.model.paragraph.paragraphAnalyzer import ParagraphAnalyzer
+from src.model.referent.referentAnalyzer import ReferentAnalyzer
 from src.model.sentence.sentence import Sentence
 from src.model.sentence.sentenceAnalyzer import SentenceAnalyzer
 from tests.freelingTreeRepository import FreelingTreeRepository
@@ -17,10 +18,11 @@ class TestClauseAnalyzer(unittest.TestCase):
         self.analyzer = ParagraphAnalyzer(self.sentenceAnalyzer)
 
     def test(self):
-        self.run_test_file("tests/input/context.txt")
-        self.run_test_file("tests/input/global_operators.txt")
-        self.run_test_file("tests/input/valuated_adverbs.txt")
-        self.run_test_file("tests/input/sentiment.txt")
+#         self.run_test_file("tests/input/context.txt")
+#         self.run_test_file("tests/input/global_operators.txt")
+#         self.run_test_file("tests/input/valuated_adverbs.txt")
+#         self.run_test_file("tests/input/sentiment.txt")
+        self.run_test_file("tests/input/referents.txt")
 
     def run_test_file(self, file):
 
@@ -37,8 +39,13 @@ class TestClauseAnalyzer(unittest.TestCase):
                 self.update_frame_and_assert(line, frame)
             else:
                 print "Analyzing [" + file + ":" + str(line_number) + "]:", line
+
                 paragraph = Paragraph.from_text(line)
                 self.analyzer.analyze(paragraph)
+                ReferentAnalyzer(paragraph).analyze()
+
+                print "Referents", paragraph.referents()
+
                 frame = { "paragraph" : paragraph }
 
                 if len(paragraph.sentences) == 1:
@@ -115,7 +122,9 @@ class TestClauseAnalyzer(unittest.TestCase):
         assertions = { "entities" : lambda: len(frame["structure"].all_entities()),
                        "go": lambda: len(frame["clause"].global_operators),
                        "adverbs": lambda: len(frame["clause"].valuated_adverbs),
-                       "sent_ev": lambda: len(frame["entity"].sentimental_value.evidence())
+                       "sent_ev": lambda: len(frame["entity"].sentimental_value.evidence()),
+                       "ref_count": lambda: frame["referent"].ref_count(),
+                       "referents": lambda: len(frame["paragraph"].referents())
                        }
         if len(splitted) == 1: splitted = [ "entities", splitted[0] ]
 
@@ -126,13 +135,16 @@ class TestClauseAnalyzer(unittest.TestCase):
 
     def entity(self, assertion, frame):
         entities = frame["structure"].all_entities()
+        self.assert_entity_into(entities, assertion, frame)
+
+    def assert_entity_into(self, entities, assertion, frame):
         asserted_lexical_forms = assertion.split(" -> ")
         if len(asserted_lexical_forms) > 1:
             entities = self.search_linked_entity(asserted_lexical_forms, entities)
         else:
             entities = self.search_non_linked_entity(assertion, entities)
 
-        self.assertTrue(len(entities) == 1, "No se encontró la entidad " + assertion + " en " + frame["structure"].name)
+        self.assertTrue(len(entities) == 1, "No se encontró la entidad " + assertion)
 
         entity = entities[0]
         frame["entity"] = entity
@@ -160,7 +172,7 @@ class TestClauseAnalyzer(unittest.TestCase):
 
         assertions = assertion.split("=")
         attribute = assertions[0].strip()
-        self.assertTrue(entity.Is(attribute), "La entidad no contiene el atributo " + attribute)
+        self.assertTrue(entity.has_attr(attribute), "La entidad no contiene el atributo " + attribute)
 
         if len(assertions) == 2:
             value =  literal_eval(assertions[1].strip())
@@ -199,6 +211,16 @@ class TestClauseAnalyzer(unittest.TestCase):
         self.assertTrue(clause.has_global_operator_of(assertion),
                         "La cláusula no tiene un operador global de tipo " + assertion)
 
+    def referent(self, assertion, frame):
+        paragraph = frame["paragraph"]
+        referents = filter(lambda referent: referent.name().lower() == assertion.lower(), paragraph.referents())
+        self.assertTrue(len(referents) == 1, "No se encontró (o existe más de uno) el referente " + assertion)
+        frame["referent"] = next(iter(referents))
+
+    def reference(self, assertion, frame):
+        entities = frame["referent"].references
+        self.assert_entity_into(entities, assertion, frame)
+
     def begin_with_keyword(self, string):
         string = string.replace(" ", "")
         return any(( string.startswith(keyword + ":") for keyword in self.keywords ))
@@ -208,7 +230,7 @@ class TestClauseAnalyzer(unittest.TestCase):
 
     structure_keywords = [ "subject", "od", "oi", "equative", "regimen", "instrument_goal", "adjuncts", "verb" ]
     keywords = ["clause", "lemma", "msi", "entity", "sentence", "count", "go", "adverb", "sent_ev", "value",
-                "attribute" ] + structure_keywords
+                "attribute", "referent", "reference" ] + structure_keywords
 
 if __name__ == '__main__':
     unittest.main()

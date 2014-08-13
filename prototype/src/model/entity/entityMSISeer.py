@@ -17,13 +17,18 @@ class EntityMSISeer:
         msi = self.msi_seer_by_label[label](self, entity) if label in self.msi_seer_by_label else {}
 
         self.detect_gender_if_necessary(msi, entity)
+
+        self.fix_semantic_classification(msi)
         self.fix_org_classification(msi, entity)
         self.set_names_for_person(msi, entity)
 
         return msi
 
+    def fix_semantic_classification(self, msi):
+        if not "semantic_classification" in msi: msi["semantic_classification"] = None
+
     def set_names_for_person(self, msi, entity):
-        if "semantic_classification" in msi and msi["semantic_classification"] == "person" and entity.kernel:
+        if msi["semantic_classification"] == "person" and entity.kernel:
             for word in entity.kernel.components():
                 if word in self.honorific_prefixes: attribute = "honorifics"
                 elif EntityMSISeer.gender_detector.gender_of(word): attribute = "names"
@@ -33,7 +38,7 @@ class EntityMSISeer:
                 entity.attributes[attribute].append(word)
 
     def fix_org_classification(self, msi, entity):
-        if "semantic_classification" in msi and msi["semantic_classification"] == "organization" and entity.kernel:
+        if msi["semantic_classification"] == "organization" and entity.kernel:
             words = entity.kernel.components()
             if words[0] not in self.honorific_prefixes: return
             if any(( EntityMSISeer.gender_detector.gender_of(word) for word in words)):

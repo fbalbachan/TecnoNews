@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from src.model.referent.referentAnalyzer import ReferentAnalyzer
 from src.model.paragraph.paragraph import Paragraph
 from src.model.paragraph.paragraphAnalyzer import ParagraphAnalyzer
 from src.sentiment.sentimentalSummarizer import SentimentalSummarizer
@@ -17,5 +18,6 @@ class Sentilecto:
 
         analysis["paragraph"] = paragraph
         analysis["summary"] = SentimentalSummarizer(paragraph).analyze()
+        ReferentAnalyzer(paragraph).analyze()
 
         return analysis
