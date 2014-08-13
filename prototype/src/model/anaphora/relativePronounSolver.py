@@ -30,7 +30,7 @@ class RelativePronounSolver:
         destination = clause.structure(destination_by_voice[clause.voice])
 
         msi = { "category" : "pronoun", "type" : "demostrative", "gender" : "neutral", "person" : 3,
-               "number" : "singular", "case" : None}
+               "number" : "singular", "case" : None, "semantic_classification": None }
         undefined_pronoun = TacitEntity("eso", msi)
 
         destination.append(undefined_pronoun)
