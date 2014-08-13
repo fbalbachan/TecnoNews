@@ -1,0 +1,31 @@
+# Unificación por matching exacto de la forma léxica entera
+Leandro Liptak murió. Leandro Liptak era bueno.
+    count: referents = 1
+    referent: leandro liptak
+        count: ref_count = 2
+
+La manzana podrida fue examinada. Comieron la manzana podrida.
+    referent: la manzana podrida
+        count: ref_count = 2
+
+Comieron la manzana podrida. Bebieron agua.
+    referent: ellos/ellas
+        count: ref_count = 2
+
+# Unificación por núcleo idéntico
+La empresa Adidas cerró. Muchos criticaron a la compañía Adidas.
+    referent: la empresa adidas
+        count: ref_count = 2
+        reference: La empresa Adidas
+        reference: la compañía Adidas
+
+El juez Leandro Liptak murió. Leandro Liptak era bueno.
+    referent: leandro liptak
+        count: ref_count = 2
+        reference: El juez Leandro_Liptak
+        reference: Leandro_Liptak
+
+# Unificación para person por nombres
+Leandro murió. Leandro Liptak era bueno. Liptak también era feliz.
+    referent: leandro liptak
+        count: ref_count = 3
