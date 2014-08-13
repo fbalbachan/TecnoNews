@@ -21,7 +21,6 @@ class EntityMatchingAnalyzer:
 
     def same_name_or_surname(self, other):
         source = self.source
-        print "source", source, source.attributes, " - other", other, other.attributes
         if source.classification() == "person" and source.classification() == other.classification():
             match = False
             for attr in ["names", "surnames"]:

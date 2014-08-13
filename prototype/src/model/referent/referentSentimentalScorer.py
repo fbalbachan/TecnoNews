@@ -1,24 +1,10 @@
 # -*- coding: utf-8 -*-
-from src.model.entity.entityMatchingAnalyzer import EntityMatchingAnalyzer
 
-class ReferentAnalyzer:
+class ReferentSentimentalScorer:
     def __init__(self, paragraph):
         self.paragraph = paragraph
 
-    def unify(self):
-        entities = list(self.paragraph.entities())
-        while len(entities) > 1:
-            source = entities.pop()
-            matching_analyzer = EntityMatchingAnalyzer(source)
-
-            for other in entities:
-                if matching_analyzer.matches(other): other.update_referent(source.referent)
-
-    def analyze(self):
-        self.unify()
-        #self.analyze_scores()
-
-    def analyze_scores(self):
+    def score(self):
         referent_scores = {}
 
         for referent in self.paragraph.referents():
@@ -33,3 +19,5 @@ class ReferentAnalyzer:
         print "scores", referent_scores
         for r in filter(lambda ref: ref.semantic_classification() == "person", referent_scores.keys()):
             print r, referent_scores[r]
+
+        return referent_scores

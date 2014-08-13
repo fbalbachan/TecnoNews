@@ -5,7 +5,7 @@ import unittest
 
 from src.model.paragraph.paragraph import Paragraph
 from src.model.paragraph.paragraphAnalyzer import ParagraphAnalyzer
-from src.model.referent.referentAnalyzer import ReferentAnalyzer
+from src.model.referent.entityUnifier import EntityUnifier
 from src.model.sentence.sentence import Sentence
 from src.model.sentence.sentenceAnalyzer import SentenceAnalyzer
 from tests.freelingTreeRepository import FreelingTreeRepository
@@ -18,10 +18,10 @@ class TestClauseAnalyzer(unittest.TestCase):
         self.analyzer = ParagraphAnalyzer(self.sentenceAnalyzer)
 
     def test(self):
-#         self.run_test_file("tests/input/context.txt")
-#         self.run_test_file("tests/input/global_operators.txt")
-#         self.run_test_file("tests/input/valuated_adverbs.txt")
-#         self.run_test_file("tests/input/sentiment.txt")
+        self.run_test_file("tests/input/context.txt")
+        self.run_test_file("tests/input/global_operators.txt")
+        self.run_test_file("tests/input/valuated_adverbs.txt")
+        self.run_test_file("tests/input/sentiment.txt")
         self.run_test_file("tests/input/referents.txt")
 
     def run_test_file(self, file):
@@ -42,7 +42,7 @@ class TestClauseAnalyzer(unittest.TestCase):
 
                 paragraph = Paragraph.from_text(line)
                 self.analyzer.analyze(paragraph)
-                ReferentAnalyzer(paragraph).analyze()
+                EntityUnifier(paragraph).unify()
 
                 print "Referents", paragraph.referents()
 

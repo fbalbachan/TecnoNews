@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from src.model.referent.referentAnalyzer import ReferentAnalyzer
 from src.model.paragraph.paragraph import Paragraph
 from src.model.paragraph.paragraphAnalyzer import ParagraphAnalyzer
+from src.model.referent.entityUnifier import EntityUnifier
+from src.model.referent.referentSentimentalScorer import ReferentSentimentalScorer
 from src.sentiment.sentimentalSummarizer import SentimentalSummarizer
 
 
@@ -18,6 +19,8 @@ class Sentilecto:
 
         analysis["paragraph"] = paragraph
         analysis["summary"] = SentimentalSummarizer(paragraph).analyze()
-        ReferentAnalyzer(paragraph).analyze()
+
+        EntityUnifier(paragraph).unify()
+        analysis["referent_scoring"] = ReferentSentimentalScorer(paragraph).score()
 
         return analysis
