@@ -1,0 +1,54 @@
+$def with (text, paragraph, printer)
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Fact extraction</title>
+    <link rel="stylesheet" href="static/jstree/dist/themes/default/style.css" />
+</head>
+<body>
+<div style="width: 100%;">
+<div style="float:left; width: 35%;">
+    <b>Named-Entities & Fact extraction</b>
+    <div id="jstree">
+        <ul>
+            $for referent in paragraph.named_referents():
+                <li data-jstree='{"icon":"$printer.tree_icon(referent)"}'>$referent.name()
+                <ul>
+                    <li data-jstree='{"icon":"static/icon/entities.png"}'>Occurrences ($referent.ref_count())
+                    <ul>
+                        $for name in referent.names()
+                            <li data-jstree='{"icon":"None"}'>$name</li>
+                    </ul>
+                    </li>
+
+                    <li data-jstree='{"icon":"static/icon/facts.png"}'>Facts
+                    <ul>
+                        $for clause in paragraph.facts_for(referent):
+                            <li data-jstree='{"icon":"None"}'>$clause</li>
+                    </ul>
+                    </li>
+
+                    <li data-jstree='{"icon":"static/icon/facts.png"}'>Normalized Facts
+                    <ul>
+                        $for clause in paragraph.facts_for(referent):
+                            <li data-jstree='{"icon":"None"}'>$printer.fact(clause)</li>
+                    </ul>
+                    </li>
+                </ul>
+                </li>
+        </ul>
+    </div>
+    <br>(Expand the tree nodes by clicking on them)
+
+    <script src="static/jstree/dist/libs/jquery.js"></script>
+    <script src="static/jstree/dist/jstree.min.js"></script>
+    <script src="static/jstree/startup.js"></script>
+</div>
+<div style="float:left; width: 65%; border-left: thick;">
+<b>Input text</b>
+<p>$text</p>
+</div>
+</div>
+</body>
+</html>

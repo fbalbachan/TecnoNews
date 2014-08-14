@@ -19,6 +19,9 @@ class Referent:
         for _list in [ fully_named, named, classified ]:
             if _list: return _list[0]
 
+    def names(self):
+        return { repr(reference) for reference in self.references }
+
     def name(self):
         designated = self.designated_ref()
         names = []

@@ -17,6 +17,7 @@ class FactNormalizer():
                     fact = fact + "∅"
                 else:
                     entities = [ self.string_of(entity) for entity in structure.all_entities() ]
+                    if structure_name == "verb" and clause.is_negated(): fact = fact + "no "
                     fact = fact + ", ".join(entities)
         return fact
 

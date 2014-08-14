@@ -28,7 +28,7 @@ class TacitEntity:
 
     def update_referent(self, referent):
         self.referent = referent
-        self.referent.add_reference(self)
+        referent.add_reference(self)
 
     def words(self):
         return self.lexical_form.split("_")

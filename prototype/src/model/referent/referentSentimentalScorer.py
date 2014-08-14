@@ -16,8 +16,4 @@ class ReferentSentimentalScorer:
             score = (score[0] / n, score[1] / n)
             referent_scores[referent] = score
 
-        print "scores", referent_scores
-        for r in filter(lambda ref: ref.semantic_classification() == "person", referent_scores.keys()):
-            print r, referent_scores[r]
-
         return referent_scores

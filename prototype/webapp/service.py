@@ -106,7 +106,12 @@ class EntiNews_request:
 				if not analysis:
 					web.redirect("/")
 				else:
-					return web.template.render().entinews(analysis, WebOutputUtils())
+					printer = WebOutputUtils()
+					if "fact_extraction" in web_input:
+						paragraph = analysis["paragraph"]
+						return web.template.render().facts(web_input.text, paragraph, printer)
+					else:
+						return web.template.render().entinews(analysis, printer)
 		web.redirect("/")
 
 ### MAIN ###
@@ -127,6 +132,7 @@ if __name__ == '__main__':
  	  '/hidden', 'HiddenEntiNews_request',
  	  '/', 'Index_request',
  	  '/debug', "Debug_request"
+
 	)
 
 	write_pidfile()

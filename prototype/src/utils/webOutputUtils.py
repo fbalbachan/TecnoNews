@@ -63,7 +63,7 @@ class WebOutputUtils:
         return FactNormalizer(clause).fact()
 
     def fact_real_or_not(self, clause):
-        return "(Not a real fact. See checked flags in global operators.)" if clause.global_operators else ""
+        return "(Not a real fact. See checked flags in global operators.)" if clause.is_fact() else ""
 
     def semmantic_clasif(self, entity):
         if entity.category() == "noun" and entity.msi["type"] == "proper":
@@ -76,3 +76,6 @@ class WebOutputUtils:
             return "%.2f,-%.2f" % (summary["positive"], summary["negative"])
         except Exception:
             return "--,--"
+
+    def tree_icon(self, referent):
+        return "static/icon/%s.png" % referent.semantic_classification().lower()

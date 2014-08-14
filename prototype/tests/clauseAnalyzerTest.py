@@ -18,11 +18,12 @@ class TestClauseAnalyzer(unittest.TestCase):
         self.analyzer = ParagraphAnalyzer(self.sentenceAnalyzer)
 
     def test(self):
-        self.run_test_file("tests/input/context.txt")
-        self.run_test_file("tests/input/global_operators.txt")
-        self.run_test_file("tests/input/valuated_adverbs.txt")
-        self.run_test_file("tests/input/sentiment.txt")
-        self.run_test_file("tests/input/referents.txt")
+#         self.run_test_file("tests/input/context.txt")
+#         self.run_test_file("tests/input/global_operators.txt")
+#         self.run_test_file("tests/input/valuated_adverbs.txt")
+#         self.run_test_file("tests/input/sentiment.txt")
+#         self.run_test_file("tests/input/referents.txt")
+         self.run_test_file("tests/input/single.txt")
 
     def run_test_file(self, file):
 
@@ -44,7 +45,9 @@ class TestClauseAnalyzer(unittest.TestCase):
                 self.analyzer.analyze(paragraph)
                 EntityUnifier(paragraph).unify()
 
-                print "Referents", paragraph.referents()
+                #print "Referents", paragraph.referents()
+                for referent in paragraph.referents():
+                    print "  REF", referent.semantic_classification(), referent
 
                 frame = { "paragraph" : paragraph }
 

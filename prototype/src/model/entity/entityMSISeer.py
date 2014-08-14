@@ -35,7 +35,8 @@ class EntityMSISeer:
                 else: attribute = "surnames"
 
                 if not attribute in entity.attributes: entity.attributes[attribute] = []
-                entity.attributes[attribute].append(word)
+                capitalized = word[0].upper() + word[1:]
+                entity.attributes[attribute].append(capitalized)
 
     def fix_org_classification(self, msi, entity):
         if msi["semantic_classification"] == "organization" and entity.kernel:

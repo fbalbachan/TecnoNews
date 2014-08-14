@@ -29,6 +29,10 @@ class Clause(TreeNode):
     def has_attr(self, attribute):
         return attribute in self.attributes
 
+    def is_fact(self):
+        go = self.global_operators
+        return not go or go == {"negation"}
+
     def is_negated(self):
         return self.has_global_operator_of("negation")
 

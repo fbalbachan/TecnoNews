@@ -14,8 +14,15 @@ class Paragraph:
     def referents(self):
         return set([ entity.referent for entity in self.entities() ])
 
-    def person_referents(self):
-        return { referent.semantic_classification() == "person" for referent in self.referents() }
+    def named_referents(self):
+        return { referent for referent in self.referents() if referent.semantic_classification() }
+
+    def clauses_for(self, referent):
+        return filter(lambda clause: any( ( referent == entity.referent for entity in clause.all_entities()) ), \
+                      self.clauses())
+
+    def facts_for(self, referent):
+        return filter(lambda clause: clause.is_fact(), self.clauses_for(referent))
 
     @staticmethod
     def from_text(text):

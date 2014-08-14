@@ -5,7 +5,6 @@ class EntityMatchingAnalyzer:
         self.source = source
 
     def matches(self, other):
-        #if self.source.classification() != other.classification(): return False
         methods = [ self.whole_lexical_form, self.same_kernel, self.same_name_or_surname ]
         return any(( method(other) for method in methods ))
 

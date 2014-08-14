@@ -9,7 +9,15 @@ class EntityUnifier:
         entities = list(self.paragraph.entities())
         while len(entities) > 1:
             source = entities.pop()
+            if source.is_linked(): continue
+
             matching_analyzer = EntityMatchingAnalyzer(source)
 
             for other in entities:
-                if matching_analyzer.matches(other): other.update_referent(source.referent)
+                if matching_analyzer.matches(other):
+                    self.update_referent(source, other)
+
+    def update_referent(self, source, other):
+        for reference in other.referent.references:
+            reference.update_referent(source.referent)
+
