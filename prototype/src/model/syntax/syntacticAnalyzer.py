@@ -96,5 +96,5 @@ class SyntacticAnalyzer:
     def only_nominal_of(self, entities):
         return filter(lambda entity: entity.category() == "noun", entities)
 
-    instrument_goal_preps = ["sin", "con", "contra", "en_favor_de", "a_favor_de", "en_contra_de", "en_pos_de",
+    instrument_goal_preps = ["sin", "con", "contra", "en_favor_de", "a_favor_de", "en_defensa_de", "en_contra_de", "en_pos_de",
                              "mediante", "a_través_de", "por_medio_de", "gracias_a"]
