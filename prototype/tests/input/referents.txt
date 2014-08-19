@@ -14,7 +14,7 @@ Comieron la manzana podrida. Bebieron agua.
 
 # Unificación por núcleo idéntico
 La empresa Adidas cerró. Muchos criticaron a la compañía Adidas.
-    referent: la empresa adidas
+    referent: Adidas
         count: ref_count = 2
         reference: La empresa Adidas
         reference: la compañía Adidas
@@ -29,3 +29,11 @@ El juez Leandro Liptak murió. Leandro Liptak era bueno.
 Leandro murió. Leandro Liptak era bueno. Liptak también era feliz.
     referent: leandro liptak
         count: ref_count = 3
+
+# Unificación de ORG
+Telefónica fundió. Telefónica S.A. cerró. Los inversores fundieron a Telefónica S.R.L. con sus jugadas.
+    referent: Telefónica
+        count: ref_count = 3
+        reference: Telefónica
+        reference: Telefónica_S.A.
+        reference: Telefónica_S.R.L.

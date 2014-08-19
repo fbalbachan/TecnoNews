@@ -717,12 +717,12 @@ Juan está robando
 El mediador Leandro murió
     subject: El mediador Leandro
         msi: { "semantic_classification" : "person" }
-        attribute: class = "mediador"
+        attribute: class = ["mediador"]
 
 Estoy en la calle Florida
     adjuncts: la calle Florida
         msi: { "semantic_classification" : "place" }
-        attribute: class = "calle"
+        attribute: class = ["calle"]
 
 # Detección de nombres y apellidos para entidades de persona
 Leandro Gustavo Liptak murió
@@ -742,3 +742,16 @@ El Dr. Leandro Liptak murió
         attribute: names = ["Leandro"]
         attribute: surnames = ["Liptak"]
         attribute: honorifics = ["Dr."]
+
+Telefónica S.A. cerró
+    subject: Telefónica_S.A.
+        msi: { "semantic_classification" : "organization" }
+        attribute: names = ["Telefónica"]
+        attribute: type = ["S.A."]
+
+# Fix de ORG con atributos de twPER o twLOC
+El Juez Griesa murió
+    subject: El Juez_Griesa
+        msi: { "semantic_classification" : "person" }
+        attribute: class = ["Juez"]
+        attribute: surnames = ["Griesa"]
