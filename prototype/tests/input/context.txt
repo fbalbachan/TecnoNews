@@ -728,17 +728,17 @@ Estoy en la calle Florida
 Leandro Gustavo Liptak murió
     subject: Leandro_Gustavo_Liptak
         msi: { "semantic_classification" : "person" }
-        attribute: names = ["leandro", "gustavo"]
-        attribute: surnames = ["liptak"]
+        attribute: names = ["Leandro", "Gustavo"]
+        attribute: surnames = ["Liptak"]
 
 Leandro Liptak Vieyto murió
     subject: Leandro_Liptak_Vieyto
         msi: { "semantic_classification" : "person" }
-        attribute: surnames = ["liptak", "vieyto"]
+        attribute: surnames = ["Liptak", "Vieyto"]
 
 El Dr. Leandro Liptak murió
     subject: El Dr._Leandro_Liptak
         msi: { "semantic_classification" : "person" }
-        attribute: names = ["leandro"]
-        attribute: surnames = ["liptak"]
-        attribute: honorifics = ["dr."]
+        attribute: names = ["Leandro"]
+        attribute: surnames = ["Liptak"]
+        attribute: honorifics = ["Dr."]

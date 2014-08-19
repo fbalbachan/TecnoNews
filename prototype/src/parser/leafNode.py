@@ -13,6 +13,9 @@ class LeafNode(ParseNode):
     def components(self):
         return self.lexical_form.split("_")
 
+    def original_components(self):
+        return self.original_lexical_form.split("_")
+
     def size(self):
         return len(self.components())
 

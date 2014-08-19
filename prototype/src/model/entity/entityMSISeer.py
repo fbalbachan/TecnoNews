@@ -1,58 +1,10 @@
 # -*- coding: utf-8 -*-
-from ConfigParser import ConfigParser
-from os.path import join
-
-from src.utils.genderDetection.genderDetector import GenderDetector
-
-
-def load_honorific_prefixes():
-    config = ConfigParser()
-    config.read("config")
-    _file = open(dict(config.items("resources"))["honorific_prefs"])
-    return [ pref.strip("\n") for pref in list(_file) ]
 
 class EntityMSISeer:
     def msi_of(self, entity):
         label = entity.node.label
         msi = self.msi_seer_by_label[label](self, entity) if label in self.msi_seer_by_label else {}
-
-        self.detect_gender_if_necessary(msi, entity)
-
-        self.fix_semantic_classification(msi)
-        self.fix_org_classification(msi, entity)
-        self.set_names_for_person(msi, entity)
-
         return msi
-
-    def fix_semantic_classification(self, msi):
-        if not "semantic_classification" in msi: msi["semantic_classification"] = None
-
-    def set_names_for_person(self, msi, entity):
-        if msi["semantic_classification"] == "person" and entity.kernel:
-            for word in entity.kernel.components():
-                if word in self.honorific_prefixes: attribute = "honorifics"
-                elif EntityMSISeer.gender_detector.gender_of(word): attribute = "names"
-                else: attribute = "surnames"
-
-                if not attribute in entity.attributes: entity.attributes[attribute] = []
-                capitalized = word[0].upper() + word[1:]
-                entity.attributes[attribute].append(capitalized)
-
-    def fix_org_classification(self, msi, entity):
-        if msi["semantic_classification"] == "organization" and entity.kernel:
-            words = entity.kernel.components()
-            if words[0] not in self.honorific_prefixes: return
-            if any(( EntityMSISeer.gender_detector.gender_of(word) for word in words)):
-                msi["semantic_classification"] = "person"
-
-    def detect_gender_if_necessary(self, msi, entity):
-        if not (msi["category"] == "noun" and msi["type"] == "proper" and msi["gender"] == "neutral"): return
-
-        for word in entity.words():
-            gender = EntityMSISeer.gender_detector.gender_of(word)
-            if gender in [ "masculine", "feminine" ]:
-                msi["gender"] = gender
-                return
 
     def msi_of_single(self, entity):
         node = entity.node
@@ -133,6 +85,3 @@ class EntityMSISeer:
                             "patons" : msi_of_leaf,
                             "ptonic" : msi_of_leaf,
                             "grup-verb-inf" : msi_of_infinity }
-
-    gender_detector = GenderDetector()
-    honorific_prefixes = load_honorific_prefixes()

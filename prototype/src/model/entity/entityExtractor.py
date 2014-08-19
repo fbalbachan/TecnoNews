@@ -1,7 +1,9 @@
 #-*- coding: utf-8 -*-
 from src.model.entity.entity import Entity
 from src.model.entity.entityMSISeer import EntityMSISeer
+from src.model.entity.entitySemanticAnalyzer import EntitySemanticAnalyzer
 from src.parser.parseNode import ParseNode
+
 
 class EntityExtractor:
 
@@ -57,7 +59,10 @@ class EntityExtractor:
 
     def assign_msi(self, entities):
         entity_msi_seer = EntityMSISeer()
-        for entity in entities: entity.msi = entity_msi_seer.msi_of(entity)
+        semantic_analyzer = EntitySemanticAnalyzer()
+        for entity in entities:
+            entity.msi = entity_msi_seer.msi_of(entity)
+            semantic_analyzer.analyze(entity)
 
     def relative_abnormal_nodes(self):
         desired_labels = [ "grup-nom-ms", "grup-nom-fs", "grup-nom-mp", "grup-nom-fp" ]
