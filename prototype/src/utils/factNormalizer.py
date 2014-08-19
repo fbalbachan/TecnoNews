@@ -22,6 +22,8 @@ class FactNormalizer():
         return fact
 
     def string_of(self, entity):
+        if entity.is_linked(): entity = entity.referenced()
+
         if entity.category() == "verb": return entity.lemma()
         if not entity.is_tacit():
             lemmas = [ leaf.lemma for leaf in entity.leaves() ]
@@ -29,5 +31,5 @@ class FactNormalizer():
             if lemmas == [ "qué" ] and entity.msi["category"] == "pronoun" and entity.msi["type"] == "interrogative":
                 return "algo"
 
-        if entity.is_linked() or entity.is_tacit(): return entity.lexical_form
+        if entity.is_tacit(): return entity.lexical_form
         return str(entity)
