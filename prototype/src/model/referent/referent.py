@@ -20,7 +20,13 @@ class Referent:
             if _list: return _list[0]
 
     def names(self):
-        return { repr(reference) for reference in self.references }
+        return set(self.name_list())
+
+    def name_list(self):
+        return [ repr(reference) for reference in self.references ]
+
+    def ref_count_of(self, name):
+        return self.name_list().count(name)
 
     def name(self):
         designated = self.designated_ref()

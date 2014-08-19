@@ -18,7 +18,7 @@ $def with (text, paragraph, printer)
                     <li data-jstree='{"icon":"static/icon/entities.png"}'>Occurrences ($referent.ref_count())
                     <ul>
                         $for name in referent.names()
-                            <li data-jstree='{"icon":"None"}'>$name</li>
+                            <li data-jstree='{"icon":"None"}'>$name ($referent.ref_count_of(name))</li>
                     </ul>
                     </li>
 
