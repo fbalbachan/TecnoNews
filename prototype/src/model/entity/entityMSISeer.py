@@ -13,7 +13,7 @@ class EntityMSISeer:
 
         nouns = node.leaves_of_category("noun") + node.leaves_of_category("number")
         if self.has_unexchangeable_appositional_relationship(nouns):
-            entity.attributes["class"] = nouns[0].lexical_form
+            entity.attributes["class"] = [ nouns[0].lexical_form ]
             nouns = [ nouns[1] ]
 
         useful_leaves = nouns + node.leaves_of_category("pronoun") + node.leaves_of_category("determinant") \

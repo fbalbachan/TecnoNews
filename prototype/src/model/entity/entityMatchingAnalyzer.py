@@ -5,7 +5,7 @@ class EntityMatchingAnalyzer:
         self.source = source
 
     def matches(self, other):
-        methods = [ self.whole_lexical_form, self.same_kernel, self.same_name_or_surname ]
+        methods = [ self.whole_lexical_form, self.same_kernel, self.same_name_or_surname, self.same_name_for_org ]
         return any(( method(other) for method in methods ))
 
     def whole_lexical_form(self, other):
@@ -16,6 +16,14 @@ class EntityMatchingAnalyzer:
         source = self.source
         if source.classification() and source.classification() == other.classification():
             return source.kernel.lexical_form == other.kernel.lexical_form
+        return False
+
+    def same_name_for_org(self, other):
+        source = self.source
+        if source.classification() == "organization" and source.classification() == other.classification():
+            attr = "names"
+            if source.has_attr(attr) and other.has_attr(attr):
+                return source.attributes[attr] == other.attributes[attr]
         return False
 
     def same_name_or_surname(self, other):

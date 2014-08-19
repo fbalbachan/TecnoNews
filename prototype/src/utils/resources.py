@@ -9,10 +9,17 @@ class Resources:
     def load_resource_file(self):
         Config = ConfigParser()
         Config.read("config")
+        self.source_config = Config
+
         resources_file = dict(Config.items("resources"))["general_resources"]
 
+        Config =  ConfigParser()
         Config.read(resources_file)
         self.config = Config
+
+    def get_wordlist(self, section, key):
+        _file = open(dict(self.source_config.items(section))[key])
+        return [ pref.strip("\n") for pref in list(_file) ]
 
     def has_key(self, section, key):
         return key in self.section(section)

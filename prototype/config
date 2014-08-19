@@ -15,4 +15,9 @@ verbal_scripts = %(resources_dir)s/scripts_verbales.csv
 sentiwordnet = %(resources_dir)s/sentiwordnet.csv
 resources_dir = /home/leandro/tecnolecto/entinews/prototype/resources
 general_resources = %(resources_dir)s/general_resources
+
 honorific_prefs = %(resources_dir)s/honorificos.pre
+organization_sufs = %(resources_dir)s/organization.suf
+
+place_classes = %(resources_dir)s/place.cls
+person_classes = %(resources_dir)s/person.cls
