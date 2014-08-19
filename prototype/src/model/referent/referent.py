@@ -23,7 +23,7 @@ class Referent:
         return set(self.name_list())
 
     def name_list(self):
-        return [ repr(reference) for reference in self.references ]
+        return [ repr(reference.kernel if reference.kernel else reference) for reference in self.references ]
 
     def ref_count_of(self, name):
         return self.name_list().count(name)
