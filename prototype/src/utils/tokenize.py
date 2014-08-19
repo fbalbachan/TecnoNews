@@ -16,16 +16,19 @@ def detroll(text):
     def por_token(index, token):
         token = token.decode("utf-8")
         if index == 0:
-            token = token[0].upper() + token[1:].lower()
+#            token = token[0].upper() + token[1:].lower()
+            token = token
         elif not (token[0].upper() == token[0] and token[1:].lower() == token[1:]):
-            token = token.lower()
+#            token = token.lower()
+            token = token
         return token.encode("utf-8")
     return ' '.join([por_token(index, token) for index, token in enumerate(text.split())])
 
 def limpieza_inicial(s):
     # estos replaces están porque Freeling reemplaza estos signos (si están solos) por 'y'
     s = s.replace('¡', '')
-    #s = s.replace('!', '')
+    s = s.replace('-', '')
+    s = s.replace('–', '')
     s = s.replace('¿', '')
     s = s.replace('"', '')
     s = s.replace("'", '')
@@ -38,6 +41,16 @@ def limpieza_inicial(s):
     s = s.replace("˶", '')
     s = s.replace("”", '')
     s = s.replace("/", '')
+    s = s.replace("%", '')
+    s = s.replace("+", '')
+    s = s.replace("(", '')
+    s = s.replace(")", '')
+    s = s.replace("#", '')
+    s = s.replace("@", '')
+    s = s.replace("=", '')
+    s = s.replace("º", '')
+    s = s.replace("ª", '')
+    s = s.replace(":", '.')
     s = re.sub(r'\bq\b', 'que', s)
     s = re.sub(r'\bQ\b', 'que', s)
     s = re.sub(r'\?+', '?', s)

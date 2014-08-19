@@ -7,7 +7,7 @@ $def with (analysis, printer)
   </head>
   <body>
 
-    <center><h2><font color="black">(Overall text score $printer.score_of(analysis,analysis["paragraph"]))</font></h2></center>
+    <center><h2><font color="black">Overall text score (+$printer.score_of(analysis,analysis["paragraph"]).split(",")[0]% , $printer.score_of(analysis,analysis["paragraph"]).split(",")[1]%)</font></h2></center>
 
     $ sentences = analysis["paragraph"].sentences
     $for sentence in sentences:

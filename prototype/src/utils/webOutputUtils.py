@@ -24,6 +24,10 @@ class WebOutputUtils:
 
     def entity_tooltip(self, entity):
         tooltip = self.msi_string(entity.msi)
+
+        if entity.category() == "noun" and entity.msi["type"] == "proper":
+            tooltip = tooltip + " " + str(entity.msi["semantic_classification"]).upper()
+
         if entity.category() == "verb":
             tooltip = tooltip + " - Transitivity " + entity.transitivity + " - Sentiment script " + \
                 entity.sentimental_script.klass
@@ -63,7 +67,7 @@ class WebOutputUtils:
         return FactNormalizer(clause).fact()
 
     def fact_real_or_not(self, clause):
-        return "(Not a real fact. See checked flags in global operators.)" if clause.is_fact() else ""
+        return "(Not a real fact. See checked flags in global operators.)" if not clause.is_fact() else ""
 
     def semmantic_clasif(self, entity):
         if entity.category() == "noun" and entity.msi["type"] == "proper":
