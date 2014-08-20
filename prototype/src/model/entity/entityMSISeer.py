@@ -37,7 +37,7 @@ class EntityMSISeer:
         return msi
 
     def has_unexchangeable_appositional_relationship(self, kernel_nouns):
-        return [ noun.msi["type"] for noun in kernel_nouns ] == [ "common", "proper" ]
+        return [ noun.msi["type"] if "type" in noun.msi else None for noun in kernel_nouns ] == [ "common", "proper" ]
 
     def disambiguate_if_necessary(self, msi, leaves):
         if not leaves: return
