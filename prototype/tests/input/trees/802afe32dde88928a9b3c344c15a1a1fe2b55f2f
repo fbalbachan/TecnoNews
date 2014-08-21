@@ -3,7 +3,7 @@
     sn_[
       +grup-nom-ms_[
         +w-ms_[
-          +(Juan juan NP00000 -)
+          +(Juan juan NP00SP0 -)
         ]
       ]
     ]
@@ -11,7 +11,7 @@
     sn_[
       +grup-nom-ms_[
         +w-ms_[
-          +(Pedro pedro NP00000 -)
+          +(Pedro pedro NP00SP0 -)
         ]
       ]
     ]

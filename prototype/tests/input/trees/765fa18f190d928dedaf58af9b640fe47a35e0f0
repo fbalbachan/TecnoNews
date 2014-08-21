@@ -37,16 +37,16 @@
               +(espada espada NCFS000 -)
             ]
           ]
-          sp-de_[
-            +(de de SPS00 -)
-            sn_[
-              +grup-nom-fp_[
-                +n-fp_[
-                  +(escamas escama NCFP000 -)
-                ]
-              ]
-            ]
-          ]
+        ]
+      ]
+    ]
+  ]
+  sp-de_[
+    +(de de SPS00 -)
+    sn_[
+      +grup-nom-fp_[
+        +n-fp_[
+          +(escamas escama NCFP000 -)
         ]
       ]
     ]

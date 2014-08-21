@@ -2,7 +2,7 @@
   sn_[
     +grup-nom-ms_[
       +w-ms_[
-        +(Hawaii hawaii NP00000 -)
+        +(Hawaii hawaii NP00SP0 -)
       ]
     ]
     Fc_[
@@ -49,12 +49,8 @@
     +prep_[
       +(en en SPS00 -)
     ]
-    sn_[
-      +grup-nom-fs_[
-        +n-fs_[
-          +(1806 1806 NCFS000 -)
-        ]
-      ]
+    numero_[
+      +(1806 1806 Z -)
     ]
   ]
 ]
