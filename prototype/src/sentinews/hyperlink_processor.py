@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 import wikipedia as wk
 import urllib
+import json
+import urllib
+
 
 WIKI_BASE_URL = 'http://es.wikipedia.org/wiki/'
-
+LINKEDIN_GQUERY = 'site:linkedin.com '
 class HyperlinkProcessor(object):
     """Given a Sentilecto analysis with Entities, adds hyperlinks.
        
@@ -43,7 +46,13 @@ class HyperlinkProcessor(object):
         return links
 
     def _get_linkedIn_links(self):
-        return []
+        links = []
+        for entity in self.entities:
+            if entity.classification() == 'person':
+                if 'names' in entity.attributes and 'surnames' in entity.attributes:
+                    person = " ".join(entity.attributes['names']) + " " + " ".join(entity.attributes['surnames'])
+                    links.append(self._google_search(LINKEDIN_GQUERY + person)) 
+        return links
 
     def _get_gMaps_links(self):
         return []    
@@ -76,3 +85,11 @@ class HyperlinkProcessor(object):
 
     def _add_links_to_text(self, links):
         return ""
+
+    def _google_search(self, searchfor):
+        query = urllib.urlencode({'q': searchfor})
+        url = 'http://ajax.googleapis.com/ajax/services/search/web?v=1.0&%s' % query
+        search_results = urllib.urlopen(url).read()
+        return json.loads(search_results)['responseData']['results'][0]['url']
+
+

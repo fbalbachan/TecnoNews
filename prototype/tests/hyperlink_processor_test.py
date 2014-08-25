@@ -51,6 +51,17 @@ class TestHyperLinkProcessor(unittest.TestCase):
         self.assertEquals(len(expected), len(links))
         for x in expected:
             self.assertIn(x, links)
+    
+    # def test__get_linkedIn_links(self):
+    #     links = []
+    #     for p in self.processors:
+    #         links += p._get_linkedIn_links()
+    #     expected = [u'http://ar.linkedin.com/pub/leandro-liptak/95/36b/19b']
+    #     self.assertEquals(len(expected), len(links))
+    #     for x in expected:
+    #         self.assertIn(x, links)
+
+
 
 if __name__ == '__main__':
     unittest.main()
