@@ -756,3 +756,14 @@ El Juez Griesa murió
         msi: { "semantic_classification" : "person" }
         attribute: class = ["Juez"]
         attribute: surnames = ["Griesa"]
+
+# No se debe separar oración por punto en números o dos puntos en horas
+Me costó 10.00
+    sentence: Me costó 10.00
+
+Me costó 10.00. Valió la pena.
+    sentence: Me costó 10.00
+    sentence: Valió la pena
+
+Salió a las 9:49hs
+    sentence: Salió a las 9:49hs
