@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 import wikipedia as wk
+import urllib
+
+WIKI_BASE_URL = 'http://es.wikipedia.org/wiki/'
 
 class HyperlinkProcessor(object):
     """Given a Sentilecto analysis with Entities, adds hyperlinks.
@@ -14,6 +17,7 @@ class HyperlinkProcessor(object):
     def __init__(self, analysis):
         self.paragraph = analysis['paragraph']
         self.entities = self._get_entities_from(analysis['paragraph'])
+        wk.set_lang('es')
 
     def get_text_with_hyperlinks(self):
         ''' Get all hyperlinks, format to html and add to text. 
@@ -49,9 +53,26 @@ class HyperlinkProcessor(object):
 
     def _get_wikipedia_links(self):
         ''' Searches Wikipedia for each Entity, uses first result to form URL. '''
-        for entity in self.entities():
-            pass
-        return []    
+        links = []
+        for entity in self.entities:
+            search_string = ''
+            if entity.classification() == 'person':
+                for attribute in ['names', 'surnames']:
+                    if attribute in entity.attributes:
+                        search_string += " ".join(entity.attributes[attribute])
+            elif entity.classification() == 'organization':
+                if 'names' in entity.attributes:
+                    search_string += " ".join(entity.attributes['names'])
+            elif entity.classification() == 'place':
+                if 'class' in entity.attributes:
+                    search_string += " ".join(entity.attributes['class'])
+                search_string += str(entity.kernel)
+
+            search_result = wk.search(search_string)
+            if search_result:
+                encoded_result = urllib.quote(search_result[0].encode('utf-8')) 
+                links.append(WIKI_BASE_URL + encoded_result)
+        return links
 
     def _add_links_to_text(self, links):
         return ""
