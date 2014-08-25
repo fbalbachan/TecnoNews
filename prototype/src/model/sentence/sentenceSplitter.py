@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import re
+
 from src.model.sentence.sentence import *
-from src.utils.textCleaner import *
+from src.utils.textCleaner import TextCleaner
+
 
 class SentenceSplitter:
 	def sentences_in(self, text):
@@ -21,14 +23,29 @@ class SentenceSplitter:
 
 			return text[index:match.start(0)] + replacement
 
-		validator = lambda match: self.is_valid_delimiter_before_period(match.group(1))
+		validator = lambda match: \
+			(not self.is_number(match)) and self.is_valid_delimiter_before_period(match.group(1))
+
 		def default_replace(text, index, match):
 			return text[index:match.end(1)]
 
 		texts = re.split(self.delimiters, text, re.U)
 		texts = sum([ self.split_by("(\w+)\.(?=[^\.])", text, default_replace, validator) for text in texts ], [])
 		texts = sum([ self.split_by("[!\?]+[!\? ]*", text, replace_signs) for text in texts ], [])
+
+		print texts
 		return texts
+
+	def is_number(self, match):
+		try:
+			char = match.string[match.end()]
+			int(char)
+
+			string = match.group(0) + char
+			float(string)
+		except ValueError:
+			return False
+		return True
 
 	# Dirty
 	def split_by(self, regex, text, append_method, validator = lambda match: True):
