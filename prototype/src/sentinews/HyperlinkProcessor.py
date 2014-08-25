@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import wikipedia as wk
 
 class HyperlinkProcessor(object):
     """Given a Sentilecto analysis with Entities, adds hyperlinks.
@@ -47,6 +48,9 @@ class HyperlinkProcessor(object):
         return []    
 
     def _get_wikipedia_links(self):
+        ''' Searches Wikipedia for each Entity, uses first result to form URL. '''
+        for entity in self.entities():
+            pass
         return []    
 
     def _add_links_to_text(self, links):
