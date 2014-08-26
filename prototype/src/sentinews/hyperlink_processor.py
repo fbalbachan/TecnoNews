@@ -23,6 +23,7 @@ class HyperlinkProcessor(object):
     def __init__(self, analysis):
         self.paragraph = analysis['paragraph']
         self.entities = self._get_entities_from(analysis['paragraph'])
+        self.links = []
         wk.set_lang('es')
 
     def get_text_with_hyperlinks(self):
@@ -46,13 +47,11 @@ class HyperlinkProcessor(object):
     def _get_all_links(self):
         ''' Search links in: LinkedIn, GMaps, Wikipedia and organization webpage.
             Returns: a list with all the hyperlinks. '''
-        links = []
-
-        links += self._get_linkedIn_links()
-        links += self._get_gMaps_links()
-        links += self._get_web_page_links()
-        links += self._get_other_links()
-        links += self._get_wikipedia_links()
+        self.links += self._get_linkedIn_links()
+        self.links += self._get_gMaps_links()
+        self.links += self._get_web_page_links()
+        self.links += self._get_other_links()
+        self.links += self._get_wikipedia_links()
 
         return links
 
