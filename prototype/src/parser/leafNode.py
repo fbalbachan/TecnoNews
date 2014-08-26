@@ -9,6 +9,7 @@ class LeafNode(ParseNode):
         self.original_lexical_form = lexical_form
         self.lemma = lemma
         self.msi = msi
+        self.token = None
 
     def components(self):
         return self.lexical_form.split("_")
