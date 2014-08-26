@@ -14,54 +14,62 @@ class TestHyperLinkProcessor(unittest.TestCase):
     def setUp(self):
         self.analyzer = ParagraphAnalyzer(SentenceAnalyzer(FreelingTreeRepository("tests/input/trees")))
 
-        self.texts = ('Fulano y Mengano',
-                      'Telefónica mejoró gracias a su estrategia comercial', 
-                      'Estoy en la calle Florida',
-                      'El Dr. Leandro Liptak murió', 
-                      'El Juez Griesa murió')
-
-        #TODO: A falta de un repository de parrafos, armo muchos processors con cada oracion
-        #      y los testeo todos.
-        self.processors = []
-
-        for sentence in self.texts:
-            paragraph = Paragraph.from_text(sentence)
-            self.analyzer.analyze(paragraph)
-            analysis = {'paragraph': paragraph} 
-            self.processors.append(HyperlinkProcessor(analysis))
+        self.text = ("Fulano y Mengano. Telefónica mejoró gracias a su estrategia comercial."
+                      "Estoy en la calle Florida."
+                      "El Dr. Leandro Liptak murió." 
+                      "El Juez Griesa murió."
+                      "La empresa Adidas cerró. Muchos criticaron a la compañía Adidas."
+                      "Fue a Sevilla, Cordoba y Madrid."
+                      "El intendente de Buenos Aires murió."
+                      "A diferencia de lo que sucedió en 2010, en Brasil no se hará presente la "
+                      "ONG Hinchadas Unidas Argentinas, que nucleaba a las barras del fútbol argentino."
+                      )
+        paragraph = Paragraph.from_text(self.text)
+        self.analyzer.analyze(paragraph)
+        analysis = {'paragraph': paragraph} 
+        self.processor = HyperlinkProcessor(analysis)
 
     def test__get_entities_from(self):
-        # "Fulano y Mengano" no forman un entity interesante
-        # Todas las demas, tienen un entity
+        for entity in self.processor.entities:
+            self.assertTrue(entity.classification() != None )
 
-        self.assertEquals(len(self.processors[0].entities), 0)
-        self.assertEquals(len(self.processors[1].entities), 1)
-        self.assertEquals(len(self.processors[2].entities), 1)
-        self.assertEquals(len(self.processors[3].entities), 1)
-        self.assertEquals(len(self.processors[4].entities), 1)
+        references = [x.referent.name() for x in self.processor.entities]
+        self.assertEquals(sorted(references), sorted(list(set(references))))
 
-    def test__get_wikipedia_links(self):
-        links = []
-        for p in self.processors:
-            links += p._get_wikipedia_links()
-        expected = ['http://es.wikipedia.org/wiki/Telef%C3%B3nica', 
-                    'http://es.wikipedia.org/wiki/Calle%20Florida', 
-                    'http://es.wikipedia.org/wiki/Thomas%20P.%20Griesa']
-
-        self.assertEquals(len(expected), len(links))
+    def test__get_gMaps_links(self):
+        links = self.processor._get_gMaps_links()
+        # print links
+        expected = ['https://maps.google.com/maps?q=calle%20Florida', 
+                    'https://maps.google.com/maps?q=Sevilla', 
+                    'https://maps.google.com/maps?q=Madrid', 
+                    'https://maps.google.com/maps?q=Cordoba', 
+                    'https://maps.google.com/maps?q=Buenos_Aires']
         for x in expected:
             self.assertIn(x, links)
-    
+
+    def test__get_wikipedia_links(self):
+        links = self.processor._get_wikipedia_links()
+        print links
+        expected = ['http://es.wikipedia.org/wiki/Telef%C3%B3nica', 
+                    'http://es.wikipedia.org/wiki/Calle%20Florida', 
+                    'http://es.wikipedia.org/wiki/Thomas%20P.%20Griesa',
+                    'http://es.wikipedia.org/wiki/Adidas']
+        for x in expected:
+            self.assertIn(x, links)
+
+    def test__get_other_links(self):
+        links = self.processor._get_other_links()
+        # print links
+        expected = ['https://www.google.com.ar/search?q=ONG+Hinchadas+Unidas+Argentinas']
+        for x in expected:
+            self.assertIn(x, links)
+
+    # Comentado para no hacer tantas searchs en Google            
     # def test__get_linkedIn_links(self):
-    #     links = []
-    #     for p in self.processors:
-    #         links += p._get_linkedIn_links()
+    #     links = self.processor._get_linkedIn_<links()
     #     expected = [u'http://ar.linkedin.com/pub/leandro-liptak/95/36b/19b']
-    #     self.assertEquals(len(expected), len(links))
     #     for x in expected:
     #         self.assertIn(x, links)
-
-
 
 if __name__ == '__main__':
     unittest.main()

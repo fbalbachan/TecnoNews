@@ -7,6 +7,9 @@ import urllib
 
 WIKI_BASE_URL = 'http://es.wikipedia.org/wiki/'
 LINKEDIN_GQUERY = 'site:linkedin.com '
+GMAPS_BASE_URL = 'https://maps.google.com/maps?q='
+GSEARCH_BASE_URL = 'https://www.google.com.ar/search?q='
+
 class HyperlinkProcessor(object):
     """Given a Sentilecto analysis with Entities, adds hyperlinks.
        
@@ -31,7 +34,14 @@ class HyperlinkProcessor(object):
 
     def _get_entities_from(self, paragraph):
         ''' Filter entities, keeping only the ones that have "classification" '''
-        return [entity for entity in paragraph.entities() if entity.classification()]
+        entities =  [entity for entity in paragraph.entities() if entity.classification()]
+        references = []
+        added_references = []
+        for x in entities:
+            if x.referent.name() not in added_references:
+                references.append(x)
+                added_references.append(x.referent.name())
+        return references
 
     def _get_all_links(self):
         ''' Search links in: LinkedIn, GMaps, Wikipedia and organization webpage.
@@ -41,6 +51,7 @@ class HyperlinkProcessor(object):
         links += self._get_linkedIn_links()
         links += self._get_gMaps_links()
         links += self._get_web_page_links()
+        links += self._get_other_links()
         links += self._get_wikipedia_links()
 
         return links
@@ -55,10 +66,26 @@ class HyperlinkProcessor(object):
         return links
 
     def _get_gMaps_links(self):
-        return []    
-
+        links = []
+        for entity in self.entities:
+            if entity.classification() == 'place':
+                search_string = ''
+                if 'class' in entity.attributes:
+                    search_string += " ".join(entity.attributes['class']) + " "
+                search_string +=  str(entity.kernel)
+                links.append(GMAPS_BASE_URL + urllib.quote(search_string))
+        return links
+    
     def _get_web_page_links(self):
-        return []    
+        return []
+
+    def _get_other_links(self):
+        links = []
+        for entity in self.entities:
+            if entity.classification() == 'other':
+                search_string = str(entity.kernel).replace('_', ' ')
+                links.append(GSEARCH_BASE_URL + urllib.quote_plus(search_string))
+        return links   
 
     def _get_wikipedia_links(self):
         ''' Searches Wikipedia for each Entity, uses first result to form URL. '''
@@ -74,9 +101,10 @@ class HyperlinkProcessor(object):
                     search_string += " ".join(entity.attributes['names'])
             elif entity.classification() == 'place':
                 if 'class' in entity.attributes:
-                    search_string += " ".join(entity.attributes['class'])
+                    search_string += " ".join(entity.attributes['class']) + " "
                 search_string += str(entity.kernel)
 
+            if search_string == '': continue
             search_result = wk.search(search_string)
             if search_result:
                 encoded_result = urllib.quote(search_result[0].encode('utf-8')) 
