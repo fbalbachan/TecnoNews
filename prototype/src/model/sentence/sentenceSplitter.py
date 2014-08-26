@@ -10,7 +10,7 @@ class SentenceSplitter:
 		text = text.decode("utf-8")
 		texts = [ text.strip().encode("utf-8") for text in self.split(text)]
 		clean_texts = [ self.textCleaner.clean(text) for text in texts]
-		non_empty_texts = filter(lambda text: text != u'' and text != None, clean_texts)
+		non_empty_texts = filter(lambda text: text != '' and text != None, clean_texts)
 		return self.to_sentences(non_empty_texts)
 
 	# Dirty
@@ -33,7 +33,6 @@ class SentenceSplitter:
 		texts = sum([ self.split_by("(\w+)\.(?=[^\.])", text, default_replace, validator) for text in texts ], [])
 		texts = sum([ self.split_by("[!\?]+[!\? ]*", text, replace_signs) for text in texts ], [])
 
-		print texts
 		return texts
 
 	def is_number(self, match):
