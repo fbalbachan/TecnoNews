@@ -1,0 +1,8 @@
+Instalar:
+    $ pip install wikipedia
+    $ pip install python-wordpress-xmlrpc
+
+Para webserver:
+
+    * Wordpress
+    * Este plugin de wordpress: http://wordpress.org/plugins/xml-rpc-modernization/
