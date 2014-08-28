@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
-from re import match
+from collections import deque
+from re import match, compile, IGNORECASE
 
 from src.model.tokenization.token import Token
+from src.utils.stringUtils import remove_accents
 
 
 class TokenizationGuesser:
@@ -19,6 +21,8 @@ class TokenizationGuesser:
 
         index = 0
 
+        following_contraction = []
+
         while text:
             if not words:
                 if leaf: leaf.token = token
@@ -28,7 +32,16 @@ class TokenizationGuesser:
 
             word = words.pop()
 
-            if text.startswith(word):
+            if not following_contraction: following_contraction = self.get_following_contraction(text)
+
+            if following_contraction:
+                component = following_contraction.popleft()
+                if component[0] == word.lower():
+                    word = component[1] if component[1] != word.lower() else word
+                else:
+                    following_contraction = []
+
+            if self.starts_with(word, text):
                 length = len(word)
                 token.components.append((index, index + length))
                 text = text[len(word):]
@@ -44,7 +57,22 @@ class TokenizationGuesser:
 
         leaf.token = token
 
+    def get_following_contraction(self, text):
+        match = self.contraction_pattern.match(text)
+        if not match: return []
+
+        word = match.group(0).lower()
+        return deque(self.contractions[word])
+
+    def starts_with(self, word, text):
+        if len(text) < len(word): return False
+        prefix = text[:len(word)]
+        return remove_accents(prefix) == remove_accents(word)
+
     def words_for(self, leaf):
         words = list(leaf.original_components())
         words.reverse()
         return [ word.decode("utf-8") for word in words ]
+
+    contractions = { "al" : [("a", "a"), ("el", "l")], "del" : [("de", "de"), ("el", "l")] }
+    contraction_pattern = compile("al|del", IGNORECASE)
