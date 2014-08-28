@@ -1,7 +1,7 @@
 #-*- coding: utf-8 -*-
 from copy import copy
 
-from src.parser.inDepthNodeIterator import InDepthNodeIterator
+from src.utils.tree.inDepthNodeIterator import InDepthNodeIterator
 from src.utils.collectionUtils import dict_by
 
 
@@ -14,8 +14,8 @@ class TreeNode:
     def __iter__(self):
         return InDepthNodeIterator(self)
 
-    def leaves(self):
-        return filter(lambda node: node.is_leaf(), self)
+    def leaves(self, iterator = InDepthNodeIterator):
+        return filter(lambda node: node.is_leaf(), iterator(self))
 
     def is_subordinated(self):
         return not self.is_root()

@@ -1,6 +1,6 @@
 #-*- coding: utf-8 -*-
 from itertools import chain
-from src.utils.treeNode import TreeNode
+from src.utils.tree.treeNode import TreeNode
 
 class PersonalPronounCoreferenceSearcher:
     def __init__(self, clause, context, pronoun):
