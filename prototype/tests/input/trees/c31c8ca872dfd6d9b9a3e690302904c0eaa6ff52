@@ -10,32 +10,31 @@
         +(hombre hombre NCMS000 -)
       ]
     ]
-    subord-rel_[
-      j-ms_[
-        +(lo el DA0NS0 -)
-      ]
-      +cual-s_[
-        +(cual cual PR0CS000 -)
-      ]
-      grup-verb_[
-        +verb_[
-          +(llevó llevar VMIS3S0 -)
-        ]
-        sn_[
-          +grup-nom-mp_[
-            +n-mp_[
-              +(minutos minuto NCMP000 -)
-            ]
-          ]
-        ]
-      ]
-    ]
   ]
   +verb_[
     +(buscó buscar VMIS3S0 -)
   ]
   Fc_[
     +(, , Fc -)
+  ]
+  grup-verb_[
+    sn_[
+      +pron-ms_[
+        +pdem-ms_[
+          +(lo_cual eso PD0NS000 -)
+        ]
+      ]
+    ]
+    +verb_[
+      +(llevó llevar VMIS3S0 -)
+    ]
+    sn_[
+      +grup-nom-mp_[
+        +n-mp_[
+          +(minutos minuto NCMP000 -)
+        ]
+      ]
+    ]
   ]
 ]
 

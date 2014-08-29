@@ -15,10 +15,12 @@
     +(parece parecer VMIP3S0 -)
   ]
   sadv_[
-    +(muy muy RG -)
-  ]
-  sadv_[
-    +(bien bien RG -)
+    cuantif_[
+      +(muy muy RG -)
+    ]
+    +sadv_[
+      +(bien bien RG -)
+    ]
   ]
 ]
 

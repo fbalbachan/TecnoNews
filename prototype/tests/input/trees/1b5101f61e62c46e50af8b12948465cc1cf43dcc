@@ -1,4 +1,4 @@
-+grup-verb_[
++verb-pass_[
   sn_[
     espec-fs_[
       +j-fs_[
@@ -14,35 +14,33 @@
   sadv_[
     +(nunca nunca RG -)
   ]
-  +verb_[
-    vaux_[
-      +(ha haber VAIP3S0 -)
-    ]
-    +parti-ser_[
-      +(sido ser VSP00SM -)
-    ]
+  vaux_[
+    +(ha haber VAIP3S0 -)
+  ]
+  parti-ser_[
+    +(sido ser VSP00SM -)
   ]
   sadv_[
     +(tan tan RG -)
   ]
-  subord-part_[
+  +parti-flex_[
     +parti-fs_[
       +(codiciada codiciar VMP00SF -)
     ]
-    grup-sp_[
-      +prep_[
-        +(antes_de antes_de SPS00 -)
-      ]
-      sn_[
-        espec-fs_[
-          +pos-fs_[
-            +(su su DP3CS0 -)
-          ]
+  ]
+  grup-sp_[
+    +prep_[
+      +(antes_de antes_de SPS00 -)
+    ]
+    sn_[
+      espec-fs_[
+        +pos-fs_[
+          +(su su DP3CS0 -)
         ]
-        +grup-nom-fs_[
-          +n-fs_[
-            +(venida venida NCFS000 -)
-          ]
+      ]
+      +grup-nom-fs_[
+        +n-fs_[
+          +(venida venida NCFS000 -)
         ]
       ]
     ]
