@@ -241,8 +241,8 @@ El hombre cuyo hijo era bueno salió
 El hombre buscó, lo cual llevó minutos
     clause: El hombre buscó ,
         subject: El hombre
-    clause: lo cual llevó minutos
-        subject: eso
+    clause: lo_cual llevó minutos
+        subject: lo_cual
 
 # Resolución de PP y ST inter-oracional
 Leandro es bueno. Él comió la manzana.
@@ -767,3 +767,7 @@ Me costó 10.00. Valió la pena.
 
 Salió a las 9:49hs
     sentence: Salió a las 9:49hs
+
+La casa nunca ha sido tan codiciada antes de su venida
+    subject: alguien
+#    od: La casa
