@@ -5,6 +5,7 @@ from src.sentiment.entitySentimentalValue import EntitySentimentalValue
 
 class TacitEntity:
 
+    # Cuidado! El diccionario attributes se instancia siempre con una referencia al mismo diccionario default!
     def __init__(self, lexical_form, msi, attributes = { "tacit" : None }):
         self.lexical_form = lexical_form
         self.msi = msi
@@ -74,6 +75,6 @@ class TacitEntity:
         return bool(self.owner)
 
     def __repr__(self):
-        _repr = "(tacit) " + self.lexical_form
+        _repr = ("(implicit)" if self.has_attr("implicit") else "(tacit)") + " " + self.lexical_form
         if self.is_linked(): _repr = _repr + " (" + self.referenced().lexical_form + ")"
         return _repr

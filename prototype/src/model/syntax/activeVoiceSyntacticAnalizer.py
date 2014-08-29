@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from src.ling.tacit_subjects import tacit_subject_for, somebody, this
+from src.ling.tacit_subjects import implicit_somebody, this
 from src.model.entity.tacitEntity import TacitEntity
 from src.model.syntax.syntacticAnalyzer import SyntacticAnalyzer
 from src.model.syntax.syntacticStructure import SyntacticStructure
@@ -16,11 +16,13 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
             entities = self.verb_matching_subject_entities(3, 2)
 
             if entities: return [ entities[0] ]
-            else:        return [ self.implicit_subject() ]
+            else:        return [ self.tacit_or_implicit_subject() ]
         return []
 
-    def implicit_subject(self):
-        criteria = [ (self.is_root_relative_clause, somebody), (self.clause.has_kind_of_cataphoric_structure, this) ]
+    def tacit_or_implicit_subject(self):
+        criteria = [(self.is_root_relative_clause, implicit_somebody), \
+                    (self.clause.has_kind_of_cataphoric_structure, this) ]
+
         for criterion, subject in criteria:
             if criterion(): return subject()
         return self.tacit_subject()
