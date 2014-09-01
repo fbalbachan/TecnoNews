@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import unittest
 from src.sentinews.blog_publisher import BlogPublisher
-from src.sentinews.blog_publisher import Entry
+from src.sentinews.news_entry import NewsEntry
 
 class TestBlogPublisher(unittest.TestCase):
 
@@ -22,13 +22,13 @@ class TestBlogPublisher(unittest.TestCase):
     def test_publish(self):
         # Completar con datos de testing
         #Must have .../xmlrpc.php
-        # import src.sentinews.blog_publisher
-        # src.sentinews.blog_publisher.HOST = 'http://tecnonews.comule.com/xmlrpc.php'
-        # src.sentinews.blog_publisher.USER = 'tecnonews'
-        # src.sentinews.blog_publisher.PASS = 'tecnonews1'
+        import src.sentinews.blog_publisher
+        src.sentinews.blog_publisher.HOST = 'http://tecnonews.comule.com/xmlrpc.php'
+        src.sentinews.blog_publisher.USER = 'tecnonews'
+        src.sentinews.blog_publisher.PASS = 'tecnonews1'
 
         content = 'Hola. <a href=http://www.google.com>Link de prueba</a>.'
-        entry = Entry('Hola',content,['test', 'sentinews'], 'fuente_de_prueba')
+        entry = NewsEntry('Hola',content,['test', 'sentinews'], 'fuente_de_prueba')
         self.blog_publisher._publish_entry(entry)
 
 if __name__ == '__main__':

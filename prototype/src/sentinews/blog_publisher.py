@@ -3,6 +3,7 @@
 from wordpress_xmlrpc import Client, WordPressPost
 from wordpress_xmlrpc.methods.posts import GetPosts, NewPost
 from wordpress_xmlrpc.methods.users import GetUserInfo
+from ..news_entry import NewsEntry
 
 #Must have .../xmlrpc.php
 HOST = 'http://tecnolecto.com/blog/xmlrpc.php'
@@ -24,7 +25,7 @@ class BlogPublisher(object):
 	def _generate_entry(self):
 		html_links = self._format_html_links()
 		content = self._add_links_to_text(html_links)
-		entry = Entry(self._get_title(), content, self._get_tags(), self._get_source())
+		entry = NewsEntry(self._get_title(), content, self._get_tags(), self._get_source())
 		return 
 
 	def _publish_entry(self, entry):
@@ -57,10 +58,3 @@ class BlogPublisher(object):
 
 	def _get_source(self):
 		return ''
-
-class Entry(object):
-	def __init__(self, title, content, tags, source):
-		self.title = title
-		self.content = content
-		self.tags = tags
-		self.source = source
