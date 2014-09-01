@@ -20,7 +20,6 @@ class SentenceAnalyzer:
         self.set_parse_tree_to(sentence)
         TokenizationGuesser(sentence).guess()
 
-        return
         sentence.clauses = ClauseExtractor().extract_from(sentence)
         for method in [ self.analyze_clauses_of, self.analyze_global_operators_of, self.analyze_sentimentally ]:
             self.invoker.invoke(method, sentence)
@@ -45,6 +44,9 @@ class SentenceAnalyzer:
     def set_parse_tree_to(self, sentence):
         node = self.tree_parser.from_text(sentence.text)
         sentence.parse_node = node
+
+        #print "TEXT", sentence.text
+        #print "LEAVES", node.leaves()
 
         #print node.tree_representation()
         #for leaf in node.leaves():  print leaf.original_lexical_form, leaf.lemma, leaf.msi

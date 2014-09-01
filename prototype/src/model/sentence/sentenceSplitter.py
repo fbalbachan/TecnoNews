@@ -2,16 +2,17 @@
 import re
 
 from src.model.sentence.sentence import *
+from src.model.tokenization.token import Token
 from src.utils.textCleaner import TextCleaner
 
 
 class SentenceSplitter:
 	def sentences_in(self, text):
 		text = text.decode("utf-8")
-		texts = [ text.strip().encode("utf-8") for text in self.split(text)]
+		texts = [ each.strip().encode("utf-8") for each in self.split(text)]
 		#clean_texts = [ self.textCleaner.clean(text) for text in texts]
 		non_empty_texts = filter(lambda text: text != '' and text != None, texts)
-		return self.to_sentences(non_empty_texts)
+		return self.to_sentences(non_empty_texts, text)
 
 	# Dirty
 	def split(self, text):
@@ -61,8 +62,21 @@ class SentenceSplitter:
 	def is_valid_delimiter_before_period(self, string):
 		return not (bool(self.abbreviation_regex.match(string)) or bool(re.match("^[A-Z]$", string)))
 
-	def to_sentences(self, texts):
-		return [ Sentence(text) for text in texts ]
+	def to_sentences(self, texts, source):
+		sentences = [ Sentence(text) for text in texts ]
+
+		for sentence in sentences:
+			sentence_text = sentence.text.decode("utf-8")
+			index = source.index(sentence_text)
+
+			token = Token()
+			token.append(index, index + len(sentence_text))
+
+			sentence.token = token
+
+			print token
+
+		return sentences
 
 	abbreviation_regex = re.compile("^(jr|mr|inc|ltd|co|ing|lic|dr|dra|arq|mag|phd|ph|prof|excmo|excma|mrs|gmbh|md|mons|cap|tte|col|lt|sgt|cnel|gral|brig|pref|prov|sr|sra|srta|dir|etc|fed)$", re.U | re.I)
 	delimiters = re.compile(ur"""(?=\.$)|\n|, ?pero\b|:\s+|, ?y\b|, ?mientras|, ?entonces|, ?aunque|, ?sin embargo\b|, ?no obstante|;|\.\.\.|, ?pues\b""", re.U|re.I)
