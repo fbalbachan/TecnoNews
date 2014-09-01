@@ -1,0 +1,40 @@
++grup-verb_[
+  +verb_[
+    +(Dijo decir VMIS3S0 -)
+  ]
+  subord_[
+    +(que que CS -)
+    grup-verb_[
+      coor-n_[
+        sn_[
+          +grup-nom-ms_[
+            +w-ms_[
+              +(Juan juan NP00SP0 -)
+            ]
+          ]
+        ]
+        +(y y CC -)
+        sn_[
+          +grup-nom-ms_[
+            +w-ms_[
+              +(Pedro pedro NP00SP0 -)
+            ]
+          ]
+        ]
+      ]
+      +verb_[
+        vaux_[
+          +(habían haber VAII3P0 -)
+        ]
+        +parti_[
+          +(muerto morir VMP00SM -)
+        ]
+      ]
+    ]
+  ]
+  F-term_[
+    +(. . Fp -)
+  ]
+]
+
+

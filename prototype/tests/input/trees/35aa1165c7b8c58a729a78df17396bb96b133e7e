@@ -1,0 +1,51 @@
++grup-verb_[
+  sn_[
+    espec-mp_[
+      +j-mp_[
+        +(Los el DA0MP0 -)
+      ]
+    ]
+    +grup-nom-mp_[
+      +n-mp_[
+        +(inversores inversor NCMP000 -)
+      ]
+    ]
+  ]
+  +verb_[
+    +(fundieron fundir VMIS3P0 -)
+  ]
+  grup-sp_[
+    +prep_[
+      +(a a SPS00 -)
+    ]
+    sn_[
+      +grup-nom-ms_[
+        +w-ms_[
+          +(Telefónica_S.R.L. telefónica_s.r.l. NP00SP0 -)
+        ]
+      ]
+    ]
+  ]
+  grup-sp_[
+    +prep_[
+      +(con con SPS00 -)
+    ]
+    sn_[
+      espec-fp_[
+        +pos-fp_[
+          +(sus su DP3CP0 -)
+        ]
+      ]
+      +grup-nom-fp_[
+        +n-fp_[
+          +(jugadas jugada NCFP000 -)
+        ]
+      ]
+    ]
+  ]
+  F-term_[
+    +(. . Fp -)
+  ]
+]
+
+

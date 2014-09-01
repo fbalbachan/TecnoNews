@@ -1,0 +1,37 @@
++grup-verb_[
+  sn_[
+    +grup-nom-ms_[
+      +w-ms_[
+        +(Fernando fernando NP00SP0 -)
+      ]
+    ]
+    subord-rel_[
+      +(quien quien PR0CS000 -)
+      grup-verb_[
+        patons_[
+          +paton-ms_[
+            +(lo lo PP3MSA00 -)
+          ]
+        ]
+        +verb_[
+          +(mató matar VMIS3S0 -)
+        ]
+      ]
+    ]
+  ]
+  +verb_[
+    +(era ser VSII3S0 -)
+  ]
+  s-adj_[
+    +s-a-ms_[
+      +a-ms_[
+        +(alto alto AQ0MS0 -)
+      ]
+    ]
+  ]
+  F-term_[
+    +(. . Fp -)
+  ]
+]
+
+

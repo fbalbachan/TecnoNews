@@ -1,0 +1,25 @@
++grup-verb_[
+  sn_[
+    +grup-nom-ms_[
+      +w-ms_[
+        +(Gustavo gustavo NP00SP0 -)
+      ]
+    ]
+  ]
+  morfema-verbal_[
+    +(se se P00CN000 -)
+  ]
+  patons_[
+    +paton-ms_[
+      +(lo lo PP3MSA00 -)
+    ]
+  ]
+  +verb_[
+    +(comió comer VMIS3S0 -)
+  ]
+  F-term_[
+    +(. . Fp -)
+  ]
+]
+
+
