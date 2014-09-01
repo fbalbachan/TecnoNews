@@ -5,9 +5,9 @@ from wordpress_xmlrpc.methods.posts import GetPosts, NewPost
 from wordpress_xmlrpc.methods.users import GetUserInfo
 
 #Must have .../xmlrpc.php
-HOST = ''
-USER = ''
-PASS = ''
+HOST = 'http://tecnolecto.com/blog/xmlrpc.php'
+USER = 'tecnolecto_news'
+PASS = 'news tecno lecto'
 
 
 class BlogPublisher(object):

@@ -38,7 +38,7 @@ class TestHyperLinkProcessor(unittest.TestCase):
 
     def test__get_gMaps_links(self):
         links = self.processor._get_gMaps_links()
-        print links
+        # print links
         expected = ['https://maps.google.com/maps?q=calle%20Florida', 
                     'https://maps.google.com/maps?q=Sevilla', 
                     'https://maps.google.com/maps?q=Madrid', 
@@ -49,7 +49,7 @@ class TestHyperLinkProcessor(unittest.TestCase):
 
     def test__get_wikipedia_links(self):
         links = self.processor._get_wikipedia_links()
-        print links
+        # print links
         expected = ['http://es.wikipedia.org/wiki/Telef%C3%B3nica', 
                     'http://es.wikipedia.org/wiki/Calle%20Florida', 
                     'http://es.wikipedia.org/wiki/Thomas%20P.%20Griesa',
