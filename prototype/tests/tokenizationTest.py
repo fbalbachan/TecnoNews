@@ -9,7 +9,8 @@ from tests.freelingTreeRepository import FreelingTreeRepository
 
 
 class TokenizationTest(unittest.TestCase):
-    def setUp(self):
+    @classmethod
+    def setUpClass(self):
         print "[Tokenization test]"
 
         self.sentenceAnalyzer = SentenceAnalyzer(FreelingTreeRepository("tests/input/trees"))
@@ -41,6 +42,25 @@ class TokenizationTest(unittest.TestCase):
 
         # BUG de Freeling: Dislocación de la ","
         self.kase("Destaco eso, en favor de lo cual vivo", (0, 7), (8, 11), (11, 12), (13, 24), (25, 32), (33, 37))
+
+    def test_compound(self):
+        self.kase_compound("Dr. Leandro Liptak", (0, 3), (4, 11), (12, 18))
+        self.kase_compound("Leandro G. Liptak", (0, 7), (8, 10), (11, 17))
+        self.kase_compound("lo cual", (0, 2), (3, 7))
+        self.kase_compound("en favor de", (0, 2), (3, 8), (9, 11))
+
+    def kase_compound(self, text, *expected_components):
+        print "\tCase (compound):", text, "->",
+
+        sentence = Sentence(text)
+        self.sentenceAnalyzer.analyze(sentence)
+
+        token = sentence.parse_node.leaves()[0].token
+        print token, token.components
+
+        self.assertEqual((expected_components[0][0], expected_components[-1][1]), (token.start(), token.end()))
+
+        self.assertEqual(list(expected_components), token.components)
 
     def kase(self, text, *expected_tokens):
         print "\tCase:", text, "->",
