@@ -38,7 +38,7 @@ class TestStructureHead(unittest.TestCase):
         ('él',        {'person': 3, 'number': 'singular', 'gender': 'masculine'}),
         ('ella',      {'person': 3, 'number': 'singular', 'gender': 'feminine'}),
 
-        ('ustedes',   {'person': 2, 'number': 'plural', 'gender': 'neutral'}),
+        ('ustedes',   {'person': 3, 'number': 'plural', 'gender': 'masculine'}),
 
         ('nosotros',  {'person': 1, 'number': 'plural', 'gender': 'masculine'}),
         ('vosotros',  {'person': 2, 'number': 'plural', 'gender': 'masculine'}),

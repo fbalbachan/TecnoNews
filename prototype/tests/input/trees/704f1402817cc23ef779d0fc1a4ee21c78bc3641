@@ -2,7 +2,7 @@
   sn_[
     +grup-nom-ms_[
       +w-ms_[
-        +(Leandro leandro NP00000 -)
+        +(Leandro leandro NP00SP0 -)
       ]
     ]
   ]
@@ -15,7 +15,7 @@
       sn_[
         +grup-nom-ms_[
           +w-ms_[
-            +(Juan juan NP00000 -)
+            +(Juan juan NP00SP0 -)
           ]
         ]
       ]

@@ -125,8 +125,8 @@ Mi vieja mula murió
         msi: { "number" : "singular", "gender" : "feminine", "person" : 3 }
     verb: murió
 
-Eso fue dicho por los de la espada de escamas
-    subject: los de la espada de escamas
+Eso fue dicho por los de la espada
+    subject: los de la espada
         msi: { "number" : "plural", "gender" : "masculine", "person" : 3 }
     od: Eso
 
@@ -241,8 +241,8 @@ El hombre cuyo hijo era bueno salió
 El hombre buscó, lo cual llevó minutos
     clause: El hombre buscó ,
         subject: El hombre
-    clause: lo cual llevó minutos
-        subject: eso
+    clause: lo_cual llevó minutos
+        subject: lo_cual
 
 # Resolución de PP y ST inter-oracional
 Leandro es bueno. Él comió la manzana.
@@ -419,7 +419,8 @@ Quien habló era linda
 Lo que quiero es que te vayas
     clause: Lo que quiero
         subject: yo
-    clause: es que te vayas
+    clause: es
+    clause: que te vayas
 
 La presidenta murió de leucemia y tétanos
     subject: La presidenta
@@ -755,3 +756,18 @@ El Juez Griesa murió
         msi: { "semantic_classification" : "person" }
         attribute: class = ["Juez"]
         attribute: surnames = ["Griesa"]
+
+# No se debe separar oración por punto en números o dos puntos en horas
+Me costó 10.00
+    sentence: Me costó 10.00
+
+Me costó 10.00. Valió la pena.
+    sentence: Me costó 10.00
+    sentence: Valió la pena
+
+Salió a las 9:49hs
+    sentence: Salió a las 9:49hs
+
+La casa nunca ha sido tan codiciada antes de su venida
+    subject: alguien
+#    od: La casa

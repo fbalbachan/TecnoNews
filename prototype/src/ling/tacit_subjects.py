@@ -31,6 +31,11 @@ def somebody():
                                     "person" : 3, "type" : "indefinite", "case" : None,
                                     "semantic_classification" : None })
 
+def implicit_somebody():
+    entity = somebody()
+    entity.attributes = { "tacit" : None, "implicit" : None }
+    return entity
+
 def this():
     return TacitEntity("esto", { "category" : "pronoun", "number" : "singular", "gender" : "neutral",
                                  "person" : 3, "type" : "demostrative", "case" : None,

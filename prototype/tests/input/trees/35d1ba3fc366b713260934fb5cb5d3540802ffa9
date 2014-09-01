@@ -30,11 +30,11 @@
     +(son ser VSIP3P0 -)
   ]
   sn_[
+    numero-nopart_[
+      +(dos 2 Z -)
+    ]
     +grup-nom-mp_[
       +n-mp_[
-        +(dos do NCMP000 -)
-      ]
-      n-mp_[
         +(animales animal NCMP000 -)
       ]
     ]

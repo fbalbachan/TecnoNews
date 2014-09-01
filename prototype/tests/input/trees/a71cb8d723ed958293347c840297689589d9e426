@@ -2,7 +2,7 @@
   sn_[
     +grup-nom-ms_[
       +w-ms_[
-        +(Juana juana NP00000 -)
+        +(Juana juana NP00SP0 -)
       ]
     ]
     Fc_[
@@ -37,7 +37,7 @@
     sn_[
       +grup-nom-ms_[
         +w-ms_[
-          +(Cortázar cortázar NP00000 -)
+          +(Cortázar cortázar NP00G00 -)
         ]
       ]
     ]
