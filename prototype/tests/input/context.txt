@@ -241,31 +241,31 @@ El hombre cuyo hijo era bueno salió
 El hombre buscó, lo cual llevó minutos
     clause: El hombre buscó ,
         subject: El hombre
-    clause: lo cual llevó minutos
-        subject: eso
+    clause: lo_cual llevó minutos
+        subject: lo_cual
 
 # Resolución de PP y ST inter-oracional
 Leandro es bueno. Él comió la manzana.
-    sentence: Leandro es bueno
+    sentence: Leandro es bueno.
         subject: Leandro
-    sentence: Él comió la manzana
+    sentence: Él comió la manzana.
         subject: Él -> Leandro
 
 # Tácito
 Leandro es bueno. Comió las manzanas.
-    sentence: Leandro es bueno
+    sentence: Leandro es bueno.
         subject: Leandro
-    sentence: Comió las manzanas
+    sentence: Comió las manzanas.
         subject: él/ella -> Leandro
 
 # Alteración del orden de búsqueda con pasivas
 Leandro es bueno. Fue comido por Pedro. Finalmente murió.
-    sentence: Leandro es bueno
+    sentence: Leandro es bueno.
         subject: Leandro
-    sentence: Fue comido por Pedro
+    sentence: Fue comido por Pedro.
         subject: Pedro
         od: él -> Leandro
-    sentence: Finalmente murió
+    sentence: Finalmente murió.
         subject: él/ella -> Leandro
 
 # Duplicación de OD
@@ -283,17 +283,17 @@ Se los tragó a los hombres
 
 # Resolución de pronombres acusativos inter-oracional
 Leandro era bueno. Gustavo se lo comió.
-    sentence: Leandro era bueno
+    sentence: Leandro era bueno.
         subject: Leandro
-    sentence: Gustavo se lo comió
+    sentence: Gustavo se lo comió.
         subject: Gustavo
         od: lo -> Leandro
 
 # No se resuelve "los" porque no coincide en número con "Leandro"
 Leandro era bueno. Gustavo se los comió.
-    sentence: Leandro era bueno
+    sentence: Leandro era bueno.
         subject: Leandro
-    sentence: Gustavo se los comió
+    sentence: Gustavo se los comió.
         subject: Gustavo
         od: los
 
@@ -310,10 +310,10 @@ Leandro criticó a Gustavo y lo mató
 #La presidenta saludó al intendente de Buenos Aires. Yo me crucé con él y le pregunté por ella.
 
 La presidenta saludó a José. Yo me crucé con él y le pregunté por ella.
-    sentence: La presidenta saludó a José
+    sentence: La presidenta saludó a José.
         subject: La presidenta
         od: José
-    sentence: Yo me crucé con él y le pregunté por ella
+    sentence: Yo me crucé con él y le pregunté por ella.
         clause: Yo me crucé con él
             instrument_goal: él -> José
                 msi: { "gender" : "masculine" }
@@ -328,28 +328,28 @@ Leandro dijo que mataría a alguien
 
 # Resolución de PPN (ST) en cláusula subordinada relativa
 Fernando se quejaba de su destino. Las mujeres con quienes lidió eran altas.
-    sentence: Fernando se quejaba de su destino
+    sentence: Fernando se quejaba de su destino.
         subject: Fernando
-    sentence: Las mujeres con quienes lidió eran altas
-        clause: Las mujeres eran altas
+    sentence: Las mujeres con quienes lidió eran altas.
+        clause: Las mujeres eran altas .
             subject: Las mujeres
         clause: con quienes lidió
             subject: él/ella -> Fernando
 
 Fernando se quejaba de su destino. El hombre con quien lidió era alto.
-    sentence: Fernando se quejaba de su destino
+    sentence: Fernando se quejaba de su destino.
         subject: Fernando
-    sentence: El hombre con quien lidió era alto
-        clause: El hombre era alto
+    sentence: El hombre con quien lidió era alto.
+        clause: El hombre era alto .
             subject: El hombre
         clause: con quien lidió
             subject: él/ella -> Fernando
 
-El hombre fue asesinado por la mujer en su casa. La hallaron shockeada.
-    sentence: El hombre fue asesinado por la mujer en su casa
+El hombre fue asesinado por la mujer en su casa. La hallaron así.
+    sentence: El hombre fue asesinado por la mujer en su casa.
         subject: la mujer
         od: El hombre
-    sentence: La hallaron shockeada
+    sentence: La hallaron así.
         subject: ellos/ellas
         od: La -> la mujer
 
@@ -363,20 +363,20 @@ Los charrúas comieron a Solís, condenándolo eternamente
         od: lo -> Solís
 
 Leandro murió. Fernando dijo que lo mató.
-    sentence: Leandro murió
+    sentence: Leandro murió.
         subject: Leandro
-    sentence: Fernando dijo que lo mató
-        clause: Fernando dijo
+    sentence: Fernando dijo que lo mató.
+        clause: Fernando dijo .
             subject: Fernando
         clause: que lo mató
             subject: él/ella -> Fernando
             od: lo -> Leandro
 
 Leandro murió. Fernando quien lo mató era alto.
-    sentence: Leandro murió
+    sentence: Leandro murió.
         subject: Leandro
-    sentence: Fernando quien lo mató era alto
-        clause: Fernando era alto
+    sentence: Fernando quien lo mató era alto.
+        clause: Fernando era alto .
             subject: Fernando
         clause: quien lo mató
             subject: Fernando
@@ -384,10 +384,10 @@ Leandro murió. Fernando quien lo mató era alto.
 
 # Gender detection
 Leandro saludó a Mariel. Ella lo abrazó.
-    sentence: Leandro saludó a Mariel
+    sentence: Leandro saludó a Mariel.
         subject: Leandro
         od: Mariel
-    sentence: Ella lo abrazó
+    sentence: Ella lo abrazó.
         subject: Ella -> Mariel
         od: lo -> Leandro
 
@@ -478,30 +478,30 @@ La presidenta encontró virus, dejándolos en un tubo de ensayo
 
 # Resolución de anáfora de PP con entidades coordinadas
 María y José salieron. Él dijo a ella algo.
-    sentence: María y José salieron
+    sentence: María y José salieron.
         subject: María y José
-    sentence: Él dijo a ella algo
+    sentence: Él dijo a ella algo.
         subject: Él -> José
         od: ella -> María
 
 El intendente de Buenos Aires murió. Él se mató.
-    sentence: El intendente de Buenos Aires murió
+    sentence: El intendente de Buenos Aires murió.
         subject: El intendente de Buenos_Aires
-    sentence: Él se mató
+    sentence: Él se mató.
         subject: Él -> El intendente de Buenos_Aires
 
 # Resolución de anáfora con entidades en infinitivo (no lo resolvemos). Además es un test de un bug con PP "Yo"
 Me molesta tomar vacaciones con mi novia. Yo la detesto.
-    sentence: Me molesta tomar vacaciones con mi novia
+    sentence: Me molesta tomar vacaciones con mi novia.
         subject: tomar vacaciones con mi novia
-    sentence: Yo la detesto
+    sentence: Yo la detesto.
         subject: Yo
         od: la -> mi novia
 
 María y Laura murieron. Ambas eran hermosas.
-    sentence: María y Laura murieron
+    sentence: María y Laura murieron.
         subject: María y Laura
-    sentence: Ambas eran hermosas
+    sentence: Ambas eran hermosas.
         subject: Ambas -> María y Laura
 
 # OI con preposición "para"
@@ -518,9 +518,9 @@ Laura Alonso es mi amiga
 
 # Duplicación de OD sólo con preposición "a"
 Juan y Pedro fueron al río. La mujer los encontró muertos.
-    sentence: Juan y Pedro fueron al río
+    sentence: Juan y Pedro fueron al río.
         subject: Juan y Pedro
-    sentence: La mujer los encontró muertos
+    sentence: La mujer los encontró muertos.
         subject: La mujer
         od: muertos
         oi: los -> Juan y Pedro
@@ -551,17 +551,17 @@ Han debido lidiar durante años con él
 
 # Resolución de anáfora de PP estructuralmente en oraciones anteriores (por niveles en las cláusulas)
 Dijo que Juan y Pedro habían muerto. Ambos eran lindos.
-    sentence: Dijo que Juan y Pedro habían muerto
-        clause: Dijo
+    sentence: Dijo que Juan y Pedro habían muerto.
+        clause: Dijo .
             subject: él/ella
         clause: que Juan y Pedro habían muerto
             subject: Juan y Pedro
-    sentence: Ambos eran lindos
+    sentence: Ambos eran lindos.
         subject: Ambos -> Juan y Pedro
 
 Dijo que Juan y Pedro habían muerto y mencionó que Augusto y Luis habían sobrevivido. Ambos eran lindos.
-    sentence: Dijo que Juan y Pedro habían muerto y mencionó que Augusto y Luis habían sobrevivido
-    sentence: Ambos eran lindos
+    sentence: Dijo que Juan y Pedro habían muerto y mencionó que Augusto y Luis habían sobrevivido.
+    sentence: Ambos eran lindos.
         subject: Ambos -> Augusto y Luis
 
 # Anáfora de PP y resolución en main-clause previa de la misma oración
@@ -610,10 +610,10 @@ Leandro boludeó a Pedro
 
 # Bugfix: resolución de anáfora sólo con aquello que "fue leído" y no algo que está a derecha del pronombre.
 Leandro murió. Juan, quien lo había matado era un genio.
-    sentence: Leandro murió
+    sentence: Leandro murió.
         subject: Leandro
-    sentence: Juan, quien lo había matado era un genio
-        clause: Juan , era un genio
+    sentence: Juan, quien lo había matado era un genio.
+        clause: Juan , era un genio .
             subject: Juan
         clause: quien lo había matado
             subject: Juan
@@ -635,9 +635,9 @@ La manzana estaba podrida
 
 # Bug PP acusativo buscado en oraciones unimembres
 Hermoso banquete. Lo disfruté mucho.
-    sentence: Hermoso banquete
+    sentence: Hermoso banquete.
         subject: Hermoso banquete
-    sentence: Lo disfruté mucho
+    sentence: Lo disfruté mucho.
         subject: yo
         od: Lo -> Hermoso banquete
 
@@ -656,18 +656,18 @@ Muy buena la cena sin Leandro
 
 # AR-PP con I/G
 Leandro mató a Pedro con una vaina. Más tarde la tiró.
-    sentence: Leandro mató a Pedro con una vaina
+    sentence: Leandro mató a Pedro con una vaina.
         subject: Leandro
         od: Pedro
         instrument_goal: una vaina
-    sentence: Más tarde la tiró
+    sentence: Más tarde la tiró.
         subject: él/ella -> Leandro
         od: la -> una vaina
 
 Muy buena la cena sin Leandro. Él es horrible.
-    sentence: Muy buena la cena sin Leandro
+    sentence: Muy buena la cena sin Leandro.
         instrument_goal: Leandro
-    sentence: Él es horrible
+    sentence: Él es horrible.
         subject: Él -> Leandro
 
 El hombre en quien pienso está muerto
@@ -690,12 +690,12 @@ Los hombres, quienes mataron mujeres, son criminales
 
 # Entidades en infinitivo no satisfacen anáforas
 Según Juana, ellos pretenden desconocer los reconocimientos. Precisó que no comprenden.
-	sentence: Según Juana, ellos pretenden desconocer los reconocimientos
+	sentence: Según Juana, ellos pretenden desconocer los reconocimientos.
 		subject: ellos
 		verb: pretenden
 		od: desconocer los reconocimientos
-	sentence: Precisó que no comprenden
-		clause: Precisó
+	sentence: Precisó que no comprenden.
+		clause: Precisó .
 			subject: él/ella -> Juana
 		clause: que no comprenden
 			subject: ellos/ellas -> ellos
@@ -762,8 +762,11 @@ Me costó 10.00
     sentence: Me costó 10.00
 
 Me costó 10.00. Valió la pena.
-    sentence: Me costó 10.00
-    sentence: Valió la pena
+    sentence: Me costó 10.00.
+    sentence: Valió la pena.
 
 Salió a las 9:49hs
     sentence: Salió a las 9:49hs
+
+# Movido de od_test.csv
+La casa nunca ha sido tan codiciada antes de su venida
