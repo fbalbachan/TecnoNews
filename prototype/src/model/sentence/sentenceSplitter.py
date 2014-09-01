@@ -9,8 +9,8 @@ class SentenceSplitter:
 	def sentences_in(self, text):
 		text = text.decode("utf-8")
 		texts = [ text.strip().encode("utf-8") for text in self.split(text)]
-		clean_texts = [ self.textCleaner.clean(text) for text in texts]
-		non_empty_texts = filter(lambda text: text != '' and text != None, clean_texts)
+		#clean_texts = [ self.textCleaner.clean(text) for text in texts]
+		non_empty_texts = filter(lambda text: text != '' and text != None, texts)
 		return self.to_sentences(non_empty_texts)
 
 	# Dirty
@@ -27,11 +27,11 @@ class SentenceSplitter:
 			(not self.is_number(match)) and self.is_valid_delimiter_before_period(match.group(1))
 
 		def default_replace(text, index, match):
-			return text[index:match.end(1)]
+			return text[index:match.end(1)] + match.group(2)
 
 		texts = re.split(self.delimiters, text, re.U)
-		texts = sum([ self.split_by("(\w+)\.(?=[^\.])", text, default_replace, validator) for text in texts ], [])
-		texts = sum([ self.split_by("[!\?]+[!\? ]*", text, replace_signs) for text in texts ], [])
+		texts = sum([ self.split_by("(\w+)(\.)(?=[^\.])", text, default_replace, validator) for text in texts ], [])
+		#texts = sum([ self.split_by("[!\?]+[!\? ]*", text, replace_signs) for text in texts ], [])
 
 		return texts
 
@@ -65,5 +65,5 @@ class SentenceSplitter:
 		return [ Sentence(text) for text in texts ]
 
 	abbreviation_regex = re.compile("^(jr|mr|inc|ltd|co|ing|lic|dr|dra|arq|mag|phd|ph|prof|excmo|excma|mrs|gmbh|md|mons|cap|tte|col|lt|sgt|cnel|gral|brig|pref|prov|sr|sra|srta|dir|etc|fed)$", re.U | re.I)
-	delimiters = re.compile(ur"""\.$|\n|, ?pero\b|:\s+|, ?y\b|, ?mientras|, ?entonces|, ?aunque|, ?sin embargo\b|, ?no obstante|;|\.\.\.|, ?pues\b""", re.U|re.I)
+	delimiters = re.compile(ur"""(?=\.$)|\n|, ?pero\b|:\s+|, ?y\b|, ?mientras|, ?entonces|, ?aunque|, ?sin embargo\b|, ?no obstante|;|\.\.\.|, ?pues\b""", re.U|re.I)
 	textCleaner = TextCleaner()
