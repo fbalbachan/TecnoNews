@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from collections import deque
-from re import match, compile, IGNORECASE
+from re import match, compile, IGNORECASE, UNICODE
 
 from src.model.tokenization.token import Token
 from src.utils.stringUtils import remove_accents
@@ -22,6 +22,7 @@ class TokenizationGuesser:
         index = 0
 
         following_contraction = []
+        mismatchs = []
 
         while text:
             if not words:
@@ -45,17 +46,36 @@ class TokenizationGuesser:
                 length = len(word)
                 token.components.append((index, index + length))
                 text = text[len(word):]
+            elif self.is_pending_mismatch(word, mismatchs):
+                pass
             else:
-                whitespace = match("\s+", text)
-                if not whitespace: raise Exception("Tokenization error!")
+                match = self.whitespace_pattern.match(text)
+                if not match:
+                    match = self.mismatch_pattern.match(text)
+                    if not match: raise Exception("Tokenization error!")
+                    mismatchs.append((match.group(0), index))
+
                 words.append(word)
 
-                length = len(whitespace.group(0))
+                length = len(match.group(0))
                 text = text[length:]
 
             index += length
 
         leaf.token = token
+
+        for word, index in mismatchs:
+            token = Token()
+            token.components.append((index, index + len(word)))
+
+            leaf = leaves_it.next()
+            leaf_word = leaf.original_lexical_form.decode("utf-8")
+
+            if leaf_word != word: raise Exception("Tokenization error!")
+            leaf.token = token
+
+    def is_pending_mismatch(self, word, mismatchs):
+        return False
 
     def get_following_contraction(self, text):
         match = self.contraction_pattern.match(text)
@@ -76,3 +96,6 @@ class TokenizationGuesser:
 
     contractions = { "al" : [("a", "a"), ("el", "l")], "del" : [("de", "de"), ("el", "l")] }
     contraction_pattern = compile("al|del", IGNORECASE)
+
+    mismatch_pattern = compile("\w+|[,]", UNICODE)
+    whitespace_pattern = compile("\s+")
