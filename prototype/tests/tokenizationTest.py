@@ -36,6 +36,12 @@ class TokenizationTest(unittest.TestCase):
         # Formas léxicas compuestas
         self.kase("Leandro G. Liptak mató al Dr. Fernández", (0, 17), (18, 22), (23, 24), (24, 25), (26, 39))
 
+        # BUG de Freeling: Dislocación de "buscó," en base a "lo cual"
+        self.kase("El hombre buscó, lo cual llevó minutos", (0, 2), (3, 9), (10, 15), (15, 16), (17, 24), (25, 30), (31, 38))
+
+        # BUG de Freeling: Dislocación de la ","
+        self.kase("Destaco eso, en favor de lo cual vivo", (0, 7), (8, 11), (11, 12), (13, 24), (25, 32), (33, 37))
+
     def kase(self, text, *expected_tokens):
         print "\tCase:", text, "->",
 
