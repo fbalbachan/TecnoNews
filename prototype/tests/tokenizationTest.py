@@ -43,6 +43,10 @@ class TokenizationTest(unittest.TestCase):
         # BUG de Freeling: Dislocación de la ","
         self.kase("Destaco eso, en favor de lo cual vivo", (0, 7), (8, 11), (11, 12), (13, 24), (25, 32), (33, 37))
 
+        # Idem anterior
+        self.kase("Lloran, les molesta eso, que es mi amor.", (0, 6), (6, 7), (8, 11), (12, 19), (20, 23), (25, 28), \
+                  (29, 31), (32, 34), (35, 39), (23, 24), (39, 40))
+
     def test_compound(self):
         self.kase_compound("Dr. Leandro Liptak", (0, 3), (4, 11), (12, 18))
         self.kase_compound("Leandro G. Liptak", (0, 7), (8, 10), (11, 17))
