@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from src.model.entity.tacitEntity import TacitEntity
+from src.model.tokenization.token import Token
+
 
 class Entity (TacitEntity):
 
@@ -8,6 +10,8 @@ class Entity (TacitEntity):
         self.kernel = None
         self.father = None
         self.proper_node = None
+
+        self.token = self.build_token()
 
         TacitEntity.__init__(self, self.lexical_form(), {}, {})
 
@@ -50,11 +54,20 @@ class Entity (TacitEntity):
     def lexical_form(self):
         return " ".join([ str(leaf) for leaf in self.node.leaves() if leaf.msi["category"] != "punctuation" ])
 
+    def build_token(self):
+        token = Token()
+        token.components = [ (leaf.token.start(), leaf.token.end()) for leaf in self.node.leaves() \
+                            if leaf.lexical_form not in [","] ]
+        return token
+
     def __repr__(self):
         _repr = self.lexical_form
         if self.is_possessed(): _repr = _repr + " (of " + repr(self.owner) + ")"
         if self.is_linked(): _repr = _repr + " (" + self.referenced().lexical_form + ")"
         return _repr
+
+    def name(self):
+        return repr(self.kernel if self.kernel else self)
 
     @staticmethod
     def only_maximal(entities):

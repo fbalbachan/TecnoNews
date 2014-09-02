@@ -77,3 +77,6 @@ class TacitEntity:
         _repr = "(tacit) " + self.lexical_form
         if self.is_linked(): _repr = _repr + " (" + self.referenced().lexical_form + ")"
         return _repr
+
+    def name(self):
+        return repr(self)
