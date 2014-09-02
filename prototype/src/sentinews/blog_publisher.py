@@ -3,7 +3,7 @@
 from wordpress_xmlrpc import Client, WordPressPost
 from wordpress_xmlrpc.methods.posts import GetPosts, NewPost
 from wordpress_xmlrpc.methods.users import GetUserInfo
-from ..news_entry import NewsEntry
+from src.sentinews.news_entry import NewsEntry
 
 #Must have .../xmlrpc.php
 HOST = 'http://tecnolecto.com/blog/xmlrpc.php'

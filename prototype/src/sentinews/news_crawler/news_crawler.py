@@ -1,23 +1,36 @@
 # -*- coding: utf-8 -*-
 
 import sqlite3
-from cnn_crawler import CNNCrawler
+from src.sentinews.news_crawler.cnn_crawler import CNNCrawler
 
-connection = sqlite3.connect("news_crawler.db")
-cursor = connection.cursor()
+class NewsCrawler(object):
+  def __init__(self):
+    self.connection = sqlite3.connect("news_crawler.db")
+    self.cursor = self.connection.cursor()
+    self._cursor_start()
+    self.crawlers_by_id = { "cnn_spanish" : CNNCrawler }
 
-cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='feed_sources'")
-if not cursor.fetchall():
-    #cursor.execute("CREATE TABLE news (source_id text, url text, last_updated date, text text)")
-    cursor.execute("CREATE TABLE feed_sources (id text, url text, last_updated date)")
-    cursor.execute("INSERT INTO feed_sources VALUES ('cnn_spanish', 'http://cnnespanol.cnn.com/feed/', NULL)")
-    connection.commit()
+  def _cursor_start(self):
+    self.cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='feed_sources'")
+    if not self.cursor.fetchall():
+        self.cursor.execute("CREATE TABLE feed_sources (id text, url text, last_updated date)")
+        self.cursor.execute("INSERT INTO feed_sources VALUES ('cnn_spanish', 'http://cnnespanol.cnn.com/feed/', NULL)")
+        self.connection.commit()
+    self.cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='original_news_entries'")
+    if not self.cursor.fetchall():
+        self.cursor.execute("CREATE TABLE original_news_entries (title text, content text, url text, tags text)")
+        self.connection.commit()
+    
 
-crawlers_by_id = { "cnn_spanish" : CNNCrawler }
-
-cursor.execute("SELECT * FROM feed_sources")
-for _id, url, last_updated in  cursor.fetchall():
-    crawler = crawlers_by_id[_id](url)
-    news = crawler.crawl()
-
-connection.close()
+  def crawl_all(self):
+    self.cursor.execute("SELECT * FROM feed_sources")
+    for _id, url, last_updated in  self.cursor.fetchall():
+        crawler = self.crawlers_by_id[_id]()
+        news_entries = crawler.crawl()
+    for entry in news_entries:
+      self.cursor.execute("INSERT INTO original_news_entries VALUES ('%s', '%s', '%s', '%s')" % (entry.title, 
+                                                                                         entry.content, 
+                                                                                         entry.source, 
+                                                                                         "|".join(entry.tags)))
+    self.connection.commit()
+    self.connection.close()

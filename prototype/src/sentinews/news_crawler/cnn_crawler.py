@@ -3,22 +3,25 @@
 import feedparser
 from re import search
 
-from cnn_parser import CNNParser
+from src.sentinews.news_crawler.cnn_parser import CNNParser
+
+FEED_URL = "http://cnnespanol.cnn.com/feed/"
 
 
 class CNNCrawler:
-    def __init__(self, feed_url):
-        self.feed = feedparser.parse(feed_url)
+    def __init__(self):
+        self.feed = feedparser.parse(FEED_URL)
 
     def crawl(self):
-        parser = ClarinParser()
-        news = []
+        parser = CNNParser()
+        news_entries = []
 
         for entry in self.feed["entries"]:
-            _id = entry["id"]
-            if search("/(mundo|sociedad)/", _id):
-                text = parser.parse(entry["link"])
-                print (entry["title"], entry["id"], entry["updated"], text)
-                news.append((entry["title"], entry["id"], entry["updated"], text))
+            news_entry = parser.parse(entry["link"])
+            news_entries.append(news_entry)
 
-        return news
+        return news_entries
+
+
+
+

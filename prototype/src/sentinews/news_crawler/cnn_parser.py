@@ -1,38 +1,19 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from lxml import etree
 from re import sub
 from urllib import urlopen
 from src.sentinews.news_entry import NewsEntry
+from bs4 import BeautifulSoup
 
 
 class CNNParser:
     def parse(self, url):
-        whole_text = ""
+        soup = BeautifulSoup(urlopen(url).read())
+        top = soup.findAll('div' , { "class" : "cnnRightPost" })[0]
 
-        html = urlopen(url).read()
-        tree = etree.HTML(html)
+        title = top.find('h1').text
+        content = top.find('div').text
+        tags = top.find('span', class_ = "cnnBlogFiledBy cnn_categories").text[11:].split(u"\xa0\u2022\xa0")
 
-        nodes = tree.xpath("//div[@class='cnnRightPost']")
-
-        node = nodes[0]
-
-        content = ''
-        title = ''
-        tags = []
-
-        for child in node:
-            if child.tag == "p":
-                text = etree.tostringlist(child, encoding = "utf-8")[0]
-
-                text = sub("</?p>", "", text)
-                text = sub("(<br />)+", " ", text)
-                text = text.strip()
-
-                whole_text = whole_text + text + "\n"
-
-        whole_text = whole_text.strip()
-        
         return NewsEntry(title, content, tags, url)
-\
