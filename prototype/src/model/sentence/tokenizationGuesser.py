@@ -12,6 +12,7 @@ class TokenizationGuesser:
 
     def guess(self):
         text = self.sentence.text.decode("utf-8")
+
         leaves = self.sentence.parse_node.leaves()
 
         leaves_it = iter(leaves)
@@ -22,7 +23,7 @@ class TokenizationGuesser:
         index = self.sentence.token.start()
 
         following_contraction = []
-        mismatchs = []
+        mismatchs = deque()
 
         while text:
             if not words:
@@ -47,12 +48,15 @@ class TokenizationGuesser:
                 token.components.append((index, index + length))
                 text = text[len(word):]
             elif self.is_pending_mismatch(word, mismatchs):
-                pass
+                mismatch, mismatch_index = mismatchs.popleft()
+                token.components.append((mismatch_index, mismatch_index + len(mismatch)))
+                length = 0
             else:
                 match = self.whitespace_pattern.match(text)
                 if not match:
                     match = self.mismatch_pattern.match(text)
-                    if not match: raise Exception("Tokenization error!")
+                    if not match:
+                        raise Exception("Tokenization error!")
                     mismatchs.append((match.group(0), index))
 
                 words.append(word)
@@ -75,7 +79,8 @@ class TokenizationGuesser:
             leaf.token = token
 
     def is_pending_mismatch(self, word, mismatchs):
-        return False
+        if not mismatchs: return False
+        return mismatchs[0][0] == word
 
     def get_following_contraction(self, text):
         match = self.contraction_pattern.match(text)
