@@ -19,7 +19,7 @@ class TokenizationGuesser:
         token = None
         words = []
 
-        index = 0
+        index = self.sentence.token.start()
 
         following_contraction = []
         mismatchs = []
