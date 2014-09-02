@@ -74,8 +74,6 @@ class SentenceSplitter:
 
 			sentence.token = token
 
-			print token
-
 		return sentences
 
 	abbreviation_regex = re.compile("^(jr|mr|inc|ltd|co|ing|lic|dr|dra|arq|mag|phd|ph|prof|excmo|excma|mrs|gmbh|md|mons|cap|tte|col|lt|sgt|cnel|gral|brig|pref|prov|sr|sra|srta|dir|etc|fed)$", re.U | re.I)
