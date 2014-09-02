@@ -53,5 +53,5 @@ class ParagraphEntityTagger:
 
         tagged_text += text[index:]
 
-        print tagged_text
+        tagged_text = tagged_text.replace("\n", "<br>")
         return (tagged_text, tag_mapping)
