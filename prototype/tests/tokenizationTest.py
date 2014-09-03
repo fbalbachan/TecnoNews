@@ -3,6 +3,8 @@
 
 import unittest
 
+from src.model.paragraph.paragraph import Paragraph
+from src.model.paragraph.paragraphAnalyzer import ParagraphAnalyzer
 from src.model.sentence.sentence import Sentence
 from src.model.sentence.sentenceAnalyzer import SentenceAnalyzer
 from tests.freelingTreeRepository import FreelingTreeRepository
@@ -14,8 +16,9 @@ class TokenizationTest(unittest.TestCase):
         print "[Tokenization test]"
 
         self.sentenceAnalyzer = SentenceAnalyzer(FreelingTreeRepository("tests/input/trees"))
+        self.paragraphAnalyzer = ParagraphAnalyzer(self.sentenceAnalyzer)
 
-    def test(self):
+    def test_single(self):
         self.kase("Leandro", (0, 7))
         self.kase("Leandro murió", (0, 7), (8, 13))
 
@@ -53,6 +56,23 @@ class TokenizationTest(unittest.TestCase):
         self.kase_compound("lo cual", (0, 2), (3, 7))
         self.kase_compound("en favor de", (0, 2), (3, 8), (9, 11))
 
+    def test_paragraph(self):
+        self.kase_paragraph("Leandro amó. María también. Leandro amó.", [[(0, 7), (8, 11), (11, 12)],
+                                                                         [(13, 18), (19, 26), (26, 27)],
+                                                                         [(28, 35), (36, 39), (39, 40)]])
+
+        self.kase_paragraph("Leandro amó, pero María odió.", [[(0, 7), (8, 11)],
+                                                              [(18, 23), (24, 28), (28, 29)] ])
+
+    def kase_paragraph(self, text, expected):
+        paragraph = Paragraph.from_text(text)
+        self.paragraphAnalyzer.analyze(paragraph)
+        sentences = paragraph.sentences
+
+        self.assertEqual(len(expected), len(sentences))
+        for sentence, expected_components in zip(sentences, expected):
+            self.kase_(sentence, *expected_components)
+
     def kase_compound(self, text, *expected_components):
         print "\tCase (compound):", text, "->",
 
@@ -67,14 +87,13 @@ class TokenizationTest(unittest.TestCase):
         self.assertEqual(list(expected_components), token.components)
 
     def kase(self, text, *expected_tokens):
-        print "\tCase:", text, "->",
-
         sentence = Sentence(text)
         self.sentenceAnalyzer.analyze(sentence)
+        self.kase_(sentence, *expected_tokens)
 
+    def kase_(self, sentence, *expected_tokens):
         actual_tokens = [ (leaf.token.start(), leaf.token.end()) for leaf in sentence.parse_node.leaves() ]
-        print actual_tokens
-
+        print "\tCase:", sentence.text, "->", actual_tokens
         self.assertEqual(actual_tokens, list(expected_tokens))
 
 if __name__ == '__main__':
