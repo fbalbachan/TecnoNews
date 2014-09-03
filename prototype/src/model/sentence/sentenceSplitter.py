@@ -65,14 +65,21 @@ class SentenceSplitter:
 	def to_sentences(self, texts, source):
 		sentences = [ Sentence(text) for text in texts ]
 
+		end = 0
+
 		for sentence in sentences:
 			sentence_text = sentence.text.decode("utf-8")
 			index = source.index(sentence_text)
+			source = source[index + len(sentence_text):]
+
+			index += end
 
 			token = Token()
 			token.append(index, index + len(sentence_text))
 
 			sentence.token = token
+
+			end = token.end()
 
 		return sentences
 
