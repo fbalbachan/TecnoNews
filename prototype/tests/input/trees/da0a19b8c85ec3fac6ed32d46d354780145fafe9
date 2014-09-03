@@ -1,0 +1,92 @@
++grup-verb_[
+  +verb_[
+    +(Desmintieron desmentir VMIS3P0 -)
+  ]
+  sn_[
+    espec-ms_[
+      +j-ms_[
+        +(el el DA0MS0 -)
+      ]
+    ]
+    +grup-nom-ms_[
+      +n-ms_[
+        +(rumor rumor NCMS000 -)
+      ]
+    ]
+    subord-rel_[
+      prel_[
+        +(que que PR0CN000 -)
+      ]
+      +verb-pass_[
+        vaux_[
+          +(había haber VAII3S0 -)
+        ]
+        parti-ser_[
+          +(sido ser VSP00SM -)
+        ]
+        +parti-flex_[
+          +parti-ms_[
+            +(difundido difundir VMP00SM -)
+          ]
+        ]
+        grup-sp_[
+          +prep_[
+            +(por por SPS00 -)
+          ]
+          sn_[
+            espec-ms_[
+              +j-ms_[
+                +(el el DA0MS0 -)
+              ]
+            ]
+            +grup-nom-ms_[
+              +n-ms_[
+                +(diario diario NCMS000 -)
+              ]
+              w-ms_[
+                +(Clarín clarín NP00O00 -)
+              ]
+            ]
+          ]
+        ]
+      ]
+    ]
+  ]
+  prep_[
+    +(acerca_de acerca_de SPS00 -)
+  ]
+  subord_[
+    +(que que CS -)
+    grup-verb_[
+      sn_[
+        +grup-nom-ms_[
+          +w-ms_[
+            +(Telefónica telefónica NP00O00 -)
+          ]
+        ]
+      ]
+      +verb_[
+        vaux_[
+          +(ha haber VAIP3S0 -)
+        ]
+        +parti_[
+          +(mejorado mejorar VMP00SM -)
+        ]
+      ]
+      sn_[
+        espec-ms_[
+          +j-ms_[
+            +(el el DA0MS0 -)
+          ]
+        ]
+        +grup-nom-ms_[
+          +n-ms_[
+            +(servicio servicio NCMS000 -)
+          ]
+        ]
+      ]
+    ]
+  ]
+]
+
+
