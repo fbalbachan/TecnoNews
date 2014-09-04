@@ -50,6 +50,10 @@ class TokenizationTest(unittest.TestCase):
         self.kase("Lloran, les molesta eso, que es mi amor.", (0, 6), (6, 7), (8, 11), (12, 19), (20, 23), (25, 28), \
                   (29, 31), (32, 34), (35, 39), (23, 24), (39, 40))
 
+        self.kase('"Hola"', (0, 1), (1, 5), (5, 6))
+        self.kase('«Hola»', (0, 1), (1, 5), (5, 6))
+        self.kase('“Sótano”', (0, 1), (1, 7), (7, 8))
+
     def test_compound(self):
         self.kase_compound("Dr. Leandro Liptak", (0, 3), (4, 11), (12, 18))
         self.kase_compound("Leandro G. Liptak", (0, 7), (8, 10), (11, 17))
