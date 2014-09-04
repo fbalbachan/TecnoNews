@@ -8,17 +8,17 @@ class EntityMSISeer:
 
     def msi_of_single(self, entity):
         node = entity.node
+
         banned_labels = ["grup-sp", "sp-de"]
         banned_nodes = set(filter(lambda child: not child.is_leaf() and child.label in banned_labels, node.children))
 
-        nouns = node.leaves_of_category("noun") + node.leaves_of_category("number")
+        nouns = self.filter_banned(node.leaves_of_category("noun") + node.leaves_of_category("number"), banned_nodes)
         if self.has_unexchangeable_appositional_relationship(nouns):
             entity.attributes["class"] = [ nouns[0].lexical_form ]
             nouns = [ nouns[1] ]
 
-        useful_leaves = nouns + node.leaves_of_category("pronoun") + node.leaves_of_category("determinant") \
-            + node.leaves_of_category("adjective")
-        useful_leaves = filter(lambda leaf: not banned_nodes & set(leaf.path_to_root()), useful_leaves)
+        other_leaves = node.leaves_of_category("pronoun", "determinant", "adjective")
+        useful_leaves = nouns + self.filter_banned(other_leaves, banned_nodes)
 
         useful_leaves.reverse()
         entity.kernel = useful_leaves.pop()
@@ -35,6 +35,9 @@ class EntityMSISeer:
         self.disambiguate_if_necessary(msi, useful_leaves)
 
         return msi
+
+    def filter_banned(self, leaves, banned_nodes):
+        return filter(lambda leaf: not banned_nodes & set(leaf.path_to_root()), leaves)
 
     def has_unexchangeable_appositional_relationship(self, kernel_nouns):
         return [ noun.msi["type"] if "type" in noun.msi else None for noun in kernel_nouns ] == [ "common", "proper" ]
