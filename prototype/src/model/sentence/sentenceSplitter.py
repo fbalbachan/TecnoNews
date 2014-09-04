@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import re
 
-from src.model.sentence.sentence import *
+from src.model.sentence.sentence import Sentence
 from src.model.tokenization.token import Token
 from src.utils.textCleaner import TextCleaner
 
@@ -9,10 +9,14 @@ from src.utils.textCleaner import TextCleaner
 class SentenceSplitter:
 	def sentences_in(self, text):
 		text = text.decode("utf-8")
+		text = self.replace_strange_chars(text)
+
 		texts = [ each.strip().encode("utf-8") for each in self.split(text)]
-		#clean_texts = [ self.textCleaner.clean(text) for text in texts]
 		non_empty_texts = filter(lambda text: text != '' and text != None, texts)
 		return self.to_sentences(non_empty_texts, text)
+
+	def replace_strange_chars(self, text):
+		return text.replace(u"“", '"').replace(u"”", '"')
 
 	# Dirty
 	def split(self, text):
