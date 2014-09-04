@@ -1,0 +1,65 @@
++verb-pass_[
+  grup-sp_[
+    +prep_[
+      +(A a SPS00 -)
+    ]
+    sn_[
+      espec-ms_[
+        +dem-ms_[
+          +(ese ese DD0MS0 -)
+        ]
+      ]
+      +grup-nom-ms_[
+        +n-ms_[
+          +(sector sector NCMS000 -)
+        ]
+      ]
+    ]
+  ]
+  vser_[
+    +(fue ser VSIS3S0 -)
+  ]
+  +parti-flex_[
+    +parti-fs_[
+      +(llevada llevar VMP00SF -)
+    ]
+  ]
+  grup-sp-inf_[
+    +prep_[
+      +(luego_de luego_de SPS00 -)
+    ]
+    grup-verb-inf_[
+      +infinitiu_[
+        +inf_[
+          +forma-inf_[
+            +(permanecer permanecer VMN0000 -)
+          ]
+        ]
+      ]
+      grup-sp_[
+        +prep_[
+          +(en en SPS00 -)
+        ]
+        sn_[
+          espec-ms_[
+            +j-ms_[
+              +(el el DA0MS0 -)
+            ]
+          ]
+          (" " Fe -)
+          +grup-nom-ms_[
+            +w-ms_[
+              +(Sótano sótano NP00V00 -)
+            ]
+          ]
+          (" " Fe -)
+        ]
+      ]
+    ]
+  ]
+  F-term_[
+    +(. . Fp -)
+  ]
+]
+
+
