@@ -8,6 +8,7 @@ class FreelingClientParser:
 
 	def get_client_output_for(self, text):
 		if type(text) != str: raise Exception("Solo se acepta unicode codificado a string.")
+		text = text.replace('"', '\\"')
 
 		config = self.config
 		command = 'echo "%s" | ' + config["client"] + ' ' + config["host"] + ':' + config["parser_port"]
