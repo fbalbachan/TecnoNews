@@ -57,6 +57,7 @@ class TokenizationGuesser:
                     match = self.mismatch_pattern.match(text)
                     if not match:
                         raise Exception("Tokenization error!")
+
                     mismatchs.append((match.group(0), index))
 
                 words.append(word)
@@ -102,5 +103,6 @@ class TokenizationGuesser:
     contractions = { "al" : [("a", "a"), ("el", "l")], "del" : [("de", "de"), ("el", "l")] }
     contraction_pattern = compile("al|del", IGNORECASE)
 
-    mismatch_pattern = compile("\w+|[,]", UNICODE)
+    #mismatch_pattern = compile("\w+|[,]", UNICODE)
+    mismatch_pattern = compile('[",]', UNICODE)
     whitespace_pattern = compile("\s+")

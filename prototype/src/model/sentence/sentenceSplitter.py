@@ -35,7 +35,7 @@ class SentenceSplitter:
 			return text[index:match.end(1)] + match.group(2)
 
 		texts = re.split(self.delimiters, text, re.U)
-		texts = sum([ self.split_by("(\w+)(\.)(?=[^\.])", text, default_replace, validator) for text in texts ], [])
+		texts = sum([ self.split_by("(\w+|[^A-Za-z0-9])(\.)(?=[^\.])", text, default_replace, validator) for text in texts ], [])
 		#texts = sum([ self.split_by("[!\?]+[!\? ]*", text, replace_signs) for text in texts ], [])
 
 		return texts
