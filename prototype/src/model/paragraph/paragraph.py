@@ -2,8 +2,9 @@
 from src.model.sentence.sentenceSplitter import SentenceSplitter
 
 class Paragraph:
-    def __init__(self, sentences = []):
+    def __init__(self, sentences = [], text = ""):
         self.sentences = sentences
+        self.text = text
 
     def clauses(self):
         return sum([ sentence.clauses for sentence in self.sentences ], [])
@@ -27,4 +28,4 @@ class Paragraph:
     @staticmethod
     def from_text(text):
         sentences = SentenceSplitter().sentences_in(text)
-        return Paragraph(sentences)
+        return Paragraph(sentences, text)
