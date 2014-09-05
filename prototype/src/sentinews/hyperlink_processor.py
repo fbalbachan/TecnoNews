@@ -30,8 +30,9 @@ class HyperlinkProcessor(object):
         ''' Get all hyperlinks, format to html and add to text. 
 
             Returns: a String with the text.'''
-        links = self._get_all_links()
-        return self._add_links_to_text(links)
+        self._fetch_all_links()
+        print self.links
+        return self._add_links_to_text()
 
     def _get_entities_from(self, paragraph):
         ''' Filter entities, keeping only the ones that have "classification" '''
@@ -44,7 +45,7 @@ class HyperlinkProcessor(object):
                 added_references.append(x.referent.name())
         return references
 
-    def _get_all_links(self):
+    def _fetch_all_links(self):
         ''' Search links in: LinkedIn, GMaps, Wikipedia and organization webpage.
             Returns: a list with all the hyperlinks. '''
         self.links += self._get_linkedIn_links()
@@ -52,8 +53,6 @@ class HyperlinkProcessor(object):
         self.links += self._get_web_page_links()
         self.links += self._get_other_links()
         self.links += self._get_wikipedia_links()
-
-        return links
 
     def _get_linkedIn_links(self):
         links = []
@@ -110,7 +109,8 @@ class HyperlinkProcessor(object):
                 links.append(WIKI_BASE_URL + encoded_result)
         return links
 
-    def _add_links_to_text(self, links):
+    def _add_links_to_text(self):
+        import pudb;pu.db
         return ""
 
     def _google_search(self, searchfor):

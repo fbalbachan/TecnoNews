@@ -21,7 +21,13 @@ class TestCrawler(unittest.TestCase):
     # 	CNNCrawler().crawl()
 
     def test(self):
-      NewsCrawler().crawl_all()
+      from src.sentinews.news_rewriter import NewsRewriter
+
+      url = ("http://cnnespanol.cnn.com/2014/09/04/ryder-cup-stephen-gallacher-ian-poulter-y-lee-westwood-los-comodines-del-torneo/")
+      parsed_entry = CNNParser().parse(url)
+      c = NewsRewriter(parsed_entry)
+      c.rewrite()
+      c.publish()
 
 if __name__ == '__main__':
     unittest.main()
