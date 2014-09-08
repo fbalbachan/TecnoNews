@@ -37,3 +37,11 @@ Telefónica fundió. Telefónica S.A. cerró. Los inversores fundieron a Telefó
         reference: Telefónica
         reference: Telefónica_S.A.
         reference: Telefónica_S.R.L.
+
+# Bug de clausulación que impactaba en referentes (también está en context.txt)
+Desmintieron el rumor que había sido difundido por el diario Clarín acerca de que Telefónica ha mejorado el servicio
+    referent: Clarín
+        count: ref_count = 1
+        reference: el diario Clarín
+    referent: el rumor
+        count: ref_count = 1

@@ -1,0 +1,31 @@
++grup-verb_[
+  sn_[
+    +grup-nom-ms_[
+      +w-ms_[
+        +(Leandro_G._Liptak leandro_g._liptak NP00SP0 -)
+      ]
+    ]
+  ]
+  +verb_[
+    +(mató matar VMIS3S0 -)
+  ]
+  grup-sp_[
+    +prep_[
+      +(a a SPS00 -)
+    ]
+    sn_[
+      espec-ms_[
+        +j-ms_[
+          +(el el DA0MS0 -)
+        ]
+      ]
+      +grup-nom-ms_[
+        +w-ms_[
+          +(Dr._Fernández dr._fernández NP00O00 -)
+        ]
+      ]
+    ]
+  ]
+]
+
+

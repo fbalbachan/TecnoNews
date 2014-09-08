@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from src.model.output.paragraphEntityTagger import ParagraphEntityTagger
 from src.model.paragraph.paragraph import Paragraph
 from src.model.paragraph.paragraphAnalyzer import ParagraphAnalyzer
 from src.model.referent.entityUnifier import EntityUnifier
@@ -22,5 +23,9 @@ class Sentilecto:
 
         EntityUnifier(paragraph).unify()
         analysis["referent_scoring"] = ReferentSentimentalScorer(paragraph).score()
+
+        tagged_text, tag_mapping = ParagraphEntityTagger().tag(text, paragraph)
+        analysis["tagged_text"] = tagged_text
+        analysis["tag_mapping"] = tag_mapping
 
         return analysis

@@ -1,0 +1,53 @@
++grup-verb_[
+  +verb_[
+    +(Lloran llorar VMIP3P0 -)
+  ]
+  Fc_[
+    +(, , Fc -)
+  ]
+  grup-verb_[
+    patons_[
+      +paton-p_[
+        +(les le PP3CPD00 -)
+      ]
+    ]
+    +verb_[
+      +(molesta molestar VMIP3S0 -)
+    ]
+    sn_[
+      +pron-ms_[
+        +pdem-ms_[
+          +(eso ese PD0NS000 -)
+        ]
+      ]
+      subord-rel_[
+        +(que que PR0CN000 -)
+        grup-verb_[
+          +verb_[
+            +(es ser VSIP3S0 -)
+          ]
+          sn_[
+            espec-ms_[
+              +pos-ms_[
+                +(mi mi DP1CSS -)
+              ]
+            ]
+            +grup-nom-ms_[
+              +n-ms_[
+                +(amor amor NCMS000 -)
+              ]
+            ]
+          ]
+        ]
+      ]
+    ]
+    Fc_[
+      +(, , Fc -)
+    ]
+    F-term_[
+      +(. . Fp -)
+    ]
+  ]
+]
+
+

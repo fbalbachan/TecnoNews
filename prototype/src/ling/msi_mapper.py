@@ -1,6 +1,4 @@
-#!/usr/bin/env python
 #-*- coding: utf-8 -*-
-import re, sys, json
 from src.ling.msi_data import *
 
 default_msi = {"person": 3, "number": u"singular", "gender": u"neutral"}
@@ -16,6 +14,8 @@ def tag2fullmsi(tag):
         for (position, letter) in zip([1,2,3,45,6], [tag[1], tag[2], tag[3], tag[4:6], tag[6]]):
             attribute, values = attributes[position]
             result[attribute] = values[letter]
+    elif category == "F":
+        result["type"] = attributes[tag[1:]]
     else:
         for (position, letter) in enumerate(tag[1:], 1):
             attribute, values = attributes[position]     # ("function", {"0": None, "P": u"participio"})
@@ -41,9 +41,3 @@ def msi_concordance(subject, verb):
     """Structure -> boolean"""
     # print "msi_concordance", subject, subject.label, subject.position, subject.msi, verb, verb.position, verb.msi
     return (subject.msi['person'] == verb.msi['person']) and (subject.msi['number'] == verb.msi['number'])
-
-if __name__ == '__main__':
-    try:
-        print(tag2fullmsi(sys.argv[1]))
-        print(msi(tag2fullmsi(sys.argv[1])))
-    except IndexError: print "please provide a tag, e.g.: ./msi_mapper.py AQ0MS0"

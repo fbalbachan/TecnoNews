@@ -1,0 +1,37 @@
++grup-verb_[
+  sn_[
+    +pron-mp_[
+      +pindef-mp_[
+        +(Muchos mucho PI0MP000 -)
+      ]
+    ]
+  ]
+  +verb_[
+    +(criticaron criticar VMIS3P0 -)
+  ]
+  grup-sp_[
+    +prep_[
+      +(a a SPS00 -)
+    ]
+    sn_[
+      espec-fs_[
+        +j-fs_[
+          +(la el DA0FS0 -)
+        ]
+      ]
+      +grup-nom-fs_[
+        +n-fs_[
+          +(compañía compañía NCFS000 -)
+        ]
+        w-fs_[
+          +(Adidas adidas NP00O00 -)
+        ]
+      ]
+    ]
+  ]
+  F-term_[
+    +(. . Fp -)
+  ]
+]
+
+

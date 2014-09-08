@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from src.model.clause.clause import *
+from src.model.clause.clause import Clause
 from src.parser.parseNode import ParseNode
 
 
@@ -9,23 +9,20 @@ class ClauseExtractor:
     def extract_from(self, sentence):
         root = sentence.parse_node
         potential_clause_roots = set(root.nodes_with_labels(self.CLAUSE_SEPARATORS))
-        clause_roots = self.filter_invalid_subordinated_clauses(potential_clause_roots) + [root]
-
+        clause_roots = set(self.filter_invalid_subordinated_clauses(potential_clause_roots) + [root])
         roots_by_level = ParseNode.by_level(clause_roots)
 
-        level_parents = set()
         clauses_by_node = {}
-        for level, nodes in sorted(roots_by_level.items()):
+        for level, nodes in sorted(roots_by_level.items()):  # @UnusedVariable
             for node in nodes:
                 clause = Clause(node)
                 clauses_by_node[node] = clause
-                parents = filter(lambda node: node in level_parents, node.path_to_root())
+                parents = filter(lambda node: node in clauses_by_node, node.path_to_root())
                 if parents:
                     parent = parents[0]
                     father_clause = clauses_by_node[parent]
                     clause.set_father(father_clause)
                     father_clause.add_child(clause)
-            level_parents = set(nodes)
 
         clauses = clauses_by_node.values()
         self.compute_proper_tree_for(clauses)

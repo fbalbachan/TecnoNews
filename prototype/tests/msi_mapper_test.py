@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
+import json
 import unittest
-from src.ling.msi_mapper import *
+
+from src.ling.msi_mapper import tag2fullmsi, msi
+
 
 class TestMSIMapper(unittest.TestCase):
 

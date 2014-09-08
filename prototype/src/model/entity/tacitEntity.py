@@ -26,6 +26,12 @@ class TacitEntity:
             self.coref_chain.extend(referenced.coref_chain)
 
         self.update_referent(self.referenced().referent)
+        self.update_msi()
+
+    def update_msi(self):
+        msi = self.msi
+        referenced_msi = self.referenced().msi
+        if msi["gender"] == "neutral": msi["gender"] = referenced_msi["gender"]
 
     def update_referent(self, referent):
         self.referent = referent
@@ -78,3 +84,6 @@ class TacitEntity:
         _repr = ("(implicit)" if self.has_attr("implicit") else "(tacit)") + " " + self.lexical_form
         if self.is_linked(): _repr = _repr + " (" + self.referenced().lexical_form + ")"
         return _repr
+
+    def name(self):
+        return repr(self)

@@ -108,8 +108,7 @@ class EntiNews_request:
 				else:
 					printer = WebOutputUtils()
 					if "fact_extraction" in web_input:
-						paragraph = analysis["paragraph"]
-						return web.template.render().facts(web_input.text, paragraph, printer)
+						return web.template.render().facts(analysis, printer)
 					else:
 						return web.template.render().entinews(analysis, printer)
 		web.redirect("/")

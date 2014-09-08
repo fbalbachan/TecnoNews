@@ -1,9 +1,14 @@
 # -*- coding: utf-8 -*-
+from src.model.tokenization.token import Token
+
 
 class Sentence(object):
 
     def __init__(self, text):
         self.text = text
+
+        self.token = self.build_token()
+
         self.parse_node = None
         self.clauses = []
 
@@ -19,3 +24,8 @@ class Sentence(object):
 
     def __repr__(self):
         return self.text
+
+    def build_token(self):
+        token = Token()
+        token.append(0, len(self.text))
+        return token

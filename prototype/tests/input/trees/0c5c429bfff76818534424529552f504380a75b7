@@ -1,0 +1,30 @@
++grup-verb_[
+  sn_[
+    +grup-nom-ms_[
+      +w-ms_[
+        +(Fernando fernando NP00SP0 -)
+      ]
+    ]
+  ]
+  +verb_[
+    +(dijo decir VMIS3S0 -)
+  ]
+  subord_[
+    +(que que CS -)
+    grup-verb_[
+      patons_[
+        +paton-ms_[
+          +(lo lo PP3MSA00 -)
+        ]
+      ]
+      +verb_[
+        +(mató matar VMIS3S0 -)
+      ]
+    ]
+  ]
+  F-term_[
+    +(. . Fp -)
+  ]
+]
+
+

@@ -83,3 +83,7 @@ class WebOutputUtils:
 
     def tree_icon(self, referent):
         return "static/icon/%s.png" % referent.semantic_classification().lower()
+
+    def e_tag_list(self, referent, name, tag_mapping):
+        existing_references = [ reference for reference in referent.references_with(name) if reference in tag_mapping ]
+        return ",".join([ tag_mapping[reference] for reference in existing_references ])

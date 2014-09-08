@@ -1,5 +1,5 @@
 #-*- coding: utf-8 -*-
-from src.utils.treeNode import TreeNode
+from src.utils.tree.treeNode import TreeNode
 
 
 class Clause(TreeNode):
