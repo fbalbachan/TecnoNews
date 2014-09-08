@@ -15,7 +15,7 @@ class NewsRewriter(object):
     def __init__(self, original_entry):
         self.original_entry = original_entry
         self.rewritten_entry = NewsEntry(original_entry.title,
-                                         "",
+                                         original_entry.content,
                                          original_entry.tags,
                                          self.original_entry.source)
     

@@ -27,6 +27,7 @@ class Paragraph:
 
     @staticmethod
     def from_text(text):
-        self.text = text
         sentences = SentenceSplitter().sentences_in(text)
-        return Paragraph(sentences)
+        paragraph = Paragraph(sentences)
+        paragraph.text = text
+        return paragraph

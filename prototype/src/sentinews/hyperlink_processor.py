@@ -4,6 +4,7 @@ import urllib
 import json
 import urllib
 from collections import defaultdict
+from src.model.output.paragraphEntityTagger import ParagraphEntityTagger
 
 WIKI_BASE_URL = 'http://es.wikipedia.org/wiki/'
 LINKEDIN_GQUERY = 'site:linkedin.com '
@@ -60,6 +61,7 @@ class HyperlinkProcessor(object):
                     person = " ".join(entity.attributes['names']) + " " + " ".join(entity.attributes['surnames'])
                     self.links_by_entity[entity].append(self._google_search(LINKEDIN_GQUERY + person))
 
+
     def _get_gMaps_links(self):
         for entity in self.entities:
             if entity.classification() == 'place':
@@ -101,12 +103,24 @@ class HyperlinkProcessor(object):
                 self.links_by_entity[entity].append(WIKI_BASE_URL + encoded_result)
 
     def _add_links_to_text(self):
-        import pudb;pu.db
-        return ""
+        attrib_by_entity = {}
+        for entity in self.links_by_entity:
+            attrib_by_entity[entity] = {'href': self.links_by_entity[entity][0],
+                                        'target':'_blank'}
+        tagger = ParagraphEntityTagger()
+        (tagged_text, tag_mapping) = tagger.tag_with_entities(self.paragraph.text, 
+                                                              self.entities, 
+                                                              'a',
+                                                              attrib_by_entity)
+
+        return tagged_text
 
     def _google_search(self, searchfor):
         query = urllib.urlencode({'q': searchfor})
         url = 'http://ajax.googleapis.com/ajax/services/search/web?v=1.0&%s' % query
         search_results = urllib.urlopen(url).read()
-        return json.loads(search_results)['responseData']['results'][0]['url']
+        try:
+            return json.loads(search_results)['responseData']['results'][0]['url']
+        except Exception:
+            return ''
 

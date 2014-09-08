@@ -5,24 +5,13 @@ from src.model.entity.entity import Entity
 
 
 class ParagraphEntityTagger:
-    def tag(self, text, paragraph):
-        text = text.decode("utf-8")
-
+    def tag_with_entities(self, text, entities, tag_name, attrib_by_entity = {}):
         tag_mapping = {}
-        entities = [ entity for entity in set(paragraph.entities()) if not entity.is_tacit() ]
-        entities = Entity.only_maximal(entities)
-        entities.sort(key = lambda entity: entity.token.start())
-
         entities = deque(entities)
         close_tag_deque = deque()
-
-        #for entity in entities:
-        #    print entity, entity.token, entity.proper_node.leaves()
-
         tagged_text = ""
         entity_id = 0
         index = 0
-
         while entities:
             entity = entities.popleft()
 
@@ -38,20 +27,35 @@ class ParagraphEntityTagger:
             entity_text = text[start:end]
 
             tagged_text += text[index:start]
-            tagged_text += "<span id='e_" + str(entity_id) + "'>" + entity_text
-            if not entity.children: tagged_text += "</span>"
+            tagged_text += "<%s id='e_%s'" %(tag_name, str(entity_id)) 
+            if entity in attrib_by_entity:
+                for attrib in attrib_by_entity[entity]:
+                    tagged_text += " %s=%s" % (attrib, attrib_by_entity[entity][attrib].encode('ascii'))
+            tagged_text += ">%s" % entity_text
+            if not entity.children: 
+                tagged_text += "</%s>" % (tag_name)
 
-            tag_mapping[entity] = "e_" + str(entity_id)
+            tag_mapping[entity] = "e_%s" % (str(entity_id))
 
             index = end
             entity_id += 1
 
             if close_tag_deque and close_tag_deque[0][0] == entity:
                 pending_end = close_tag_deque.popleft()[1]
-                tagged_text += text[index:pending_end] + "</span>"
+                tagged_text += text[index:pending_end] + "</%s>" % (tag_name)
                 index = pending_end
 
         tagged_text += text[index:]
 
         tagged_text = tagged_text.replace("\n", "<br>")
         return (tagged_text, tag_mapping)
+
+
+    def tag_all(self, paragraph, tag_name):
+        text = paragraph.text.decode("utf-8")
+
+        entities = [ entity for entity in set(paragraph.entities()) if not entity.is_tacit() ]
+        entities = Entity.only_maximal(entities)
+        entities.sort(key = lambda entity: entity.token.start())
+        
+        return self.tag_with_entities(text, entities, tag_name)

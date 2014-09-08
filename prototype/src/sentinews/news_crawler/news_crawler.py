@@ -37,6 +37,8 @@ class NewsCrawler(object):
                                                                                      entry.content, 
                                                                                      entry.source,
                                                                                      "|".join(entry.tags)))
-           
+
     self.connection.commit()
     self.connection.close()
+
+    return news_entries
