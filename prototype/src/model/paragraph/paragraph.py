@@ -3,6 +3,7 @@ from src.model.sentence.sentenceSplitter import SentenceSplitter
 
 class Paragraph:
     def __init__(self, sentences = []):
+        self.text = None
         self.sentences = sentences
 
     def clauses(self):
@@ -26,5 +27,6 @@ class Paragraph:
 
     @staticmethod
     def from_text(text):
+        self.text = text
         sentences = SentenceSplitter().sentences_in(text)
         return Paragraph(sentences)

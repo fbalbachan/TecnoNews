@@ -37,7 +37,7 @@ class TestHyperLinkProcessor(unittest.TestCase):
         self.assertEquals(sorted(references), sorted(list(set(references))))
 
     def test__get_gMaps_links(self):
-        links = self.processor._get_gMaps_links()
+        self.processor._get_gMaps_links()
         # print links
         expected = ['https://maps.google.com/maps?q=calle%20Florida', 
                     'https://maps.google.com/maps?q=Sevilla', 
@@ -45,7 +45,7 @@ class TestHyperLinkProcessor(unittest.TestCase):
                     'https://maps.google.com/maps?q=Cordoba', 
                     'https://maps.google.com/maps?q=Buenos_Aires']
         for x in expected:
-            self.assertIn(x, links)
+            self.assertIn(x, self._get_links_from_processor())
 
     def test__get_wikipedia_links(self):
         links = self.processor._get_wikipedia_links()
@@ -55,21 +55,27 @@ class TestHyperLinkProcessor(unittest.TestCase):
                     'http://es.wikipedia.org/wiki/Thomas%20P.%20Griesa',
                     'http://es.wikipedia.org/wiki/Adidas']
         for x in expected:
-            self.assertIn(x, links)
+            self.assertIn(x, self._get_links_from_processor())
 
     def test__get_other_links(self):
         links = self.processor._get_other_links()
         # print links
         expected = ['https://www.google.com.ar/search?q=ONG+Hinchadas+Unidas+Argentinas']
         for x in expected:
-            self.assertIn(x, links)
+            self.assertIn(x, self._get_links_from_processor())
+
+    def _get_links_from_processor(self):
+        res = []
+        for links in self.processor.links_by_entity.values():
+            res += links 
+        return res
 
     # Comentado para no hacer tantas searchs en Google            
     # def test__get_linkedIn_links(self):
     #     links = self.processor._get_linkedIn_<links()
     #     expected = [u'http://ar.linkedin.com/pub/leandro-liptak/95/36b/19b']
     #     for x in expected:
-    #         self.assertIn(x, links)
+    #         self.assertIn(x, self._get_links_from_processor())
 
 if __name__ == '__main__':
     unittest.main()
