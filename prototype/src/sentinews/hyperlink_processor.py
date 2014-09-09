@@ -108,8 +108,9 @@ class HyperlinkProcessor(object):
             attrib_by_entity[entity] = {'href': self.links_by_entity[entity][0],
                                         'target':'_blank'}
         tagger = ParagraphEntityTagger()
+        entities = [entity for  entity in self.entities if entity in attrib_by_entity]
         (tagged_text, tag_mapping) = tagger.tag_with_main_entities(self.paragraph.text, 
-                                                                   self.entities, 
+                                                                   entities, 
                                                                    'a',
                                                                    attrib_by_entity)
 
