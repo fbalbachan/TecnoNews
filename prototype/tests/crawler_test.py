@@ -20,20 +20,5 @@ class TestCrawler(unittest.TestCase):
     # def testCrawler(self):
     # 	CNNCrawler().crawl()
 
-    def test(self):
-      from src.sentinews.news_rewriter import NewsRewriter
-      # entries =  NewsCrawler().crawl_all()
-      # print 'entries', len(entries)
-      url = ("http://cnnespanol.cnn.com/2014/08/31/"
-       "tres-estudiantes-chilenos-crean-la-primera-bicicleta-imposible-de-robar/")
-      parsed_entry = CNNParser().parse(url)
-      for entry in [parsed_entry]:
-        try:
-          c = NewsRewriter(entry)
-          c.rewrite()
-          c.publish()
-        except Exception, e:
-          print str(e)
-          continue
 if __name__ == '__main__':
     unittest.main()

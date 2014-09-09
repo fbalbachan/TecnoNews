@@ -51,7 +51,7 @@ class HyperlinkProcessor(object):
         self._get_linkedIn_links()
         self._get_gMaps_links()
         self._get_web_page_links()
-        self._get_other_links()
+        #self._get_other_links()
         self._get_wikipedia_links()
 
     def _get_linkedIn_links(self):
