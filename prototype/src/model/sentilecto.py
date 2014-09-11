@@ -24,8 +24,7 @@ class Sentilecto:
         EntityUnifier(paragraph).unify()
         analysis["referent_scoring"] = ReferentSentimentalScorer(paragraph).score()
 
-        tagged_text, tag_mapping = ParagraphEntityTagger().tag(text, paragraph)
+        tagged_text, tag_mapping = ParagraphEntityTagger().tag_all(paragraph, "span")
         analysis["tagged_text"] = tagged_text
         analysis["tag_mapping"] = tag_mapping
-
         return analysis
