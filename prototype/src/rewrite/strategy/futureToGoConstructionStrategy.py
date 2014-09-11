@@ -3,7 +3,7 @@ from src.rewrite.rewrite import Rewrite
 from src.utils.stringUtils import set_first_letter_case
 
 
-class FutureStrategy:
+class FutureToGoConstructionStrategy:
     def __init__(self, ontology):
         self.ontology = ontology
 
