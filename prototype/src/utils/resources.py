@@ -17,8 +17,11 @@ class Resources:
         Config.read(resources_file)
         self.config = Config
 
+    def get_config(self, section, key):
+        return dict(self.source_config.items(section))[key]
+
     def get_wordlist(self, section, key):
-        _file = open(dict(self.source_config.items(section))[key])
+        _file = open(self.get_config(section, key))
         return [ pref.strip("\n") for pref in list(_file) ]
 
     def has_key(self, section, key):

@@ -16,7 +16,7 @@ class SentenceSplitter:
 		return self.to_sentences(non_empty_texts, text)
 
 	def replace_strange_chars(self, text):
-		return text.replace(u"“", '"').replace(u"”", '"')
+		return text.replace(u"“", '"').replace(u"”", '"').replace('"', "-")
 
 	# Dirty
 	def split(self, text):
