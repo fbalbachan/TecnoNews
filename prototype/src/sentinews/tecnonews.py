@@ -1,5 +1,3 @@
-#!/usr/bin/python
-
 # -*- coding: utf-8 -*-
 from src.sentinews.news_rewriter import NewsRewriter
 from src.sentinews.news_crawler.news_crawler import NewsCrawler

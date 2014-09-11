@@ -16,4 +16,4 @@ class CNNParser:
         content = top.find('div').text
         tags = top.find('span', class_ = "cnnBlogFiledBy cnn_categories").text[11:].split(u"\xa0\u2022\xa0")
 
-        return NewsEntry(title, content, tags, url)
+        return NewsEntry(title, content, tags, u"CNN en español")
