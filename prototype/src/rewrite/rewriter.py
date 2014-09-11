@@ -3,6 +3,8 @@ from collections import deque
 
 from src.ling.freelingDictionaryParser import FreelingDictionaryParser
 from src.rewrite.strategy.futureToGoConstructionStrategy import FutureToGoConstructionStrategy
+from src.rewrite.strategy.goConstructionToFutureStrategy import GoConstructionToFutureStrategy
+from src.rewrite.strategy.pastCompoundToSimpleStrategy import PastCompoundToSimpleStrategy
 from src.rewrite.strategy.pastSimpleToCompoundStrategy import PastSimpleToCompoundStrategy
 from src.rewrite.strategy.subjuntiveImperfectStrategy import SubjuntiveImperfectStrategy
 from src.rewrite.strategy.verbalSynStrategy import VerbalSynStrategy
@@ -44,5 +46,11 @@ class Rewriter:
         return [ strategy.rewrite(clause) for strategy in self.strategies if strategy.applies_to(clause) ]
 
     ontology = FreelingDictionaryParser.from_resource()
-    strategies = [PastSimpleToCompoundStrategy(ontology), SubjuntiveImperfectStrategy(ontology),\
-                  FutureToGoConstructionStrategy(ontology) ]
+    strategies = [PastSimpleToCompoundStrategy(ontology),
+                  PastCompoundToSimpleStrategy(ontology),
+
+                  SubjuntiveImperfectStrategy(ontology),
+
+                  FutureToGoConstructionStrategy(ontology),
+                  GoConstructionToFutureStrategy(ontology)
+                  ]

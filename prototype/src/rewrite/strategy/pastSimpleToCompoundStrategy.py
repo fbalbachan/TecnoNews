@@ -24,7 +24,7 @@ class PastSimpleToCompoundStrategy:
         rewrited_verb = haber_lf.text + " " + participle_lf.text
         if verb.has_modal(): rewrited_verb += " " + verb.leaf().lexical_form
 
-        return Rewrite(verb.node, set_first_letter_case(verb.leaves()[0].original_lexical_form, rewrited_verb))
+        return Rewrite.preserving_case(verb.node, rewrited_verb)
 
     def msi_for(self, verb):
         msi = verb.msi

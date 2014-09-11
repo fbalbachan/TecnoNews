@@ -20,7 +20,7 @@ class SubjuntiveImperfectStrategy:
         lexical_forms = ontology.get_lexical_forms(leaf.lemma, self.msi_for(leaf))
         rewrited_verb = filter(lambda lf: lf.text != leaf.lexical_form, lexical_forms)[0].text
 
-        return Rewrite(verb.node, set_first_letter_case(leaf.original_lexical_form, rewrited_verb))
+        return Rewrite.preserving_case(verb.node, rewrited_verb)
 
     def msi_for(self, verb):
         msi = verb.msi

@@ -9,8 +9,8 @@ class FutureToGoConstructionStrategy:
 
     def applies_to(self, clause):
         verb = clause.verb
-        return clause.voice == "active" and verb.matches_msi({ "mode" : "indicative", "time" : "futuro" }) \
-            and not verb.is_locution()
+        return clause.voice == "active" and not verb.is_compound() and \
+            verb.matches_msi({ "mode" : "indicative", "time" : "futuro" }) and not verb.is_locution()
 
     def rewrite(self, clause):
         ontology = self.ontology
@@ -20,7 +20,7 @@ class FutureToGoConstructionStrategy:
         ir_lf = ontology.get_lexical_form("ir", self.msi_for(leaf))
         rewrited_verb = ir_lf.text + " a " + leaf.lemma
 
-        return Rewrite(verb.node, set_first_letter_case(leaf.original_lexical_form, rewrited_verb))
+        return Rewrite.preserving_case(verb.node, rewrited_verb)
 
     def msi_for(self, verb):
         msi = verb.msi
