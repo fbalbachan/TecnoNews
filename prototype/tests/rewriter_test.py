@@ -43,18 +43,34 @@ class TestClauseAnalyzer(unittest.TestCase):
         # Es una locución
         self.kase("Yo metí la pata", "Yo metí la pata")
 
+    def test_past_compound_to_simple(self):
+        self.kase("He comprado un libro", "Compré un libro")
+        self.kase("Tú has podido vender algo", "Tú pudiste vender algo")
+        self.kase("Yo he querido ser alguien", "Yo quise ser alguien")
+        self.kase("Nosotros hemos sido buenos", "Nosotros fuimos buenos")
+        self.kase("Leandro ha salido", "Leandro salió")
+
     def test_subjuntive_imperfect(self):
         self.kase("Si yo muriese sería feliz", "Si yo muriera sería feliz")
         self.kase("Si muriéramos estaría bien", "Si muriésemos estaría bien")
 
-    def test_future(self):
+    def test_future_to_go_construction(self):
         self.kase("Moriré mañana", "Voy a morir mañana")
         self.kase("Construiremos más viviendas", "Vamos a construir más viviendas")
         self.kase("Juan amará", "Juan va a amar")
 
+        # No se reescriben verbos modales
+        self.kase("Juan podrá amar", "Juan podrá amar")
+
+    def test_go_construction_to_future(self):
+        self.kase("Voy a pasear el perro", "Pasearé el perro")
+        self.kase("Nosotros vamos a correr", "Nosotros correremos")
+        self.kase("Él va a querer comer pizza", "Él querrá comer pizza")
+
     def test_combined(self):
         self.kase("Si yo amara a quien odió sería libre", "Si yo amase a quien ha odiado sería libre")
         self.kase("Amaré si odiase a quien pudo ver la luz", "Voy a amar si odiara a quien ha podido ver la luz")
+        self.kase("He querido ser alguien que murió tiempo atrás", "Quise ser alguien que ha muerto tiempo atrás")
 
     def kase(self, source, edited):
         print "Case:", source

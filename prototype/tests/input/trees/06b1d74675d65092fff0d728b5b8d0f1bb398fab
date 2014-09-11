@@ -1,0 +1,26 @@
++grup-verb_[
+  sn_[
+    +pron-mp_[
+      +psubj-mp_[
+        +(Nosotros nosotros PP1MP000 -)
+      ]
+    ]
+  ]
+  +verb_[
+    vaux_[
+      +(hemos haber VAIP1P0 -)
+    ]
+    +parti-ser_[
+      +(sido ser VSP00SM -)
+    ]
+  ]
+  s-adj_[
+    +s-a-mp_[
+      +a-mp_[
+        +(buenos bueno AQ0MP0 -)
+      ]
+    ]
+  ]
+]
+
+
