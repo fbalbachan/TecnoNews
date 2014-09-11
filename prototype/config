@@ -4,7 +4,7 @@ raise_exception = True
 
 [freeling]
 
-host        = tecnolecto.com
+host        = localhost
 client      = analyzer_client
 parser_port = 10000
 tagger_port = 9999
@@ -21,3 +21,5 @@ organization_sufs = %(resources_dir)s/organization.suf
 
 place_classes = %(resources_dir)s/place.cls
 person_classes = %(resources_dir)s/person.cls
+
+freeling_dict = %(resources_dir)s/freeling_es.dic
