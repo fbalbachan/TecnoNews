@@ -23,6 +23,13 @@ class TestClauseAnalyzer(unittest.TestCase):
         ontology = FreelingDictionaryParser.from_resource()
         print ontology.get_lexical_form("haber", { "mode" : "indicative", "time" : "presente", "person" : 2, "number" : "singular"})
 
+    def test_adverbial_clause_dislocation(self):
+        # Tests funcionando en la working copy de Axel. Serán incorporados cuando suba
+        # el resto de los cambios para utilizar AdverbialClauseDislocationStrategy.
+        #self.kase("Si yo amara a quien odió sería libre", "Sería libre si yo amara a quien odió")
+        #self.kase("Si yo amara a quien odió, sería libre", "Sería libre, si yo amara a quien odió")
+        return
+
     def test_past_simple_to_compound(self):
         self.kase("Leandro amó", "Leandro ha amado")
         self.kase("Yo amé", "Yo he amado")
