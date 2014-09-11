@@ -14,11 +14,11 @@ class TecnoNews(object):
     def run(self):
       logger = get_logger('tecnonews')
       entries =  NewsCrawler().crawl_all()
-      logger.info(str(datetime.datetime.now()))
       logger.info("Entries to publish: %s" % len(entries))
 
       for entry in entries:
         self._process(entry)
+      logger.info("Done.")
 
     def _process(self, entry):
         try:
