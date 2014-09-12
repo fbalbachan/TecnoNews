@@ -11,7 +11,7 @@ class TestCrawler(unittest.TestCase):
         url = ("http://cnnespanol.cnn.com/2014/08/31/"
                "tres-estudiantes-chilenos-crean-la-primera-bicicleta-imposible-de-robar/")
         parsed_entry = CNNParser().parse(url)
-        self.assertEquals(parsed_entry.source, url)
+        self.assertEquals(parsed_entry.source, u'CNN en espa\xf1ol')
         self.assertIn("Deportes", parsed_entry.tags)
         self.assertTrue(parsed_entry.content != "")
         self.assertEquals(parsed_entry.title, ("Tres estudiantes chilenos crean la primera bicicleta"
