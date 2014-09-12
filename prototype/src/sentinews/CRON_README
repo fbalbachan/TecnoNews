@@ -1,0 +1,12 @@
+El cron job corre solo, en principio no hay que hacer nada.
+Haciendo crontab -e tenemos la regla que corre periodicamente:
+*/30 * * * * /home/nvaras/entinews/prototype/src/sentinews/run.sh
+
+(*/30 == cada media hora)
+
+Si se cambia esa regla no hace falta restartear el cron ni nada, va a correr cada media hora, a las xx:00 y xx:30.
+
+
+Para ver si corrio o tiro error cat /var/log/syslog | grep CRON
+
+Hay un log interno de la app en prototype/logs/tecnonews.log

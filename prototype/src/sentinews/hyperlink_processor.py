@@ -107,8 +107,14 @@ class HyperlinkProcessor(object):
         for entity in self.links_by_entity:
             attrib_by_entity[entity] = {'href': self.links_by_entity[entity][0],
                                         'target':'_blank'}
+        keys = attrib_by_entity.keys()
+        for entity in self.paragraph.entities():
+            for main_entity in keys:
+                if entity != main_entity and entity.referent == main_entity.referent:
+                    attrib_by_entity[entity] = attrib_by_entity[main_entity]
+
         tagger = ParagraphEntityTagger()
-        entities = [entity for  entity in self.entities if entity in attrib_by_entity]
+        entities = [entity for  entity in self.paragraph.entities() if entity in attrib_by_entity]
         (tagged_text, tag_mapping) = tagger.tag_with_main_entities(self.paragraph.text, 
                                                                    entities, 
                                                                    'a',

@@ -1,6 +1,7 @@
 Instalar:
     $ pip install wikipedia
     $ pip install python-wordpress-xmlrpc
+    $ pip install pysqlite
 
 Para webserver:
 

@@ -8,6 +8,7 @@ from src.model.sentence.sentenceAnalyzer import SentenceAnalyzer
 from src.model.paragraph.paragraphAnalyzer import ParagraphAnalyzer
 from src.sentinews.hyperlink_processor import HyperlinkProcessor
 from tests.freelingTreeRepository import FreelingTreeRepository
+from src.model.sentilecto import Sentilecto
 
 class TestHyperLinkProcessor(unittest.TestCase):
 
@@ -63,6 +64,20 @@ class TestHyperLinkProcessor(unittest.TestCase):
         expected = ['https://www.google.com.ar/search?q=ONG+Hinchadas+Unidas+Argentinas']
         for x in expected:
             self.assertIn(x, self._get_links_from_processor())
+
+    def test__merge_entities(self):
+        text = ("Si Leandro Liptak no quiere estelarizar otra película de Cazafantasmas,"
+                " quizás pueda ser el director de casting. En su aparición en el Festival"
+                " de Cine Internacional de Toronto, Liptak habló sobre el rumor de una nueva"
+                " película de la saga con mujeres como estelares, que el estudio Sony"
+                " está considerando.")
+        processor = HyperlinkProcessor(Sentilecto().analyze(text))
+        self.assertIn('Leandro_Liptak', [str(e) for e in processor.entities])
+        test_entity = [e for e in processor.entities if e.name() == 'Leandro_Liptak'][0]
+        processor.links_by_entity[test_entity].append('http://www.google.com')
+        tagged_text = processor._add_links_to_text()
+        self.assertIn("<a id='e_0' href=http://www.google.com target=_blank>Leandro Liptak</a>", tagged_text)
+        self.assertIn(" <a id='e_1' href=http://www.google.com target=_blank>Liptak</a>", tagged_text)
 
     def _get_links_from_processor(self):
         res = []

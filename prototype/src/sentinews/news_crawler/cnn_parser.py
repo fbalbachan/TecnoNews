@@ -14,15 +14,17 @@ class CNNParser:
 
         title = top.find('h1').text
         content_text = top.find('div').text
-        if u"\u2014" in content_text:
-            content = content_text.split(u"\u2014")
-        else:
-            content = content_text.split(u"\u2013")
+
+        content1 = content_text.split(u"\u2014")
+        content2 = content_text.split(u"\u2013")
         
-        if len(content) >1:
-            content = content[1]
+        if len(content1[0]) < len(content2[0]):
+            content = "-".join(content1[1:])
         else:
-            content = content[0]
+            if len(content2) > 1:
+                content = "-".join(content2[1:])
+            else:
+                content = content2[0]
 
         tags = top.find('span', class_ = "cnnBlogFiledBy cnn_categories").text[11:].split(u"\xa0\u2022\xa0")
 
