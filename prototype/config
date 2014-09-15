@@ -21,3 +21,5 @@ organization_sufs = %(resources_dir)s/organization.suf
 
 place_classes = %(resources_dir)s/place.cls
 person_classes = %(resources_dir)s/person.cls
+
+tags_to_filter = %(resources_dir)s/tags_to_filter
