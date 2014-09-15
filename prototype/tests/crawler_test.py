@@ -4,6 +4,8 @@ from src.sentinews.news_crawler.cnn_parser import CNNParser
 from src.sentinews.news_crawler.cnn_crawler import CNNCrawler
 from src.sentinews.news_entry import NewsEntry
 from src.sentinews.news_crawler.news_crawler import NewsCrawler
+from bs4 import BeautifulSoup
+from urllib import urlopen
 
 class TestCrawler(unittest.TestCase):
     
@@ -16,9 +18,25 @@ class TestCrawler(unittest.TestCase):
         self.assertTrue(parsed_entry.content != "")
         self.assertEquals(parsed_entry.title, ("Tres estudiantes chilenos crean la primera bicicleta"
         	                                   " imposible de robar"))
+    def testRemoveCNN(self):
+        url = ("http://cnnespanol.cnn.com/2014/09/11/sobrevivientes-del-11-de-septiembre-piden-extension-"
+               "del-programa-de-salud/")
+        soup = BeautifulSoup(urlopen(url).read())
+        top = soup.findAll('div' , { "class" : "cnnRightPost" })[0]
+        text = CNNParser()._remove_cnn_header(top.find('div').text)
+        self.assertEquals(text[:7], u"Después")
+
+        url = ("http://cnnespanol.cnn.com/2014/09/15/el-huracan-odile-toca-tierra"
+               "-y-avanza-hacia-la-paz-baja-california-sur/")
+        
+        soup = BeautifulSoup(urlopen(url).read())
+        top = soup.findAll('div' , { "class" : "cnnRightPost" })[0]
+        text = CNNParser()._remove_cnn_header(top.find('div').text)
+        self.assertEquals(text[:10], u"El huracán")
+
 
     # def testCrawler(self):
     # 	CNNCrawler().crawl()
-
+# http://cnnespanol.cnn.com/2014/09/09/bill-murray-dice-cuales-actrices-serian-las-mejores-cazafantasmas/
 if __name__ == '__main__':
     unittest.main()

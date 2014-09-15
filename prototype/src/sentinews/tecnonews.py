@@ -26,7 +26,7 @@ class TecnoNews(object):
           c.rewrite()
           c.publish()
         except Exception, e:
-            logger.error(traceback.format_exc())
+            logger.info(traceback.format_exc())
 
 if __name__ == '__main__':
     TecnoNews().run()

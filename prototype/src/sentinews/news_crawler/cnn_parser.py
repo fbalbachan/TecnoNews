@@ -5,6 +5,7 @@ from re import sub
 from urllib import urlopen
 from src.sentinews.news_entry import NewsEntry
 from bs4 import BeautifulSoup
+from src.utils.logger_utils import *
 
 
 class CNNParser:
@@ -13,19 +14,32 @@ class CNNParser:
         top = soup.findAll('div' , { "class" : "cnnRightPost" })[0]
 
         title = top.find('h1').text
-        content_text = top.find('div').text
+        content = self._remove_cnn_header(top.find('div').text)
 
-        content1 = content_text.split(u"\u2014")
-        content2 = content_text.split(u"\u2013")
-        
-        if len(content1[0]) < len(content2[0]):
-            content = "-".join(content1[1:])
-        else:
-            if len(content2) > 1:
-                content = "-".join(content2[1:])
-            else:
-                content = content2[0]
-
-        tags = top.find('span', class_ = "cnnBlogFiledBy cnn_categories").text[11:].split(u"\xa0\u2022\xa0")
+        try:
+          tags = top.find('span', class_ = "cnnBlogFiledBy cnn_categories").text[11:].split(u"\xa0\u2022\xa0")
+        except:
+          logger = get_logger('tecnonews')
+          logger.info('Tags not found: %s' %(top.find('span', class_ = "cnnBlogFiledBy cnn_categories")))
+          tags = []
 
         return NewsEntry(title, content, tags, u"CNN en español")
+
+    def _remove_cnn_header(self, text):
+        dashes = [u'\u2014', u'\u2013', '-']
+
+        text_with_dash = text[:100]
+        positions = [(dash,text_with_dash.find(dash)) for dash in dashes if text_with_dash.find(dash) > -1]
+
+        min_pos = 9999
+        min_dash = None
+        for dash, pos in positions:
+            if pos < min_pos:
+                min_pos = pos
+                min_dash = dash
+
+        if min_dash:
+            text_without_dash = text_with_dash.split(min_dash)[1][1:]
+            text = text_without_dash + text[100:]
+        
+        return text        
