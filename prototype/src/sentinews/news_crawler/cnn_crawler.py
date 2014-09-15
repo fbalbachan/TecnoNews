@@ -3,6 +3,7 @@
 import feedparser
 from re import search
 import sqlite3
+import ConfigParser
 
 from src.sentinews.news_crawler.cnn_parser import CNNParser
 
@@ -20,10 +21,7 @@ class CNNCrawler:
         for entry in filtered_entries:
             news_entry = parser.parse(entry["link"])
             news_entries.append(news_entry)
-
-        return news_entries
-
-
+        return self._filter_by_tag(news_entries)
 
 
     def _filter_entries(self, entries):
@@ -33,3 +31,13 @@ class CNNCrawler:
         titles = cursor.execute("SELECT title FROM original_news_entries").fetchall()
         titles = [title[0] for title in titles]
         return [entry for entry in entries if entry['title'] not in titles]
+
+    def _filter_by_tag(self, news_entries):
+        Config = ConfigParser.ConfigParser()
+        Config.read("config")
+
+        tags_filename =  Config.get("resources", "tags_to_filter")
+        with open(tags_filename) as tagsfile:
+            tags = [tag.strip() for tag in tagsfile]
+        
+        return [entry for entry in news_entries if  len(set(tags) & set(entry.tags)) == 0]

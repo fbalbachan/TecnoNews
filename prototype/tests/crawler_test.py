@@ -6,6 +6,7 @@ from src.sentinews.news_entry import NewsEntry
 from src.sentinews.news_crawler.news_crawler import NewsCrawler
 from bs4 import BeautifulSoup
 from urllib import urlopen
+from src.sentinews.news_entry import NewsEntry
 
 class TestCrawler(unittest.TestCase):
     
@@ -42,6 +43,17 @@ class TestCrawler(unittest.TestCase):
         filtered_entries = crawler._filter_entries(entries)
         self.assertEquals(len(filtered_entries), 1)
         self.assertEquals(filtered_entries[0]['title'], 'Test entry')
+
+    def testFilterTags(self):
+        entries = [NewsEntry('','',['tag1', 'tag2'],''),
+                   NewsEntry('','',['tag1', 'tag2', 'Al Galope'],''),
+                   NewsEntry('','',['Al Galope'],''),
+                   NewsEntry('','',['Héroes de CNN', 'Al Galope'],''),
+                   NewsEntry('','',['Héroes de CNN'],''),
+                   NewsEntry('','',[],'')]
+        crawler = CNNCrawler()
+        filtered_entries = crawler._filter_by_tag(entries)
+        self.assertEquals(len(filtered_entries), 2)
 
     # def testCrawler(self):
     # 	CNNCrawler().crawl()
