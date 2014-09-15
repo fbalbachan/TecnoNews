@@ -2,24 +2,61 @@
 from collections import deque
 
 from src.ling.freelingDictionaryParser import FreelingDictionaryParser
+from src.rewrite.strategy.adverbialClauseDislocationStrategy import AdverbialClauseDislocationStrategy
 from src.rewrite.strategy.futureStrategy import FutureStrategy
 from src.rewrite.strategy.pastSimpleToCompoundStrategy import PastSimpleToCompoundStrategy
 from src.rewrite.strategy.subjuntiveImperfectStrategy import SubjuntiveImperfectStrategy
 from src.rewrite.strategy.verbalSynStrategy import VerbalSynStrategy
 
+from src.model.clause.clause import Clause
+from src.model.sentence.sentence import Sentence
+
+from src.model.paragraph.paragraph import Paragraph
+from src.model.paragraph.paragraphAnalyzer import ParagraphAnalyzer
+from src.model.sentence.sentenceAnalyzer import SentenceAnalyzer
+from tests.freelingTreeRepository import FreelingTreeRepository
+
 
 class Rewriter:
-    def __init__(self, paragraph):
+    def __init__(self, paragraph, ontology = None, strategies = None):
+        if ontology == None:
+            ontology = FreelingDictionaryParser.from_resource()
+        
+        if strategies == None:
+            self.replacementStrategies = [
+                PastSimpleToCompoundStrategy(ontology),
+                SubjuntiveImperfectStrategy(ontology),
+                FutureStrategy(ontology)
+            ]
+            self.dislocationStrategies = [
+                AdverbialClauseDislocationStrategy()
+            ]
+        else:
+            self.replacementStrategies = []
+            self.dislocationStrategies = []
+            for strategy in strategies:
+                if strategy.type == 'replacement': self.replacementStrategies.append(strategy)
+                else: self.dislocationStrategies.append(strategy)
+        
         self.paragraph = paragraph
 
     def rewrite(self):
-        rewrites = []
+        replacements = []
         for clause in self.paragraph.clauses():
-                rewrites.extend(self.rewrites_for(clause))
+            replacements.extend(self.replacements_for(clause))
 
         #print rewrites
 
-        return self.compose_text_with(rewrites)
+        text = self.compose_text_with(replacements)
+        for strategy in self.dislocationStrategies:
+            
+            self.paragraph = Paragraph.from_text(text)
+            self.analyzer.analyze(self.paragraph) # TODO: Check if this is needed
+            
+            dislocations = self.dislocations_from(strategy)
+            text = self.compose_text_with(dislocations)
+        
+        return text
 
     def compose_text_with(self, rewrites):
         rewrites.sort(key = lambda rewrite: rewrite.token().start())
@@ -40,9 +77,11 @@ class Rewriter:
         source_text += text[index:]
         return source_text.encode("utf-8")
 
-    def rewrites_for(self, clause):
-        return [ strategy.rewrite(clause) for strategy in self.strategies if strategy.applies_to(clause) ]
+    def dislocations_from(self, strategy):
+        return [ strategy.rewrite(sentence) for sentence in self.paragraph.sentences if strategy.applies_to(sentence) ]
 
-    ontology = FreelingDictionaryParser.from_resource()
-    strategies = [PastSimpleToCompoundStrategy(ontology), SubjuntiveImperfectStrategy(ontology),\
-                  FutureStrategy(ontology) ]
+    def replacements_for(self, clause):
+        return [ strategy.rewrite(clause) for strategy in self.replacementStrategies if strategy.applies_to(clause) ]
+
+    sentenceAnalyzer = SentenceAnalyzer(FreelingTreeRepository("tests/input/trees"))
+    analyzer = ParagraphAnalyzer(sentenceAnalyzer)

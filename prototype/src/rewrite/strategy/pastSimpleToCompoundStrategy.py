@@ -31,3 +31,5 @@ class PastSimpleToCompoundStrategy:
         return { "mode" : "indicative", "time" : "presente", "person" : msi["person"], "number" : msi["number"]}
 
     participle_msi = { "mode" : "participio", "gender" : "masculine", "number" : "singular" }
+
+    type = "replacement"
