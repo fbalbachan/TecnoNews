@@ -780,3 +780,8 @@ Desmintieron el rumor que había sido difundido por el diario Clarín acerca de 
     clause: que había sido difundido por el diario Clarín
         subject: el diario Clarín
     clause: que Telefónica ha mejorado el servicio
+
+# BUG en resolución de anáfora, se había perdido el enriquecimiento de atributos de MSI en cadenas coreferenciales
+Fernando dijo que vió a María. Ella volvió.
+    sentence: Ella volvió.
+        subject: Ella -> María
