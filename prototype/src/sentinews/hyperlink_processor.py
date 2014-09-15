@@ -59,7 +59,9 @@ class HyperlinkProcessor(object):
             if entity.classification() == 'person':
                 if 'names' in entity.attributes and 'surnames' in entity.attributes:
                     person = " ".join(entity.attributes['names']) + " " + " ".join(entity.attributes['surnames'])
-                    self.links_by_entity[entity].append(self._google_search(LINKEDIN_GQUERY + person))
+                    link = self._google_search(LINKEDIN_GQUERY + person)
+                    if link != '':
+                        self.links_by_entity[entity].append(link)
 
 
     def _get_gMaps_links(self):

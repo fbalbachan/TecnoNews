@@ -24,6 +24,7 @@ class TestHyperLinkProcessor(unittest.TestCase):
                       "El intendente de Buenos Aires murió."
                       "A diferencia de lo que sucedió en 2010, en Brasil no se hará presente la "
                       "ONG Hinchadas Unidas Argentinas, que nucleaba a las barras del fútbol argentino."
+                      "El médico Maurice Ohayon."
                       )
         paragraph = Paragraph.from_text(self.text)
         self.analyzer.analyze(paragraph)
@@ -39,7 +40,6 @@ class TestHyperLinkProcessor(unittest.TestCase):
 
     def test__get_gMaps_links(self):
         self.processor._get_gMaps_links()
-        # print links
         expected = ['https://maps.google.com/maps?q=calle%20Florida', 
                     'https://maps.google.com/maps?q=Sevilla', 
                     'https://maps.google.com/maps?q=Madrid', 
@@ -49,8 +49,7 @@ class TestHyperLinkProcessor(unittest.TestCase):
             self.assertIn(x, self._get_links_from_processor())
 
     def test__get_wikipedia_links(self):
-        links = self.processor._get_wikipedia_links()
-        # print links
+        self.processor._get_wikipedia_links()
         expected = ['http://es.wikipedia.org/wiki/Telef%C3%B3nica', 
                     'http://es.wikipedia.org/wiki/Calle%20Florida', 
                     'http://es.wikipedia.org/wiki/Thomas%20P.%20Griesa',
@@ -58,9 +57,15 @@ class TestHyperLinkProcessor(unittest.TestCase):
         for x in expected:
             self.assertIn(x, self._get_links_from_processor())
 
+    def test__get_linkedIn_links(self):
+        self.processor._get_linkedIn_links()
+        expected = [u'http://ar.linkedin.com/pub/leandro-liptak/95/36b/19b', 
+                    u'http://www.linkedin.com/pub/maurice-ohayon/1b/6b3/516']
+        for x in expected:
+            self.assertIn(x, self._get_links_from_processor())
+
     def test__get_other_links(self):
-        links = self.processor._get_other_links()
-        # print links
+        self.processor._get_other_links()
         expected = ['https://www.google.com.ar/search?q=ONG+Hinchadas+Unidas+Argentinas']
         for x in expected:
             self.assertIn(x, self._get_links_from_processor())
@@ -84,13 +89,6 @@ class TestHyperLinkProcessor(unittest.TestCase):
         for links in self.processor.links_by_entity.values():
             res += links 
         return res
-
-    # Comentado para no hacer tantas searchs en Google            
-    # def test__get_linkedIn_links(self):
-    #     links = self.processor._get_linkedIn_<links()
-    #     expected = [u'http://ar.linkedin.com/pub/leandro-liptak/95/36b/19b']
-    #     for x in expected:
-    #         self.assertIn(x, self._get_links_from_processor())
 
 if __name__ == '__main__':
     unittest.main()
