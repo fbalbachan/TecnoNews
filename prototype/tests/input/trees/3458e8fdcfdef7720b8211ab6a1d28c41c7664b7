@@ -1,0 +1,26 @@
++grup-verb_[
+  sn_[
+    +grup-nom-ms_[
+      +w-ms_[
+        +(José josé NP00SP0 -)
+      ]
+    ]
+  ]
+  +verb_[
+    +(compró comprar VMIS3S0 -)
+  ]
+  grup-sp_[
+    +prep_[
+      +(para para SPS00 -)
+    ]
+    sn_[
+      +grup-nom-ms_[
+        +w-ms_[
+          +(Juan juan NP00SP0 -)
+        ]
+      ]
+    ]
+  ]
+]
+
+

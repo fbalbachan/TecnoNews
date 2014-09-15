@@ -1,0 +1,46 @@
++grup-verb_[
+  sn_[
+    +grup-nom-ms_[
+      +w-ms_[
+        +(Pedro pedro NP00SP0 -)
+      ]
+    ]
+  ]
+  +verb_[
+    +(jugó jugar VMIS3S0 -)
+  ]
+  grup-sp_[
+    +prep_[
+      +(con con SPS00 -)
+    ]
+    sn_[
+      +grup-nom-ms_[
+        +w-ms_[
+          +(María maría NP00SP0 -)
+        ]
+      ]
+      subord-rel_[
+        +(quien quien PR0CS000 -)
+        grup-verb_[
+          +verb_[
+            +(vivió vivir VMIS3S0 -)
+          ]
+          grup-sp_[
+            +prep_[
+              +(en en SPS00 -)
+            ]
+            sn_[
+              +grup-nom-ms_[
+                +w-ms_[
+                  +(Caracas caracas NP00G00 -)
+                ]
+              ]
+            ]
+          ]
+        ]
+      ]
+    ]
+  ]
+]
+
+

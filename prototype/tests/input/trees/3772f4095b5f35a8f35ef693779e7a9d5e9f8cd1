@@ -1,0 +1,26 @@
++grup-verb_[
+  sn_[
+    +grup-nom-ms_[
+      +w-ms_[
+        +(Leandro leandro NP00SP0 -)
+      ]
+    ]
+  ]
+  +verb_[
+    +(amó amar VMIS3S0 -)
+  ]
+  grup-sp_[
+    +prep_[
+      +(a a SPS00 -)
+    ]
+    sn_[
+      +grup-nom-ms_[
+        +w-ms_[
+          +(María maría NP00SP0 -)
+        ]
+      ]
+    ]
+  ]
+]
+
+
