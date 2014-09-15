@@ -30,6 +30,6 @@ class CNNCrawler:
         ''' Filter entries that already exist in the DB,
             we dont want to parse them again. '''
         cursor = sqlite3.connect("news_crawler.db").cursor()
-        urls = cursor.execute("SELECT url FROM original_news_entries").fetchall()
-        urls = [url[0] for url in urls]
-        return [entry for entry in entries if entry['link'] not in urls]
+        titles = cursor.execute("SELECT title FROM original_news_entries").fetchall()
+        titles = [title[0] for title in titles]
+        return [entry for entry in entries if entry['title'] not in titles]

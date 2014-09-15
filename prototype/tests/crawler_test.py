@@ -34,6 +34,14 @@ class TestCrawler(unittest.TestCase):
         text = CNNParser()._remove_cnn_header(top.find('div').text)
         self.assertEquals(text[:10], u"El huracán")
 
+    def testFilterEntries(self):
+        test_title = 'Al menos 44 muertos al derrumbarse un edificio de una iglesia en Nigeria'
+        entries = [{'title': test_title},
+                   {'title':'Test entry'}]
+        crawler = CNNCrawler()
+        filtered_entries = crawler._filter_entries(entries)
+        self.assertEquals(len(filtered_entries), 1)
+        self.assertEquals(filtered_entries[0]['title'], 'Test entry')
 
     # def testCrawler(self):
     # 	CNNCrawler().crawl()
