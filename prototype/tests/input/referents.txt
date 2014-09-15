@@ -45,3 +45,11 @@ Desmintieron el rumor que había sido difundido por el diario Clarín acerca de 
         reference: el diario Clarín
     referent: el rumor
         count: ref_count = 1
+
+# Bug en unificación. Existe un "él/ella" no resuelto, que se unifica con otros "él/ella" resueltos,
+# lo cual no tiene sentido. Sólo pronombres (implícitos o explícitos) no resueltos pueden unificarse entre sí.
+Leandro amó. Dijo que amaría. María comió. Dijo que comería. Nosotros amamos. Ellos amaron. Dijo que moriría.
+    referent: Leandro
+        count: ref_count = 3
+    referent: María
+        count: ref_count = 3

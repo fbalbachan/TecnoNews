@@ -1,0 +1,18 @@
++grup-verb_[
+  +verb_[
+    +(Dijo decir VMIS3S0 -)
+  ]
+  subord_[
+    +(que que CS -)
+    grup-verb_[
+      +verb_[
+        +(moriría morir VMIC3S0 -)
+      ]
+    ]
+  ]
+  F-term_[
+    +(. . Fp -)
+  ]
+]
+
+
