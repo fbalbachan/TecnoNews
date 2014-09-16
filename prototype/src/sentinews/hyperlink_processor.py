@@ -5,6 +5,8 @@ import json
 import urllib
 from collections import defaultdict
 from src.model.output.paragraphEntityTagger import ParagraphEntityTagger
+from src.utils.logger_utils import *
+
 
 WIKI_BASE_URL = 'http://es.wikipedia.org/wiki/'
 LINKEDIN_GQUERY = 'site:linkedin.com '
@@ -24,7 +26,10 @@ class HyperlinkProcessor(object):
     def __init__(self, analysis):
         self.paragraph = analysis['paragraph']
         self.entities = self._get_entities_from(analysis['paragraph'])
-        self.links_by_entity = defaultdict(list)
+
+        # This has the form: {entity : {link_type: link}}
+        # where link_type = 'google', 'wiki', 'linkedin', 'maps', 'lucky'
+        self.links_by_entity = defaultdict(dict)
         wk.set_lang('es')
 
     def get_text_with_hyperlinks(self):
@@ -57,11 +62,19 @@ class HyperlinkProcessor(object):
     def _get_linkedIn_links(self):
         for entity in self.entities:
             if entity.classification() == 'person':
+                link = ''
                 if 'names' in entity.attributes and 'surnames' in entity.attributes:
                     person = " ".join(entity.attributes['names']) + " " + " ".join(entity.attributes['surnames'])
-                    link = self._google_search(LINKEDIN_GQUERY + person)
-                    if link != '':
-                        self.links_by_entity[entity].append(link)
+                    link = self._get_first_gresult(LINKEDIN_GQUERY + person)
+                if link != '':
+                    self.links_by_entity[entity]['linkedin'] = link
+                else:
+                    if 'names' in entity.attributes:
+                        person = entity.attributes['names']
+                    else:
+                        person = entity.attributes['surnames']
+                    person = " ".join(person)
+                    self.links_by_entity[entity]['google'] = (GSEARCH_BASE_URL + urllib.quote_plus(person))
 
 
     def _get_gMaps_links(self):
@@ -71,16 +84,22 @@ class HyperlinkProcessor(object):
                 if 'class' in entity.attributes:
                     search_string += " ".join(entity.attributes['class']) + " "
                 search_string +=  str(entity.kernel)
-                self.links_by_entity[entity].append(GMAPS_BASE_URL + urllib.quote(search_string))
+                self.links_by_entity[entity]['maps'] = (GMAPS_BASE_URL + urllib.quote(search_string))
     
     def _get_web_page_links(self):
-        pass
+        for entity in self.entities:
+            if entity.classification() == 'organization':
+                search_string = str(entity.kernel)
+                if 'names' in entity.attributes:
+                    search_string = " ".join(entity.attributes['names'])
+                self.links_by_entity[entity]['lucky'] = self._get_first_gresult(search_string)
+
 
     def _get_other_links(self):
         for entity in self.entities:
             if entity.classification() == 'other':
                 search_string = str(entity.kernel).replace('_', ' ')
-                self.links_by_entity[entity].append(GSEARCH_BASE_URL + urllib.quote_plus(search_string))
+                self.links_by_entity[entity]['google'] = (GSEARCH_BASE_URL + urllib.quote_plus(search_string))
 
     def _get_wikipedia_links(self):
         ''' Searches Wikipedia for each Entity, uses first result to form URL. '''
@@ -99,15 +118,19 @@ class HyperlinkProcessor(object):
                 search_string += str(entity.kernel)
 
             if search_string == '': continue
+
             search_result = wk.search(search_string)
             if search_result:
                 encoded_result = urllib.quote(search_result[0].encode('utf-8')) 
-                self.links_by_entity[entity].append(WIKI_BASE_URL + encoded_result)
+                self.links_by_entity[entity]['wiki'] = (WIKI_BASE_URL + encoded_result)
+            else:
+                self.links_by_entity[entity]['google'] = (GSEARCH_BASE_URL + urllib.quote_plus(search_string))
 
     def _add_links_to_text(self):
         attrib_by_entity = {}
         for entity in self.links_by_entity:
-            attrib_by_entity[entity] = {'href': self.links_by_entity[entity][0],
+            link = self._choose_link(entity)
+            attrib_by_entity[entity] = {'href': link,
                                         'target':'_blank'}
         keys = attrib_by_entity.keys()
         for entity in self.paragraph.entities():
@@ -123,13 +146,36 @@ class HyperlinkProcessor(object):
                                                                    attrib_by_entity)
 
         return tagged_text
+    
+    def _choose_link(self, entity):
+        import pudb;pu.db
 
+        if entity.classification() == 'person':
+            for link_type in ['linkedin', 'wiki', 'google']:
+                if link_type in self.links_by_entity[entity]:
+                    return self.links_by_entity[entity][link_type]
+        elif entity.classification() == 'place':
+            for link_type in ['maps', 'wiki', 'google']:
+                if link_type in self.links_by_entity[entity]:
+                    return self.links_by_entity[entity][link_type]
+        elif entity.classification() == 'organization':
+            for link_type in ['wiki','linkedin','lucky']:
+                if link_type in self.links_by_entity[entity]:
+                    return self.links_by_entity[entity][link_type]
+    
     def _google_search(self, searchfor):
         query = urllib.urlencode({'q': searchfor})
         url = 'http://ajax.googleapis.com/ajax/services/search/web?v=1.0&%s' % query
         search_results = urllib.urlopen(url).read()
-        try:
-            return json.loads(search_results)['responseData']['results'][0]['url']
-        except Exception:
-            return ''
+        return json.loads(search_results)
 
+    def _get_first_gresult(self, searchfor):
+        data = self._google_search(searchfor)
+        try:
+            return data['responseData']['results'][0]['url']
+        except Exception, e:
+            logger = get_logger('tecnonews')
+            logger.info("HyperlinkProcessor:")
+            logger.info("JSON %s" % data)
+            logger.info(traceback.format_exc())
+            return ''
