@@ -6,6 +6,8 @@ import urllib
 from collections import defaultdict
 from src.model.output.paragraphEntityTagger import ParagraphEntityTagger
 from src.utils.logger_utils import *
+import traceback
+import datetime
 
 
 WIKI_BASE_URL = 'http://es.wikipedia.org/wiki/'
@@ -148,8 +150,6 @@ class HyperlinkProcessor(object):
         return tagged_text
     
     def _choose_link(self, entity):
-        import pudb;pu.db
-
         if entity.classification() == 'person':
             for link_type in ['linkedin', 'wiki', 'google']:
                 if link_type in self.links_by_entity[entity]:
