@@ -151,18 +151,19 @@ class HyperlinkProcessor(object):
     
     def _choose_link(self, entity):
         if entity.classification() == 'person':
-            for link_type in ['linkedin', 'wiki', 'google']:
+            for link_type in ['linkedin', 'wiki']:
                 if link_type in self.links_by_entity[entity]:
                     return self.links_by_entity[entity][link_type]
         elif entity.classification() == 'place':
-            for link_type in ['maps', 'wiki', 'google']:
+            for link_type in ['maps', 'wiki']:
                 if link_type in self.links_by_entity[entity]:
                     return self.links_by_entity[entity][link_type]
         elif entity.classification() == 'organization':
-            for link_type in ['wiki','linkedin','lucky']:
+            for link_type in ['wiki','linkedin']:
                 if link_type in self.links_by_entity[entity]:
                     return self.links_by_entity[entity][link_type]
-    
+        return ''
+        
     def _google_search(self, searchfor):
         query = urllib.urlencode({'q': searchfor})
         url = 'http://ajax.googleapis.com/ajax/services/search/web?v=1.0&%s' % query
