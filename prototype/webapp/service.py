@@ -127,7 +127,7 @@ if __name__ == '__main__':
 
 	urls = (
  	  '/favicon.ico', 'Favicon_request',
- 	  '/result', 'EntiNews_request',
+ 	  '/result', 'Debug_request', # 'EntiNews_request',
  	  '/hidden', 'HiddenEntiNews_request',
  	  '/', 'Index_request',
  	  '/debug', "Debug_request"
