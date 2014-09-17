@@ -35,8 +35,17 @@ class TestClauseAnalyzer(unittest.TestCase):
         self.kase("Si yo amo a quien odia soy libre",  "Soy libre, si yo amo a quien odia")
 
         # Si p, q sólo es unidireccional
-        # Tokenization error!
+        # TODO: Fix 'Tokenization error!'
         #self.kase("Soy libre si yo amo a quien odia",  "Soy libre si yo amo a quien odia")
+        self.kase("Si pasa esto, ocurre esto",  "Ocurre esto, si pasa esto")
+        self.kase("Ocurre esto, si pasa esto",  "Ocurre esto, si pasa esto")
+
+        # Cuando/apenas p, q <==> q, cuando/apenas p
+        # Con/sin comas intermedias; con/sin puntuación final
+        self.kase("Cuando pasa esto, ocurre esto.", "Ocurre esto, cuando pasa esto.")
+        self.kase("Apenas pasa esto ocurre esto", "Ocurre esto, apenas pasa esto")
+        self.kase("Ocurre esto cuando pasa esto.", "Cuando pasa esto, ocurre esto.")
+        self.kase("Ocurre esto, apenas pasa esto", "Apenas pasa esto, ocurre esto")
 
         # Múltiples oraciones
         self.kase(
@@ -49,12 +58,6 @@ class TestClauseAnalyzer(unittest.TestCase):
 
         # Con aclaración entre comas
         self.kase("Si Cristina, la presidenta, hace esto, eso ocurre.", "Eso ocurre, si Cristina, la presidenta, hace esto.")
-
-        # Cuando/apenas p, q <==> q, cuando/apenas p
-        self.kase("Cuando yo amo a quien odia, soy libre.", "Soy libre, cuando yo amo a quien odia.")
-        self.kase("Apenas yo ame a quien odia, soy libre.", "Soy libre, apenas yo ame a quien odia.")
-        #self.kase("Soy libre cuando yo amo a quien odia.", "Cuando yo amo a quien odia, soy libre.")
-        #self.kase("Soy libre apenas yo ame a quien odia.", "Apenas yo ame a quien odia, soy libre.")
 
         # En caso de, y siempre y cuando
         #self.kase("En caso de que duerma, los sueños son posibles", "Los sueños son posibles, en caso de que duerma")
