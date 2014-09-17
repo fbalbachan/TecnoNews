@@ -50,9 +50,11 @@ class TestClauseAnalyzer(unittest.TestCase):
         # Con aclaración entre comas
         self.kase("Si Cristina, la presidenta, hace esto, eso ocurre.", "Eso ocurre, si Cristina, la presidenta, hace esto.")
 
-        # Cuando p, q <==> q, cuando p
+        # Cuando/apenas p, q <==> q, cuando/apenas p
         self.kase("Cuando yo amo a quien odia, soy libre.", "Soy libre, cuando yo amo a quien odia.")
+        self.kase("Apenas yo ame a quien odia, soy libre.", "Soy libre, apenas yo ame a quien odia.")
         #self.kase("Soy libre cuando yo amo a quien odia.", "Cuando yo amo a quien odia, soy libre.")
+        #self.kase("Soy libre apenas yo ame a quien odia.", "Apenas yo ame a quien odia, soy libre.")
 
         # En caso de, y siempre y cuando
         #self.kase("En caso de que duerma, los sueños son posibles", "Los sueños son posibles, en caso de que duerma")
