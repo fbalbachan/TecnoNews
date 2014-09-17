@@ -37,6 +37,8 @@ class WikipediaContentGenerator:
                 summary = self.disambiguated_summary_for(referent)
                 if not summary: continue
 
+            summary = summary.encode("utf-8")
+
             print "\n[Summary de wikipedia para", page_rank[0], "]\n"
             print summary
             print "--\n"
@@ -44,12 +46,9 @@ class WikipediaContentGenerator:
             sentence = self.first_content_sentence_of(summary)
 
             print "Primer oración:", sentence.text
-
-            break
+            print "-- -- -- -- -- -- -- -- -- --"
 
     def first_content_sentence_of(self, summary):
-        summary = summary.encode("utf-8")
-
         paragraph = Paragraph.from_text(self.without_parentheses(summary))
         for sentence in paragraph.sentences:
             text = sentence.text.lower()
