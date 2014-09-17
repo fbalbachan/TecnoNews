@@ -23,9 +23,10 @@ class AdverbialClauseDislocationStrategy:
         main_clause = sentence.main_clause()
         
         token = main_clause.children[0].node.token
-        # TODO: Corregir +1 de offset para varios encoding
-        first_part = sentence.paragraph.text[main_clause.node.token.start():token.end()+1].strip()
-        second_part = sentence.paragraph.text[token.end()+1:main_clause.node.token.end()].strip()
+        
+        text = sentence.paragraph.text.decode("utf-8")
+        first_part = text[main_clause.node.token.start():token.end()].strip()
+        second_part = text[token.end():main_clause.node.token.end()].strip()
         final_punctuation = "" # TODO: Tomar toda la puntuación del final de second_part
         if second_part[-1] == ".": # TODO: Hacerlo bien: Si soy esto, soy esto!. (múltiples puntuaciones)
             final_punctuation = "."
@@ -36,8 +37,8 @@ class AdverbialClauseDislocationStrategy:
         
         second_part += ","
         second_part = set_first_letter_case(first_part, second_part)
-        # TODO: Check cases when lowercase on [0] it's not appropriate
+        # first_part[0] nunca debe ser mayúscula ya que comienza con condicionales
         rewritten_sentence = second_part + " " + first_part[0].lower() + first_part[1:] + final_punctuation
-        return Rewrite(sentence.main_clause().node, rewritten_sentence)
+        return Rewrite(sentence.main_clause().node, rewritten_sentence.encode('utf-8'))
 
     type = "dislocation"

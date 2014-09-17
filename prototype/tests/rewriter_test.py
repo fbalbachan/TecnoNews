@@ -30,11 +30,34 @@ class TestClauseAnalyzer(unittest.TestCase):
 
     def test_adverbial_clause_dislocation(self):
         self.strategies = [AdverbialClauseDislocationStrategy()]
-        # TODO: Funcionaría al arreglar +1 de offset en AdverbialClauseDislocationStrategy.
-        # self.kase("Si yo amara a quien odió sería libre. Si yo odio a quien ama, soy esclavo.", "Sería libre, si yo amara a quien odió. Soy esclavo, si yo odio a quien ama.")
-        self.kase("Si yo amo a quien odia soy libre", "Soy libre, si yo amo a quien odia")
+        # Con y sin coma inicial
         self.kase("Si yo amo a quien odia, soy libre", "Soy libre, si yo amo a quien odia")
+        self.kase("Si yo amo a quien odia soy libre",  "Soy libre, si yo amo a quien odia")
 
+        # Si p, q sólo es unidireccional
+        # Tokenization error!
+        #self.kase("Soy libre si yo amo a quien odia",  "Soy libre si yo amo a quien odia")
+
+        # Múltiples oraciones
+        self.kase(
+            "Si yo amara a quien odió sería libre. Si yo odio a quien ama, soy esclavo.",
+            "Sería libre, si yo amara a quien odió. Soy esclavo, si yo odio a quien ama."
+        )
+
+        # Minúscula
+        self.kase("si yo soy minúscula, vos dejame en minúscula", "vos dejame en minúscula, si yo soy minúscula")
+
+        # Con aclaración entre comas
+        self.kase("Si Cristina, la presidenta, hace esto, eso ocurre.", "Eso ocurre, si Cristina, la presidenta, hace esto.")
+
+        # Cuando p, q <==> q, cuando p
+        self.kase("Cuando yo amo a quien odia, soy libre.", "Soy libre, cuando yo amo a quien odia.")
+        #self.kase("Soy libre cuando yo amo a quien odia.", "Cuando yo amo a quien odia, soy libre.")
+
+        # En caso de, y siempre y cuando
+        #self.kase("En caso de que duerma, los sueños son posibles", "Los sueños son posibles, en caso de que duerma")
+        #self.kase("En caso de dormir, los sueños son posibles", "Los sueños son posibles, en caso de dormir")
+        #self.kase("Siempre y cuando yo duerma, los sueños son posibles", "Los sueños son posibles, siempre y cuando yo duerma")
     def test_past_simple_to_compound(self):
         self.strategies = [PastSimpleToCompoundStrategy(self.ontology)]
         self.kase("Leandro amó", "Leandro ha amado")
@@ -72,9 +95,8 @@ class TestClauseAnalyzer(unittest.TestCase):
         self.kase("Si yo amara a quien odió sería libre", "Si yo amase a quien ha odiado sería libre")
         self.kase("Amaré si odiase a quien pudo ver la luz", "Voy a amar si odiara a quien ha podido ver la luz")
 
-        # TODO: Funcionaría al arreglar +1 de offset en AdverbialClauseDislocationStrategy.
-        #self.strategies = None # Estrategias por defecto
-        #self.kase("Amaré si odiase a quien pudo ver la luz", "Si odiara a quien ha podido ver la luz, voy a amar")
+        self.strategies = None # Estrategias por defecto
+        self.kase("Si odiase a quien pudo ver la luz, amaré", "Voy a amar, si odiara a quien ha podido ver la luz")
 
     def kase(self, source, edited):
         print "Case:", source
