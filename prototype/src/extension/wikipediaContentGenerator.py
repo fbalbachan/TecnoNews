@@ -37,18 +37,25 @@ class WikipediaContentGenerator:
                 summary = self.disambiguated_summary_for(referent)
                 if not summary: continue
 
-            summary = summary.encode("utf-8")
-
             print "\n[Summary de wikipedia para", page_rank[0], "]\n"
             print summary
             print "--\n"
 
-            paragraph = Paragraph.from_text(self.without_parentheses(summary))
-            sentence = paragraph.sentences[0]
+            sentence = self.first_content_sentence_of(summary)
 
             print "Primer oración:", sentence.text
 
             break
+
+    def first_content_sentence_of(self, summary):
+        summary = summary.encode("utf-8")
+
+        paragraph = Paragraph.from_text(self.without_parentheses(summary))
+        for sentence in paragraph.sentences:
+            text = sentence.text.lower()
+            if len(text.split()) < 10: continue
+            if ("redirigen" in text or "redirige" in text) and ("véase" in text or "desambiguación" in text): continue
+            return sentence
 
     def disambiguated_summary_for(self, referent):
         print "[Intentando desambiguar", referent.name(), "con info adicional:", referent.extra_words, "]"
