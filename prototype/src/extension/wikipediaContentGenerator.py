@@ -4,6 +4,7 @@ from re import sub
 from wikipedia.exceptions import DisambiguationError
 
 from src.model.paragraph.paragraph import Paragraph
+from src.model.referent.referentInformationExtractor import ReferentInformationExtractor
 import wikipedia as wk
 
 
@@ -29,10 +30,14 @@ class WikipediaContentGenerator:
                 continue
 
             try:
-                summary = wk.page(page_rank[0]).summary.encode("utf-8")
+                summary = wk.page(page_rank[0]).summary
             except DisambiguationError:
                 print "(!) La página '", page_rank[0], "' llevaba a una página de desambiguación"
-                continue
+
+                summary = self.disambiguated_summary_for(referent)
+                if not summary: continue
+
+            summary = summary.encode("utf-8")
 
             print "\n[Summary de wikipedia para", page_rank[0], "]\n"
             print summary
@@ -44,6 +49,24 @@ class WikipediaContentGenerator:
             print "Primer oración:", sentence.text
 
             break
+
+    def disambiguated_summary_for(self, referent):
+        print "[Intentando desambiguar", referent.name(), "con info adicional:", referent.extra_words, "]"
+
+        if len(referent.extra_words) < 2: return
+
+        pages = wk.search(" ".join(referent.extra_words), results = 1)
+        if not pages: return
+
+        page = pages[0]
+
+        page_words = set([ word.lower().encode("utf-8") for word in page.split() ])
+        referent_words = set(referent.extra_words)
+
+        jaccard_index = len(page_words & referent_words) / float(len(page_words | referent_words))
+
+        print "\tWikipage:", page, "- jaccard_index", jaccard_index
+        if jaccard_index >= 0.5: return wk.page(pages[0]).summary
 
     def without_parentheses(self, text):
         text = sub("\([^)]*\)", "", text)

@@ -3,6 +3,7 @@
 class Referent:
     def __init__(self, entity):
         self.references = set([ entity ])
+        self.extra_words = []
 
     def add_reference(self, entity):
         self.references.add(entity)
