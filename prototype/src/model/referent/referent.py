@@ -36,7 +36,7 @@ class Referent:
         designated = self.designated_ref()
         names = []
         for attr in ["names", "surnames"]:
-            if designated.has_attr(attr): names.append(designated.attributes[attr][0])
+            if designated.has_attr(attr): names.extend(designated.attributes[attr])
         if not names: names.append(designated.lexical_form)
         return " ".join(names)
 
