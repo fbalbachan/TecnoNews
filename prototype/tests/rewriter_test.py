@@ -47,6 +47,10 @@ class TestClauseAnalyzer(unittest.TestCase):
         self.kase("Ocurre esto cuando pasa esto.", "Cuando pasa esto, ocurre esto.")
         self.kase("Ocurre esto, apenas pasa esto", "Apenas pasa esto, ocurre esto")
 
+        # Apenas como adverbio no se tiene en cuenta
+        self.kase("La sopa está apenas salada", "La sopa está apenas salada")
+        self.kase("La sopa está apenas vuelva", "Apenas vuelva, la sopa está")
+
         # Múltiples oraciones
         self.kase(
             "Si yo amara a quien odió sería libre. Si yo odio a quien ama, soy esclavo.",
