@@ -64,9 +64,9 @@ class WikipediaContentGenerator:
         pages = wk.search(" ".join(referent.extra_words), results = 1)
         if not pages: return
 
-        page = pages[0]
+        page = pages[0].encode("utf-8")
 
-        page_words = set([ word.lower().encode("utf-8") for word in page.split() ])
+        page_words = set([ word.lower() for word in page.split() ])
         referent_words = set(referent.extra_words)
 
         jaccard_index = len(page_words & referent_words) / float(len(page_words | referent_words))
@@ -75,7 +75,7 @@ class WikipediaContentGenerator:
         if jaccard_index >= 0.5: return wk.page(pages[0]).summary
 
     def without_parentheses(self, text):
-        text = sub("\([^)]*\)", "", text)
+        text = sub("\([^)]*\)", "", text, )
         text = sub(" +", " ", text)
         text = text.replace(" ,", ",")
         return text
