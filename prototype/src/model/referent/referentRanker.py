@@ -33,5 +33,5 @@ class ReferentRanker:
 
         return functions_by_entity
 
-    score_by_function = {"subject" : 1, "od" : 0.75, "oi" : 0.75, "regimen" : 0.75, "equative" : 0.75,
-                         "adjuncts" : 0.5, "instrument_goal" : 0.5 }
+    score_by_function = {"subject" : 1, "od" : 0.5, "oi" : 0.5, "regimen" : 0.5, "equative" : 0.5,
+                         "adjuncts" : 0.25, "instrument_goal" : 0.25 }
