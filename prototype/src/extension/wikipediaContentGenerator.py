@@ -18,47 +18,32 @@ class WikipediaContentGenerator:
 
         ranking = filter(lambda (referent, score): bool(referent.semantic_classification()), ranking)
 
-        print "[Ranking de referentes]"
-        for referent, score in ranking:
-            print "\t", referent, "->", score
-        print
-
         for referent, score in ranking[0:2]:  # @UnusedVariable
             page_rank = self.page_rank_for(referent)
             if not page_rank:
-                print "(!) El referente", referent.name(), "no tiene resultados aceptables en Wikipedia"
                 continue
 
             try:
                 summary = wk.page(page_rank[0]).summary
             except DisambiguationError:
-                print "(!) La página '", page_rank[0], "' llevaba a una página de desambiguación"
-
                 summary = self.disambiguated_summary_for(referent)
                 if not summary: continue
 
             summary = summary.encode("utf-8")
 
-            print "\n[Summary de wikipedia para", page_rank[0], "]\n"
-            print summary
-            print "--\n"
-
             sentence = self.first_content_sentence_of(summary)
-
-            print "Primer oración:", sentence.text
-            print "-- -- -- -- -- -- -- -- -- --"
+            return sentence.text
 
     def first_content_sentence_of(self, summary):
         paragraph = Paragraph.from_text(self.without_parentheses(summary))
-        for sentence in paragraph.sentences:
-            text = sentence.text.lower()
-            if len(text.split()) < 10: continue
-            if ("redirigen" in text or "redirige" in text) and ("véase" in text or "desambiguación" in text): continue
-            return sentence
+        return iter(( sentence for sentence in paragraph.sentences if self.is_valid_sentence(sentence))).next()
+
+    def is_valid_sentence(self, sentence):
+        text = sentence.text.lower()
+        if len(text.split()) < 10: return False
+        return not (("redirigen" in text or "redirige" in text) and ("véase" in text or "desambiguación" in text))
 
     def disambiguated_summary_for(self, referent):
-        print "[Intentando desambiguar", referent.name(), "con info adicional:", referent.extra_words, "]"
-
         if len(referent.extra_words) < 2: return
 
         pages = wk.search(" ".join(referent.extra_words), results = 1)
@@ -71,7 +56,6 @@ class WikipediaContentGenerator:
 
         jaccard_index = len(page_words & referent_words) / float(len(page_words | referent_words))
 
-        print "\tWikipage:", page, "- jaccard_index", jaccard_index
         if jaccard_index >= 0.5: return wk.page(pages[0]).summary
 
     def without_parentheses(self, text):
@@ -83,12 +67,7 @@ class WikipediaContentGenerator:
     def page_rank_for(self, referent):
         name = referent.name()
 
-        print "\nRanking de páginas para referente", name
-
         pages = [ page.encode("utf-8") for page in wk.search(name, results = 3) ]
         page_rank = [ (page, jaro_winkler(page, name)) for page in pages ]
-
-        for page, rank in page_rank:
-            print "\t",  page, "->", rank
 
         return [ page for page, rank in page_rank if rank > 0.9 ]
