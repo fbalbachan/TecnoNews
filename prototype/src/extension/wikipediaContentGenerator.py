@@ -16,23 +16,32 @@ class WikipediaContentGenerator:
         wk.set_lang("es")
         ranking = self.analysis["referent_ranking"]
 
+        for r in ranking: print "*", r
+        print
+
         for referent, score in ranking[0:2]:  # @UnusedVariable
+            print "Analizando:", referent
             content = self.content_for(referent)
             if content: return content
 
     def content_for(self, referent):
         page_rank = self.page_rank_for(referent)
-        if not page_rank: return
+        if not page_rank:
+            print "(!) No hay resultados aceptables"
+            return
 
         try:
             summary = wk.page(page_rank[0]).summary
         except DisambiguationError:
+            print "(!) Desambiguación"
+
             summary = self.disambiguated_summary_for(referent)
             if not summary: return
 
         summary = summary.encode("utf-8")
 
         sentence = self.first_content_sentence_of(summary)
+        print "Contenido:", sentence.text
         return sentence.text
 
     def first_content_sentence_of(self, summary):
