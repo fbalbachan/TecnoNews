@@ -46,6 +46,9 @@ class Referent:
     def explicit_references(self):
         return filter(lambda entity: not entity.is_tacit(), self.references)
 
+    def first_occurrence(self):
+        return sorted(self.explicit_references(), key = lambda reference: reference.token.start())[0]
+
     def __repr__(self):
         return self.name() + " [" + str(self.ref_count()) + "] (" + \
             ", ".join([ str(ref) for ref in self.references ]) + ")"

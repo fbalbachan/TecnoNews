@@ -15,7 +15,9 @@ class ReferentRanker:
                 score += sum(self.score_by_function[function] for function in functions_by_entity[reference])
             score_by_referent[referent] = score
 
-        ranking = sorted(score_by_referent.items(), key = lambda (referent, score): score, reverse = True)
+        ranking = sorted(score_by_referent.items(),
+                         key = lambda (referent, score): (score, - referent.first_occurrence().token.start()),
+                         reverse = True)
         return ranking
 
     def arrange_entities_by_function(self):

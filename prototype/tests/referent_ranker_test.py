@@ -32,11 +32,8 @@ class ReferentRankerTest(unittest.TestCase):
         self.kase("Pedro jugó con María quien vivió en Caracas", ("María", 1.25), ("Pedro", 1), ("Caracas", 0.25))
         self.kase("Pedro amó a Maria. Dijo que la amaba.", ("Pedro", 3), ("Maria", 1))
 
-        # TODO: Ordenar los referentes ante empate, para así poder testear. El test en sí funciona: reciben el mismo
-        # score las entidades de nivel superior que las subordinadas, de acuerdo con la función sintáctica.
-
-        #self.kase("La empresa de Leandro compró a la empresa de María", ("La empresa de Leandro", 1), ("Leandro", 1),
-        #          ("Maria", 0.5), ("la empresa de María", 0.5))
+        self.kase("La empresa de Leandro compró a la empresa de María", ("La empresa de Leandro", 1), ("Leandro", 1),
+                  ("la empresa de María", 0.5), ("María", 0.5))
 
     def kase(self, text, *expected):
         paragraph = Paragraph.from_text(text)
