@@ -16,23 +16,24 @@ class WikipediaContentGenerator:
         wk.set_lang("es")
         ranking = self.analysis["referent_ranking"]
 
-        ranking = filter(lambda (referent, score): bool(referent.semantic_classification()), ranking)
-
         for referent, score in ranking[0:2]:  # @UnusedVariable
-            page_rank = self.page_rank_for(referent)
-            if not page_rank:
-                continue
+            content = self.content_for(referent)
+            if content: return content
 
-            try:
-                summary = wk.page(page_rank[0]).summary
-            except DisambiguationError:
-                summary = self.disambiguated_summary_for(referent)
-                if not summary: continue
+    def content_for(self, referent):
+        page_rank = self.page_rank_for(referent)
+        if not page_rank: return
 
-            summary = summary.encode("utf-8")
+        try:
+            summary = wk.page(page_rank[0]).summary
+        except DisambiguationError:
+            summary = self.disambiguated_summary_for(referent)
+            if not summary: return
 
-            sentence = self.first_content_sentence_of(summary)
-            return sentence.text
+        summary = summary.encode("utf-8")
+
+        sentence = self.first_content_sentence_of(summary)
+        return sentence.text
 
     def first_content_sentence_of(self, summary):
         paragraph = Paragraph.from_text(self.without_parentheses(summary))
