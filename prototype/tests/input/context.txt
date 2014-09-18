@@ -785,3 +785,9 @@ Desmintieron el rumor que había sido difundido por el diario Clarín acerca de 
 Fernando dijo que vió a María. Ella volvió.
     sentence: Ella volvió.
         subject: Ella -> María
+
+# Test: blacklist de entidades que no son NE
+Fuente: un pepino
+    sentence: Fuente
+        subject: Fuente
+            msi: { "semantic_classification" : None }
