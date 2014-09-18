@@ -43,6 +43,9 @@ class Referent:
     def ref_count(self):
         return len(self.references)
 
+    def explicit_ref_count(self):
+        return len(self.explicit_references())
+
     def explicit_references(self):
         return filter(lambda entity: not entity.is_tacit(), self.references)
 

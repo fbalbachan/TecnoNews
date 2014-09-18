@@ -9,7 +9,7 @@ class ReferentRanker:
 
         score_by_referent = {}
 
-        for referent in self.paragraph.referents():
+        for referent in self.paragraph.named_referents():
             score = 0
             for reference in referent.references:
                 score += sum(self.score_by_function[function] for function in functions_by_entity[reference])
