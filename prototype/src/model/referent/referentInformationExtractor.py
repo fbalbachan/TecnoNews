@@ -8,7 +8,7 @@ class ReferentInformationExtractor:
     def extract(self):
         words = []
 
-        for reference in self.referent.references:
+        for reference in self.referent.explicit_references():
             if reference.father: reference = reference.father
             words.extend([ leaf.lexical_form for leaf in reference.node.leaves_of_category("noun") ])
 
