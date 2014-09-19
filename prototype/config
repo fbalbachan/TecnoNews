@@ -23,3 +23,4 @@ place_classes = %(resources_dir)s/place.cls
 person_classes = %(resources_dir)s/person.cls
 
 tags_to_filter = %(resources_dir)s/tags_to_filter
+freeling_dict = %(resources_dir)s/freeling_es.dic

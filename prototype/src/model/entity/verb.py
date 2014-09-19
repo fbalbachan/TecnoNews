@@ -34,12 +34,21 @@ class Verb(Entity):
         leaves = self._leaves[-2:]
         if leaves[1].msi["mode"] == "infinitive": return leaves[0]
 
+    def has_modal(self):
+        return self.modal_verb() != None
+
     def is_modal_of(self, lemma):
         modal = self.modal_verb()
         return modal and modal.lemma == lemma
 
     def is_compound(self):
         return len(self._leaves) > 1
+
+    def has_compound_time(self):
+        return self.is_compound() and self.leaves()[0].lemma == "haber"
+
+    def is_locution(self):
+        return self.leaf().size() > 1
 
     def guess_msi(self):
         first_leaf = self._leaves[0]
@@ -48,8 +57,10 @@ class Verb(Entity):
         gender = "neutral" if self.voice == "active" else (self.leaf().msi["gender"] or "neutral")
         number = first_leaf.msi["number"]
         mode = first_leaf.msi["mode"]
+        time = first_leaf.msi["time"]
 
-        return { "category" : "verb", "gender" : gender, "number" : number, "person" : person, "mode" : mode }
+        return {"category" : "verb", "gender" : gender, "number" : number, "person" : person, "mode" : mode,
+                "time" :  time}
 
     def matching_pronoun(self):
         neutral_pronouns = { (1, "singular"), (2, "singular"), (2, "plural") }

@@ -4,9 +4,15 @@ from src.utils.resources import instance as resources
 
 class EntitySemanticAnalyzer:
     def analyze(self, entity):
-        for method in [self.detect_gender_if_necessary, self.fix_semantic_classification, self.fix_org_classification,
-                       self.fix_person_classification, self.set_names_for_person, self.set_attrs_for_org ]:
+        for method in [self.detect_gender_if_necessary, self.fix_semantic_classification, self.fix_invalid_ne,
+                       self.fix_org_classification, self.fix_person_classification, self.set_names_for_person,
+                       self.set_attrs_for_org ]:
             method(entity)
+
+    def fix_invalid_ne(self, entity):
+        if entity.lexical_form.lower() in self.invalid_name_entities:
+            entity.msi["semantic_classification"] = None
+            if entity.msi["category"] == "noun": entity.msi["type"] = "common"
 
     def fix_person_classification(self, entity):
         if entity.kernel and any( (word in self.org_sufixes for word in entity.kernel.original_components()) ):
@@ -71,3 +77,5 @@ class EntitySemanticAnalyzer:
 
     place_classes = resources.get_wordlist("resources", "place_classes")
     person_classes = resources.get_wordlist("resources", "person_classes")
+
+    invalid_name_entities = { name.lower() for name in resources.parse_csv_in("nec", "invalid_ne") }

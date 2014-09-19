@@ -79,6 +79,14 @@ class TokenizationGuesser:
             if leaf_word != word: raise Exception("Tokenization error!")
             leaf.token = token
 
+        self.assing_middle_node_tokens()
+
+    def assing_middle_node_tokens(self):
+        for node in [ node for node in self.sentence.parse_node if not node.is_leaf() ]:
+            token = Token()
+            token.components = [ (leaf.token.start(), leaf.token.end()) for leaf in node.leaves() ]
+            node.token = token
+
     def is_pending_mismatch(self, word, mismatchs):
         if not mismatchs: return False
         return mismatchs[0][0] == word

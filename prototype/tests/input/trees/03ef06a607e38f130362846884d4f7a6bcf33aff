@@ -1,0 +1,23 @@
++grup-verb_[
+  +verb_[
+    +(Dijo decir VMIS3S0 -)
+  ]
+  subord_[
+    +(que que CS -)
+    grup-verb_[
+      patons_[
+        +paton-fs_[
+          +(la lo PP3FSA00 -)
+        ]
+      ]
+      +verb_[
+        +(amaba amar VMII3S0 -)
+      ]
+    ]
+  ]
+  F-term_[
+    +(. . Fp -)
+  ]
+]
+
+

@@ -65,6 +65,11 @@ class TacitEntity:
         return msi["gender"] in neutral_genders or entity.msi["gender"] in neutral_genders \
             or msi["gender"] == entity.msi["gender"]
 
+    def matches_msi(self, msi):
+        for key, value in msi.items():
+            if not key in self.msi or self.msi[key] != value: return False
+        return True
+
     def is_linked(self):
         return bool(self.coref_chain)
 

@@ -5,3 +5,6 @@ negation_verbs = evitar, negar, rechazar, desmentir, desestimar, descartar, impe
 possibility_verbs = suponer, presumir, creer, intentar, soñar, fantasear, tratar
 future_verbs = augurar, predecir, anticipar, profetizar
 
+[nec]
+
+invalid_ne = fuente

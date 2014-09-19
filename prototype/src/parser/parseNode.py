@@ -11,6 +11,7 @@ class ParseNode(TreeNode):
 
     def __init__(self):
         TreeNode.__init__(self)
+        self.token = None
 
     def leaves_of_msi(self, msi):
         return filter(lambda leaf: all([ attribute in leaf.msi and leaf.msi[attribute] == value

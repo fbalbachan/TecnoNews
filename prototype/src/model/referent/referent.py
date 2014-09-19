@@ -3,6 +3,7 @@
 class Referent:
     def __init__(self, entity):
         self.references = set([ entity ])
+        self.extra_words = []
 
     def add_reference(self, entity):
         self.references.add(entity)
@@ -35,12 +36,21 @@ class Referent:
         designated = self.designated_ref()
         names = []
         for attr in ["names", "surnames"]:
-            if designated.has_attr(attr): names.append(designated.attributes[attr][0])
+            if designated.has_attr(attr): names.extend(designated.attributes[attr])
         if not names: names.append(designated.lexical_form)
         return " ".join(names)
 
     def ref_count(self):
         return len(self.references)
+
+    def explicit_ref_count(self):
+        return len(self.explicit_references())
+
+    def explicit_references(self):
+        return filter(lambda entity: not entity.is_tacit(), self.references)
+
+    def first_occurrence(self):
+        return sorted(self.explicit_references(), key = lambda reference: reference.token.start())[0]
 
     def __repr__(self):
         return self.name() + " [" + str(self.ref_count()) + "] (" + \
