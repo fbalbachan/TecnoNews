@@ -16,7 +16,7 @@ class WikipediaContentGenerator:
         ranking = self.analysis["referent_ranking"]
 
         content = []
-        for referent, score in ranking[0:2]:  # @UnusedVariable
+        for referent, score in ranking[0:3]:  # @UnusedVariable
             sentence_text, page = self.content_and_page_for(referent)
             content.append((referent, sentence_text, page))
         return content
@@ -35,7 +35,11 @@ class WikipediaContentGenerator:
         summary = page.summary.encode("utf-8")
 
         sentence = self.first_content_sentence_of(summary)
-        return sentence.text, page
+
+        content = sentence.text
+        if content[-1] != ".": content += "."
+
+        return content, page
 
     def first_content_sentence_of(self, summary):
         paragraph = Paragraph.from_text(self.without_parentheses(summary))
