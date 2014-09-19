@@ -12,20 +12,24 @@ class AdverbialClauseDislocationStrategy:
 
         en_caso_de_que = (
             main_clause.node.label == 'prep' and
-            self.is_subord_to_apply(main_clause.children[0]) and
+            self.is_subord_to_apply(main_clause.children[0], ["que"]) and
             len(ConditionFinder(main_clause.children[0].children[0]).find()) > 0 and
             ConditionFinder(main_clause.children[0].children[0]).find()[0].object == 'en_caso_de'
         )
 
         return self.is_subord_to_apply(main_clause) or en_caso_de_que
 
-    def is_subord_to_apply(self, clause):
+    def is_subord_to_apply(self, clause,
+            # "en_caso_de" se ve por separado en applies_to()
+            subordinate_headers = ["si", "mientras", "cuando", "una_vez_que"]
+        ):
         return (
             clause.node.label == 'grup-verb' and len(clause.children) == 1 and
             clause.children[0].node.label == 'subord' and (
                 clause.children[0].node.token.start() == clause.node.token.start() or
                 len(ConditionFinder(clause.children[0]).find()) == 0
-            )
+            ) and
+            clause.children[0].node.leaves()[0].lemma in subordinate_headers
         )
 
     def rewrite(self, sentence):
