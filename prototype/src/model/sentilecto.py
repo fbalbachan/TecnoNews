@@ -34,6 +34,6 @@ class Sentilecto:
         analysis["tag_mapping"] = tag_mapping
 
         analysis["referent_ranking"] = ReferentRanker(paragraph).rank()
-        WikipediaContentGenerator(analysis).generate()
+        analysis["generated_content"] = WikipediaContentGenerator(analysis).generate()
 
         return analysis
