@@ -27,5 +27,12 @@ class Paragraph:
 
     @staticmethod
     def from_text(text):
-        sentences = SentenceSplitter().sentences_in(text)
-        return Paragraph(sentences, text)
+        # TODO: Repensar desde la arquitectura si las sentences son de text o del párrafo,
+        #       ya que Paragraph(sentences, text) puede ser redundante.
+        paragraph = Paragraph()
+        # Mientras tanto, paragraph es un parámetro -posiblemente redundante-
+        # de SentenceSplitter.sentences_in()
+        sentences = SentenceSplitter().sentences_in(text, paragraph)
+        paragraph.sentences = sentences
+        paragraph.text = text
+        return paragraph

@@ -3,9 +3,10 @@ from src.model.tokenization.token import Token
 
 
 class Sentence(object):
-
-    def __init__(self, text):
+    # TODO: Repensar parámetros: text o paragraph? o ambos?
+    def __init__(self, text, paragraph = None):
         self.text = text
+        self.paragraph = paragraph
 
         self.token = self.build_token()
 
@@ -13,6 +14,7 @@ class Sentence(object):
         self.clauses = []
 
     def main_clause(self):
+        # TODO: Preguntarle a Lean por qué toma [0] si dijo que puede haber más de una
         return self.clauses_of_level(0)[0]
 
     def clauses_of_level(self, level):

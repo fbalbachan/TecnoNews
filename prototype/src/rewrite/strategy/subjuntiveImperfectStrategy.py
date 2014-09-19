@@ -25,3 +25,5 @@ class SubjuntiveImperfectStrategy:
     def msi_for(self, verb):
         msi = verb.msi
         return { "mode" : "subjuntive", "time" : "imperfecto", "person" : msi["person"], "number" : msi["number"]}
+
+    type = "replacement"

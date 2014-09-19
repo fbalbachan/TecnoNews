@@ -7,13 +7,14 @@ from src.utils.textCleaner import TextCleaner
 
 
 class SentenceSplitter:
-	def sentences_in(self, text):
+    # TODO: Repensar parámetros: text o paragraph? o ambos?
+	def sentences_in(self, text, paragraph = None):
 		text = text.decode("utf-8")
 		text = self.replace_strange_chars(text)
 
 		texts = [ each.strip().encode("utf-8") for each in self.split(text)]
 		non_empty_texts = filter(lambda text: text != '' and text != None, texts)
-		return self.to_sentences(non_empty_texts, text)
+		return self.to_sentences(non_empty_texts, text, paragraph)
 
 	def replace_strange_chars(self, text):
 		return text.replace(u"“", '"').replace(u"”", '"').replace('"', "-")
@@ -66,8 +67,9 @@ class SentenceSplitter:
 	def is_valid_delimiter_before_period(self, string):
 		return not (bool(self.abbreviation_regex.match(string)) or bool(re.match("^[A-Z]$", string)))
 
-	def to_sentences(self, texts, source):
-		sentences = [ Sentence(text) for text in texts ]
+	# TODO: Repensar parámetros: text o paragraph? o ambos?
+	def to_sentences(self, texts, source, paragraph = None):
+		sentences = [ Sentence(text, paragraph) for text in texts ]
 
 		end = 0
 
