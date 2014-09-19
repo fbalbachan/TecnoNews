@@ -11,12 +11,7 @@ class TestBlogPublisher(unittest.TestCase):
                  'http://es.wikipedia.org/wiki/Thomas%20P.%20Griesa', 
                  ]
 
-        self.blog_publisher = BlogPublisher("", links)
-    
-
-    def test__format_html_links(self):
-        html_links = self.blog_publisher._format_html_links()
-        self.assertIn('<a href=http://es.wikipedia.org/wiki/Telef%C3%B3nica>http://es.wikipedia.org/wiki/Telef%C3%B3nica</a>', html_links)
+        self.blog_publisher = BlogPublisher()
 
     
     def test_publish(self):
@@ -29,7 +24,7 @@ class TestBlogPublisher(unittest.TestCase):
 
         content = 'Hola. <a href=http://www.google.com>Link de prueba</a>.'
         entry = NewsEntry('Hola',content,['test', 'sentinews'], 'fuente_de_prueba')
-        self.blog_publisher._publish_entry(entry)
+        self.blog_publisher.publish(entry)
 
 if __name__ == '__main__':
     unittest.main()

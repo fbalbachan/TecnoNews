@@ -36,6 +36,7 @@ class TestCrawler(unittest.TestCase):
         self.assertEquals(text[:10], u"El huracán")
 
     def testFilterEntries(self):
+        # This title should be in DB
         test_title = 'Al menos 44 muertos al derrumbarse un edificio de una iglesia en Nigeria'
         entries = [{'title': test_title},
                    {'title':'Test entry'}]

@@ -17,8 +17,11 @@ class WikipediaContentGenerator:
 
         content = []
         for referent, score in ranking[0:3]:  # @UnusedVariable
-            sentence_text, page = self.content_and_page_for(referent)
-            content.append((referent, sentence_text, page))
+            content_and_page = self.content_and_page_for(referent)
+            if  content_and_page:
+                sentence_text, page = content_and_page
+                content.append((referent, sentence_text, page))
+                if len(content) > 1: break
         return content
 
     def content_and_page_for(self, referent):

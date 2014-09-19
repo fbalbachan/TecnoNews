@@ -14,6 +14,7 @@ link = "http://cnnespanol.cnn.com/2014/09/16/microsoft-presentara-windows-9-el-3
 
 parser = CNNParser()
 news_entry = parser.parse(link)
+
 c = NewsRewriter(news_entry)
 c.rewrite()
 c.publish()

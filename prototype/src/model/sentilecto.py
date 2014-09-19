@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
+from src.extension.wikipediaContentGenerator import WikipediaContentGenerator
 from src.model.output.paragraphEntityTagger import ParagraphEntityTagger
 from src.model.paragraph.paragraph import Paragraph
 from src.model.paragraph.paragraphAnalyzer import ParagraphAnalyzer
 from src.model.referent.entityUnifier import EntityUnifier
 from src.model.referent.referentInformationExtractor import ReferentInformationExtractor
-from src.model.referent.referentRanker import ReferentRanker
 from src.model.referent.referentSentimentalScorer import ReferentSentimentalScorer
 from src.sentiment.sentimentalSummarizer import SentimentalSummarizer
 
@@ -32,7 +32,5 @@ class Sentilecto:
         analysis["tagged_text"] = tagged_text
         analysis["tag_mapping"] = tag_mapping
 
-        analysis["referent_ranking"] = ReferentRanker(paragraph).rank()
-        analysis["generated_content"] = WikipediaContentGenerator(analysis).generate()
 
         return analysis

@@ -79,15 +79,16 @@ class TestHyperLinkProcessor(unittest.TestCase):
         processor = HyperlinkProcessor(Sentilecto().analyze(text))
         self.assertIn('Leandro_Liptak', [str(e) for e in processor.entities])
         test_entity = [e for e in processor.entities if e.name() == 'Leandro_Liptak'][0]
-        processor.links_by_entity[test_entity].append('http://www.google.com')
+        processor.links_by_entity[test_entity]['linkedin'] = 'http://www.google.com'
         tagged_text = processor._add_links_to_text()
         self.assertIn("<a id='e_0' href=http://www.google.com target=_blank>Leandro Liptak</a>", tagged_text)
         self.assertIn(" <a id='e_1' href=http://www.google.com target=_blank>Liptak</a>", tagged_text)
 
     def _get_links_from_processor(self):
         res = []
-        for links in self.processor.links_by_entity.values():
-            res += links 
+        for links_by_type in self.processor.links_by_entity.values():
+            for links in links_by_type.values():
+                res.append(links) 
         return res
 
 if __name__ == '__main__':

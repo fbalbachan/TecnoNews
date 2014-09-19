@@ -15,7 +15,7 @@ from tests.freelingTreeRepository import FreelingTreeRepository
 class Rewriter:
     def __init__(self, paragraph, ontology = None, strategies = None):
         if ontology == None:
-            ontology = FreelingDictionaryParser.from_resource()
+            ontology = self.ontology
 
         if strategies == None:
             self.replacementStrategies = [
@@ -80,3 +80,5 @@ class Rewriter:
 
     sentenceAnalyzer = SentenceAnalyzer(FreelingTreeRepository("tests/input/trees"))
     analyzer = ParagraphAnalyzer(sentenceAnalyzer)
+    ontology = FreelingDictionaryParser.from_resource()
+
