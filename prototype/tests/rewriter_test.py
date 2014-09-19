@@ -63,9 +63,26 @@ class TestClauseAnalyzer(unittest.TestCase):
         # Con aclaración entre comas
         self.kase("Si Cristina, la presidenta, hace esto, eso ocurre.", "Eso ocurre, si Cristina, la presidenta, hace esto.")
 
-        # En caso de, y siempre y cuando
-        #self.kase("En caso de que duerma, los sueños son posibles", "Los sueños son posibles, en caso de que duerma")
-        #self.kase("En caso de dormir, los sueños son posibles", "Los sueños son posibles, en caso de dormir")
+        # Una vez que
+        self.kase("Una vez que yo sea así, lo lograré.", "Lo lograré, una vez que yo sea así.")
+        self.kase("Lo lograré, una vez que sea así", "Una vez que sea así, lo lograré")
+
+        # Mientras
+        self.kase("Mientras él está allá, ella está acá.", "Ella está acá, mientras él está allá.")
+        # TODO: Por ahora mientras es unidireccional ya que ", mientras" separa en oraciones.
+        #self.kase("Ella está acá, mientras él está allá.", "Mientras él está allá, ella está acá.")
+
+        # En caso de que (unidireccional)
+        self.kase(
+            "probando mayúscula de oración y con múltiples oraciones. En caso de que yo sea rico, me compro un yate. listo.",
+            "probando mayúscula de oración y con múltiples oraciones. Me compro un yate, en caso de que yo sea rico. listo."
+        )
+        self.kase("en caso de que duerma, los sueños son posibles", "los sueños son posibles, en caso de que duerma")
+        self.kase("Los sueños son posibles, en caso de que duerma.", "Los sueños son posibles, en caso de que duerma.")
+
+        # En caso de (sin "que" queda igual)
+        self.kase("En caso de dormir, los sueños son posibles", "En caso de dormir, los sueños son posibles")
+
         #self.kase("Siempre y cuando yo duerma, los sueños son posibles", "Los sueños son posibles, siempre y cuando yo duerma")
     def test_past_simple_to_compound(self):
         self.strategies = [PastSimpleToCompoundStrategy(self.ontology)]
