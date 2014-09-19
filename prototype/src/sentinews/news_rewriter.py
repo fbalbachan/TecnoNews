@@ -58,14 +58,11 @@ class NewsRewriter(object):
         else:
             image = images[0]
 
-        return "<img src=%s></img> %s" %(image, self.original_entry.content)
+        return "<img src=%s></img> %s" %(image, self.rewritten_entry.content)
 
 
 
     def rewrite(self):
-        logger = get_logger('tecnonews')
-        logger.info("ORIGINAL: %s" % self.rewritten_entry.content)
-      
         analysis = self._analyze(self.original_entry.content)
         analysis["referent_ranking"] = ReferentRanker(analysis["paragraph"]).rank()
         analysis["generated_content"] = WikipediaContentGenerator(analysis).generate()
@@ -74,15 +71,10 @@ class NewsRewriter(object):
 
         wikiinfo =  analysis["generated_content"]
         ranking =  analysis["referent_ranking"]
-        logger.info("wikiinfo: %s" % wikiinfo)
-
-        logger.info("INSERTER: %s" % self.rewritten_entry.content)
 
         analysis = self._analyze(self.rewritten_entry.content)
         rewriter = Rewriter(analysis['paragraph'])
         self.rewritten_entry.content = rewriter.rewrite()
-
-        logger.info("REWRITEN: %s" % self.rewritten_entry.content)
 
         analysis = self._analyze(self.rewritten_entry.content)
         hyperlink_processor = HyperlinkProcessor(analysis)
