@@ -1,31 +1,32 @@
 # -*- coding: utf-8 -*-
 
-from src.extension.textInserter import TextInserter
-from src.extension.wikipediaContentGenerator import WikipediaContentGenerator
-from src.model.referent.referentRanker import ReferentRanker
 from src.model.sentilecto import Sentilecto
-from src.rewrite.rewriter import Rewriter
-from src.sentinews.blog_publisher import BlogPublisher
 from src.sentinews.hyperlink_processor import HyperlinkProcessor
+from src.sentinews.blog_publisher import BlogPublisher
 from src.sentinews.news_entry import NewsEntry
+from src.extension.textInserter import TextInserter
+from src.rewrite.rewriter import Rewriter
+from src.model.referent.referentRanker import ReferentRanker
+from src.extension.wikipediaContentGenerator import WikipediaContentGenerator
 from src.utils.logger_utils import *
+
+
 import wikipedia as wk
 
-
 class NewsRewriter(object):
-    ''' Main class that contains all information
+    ''' Main class that contains all information 
         about the original news article and
-        the rewritten result.
+        the rewritten result. 
         Ties the crawler, the rewrite strategies and
         the publisher. '''
-
+    
     def __init__(self, original_entry):
         self.original_entry = original_entry
         self.rewritten_entry = NewsEntry(original_entry.title,
                                          original_entry.content,
                                          original_entry.tags,
                                          original_entry.source)
-
+    
     def inject_additional_info(self, wikipage):
         self.insert_main_image(wikipage)
 
@@ -52,6 +53,8 @@ class NewsRewriter(object):
             if "Flag" in x:
                 res = [x]
                 break
+        if not images:
+            return self.rewritten_entry.content
         if res:
             image = res[0]
         else:
@@ -79,7 +82,7 @@ class NewsRewriter(object):
         hyperlink_processor = HyperlinkProcessor(analysis)
         self.rewritten_entry.content = hyperlink_processor.get_text_with_hyperlinks()
 
-        if wikiinfo and filter(lambda (referent, score): referent == wikiinfo[0][0] and score > 1., ranking):
+        if wikiinfo and filter(lambda (referent, score): referent == wikiinfo[0][0] and score > 1., ranking): 
             self.rewritten_entry.content  = self.insert_main_image(wikiinfo[0][2])
 
     def publish(self):
