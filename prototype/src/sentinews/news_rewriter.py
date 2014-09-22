@@ -71,12 +71,9 @@ class NewsRewriter(object):
         wikiinfo =  analysis["generated_content"]
         ranking =  analysis["referent_ranking"]
 
-        try:
-            analysis = self._analyze(self.rewritten_entry.content)
-            rewriter = Rewriter(analysis['paragraph'])
-            self.rewritten_entry.content = rewriter.rewrite()
-        except:
-            pass
+        analysis = self._analyze(self.rewritten_entry.content)
+        rewriter = Rewriter(analysis['paragraph'])
+        self.rewritten_entry.content = rewriter.rewrite()
 
         analysis = self._analyze(self.rewritten_entry.content)
         hyperlink_processor = HyperlinkProcessor(analysis)

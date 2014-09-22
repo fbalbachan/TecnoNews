@@ -86,7 +86,12 @@ class Rewriter:
         #return [ strategy.rewrite(sentence) for sentence in self.paragraph.sentences if strategy.applies_to(sentence) ]
 
     def replacements_for(self, clause):
-        return [ strategy.rewrite(clause) for strategy in self.replacementStrategies if strategy.applies_to(clause) ]
+        replacements = []
+        for strategy in self.replacementStrategies:
+            try:
+                if strategy.applies_to(clause): replacements.append(strategy.rewrite(clause))
+            except: pass
+        return replacements
 
     sentenceAnalyzer = SentenceAnalyzer(FreelingTreeRepository("tests/input/trees"))
     analyzer = ParagraphAnalyzer(sentenceAnalyzer)
