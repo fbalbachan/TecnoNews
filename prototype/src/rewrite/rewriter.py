@@ -73,7 +73,17 @@ class Rewriter:
         return source_text.encode("utf-8")
 
     def dislocations_from(self, strategy):
-        return [ strategy.rewrite(sentence) for sentence in self.paragraph.sentences if strategy.applies_to(sentence) ]
+        # TODO: Remove this exception handler when the problem is solved
+        dislocations = []
+        for sentence in self.paragraph.sentences:
+            try:
+                if strategy.applies_to(sentence):
+                    dislocations.append(strategy.rewrite(sentence))
+            except:
+                pass
+        return dislocations
+        # TODO: Use the line below again after removing the handler above
+        #return [ strategy.rewrite(sentence) for sentence in self.paragraph.sentences if strategy.applies_to(sentence) ]
 
     def replacements_for(self, clause):
         return [ strategy.rewrite(clause) for strategy in self.replacementStrategies if strategy.applies_to(clause) ]
