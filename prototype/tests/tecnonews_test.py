@@ -7,14 +7,16 @@ from src.utils.logger_utils import *
 import traceback
 import datetime
 from src.sentinews.news_crawler.cnn_parser import CNNParser
+import wikipedia as wk
+from src.sentinews.news_crawler.cnn_crawler import CNNCrawler
 
 ''' Clase para testear una sola noticia end to end '''
 
-link = "http://cnnespanol.cnn.com/2014/09/16/microsoft-presentara-windows-9-el-30-de-septiembre/"
+link = "http://cnnespanol.cnn.com/2014/09/19/vive-el-golf-consejos-de-golf-de-rafael-alarcon-como-mover-la-pelota/"
 
 parser = CNNParser()
 news_entry = parser.parse(link)
-
+CNNCrawler()
 c = NewsRewriter(news_entry)
 c.rewrite()
 c.publish()

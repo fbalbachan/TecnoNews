@@ -12,6 +12,7 @@ from src.utils.logger_utils import *
 
 
 import wikipedia as wk
+logger = get_logger('tecnonews')
 
 class NewsRewriter(object):
     ''' Main class that contains all information 
@@ -26,9 +27,6 @@ class NewsRewriter(object):
                                          original_entry.content,
                                          original_entry.tags,
                                          original_entry.source)
-    
-    def inject_additional_info(self, wikipage):
-        self.insert_main_image(wikipage)
 
     def insert_main_image(self, wikipage):
         ## TODO CAMBIAR
@@ -59,8 +57,10 @@ class NewsRewriter(object):
             image = res[0]
         else:
             image = images[0]
+        
+        logger.info("IMAGE URL: %s", image)
 
-        return "<img src=%s></img> %s" %(image, self.rewritten_entry.content)
+        return "<p><img src=%s></img></p> %s" %(image, self.rewritten_entry.content)
 
 
 
@@ -86,7 +86,10 @@ class NewsRewriter(object):
         self.rewritten_entry.content = hyperlink_processor.get_text_with_hyperlinks()
 
         if wikiinfo and filter(lambda (referent, score): referent == wikiinfo[0][0] and score > 1., ranking): 
+            logger.info("WIKIINFO: %s", str(wikiinfo))
             self.rewritten_entry.content  = self.insert_main_image(wikiinfo[0][2])
+        else:
+            logger.info("NO REFERENT SCORE > 1")
 
     def publish(self):
         publisher = BlogPublisher()
