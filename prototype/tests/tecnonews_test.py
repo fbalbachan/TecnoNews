@@ -12,7 +12,7 @@ from src.sentinews.news_crawler.cnn_crawler import CNNCrawler
 
 ''' Clase para testear una sola noticia end to end '''
 
-link = "http://cnnespanol.cnn.com/2014/09/19/vive-el-golf-consejos-de-golf-de-rafael-alarcon-como-mover-la-pelota/"
+link = "http://cnnespanol.cnn.com/2014/09/22/policia-investiga-ataques-racistas-contra-mario-balotelli-tras-un-tuit-del-futbolista/"
 
 parser = CNNParser()
 news_entry = parser.parse(link)
