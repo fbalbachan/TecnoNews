@@ -19,6 +19,8 @@ general_resources = %(resources_dir)s/general_resources
 honorific_prefs = %(resources_dir)s/honorificos.pre
 organization_sufs = %(resources_dir)s/organization.suf
 
+freeling_dict = %(resources_dir)s/freeling_es.dic
+
 place_classes = %(resources_dir)s/place.cls
 person_classes = %(resources_dir)s/person.cls
 

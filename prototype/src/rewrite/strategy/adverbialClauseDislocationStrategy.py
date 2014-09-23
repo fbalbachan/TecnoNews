@@ -6,8 +6,6 @@ from src.model.go.conditionFinder import ConditionFinder
 
 class AdverbialClauseDislocationStrategy:
     def applies_to(self, sentence):
-        # No aplica a "Soy libre si amo a quien busca" porque ambas clauses, subord y subord-rel,
-        # son hijas de "Soy libre". La clause subord-rel debería ser hija de la subord.
         main_clause = sentence.main_clause()
 
         en_caso_de_que = (
@@ -24,7 +22,7 @@ class AdverbialClauseDislocationStrategy:
             subordinate_headers = ["si", "mientras", "cuando", "una_vez_que"]
         ):
         return (
-            clause.node.label == 'grup-verb' and len(clause.children) == 1 and
+            clause.node.label == 'grup-verb' and len(clause.children) > 0 and
             clause.children[0].node.label == 'subord' and (
                 clause.children[0].node.token.start() == clause.node.token.start() or
                 len(ConditionFinder(clause.children[0]).find()) == 0

@@ -90,6 +90,16 @@ class TestClauseAnalyzer(unittest.TestCase):
         # En caso de (sin "que" queda igual)
         self.kase("En caso de dormir, los sueños son posibles", "En caso de dormir, los sueños son posibles")
 
+        # Algunos casos reales
+        self.kase(
+            "Si enciendes la televisión cualquier día de la semana, es probable que te topes con la repetición de algún episodio de Friends.",
+            "Es probable que te topes con la repetición de algún episodio de Friends, si enciendes la televisión cualquier día de la semana."
+        )
+        self.kase(
+            "Si no ha sido tu día —ni tu año— puedes contar con un grupo selecto de amigos que te van a hacer sonreír.",
+            "Puedes contar con un grupo selecto de amigos que te van a hacer sonreír, si no ha sido tu día —ni tu año—."
+        )
+
         #self.kase("Siempre y cuando yo duerma, los sueños son posibles", "Los sueños son posibles, siempre y cuando yo duerma")
     def test_past_simple_to_compound(self):
         self.strategies = [PastSimpleToCompoundStrategy(self.ontology)]
