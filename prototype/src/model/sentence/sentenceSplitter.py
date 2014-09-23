@@ -90,5 +90,5 @@ class SentenceSplitter:
 		return sentences
 
 	abbreviation_regex = re.compile("^(jr|mr|inc|ltd|co|ing|lic|dr|dra|arq|mag|phd|ph|prof|excmo|excma|mrs|gmbh|md|mons|cap|tte|col|lt|sgt|cnel|gral|brig|pref|prov|sr|sra|srta|dir|etc|fed|ee|uu)$", re.U | re.I)
-	delimiters = re.compile(ur"""[!\?]\s+|(?=\.$)|\n|, ?pero\b|:\s+|, ?y\b|, ?mientras|, ?entonces|, ?aunque|, ?sin embargo\b|, ?no obstante|;|\.\.\.|, ?pues\b""", re.U|re.I)
+	delimiters = re.compile(ur"""[!\?]\s+|(?=\.$)|\n|, ?pero\b|:\s+|, ?y\b|, ?entonces|, ?sin embargo\b|, ?no obstante|;|\.\.\.|, ?pues\b""", re.U|re.I)
 	textCleaner = TextCleaner()
