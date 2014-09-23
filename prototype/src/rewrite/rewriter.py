@@ -9,6 +9,7 @@ from src.rewrite.strategy.adverbialClauseDislocationStrategy import AdverbialCla
 from src.rewrite.strategy.futureToGoConstructionStrategy import FutureToGoConstructionStrategy
 from src.rewrite.strategy.pastSimpleToCompoundStrategy import PastSimpleToCompoundStrategy
 from src.rewrite.strategy.subjuntiveImperfectStrategy import SubjuntiveImperfectStrategy
+from src.rewrite.strategy.synonymsStrategy import SynonymsStrategy
 from tests.freelingTreeRepository import FreelingTreeRepository
 
 
@@ -19,9 +20,10 @@ class Rewriter:
 
         if strategies == None:
             self.replacementStrategies = [
+                SynonymsStrategy(ontology),
                 PastSimpleToCompoundStrategy(ontology),
                 SubjuntiveImperfectStrategy(ontology),
-                FutureToGoConstructionStrategy(ontology)
+                FutureToGoConstructionStrategy(ontology),
             ]
             self.dislocationStrategies = [
                 AdverbialClauseDislocationStrategy()
@@ -89,7 +91,13 @@ class Rewriter:
         replacements = []
         for strategy in self.replacementStrategies:
             try:
-                if strategy.applies_to(clause): replacements.append(strategy.rewrite(clause))
+                if strategy.applies_to(clause):
+                    rewrite = strategy.rewrite(clause)
+                    if type(rewrite) == list: 
+                        replacements.extend(rewrite)
+                    else:
+                        replacements.append(rewrite)
+
             except: pass
         return replacements
 
