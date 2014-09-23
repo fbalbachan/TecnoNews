@@ -18,7 +18,7 @@ from tests.freelingTreeRepository import FreelingTreeRepository
 
 
 class Rewriter:
-    def __init__(self, paragraph, ontology = None, strategies = None):
+    def __init__(self, paragraph, ontology = None, strategies = None, clausesForReplacements = None):
         if ontology == None:
             ontology = FreelingDictionaryParser.from_resource()
         
@@ -29,7 +29,7 @@ class Rewriter:
                 FutureStrategy(ontology)
             ]
             self.dislocationStrategies = [
-                AdverbialClauseDislocationStrategy()
+                AdverbialClauseDislocationStrategy(ontology)
             ]
         else:
             self.replacementStrategies = []
@@ -39,10 +39,12 @@ class Rewriter:
                 else: self.dislocationStrategies.append(strategy)
         
         self.paragraph = paragraph
+        self.clausesForReplacements = clausesForReplacements
 
     def rewrite(self):
         replacements = []
-        for clause in self.paragraph.clauses():
+        clauses = self.paragraph.clauses() if not self.clausesForReplacements else self.clausesForReplacements
+        for clause in clauses:
             replacements.extend(self.replacements_for(clause))
 
         #print rewrites
