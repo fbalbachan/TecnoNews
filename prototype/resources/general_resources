@@ -8,3 +8,7 @@ future_verbs = augurar, predecir, anticipar, profetizar
 [nec]
 
 invalid_ne = fuente
+
+[rewrite]
+
+blacklist = CNN, ISIS, Servicio_Secreto
