@@ -7,7 +7,7 @@ future_verbs = augurar, predecir, anticipar, profetizar
 
 [nec]
 
-invalid_ne = fuente,cnn_en_español,cnn,isis,juzgado_penal,fuente_cnn_en_español,fuente_cnn,click_to_watch_video,click,Click,Click_to_watch_video,CNN_Español
+invalid_ne = fuente,cnn_en_español,cnn,isis,juzgado_penal,fuente_cnn_en_español,fuente_cnn,click_to_watch_video,click,Click,Click_to_watch_video,CNN_Español,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,Amnistía
 
 [rewrite]
 
