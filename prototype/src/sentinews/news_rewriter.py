@@ -28,7 +28,7 @@ class NewsRewriter(object):
                                          original_entry.tags,
                                          original_entry.source)
 
-    def _filter_alt_text(self, im, h):
+    def _get_alt_text(self, im, h):
         im2 = [(x.split('/')[-1].split('.')[0], x) for x in im]
 
         res = {}
@@ -38,16 +38,15 @@ class NewsRewriter(object):
                 s = re.search("alt=\".*\" src=", x).group(0)
                 s = s[s.find('"')+1:]
                 s = s[:s.find('"')]
-                if s != "":
-                    res[url] = s
+                res[url] = s
             except:
-                pass
+                res[url] = url
         return res
 
     def insert_main_image(self, wikipage):
         ## TODO CAMBIAR
 
-        img_alts = self._filter_alt_text(wikipage.images, wikipage.html())
+        img_alts = self._get_alt_text(wikipage.images, wikipage.html())
         images = img_alts.keys()
 
         search_string = wikipage.original_title.lower().split()
