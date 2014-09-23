@@ -9,9 +9,10 @@ from src.rewrite.rewriter import Rewriter
 from src.model.referent.referentRanker import ReferentRanker
 from src.extension.wikipediaContentGenerator import WikipediaContentGenerator
 from src.utils.logger_utils import *
-
+import re
 
 import wikipedia as wk
+logger = get_logger('tecnonews')
 
 class NewsRewriter(object):
     ''' Main class that contains all information 
@@ -26,14 +27,28 @@ class NewsRewriter(object):
                                          original_entry.content,
                                          original_entry.tags,
                                          original_entry.source)
-    
-    def inject_additional_info(self, wikipage):
-        self.insert_main_image(wikipage)
+
+    def _get_alt_text(self, im, h):
+        im2 = [(x.split('/')[-1].split('.')[0], x) for x in im]
+
+        res = {}
+        for img,url in im2:
+            try:
+                x = re.search("\<img.*%s.*/>" % img, h).group(0)
+                s = re.search("alt=\".*\" src=", x).group(0)
+                s = s[s.find('"')+1:]
+                s = s[:s.find('"')]
+                res[url] = s
+            except:
+                res[url] = url
+        return res
 
     def insert_main_image(self, wikipage):
         ## TODO CAMBIAR
 
-        images = wikipage.images
+        img_alts = self._get_alt_text(wikipage.images, wikipage.html())
+        images = img_alts.keys()
+
         search_string = wikipage.original_title.lower().split()
 
         res = []
@@ -59,8 +74,10 @@ class NewsRewriter(object):
             image = res[0]
         else:
             image = images[0]
+        
+        logger.info("IMAGE URL: %s %s", image, img_alts[image])
 
-        return "<img src=%s></img> %s" %(image, self.rewritten_entry.content)
+        return '<p><img title="%s" src=%s></img></p> %s' %(img_alts[image], image, self.rewritten_entry.content)
 
 
 
@@ -83,7 +100,10 @@ class NewsRewriter(object):
         self.rewritten_entry.content = hyperlink_processor.get_text_with_hyperlinks()
 
         if wikiinfo and filter(lambda (referent, score): referent == wikiinfo[0][0] and score > 1., ranking): 
+            logger.info("WIKIINFO: %s", str(wikiinfo))
             self.rewritten_entry.content  = self.insert_main_image(wikiinfo[0][2])
+        else:
+            logger.info("NO REFERENT SCORE > 1")
 
     def publish(self):
         publisher = BlogPublisher()

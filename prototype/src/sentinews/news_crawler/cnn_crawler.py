@@ -38,6 +38,5 @@ class CNNCrawler:
 
         tags_filename =  Config.get("resources", "tags_to_filter")
         with open(tags_filename) as tagsfile:
-            tags = [tag.strip() for tag in tagsfile]
-        
-        return [entry for entry in news_entries if  len(set(tags) & set(entry.tags)) == 0]
+            tags = [tag.strip().lower() for tag in tagsfile]
+        return [entry for entry in news_entries if  len(set(tags) & set([tag.lower() for tag in entry.tags])) == 0]
