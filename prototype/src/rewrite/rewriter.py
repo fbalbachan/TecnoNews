@@ -7,6 +7,9 @@ from src.model.paragraph.paragraphAnalyzer import ParagraphAnalyzer
 from src.model.sentence.sentenceAnalyzer import SentenceAnalyzer
 from src.rewrite.strategy.adverbialClauseDislocationStrategy import AdverbialClauseDislocationStrategy
 from src.rewrite.strategy.futureToGoConstructionStrategy import FutureToGoConstructionStrategy
+from src.rewrite.strategy.goConstructionToFutureStrategy import GoConstructionToFutureStrategy
+from src.rewrite.strategy.modalDeberToTieneQue import ModalDeberToTieneQue
+from src.rewrite.strategy.pastCompoundToSimpleStrategy import PastCompoundToSimpleStrategy
 from src.rewrite.strategy.pastSimpleToCompoundStrategy import PastSimpleToCompoundStrategy
 from src.rewrite.strategy.subjuntiveImperfectStrategy import SubjuntiveImperfectStrategy
 from tests.freelingTreeRepository import FreelingTreeRepository
@@ -20,8 +23,12 @@ class Rewriter:
         if strategies == None:
             self.replacementStrategies = [
                 PastSimpleToCompoundStrategy(ontology),
+                PastCompoundToSimpleStrategy(ontology),
                 SubjuntiveImperfectStrategy(ontology),
-                FutureToGoConstructionStrategy(ontology)
+                FutureToGoConstructionStrategy(ontology),
+                GoConstructionToFutureStrategy(ontology)
+                #ModalDeberToTieneQue(ontology)
+
             ]
             self.dislocationStrategies = [
                 AdverbialClauseDislocationStrategy()
