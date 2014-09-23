@@ -93,7 +93,7 @@ class Rewriter:
             except: pass
         return replacements
 
-    sentenceAnalyzer = SentenceAnalyzer(FreelingTreeRepository("tests/input/trees"))
+    sentenceAnalyzer = SentenceAnalyzer() #FreelingTreeRepository("tests/input/trees"))
     analyzer = ParagraphAnalyzer(sentenceAnalyzer)
     ontology = FreelingDictionaryParser.from_resource()
 
