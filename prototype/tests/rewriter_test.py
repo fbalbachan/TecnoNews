@@ -144,7 +144,7 @@ class TestClauseAnalyzer(unittest.TestCase):
 
         self.assertEqual(text, edited)
 
-    ontology = FreelingDictionaryParser.from_resource()
+    ontology = Rewriter.ontology
 
 if __name__ == '__main__':
     unittest.main()
