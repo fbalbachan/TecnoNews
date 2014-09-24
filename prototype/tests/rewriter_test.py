@@ -9,12 +9,14 @@ from src.model.sentence.sentenceAnalyzer import SentenceAnalyzer
 from src.rewrite.rewriter import Rewriter
 from src.rewrite.strategy.adverbialClauseDislocationStrategy import AdverbialClauseDislocationStrategy
 from src.rewrite.strategy.futureToGoConstructionStrategy import FutureToGoConstructionStrategy
+from src.rewrite.strategy.modalDeberToTieneQue import ModalDeberToTieneQue
 from src.rewrite.strategy.pastSimpleToCompoundStrategy import PastSimpleToCompoundStrategy
 from src.rewrite.strategy.subjuntiveImperfectStrategy import SubjuntiveImperfectStrategy
+from src.rewrite.strategy.tieneQueToModalDeber import TieneQueToModalDeber
 from tests.freelingTreeRepository import FreelingTreeRepository
 
 
-class TestClauseAnalyzer(unittest.TestCase):
+class TestRewriter(unittest.TestCase):
 
     @classmethod
     def setUpClass(self):
@@ -154,6 +156,17 @@ class TestClauseAnalyzer(unittest.TestCase):
 
         # Es una locución
         self.kase("Yo metí la pata", "Yo metí la pata")
+
+    def test_modal_deber_to_tiene_que(self):
+        self.strategies = [ModalDeberToTieneQue(self.ontology)]
+        self.kase("Yo debo amar a todos", "Yo tengo que amar a todos")
+        self.kase("Yo debí amar a todos", "Yo tuve que amar a todos")
+
+    def test_tiene_que_to_modal_deber(self):
+        self.strategies = [TieneQueToModalDeber(self.ontology)]
+        self.kase("Yo tuve que amar a todos", "Yo debí amar a todos")
+        self.kase("Tendré que buscar agua", "Deberé buscar agua")
+        self.kase("Tendría que buscar agua", "Debería buscar agua")
 
     def test_subjuntive_imperfect(self):
         self.strategies = [SubjuntiveImperfectStrategy(self.ontology)]

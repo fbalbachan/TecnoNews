@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from collections import deque
 
+from traceback import format_exc
 from src.ling.freelingDictionaryParser import FreelingDictionaryParser
 from src.model.paragraph.paragraph import Paragraph
 from src.model.paragraph.paragraphAnalyzer import ParagraphAnalyzer
@@ -8,9 +9,11 @@ from src.model.sentence.sentenceAnalyzer import SentenceAnalyzer
 from src.rewrite.strategy.adverbialClauseDislocationStrategy import AdverbialClauseDislocationStrategy
 from src.rewrite.strategy.futureToGoConstructionStrategy import FutureToGoConstructionStrategy
 from src.rewrite.strategy.goConstructionToFutureStrategy import GoConstructionToFutureStrategy
+from src.rewrite.strategy.modalDeberToTieneQue import ModalDeberToTieneQue
 from src.rewrite.strategy.pastCompoundToSimpleStrategy import PastCompoundToSimpleStrategy
 from src.rewrite.strategy.pastSimpleToCompoundStrategy import PastSimpleToCompoundStrategy
 from src.rewrite.strategy.subjuntiveImperfectStrategy import SubjuntiveImperfectStrategy
+from src.rewrite.strategy.tieneQueToModalDeber import TieneQueToModalDeber
 
 
 class Rewriter:
@@ -22,10 +25,14 @@ class Rewriter:
             self.replacementStrategies = [
                 PastSimpleToCompoundStrategy(ontology),
                 PastCompoundToSimpleStrategy(ontology),
+
                 SubjuntiveImperfectStrategy(ontology),
+
                 FutureToGoConstructionStrategy(ontology),
-                GoConstructionToFutureStrategy(ontology)
-                #ModalDeberToTieneQue(ontology)
+                GoConstructionToFutureStrategy(ontology),
+
+                ModalDeberToTieneQue(ontology),
+                TieneQueToModalDeber(ontology)
 
             ]
             self.dislocationStrategies = [
@@ -86,8 +93,8 @@ class Rewriter:
             try:
                 if strategy.applies_to(sentence):
                     dislocations.append(strategy.rewrite(sentence))
-            except:
-                pass
+            except: print format_exc()
+
         return dislocations
         # TODO: Use the line below again after removing the handler above
         #return [ strategy.rewrite(sentence) for sentence in self.paragraph.sentences if strategy.applies_to(sentence) ]
@@ -97,7 +104,8 @@ class Rewriter:
         for strategy in self.replacementStrategies:
             try:
                 if strategy.applies_to(clause): replacements.append(strategy.rewrite(clause))
-            except: pass
+            except: print format_exc()
+
         return replacements
 
     sentenceAnalyzer = SentenceAnalyzer() #FreelingTreeRepository("tests/input/trees"))
