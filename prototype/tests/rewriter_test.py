@@ -42,28 +42,34 @@ class TestClauseAnalyzer(unittest.TestCase):
         self.kase("Aunque duerma sigo pensando.", "Sigo pensando, aunque duerma.")
         self.kase("Aunque duerma, sigo pensando.", "Sigo pensando, aunque duerma.")
 
-        #self.kase("Sigo pensando aunque duerma", "Aunque duerma, sigo pensando")
+        self.kase("Sigo pensando aunque duerma", "Aunque duerma, sigo pensando")
         #self.kase("Sigo pensando, aunque duerma",  "Aunque duerma, sigo pensando")
-        #self.kase("Sigo pensando aunque duerma.",  "Aunque duerma, sigo pensando.")
+        self.kase("Sigo pensando aunque duerma.",  "Aunque duerma, sigo pensando.")
         #self.kase("Sigo pensando, aunque duerma.",  "Aunque duerma, sigo pensando.")
 
         # A pesar de que
         self.kase("A pesar de que odie, soy libre.",  "Soy libre, a pesar de que odie.")
-        #self.kase("Soy libre, a pesar de que odie.",  "A pesar de que odie, soy libre.")
+        self.kase("Soy libre, a pesar de que odie.",  "A pesar de que odie, soy libre.")
 
         # Pese a que
         self.kase("Pese a que odia, soy libre.",  "Soy libre, pese a que odia.")
-        #self.kase("Soy libre, pese a que yo ame a quien odia.",  "Pese a que yo ame a quien odia, soy libre.")
+        self.kase("Soy libre, pese a que odia.",  "Pese a que odia, soy libre.")
 
         # Múltiples oraciones
         self.kase(
-            "Aunque me amara sería libre. A pesar de que ame, soy esclavo",
-            "Sería libre, aunque me amara. Soy esclavo, a pesar de que ame"
+            "Aunque me amara sería libre. a pesar de que ame, soy esclavo. Siempre pienso, pese a que duerma",
+            "Sería libre, aunque me amara. soy esclavo, a pesar de que ame. Pese a que duerma, siempre pienso"
         )
 
         # Minúscula
         self.kase("aunque odie soy libre", "soy libre, aunque odie")
-        #self.kase("soy libre pese a que yo ame a quien odia", "pese a que yo ame a quien odia, soy libre")
+        self.kase("soy libre pese a que odie", "pese a que odie, soy libre")
+
+        # Casos reales
+        #self.kase(
+        #    "El periódico ha señalado que el riesgo de hacerse adicto comiendo los fideos es prácticamente inexistente, aunque se comen de forma continua durante un largo periodo.",
+        #    "Aunque se comen de forma continua durante un largo periodo, el periódico ha señalado que el riesgo de hacerse adicto comiendo los fideos es prácticamente inexistente."
+        #)
 
     def test_adverbial_clause_dislocation_no_header_change(self):
         self.strategies = [AdverbialClauseDislocationStrategy(self.ontology, False)]
