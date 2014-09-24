@@ -10,6 +10,7 @@ from src.rewrite.rewriter import Rewriter
 from tests.freelingTreeRepository import FreelingTreeRepository
 
 from src.rewrite.strategy.adverbialClauseDislocationStrategy import AdverbialClauseDislocationStrategy
+from src.rewrite.strategy.althoughClauseDislocationStrategy import AlthoughClauseDislocationStrategy
 from src.rewrite.strategy.futureStrategy import FutureStrategy
 from src.rewrite.strategy.pastSimpleToCompoundStrategy import PastSimpleToCompoundStrategy
 from src.rewrite.strategy.subjuntiveImperfectStrategy import SubjuntiveImperfectStrategy
@@ -27,6 +28,42 @@ class TestClauseAnalyzer(unittest.TestCase):
     def __(self):
         ontology = FreelingDictionaryParser.from_resource()
         print ontology.get_lexical_form("haber", { "mode" : "indicative", "time" : "presente", "person" : 2, "number" : "singular"})
+
+    def test_although_clause_dislocation(self):
+        self.strategies = [AlthoughClauseDislocationStrategy()]
+
+        # Malformaciones o "aunque" sin tesis
+        self.kase("Duermo aunque", "Duermo aunque")
+        self.kase("Aunque duermo", "Aunque duermo")
+
+        # Diferentes opciones de puntuación
+        self.kase("Aunque duerma sigo pensando", "Sigo pensando, aunque duerma")
+        self.kase("Aunque duerma, sigo pensando", "Sigo pensando, aunque duerma")
+        self.kase("Aunque duerma sigo pensando.", "Sigo pensando, aunque duerma.")
+        self.kase("Aunque duerma, sigo pensando.", "Sigo pensando, aunque duerma.")
+
+        #self.kase("Sigo pensando aunque duerma", "Aunque duerma, sigo pensando")
+        #self.kase("Sigo pensando, aunque duerma",  "Aunque duerma, sigo pensando")
+        #self.kase("Sigo pensando aunque duerma.",  "Aunque duerma, sigo pensando.")
+        #self.kase("Sigo pensando, aunque duerma.",  "Aunque duerma, sigo pensando.")
+
+        # A pesar de que
+        self.kase("A pesar de que odie, soy libre.",  "Soy libre, a pesar de que odie.")
+        #self.kase("Soy libre, a pesar de que odie.",  "A pesar de que odie, soy libre.")
+
+        # Pese a que
+        #self.kase("Pese a que odio, soy libre.",  "Soy libre, pese a que odio.")
+        #self.kase("Soy libre, pese a que yo ame a quien odia.",  "Pese a que yo ame a quien odia, soy libre.")
+
+        # Múltiples oraciones
+        self.kase(
+            "Aunque me amara sería libre. A pesar de que ame, soy esclavo",
+            "Sería libre, aunque me amara. Soy esclavo, a pesar de que ame"
+        )
+
+        # Minúscula
+        self.kase("aunque odie soy libre", "soy libre, aunque odie")
+        #self.kase("soy libre pese a que yo ame a quien odia", "pese a que yo ame a quien odia, soy libre")
 
     def test_adverbial_clause_dislocation_no_header_change(self):
         self.strategies = [AdverbialClauseDislocationStrategy(self.ontology, False)]
