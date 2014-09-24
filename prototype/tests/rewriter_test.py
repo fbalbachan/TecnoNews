@@ -52,7 +52,7 @@ class TestClauseAnalyzer(unittest.TestCase):
         #self.kase("Soy libre, a pesar de que odie.",  "A pesar de que odie, soy libre.")
 
         # Pese a que
-        #self.kase("Pese a que odio, soy libre.",  "Soy libre, pese a que odio.")
+        self.kase("Pese a que odia, soy libre.",  "Soy libre, pese a que odia.")
         #self.kase("Soy libre, pese a que yo ame a quien odia.",  "Pese a que yo ame a quien odia, soy libre.")
 
         # Múltiples oraciones
