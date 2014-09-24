@@ -105,9 +105,15 @@ class Rewriter:
         replacements = []
         for strategy in self.replacementStrategies:
             try:
-                if strategy.applies_to(clause): replacements.append(strategy.rewrite(clause))
+                if strategy.applies_to(clause): self.append_if_not_overlaps(strategy.rewrite(clause), replacements)
             except: print format_exc()
         return replacements
+
+    def append_if_not_overlaps(self, rewrite, rewrites):
+        if not any(( each.overlaps(rewrite) for each in rewrites )):
+            rewrites.append(rewrite)
+        else:
+            print "Hay OVERLAP"
 
     sentenceAnalyzer = SentenceAnalyzer()
     analyzer = ParagraphAnalyzer(sentenceAnalyzer)

@@ -14,5 +14,8 @@ class Token:
     def end(self):
         return self.components[-1][1]
 
+    def overlaps(self, other):
+        return bool(set(range(self.start(), self.end())) & set(range(other.start(), other.end())))
+
     def __repr__(self):
         return "(" + str(self.start()) + ", " + str(self.end()) + ")"
