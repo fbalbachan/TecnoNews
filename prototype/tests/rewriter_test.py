@@ -27,8 +27,9 @@ class TestClauseAnalyzer(unittest.TestCase):
         ontology = FreelingDictionaryParser.from_resource()
         print ontology.get_lexical_form("haber", { "mode" : "indicative", "time" : "presente", "person" : 2, "number" : "singular"})
 
-    def test_adverbial_clause_dislocation(self):
-        self.strategies = [AdverbialClauseDislocationStrategy()]
+    def test_adverbial_clause_dislocation_no_header_change(self):
+        self.strategies = [AdverbialClauseDislocationStrategy(self.ontology, False)]
+
         # Con y sin coma inicial
         self.kase("Si yo amo a quien odia, soy libre", "Soy libre, si yo amo a quien odia")
         self.kase("Si yo amo a quien odia soy libre",  "Soy libre, si yo amo a quien odia")
@@ -101,6 +102,38 @@ class TestClauseAnalyzer(unittest.TestCase):
         )
 
         #self.kase("Siempre y cuando yo duerma, los sueños son posibles", "Los sueños son posibles, siempre y cuando yo duerma")
+
+    def test_adverbial_clause_dislocation_header_change(self):
+        self.strategies = [AdverbialClauseDislocationStrategy(self.ontology)]
+
+        self.kase("Si yo amo a quien odia, soy libre", "Soy libre, en caso de que yo ame a quien odia")
+        self.kase("Si quiero comer, ocurre esto",  "Ocurre esto, en caso de que quiera comer")
+        self.kase("Si yo tomé esto, ocurre esto",  "Ocurre esto, en caso de que yo haya tomado esto")
+        self.kase("Si yo pude comer esto, ocurre esto",  "Ocurre esto, en caso de que yo haya podido comer esto")
+        self.kase("Si tomaron esto, ocurre esto",  "Ocurre esto, en caso de que hayan tomado esto")
+        self.kase("Si tomamos esto, ocurre esto",  "Ocurre esto, en caso de que tomemos esto")
+        self.kase("Si yo tomase esto, ocurre esto",  "Ocurre esto, si yo tomase esto")
+        self.kase("Si yo tomara esto, ocurre esto",  "Ocurre esto, si yo tomara esto")
+        self.kase("Ocurre esto, si pasa esto",  "Ocurre esto, si pasa esto")
+        self.kase("Si los átomos chocaban, explotaba todo.",  "Explotaba todo, en caso de que los átomos chocaran.")
+        self.kase("Si los átomos chocarán, explotará.",  "Explotará, en caso de que los átomos chocaren.")
+
+        # apenas -> cuando (unidireccional)
+        self.kase("Apenas pasa esto, ocurre esto.", "Ocurre esto, cuando pasa esto.")
+        self.kase("Ocurre esto apenas pasa esto.", "Cuando pasa esto, ocurre esto.")
+        self.kase("ocurre esto, apenas pasa esto", "cuando pasa esto, ocurre esto")
+        self.kase("Cuando pasa esto, ocurre esto.", "Ocurre esto, cuando pasa esto.")
+
+        # Por ahora sin soporte de verbos inicialmente compuestos
+        self.kase("Si ella había tomado esto, ocurre esto",  "Ocurre esto, si ella había tomado esto")
+        self.kase("Si ella ha tomado esto, ocurre esto",  "Ocurre esto, si ella ha tomado esto")
+
+        # Combinado
+        self.kase(
+            "Si amara a quien odió sería libre. Si odié a quien ama, soy esclavo. Apenas corro, me libero.",
+            "Sería libre, si amara a quien odió. Soy esclavo, en caso de que haya odiado a quien ama. Me libero, cuando corro."
+        )
+
     def test_past_simple_to_compound(self):
         self.strategies = [PastSimpleToCompoundStrategy(self.ontology)]
         self.kase("Leandro amó", "Leandro ha amado")
