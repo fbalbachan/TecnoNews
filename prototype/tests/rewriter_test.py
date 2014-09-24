@@ -8,6 +8,7 @@ from src.model.paragraph.paragraphAnalyzer import ParagraphAnalyzer
 from src.model.sentence.sentenceAnalyzer import SentenceAnalyzer
 from src.rewrite.rewriter import Rewriter
 from src.rewrite.strategy.adverbialClauseDislocationStrategy import AdverbialClauseDislocationStrategy
+from src.rewrite.strategy.althoughClauseDislocationStrategy import AlthoughClauseDislocationStrategy
 from src.rewrite.strategy.futureToGoConstructionStrategy import FutureToGoConstructionStrategy
 from src.rewrite.strategy.modalDeberToTieneQue import ModalDeberToTieneQue
 from src.rewrite.strategy.pastSimpleToCompoundStrategy import PastSimpleToCompoundStrategy
@@ -28,6 +29,42 @@ class TestRewriter(unittest.TestCase):
     def __(self):
         ontology = FreelingDictionaryParser.from_resource()
         print ontology.get_lexical_form("haber", { "mode" : "indicative", "time" : "presente", "person" : 2, "number" : "singular"})
+
+    def test_although_clause_dislocation(self):
+        self.strategies = [AlthoughClauseDislocationStrategy()]
+
+        # Malformaciones o "aunque" sin tesis
+        self.kase("Duermo aunque", "Duermo aunque")
+        self.kase("Aunque duermo", "Aunque duermo")
+
+        # Diferentes opciones de puntuación
+        self.kase("Aunque duerma sigo pensando", "Sigo pensando, aunque duerma")
+        self.kase("Aunque duerma, sigo pensando", "Sigo pensando, aunque duerma")
+        self.kase("Aunque duerma sigo pensando.", "Sigo pensando, aunque duerma.")
+        self.kase("Aunque duerma, sigo pensando.", "Sigo pensando, aunque duerma.")
+
+        #self.kase("Sigo pensando aunque duerma", "Aunque duerma, sigo pensando")
+        #self.kase("Sigo pensando, aunque duerma",  "Aunque duerma, sigo pensando")
+        #self.kase("Sigo pensando aunque duerma.",  "Aunque duerma, sigo pensando.")
+        #self.kase("Sigo pensando, aunque duerma.",  "Aunque duerma, sigo pensando.")
+
+        # A pesar de que
+        self.kase("A pesar de que odie, soy libre.",  "Soy libre, a pesar de que odie.")
+        #self.kase("Soy libre, a pesar de que odie.",  "A pesar de que odie, soy libre.")
+
+        # Pese a que
+        self.kase("Pese a que odia, soy libre.",  "Soy libre, pese a que odia.")
+        #self.kase("Soy libre, pese a que yo ame a quien odia.",  "Pese a que yo ame a quien odia, soy libre.")
+
+        # Múltiples oraciones
+        self.kase(
+            "Aunque me amara sería libre. A pesar de que ame, soy esclavo",
+            "Sería libre, aunque me amara. Soy esclavo, a pesar de que ame"
+        )
+
+        # Minúscula
+        self.kase("aunque odie soy libre", "soy libre, aunque odie")
+        #self.kase("soy libre pese a que yo ame a quien odia", "pese a que yo ame a quien odia, soy libre")
 
     def test_adverbial_clause_dislocation_no_header_change(self):
         self.strategies = [AdverbialClauseDislocationStrategy(self.ontology, False)]
@@ -71,8 +108,13 @@ class TestRewriter(unittest.TestCase):
 
         # Mientras
         self.kase("Mientras él está allá, ella está acá.", "Ella está acá, mientras él está allá.")
+        self.kase("Ella está acá mientras él está allá.", "Mientras él está allá, ella está acá.")
         # TODO: Por ahora mientras es unidireccional ya que ", mientras" separa en oraciones.
         #self.kase("Ella está acá, mientras él está allá.", "Mientras él está allá, ella está acá.")
+
+        # Según
+        self.kase("Según dijo Pedro, ella está acá.", "Ella está acá, según dijo Pedro.")
+        self.kase("Ella está acá, según dijo Pedro.", "Según dijo Pedro, ella está acá.")
 
         # PORQUE no es dislocable
         self.kase("Porque yo soy así, ella es así.", "Porque yo soy así, ella es así.")
@@ -101,6 +143,10 @@ class TestRewriter(unittest.TestCase):
         self.kase(
             "Si no ha sido tu día —ni tu año— puedes contar con un grupo selecto de amigos que te van a hacer sonreír.",
             "Puedes contar con un grupo selecto de amigos que te van a hacer sonreír, si no ha sido tu día —ni tu año—."
+        )
+        self.kase(
+            "Si estás viendo esta nota en tu móvil, mira aquí la galería.",
+            "Mira aquí la galería, si estás viendo esta nota en tu móvil."
         )
 
         #self.kase("Siempre y cuando yo duerma, los sueños son posibles", "Los sueños son posibles, siempre y cuando yo duerma")
@@ -180,7 +226,8 @@ class TestRewriter(unittest.TestCase):
         self.kase("Juan amará", "Juan va a amar")
 
     def test_combined(self):
-        self.strategies = [PastSimpleToCompoundStrategy(self.ontology), SubjuntiveImperfectStrategy(self.ontology), FutureToGoConstructionStrategy(self.ontology) ]
+        self.strategies = [PastSimpleToCompoundStrategy(self.ontology), SubjuntiveImperfectStrategy(self.ontology), \
+                           FutureToGoConstructionStrategy(self.ontology) ]
         self.kase("Si yo amara a quien odió sería libre", "Si yo amase a quien ha odiado sería libre")
         self.kase("Amaré si odiase a quien pudo ver la luz", "Voy a amar si odiara a quien ha podido ver la luz")
 

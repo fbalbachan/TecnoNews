@@ -25,12 +25,12 @@ class SiAEncasodequeStrategySubjunctivePart:
         return Rewrite(verb.node, set_first_letter_case(verb.leaves()[0].original_lexical_form, rewrited_verb))
 
     def original_text(self, verb):
-        return str(verb.leaf()) # TODO: Check this
+        return " ".join([ leaf.original_lexical_form for leaf in verb.node.leaves() ]) # TODO: Check this
 
     def subjunctive_text(self, verb):
         ontology = self.ontology
-        inflected_leaf = verb.modal_verb() if verb.has_modal() else verb.leaf()
         try:
+            inflected_leaf = verb.modal_verb() if verb.has_modal() else verb.leaf()
             if inflected_leaf.msi['time'] == 'pasado':
                 subjunctive_lf = ontology.get_lexical_form(inflected_leaf.lemma, self.msi_for(inflected_leaf))
 
@@ -43,10 +43,10 @@ class SiAEncasodequeStrategySubjunctivePart:
             else:
                 subjunctive_lf = ontology.get_lexical_form(inflected_leaf.lemma, self.msi_for(inflected_leaf))
                 rewrited_verb = subjunctive_lf.text
+            if verb.has_modal(): rewrited_verb += " " + verb.leaf().lexical_form
         except:
-            rewrited_verb = inflected_leaf.text
+            rewrited_verb = self.original_text(verb)
 
-        if verb.has_modal(): rewrited_verb += " " + verb.leaf().lexical_form
         return rewrited_verb
 
     def msi_for(self, verb):

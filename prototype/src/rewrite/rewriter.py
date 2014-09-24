@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 from collections import deque
-
 from traceback import format_exc
+
 from src.ling.freelingDictionaryParser import FreelingDictionaryParser
 from src.model.paragraph.paragraph import Paragraph
 from src.model.paragraph.paragraphAnalyzer import ParagraphAnalyzer
 from src.model.sentence.sentenceAnalyzer import SentenceAnalyzer
 from src.rewrite.strategy.adverbialClauseDislocationStrategy import AdverbialClauseDislocationStrategy
+from src.rewrite.strategy.althoughClauseDislocationStrategy import AlthoughClauseDislocationStrategy
 from src.rewrite.strategy.futureToGoConstructionStrategy import FutureToGoConstructionStrategy
 from src.rewrite.strategy.goConstructionToFutureStrategy import GoConstructionToFutureStrategy
 from src.rewrite.strategy.modalDeberToTieneQue import ModalDeberToTieneQue
@@ -36,7 +37,8 @@ class Rewriter:
 
             ]
             self.dislocationStrategies = [
-                AdverbialClauseDislocationStrategy(ontology)
+                AdverbialClauseDislocationStrategy(ontology),
+                AlthoughClauseDislocationStrategy(),
             ]
         else:
             self.replacementStrategies = []
@@ -105,10 +107,9 @@ class Rewriter:
             try:
                 if strategy.applies_to(clause): replacements.append(strategy.rewrite(clause))
             except: print format_exc()
-
         return replacements
 
-    sentenceAnalyzer = SentenceAnalyzer() #FreelingTreeRepository("tests/input/trees"))
+    sentenceAnalyzer = SentenceAnalyzer()
     analyzer = ParagraphAnalyzer(sentenceAnalyzer)
     ontology = FreelingDictionaryParser.from_resource()
 
