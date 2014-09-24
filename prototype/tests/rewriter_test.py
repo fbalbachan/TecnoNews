@@ -101,6 +101,10 @@ class TestClauseAnalyzer(unittest.TestCase):
             "Si no ha sido tu día —ni tu año— puedes contar con un grupo selecto de amigos que te van a hacer sonreír.",
             "Puedes contar con un grupo selecto de amigos que te van a hacer sonreír, si no ha sido tu día —ni tu año—."
         )
+        self.kase(
+            "Si estás viendo esta nota en tu móvil, mira aquí la galería.",
+            "Mira aquí la galería, si estás viendo esta nota en tu móvil."
+        )
 
         #self.kase("Siempre y cuando yo duerma, los sueños son posibles", "Los sueños son posibles, siempre y cuando yo duerma")
 
