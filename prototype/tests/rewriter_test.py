@@ -70,8 +70,13 @@ class TestClauseAnalyzer(unittest.TestCase):
 
         # Mientras
         self.kase("Mientras él está allá, ella está acá.", "Ella está acá, mientras él está allá.")
+        self.kase("Ella está acá mientras él está allá.", "Mientras él está allá, ella está acá.")
         # TODO: Por ahora mientras es unidireccional ya que ", mientras" separa en oraciones.
         #self.kase("Ella está acá, mientras él está allá.", "Mientras él está allá, ella está acá.")
+
+        # Según
+        self.kase("Según dijo Pedro, ella está acá.", "Ella está acá, según dijo Pedro.")
+        self.kase("Ella está acá, según dijo Pedro.", "Según dijo Pedro, ella está acá.")
 
         # PORQUE no es dislocable
         self.kase("Porque yo soy así, ella es así.", "Porque yo soy así, ella es así.")

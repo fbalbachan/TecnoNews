@@ -30,7 +30,7 @@ class AdverbialClauseDislocationStrategy:
 
     def is_subord_to_apply(self, clause,
             # "en_caso_de" se ve por separado en applies_to()
-            subordinate_headers = ["si", "mientras", "cuando", "una_vez_que"]
+            subordinate_headers = ["si", "mientras", "cuando", "una_vez_que", "según"]
         ):
         return (
             clause.node.label == 'grup-verb' and len(clause.children) > 0 and
