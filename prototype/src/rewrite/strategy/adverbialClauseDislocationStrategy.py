@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
-from src.rewrite.rewrite import Rewrite
-from src.utils.stringUtils import set_first_letter_case
 from src.model.go.conditionFinder import ConditionFinder
-from src.rewrite.strategy.siAEncasodequeStrategySubjunctivePart import SiAEncasodequeStrategySubjunctivePart
-
-import src.rewrite.rewriter
 from src.model.paragraph.paragraph import Paragraph
 from src.model.paragraph.paragraphAnalyzer import ParagraphAnalyzer
 from src.model.sentence.sentenceAnalyzer import SentenceAnalyzer
-from tests.freelingTreeRepository import FreelingTreeRepository
+from src.rewrite.rewrite import Rewrite
+import src.rewrite.rewriter
+from src.rewrite.strategy.siAEncasodequeStrategySubjunctivePart import SiAEncasodequeStrategySubjunctivePart
+from src.utils.stringUtils import set_first_letter_case
 
 
 class AdverbialClauseDislocationStrategy:
@@ -147,7 +145,7 @@ class AdverbialClauseDislocationStrategy:
         main_clause = sentence.main_clause()
         clause = main_clause.children[0]
         token = clause.children[0].node.token
-        
+
         text = sentence.paragraph.text.decode("utf-8")
         first_part = text[clause.node.token.start():token.end()].strip()
         second_part = text[token.end():clause.node.token.end()].strip()
@@ -171,5 +169,5 @@ class AdverbialClauseDislocationStrategy:
 
     type = "dislocation"
 
-    sentenceAnalyzer = SentenceAnalyzer(FreelingTreeRepository("tests/input/trees"))
+    sentenceAnalyzer = SentenceAnalyzer()
     analyzer = ParagraphAnalyzer(sentenceAnalyzer)
