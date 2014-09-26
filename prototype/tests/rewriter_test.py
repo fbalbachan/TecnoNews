@@ -138,8 +138,7 @@ class TestClauseAnalyzer(unittest.TestCase):
     def test_combined(self):
         self.strategies = [PastSimpleToCompoundStrategy(self.ontology), SubjuntiveImperfectStrategy(self.ontology), FutureToGoConstructionStrategy(self.ontology), SynonymsStrategy(self.ontology) ]
         self.kase("Si yo amara a quien odió sería libre", "Si yo amase a quien ha odiado sería libre")
-        self.kase("Si odiase a quien pudo construir la luz, amaré", "Voy a amar, si odiara a quien ha podido ver la luz")
-
+        self.kase("Si odiase a quien pudo ver la luz, amaré", "Voy a amar, si odiara a quien ha podido ver la luz")
         self.kase("Amaré si odiase a quien pudo construir la luz", "Voy a amar si odiara a quien ha podido ver la luz")
 
         self.strategies = None # Estrategias por defecto

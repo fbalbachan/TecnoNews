@@ -88,15 +88,22 @@ class Rewriter:
         #return [ strategy.rewrite(sentence) for sentence in self.paragraph.sentences if strategy.applies_to(sentence) ]
 
     def replacements_for(self, clause):
+        replaced_nodes = set()
+
         replacements = []
         for strategy in self.replacementStrategies:
             try:
                 if strategy.applies_to(clause):
                     rewrite = strategy.rewrite(clause)
-                    if type(rewrite) == list: 
-                        replacements.extend(rewrite)
+                    if type(rewrite) == list:
+                        for r in rewrite:
+                            if not r.node.leaves().intersection(replaced_nodes):     
+                                replacements.append(r)
+                                replaced_nodes = replaced_nodes.union(set(r.node.leaves()))
                     else:
-                        replacements.append(rewrite)
+                        if not rewrite.node.leaves().intersection(replaced_nodes):     
+                            replacements.append(rewrite)
+                            replaced_nodes = replaced_nodes.union(set(rewrite.node.leaves()))
 
             except: pass
         return replacements
