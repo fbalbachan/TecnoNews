@@ -241,6 +241,11 @@ class TestRewriter(unittest.TestCase):
                   "Para el alumno, memorizar el abecedario es un desafío ilógico")        
         self.kase("El principio del famoso robo fue maravilloso y rápido", 
                   "El comienzo del famoso robo fue extraordinario y rápido")  
+        self.kase("Quizás salga primero a pesar de esperar de vez en cuando", 
+                  "Tal vez salga primero pese a esperar esporádicamente")  
+        self.kase("Tal vez salga primero pese a esperar esporádicamente", 
+                  "Quizá salga primero a pesar de esperar esporádicamente")  
+
 
 
     def test_combined(self):
