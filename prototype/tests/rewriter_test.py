@@ -231,7 +231,8 @@ class TestRewriter(unittest.TestCase):
         self.kase("Moriré mañana", "Voy a morir mañana")
         self.kase("Construiremos más viviendas", "Vamos a construir más viviendas")
         self.kase("Juan amará", "Juan va a amar")
-   def test_synonyms(self):
+    
+    def test_synonyms(self):
         self.strategies = [SynonymsStrategy(self.ontology)]
 
         self.kase("El rey construyó su victoria en base a mentiras", 
@@ -246,10 +247,10 @@ class TestRewriter(unittest.TestCase):
         self.strategies = [SynonymsStrategy(self.ontology), PastSimpleToCompoundStrategy(self.ontology), SubjuntiveImperfectStrategy(self.ontology), \
                            FutureToGoConstructionStrategy(self.ontology) ]
         self.kase("Si yo amara a quien odió sería libre", "Si yo amase a quien ha odiado sería libre")
-        self.kase("Amaré si odiase a quien pudo ver la luz", "Voy a amar si odiara a quien ha podido ver la luz")
+        self.kase("Amaré si odiase a quien pudo ver la luz", "Voy a amar si odiara a quien pudo observar la luz")
 
         self.strategies = None # Estrategias por defecto
-        self.kase("Si odiase a quien pudo ver la luz, amaré", "Voy a amar, si odiara a quien ha podido ver la luz")
+        self.kase("Si odiase a quien pudo ver la luz, amaré", "Voy a amar, si odiara a quien pudo observar la luz")
 
     def kase(self, source, edited):
         print "Case:", source
