@@ -23,6 +23,7 @@ class Clause(TreeNode):
 
         self.valuated_adverbs = []
         self.isolated_adjectives = []
+        self.time_references = []
 
         self.attributes = []
 
