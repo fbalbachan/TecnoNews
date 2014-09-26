@@ -29,3 +29,5 @@ class PastCompoundToSimpleStrategy:
     def msi_for(self, verb):
         msi = verb.msi
         return { "mode" : "indicative", "time" : "pasado", "person" : msi["person"], "number" : msi["number"]}
+
+    type = "replacement"

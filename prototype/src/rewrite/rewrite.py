@@ -10,6 +10,9 @@ class Rewrite:
     def token(self):
         return self.node.token
 
+    def overlaps(self, other):
+        return self.token().overlaps(other.token())
+
     def __repr__(self):
         return self.node.leaves_string() + " -> " + self.replacement
 

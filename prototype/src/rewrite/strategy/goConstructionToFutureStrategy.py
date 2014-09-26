@@ -24,3 +24,5 @@ class GoConstructionToFutureStrategy:
     def msi_for(self, verb):
         msi = verb.msi
         return { "mode" : "indicative", "time" : "futuro", "person" : msi["person"], "number" : msi["number"]}
+
+    type = "replacement"

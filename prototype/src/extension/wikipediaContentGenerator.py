@@ -4,6 +4,7 @@ from re import sub
 from wikipedia.exceptions import DisambiguationError
 
 from src.model.paragraph.paragraph import Paragraph
+from src.utils.resources import instance as resources
 import wikipedia as wk
 
 
@@ -14,8 +15,10 @@ class WikipediaContentGenerator:
     def generate(self):
         wk.set_lang("es")
         ranking = self.analysis["referent_ranking"]
+        ranking = filter(lambda (referent, score): not self.is_blacklisted(referent), ranking)
 
         content = []
+
         for referent, score in ranking[0:3]:  # @UnusedVariable
             content_and_page = self.content_and_page_for(referent)
             if  content_and_page:
@@ -23,6 +26,12 @@ class WikipediaContentGenerator:
                 content.append((referent, sentence_text, page))
                 if len(content) > 1: break
         return content
+
+    def is_blacklisted(self, referent):
+        def has_blacklisted_word(entity):
+            return any(( black_word in entity.lexical_form for black_word in self.black_words ))
+
+        return any(( has_blacklisted_word(reference) for reference in referent.explicit_references() ))
 
     def content_and_page_for(self, referent):
         page_rank = self.page_rank_for(referent)
@@ -81,3 +90,5 @@ class WikipediaContentGenerator:
         page_rank = [ (page, jaro_winkler(page, name)) for page in pages ]
 
         return [ page for page, rank in page_rank if rank > 0.9 ]
+
+    black_words = resources.parse_csv_in("rewrite", "blacklist")
