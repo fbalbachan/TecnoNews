@@ -1,20 +1,26 @@
 # -*- coding: utf-8 -*-
 from collections import deque
+from traceback import format_exc
 
 from src.ling.freelingDictionaryParser import FreelingDictionaryParser
 from src.model.paragraph.paragraph import Paragraph
 from src.model.paragraph.paragraphAnalyzer import ParagraphAnalyzer
 from src.model.sentence.sentenceAnalyzer import SentenceAnalyzer
 from src.rewrite.strategy.adverbialClauseDislocationStrategy import AdverbialClauseDislocationStrategy
+from src.rewrite.strategy.althoughClauseDislocationStrategy import AlthoughClauseDislocationStrategy
 from src.rewrite.strategy.futureToGoConstructionStrategy import FutureToGoConstructionStrategy
+from src.rewrite.strategy.goConstructionToFutureStrategy import GoConstructionToFutureStrategy
+from src.rewrite.strategy.modalDeberToTieneQue import ModalDeberToTieneQue
+from src.rewrite.strategy.pastCompoundToSimpleStrategy import PastCompoundToSimpleStrategy
 from src.rewrite.strategy.pastSimpleToCompoundStrategy import PastSimpleToCompoundStrategy
 from src.rewrite.strategy.subjuntiveImperfectStrategy import SubjuntiveImperfectStrategy
 from src.rewrite.strategy.synonymsStrategy import SynonymsStrategy
+from src.rewrite.strategy.tieneQueToModalDeber import TieneQueToModalDeber
 from tests.freelingTreeRepository import FreelingTreeRepository
 
 
 class Rewriter:
-    def __init__(self, paragraph, ontology = None, strategies = None):
+    def __init__(self, paragraph, ontology = None, strategies = None, clausesForReplacements = None):
         if ontology == None:
             ontology = self.ontology
 
@@ -22,11 +28,20 @@ class Rewriter:
             self.replacementStrategies = [
                 SynonymsStrategy(ontology),
                 PastSimpleToCompoundStrategy(ontology),
+                PastCompoundToSimpleStrategy(ontology),
+
                 SubjuntiveImperfectStrategy(ontology),
+
                 FutureToGoConstructionStrategy(ontology),
+                GoConstructionToFutureStrategy(ontology),
+
+                ModalDeberToTieneQue(ontology),
+                TieneQueToModalDeber(ontology)
+
             ]
             self.dislocationStrategies = [
-                AdverbialClauseDislocationStrategy()
+                AdverbialClauseDislocationStrategy(ontology),
+                AlthoughClauseDislocationStrategy(),
             ]
         else:
             self.replacementStrategies = []
@@ -36,10 +51,12 @@ class Rewriter:
                 else: self.dislocationStrategies.append(strategy)
 
         self.paragraph = paragraph
+        self.clausesForReplacements = clausesForReplacements
 
     def rewrite(self):
         replacements = []
-        for clause in self.paragraph.clauses():
+        clauses = self.paragraph.clauses() if not self.clausesForReplacements else self.clausesForReplacements
+        for clause in clauses:
             replacements.extend(self.replacements_for(clause))
 
         #print rewrites
@@ -81,34 +98,27 @@ class Rewriter:
             try:
                 if strategy.applies_to(sentence):
                     dislocations.append(strategy.rewrite(sentence))
-            except:
-                pass
+            except: print format_exc()
+
         return dislocations
         # TODO: Use the line below again after removing the handler above
         #return [ strategy.rewrite(sentence) for sentence in self.paragraph.sentences if strategy.applies_to(sentence) ]
 
     def replacements_for(self, clause):
-        replaced_nodes = set()
-
         replacements = []
         for strategy in self.replacementStrategies:
             try:
-                if strategy.applies_to(clause):
-                    rewrite = strategy.rewrite(clause)
-                    if type(rewrite) == list:
-                        for r in rewrite:
-                            if not r.node.leaves().intersection(replaced_nodes):     
-                                replacements.append(r)
-                                replaced_nodes = replaced_nodes.union(set(r.node.leaves()))
-                    else:
-                        if not rewrite.node.leaves().intersection(replaced_nodes):     
-                            replacements.append(rewrite)
-                            replaced_nodes = replaced_nodes.union(set(rewrite.node.leaves()))
-
-            except: pass
+                if strategy.applies_to(clause): self.append_if_not_overlaps(strategy.rewrite(clause), replacements)
+            except: print format_exc()
         return replacements
 
-    sentenceAnalyzer = SentenceAnalyzer(FreelingTreeRepository("tests/input/trees"))
+    def append_if_not_overlaps(self, rewrite, rewrites):
+        if not any(( each.overlaps(rewrite) for each in rewrites )):
+            rewrites.append(rewrite)
+        else:
+            print "Hay OVERLAP"
+
+    sentenceAnalyzer = SentenceAnalyzer()
     analyzer = ParagraphAnalyzer(sentenceAnalyzer)
     ontology = FreelingDictionaryParser.from_resource()
 

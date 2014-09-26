@@ -1,3 +1,4 @@
+BARACK,english
 JOSÉ,spanish
 ESSUA,spanish
 MANOLO,spanish

@@ -10,6 +10,7 @@ from threading import Timer
 import time
 from traceback import format_exc
 
+from src.model.contentRewriterAndGenerator import ContentRewriterAndGenerator
 from src.model.sentilecto import Sentilecto
 from src.utils.webOutputUtils import WebOutputUtils
 
@@ -85,6 +86,24 @@ class HiddenEntiNews_request:
 		return web.template.render().entinews(analysis, WebOutputUtils())
 
 class EntiNews_request:
+	def action_content_rewrite(self):
+		try:
+			web_input = web.input()
+			return web.template.render().rewrite(ContentRewriterAndGenerator().run(web_input.text))
+		except Exception:
+			print format_exc()
+			web.redirect("/")
+
+	def action_fact_extraction(self):
+		analysis = analyze()
+		if not analysis: web.redirect("/")
+		return web.template.render().facts(analysis, WebOutputUtils())
+
+	def action_svo_slots(self):
+		analysis = analyze()
+		if not analysis: web.redirect("/")
+		return web.template.render().entinews(analysis, WebOutputUtils())
+
 	def GET(self):
 		web_input = web.input()
 		request_id = int(web_input.request)
@@ -102,15 +121,13 @@ class EntiNews_request:
 				ip = web_env["HTTP_X_FORWARDED_FOR"] if "HTTP_X_FORWARDED_FOR" in web_env else web.ctx["ip"]
 				logger.info(time.strftime("%d/%m/%Y %H:%M:%S") + "\t" + ip + "\t" + web.ctx["fullpath"])
 
-				analysis = analyze()
-				if not analysis:
-					web.redirect("/")
-				else:
-					printer = WebOutputUtils()
-					if "fact_extraction" in web_input:
-						return web.template.render().facts(analysis, printer)
-					else:
-						return web.template.render().entinews(analysis, printer)
+				action_by_method = {"svo_slots" 		: self.action_svo_slots,
+									"fact_extraction"	: self.action_fact_extraction,
+									"content_rewrite"	: self.action_content_rewrite }
+
+				method = web_input["method"]
+				return action_by_method[method]()
+
 		web.redirect("/")
 
 ### MAIN ###
@@ -127,7 +144,7 @@ if __name__ == '__main__':
 
 	urls = (
  	  '/favicon.ico', 'Favicon_request',
- 	  '/result', 'Debug_request', # 'EntiNews_request',
+ 	  '/result', 'EntiNews_request',
  	  '/hidden', 'HiddenEntiNews_request',
  	  '/', 'Index_request',
  	  '/debug', "Debug_request"
