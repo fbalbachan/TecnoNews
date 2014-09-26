@@ -14,7 +14,9 @@ from src.rewrite.strategy.modalDeberToTieneQue import ModalDeberToTieneQue
 from src.rewrite.strategy.pastCompoundToSimpleStrategy import PastCompoundToSimpleStrategy
 from src.rewrite.strategy.pastSimpleToCompoundStrategy import PastSimpleToCompoundStrategy
 from src.rewrite.strategy.subjuntiveImperfectStrategy import SubjuntiveImperfectStrategy
+from src.rewrite.strategy.synonymsStrategy import SynonymsStrategy
 from src.rewrite.strategy.tieneQueToModalDeber import TieneQueToModalDeber
+from tests.freelingTreeRepository import FreelingTreeRepository
 
 
 class Rewriter:
@@ -24,6 +26,7 @@ class Rewriter:
 
         if strategies == None:
             self.replacementStrategies = [
+                SynonymsStrategy(ontology),
                 PastSimpleToCompoundStrategy(ontology),
                 PastCompoundToSimpleStrategy(ontology),
 
@@ -105,7 +108,13 @@ class Rewriter:
         replacements = []
         for strategy in self.replacementStrategies:
             try:
-                if strategy.applies_to(clause): self.append_if_not_overlaps(strategy.rewrite(clause), replacements)
+                if strategy.applies_to(clause): 
+                    rewrites = strategy.rewrite(clause)
+                    if type(rewrites) == list:
+                        for rewrite in rewrites:
+                            self.append_if_not_overlaps(rewrite, replacements)
+                    else:
+                        self.append_if_not_overlaps(rewrites, replacements)
             except: print format_exc()
         return replacements
 

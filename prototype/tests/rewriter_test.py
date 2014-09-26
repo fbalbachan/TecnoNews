@@ -15,6 +15,7 @@ from src.rewrite.strategy.pastSimpleToCompoundStrategy import PastSimpleToCompou
 from src.rewrite.strategy.subjuntiveImperfectStrategy import SubjuntiveImperfectStrategy
 from src.rewrite.strategy.tieneQueToModalDeber import TieneQueToModalDeber
 from tests.freelingTreeRepository import FreelingTreeRepository
+from src.rewrite.strategy.synonymsStrategy import SynonymsStrategy
 
 
 class TestRewriter(unittest.TestCase):
@@ -230,15 +231,31 @@ class TestRewriter(unittest.TestCase):
         self.kase("Moriré mañana", "Voy a morir mañana")
         self.kase("Construiremos más viviendas", "Vamos a construir más viviendas")
         self.kase("Juan amará", "Juan va a amar")
+    
+    def test_synonyms(self):
+        self.strategies = [SynonymsStrategy(self.ontology)]
+
+        self.kase("El rey construyó su victoria en base a mentiras", 
+                  "El rey edificó su victoria en base a mentiras") 
+        self.kase("Para el alumno, memorizar el alfabeto es un reto absurdo", 
+                  "Para el alumno, memorizar el abecedario es un desafío ilógico")        
+        self.kase("El principio del famoso robo fue maravilloso y rápido", 
+                  "El comienzo del famoso robo fue extraordinario y rápido")  
+        self.kase("Quizás salga primero a pesar de esperar de vez en cuando", 
+                  "Tal vez salga primero pese a esperar esporádicamente")  
+        self.kase("Tal vez salga primero pese a esperar esporádicamente", 
+                  "Quizá salga primero a pesar de esperar esporádicamente")  
+
+
 
     def test_combined(self):
-        self.strategies = [PastSimpleToCompoundStrategy(self.ontology), SubjuntiveImperfectStrategy(self.ontology), \
+        self.strategies = [SynonymsStrategy(self.ontology), PastSimpleToCompoundStrategy(self.ontology), SubjuntiveImperfectStrategy(self.ontology), \
                            FutureToGoConstructionStrategy(self.ontology) ]
         self.kase("Si yo amara a quien odió sería libre", "Si yo amase a quien ha odiado sería libre")
-        self.kase("Amaré si odiase a quien pudo ver la luz", "Voy a amar si odiara a quien ha podido ver la luz")
+        self.kase("Amaré si odiase a quien pudo ver la luz", "Voy a amar si odiara a quien pudo observar la luz")
 
         self.strategies = None # Estrategias por defecto
-        self.kase("Si odiase a quien pudo ver la luz, amaré", "Voy a amar, si odiara a quien ha podido ver la luz")
+        self.kase("Si odiase a quien pudo ver la luz, amaré", "Voy a amar, si odiara a quien pudo observar la luz")
 
     def kase(self, source, edited):
         print "Case:", source
