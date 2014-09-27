@@ -66,7 +66,7 @@ $def with (analysis, printer)
               <th>Phrasal-Verb<br>Complement</th>
               <th>Equative</th>
               <th>Instrument/Company<br>Goal/Beneficiary</th>
-              <th>Adjuncts<br>(Space, etc.)</th>
+              <th>Adjuncts<br>(Time, Space, etc.)</th>
               <th>Time</th>
             </tr>
 
@@ -86,6 +86,10 @@ $def with (analysis, printer)
                     <td class="structures" bgcolor=$bg_color title="$printer.tooltip(clause, name)">
                         $printer.structure(clause, name)
                     </td>
+
+                <td class="structures" bgcolor="#5FB404">
+                    $printer.time_references(clause)
+                </td>
             </tr>
             </table>
             </p>
