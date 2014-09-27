@@ -8,6 +8,7 @@ from src.model.entity.entityExtractor import EntityExtractor
 from src.model.entity.verb import Verb
 from src.model.entity.verbExtractor import VerbExtractor
 from src.model.syntax.activeVoiceSyntacticAnalizer import ActiveVoiceSyntacticAnalyzer
+from src.model.syntax.dateTimeFinder import DateTimeFinder
 from src.model.syntax.passiveVoiceSyntacticAnalyzer import PassiveVoiceSyntacticAnalyzer
 from src.model.syntax.syntacticAnalyzer import SyntacticAnalyzer
 from src.model.syntax.syntacticStructure import SyntacticStructure
@@ -41,7 +42,7 @@ class ClauseAnalyzer:
             relative_solver_order.reverse()
 
         return relative_solver_order + [self.solve_gerund, self.solve_personal_pronouns, self.find_adverbs,
-                                        self.find_unassigned_adjectives ]
+                                        self.find_unassigned_adjectives, self.find_time_references ]
 
     def relative_needs_to_be_solved_first(self, clause):
         if not clause.is_relative(): return False
@@ -72,6 +73,9 @@ class ClauseAnalyzer:
 
     def find_adverbs(self, clause):
         clause.valuated_adverbs = ValuatedAdverbFinder(clause).find()
+
+    def find_time_references(self, clause):
+        clause.time_references = DateTimeFinder(clause).find()
 
     def solve_relative(self, clause):
         if clause.is_relative() and clause.relative_entity: RelativePronounSolver(clause).solve()

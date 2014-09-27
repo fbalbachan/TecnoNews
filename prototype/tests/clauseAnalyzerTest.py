@@ -23,7 +23,7 @@ class TestClauseAnalyzer(unittest.TestCase):
         self.run_test_file("tests/input/valuated_adverbs.txt")
         self.run_test_file("tests/input/sentiment.txt")
         self.run_test_file("tests/input/referents.txt")
-#         self.run_test_file("tests/input/single.txt")
+#        self.run_test_file("tests/input/single.txt")
 
     def run_test_file(self, file):
 
@@ -69,6 +69,7 @@ class TestClauseAnalyzer(unittest.TestCase):
             print
             print "\t   Global operators", list(clause.global_operators)
             print "\t   Valuated adverbs", list(clause.valuated_adverbs)
+            print "\t   Time references ", [ ref.leaves() for ref in clause.time_references ]
             print
 
             entities = clause.entities
@@ -209,6 +210,12 @@ class TestClauseAnalyzer(unittest.TestCase):
         self.assertTrue(assertion in adverb_lexical_forms,
                         "La cláusula no tiene un adverbio valuado sentimentalmente de forma léxica " + assertion)
 
+    def datetime(self, assertion, frame):
+        clause = frame["clause"]
+        time_lexical_forms = [ " ".join([repr(l) for l in reference.leaves()]) for reference in clause.time_references ]
+        self.assertTrue(assertion in time_lexical_forms,
+                        "La cláusula no tiene una referencia temporal de forma léxica " + assertion)
+
     def go(self, assertion, frame):
         clause = frame["clause"]
         self.assertTrue(clause.has_global_operator_of(assertion),
@@ -233,7 +240,7 @@ class TestClauseAnalyzer(unittest.TestCase):
 
     structure_keywords = [ "subject", "od", "oi", "equative", "regimen", "instrument_goal", "adjuncts", "verb" ]
     keywords = ["clause", "lemma", "msi", "entity", "sentence", "count", "go", "adverb", "sent_ev", "value",
-                "attribute", "referent", "reference" ] + structure_keywords
+                "attribute", "referent", "reference", "datetime" ] + structure_keywords
 
 if __name__ == '__main__':
     unittest.main()
