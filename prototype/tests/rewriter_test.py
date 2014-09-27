@@ -9,6 +9,7 @@ from src.model.sentence.sentenceAnalyzer import SentenceAnalyzer
 from src.rewrite.rewriter import Rewriter
 from src.rewrite.strategy.adverbialClauseDislocationStrategy import AdverbialClauseDislocationStrategy
 from src.rewrite.strategy.althoughClauseDislocationStrategy import AlthoughClauseDislocationStrategy
+from src.rewrite.strategy.dateTimeStrategy import DateTimeStrategy
 from src.rewrite.strategy.futureToGoConstructionStrategy import FutureToGoConstructionStrategy
 from src.rewrite.strategy.modalDeberToTieneQue import ModalDeberToTieneQue
 from src.rewrite.strategy.pastSimpleToCompoundStrategy import PastSimpleToCompoundStrategy
@@ -239,6 +240,26 @@ class TestRewriter(unittest.TestCase):
 
         self.strategies = None # Estrategias por defecto
         self.kase("Si odiase a quien pudo ver la luz, amaré", "Voy a amar, si odiara a quien ha podido ver la luz")
+
+    def test_datetime(self):
+        self.strategies = [DateTimeStrategy(self.ontology)]
+
+        self.kase("En 2010, jugó al fútbol.", "Jugó a el fútbol, en 2010.")
+        self.kase("El 15 de Agosto, Leandro jugó al fútbol.", "Leandro jugó a el fútbol, el 15 de Agosto.")
+        self.kase("Murió en la semana de mayo, honradamente.", "En la semana de mayo, murió, honradamente.")
+        self.kase("Murió en la semana de mayo, honradamente, en la madrugada.", "En la semana de mayo, en la madrugada, murió, honradamente.")
+        self.kase("En 1990 falleció, luego del otoño, honradamente, a la madrugada.", "Luego de el otoño, a la madrugada, falleció honradamente, en 1990.")
+        self.kase("En 2010 falleció el hombre que había nacido en 1880.", "Falleció el hombre que había nacido en 1880, en 2010.")
+        self.kase('En abril de 2012, Hillary Clinton le dijo a ABC que "dependía realmente de ella si ganaría el título de abuela", pero añadió: "Me gustaría tenerlo... creo que sería muy bueno".', \
+                  'Hillary Clinton le dijo a ABC que " dependía realmente de ella si ganaría el título de abuela ", en abril de 2012, pero añadió: "Me gustaría tenerlo... creo que sería muy bueno".')
+        self.kase('"Amó en 2013 a su hermana"', '"En 2013, amó a su hermana"')
+
+        # Time reference en subordinada
+        self.kase("El hombre que en 2010 había nacido murió", "El hombre que en 2010 había nacido murió")
+
+        # En coordinada
+        self.kase("En 2010 jugó y lloró en primavera", "Jugó, en 2010 y lloró en primavera")
+        self.kase("Jugó y lloró en primavera", "Jugó y en primavera, lloró")
 
     def kase(self, source, edited):
         print "Case:", source
