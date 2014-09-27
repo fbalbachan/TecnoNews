@@ -9,6 +9,7 @@ from src.model.sentence.sentenceAnalyzer import SentenceAnalyzer
 from src.rewrite.rewriter import Rewriter
 from src.rewrite.strategy.adverbialClauseDislocationStrategy import AdverbialClauseDislocationStrategy
 from src.rewrite.strategy.althoughClauseDislocationStrategy import AlthoughClauseDislocationStrategy
+from src.rewrite.strategy.dateTimeStrategy import DateTimeStrategy
 from src.rewrite.strategy.futureToGoConstructionStrategy import FutureToGoConstructionStrategy
 from src.rewrite.strategy.modalDeberToTieneQue import ModalDeberToTieneQue
 from src.rewrite.strategy.pastSimpleToCompoundStrategy import PastSimpleToCompoundStrategy
@@ -239,6 +240,10 @@ class TestRewriter(unittest.TestCase):
 
         self.strategies = None # Estrategias por defecto
         self.kase("Si odiase a quien pudo ver la luz, amaré", "Voy a amar, si odiara a quien ha podido ver la luz")
+
+    def test_datetime(self):
+        self.strategies = [DateTimeStrategy(self.ontology)]
+        self.kase("Murió en la semana de mayo, honradamente, en la madrugada.", "")
 
     def kase(self, source, edited):
         print "Case:", source
