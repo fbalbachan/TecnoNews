@@ -81,13 +81,25 @@ class Rewriter:
         source_text += text[index:]
         return source_text.encode("utf-8")
 
+    def dislocations_from_node(self, strategy, sentence, node):
+        dislocations = []
+        enter = True
+        try:
+            if strategy.applies_to(sentence, node):
+                dislocations.append(strategy.rewrite(sentence, node))
+                enter = False
+        except: pass
+        if enter:
+            for child in node.children:
+                dislocations.extend(self.dislocations_from_node(strategy, sentence, child))
+        return dislocations
+
     def dislocations_from(self, strategy):
         # TODO: Remove this exception handler when the problem is solved
         dislocations = []
         for sentence in self.paragraph.sentences:
             try:
-                if strategy.applies_to(sentence):
-                    dislocations.append(strategy.rewrite(sentence))
+                dislocations.extend(self.dislocations_from_node(strategy, sentence, sentence.parse_node))
             except:
                 pass
         return dislocations
