@@ -13,13 +13,11 @@ tagger_port = 9999
 
 verbal_scripts = %(resources_dir)s/scripts_verbales.csv
 sentiwordnet = %(resources_dir)s/sentiwordnet.csv
-resources_dir = /home/leandro/tecnolecto/entinews/prototype/resources
+resources_dir = /home/wert/Desktop/entinews/prototype/resources
 general_resources = %(resources_dir)s/general_resources
 
 honorific_prefs = %(resources_dir)s/honorificos.pre
 organization_sufs = %(resources_dir)s/organization.suf
-
-freeling_dict = %(resources_dir)s/freeling_es.dic
 
 place_classes = %(resources_dir)s/place.cls
 person_classes = %(resources_dir)s/person.cls
@@ -29,3 +27,4 @@ freeling_dict = %(resources_dir)s/freeling_es.dic
 
 synonyms = %(resources_dir)s/synonyms.csv
 locucions = %(resources_dir)s/locucions_extended.dat
+adverb_forms = %(resources_dir)s/adverb_forms.csv
