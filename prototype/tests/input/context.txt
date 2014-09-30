@@ -791,3 +791,27 @@ Fuente: un pepino
     sentence: Fuente
         subject: Fuente
             msi: { "semantic_classification" : None }
+
+# Detección de date time
+Murió el lunes por la madrugada
+    datetime: el lunes_por_la_madrugada
+
+El día 18 de mayo se fue
+    datetime: El día_18_de_mayo
+
+# Implementar
+Nació en 1990
+    datetime: en 1990
+
+Murió en la semana de mayo
+    datetime: en la semana
+    datetime: de mayo
+
+Amó en la primavera del 90
+    datetime: en la primavera de el 90
+
+Amó desde 1990
+    datetime: desde 1990
+
+Murió un 15/5/1990
+    datetime: un 15/5/1990

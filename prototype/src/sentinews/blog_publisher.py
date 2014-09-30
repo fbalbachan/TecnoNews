@@ -6,9 +6,9 @@ from wordpress_xmlrpc.methods.users import GetUserInfo
 from src.sentinews.news_entry import NewsEntry
 
 #Must have .../xmlrpc.php
-HOST = 'http://tecnolecto.com/blog/xmlrpc.php'
-USER = 'tecnolecto_news'
-PASS = 'news tecno lecto'
+HOST = 'http://tecnonews.comule.com/xmlrpc.php'
+USER = 'tecnonews'
+PASS = 'tecnonews1'
 
 
 class BlogPublisher(object):
@@ -24,10 +24,3 @@ class BlogPublisher(object):
 		}
 		post.post_status = 'publish'
 		wp.call(NewPost(post))
-
-	# def _format_html_links(self):
-	# 	html_links = []
-	# 	for link in self.links:
-	# 		#TODO: cambiar el texto del link
-	# 		html_links.append("<a href=%s>%s</a>" % (link, link))
-	# 	return html_links
