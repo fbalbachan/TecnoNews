@@ -1,0 +1,30 @@
++grup-verb_[
+  sadv_[
+    +(Quizás quizás RG -)
+  ]
+  +verb_[
+    +(salga salir VMSP3S0 -)
+  ]
+  sadv_[
+    +(primero primero RG -)
+  ]
+  grup-sp-inf_[
+    +prep_[
+      +(a_pesar_de a_pesar_de SPS00 -)
+    ]
+    grup-verb-inf_[
+      +infinitiu_[
+        +inf_[
+          +forma-inf_[
+            +(esperar esperar VMN0000 -)
+          ]
+        ]
+      ]
+    ]
+  ]
+  sadv_[
+    +(de_vez_en_cuando de_vez_en_cuando RG -)
+  ]
+]
+
+

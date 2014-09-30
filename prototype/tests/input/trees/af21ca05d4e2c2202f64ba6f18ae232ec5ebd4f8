@@ -1,0 +1,21 @@
++subord_[
+  +(si si CS -)
+  grup-verb_[
+    +verb_[
+      +(odié odiar VMIS1S0 -)
+    ]
+  ]
+  subord-rel_[
+    +(a a SPS00 -)
+    prel-comp_[
+      +(quien quien PR0CS000 -)
+      grup-verb_[
+        +verb_[
+          +(ama amar VMIP3S0 -)
+        ]
+      ]
+    ]
+  ]
+]
+
+

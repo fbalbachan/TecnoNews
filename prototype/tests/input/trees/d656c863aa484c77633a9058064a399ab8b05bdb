@@ -1,0 +1,26 @@
++grup-verb_[
+  subord_[
+    +(Apenas cuando CS -)
+    grup-verb_[
+      +verb_[
+        +(corro correr VMIP1S0 -)
+      ]
+    ]
+    Fc_[
+      +(, , Fc -)
+    ]
+  ]
+  patons_[
+    +paton-s_[
+      +(me me PP1CS000 -)
+    ]
+  ]
+  +verb_[
+    +(libero liberar VMIP1S0 -)
+  ]
+  F-term_[
+    +(. . Fp -)
+  ]
+]
+
+

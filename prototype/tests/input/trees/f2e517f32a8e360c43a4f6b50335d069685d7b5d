@@ -1,0 +1,99 @@
++grup-verb_[
+  grup-sp_[
+    +prep_[
+      +(En en SPS00 -)
+    ]
+    data_[
+      +(abril_de_2012 [??:??/4/2012:??.??:??] W -)
+    ]
+    Fc_[
+      +(, , Fc -)
+    ]
+  ]
+  sn_[
+    +grup-nom-ms_[
+      +w-ms_[
+        +(Hillary_Clinton hillary_clinton NP00SP0 -)
+      ]
+    ]
+  ]
+  patons_[
+    +paton-s_[
+      +(le le PP3CSD00 -)
+    ]
+  ]
+  +verb_[
+    +(dijo decir VMIS3S0 -)
+  ]
+  grup-sp_[
+    +prep_[
+      +(a a SPS00 -)
+    ]
+    sn_[
+      +grup-nom-ms_[
+        +w-ms_[
+          +(ABC abc NP00O00 -)
+        ]
+      ]
+    ]
+  ]
+  conj-subord_[
+    +(que que CS -)
+  ]
+  F-no-c_[
+    +(" " Fe -)
+  ]
+  grup-verb_[
+    +verb_[
+      +(dependía depender VMII3S0 -)
+    ]
+    sadv_[
+      +(realmente real RG -)
+    ]
+    sp-de_[
+      +(de de SPS00 -)
+      sn_[
+        +pron-fs_[
+          +psubj-fs_[
+            +(ella él PP3FS000 -)
+          ]
+        ]
+      ]
+    ]
+    subord_[
+      +(si si CS -)
+      grup-verb_[
+        +verb_[
+          +(ganaría ganar VMIC3S0 -)
+        ]
+        sn_[
+          espec-ms_[
+            +j-ms_[
+              +(el el DA0MS0 -)
+            ]
+          ]
+          +grup-nom-ms_[
+            +n-ms_[
+              +(título título NCMS000 -)
+            ]
+          ]
+          sp-de_[
+            +(de de SPS00 -)
+            sn_[
+              +grup-nom-fs_[
+                +n-fs_[
+                  +(abuela abuelo NCFS000 -)
+                ]
+              ]
+            ]
+          ]
+        ]
+      ]
+    ]
+  ]
+  F-no-c_[
+    +(" " Fe -)
+  ]
+]
+
+

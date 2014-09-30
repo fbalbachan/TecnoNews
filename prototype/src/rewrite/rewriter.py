@@ -17,7 +17,6 @@ from src.rewrite.strategy.pastSimpleToCompoundStrategy import PastSimpleToCompou
 from src.rewrite.strategy.subjuntiveImperfectStrategy import SubjuntiveImperfectStrategy
 from src.rewrite.strategy.synonymsStrategy import SynonymsStrategy
 from src.rewrite.strategy.tieneQueToModalDeber import TieneQueToModalDeber
-from tests.freelingTreeRepository import FreelingTreeRepository
 
 
 class Rewriter:
@@ -43,6 +42,7 @@ class Rewriter:
             self.dislocationStrategies = [
                 AdverbialClauseDislocationStrategy(ontology),
                 AlthoughClauseDislocationStrategy(),
+                DateTimeStrategy(ontology)
             ]
         else:
             self.replacementStrategies = []
@@ -92,15 +92,27 @@ class Rewriter:
         source_text += text[index:]
         return source_text.encode("utf-8")
 
+    def dislocations_from_node(self, strategy, sentence, node):
+        dislocations = []
+        enter = True
+        try:
+            if strategy.applies_to(sentence, node):
+                dislocations.append(strategy.rewrite(sentence, node))
+                enter = False
+        except: pass
+        if enter:
+            for child in node.children:
+                dislocations.extend(self.dislocations_from_node(strategy, sentence, child))
+        return dislocations
+
     def dislocations_from(self, strategy):
         # TODO: Remove this exception handler when the problem is solved
         dislocations = []
         for sentence in self.paragraph.sentences:
             try:
-                if strategy.applies_to(sentence):
-                    dislocations.append(strategy.rewrite(sentence))
-            except: print format_exc()
-
+                dislocations.extend(self.dislocations_from_node(strategy, sentence, sentence.parse_node))
+            except:
+                pass
         return dislocations
         # TODO: Use the line below again after removing the handler above
         #return [ strategy.rewrite(sentence) for sentence in self.paragraph.sentences if strategy.applies_to(sentence) ]
@@ -109,7 +121,7 @@ class Rewriter:
         replacements = []
         for strategy in self.replacementStrategies:
             try:
-                if strategy.applies_to(clause): 
+                if strategy.applies_to(clause):
                     rewrites = strategy.rewrite(clause)
                     if type(rewrites) == list:
                         for rewrite in rewrites:
@@ -127,5 +139,6 @@ class Rewriter:
 
     sentenceAnalyzer = SentenceAnalyzer()
     analyzer = ParagraphAnalyzer(sentenceAnalyzer)
-    ontology = FreelingDictionaryParser.from_resource()
 
+    ontology = FreelingDictionaryParser.from_resource()
+    #ontology = Ontology("Test")

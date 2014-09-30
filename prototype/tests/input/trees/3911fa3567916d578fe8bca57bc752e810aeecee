@@ -1,0 +1,31 @@
++grup-verb_[
+  +verb_[
+    +(creo crear VMIP1S0 -)
+  ]
+  subord_[
+    +(que que CS -)
+    grup-verb_[
+      +verb_[
+        +(sería ser VSIC3S0 -)
+      ]
+      s-adj_[
+        sadv_[
+          +(muy muy RG -)
+        ]
+        +s-a-ms_[
+          +a-ms_[
+            +(bueno bueno AQ0MS0 -)
+          ]
+        ]
+      ]
+    ]
+  ]
+  F-no-c_[
+    +(" " Fe -)
+  ]
+  F-term_[
+    +(. . Fp -)
+  ]
+]
+
+

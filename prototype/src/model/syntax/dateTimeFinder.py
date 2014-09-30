@@ -12,11 +12,14 @@ class DateTimeFinder:
         clause = self.clause
         useful_nodes = clause.verb_level_nodes() if clause.voice else clause.proper_tree().children
         nodes = filter(lambda node: not node.is_leaf() and \
-                       (self.has_data(node) or self.is_valid_subord(node)), useful_nodes)
+                       (self.has_data(node) or self.is_valid_subord(node) or self.is_valid_sadv(node)), useful_nodes)
         return nodes
 
+    def is_valid_sadv(self, node):
+        return node.label == "sadv" and node.nodes_with_labels("sn-tmp")
+
     def is_valid_subord(self, node):
-        if node.label != "grup-sp": return False
+        if node.label != "grup-sp" or node.leaves()[0].lexical_form == "por": return False
         return any(( check(node) for check in [ self.has_year, self.is_en_plus_num, self.has_time_word ]))
 
     def has_year(self, node):

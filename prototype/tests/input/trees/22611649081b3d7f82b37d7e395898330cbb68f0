@@ -1,0 +1,40 @@
++grup-verb_[
+  subord_[
+    +(Si si CS -)
+    grup-verb_[
+      sn_[
+        espec-mp_[
+          +j-mp_[
+            +(los el DA0MP0 -)
+          ]
+        ]
+        +grup-nom-mp_[
+          +n-mp_[
+            +(átomos átomo NCMP000 -)
+          ]
+        ]
+      ]
+      +verb_[
+        +(chocaban chocar VMII3P0 -)
+      ]
+    ]
+    Fc_[
+      +(, , Fc -)
+    ]
+  ]
+  +verb_[
+    +(explotaba explotar VMII3S0 -)
+  ]
+  sn_[
+    +pron-ms_[
+      +pindef-ms_[
+        +(todo todo PI0MS000 -)
+      ]
+    ]
+  ]
+  F-term_[
+    +(. . Fp -)
+  ]
+]
+
+

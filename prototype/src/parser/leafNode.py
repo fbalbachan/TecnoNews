@@ -16,6 +16,9 @@ class LeafNode(ParseNode):
     def original_components(self):
         return self.original_lexical_form.split("_")
 
+    def joined_text(self):
+        return " ".join(self.original_components())
+
     def size(self):
         return len(self.components())
 

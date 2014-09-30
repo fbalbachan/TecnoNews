@@ -1,0 +1,110 @@
++grup-verb_[
+  sn_[
+    espec-fs_[
+      +j-fs_[
+        +(La el DA0FS0 -)
+      ]
+    ]
+    +grup-nom-fs_[
+      +n-fs_[
+        +(película película NCFS000 -)
+      ]
+    ]
+    sp-de_[
+      +(de de SPS00 -)
+      sn_[
+        +numero_[
+          +(2013 2013 Z -)
+        ]
+      ]
+    ]
+  ]
+  +verb_[
+    vaux_[
+      +(ha haber VAIP3S0 -)
+    ]
+    +parti-ser_[
+      +(sido ser VSP00SM -)
+    ]
+  ]
+  s-adj_[
+    sadv_[
+      +(increíblemente increíble RG -)
+    ]
+    +s-a-ms_[
+      +a-ms_[
+        +(popular popular AQ0CS0 -)
+      ]
+    ]
+  ]
+  grup-sp_[
+    +prep_[
+      +(en en SPS00 -)
+    ]
+    sn_[
+      espec-fs_[
+        +j-fs_[
+          +(la el DA0FS0 -)
+        ]
+      ]
+      +grup-nom-fs_[
+        +n-fs_[
+          +(taquilla taquilla NCFS000 -)
+        ]
+      ]
+      subord-rel_[
+        +(que que PR0CN000 -)
+        grup-verb_[
+          +verb_[
+            (fue ir VMIS3S0 -)
+            (a a SPS00 -)
+            +infinitiu_[
+              +inf_[
+                +forma-inf_[
+                  +(ver ver VMN0000 -)
+                ]
+              ]
+            ]
+          ]
+          patons_[
+            +paton-fs_[
+              +(la lo PP3FSA00 -)
+            ]
+          ]
+          subord_[
+            +(cuando cuando CS -)
+            grup-verb_[
+              sn_[
+                +grup-nom-ms_[
+                  +w-ms_[
+                    +(Disney disney NP00SP0 -)
+                  ]
+                ]
+              ]
+              +verb_[
+                +(estrenó estrenar VMIS3S0 -)
+              ]
+              sn_[
+                espec-ms_[
+                  +j-ms_[
+                    +(el el DA0MS0 -)
+                  ]
+                ]
+                +grup-nom-ms_[
+                  +n-ms_[
+                    +(film film NCMS000 -)
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ]
+      ]
+    ]
+  ]
+  F-term_[
+    +(. . Fp -)
+  ]
+]
+
+

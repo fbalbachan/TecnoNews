@@ -1,0 +1,61 @@
++grup-verb_[
+  +verb_[
+    +(Murió morir VMIS3S0 -)
+  ]
+  grup-sp_[
+    +prep_[
+      +(en en SPS00 -)
+    ]
+    sn_[
+      espec-fs_[
+        +j-fs_[
+          +(la el DA0FS0 -)
+        ]
+      ]
+      +grup-nom-fs_[
+        +n-fs_[
+          +(semana semana NCFS000 -)
+        ]
+      ]
+    ]
+  ]
+  grup-sp_[
+    +prep_[
+      +(de de SPS00 -)
+    ]
+    data_[
+      +(mayo [??:??/5/??:??.??:??] W -)
+    ]
+  ]
+  Fc_[
+    +(, , Fc -)
+  ]
+  sadv_[
+    +(honradamente honrar RG -)
+  ]
+  Fc_[
+    +(, , Fc -)
+  ]
+  grup-sp_[
+    +prep_[
+      +(en en SPS00 -)
+    ]
+    sn_[
+      espec-fs_[
+        +j-fs_[
+          +(la el DA0FS0 -)
+        ]
+      ]
+      +grup-nom-fs_[
+        +n-fs_[
+          +(madrugada madrugada NCFS000 -)
+        ]
+      ]
+    ]
+  ]
+  F-term_[
+    +(. . Fp -)
+  ]
+]
+
+

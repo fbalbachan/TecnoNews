@@ -1,0 +1,60 @@
++grup-verb_[
+  subord_[
+    +(Si si CS -)
+    grup-verb_[
+      sn_[
+        +grup-nom-ms_[
+          +w-ms_[
+            +(Cristina cristina NP00SP0 -)
+          ]
+        ]
+        Fc_[
+          +(, , Fc -)
+        ]
+      ]
+      sn_[
+        espec-fs_[
+          +j-fs_[
+            +(la el DA0FS0 -)
+          ]
+        ]
+        +grup-nom-fs_[
+          +n-fs_[
+            +(presidenta presidente NCFS000 -)
+          ]
+        ]
+        Fc_[
+          +(, , Fc -)
+        ]
+      ]
+      +verb_[
+        +(hace hacer VMIP3S0 -)
+      ]
+      sn_[
+        +pron-ms_[
+          +pdem-ms_[
+            +(esto este PD0NS000 -)
+          ]
+        ]
+      ]
+    ]
+    Fc_[
+      +(, , Fc -)
+    ]
+  ]
+  sn_[
+    +pron-ms_[
+      +pdem-ms_[
+        +(eso ese PD0NS000 -)
+      ]
+    ]
+  ]
+  +verb_[
+    +(ocurre ocurrir VMIP3S0 -)
+  ]
+  F-term_[
+    +(. . Fp -)
+  ]
+]
+
+

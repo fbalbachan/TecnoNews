@@ -1,0 +1,27 @@
++grup-verb_[
+  sn_[
+    espec-fs_[
+      +j-fs_[
+        +(La el DA0FS0 -)
+      ]
+    ]
+    +grup-nom-fs_[
+      +n-fs_[
+        +(sopa sopa NCFS000 -)
+      ]
+    ]
+  ]
+  +verb_[
+    +(está estar VAIP3S0 -)
+  ]
+  subord_[
+    +(apenas cuando CS -)
+    grup-verb_[
+      +verb_[
+        +(vuelva volver VMSP3S0 -)
+      ]
+    ]
+  ]
+]
+
+

@@ -6,7 +6,7 @@ from src.parser.labelNode import LabelNode
 
 
 class AlthoughClauseDislocationStrategy:
-    def applies_to(self, sentence):
+    def applies_to(self, sentence, node):
         node = sentence.parse_node
         if node.label != 'coor-vb': return False
         aunque = False
@@ -20,7 +20,7 @@ class AlthoughClauseDislocationStrategy:
         if len([ c for c in node.children if isinstance(c, LabelNode) and c.label == 'grup-verb' ]) < 2: return False
         return True
 
-    def rewrite(self, sentence):
+    def rewrite(self, sentence, node):
         node = sentence.parse_node
         if isinstance(node.children[0], LeafNode) and node.children[0].lemma == 'aunque':
             return self.rewrite_although_p_q(sentence)

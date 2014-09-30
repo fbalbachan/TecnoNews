@@ -1,0 +1,70 @@
++grup-verb_[
+  subord_[
+    +(Si si CS -)
+    grup-verb_[
+      +verb_[
+        vaux_[
+          +(estás estar VAIP2S0 -)
+        ]
+        +forma-ger_[
+          +(viendo ver VMG0000 -)
+        ]
+      ]
+      sn_[
+        espec-fs_[
+          +dem-fs_[
+            +(esta este DD0FS0 -)
+          ]
+        ]
+        +grup-nom-fs_[
+          +n-fs_[
+            +(nota nota NCFS000 -)
+          ]
+        ]
+      ]
+      grup-sp_[
+        +prep_[
+          +(en en SPS00 -)
+        ]
+        sn_[
+          espec-ms_[
+            +pos-ms_[
+              +(tu tu DP2CSS -)
+            ]
+          ]
+          +grup-nom-ms_[
+            +n-ms_[
+              +(móvil móvil NCMS000 -)
+            ]
+          ]
+        ]
+      ]
+    ]
+    Fc_[
+      +(, , Fc -)
+    ]
+  ]
+  +verb_[
+    +(mira mirar VMM02S0 -)
+  ]
+  sadv_[
+    +(aquí aquí RG -)
+  ]
+  sn_[
+    espec-fs_[
+      +j-fs_[
+        +(la el DA0FS0 -)
+      ]
+    ]
+    +grup-nom-fs_[
+      +n-fs_[
+        +(galería galería NCFS000 -)
+      ]
+    ]
+  ]
+  F-term_[
+    +(. . Fp -)
+  ]
+]
+
+

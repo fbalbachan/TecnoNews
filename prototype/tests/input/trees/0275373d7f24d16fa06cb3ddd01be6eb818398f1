@@ -1,0 +1,55 @@
++prep_[
+  +(En_caso_de en_caso_de SPS00 -)
+  grup-verb_[
+    subord_[
+      +(que que CS -)
+      grup-verb_[
+        sn_[
+          +pron_[
+            +psubj-s_[
+              +(yo yo PP1CSN00 -)
+            ]
+          ]
+        ]
+        +verb_[
+          +(sea ser VSSP3S0 -)
+        ]
+        s-adj_[
+          +s-a-ms_[
+            +a-ms_[
+              +(rico rico AQ0MS0 -)
+            ]
+          ]
+        ]
+      ]
+      Fc_[
+        +(, , Fc -)
+      ]
+    ]
+    patons_[
+      +paton-s_[
+        +(me me PP1CS000 -)
+      ]
+    ]
+    +verb_[
+      +(compro comprar VMIP1S0 -)
+    ]
+    sn_[
+      espec-ms_[
+        +indef-ms_[
+          +(un uno DI0MS0 -)
+        ]
+      ]
+      +grup-nom-ms_[
+        +n-ms_[
+          +(yate yate NCMS000 -)
+        ]
+      ]
+    ]
+    F-term_[
+      +(. . Fp -)
+    ]
+  ]
+]
+
+

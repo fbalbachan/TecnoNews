@@ -1,0 +1,28 @@
++subord_[
+  +(si si CS -)
+  grup-verb_[
+    sn_[
+      +pron_[
+        +psubj-s_[
+          +(yo yo PP1CSN00 -)
+        ]
+      ]
+    ]
+    +verb_[
+      +(amo amar VMIP1S0 -)
+    ]
+  ]
+  subord-rel_[
+    +(a a SPS00 -)
+    prel-comp_[
+      +(quien quien PR0CS000 -)
+      grup-verb_[
+        +verb_[
+          +(odia odiar VMIP3S0 -)
+        ]
+      ]
+    ]
+  ]
+]
+
+

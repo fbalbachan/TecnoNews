@@ -1,0 +1,128 @@
++grup-verb_[
+  subord_[
+    +(Si si CS -)
+    grup-verb_[
+      neg_[
+        +(no no RN -)
+      ]
+      +verb_[
+        vaux_[
+          +(ha haber VAIP3S0 -)
+        ]
+        +parti-ser_[
+          +(sido ser VSP00SM -)
+        ]
+      ]
+      sn_[
+        espec-ms_[
+          +pos-ms_[
+            +(tu tu DP2CSS -)
+          ]
+        ]
+        +grup-nom-ms_[
+          +n-ms_[
+            +(día día NCMS000 -)
+          ]
+        ]
+      ]
+    ]
+    F-no-c_[
+      +(— — Fz -)
+    ]
+    coor-n_[
+      +(ni ni CC -)
+      sn_[
+        espec-ms_[
+          +pos-ms_[
+            +(tu tu DP2CSS -)
+          ]
+        ]
+        +grup-nom-ms_[
+          +n-ms_[
+            +(año año NCMS000 -)
+          ]
+        ]
+      ]
+    ]
+    F-no-c_[
+      +(— — Fz -)
+    ]
+  ]
+  +verb_[
+    (puedes poder VMIP2S0 -)
+    +infinitiu_[
+      +inf_[
+        +forma-inf_[
+          +(contar contar VMN0000 -)
+        ]
+      ]
+    ]
+  ]
+  grup-sp_[
+    +prep_[
+      +(con con SPS00 -)
+    ]
+    sn_[
+      espec-ms_[
+        +indef-ms_[
+          +(un uno DI0MS0 -)
+        ]
+      ]
+      +grup-nom-ms_[
+        +n-ms_[
+          +(grupo grupo NCMS000 -)
+        ]
+        s-a-ms_[
+          +a-ms_[
+            +(selecto selecto AQ0MS0 -)
+          ]
+        ]
+      ]
+      sp-de_[
+        +(de de SPS00 -)
+        sn_[
+          +grup-nom-mp_[
+            +n-mp_[
+              +(amigos amigo NCMP000 -)
+            ]
+          ]
+          subord-rel_[
+            +(que que PR0CN000 -)
+            grup-verb_[
+              patons_[
+                +paton-s_[
+                  +(te te PP2CS000 -)
+                ]
+              ]
+              +verb_[
+                (van ir VMIP3P0 -)
+                (a a SPS00 -)
+                +infinitiu_[
+                  +inf_[
+                    +forma-inf_[
+                      +(hacer hacer VMN0000 -)
+                    ]
+                  ]
+                ]
+              ]
+              grup-verb-inf_[
+                +infinitiu_[
+                  +inf_[
+                    +forma-inf_[
+                      +(sonreír sonreír VMN0000 -)
+                    ]
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ]
+      ]
+    ]
+  ]
+  F-term_[
+    +(. . Fp -)
+  ]
+]
+
+
