@@ -240,6 +240,12 @@ class TestRewriter(unittest.TestCase):
 
     def test_synonyms(self):
         self.strategies = [SynonymsStrategy(self.ontology)]
+        self.kase("Semanalmente", 
+                  "Cada semana") 
+        self.kase("A la vez", 
+                  "Simultáneamente") 
+        self.kase("Desagradablemente", 
+                  "Dolorosamente") 
 
         self.kase("El rey construyó su victoria en base a mentiras",
                   "El rey edificó su victoria en base a mentiras")

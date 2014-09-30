@@ -11,7 +11,7 @@ invalid_ne = fuente,cnn_en_español,cnn,isis,juzgado_penal,fuente_cnn_en_españo
 
 [rewrite]
 
-blacklist = CNN, ISIS, Servicio_Secreto
+blacklist = CNN,ISIS,Servicio_Secreto,Maven,MAVEN,Corea,Clic,COM
 
 [syntax]
 

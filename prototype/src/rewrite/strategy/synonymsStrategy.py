@@ -10,11 +10,13 @@ class SynonymsStrategy:
     def __init__(self, ontology):
         self.ontology = ontology
         self.synonyms = self._get_synonyms()
+        self.adverbs = self._get_adverbs()
         self.locucions = self._get_locucions()
 
     def applies_to(self, clause):
         for leaf in clause.proper_leaves():
-            if leaf.lemma in self.synonyms.keys():
+            if (leaf.lemma in self.synonyms.keys() or 
+                leaf.lexical_form in self.adverbs.keys()):
                 return True
         return False
 
@@ -38,21 +40,31 @@ class SynonymsStrategy:
                         replacement = lexical_forms[0].text
                 if replacement:
                     rewrites.append(Rewrite.preserving_case(leaf, replacement))
+            elif leaf.lexical_form in self.adverbs.keys():
+                adverb = self.adverbs[leaf.lexical_form]
+                rewrites.append(Rewrite.preserving_case(leaf, adverb.replace('_', ' ')))
+                
         return rewrites
 
     def _get_synonyms(self):
-        # Warning, it is a dict, it doesn't work for multiple
-        # synonyms ofr the same word.
+        return self._get_replacements_from_csv("synonyms")
 
-        synonyms = {}
+    def _get_adverbs(self):
+        return self._get_replacements_from_csv("adverb_forms")
+
+    def _get_replacements_from_csv(self, resource):
+        # Warning, it is a dict, it doesn't work for multiple
+        # replacements for the same word.
+
+        replacements = {}
         Config = ConfigParser.ConfigParser()
         Config.read("config")
-        synonyms_filename =  Config.get("resources", "synonyms")
-        for line in csv.reader(open(synonyms_filename, 'r')):
-            synonyms[line[0]] = line[1]
-            synonyms[line[1]] = line[0]
-        return synonyms
-
+        replacements_filename =  Config.get("resources", resource)
+        for line in csv.reader(open(replacements_filename, 'r')):
+            replacements[line[0]] = line[1]
+            replacements[line[1]] = line[0]
+        return replacements
+    
     def _get_locucions(self):
         locucions = {}
         Config = ConfigParser.ConfigParser()
@@ -79,8 +91,3 @@ class SynonymsStrategy:
         return result_msi
 
     type = "replacement"
-
-
- 
-
- 
