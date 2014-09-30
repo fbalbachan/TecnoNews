@@ -7,10 +7,10 @@ class DateTimeStrategy:
     def __init__(self, ontology):
         self.ontology = ontology
 
-    def applies_to(self, sentence):
+    def applies_to(self, sentence, node):
         return any(( self.applies_to_clause(clause) for clause in sentence.clauses_of_level(0) ))
 
-    def rewrite(self, sentence):
+    def rewrite(self, sentence, node):
         clause = [ clause for clause in sentence.clauses_of_level(0) if self.applies_to_clause(clause) ][0]
         return self.rewrite_clause(clause)
 

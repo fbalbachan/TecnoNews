@@ -1,0 +1,40 @@
++subord_[
+  +(si si CS -)
+  grup-verb_[
+    +verb_[
+      +(odiara odiar VMSI3S0 -)
+    ]
+  ]
+  subord-rel_[
+    +(a a SPS00 -)
+    prel-comp_[
+      +(quien quien PR0CS000 -)
+      grup-verb_[
+        +verb_[
+          (pudo poder VMIS3S0 -)
+          +infinitiu_[
+            +inf_[
+              +forma-inf_[
+                +(observar observar VMN0000 -)
+              ]
+            ]
+          ]
+        ]
+        sn_[
+          espec-fs_[
+            +j-fs_[
+              +(la el DA0FS0 -)
+            ]
+          ]
+          +grup-nom-fs_[
+            +n-fs_[
+              +(luz luz NCFS000 -)
+            ]
+          ]
+        ]
+      ]
+    ]
+  ]
+]
+
+
