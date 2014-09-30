@@ -261,6 +261,9 @@ class TestRewriter(unittest.TestCase):
         self.kase("En 2010 jugó y lloró en primavera", "Jugó, en 2010 y lloró en primavera")
         self.kase("Jugó y lloró en primavera", "Jugó y en primavera, lloró")
 
+        self.kase("Corrió a 10 kilómetros por hora", "Corrió a 10 kilómetros por hora")
+        self.kase("Pasó esto hace una hora", "Hace una hora, pasó esto")
+
     def kase(self, source, edited):
         print "Case:", source
         analyzer = self.analyzer
