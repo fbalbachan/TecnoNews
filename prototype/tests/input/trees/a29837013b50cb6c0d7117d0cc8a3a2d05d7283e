@@ -1,0 +1,41 @@
++grup-verb_[
+  subord_[
+    +(Porque porque CS -)
+    grup-verb_[
+      sn_[
+        +pron_[
+          +psubj-s_[
+            +(yo yo PP1CSN00 -)
+          ]
+        ]
+      ]
+      +verb_[
+        +(soy ser VSIP1S0 -)
+      ]
+      sadv_[
+        +(así así RG -)
+      ]
+    ]
+    Fc_[
+      +(, , Fc -)
+    ]
+  ]
+  sn_[
+    +pron-fs_[
+      +psubj-fs_[
+        +(ella él PP3FS000 -)
+      ]
+    ]
+  ]
+  +verb_[
+    +(es ser VSIP3S0 -)
+  ]
+  sadv_[
+    +(así así RG -)
+  ]
+  F-term_[
+    +(. . Fp -)
+  ]
+]
+
+

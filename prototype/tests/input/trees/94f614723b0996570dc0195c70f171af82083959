@@ -1,0 +1,35 @@
++grup-verb_[
+  sn_[
+    +pron_[
+      +psubj-s_[
+        +(Yo yo PP1CSN00 -)
+      ]
+    ]
+  ]
+  +verb_[
+    +(digo decir VMIP1S0 -)
+  ]
+  subord_[
+    +(que que CS -)
+    grup-verb_[
+      sn_[
+        +pron-ms_[
+          +pdem-ms_[
+            +(esto este PD0NS000 -)
+          ]
+        ]
+      ]
+      +verb_[
+        +(es ser VSIP3S0 -)
+      ]
+      sadv_[
+        +(así así RG -)
+      ]
+    ]
+  ]
+  F-term_[
+    +(. . Fp -)
+  ]
+]
+
+

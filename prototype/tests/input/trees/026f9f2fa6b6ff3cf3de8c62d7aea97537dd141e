@@ -1,0 +1,56 @@
++grup-verb_[
+  subord_[
+    +(si si CS -)
+    grup-verb_[
+      sn_[
+        +pron_[
+          +psubj-s_[
+            +(yo yo PP1CSN00 -)
+          ]
+        ]
+      ]
+      +verb_[
+        +(soy ser VSIP1S0 -)
+      ]
+      s-adj_[
+        +s-a-fs_[
+          +a-fs_[
+            +(minúscula minúsculo AQ0FS0 -)
+          ]
+        ]
+      ]
+    ]
+    Fc_[
+      +(, , Fc -)
+    ]
+  ]
+  sn_[
+    +pron-ms_[
+      +psubj-ms_[
+        +(vos vos PP2CS00P -)
+      ]
+    ]
+  ]
+  +verb_[
+    +(deja dejar VMM02S0 -)
+  ]
+  patons_[
+    +paton-s_[
+      +(me me PP1CS000 -)
+    ]
+  ]
+  grup-sp_[
+    +prep_[
+      +(en en SPS00 -)
+    ]
+    sn_[
+      +grup-nom-fs_[
+        +n-fs_[
+          +(minúscula minúscula NCFS000 -)
+        ]
+      ]
+    ]
+  ]
+]
+
+

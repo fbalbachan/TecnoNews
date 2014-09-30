@@ -1,0 +1,35 @@
++coor-vb_[
+  grup-verb_[
+    grup-sp_[
+      +prep_[
+        +(En en SPS00 -)
+      ]
+      numero_[
+        +(2010 2010 Z -)
+      ]
+    ]
+    +verb_[
+      +(jugó jugar VMIS3S0 -)
+    ]
+  ]
+  +(y y CC -)
+  grup-verb_[
+    +verb_[
+      +(lloró llorar VMIS3S0 -)
+    ]
+    grup-sp_[
+      +prep_[
+        +(en en SPS00 -)
+      ]
+      sn_[
+        +grup-nom-fs_[
+          +n-fs_[
+            +(primavera primavera NCFS000 -)
+          ]
+        ]
+      ]
+    ]
+  ]
+]
+
+
