@@ -6,6 +6,7 @@ from src.ling.freelingDictionaryParser import FreelingDictionaryParser
 from src.model.paragraph.paragraph import Paragraph
 from src.model.paragraph.paragraphAnalyzer import ParagraphAnalyzer
 from src.model.sentence.sentenceAnalyzer import SentenceAnalyzer
+from src.ontology.ontology import Ontology
 from src.rewrite.strategy.adverbialClauseDislocationStrategy import AdverbialClauseDislocationStrategy
 from src.rewrite.strategy.althoughClauseDislocationStrategy import AlthoughClauseDislocationStrategy
 from src.rewrite.strategy.dateTimeStrategy import DateTimeStrategy
@@ -43,6 +44,7 @@ class Rewriter:
             self.dislocationStrategies = [
                 AdverbialClauseDislocationStrategy(ontology),
                 AlthoughClauseDislocationStrategy(),
+                DateTimeStrategy(ontology)
             ]
         else:
             self.replacementStrategies = []
@@ -64,7 +66,6 @@ class Rewriter:
 
         text = self.compose_text_with(replacements)
         for strategy in self.dislocationStrategies:
-
             self.paragraph = Paragraph.from_text(text)
             self.analyzer.analyze(self.paragraph) # TODO: Check if this is needed
 
@@ -127,5 +128,7 @@ class Rewriter:
 
     sentenceAnalyzer = SentenceAnalyzer()
     analyzer = ParagraphAnalyzer(sentenceAnalyzer)
+
     ontology = FreelingDictionaryParser.from_resource()
+    #ontology = Ontology("Test")
 

@@ -1,0 +1,64 @@
++grup-verb_[
+  grup-sp_[
+    +prep_[
+      +(En en SPS00 -)
+    ]
+    numero_[
+      +(1990 1990 Z -)
+    ]
+  ]
+  +verb_[
+    +(falleció fallecer VMIS3S0 -)
+  ]
+  Fc_[
+    +(, , Fc -)
+  ]
+  grup-sp_[
+    +prep_[
+      +(luego_de luego_de SPS00 -)
+    ]
+    sn_[
+      espec-ms_[
+        +j-ms_[
+          +(el el DA0MS0 -)
+        ]
+      ]
+      +grup-nom-ms_[
+        +n-ms_[
+          +(otoño otoño NCMS000 -)
+        ]
+      ]
+    ]
+    Fc_[
+      +(, , Fc -)
+    ]
+  ]
+  sadv_[
+    +(honradamente honrar RG -)
+  ]
+  Fc_[
+    +(, , Fc -)
+  ]
+  grup-sp_[
+    +prep_[
+      +(a a SPS00 -)
+    ]
+    sn_[
+      espec-fs_[
+        +j-fs_[
+          +(la el DA0FS0 -)
+        ]
+      ]
+      +grup-nom-fs_[
+        +n-fs_[
+          +(madrugada madrugada NCFS000 -)
+        ]
+      ]
+    ]
+  ]
+  F-term_[
+    +(. . Fp -)
+  ]
+]
+
+

@@ -1,0 +1,26 @@
++grup-verb_[
+  patons_[
+    +paton-ms_[
+      +(Lo lo PP3MSA00 -)
+    ]
+  ]
+  +verb_[
+    +(lograré lograr VMIF1S0 -)
+  ]
+  Fc_[
+    +(, , Fc -)
+  ]
+  subord_[
+    +(una_vez_que una_vez_que CS -)
+    grup-verb_[
+      +verb_[
+        +(sea ser VSSP3S0 -)
+      ]
+      sadv_[
+        +(así así RG -)
+      ]
+    ]
+  ]
+]
+
+

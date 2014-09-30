@@ -1,0 +1,43 @@
++grup-verb_[
+  sn_[
+    espec-mp_[
+      +j-mp_[
+        +(Los el DA0MP0 -)
+      ]
+    ]
+    +grup-nom-mp_[
+      +n-mp_[
+        +(sueños sueño NCMP000 -)
+      ]
+    ]
+  ]
+  +verb_[
+    +(son ser VSIP3P0 -)
+  ]
+  s-adj_[
+    +s-a-mp_[
+      +a-mp_[
+        +(posibles posible AQ0CP0 -)
+      ]
+    ]
+  ]
+  Fc_[
+    +(, , Fc -)
+  ]
+  prep_[
+    +(en_caso_de en_caso_de SPS00 -)
+  ]
+  subord_[
+    +(que que CS -)
+    grup-verb_[
+      +verb_[
+        +(duerma dormir VMSP3S0 -)
+      ]
+    ]
+    F-term_[
+      +(. . Fp -)
+    ]
+  ]
+]
+
+

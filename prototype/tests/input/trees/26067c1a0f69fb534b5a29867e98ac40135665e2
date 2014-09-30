@@ -1,0 +1,38 @@
++grup-verb_[
+  sn_[
+    +pron-fs_[
+      +psubj-fs_[
+        +(Ella él PP3FS000 -)
+      ]
+    ]
+  ]
+  +verb_[
+    +(está estar VAIP3S0 -)
+  ]
+  sadv_[
+    +(acá acá RG -)
+  ]
+  subord_[
+    +(mientras mientras CS -)
+    grup-verb_[
+      sn_[
+        +pron-ms_[
+          +psubj-ms_[
+            +(él él PP3MS000 -)
+          ]
+        ]
+      ]
+      +verb_[
+        +(está estar VAIP3S0 -)
+      ]
+      sadv_[
+        +(allá allá RG -)
+      ]
+    ]
+  ]
+  F-term_[
+    +(. . Fp -)
+  ]
+]
+
+

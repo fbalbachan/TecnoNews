@@ -1,0 +1,41 @@
++grup-verb_[
+  subord_[
+    +(Mientras mientras CS -)
+    grup-verb_[
+      sn_[
+        +pron-ms_[
+          +psubj-ms_[
+            +(él él PP3MS000 -)
+          ]
+        ]
+      ]
+      +verb_[
+        +(está estar VAIP3S0 -)
+      ]
+      sadv_[
+        +(allá allá RG -)
+      ]
+    ]
+    Fc_[
+      +(, , Fc -)
+    ]
+  ]
+  sn_[
+    +pron-fs_[
+      +psubj-fs_[
+        +(ella él PP3FS000 -)
+      ]
+    ]
+  ]
+  +verb_[
+    +(está estar VAIP3S0 -)
+  ]
+  sadv_[
+    +(acá acá RG -)
+  ]
+  F-term_[
+    +(. . Fp -)
+  ]
+]
+
+

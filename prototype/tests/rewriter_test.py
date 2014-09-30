@@ -14,9 +14,9 @@ from src.rewrite.strategy.futureToGoConstructionStrategy import FutureToGoConstr
 from src.rewrite.strategy.modalDeberToTieneQue import ModalDeberToTieneQue
 from src.rewrite.strategy.pastSimpleToCompoundStrategy import PastSimpleToCompoundStrategy
 from src.rewrite.strategy.subjuntiveImperfectStrategy import SubjuntiveImperfectStrategy
+from src.rewrite.strategy.synonymsStrategy import SynonymsStrategy
 from src.rewrite.strategy.tieneQueToModalDeber import TieneQueToModalDeber
 from tests.freelingTreeRepository import FreelingTreeRepository
-from src.rewrite.strategy.synonymsStrategy import SynonymsStrategy
 
 
 class TestRewriter(unittest.TestCase):
@@ -232,20 +232,20 @@ class TestRewriter(unittest.TestCase):
         self.kase("Moriré mañana", "Voy a morir mañana")
         self.kase("Construiremos más viviendas", "Vamos a construir más viviendas")
         self.kase("Juan amará", "Juan va a amar")
-    
+
     def test_synonyms(self):
         self.strategies = [SynonymsStrategy(self.ontology)]
 
-        self.kase("El rey construyó su victoria en base a mentiras", 
-                  "El rey edificó su victoria en base a mentiras") 
-        self.kase("Para el alumno, memorizar el alfabeto es un reto absurdo", 
-                  "Para el alumno, memorizar el abecedario es un desafío ilógico")        
-        self.kase("El principio del famoso robo fue maravilloso y rápido", 
-                  "El comienzo del famoso robo fue extraordinario y rápido")  
-        self.kase("Quizás salga primero a pesar de esperar de vez en cuando", 
-                  "Tal vez salga primero pese a esperar esporádicamente")  
-        self.kase("Tal vez salga primero pese a esperar esporádicamente", 
-                  "Quizá salga primero a pesar de esperar esporádicamente")  
+        self.kase("El rey construyó su victoria en base a mentiras",
+                  "El rey edificó su victoria en base a mentiras")
+        self.kase("Para el alumno, memorizar el alfabeto es un reto absurdo",
+                  "Para el alumno, memorizar el abecedario es un desafío ilógico")
+        self.kase("El principio del famoso robo fue maravilloso y rápido",
+                  "El comienzo del famoso robo fue extraordinario y rápido")
+        self.kase("Quizás salga primero a pesar de esperar de vez en cuando",
+                  "Tal vez salga primero pese a esperar esporádicamente")
+        self.kase("Tal vez salga primero pese a esperar esporádicamente",
+                  "Quizá salga primero a pesar de esperar esporádicamente")
 
 
 
@@ -260,7 +260,26 @@ class TestRewriter(unittest.TestCase):
 
     def test_datetime(self):
         self.strategies = [DateTimeStrategy(self.ontology)]
-        self.kase("Murió en la semana de mayo, honradamente, en la madrugada.", "")
+
+        self.kase("En 2010, jugó al fútbol.", "Jugó a el fútbol, en 2010.")
+        self.kase("El 15 de Agosto, Leandro jugó al fútbol.", "Leandro jugó a el fútbol, el 15 de Agosto.")
+        self.kase("Murió en la semana de mayo, honradamente.", "En la semana de mayo, murió, honradamente.")
+        self.kase("Murió en la semana de mayo, honradamente, en la madrugada.", "En la semana de mayo, en la madrugada, murió, honradamente.")
+        self.kase("En 1990 falleció, luego del otoño, honradamente, a la madrugada.", "Luego de el otoño, a la madrugada, falleció honradamente, en 1990.")
+        self.kase("En 2010 falleció el hombre que había nacido en 1880.", "Falleció el hombre que había nacido en 1880, en 2010.")
+        self.kase('En abril de 2012, Hillary Clinton le dijo a ABC que "dependía realmente de ella si ganaría el título de abuela", pero añadió: "Me gustaría tenerlo... creo que sería muy bueno".', \
+                  'Hillary Clinton le dijo a ABC que " dependía realmente de ella si ganaría el título de abuela ", en abril de 2012, pero añadió: "Me gustaría tenerlo... creo que sería muy bueno".')
+        self.kase('"Amó en 2013 a su hermana"', '"En 2013, amó a su hermana"')
+
+        # Time reference en subordinada
+        self.kase("El hombre que en 2010 había nacido murió", "El hombre que en 2010 había nacido murió")
+
+        # En coordinada
+        self.kase("En 2010 jugó y lloró en primavera", "Jugó, en 2010 y lloró en primavera")
+        self.kase("Jugó y lloró en primavera", "Jugó y en primavera, lloró")
+
+        self.kase("Corrió a 10 kilómetros por hora", "Corrió a 10 kilómetros por hora")
+        self.kase("Pasó esto hace una hora", "Hace una hora, pasó esto")
 
     def kase(self, source, edited):
         print "Case:", source
