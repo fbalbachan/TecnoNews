@@ -240,12 +240,9 @@ class TestRewriter(unittest.TestCase):
 
     def test_synonyms(self):
         self.strategies = [SynonymsStrategy(self.ontology)]
-        self.kase("Semanalmente", 
-                  "Cada semana") 
-        self.kase("A la vez", 
-                  "Simultáneamente") 
-        self.kase("Desagradablemente", 
-                  "Dolorosamente") 
+        self.kase("Semanalmente", "Cada semana")
+        self.kase("A la vez", "A el mismo tiempo") # Prioridad sinónimos
+        self.kase("Desagradablemente", "Dolorosamente")
 
         self.kase("El rey construyó su victoria en base a mentiras",
                   "El rey edificó su victoria en base a mentiras")
@@ -256,7 +253,7 @@ class TestRewriter(unittest.TestCase):
         self.kase("Quizás salga primero a pesar de esperar de vez en cuando",
                   "Tal vez parta primero pese a esperar esporádicamente")
         self.kase("Tal vez salga primero pese a esperar esporádicamente",
-                  "Quizás parta primero a pesar de esperar esporádicamente")
+                  "Quizás parta primero a pesar de esperar de vez en cuando")
 
     def test_combined(self):
         self.strategies = [SynonymsStrategy(self.ontology), PastSimpleToCompoundStrategy(self.ontology), SubjuntiveImperfectStrategy(self.ontology), \

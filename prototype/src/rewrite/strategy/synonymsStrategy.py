@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
+import ConfigParser
+import csv
+import re
+
 from src.rewrite.rewrite import Rewrite
 from src.utils.stringUtils import set_first_letter_case
 
-import csv
-import ConfigParser
-import re
 
 class SynonymsStrategy:
     def __init__(self, ontology):
@@ -15,7 +16,7 @@ class SynonymsStrategy:
 
     def applies_to(self, clause):
         for leaf in clause.proper_leaves():
-            if (leaf.lemma in self.synonyms.keys() or 
+            if (leaf.lemma in self.synonyms.keys() or
                 leaf.lexical_form in self.adverbs.keys()):
                 return True
         return False
@@ -25,9 +26,9 @@ class SynonymsStrategy:
 
         rewrites = []
         for leaf in clause.proper_leaves():
+            replacement = None
             if leaf.lemma in self.synonyms.keys():
                 synonym = self.synonyms[leaf.lemma]
-                replacement = None
                 if '_' in synonym or synonym not in ontology.concepts:
                     if synonym in self.locucions and self.locucions[synonym]:
                         pass
@@ -40,10 +41,11 @@ class SynonymsStrategy:
                         replacement = lexical_forms[0].text
                 if replacement:
                     rewrites.append(Rewrite.preserving_case(leaf, replacement))
-            elif leaf.lexical_form in self.adverbs.keys():
+
+            if not replacement and leaf.lexical_form in self.adverbs.keys():
                 adverb = self.adverbs[leaf.lexical_form]
                 rewrites.append(Rewrite.preserving_case(leaf, adverb.replace('_', ' ')))
-                
+
         return rewrites
 
     def _get_synonyms(self):
@@ -64,7 +66,7 @@ class SynonymsStrategy:
             replacements[line[0]] = line[1]
             replacements[line[1]] = line[0]
         return replacements
-    
+
     def _get_locucions(self):
         locucions = {}
         Config = ConfigParser.ConfigParser()
