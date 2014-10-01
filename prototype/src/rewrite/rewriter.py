@@ -4,6 +4,7 @@ from collections import deque
 from src.ling.freelingDictionaryParser import FreelingDictionaryParser
 from src.rewrite.strategy.adverbialClauseDislocationStrategy import AdverbialClauseDislocationStrategy
 from src.rewrite.strategy.althoughClauseDislocationStrategy import AlthoughClauseDislocationStrategy
+from src.rewrite.strategy.segunToDijoDislocationStrategy import SegunToDijoDislocationStrategy
 from src.rewrite.strategy.futureStrategy import FutureStrategy
 from src.rewrite.strategy.pastSimpleToCompoundStrategy import PastSimpleToCompoundStrategy
 from src.rewrite.strategy.subjuntiveImperfectStrategy import SubjuntiveImperfectStrategy
@@ -32,6 +33,7 @@ class Rewriter:
             self.dislocationStrategies = [
                 AdverbialClauseDislocationStrategy(ontology),
                 AlthoughClauseDislocationStrategy(),
+                SegunToDijoDislocationStrategy()
             ]
         else:
             self.replacementStrategies = []
