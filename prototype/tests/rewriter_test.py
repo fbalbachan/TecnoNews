@@ -8,6 +8,7 @@ from src.model.paragraph.paragraphAnalyzer import ParagraphAnalyzer
 from src.model.sentence.sentenceAnalyzer import SentenceAnalyzer
 from src.rewrite.rewriter import Rewriter
 from src.rewrite.strategy.adverbialClauseDislocationStrategy import AdverbialClauseDislocationStrategy
+from src.rewrite.strategy.segunToDijoDislocationStrategy import SegunToDijoDislocationStrategy
 from src.rewrite.strategy.althoughClauseDislocationStrategy import AlthoughClauseDislocationStrategy
 from src.rewrite.strategy.dateTimeStrategy import DateTimeStrategy
 from src.rewrite.strategy.futureToGoConstructionStrategy import FutureToGoConstructionStrategy
@@ -31,6 +32,53 @@ class TestRewriter(unittest.TestCase):
     def __(self):
         ontology = FreelingDictionaryParser.from_resource()
         print ontology.get_lexical_form("haber", { "mode" : "indicative", "time" : "presente", "person" : 2, "number" : "singular"})
+
+    def test_segun_to_dijo_dislocation(self):
+        self.strategies = [SegunToDijoDislocationStrategy([True], [""])]
+
+        # Sin comillas no cambia
+        self.kase('Según Pedro esto es así.', 'Según Pedro esto es así.')
+
+        #=================================================
+        # CON Dislocación, SIN cambio a "de acuerdo con"
+        # Diferentes opciones de puntuación
+        self.kase('Según Pedro "esto es así"', '"Esto es así", según Pedro')
+        self.kase('Según Pedro, "esto es así"', '"Esto es así", según Pedro')
+        self.kase('Según Pedro "esto es así".', '"Esto es así", según Pedro.')
+        self.kase('Según Pedro, "esto es así".', '"Esto es así", según Pedro.')
+        # Múltiples oraciones / minúsculas
+        self.kase(
+            'Según Pedro, "nada pasa". según él, "estaría bueno". Según mi imaginación, "es impresionante"',
+            '"Nada pasa", según Pedro. "estaría bueno", según él. "Es impresionante", según mi imaginación',
+        )
+
+        #=================================================
+        # CON Dislocación, CON cambio a "de acuerdo con"
+        self.strategies = [SegunToDijoDislocationStrategy([True], ["de_acuerdo_con"])]
+        # Diferentes opciones de puntuación
+        self.kase('Según Pedro "esto es así"', '"Esto es así", de acuerdo con Pedro')
+        self.kase('Según Pedro, "esto es así"', '"Esto es así", de acuerdo con Pedro')
+        self.kase('Según Pedro "esto es así".', '"Esto es así", de acuerdo con Pedro.')
+        self.kase('Según Pedro, "esto es así".', '"Esto es así", de acuerdo con Pedro.')
+        # Múltiples oraciones / minúsculas
+        self.kase(
+            'Según Pedro, "nada pasa". según él, "estaría bueno". Según mi imaginación, "es impresionante"',
+            '"Nada pasa", de acuerdo con Pedro. "estaría bueno", de acuerdo con él. "Es impresionante", de acuerdo con mi imaginación',
+        )
+
+        #=================================================
+        # SIN Dislocación, CON cambio a "de acuerdo con"
+        self.strategies = [SegunToDijoDislocationStrategy([False], ["de_acuerdo_con"])]
+        # Diferentes opciones de puntuación
+        self.kase('Según Pedro "esto es así"', 'De acuerdo con Pedro "esto es así"')
+        self.kase('Según Pedro, "esto es así"', 'De acuerdo con Pedro, "esto es así"')
+        self.kase('Según Pedro "esto es así".', 'De acuerdo con Pedro "esto es así".')
+        self.kase('Según Pedro, "esto es así".', 'De acuerdo con Pedro, "esto es así".')
+        # Múltiples oraciones / minúsculas
+        self.kase(
+            'Según Pedro, "nada pasa". según él, "estaría bueno". Según mi imaginación, "es impresionante"',
+            'De acuerdo con Pedro, "nada pasa". de acuerdo con él, "estaría bueno". De acuerdo con mi imaginación, "es impresionante"',
+        )
 
     def test_although_clause_dislocation(self):
         self.strategies = [AlthoughClauseDislocationStrategy()]
@@ -240,12 +288,9 @@ class TestRewriter(unittest.TestCase):
 
     def test_synonyms(self):
         self.strategies = [SynonymsStrategy(self.ontology)]
-        self.kase("Semanalmente", 
-                  "Cada semana") 
-        self.kase("A la vez", 
-                  "Simultáneamente") 
-        self.kase("Desagradablemente", 
-                  "Dolorosamente") 
+        self.kase("Semanalmente", "Cada semana")
+        self.kase("A la vez", "A el mismo tiempo") # Prioridad sinónimos
+        self.kase("Desagradablemente", "Dolorosamente")
 
         self.kase("El rey construyó su victoria en base a mentiras",
                   "El rey edificó su victoria en base a mentiras")
@@ -256,7 +301,7 @@ class TestRewriter(unittest.TestCase):
         self.kase("Quizás salga primero a pesar de esperar de vez en cuando",
                   "Tal vez parta primero pese a esperar esporádicamente")
         self.kase("Tal vez salga primero pese a esperar esporádicamente",
-                  "Quizás parta primero a pesar de esperar esporádicamente")
+                  "Quizás parta primero a pesar de esperar de vez en cuando")
 
     def test_combined(self):
         self.strategies = [SynonymsStrategy(self.ontology), PastSimpleToCompoundStrategy(self.ontology), SubjuntiveImperfectStrategy(self.ontology), \
