@@ -7,8 +7,8 @@ class FactNormalizer():
     def fact(self):
         fact = ""
         clause = self.clause
-        structure_order = [ "subject", "verb", "od", "oi", "regimen", "equative", "instrument_goal", "adjuncts" ]
-
+        structure_order = [ "subject", "verb", "od", "oi", "regimen", "equative", "instrument_goal", 
+                            "adjuncts" ]
         for structure_name in structure_order:
             if clause.has_structure(structure_name):
                 if fact: fact = fact + " + "
@@ -19,6 +19,9 @@ class FactNormalizer():
                     entities = [ self.string_of(entity) for entity in structure.all_entities() ]
                     if structure_name == "verb" and clause.is_negated(): fact = fact + "no "
                     fact = fact + ", ".join(entities)
+        
+        time_lexical_forms = [ " ".join([repr(l) for l in reference.leaves()]) for reference in clause.time_references ]
+        fact = fact + ", ".join(time_lexical_forms)
         return fact
 
     def string_of(self, entity):
