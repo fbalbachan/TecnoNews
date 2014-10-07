@@ -21,7 +21,7 @@ class FactNormalizer():
                     fact = fact + ", ".join(entities)
         
         time_lexical_forms = [ " ".join([repr(l) for l in reference.leaves()]) for reference in clause.time_references ]
-        fact = fact + ", ".join(time_lexical_forms)
+        fact = fact + " + " + ", ".join(time_lexical_forms)
         return fact
 
     def string_of(self, entity):
