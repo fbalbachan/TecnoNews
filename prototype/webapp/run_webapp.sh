@@ -10,4 +10,4 @@ if [ -f $PID_FILE ]; then
 	fi
 fi
 
-python service.py 8321
+python2.7 service.py 8321

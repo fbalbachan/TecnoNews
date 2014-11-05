@@ -15,6 +15,10 @@ class SegunToDijoDislocationStrategy:
     def applies_to(self, sentence, node):
         return self.applies_segun_inicial(sentence, node)
 
+
+      
+        
+
     def applies_segun_inicial(self, sentence, node):
         return isinstance(node, LabelNode) and node.label == 'subord' and (
             len(node.children) >= 3 and
@@ -23,8 +27,12 @@ class SegunToDijoDislocationStrategy:
             self.correct_last_quotes(node, sentence) > 0
         )
 
+
+
+
     def is_quote(self, node, sentence):
         token = node.token
+        
         return isinstance(node, LabelNode) and node.label == 'F-no-c' and\
             sentence.paragraph.text.decode("utf-8")[token.start():token.end()].encode('utf-8') == '"'
 
@@ -63,6 +71,8 @@ class SegunToDijoDislocationStrategy:
             first_part = set_first_letter_case(segun, "de acuerdo con ") + first_part
         else:
             first_part = text[node.token.start():node.children[1].token.end()].strip()
+
+        
 
         second_part = text[node.children[2].token.start():last_quote_token.end()].strip()
         third_part = text[last_quote_token.end():node.token.end()].strip()

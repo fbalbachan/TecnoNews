@@ -13,10 +13,6 @@ tagger_port = 9999
 
 verbal_scripts = %(resources_dir)s/scripts_verbales.csv
 sentiwordnet = %(resources_dir)s/sentiwordnet.csv
-<<<<<<< Updated upstream
-resources_dir = /home/wert/Desktop/entinews/prototype/resources
-=======
->>>>>>> Stashed changes
 general_resources = %(resources_dir)s/general_resources
 
 honorific_prefs = %(resources_dir)s/honorificos.pre
@@ -29,9 +25,6 @@ tags_to_filter = %(resources_dir)s/tags_to_filter
 
 synonyms = %(resources_dir)s/synonyms.csv
 locucions = %(resources_dir)s/locucions_extended.dat
-<<<<<<< Updated upstream
 adverb_forms = %(resources_dir)s/adverb_forms.csv
-=======
-
+freeling_dict = %(resources_dir)s/freeling_es.dic
 resources_dir = /apps/entinews/prototype/resources
->>>>>>> Stashed changes

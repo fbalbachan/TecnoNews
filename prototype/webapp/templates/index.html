@@ -1,5 +1,5 @@
 $def with (request_id)
-$ captcha_src = "static/captcha/captcha_" + request_id + ".png"
+$ captcha_src = "sentilecto/static/captcha/captcha_" + request_id + ".png"
 <!DOCTYPE html>
 <html lang="es">
   <head>
@@ -59,21 +59,38 @@ $ captcha_src = "static/captcha/captcha_" + request_id + ".png"
     <div class="container" style="width: 1000px">
 
       <h2 style="padding-top:60px;padding-bottom:10px;"></h2>
-
+      
       <div>
-        <form class="well form-search" action="result" method="GET">
+        <form class="well form-search" action="sentilecto/result" method="GET">
             <fieldset>
                 <div class="control-group">
                     <label class="control-label" for="text">Input Text (only Spanish):</label>
                     <div class="controls">
-                        <textarea class="input-xlarge" id="textarea" rows="14" style="width: 950px;" name="text">Los noruegos, quienes son un pueblo agresivo, exportan el exquisito bacalao. A ellos les molesta tomar vacaciones en Hawaii, aunque no odian el calor. Afortunadamente, no fueron conquistados por los ingleses en el año 1066, y en cambio desarrollaron su propia cultura, confiando en su herencia vikinga y no formando parte de la Unión Europea.</textarea>
+			<textarea class="input-xlarge" id="textarea" rows="26" style="width: 950px;" name="text">Los noruegos, quienes pueden llegar a ser un pueblo agresivo, exportan el exquisito bacalao. Aunque no odian el calor, a ellos les molesta tomar vacaciones en Hawaii, que es mi lugar favorito. No fueron conquistados por los ingleses en el año 1066, y en cambio, afortunadamente desarrollaron su propia cultura, confiando en su herencia vikinga. Ellos reniegan de los europeos occidentales y orientales, con los cuales han debido lidiar durante años. Viviremos mejor cuando trabajemos a brazo partido como el próspero pueblo de los noruegos, cuyas autoridades gobiernan sin contratiempo alguno. ¡Mejoremos nuestro estilo de vida entonces cuanto antes! Injustamente cruel ha resultado nuestro destino de grandeza aunque hicimos cosas magníficas que fascinaron al mundo entero. Descarto que seamos tan malos, pero ciertamente nos hemos convertido en motivo de preocupación para nuestros venerables e ilustres antepasados porque no hemos erradicado los males que nos aquejan desde hace varias décadas.
+
+separadores de textos. dejar un texto y borrar los otros. separadores de textos.
+
+Gentil y amable como pocas, la Excma. Dra. Juana della Carbonara saludó al arq Gonzalo F. Juárez Jr en las oficinas de la gobernación, ante la mirada del propio gobernador, dejándolo perplejo. María G Fernández se cruzó con ella y le preguntó por él. Juana y Gonzalo parecen una pareja disfuncional cuando discuten, no? Aunque los admiro a ambos por igual, supuse que ella lo iba a hostigar. No obstante, destaco las buenas intenciones de Juana, en favor de la cual debo decir que los flirteos mutuos han sido mitigados por el tiempo. ¿Quién les robó sus sueños y deseos? ¿Desaparecieron para siempre? Si la vida se propone separar a las personas que aprecio, me resisto a asumir responsabilidades. En tal caso quiero permanecer como un eterno niño, resistiendo a la embestida del tiempo, aunque reconozco que resulta inconducente que adoptemos esta postura. Juana y Gonzalo desperdiciaron su oportunidad de ser felices. Yo no voy a tirar la toalla así nomás.
+
+separadores de textos. dejar un texto y borrar los otros. separadores de textos.
+
+El estudiante había rendido examen en la facultad ese lunes, pero igual en el trabajo había rendido muy satisfactoriamente durante ese día. Decidió que por la noche iría a ver a la banda que le rinde tributo a Freddie Mercury, quien no se había rendido en su vida hasta el final, y luego se emborracharía. El estudiante Fernando Balbachan se dijo a sí mismo que no le rinde cuentas a nadie. Fernando Balbachan odia al Presidente Pellegrini. El estudiante Balbachan odia la calle Pellegrini. Balbachan odia a la empresa Pellegrini. El Dr. Fernando Balbachan se perfila como un gran misántropo. Fernando Gómez pertenece a otra familia. Balbachan es admirado por el ingeniero Gómez.
+
+separadores de textos. dejar un texto y borrar los otros. separadores de textos.
+
+Telefónica mejoró su servicio. Telefónica S.A. no mejoró su servicio. Telefónica S.R.L. puede mejorar su servicio. Según ciertas versiones, Telefónica mejoraría su servicio. Supongo que Telefónica mejoró su servicio. Telefónica Inc tiene que mejorar su servicio. Telefónica no tiene que mejorar su servicio. ¿Telefónica mejoró su servicio? ¿Gracias a quién Telefónica mejoró su servicio? ¡Telefónica, mejorá tu servicio! Si Telefónica mejora su servicio, es un acontecimiento digno de ser celebrado. Desmintieron el rumor que había sido difundido por el diario Clarín acerca de que Telefónica ha mejorado el servicio de la empresa Movistar. 
+
+separadores de textos. dejar un texto y borrar los otros. separadores de textos.
+
+Me alegra que el servicio de Telefónica haya mejorado. Me preocupa que el servicio de Telefónica no haya mejorado. No me preocupa que el servicio de Telefónica haya mejorado. No es verdad que Telefónica haya mejorado. Exijo que el servicio de Telefónica mejore. Esperamos que el servicio de Telefónica mejore. Ella preguntó si el servicio de Telefónica mejoró.
+</textarea>
                         <br><br>
-                        Enter the number you see <input class="input" type="text" style="width: 50px;" maxlength=4 name="captcha"/>&nbsp;
+                        Are you a robot? (enter the numbers & letters you see) <input class="input" type="text" style="width: 50px;" maxlength=4 name="captcha"/>&nbsp;
                         <img src="$captcha_src">
                         <br><br>
-                        Available outputs
+                        <b>Available output</b>
                         <select name="method" style="width: 300px;">
-                            <option value="svo_slots">Aspect-based Sentiment Analysis &amp; SVO slots</option>
+                            <option value="svo_slots">Text global understanding &amp; Sentiment Analysis</option>
                             <option value="fact_extraction">Fact mining for Named-Entities</option>
                             <option value="content_rewrite">Rewriting &amp; content generation</option>
                         </select>
@@ -84,17 +101,21 @@ $ captcha_src = "static/captcha/captcha_" + request_id + ".png"
             </fieldset>
         </form>
       </div>
-
-      <p>This Entity-based Sentiment Analysis (ESA) solution yields a highly fine-grained representation for the sentiment values involved in each opinion. Unlike other approaches, this solution can deal with polarity shifting in the same sentence ('<i>I like chocolate but I hate strawberry ice-cream</i>') or even within embedded clauses ('<i>Norwegians, who are an aggresive People, export the exquisite herring</i>').
+      <p><b>Could you tell who <i>left</i> who <i>astonished</i> in the text above? SentiLecto can ¿Quién "<i>DEJÓ PERPLEJO</i>" a quién en el texto de la demo?</b><p>
+      <p></p>
+      <p>This Aspect-based Sentiment Analysis solution yields a highly fine-grained representation for the sentiment values involved in each opinion. Unlike other approaches, this solution can deal with polarity shifting in the same sentence ('<i>I like chocolate but I hate strawberry ice-cream</i>'), within embedded clauses ('<i>Norwegians, who are an aggresive People, export the exquisite herring</i>'), or even onto the very same word ('<i>Somebody who <u>wasted</u> a chance to do something</i>' means that person did <u>something bad</u> <u>about something good</u>).
 <b>SentiLecto better represents the premise whereby the entities involved in the opinion are syntactically  mapped onto SVO (subject-verb-object) slots for their sentiment assignments</b>:
 '<i>Mary hates John</i>' (2 entities but only the object has a negative presentation) vs. '<i>Mary defames John</i>' (the same 2 entities but only the subject has negative presentation).
 	</p>
       <p>
-        SentiLecto leans on outstanding linguistic features such as: passive/active voice transformation, anaphora resolution and co-reference chains, modality treatment and accurate verb scripts for all verbs in Spanish, even with different pronominal cases (for example, 'destacar' 'to appraise something' vs. 'destacarSE' 'to highlight oneself from the rest')
+        SentiLecto leans on outstanding linguistic features such as: passive/active voice transformation, negation scope, anaphora resolution and co-reference chains, modality treatment and accurate verb scripts for all verbs in Spanish, even with subtle semantic differences (for example, 'resistir' '<i>to fight against (something bad)</i>' vs. 'resistirSE a' '<i>to prevent yourself from doing something (good) that somebody wants you to do</i> ').</p>
+<p>Also, SentiLecto can flawlessly identify whether or not an utterance is a real fact (fact mining) over which an opinion could span, and it can recognize & classify named-entities (NERC).
       </p>
-      <p>Try this challenging input text and behold the results!</p>
+      <p>Try this default challenging input text, or you can enter any complex large text, such as news. Copy & paste the entire body text from <a href="http://mundial-brasil-2014.clarin.com/Deportaron-hincha-Central_0_1153685255.html" target="_blank"><b><u>this recent news about the World Cup Brazil 2014</b></u></a>, or this <a href="http://www.lanacion.com.ar/1709099-el-gobierno-adujo-la-negativa-a-las-exportaciones-de-carne-en-eeuu-a-una-campana-de-los-fondos-buitres" target="_blank"><b><u>other article</u></b></a>, into SentiLecto's input text box and behold the results! While there might be some occasional misinterpretations in sparse utterances, after processing large data sets of converging texts in a few seconds -for example, all news about the same topic-, the most important facts and opinionated entities will certainly emerge through an accurate and exhaustive linguistic representation.</p>  
+     <p></p>
+      <p>Still skeptical? Try a raw comparison between two editorial lines of newspapers covering the very same news about Argentina's risk of financial default in <b><u><a href="http://www.pagina12.com.ar/diario/economia/2-251778-2014-07-29.html" target="_blank">Página/12</a></u></b> versus <b><u><a href="http://www.ieco.clarin.com/economia/deuda-buitres-griesa-citibank_0_1183082146.html" target="_blank">Clarín</a></u></b>. Check out the meaningful difference in the respective overall text scores.</p>
     </div>
-
+    <div align=center>visitors <img src='http://www.counter12.com/img-AdBd9B70-57.gif' border='0' ><script type='text/javascript' src='http://www.counter12.com/ad.js?id=AdBd9B70'></script></div>
   </body>
   <!-- </div> -->
 </html>

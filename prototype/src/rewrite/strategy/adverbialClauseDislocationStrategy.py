@@ -199,6 +199,6 @@ class AdverbialClauseDislocationStrategy:
     type = "dislocation"
 
     # "en_caso_de" se ve por separado en applies_to()
-    subordinate_headers = ["si", "mientras", "cuando", "una_vez_que", "según"]
+    subordinate_headers = ["si", "mientras", "cuando", "una_vez_que", "según", "mientras_que"]
     sentenceAnalyzer = SentenceAnalyzer(FreelingTreeRepository("tests/input/trees"))
     analyzer = ParagraphAnalyzer(sentenceAnalyzer)

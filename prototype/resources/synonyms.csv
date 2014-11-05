@@ -1,3 +1,10 @@
+festejar,celebrar
+exorbitante,desmedido
+estrafalario,extravagante
+desmesurado,desmedido
+pretender,intentar
+continuar,seguir
+estadounidense,norteamericano
 colina_abajo,cuesta_abajo
 hasta_ahora,hasta_el_momento
 al_lado_de,junto_a
@@ -23,7 +30,6 @@ a_toda_vela,a_todo_vapor
 a_la_vez,a_el_mismo_tiempo
 suponer,presuponer
 planear,planificar
-recordar,rememorar
 amilanar,amedrentar
 romper,quebrar
 recobrar,recuperar
@@ -34,7 +40,6 @@ a_causa_de,debido_a
 a_pesar_de,pese_a
 abecedario,alfabeto
 absurdo,ilógico
-admitir,reconocer
 advertir,prevenir
 agregar,añadir
 aparecer,surgir
@@ -57,7 +62,6 @@ decir,afirmar
 demente,loco
 desafío,reto
 diferente,distinto
-economizar,ahorrar
 edificar,construir
 elegir,escoger
 embuste,mentira
@@ -67,7 +71,6 @@ en_cuanto_a,con_respecto_a
 en_espera_de,a_la_espera_de
 en_torno_a,respecto_de
 en_virtud_de,en_vista_de
-entrar,ingresar
 erudito,sabio
 esporádicamente,de_vez_en_cuando
 estampilla,sello
@@ -114,22 +117,18 @@ obsequio,regalo
 ofrecer,brindar
 ostentoso,pomposo
 paciente,tolerante
-parar,detener
 pedazo,trozo
 pedir,solicitar
 poco_a_poco,paulatinamente
 por_causa_de,a_causa_de
 por_consiguiente,por_lo_tanto
 previo,anterior
-principio,inicio
 principio,comienzo
 quebradizo,frágil
 quizá,tal_vez
 quizás,tal_vez
 rápido,veloz
 raro,extraño
-regresar,volver
-reñir,pelear
 retrasar,demorar
 rostro,cara
 salir,partir
@@ -144,17 +143,15 @@ sorteo,rifa
 tapar,cubrir
 tonto,necio
 trabajo,labor
-ubicar,colocar
+ubicar,situar
 utilizar,usar
 vacante,disponible
 valioso,preciado
 vaso,taza
 vasto,extenso
 ver,mirar
-ver,observar
 vereda,senda
 victoria,triunfo
-volver,regresar
 zambullir,sumergir
 zancada,paso
 zarcillo,pendiente
@@ -208,7 +205,6 @@ caracterizar,describir
 castigar,penalizar
 causar,ocasionar
 charlar,conversar
-colocar,situar
 comenzar,empezar
 compactar,comprimir
 comprender,entender
@@ -279,7 +275,6 @@ deshonesto,deshonroso
 desfavorable,desventajoso
 decisivo,determinante
 alejado,distante
-diferente,distinto
 alegre,divertido
 discutible,dudoso
 eficaz,eficiente
@@ -345,5 +340,5 @@ asombroso,sorprendente
 abarcativo,exhaustivo
 perseverante,tenaz
 cariñoso,tierno
-nocivo,tóxico
+nocivo,pernicioso
 energizante,vigorizante

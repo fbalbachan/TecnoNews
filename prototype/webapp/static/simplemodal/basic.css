@@ -10,7 +10,7 @@
 
 @font-face {
     font-family: executive;
-    src: url('/static/font/typewriter.ttf');
+    src: url('../font/typewriter.ttf');
 }
 
 #basic-modal-content {display:none; font-family: "executive";}

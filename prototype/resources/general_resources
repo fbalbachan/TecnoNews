@@ -11,8 +11,9 @@ invalid_ne = fuente,cnn_en_español,cnn,isis,juzgado_penal,fuente_cnn_en_españo
 
 [rewrite]
 
-blacklist = CNN,ISIS,Servicio_Secreto,Maven,MAVEN,Corea,Clic,COM
+blacklist = CNN,ISIS,Servicio_Secreto,Maven,MAVEN,Corea,Clic,Com,Norte,Sur,Guerrero,Yo
+
 
 [syntax]
 
-time_words = enero, febrero, marzo, abril, mayo, junio, octubre, agosto, septiembre, noviembre, diciembre, mes, semana, lunes, martes, miércoles, jueves, viernes, sábado, domingo, julio, día, década, noche, cuatrimestre, trimestre, bimestre, siglo, hora, minuto, instante, momento, época, período, mañana, tarde, mediodía, madrugada, tarde, medianoche, verano, invierno, primavera, otoño, fines, fin, comienzo, mediado, final
+time_words = enero, febrero, marzo, abril, mayo, junio, octubre, agosto, septiembre, noviembre, diciembre, mes, semana, lunes, martes, miércoles, jueves, viernes, sábado, domingo, julio, día, década, noche, cuatrimestre, trimestre, bimestre, siglo, hora, minuto, instante, momento, época, período, mañana, tarde, mediodía, madrugada, tarde, medianoche, verano, invierno, primavera, otoño, fines, fin, comienzo, mediado, final, fecha, era, tiempo, quincena

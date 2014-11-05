@@ -22,3 +22,4 @@ prototype/no/*
 prototype/webapp/webapp_path
 prototype/.ropeproject
 prototype/tests/input/trees/*
+prototype/webapp/nohup.out

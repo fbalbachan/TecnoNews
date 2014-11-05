@@ -76,6 +76,7 @@ class Debug_request:
 		sys.stdout = output
 		sys.stderr = output
 
+		print web.ctx
 		analyze()
 		return web.template.render().debug(output.getvalue())
 
@@ -92,16 +93,16 @@ class EntiNews_request:
 			return web.template.render().rewrite(ContentRewriterAndGenerator().run(web_input.text))
 		except Exception:
 			print format_exc()
-			web.redirect("/")
+			web.redirect("/sentilecto")
 
 	def action_fact_extraction(self):
 		analysis = analyze()
-		if not analysis: web.redirect("/")
+		if not analysis: web.redirect("/sentilecto")
 		return web.template.render().facts(analysis, WebOutputUtils())
 
 	def action_svo_slots(self):
 		analysis = analyze()
-		if not analysis: web.redirect("/")
+		if not analysis: web.redirect("/sentilecto")
 		return web.template.render().entinews(analysis, WebOutputUtils())
 
 	def GET(self):
@@ -128,7 +129,7 @@ class EntiNews_request:
 				method = web_input["method"]
 				return action_by_method[method]()
 
-		web.redirect("/")
+		web.redirect("/sentilecto")
 
 ### MAIN ###
 
