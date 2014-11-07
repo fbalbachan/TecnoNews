@@ -1,16 +1,31 @@
 import unittest
 from bs4 import BeautifulSoup
-from urllib import urlopen
+from urllib2 import urlopen, Request
 from src.sentinews.news_crawler.wall_street_parser import WallStreetParser
+from time import sleep
 
 class TestWallStreetCrawler(unittest.TestCase):
 
 	def test_get_page_url(self):
+		headers = { 'User-Agent' : 'Mozilla/5.0' }
 		url = "http://online.wsj.com/public/page/actualidad.html"
-		soup = BeautifulSoup(urlopen(url).read())
+		req = Request(url, None, headers)
+		soup = BeautifulSoup(urlopen(req).read())
 		new_elements = soup.findAll('li' , { "class" : "listFirst" })[0]
 		self.assertTrue(new_elements is not None)
 		self.assertEquals(len(new_elements), 4)
+
+		article_content_url = new_elements.find('h2').find('a')['href']
+		sleep(2)
+		req = Request(article_content_url, None, headers)
+		article = BeautifulSoup(urlopen(req).read())
+		self.assertTrue(article is not None)
+		print article
+		content = article.find('article').findAll('p')
+		self.assertTrue(content is not None)
+		self.assertTrue(len(content) > 0)
+		print article_content_url
+		self.assertTrue(article_content_url is not None)
 
 
 	def test_create_newWallStreetEntry(self):
