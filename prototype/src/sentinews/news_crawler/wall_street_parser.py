@@ -11,7 +11,7 @@ class WallStreetParser(object):
 
 	def parse(self, url, limit = 0):
 		soup = BeautifulSoup(urlopen(url).read())
-		top = soup.findAll('li', {"class": "firstList listFirst"})[0]
+		top = soup.findAll('li', {"class": "listFirst"})[0]
 
 		try:
 			title = ''
