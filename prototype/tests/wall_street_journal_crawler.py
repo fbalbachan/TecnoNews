@@ -1,6 +1,7 @@
 import unittest
 from bs4 import BeautifulSoup
 from urllib import urlopen
+from src.sentinews.news_crawler.wall_street_parser import WallStreetParser
 
 class TestWallStreetCrawler(unittest.TestCase):
 
@@ -12,6 +13,13 @@ class TestWallStreetCrawler(unittest.TestCase):
 		self.assertEquals(len(new_elements), 4)
 
 
+	def test_create_newWallStreetEntry(self):
+		wall_street_p = WallStreetParser()
+		ws_entry = wall_street_p.parse('http://online.wsj.com/public/page/espanol-inicio.html')
+		self.assertEquals(ws_entry.title,'')
+		self.assertEquals(ws_entry.content,'')
+		self.assertEquals(len(ws_entry.tags), 0)
+		self.assertEquals(ws_entry.source, u'Wall Street Journal')
 
 
 if __name__ == '__main__':
