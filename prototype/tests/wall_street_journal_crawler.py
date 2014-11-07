@@ -6,7 +6,7 @@ from src.sentinews.news_crawler.wall_street_parser import WallStreetParser
 class TestWallStreetCrawler(unittest.TestCase):
 
 	def test_get_page_url(self):
-		url = "http://online.wsj.com/public/page/espanol-inicio.html"
+		url = "http://online.wsj.com/public/page/actualidad.html"
 		soup = BeautifulSoup(urlopen(url).read())
 		new_elements = soup.findAll('li' , { "class" : "firstList listFirst" })[0]
 		self.assertTrue(new_elements is not None)
