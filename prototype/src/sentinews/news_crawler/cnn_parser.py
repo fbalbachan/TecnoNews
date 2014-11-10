@@ -9,22 +9,25 @@ from src.utils.logger_utils import *
 
 
 class CNNParser:
-    def parse(self, url):
+    def parse(self, url, limit=1):
         soup = BeautifulSoup(urlopen(url).read())
-        top = soup.findAll('div' , { "class" : "cnnRightPost" })[0]
+        articles = soup.findAll('div' , { "class" : "cnnRightPost" }, limit=limit)
+        new_entries = []
+        for article in articles:
+            title = article.find('h1').text
+            content = self._remove_cnn_header(article.find('div').text)
 
-        title = top.find('h1').text
-        content = self._remove_cnn_header(top.find('div').text)
+            try:
+              tags = article.find('span', class_ = "cnnBlogFiledBy cnn_categories").text[11:].split(u"\xa0\u2022\xa0")
+            except:
+              logger = get_logger('tecnonews')
+              logger.info('Tags not found: %s' %(article.find('span', class_ = "cnnBlogFiledBy cnn_categories")))
+              tags = []
 
-        try:
-          tags = top.find('span', class_ = "cnnBlogFiledBy cnn_categories").text[11:].split(u"\xa0\u2022\xa0")
-        except:
-          logger = get_logger('tecnonews')
-          logger.info('Tags not found: %s' %(top.find('span', class_ = "cnnBlogFiledBy cnn_categories")))
-          tags = []
+            new_entries.append(NewsEntry(title, content, tags, u"CNN en español"))
+        return new_entries
 
-        return NewsEntry(title, content, tags, u"CNN en español")
-
+        
     def _remove_cnn_header(self, text):
         dashes = [u'\u2014', u'\u2013', '-']
 
