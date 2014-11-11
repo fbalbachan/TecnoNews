@@ -27,6 +27,5 @@ synonyms = %(resources_dir)s/synonyms.csv
 locucions = %(resources_dir)s/locucions_extended.dat
 adverb_forms = %(resources_dir)s/adverb_forms.csv
 freeling_dict = %(resources_dir)s/freeling_es.dic
-
 verbs_que = %(resources_dir)s/verbs-que-es.dat
 resources_dir = /apps/entinews/prototype/resources
