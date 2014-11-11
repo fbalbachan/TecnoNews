@@ -25,7 +25,7 @@ class CNNParser:
               tags = []
 
             new_entries.append(NewsEntry(title, content, tags, u"CNN en español"))
-        return new_entries
+        return new_entries[0]
 
         
     def _remove_cnn_header(self, text):
