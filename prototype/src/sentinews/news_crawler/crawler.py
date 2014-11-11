@@ -9,7 +9,7 @@ class Crawler(object):
         cursor = sqlite3.connect("news_crawler.db").cursor()
         titles = cursor.execute("SELECT title FROM original_news_entries").fetchall()
         titles = [title[0] for title in titles]
-        return [entry for entry in entries if entry['title'] not in titles]
+        return [entry for entry in entries if entry.title not in titles]
 
     def _filter_by_tag(self, news_entries):
         Config = ConfigParser.ConfigParser()

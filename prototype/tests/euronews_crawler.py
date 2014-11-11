@@ -2,6 +2,7 @@ import unittest
 from bs4 import BeautifulSoup
 from urllib2 import urlopen, Request
 from src.sentinews.news_crawler.euronews_parser import EuroNewsParser
+from src.sentinews.news_crawler.euronews_crawler import EuroNewsCrawler
 from src.sentinews.news_entry import NewsEntry
 
 class TestEuroNewsCrawler(unittest.TestCase):
@@ -57,7 +58,13 @@ class TestEuroNewsCrawler(unittest.TestCase):
 	def test_create_list_entries(self):
 		new_entries = EuroNewsParser().parse('http://es.euronews.com/noticias/boletin/',5)
 		self.assertTrue(new_entries is not None)
-		self.assertTrue(len(new_entries) == 3)
+		self.assertTrue(len(new_entries) == 5)
+
+
+	def test_create_filtered_list_entries(self):
+		filtered_list = EuroNewsCrawler().crawl()
+		self.assertTrue(filtered_list is not None)
+		self.assertTrue(len(filtered_list) == 5)	
 
 
 if __name__ == '__main__':
