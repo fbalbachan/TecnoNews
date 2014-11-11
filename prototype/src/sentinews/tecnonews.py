@@ -23,8 +23,8 @@ class TecnoNews(object):
     def _process(self, entry):
         try:
           c = NewsRewriter(entry)
-          c.rewrite()
-          c.publish()
+          #c.rewrite()
+          #c.publish()
         except Exception, e:
             logger.info(traceback.format_exc())
 

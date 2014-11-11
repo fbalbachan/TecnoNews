@@ -21,7 +21,8 @@ class CNNCrawler:
         for entry in filtered_entries:
             news_entry = parser.parse(entry["link"])
             news_entries.append(news_entry)
-        return self._filter_by_tag(news_entries)
+        filtered_by_tags = self._filter_by_tag(news_entries)
+        return filtered_by_tags
 
 
     def _filter_entries(self, entries):
