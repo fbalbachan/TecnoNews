@@ -2,6 +2,7 @@
 
 import sqlite3
 from src.sentinews.news_crawler.cnn_crawler import CNNCrawler
+from src.sentinews.news_crawler.euronews_crawler import EuroNewsCrawler
 
 ''' This class also builds and inserts into DB.
     DB structure:
@@ -14,7 +15,7 @@ class NewsCrawler(object):
     self.connection = sqlite3.connect("news_crawler.db")
     self.cursor = self.connection.cursor()
     self._cursor_start()
-    self.crawlers_by_id = { "cnn_spanish" : CNNCrawler }
+    self.crawlers_by_id = { "cnn_spanish" : CNNCrawler, "euronews" : EuroNewsCrawler }
 
   def _cursor_start(self):
     self.cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='feed_sources'")
