@@ -47,10 +47,6 @@ class NewsCrawler(object):
         print crawler
         news_entries = crawler.crawl()
         for entry in news_entries:
-          print entry.title
-          print entry.content
-          print entry.source
-          print entry.tags
           self.cursor.execute('INSERT INTO original_news_entries VALUES (?, ?, ?, ?)' , (entry.title, 
                                                                                        entry.content, 
                                                                                        entry.source,
