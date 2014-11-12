@@ -23,3 +23,5 @@ prototype/webapp/webapp_path
 prototype/.ropeproject
 prototype/tests/input/trees/*
 prototype/webapp/nohup.out
+.DS_Store
+prototype/.DS_Store
