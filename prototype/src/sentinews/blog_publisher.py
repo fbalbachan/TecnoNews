@@ -6,9 +6,9 @@ from wordpress_xmlrpc.methods.users import GetUserInfo
 from src.sentinews.news_entry import NewsEntry
 
 #Must have .../xmlrpc.php
-HOST = 'http://tecnonews.comule.com/xmlrpc.php'
-USER = 'tecnonews'
-PASS = 'tecnonews1'
+HOST = 'http://tecnolecto.com/blog/xmlrpc.php'
+USER = 'tecnolecto_news'
+PASS = 'news tecno lecto'
 
 
 class BlogPublisher(object):
