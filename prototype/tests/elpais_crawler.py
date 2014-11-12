@@ -11,19 +11,22 @@ class TestElPaisCrawler(unittest.TestCase):
 	def test_create_single_entry(self):
 		new_entries = ElPaisParser().parse('http://elpais.com/tag/fecha/hoy')
 		self.assertTrue(new_entries is not None)
-		sellf.assertTrue(len(new_entries) == 1)
+		self.assertTrue(len(new_entries) == 1)
+		self.assertTrue(len(new_entries[0].title)>1)
+		self.assertTrue(len(new_entries[0].content)>1)
 
 
 	def test_entries_list(self):
-		new_entries = ElPaisParser().parse('http://elpais.com/tag/fecha/hoy',5)
+		new_entries = ElPaisParser().parse('http://elpais.com/tag/fecha/hoy',4)
 		self.assertTrue(new_entries is not None)
-		sellf.assertTrue(len(new_entries) == 5)
+		print len(new_entries)
+		self.assertTrue(len(new_entries) == 4)
 
 
 	def test_filtered_entries_list(self):
 		new_entries_filtered = ElPaisCrawler().crawl()
 		self.assertTrue(new_entries_filtered is not None)
-		self.assertTrue(len(new_entries_filtered) == 5)
+		self.assertTrue(len(new_entries_filtered) == 4)
 
 
 if __name__ == '__main__':
