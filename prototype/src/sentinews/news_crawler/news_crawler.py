@@ -41,17 +41,21 @@ class NewsCrawler(object):
 
   def crawl_all(self):
     self.cursor.execute("SELECT * FROM feed_sources")
+    entries = []
     for _id, url, last_updated in self.cursor.fetchall():
         print _id
         crawler = self.crawlers_by_id[_id]()
         print crawler
         news_entries = crawler.crawl()
         for entry in news_entries:
+          print "content: " + entry.content 
           self.cursor.execute('INSERT INTO original_news_entries VALUES (?, ?, ?, ?)' , (entry.title, 
                                                                                        entry.content, 
                                                                                        entry.source,
                                                                                        "|".join(entry.tags)))
+        entries.extend(news_entries)
+    
     self.connection.commit()
     self.connection.close()
 
-    return news_entries
+    return entries

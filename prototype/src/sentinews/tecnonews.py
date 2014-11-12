@@ -23,8 +23,9 @@ class TecnoNews(object):
     def _process(self, entry):
         try:
           c = NewsRewriter(entry)
-          #c.rewrite()
-          #c.publish()
+          logger.info("publishing note: " + entry.source)
+          c.rewrite()
+          c.publish()
         except Exception, e:
             logger.info(traceback.format_exc())
 
