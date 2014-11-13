@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 from re import sub
 from urllib import urlopen
 from src.sentinews.news_entry import NewsEntry
@@ -6,7 +8,7 @@ from src.utils.logger_utils import *
 
 class ElPaisParser(object):
 
-	source = u'El Pais'
+	source = u'El País'
 	
 	def parse(self, url, limit = 1):
 		soup = BeautifulSoup(urlopen(url).read())
