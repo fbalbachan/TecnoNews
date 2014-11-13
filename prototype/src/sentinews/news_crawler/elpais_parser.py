@@ -18,8 +18,7 @@ class ElPaisParser(object):
 			for article in articles:
 				title = article.find('h2').find('a').text
 				article_url = article.find('h2').find('a')['href']
-				content = self.__extract_content(article_url)
-				tags = []
+				content, tags = self.__extract_content(article_url)
 				if len(content) > 1 :
 					new_entries.append(NewsEntry(title, content, tags, self.source))
 		return new_entries
@@ -28,10 +27,15 @@ class ElPaisParser(object):
 	def __extract_content(self, article_url):
 		soup = BeautifulSoup(urlopen(article_url).read())
 		content = ''
+		tags = []
 		if soup is not None:
 			news_body = soup.find('div',{'id': 'cuerpo_noticia'})
 			if news_body is not None:
 				content = [ '<p>' + p.text + '</p>'  for p in news_body.find_all(
 					'p')]
+				list_tag = soup.find('div', 
+					{'class': 'contenedor'}).find(
+					'ul').find_all('li')
+				tags = [li.find('a').text for li in list_tag]
 
-		return " ".join(content) if content else ''
+		return " ".join(content), tags
