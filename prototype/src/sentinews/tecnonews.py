@@ -24,8 +24,8 @@ class TecnoNews(object):
         try:
           c = NewsRewriter(entry)
           logger.info("publishing note: " + entry.source)
-          #c.rewrite()
-          #c.publish()
+          c.rewrite()
+          c.publish()
         except Exception, e:
             logger.info(traceback.format_exc())
 
