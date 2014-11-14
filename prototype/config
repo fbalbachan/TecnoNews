@@ -4,8 +4,8 @@ raise_exception = False
 
 [freeling]
 
-host        = localhost
-client      = /opt/freeling-3.0/bin/analyzer_client
+host        = tecnolecto.com
+client      = /home/arkat/Downloads/analyzer_client
 parser_port = 10000
 tagger_port = 9999
 
@@ -27,4 +27,5 @@ synonyms = %(resources_dir)s/synonyms.csv
 locucions = %(resources_dir)s/locucions_extended.dat
 adverb_forms = %(resources_dir)s/adverb_forms.csv
 freeling_dict = %(resources_dir)s/freeling_es.dic
+verbs_que = %(resources_dir)s/verbs-que-es.dat
 resources_dir = /apps/entinews/prototype/resources

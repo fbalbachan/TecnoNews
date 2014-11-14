@@ -18,6 +18,7 @@ from src.rewrite.strategy.segunToDijoDislocationStrategy import SegunToDijoDislo
 from src.rewrite.strategy.subjuntiveImperfectStrategy import SubjuntiveImperfectStrategy
 from src.rewrite.strategy.synonymsStrategy import SynonymsStrategy
 from src.rewrite.strategy.tieneQueToModalDeber import TieneQueToModalDeber
+from src.rewrite.strategy.textualCite import TextualCite
 
 
 class Rewriter:
@@ -44,7 +45,8 @@ class Rewriter:
                 AdverbialClauseDislocationStrategy(ontology),
                 AlthoughClauseDislocationStrategy(),
                 DateTimeStrategy(ontology),
-                SegunToDijoDislocationStrategy()
+                SegunToDijoDislocationStrategy(),
+                TextualCite()
             ]
         else:
             self.replacementStrategies = []
@@ -62,7 +64,6 @@ class Rewriter:
         for clause in clauses:
             replacements.extend(self.replacements_for(clause))
 
-        #print rewrites
 
         text = self.compose_text_with(replacements)
         for strategy in self.dislocationStrategies:
