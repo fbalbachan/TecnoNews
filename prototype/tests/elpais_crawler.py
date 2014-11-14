@@ -14,6 +14,8 @@ class TestElPaisCrawler(unittest.TestCase):
 		self.assertTrue(len(new_entries) == 1)
 		self.assertTrue(len(new_entries[0].title)>1)
 		self.assertTrue(len(new_entries[0].content)>1)
+		print new_entries[0].tags
+		print new_entries[0].title
 		self.assertTrue(len(new_entries[0].tags) > 1)
 
 

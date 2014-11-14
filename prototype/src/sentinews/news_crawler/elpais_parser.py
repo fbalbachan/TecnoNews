@@ -33,9 +33,11 @@ class ElPaisParser(object):
 			if news_body is not None:
 				content = [ '<p>' + p.text + '</p>'  for p in news_body.find_all(
 					'p')]
-				list_tag = soup.find('div', 
-					{'class': 'contenedor'}).find(
-					'ul').find_all('li')
-				tags = [li.find('a').text for li in list_tag]
+				container = soup.find('div', 
+					{'class': 'contenedor'})
+				if container is not None: 
+					list_tag = container.find(
+						'ul').find_all('li')
+					tags = [li.find('a').text for li in list_tag]
 
 		return " ".join(content), tags
