@@ -64,6 +64,10 @@ class TestEuroNewsCrawler(unittest.TestCase):
 	def test_create_filtered_list_entries(self):
 		filtered_list = EuroNewsCrawler().crawl()
 		self.assertTrue(filtered_list is not None)
+		print len(filtered_list)
+		print filtered_list[0].source
+		print filtered_list[1].source
+
 		self.assertTrue(len(filtered_list) == 5)	
 
 
