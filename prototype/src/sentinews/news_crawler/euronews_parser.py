@@ -7,7 +7,7 @@ from src.utils.logger_utils import *
 
 class EuroNewsParser(object):
     base_path = 'http://es.euronews.com'
-    source = u'Euronews'
+    source = u'<br><strong>Euronews</strong>'
 
     def parse(self, url, limit=1):
         soup = BeautifulSoup(urlopen(url).read())

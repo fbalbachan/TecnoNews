@@ -9,6 +9,7 @@ from src.utils.logger_utils import *
 
 
 class CNNParser:
+    source = u"<br><strong>CNN en español</strong>"
     def parse(self, url, limit=1):
         soup = BeautifulSoup(urlopen(url).read())
         articles = soup.findAll('div' , { "class" : "cnnRightPost" }, limit=limit)
@@ -23,7 +24,7 @@ class CNNParser:
               logger = get_logger('tecnonews')
               logger.info('Tags not found: %s' %(article.find('span', class_ = "cnnBlogFiledBy cnn_categories")))
               tags = []
-            new_entries.append(NewsEntry(title, content, tags, u"CNN en español"))  
+            new_entries.append(NewsEntry(title, content, tags, self.source))  
         return new_entries[0]
 
         
