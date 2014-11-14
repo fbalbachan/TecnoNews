@@ -4,8 +4,8 @@ raise_exception = False
 
 [freeling]
 
-host        = tecnolecto.com
-client      = /home/arkat/Downloads/analyzer_client
+host        = localhost
+client      = /opt/freeling-3.0/bin/analyzer_client
 parser_port = 10000
 tagger_port = 9999
 
