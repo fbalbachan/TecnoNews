@@ -9,7 +9,7 @@ from src.utils.logger_utils import *
 
 
 class CNNParser:
-    source = u"<br><strong>CNN en español</strong>"
+    source = u"CNN en español"
     def parse(self, url, limit=1):
         soup = BeautifulSoup(urlopen(url).read())
         articles = soup.findAll('div' , { "class" : "cnnRightPost" }, limit=limit)

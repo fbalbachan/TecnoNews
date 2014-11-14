@@ -8,7 +8,7 @@ from src.utils.logger_utils import *
 
 class ElPaisParser(object):
 
-	source = u'<br><strong>El País</strong>'
+	source = u'El País'
 	
 	def parse(self, url, limit = 1):
 		soup = BeautifulSoup(urlopen(url).read())
