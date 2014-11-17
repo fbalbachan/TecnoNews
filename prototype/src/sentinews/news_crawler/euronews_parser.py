@@ -41,7 +41,7 @@ class EuroNewsParser(object):
             else:
                 content_paragraphs_list = []
                     
-            content_str = ['<p>' + text + '</p>' for text in content_paragraphs_list]
+            content_str = [ text for text in content_paragraphs_list]
             tags = []
             if paragraphs is not None:
                 li_tags = soup.find('ul', {'class': 'kwl'}).find_all('li')
