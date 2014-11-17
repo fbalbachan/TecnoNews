@@ -19,7 +19,7 @@ class ElPaisParser(object):
 				title = article.find('h2').find('a').text
 				article_url = article.find('h2').find('a')['href']
 				content, tags = self.__extract_content(article_url)
-				if len(content) > 1 or len(tags) > 0 :
+				if len(content) > 1 and len(tags) > 0 :
 					new_entries.append(NewsEntry(title, content, tags, self.source))
 		return new_entries
 
