@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 from re import sub
 from urllib import urlopen
 from src.sentinews.news_entry import NewsEntry
@@ -41,7 +43,7 @@ class EuroNewsParser(object):
             else:
                 content_paragraphs_list = []
                     
-            content_str = [ text for text in content_paragraphs_list]
+            content_str = [ text + '\n' for text in content_paragraphs_list]
             tags = []
             if paragraphs is not None:
                 li_tags = soup.find('ul', {'class': 'kwl'}).find_all('li')

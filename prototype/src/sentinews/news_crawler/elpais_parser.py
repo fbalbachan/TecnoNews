@@ -31,7 +31,7 @@ class ElPaisParser(object):
 		if soup is not None:
 			news_body = soup.find('div',{'id': 'cuerpo_noticia'})
 			if news_body is not None:
-				content = [ p.text  for p in news_body.find_all(
+				content = [ p.text + '\n' for p in news_body.find_all(
 					'p')]
 				container = soup.find('div', 
 					{'class': 'contenedor'})
