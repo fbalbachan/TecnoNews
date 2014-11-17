@@ -27,3 +27,4 @@ prototype/webapp/nohup.out
 prototype/.DS_Store
 news_crawler.db
 webapp/static/captcha/*
+prototype/news_crawler.db
