@@ -27,28 +27,26 @@ class TestRewriter(unittest.TestCase):
     def test_dislocate_cite(self):
         self.strategies = [TextualCite([True], [""])]
 
-        # TODO:
-        # Case fist level parsing SN SN Verb F-no-c F-no-c(") Something F-no-c F-term
-        # self.kase('El mejor jugador de todos los tiempos, Diego Armando Maradona, declaró: "no fue con la mano".', '"no fue con la mano", declaró el mejor jugador de todos los tiempos, Diego Armando Maradona.')
-
+        self.kase('“Es un paso adelante clave para hacer de Nueva York una ciudad más igual, abierta y conectada”, asegura el alcalde demócrata.',
+                  'el alcalde demócrata asegura, “Es un paso adelante clave para hacer de Nueva York una ciudad más igual, abierta y conectada”.')
+        self.kase('“Se suspende esta negociación hasta tanto no se aclare y se liberen estas personas”, dijo Maradona hoy, rodeado de la cúpula militar.',
+                  'Maradona hoy, rodeado de la cúpula militar dijo, “Se suspende esta negociación hasta tanto no se aclare y se liberen estas personas”.')
+        self.kase('“Se suspende esta negociación hasta tanto no se aclare y se liberen estas personas”, dijo hoy, rodeado de la cúpula militar.',
+                  'hoy, rodeado de la cúpula militar dijo, “Se suspende esta negociación hasta tanto no se aclare y se liberen estas personas”.')
+        self.kase('Con soltura Maradona dijo, "no fue con la mano".', '"no fue con la mano", dijo Con soltura Maradona.')
+        self.kase('"fue con la mano", dijo Maradona con soltura.', 'Maradona con soltura dijo, "fue con la mano".')
         self.kase('Maradona dijo, "no fue con la mano".', '"no fue con la mano", dijo Maradona.')
         self.kase('Maradona dijo: "no fue con la mano".', '"no fue con la mano", dijo Maradona.')
         self.kase('Diego Maradona comenta: "no fue con la mano".', '"no fue con la mano", comenta Diego Maradona.')
 
+        # TODO:
         self.kase('El mejor jugador de todos los tiempos dijo: "no fue con la mano".',
-                  '"no fue con la mano", dijo el mejor jugador de todos los tiempos.')
+                  '"no fue con la mano", dijo El mejor jugador de todos los tiempos.')
 
         self.kase('Ellos comentaron: "vivos se los llevaron, vivos los queremos".',
-                   '"vivos se los llevaron, vivos los queremos", comentaron ellos.')
+                   '"vivos se los llevaron, vivos los queremos", comentaron Ellos.')
 
         #TODO: case with distance 3
-        # self.kase('Fernando dijo lo siguiente, "esto debe funcionar"., "")
-        # self.kase('Diego Maradona afirmó: "No fue con la mano. El gol fue válido".',
-        #           '"No fue con la mano. El gol fue válido", afirmó Diego Maradona.')
-
-        # self.kase('Escribieron el mensaje: "vivos se los llevaron, vivos los queremos".',
-        #            '"vivos se los llevaron, vivos los queremos", escribieron el mensaje.')
-
         # avoid false positives
         self.kase('Entretanto, el gobierno federal anunció que presentará una "Comisión de Estado" que dictará los lineamientos para enfrentar la inseguridad en el país.',
                   'Entretanto, el gobierno federal anunció que presentará una "Comisión de Estado" que dictará los lineamientos para enfrentar la inseguridad en el país.')

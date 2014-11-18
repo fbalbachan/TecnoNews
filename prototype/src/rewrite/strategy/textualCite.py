@@ -5,9 +5,6 @@ from src.parser.leafNode import LeafNode
 from src.parser.labelNode import LabelNode
 import ConfigParser
 
-#TODO: add case when the root is f-no-c and all the cases
-#CLAUSE_SEPARATORS
-
 class TextualCite:
     def __init__(self, dislocation=None, changes=None):
         if dislocation is None:
@@ -19,41 +16,59 @@ class TextualCite:
         #     self.changes = ["de_acuerdo_con", ""]
 
         self.verbs_que = self._get_verbs_que()
+        self.head_nodes = ["grup-verb", "subord-rel", "subord", "subord-ger", "verb-pass"]
 
     def applies_to(self, sentence, node):
         return self.applies_segun_inicial(sentence, node)
 
     def applies_segun_inicial(self, sentence, node):
+        verb_que_idx = None
+        group_verb_que_idx = None
+        closing_quote_idx = None
+
 
         cite_indexes = self.find_children_cite_indexes(node)
+        if isinstance(node, LabelNode):
+            if node.label in self.head_nodes:
 
-        applies = isinstance(node, LabelNode) and node.label == 'grup-verb' \
+                verbs_que_idx = self.get_verbs_que_idx_list(node)
+
+                if len(verbs_que_idx) > 0:
+                    verb_que_idx = verbs_que_idx[0]
+            if node.label == "F-no-c":
+                closing_quote_idx = self.find_quote_comma(node)
+                group_verb_que_idx = self.get_verbs_que_idx_deep(node, closing_quote_idx[0]+1)
+
+        applies_normal = isinstance(node, LabelNode) and node.label in self.head_nodes \
             and (
-                len(node.children) >= 3 and
 
-                isinstance(node.children[0], LabelNode) and
-                node.children[0].label == 'sn' and
+                verb_que_idx and
 
-                isinstance(node.children[1], LabelNode) and
-                node.children[1].label == 'verb' and
-
-                node.children[1].children[0].lemma in self.verbs_que and
-
-                isinstance(node.children[2], LabelNode) and
-                (node.children[2].label == 'Fc' or
-                 (node.children[2].label == 'F-no-c' and
-                  node.children[2].children[0].lemma == ':')) and
-
+                len(cite_indexes) == 2 and
                 isinstance(node.children[cite_indexes[0]], LabelNode) and
-                node.children[cite_indexes[0]].label == 'F-no-c' and
+                cite_indexes[0] > 1 and
+                (node.children[cite_indexes[0]-1].label == 'Fc' or
+                 (node.children[cite_indexes[0]-1].label == 'F-no-c' and
+                  node.children[cite_indexes[0]-1].children[0].lemma == ':')) and
 
-                isinstance(node.children[cite_indexes[1]], LabelNode) and
-                node.children[cite_indexes[1]].label == 'F-no-c'
+                (abs(verb_que_idx - cite_indexes[0]) < 3 or
+                 abs(verb_que_idx - cite_indexes[0]) < 3)
             )
+        applies_quote_root = isinstance(node, LabelNode) and \
+                             node.label == "F-no-c" and \
+                             group_verb_que_idx is not None and \
+                             closing_quote_idx is not None and \
+                             node.children[closing_quote_idx[0]+1].label == 'Fc'
 
-        return applies
+
+        return applies_normal or applies_quote_root
 
     def _get_verbs_que(self):
+        """
+        load resource list of verbs que
+
+        :return: list of words as list
+        """
         verbs_que = []
         config = ConfigParser.ConfigParser()
         config.read("config")
@@ -64,16 +79,47 @@ class TextualCite:
                 verbs_que.append(line.rstrip('\n'))
         return verbs_que
 
+    def find_quote_comma(self, node):
+        return [i for i, child in enumerate(node.children) if
+                isinstance(child, LabelNode) and
+                child.label == 'F-no-c' and
+                child.children[0].lemma == '"' and
+                i+1 < len(node.children) and
+                node.children[i+1].label == 'Fc']
+
+
     def find_children_cite_indexes(self, node):
         """
 
         :rtype : list
         """
+        if not node:
+            return []
+
         return [i for i, child in enumerate(node.children) if
                 isinstance(child, LabelNode) and
                 child.label == 'F-no-c' and
-                child.children[0].lemma == '"' and
-                i >= 3]
+                child.children[0].lemma == '"']
+
+
+
+    def get_verbs_que_idx_list(self, node):
+        return [i for i, child in enumerate(node.children) if
+                isinstance(child, LabelNode) and
+                child.label == 'verb' and child.children[0].lemma in self.verbs_que]
+
+    def get_verbs_que_idx_deep(self, node, startChild):
+        verbs_que = []
+        for idx, child in enumerate(node.children):
+            if isinstance(child, LabelNode) and child.label == 'grup-verb':
+                for cchild in child.children:
+                    if cchild.label == 'verb':
+                        if cchild.children[0].lemma in self.verbs_que:
+                            if idx >= startChild:
+                                verbs_que.append(idx)
+
+        return verbs_que
+
 
     def get_verb_citing(self, node):
         # Maybe we have more than one verb we are returning the first
@@ -98,18 +144,63 @@ class TextualCite:
             return self.rewrite_segun_inicial(sentence, node)
 
     def rewrite_segun_inicial(self, sentence, node):
-
         text = sentence.paragraph.text.decode("utf-8")
+
+        if node.label == "F-no-c":
+            closing_quote_idxs = self.find_quote_comma(node)
+            closing_quote_idx = closing_quote_idxs[0]
+            cite = text[node.children[0].token.start():node.children[closing_quote_idx].token.end()].strip()
+
+            group_verb_que_idxs = self.get_verbs_que_idx_deep(node, closing_quote_idx)
+            group_verb_que_idx = group_verb_que_idxs[0]
+
+            group_verb_node = node.children[group_verb_que_idx]
+
+            verb_sub_idxs = self.get_verbs_que_idx_list(group_verb_node)
+            verb_sub_idx = verb_sub_idxs[0]
+
+            verb_text = text[group_verb_node.children[verb_sub_idx].token.start():group_verb_node.children[verb_sub_idx].token.end()].strip()
+
+
+            if verb_sub_idx > 0:
+                pre_verb_text = text[group_verb_node.children[0].token.start():group_verb_node.children[verb_sub_idx-1].token.end()].strip()
+            else:
+                pre_verb_text = ""
+            post_verb_text = text[group_verb_node.children[verb_sub_idx+1].token.start():group_verb_node.children[-1].token.end()].strip()
+            post_verb_text = post_verb_text.rstrip('.')
+            group_verb_rewritten = post_verb_text + " " + verb_text + " " + pre_verb_text
+            group_verb_rewritten = group_verb_rewritten.strip()
+            rewritten_sentence = group_verb_rewritten + ", " + cite
+            # if we had point in the finish of the sentence put it back
+            if sentence.text[-1] == '.':
+                rewritten_sentence = rewritten_sentence + '.'
+            return Rewrite(node, rewritten_sentence.encode('utf-8'))
+
 
         cite_indexes = self.find_children_cite_indexes(node)
 
         cite = text[node.children[cite_indexes[0]].token.start():node.children[cite_indexes[1]].token.end()].strip()
 
-        verb = text[node.children[1].token.start():node.children[1].token.end()].strip()
+        verbs_que = self.get_verbs_que_idx_list(node)
+        assert (len(verbs_que) == 1)
+        verb_idx = verbs_que[0]
 
-        sn = self.lowered_text_except_properNouns(node.children[0])
+        verb = text[node.children[verb_idx].token.start():node.children[verb_idx].token.end()].strip()
 
-        rewritten_sentence = cite + ', ' + verb + " " + sn + "."
+        rewritten_sentence = ""
+        # Case X Verb Y "cite"
+        if verb_idx < cite_indexes[0]:
+            before_verb = text[node.children[0].token.start():node.children[verb_idx-1].token.end()].strip()
+            # cite -2 becouse before cite we ask to be  ',' or ':'
+            between_verb_and_cite = text[node.children[verb_idx+1].token.start():node.children[cite_indexes[0]-2].token.end()].strip()
+            rewritten_sentence = cite + ',' + between_verb_and_cite + " " + verb + " " + before_verb + "."
+
+        if verb_idx > cite_indexes[1]:
+            pass
+            # This case never happen ?
+            # Cite +2 becouse next to cite we ask to be ',' or ':'
+            before_verb = text[node.children[cite_indexes[0]+2].token.start():node.children[verb_idx-1].token.end()].strip()
+            between_verb_and_cite = text[node.children[verb_idx+1].token.start():node.children[cite_indexes[0]-1].token.end()].strip()
 
         return Rewrite(node, rewritten_sentence.encode('utf-8'))
 
