@@ -23,8 +23,14 @@ class TestBlogPublisher(unittest.TestCase):
         src.sentinews.blog_publisher.PASS = 'tecnonews1'
 
         content = 'Hola. <a href=http://www.google.com>Link de prueba</a>.'
-        entry = NewsEntry('Hola',content,['test', 'sentinews'], 'fuente_de_prueba')
+        entry = NewsEntry('Hola, a diego le gusta hacer pruebas',content,['test', 'sentinews'], 'fuente_de_prueba')
         self.blog_publisher.publish(entry)
+
+    def test_get_categories(self):
+        categories = self.blog_publisher.get_categories()
+        self.assertTrue(categories is not None)
+        print categories
+        self.assertTrue(len(categories) > 0)
 
 if __name__ == '__main__':
     unittest.main()
