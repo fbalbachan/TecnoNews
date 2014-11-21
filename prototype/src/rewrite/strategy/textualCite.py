@@ -19,12 +19,13 @@ class TextualCite:
         self.head_nodes = ["grup-verb", "subord-rel", "subord", "subord-ger", "verb-pass"]
 
     def applies_to(self, sentence, node):
-        return self.applies_segun_inicial(sentence, node)
+        return self.applies_quote(sentence, node)
 
-    def applies_segun_inicial(self, sentence, node):
+    def applies_quote(self, sentence, node):
         verb_que_idx = None
         group_verb_que_idx = None
         closing_quote_idx = None
+        is_verb_sun_of_verb_root = None
 
         cite_indexes = self.find_children_cite_indexes(node)
         if isinstance(node, LabelNode):
@@ -38,9 +39,10 @@ class TextualCite:
                 closing_quote_idx = self.find_quote_comma(node)
 
                 verb_list = self.get_verbs_que_from_clause(sentence)
+
                 if len(closing_quote_idx) > 0:
                     group_verb_que_idx = self.get_verbs_que_idx_using_verbs(node, verb_list, closing_quote_idx[0]+1)
-
+                    # is_verb_sun_of_verb_root = self.get_verbs_que_idx_list(node.children[group_verb_que_idx[0]+1])
 
         applies_normal = isinstance(node, LabelNode) and node.label in self.head_nodes \
             and (
@@ -52,16 +54,17 @@ class TextualCite:
                 cite_indexes[0] > 1 and
                 (node.children[cite_indexes[0]-1].label == 'Fc' or
                  (node.children[cite_indexes[0]-1].label == 'F-no-c' and
-                  node.children[cite_indexes[0]-1].children[0].lemma == ':')) and
-
+                  # node.children[cite_indexes[0]-1].children[0].lemma == ':')) and
+                self.is_comma_or_two_points_last_leave(node.children[cite_indexes[0]-1]))) and
                 (abs(verb_que_idx - cite_indexes[0]) < 3 or
                  abs(verb_que_idx - cite_indexes[0]) < 3)
             )
         applies_quote_root = isinstance(node, LabelNode) and \
                              node.label == "F-no-c" and \
                              group_verb_que_idx is not None and \
-                             closing_quote_idx is not None and \
-                             node.children[closing_quote_idx[0]+1].label == 'Fc'
+                             closing_quote_idx is not None
+        # and \
+                             # is_verb_sun_of_verb_root != []
 
         return applies_normal or applies_quote_root
 
@@ -81,17 +84,21 @@ class TextualCite:
                 verbs_que.append(line.rstrip('\n'))
         return verbs_que
 
-    def find_quote_comma(self, node):
+    def find_quote_comma(self, node, after_node=0):
         return [i for i, child in enumerate(node.children) if
-            isinstance(child, LabelNode) and
-            child.label == 'F-no-c' and
-            child.children[0].lemma == '"' and
-            i+1 < len(node.children) and
-            self.is_comma_first_leave(node.children[i+1])]
+                i >= after_node and
+                isinstance(child, LabelNode) and
+                child.label == 'F-no-c' and
+                child.children[0].lemma == '"' and
+                i+1 < len(node.children) and
+                self.is_comma_first_leave(node.children[i+1])]
 
     def is_comma_first_leave(self, node):
         return (node.label == 'Fc' and node.children[0].lemma == ',') or\
                         node.leaves()[0].lemma == ','
+
+    def is_comma_or_two_points_last_leave(self, node):
+        return node.leaves()[0].lemma == ',' or node.leaves()[0].lemma == ':'
 
     def find_children_cite_indexes(self, node):
         """
@@ -118,27 +125,71 @@ class TextualCite:
     def get_verbs_que_idx_list(self, node):
         return [i for i, child in enumerate(node.children) if
                 isinstance(child, LabelNode) and
-                child.label == 'verb' and child.children[0].lemma in self.verbs_que]
+                child.label == 'verb' and child.leaves()[-1].lemma in self.verbs_que]
 
-    def get_verbs_que_idx_using_verbs(self, node, verb_list, startChild):
-        # Search for the idx of the child of node wich has a verb in verb_list
+    # search in the childs of group_verb_node and the one
+    #  which has the verb node
+    # TODO: implement
+    def child_with_verb(self, node, idx=None):
+        try:
+            for idx, child in enumerate(node.children):
+
+                if isinstance(child, LabelNode):
+                    if child.label == 'verb':
+                        return idx
+                    else:
+                        return self.child_with_verb_recursive(child, idx)
+                else:
+                    continue
+        except Exception as e:
+            print e.message
+            ex_type, ex, tb = sys.exc_info()
+            traceback.print_tb(tb)
+            raise
+
+    def child_with_verb_recursive(self, node, idx):
+
+        print "case node", node
+        print "case children", node.children
+        for child in node.children:
+            if isinstance(child, LabelNode):
+                if child.label == 'verb':
+                    return idx
+                else:
+                    self.child_with_verb(child, idx)
+
+
+    def get_verbs_que_idx_using_verbs(self, node, verb_list, start_child=0, end_child=None):
+        print "start_child", start_child
+        if not end_child:
+            end_child = len(node.children) - 1
+        print "end_child", end_child
+
+        # Search for the idx of the child of node which has a verb in verb_list
         verb_list_ocurrences_idx = []
+        # TODO: move outside the function for eficiency
+        verb_list_leaf = [verb.leaf().joined_text() for verb in verb_list]
+        print verb_list_leaf
         for idx, child in enumerate(node.children):
             for leave in child.leaves():
-                if leave in verb_list:
+                if leave.joined_text() in verb_list_leaf and start_child <= idx <= end_child:
+                    print "ocurrence", leave, idx
                     verb_list_ocurrences_idx.append(idx)
 
+        print "Ending verb_list_ocurrences_idx"
+        print "verb_list_ocurrences_idx", verb_list_ocurrences_idx
         return verb_list_ocurrences_idx
 
     def get_verbs_que_idx_deep(self, node, startChild):
-
+        # Method of finding the id using the insight of spanish:
+        # Last leave of the verb subtree is the the ver_que
         verbs_que = []
         for idx, child in enumerate(node.children):
             if isinstance(child, LabelNode) and child.label == 'grup-verb':
                 for cchild in child.children:
                     if cchild.label == 'verb':
                         # select last children in the verb
-                        if cchild.children[-1].lemma in self.verbs_que:
+                        if cchild.leaves()[-1].lemma() in self.verbs_que:
                             if idx >= startChild:
                                 verbs_que.append(idx)
 
@@ -151,7 +202,7 @@ class TextualCite:
         for child in node.children:
             if isinstance(child, LabelNode) and child.label == 'verb':
                 if child.children[0].lemma in self.verbs_que:
-                    return child.children[0].lemma
+                    return child.children[-1].lemma
         return
 
     def lowered_text_except_properNouns(self, node):
@@ -164,23 +215,35 @@ class TextualCite:
         return result_text.strip()
 
     def rewrite(self, sentence, node):
-        if self.applies_segun_inicial(sentence, node):
-            return self.rewrite_segun_inicial(sentence, node)
+        if self.applies_quote(sentence, node):
+            return self.rewrite_quote(sentence, node)
 
-    def rewrite_segun_inicial(self, sentence, node):
-
+    def rewrite_quote(self, sentence, node):
         text = sentence.paragraph.text.decode("utf-8")
 
+        #Case root is '"'
         if node.label == "F-no-c":
+
             closing_quote_idxs = self.find_quote_comma(node)
+
             closing_quote_idx = closing_quote_idxs[0]
+
             cite = text[node.children[0].token.start():node.children[closing_quote_idx].token.end()].strip()
 
-            group_verb_que_idxs = self.get_verbs_que_idx_deep(node, closing_quote_idx)
+            verb_list = self.get_verbs_que_from_clause(sentence)
+
+            # Note: group_verb is the node (child of the root) in which the verb_que is in
+            # group_verb_que_idxs = self.get_verbs_que_idx_deep(node, closing_quote_idx)
+            group_verb_que_idxs = self.get_verbs_que_idx_using_verbs(node, verb_list, closing_quote_idxs[0]+1)
             group_verb_que_idx = group_verb_que_idxs[0]
 
             group_verb_node = node.children[group_verb_que_idx]
 
+            # remplace this method with one that search in the childs of group_verb_node and the one
+            #  which has the verb node
+            # Get the child id of the group verb which contains the verb_que
+            # print "children of group verb", group_verb_node.children
+            # print "child with verb", self.child_with_verb(group_verb_node)
             verb_sub_idxs = self.get_verbs_que_idx_list(group_verb_node)
             verb_sub_idx = verb_sub_idxs[0]
 
@@ -191,10 +254,11 @@ class TextualCite:
             else:
                 pre_verb_text = ""
             post_verb_text = text[group_verb_node.children[verb_sub_idx+1].token.start():group_verb_node.children[-1].token.end()].strip()
-            post_verb_text = post_verb_text.rstrip('.')
+            post_verb_text = post_verb_text.rstrip('.').strip()
 
             if group_verb_que_idx+1 < len(node.children):
                 post_group_verb = text[node.children[group_verb_que_idx+1].token.start():node.children[-1].token.end()].strip()
+                post_verb_text = post_verb_text.rstrip('.').strip()
             else:
                 post_group_verb = ""
 
@@ -204,30 +268,42 @@ class TextualCite:
                 group_verb_rewritten += post_verb_text + " "
 
             if post_group_verb and post_group_verb != "":
-                group_verb_rewritten += post_group_verb.rstrip('.') + " "
+                group_verb_rewritten += post_group_verb + " "
 
             if verb_text and verb_text != "":
                 group_verb_rewritten += verb_text + " "
 
-            if pre_verb_text and pre_verb_text != "":
-                group_verb_rewritten += pre_verb_text
+            # TODO: Check this out, we must use pre_verb_text
+            # if pre_verb_text and pre_verb_text != "":
+            #     print "pre_verb_text", pre_verb_text
 
-            # group_verb_rewritten = group_verb_rewritten.strip()
-            rewritten_sentence = group_verb_rewritten.strip() + ", " + cite
+            group_verb_rewritten = group_verb_rewritten[0].upper() + group_verb_rewritten[1:]
+            rewritten_sentence = group_verb_rewritten.strip() + ": " + cite
             # if we had point in the finish of the sentence put it back
             if sentence.text[-1] == '.':
                 rewritten_sentence += '.'
 
+
             return Rewrite(node, rewritten_sentence.encode('utf-8'))
 
+
+        # Case root is not '"'
+        # if the fist leaf is not a proper name we lower it
+        if node.leaves()[0].msi['category'] != 'noun' or (
+            node.leaves()[0].msi['category'] == 'noun' and
+                        node.leaves()[0].msi['semantic_classification'] is None
+        ):
+            text = text[0].lower() + text[1:]
 
         cite_indexes = self.find_children_cite_indexes(node)
 
         cite = text[node.children[cite_indexes[0]].token.start():node.children[cite_indexes[1]].token.end()].strip()
-
-        verbs_que = self.get_verbs_que_idx_list(node)
-        assert (len(verbs_que) == 1)
-        verb_idx = verbs_que[0]
+        cite = '"' + cite[1].capitalize() + cite[2:]
+        verb_list = self.get_verbs_que_from_clause(sentence)
+        # TODO: Check
+        verbs_que_idxs = self.get_verbs_que_idx_using_verbs(node, verb_list, 0, cite_indexes[0]-1)
+        # verbs_que = self.get_verbs_que_idx_list(node)
+        verb_idx = verbs_que_idxs[0]
 
         verb = text[node.children[verb_idx].token.start():node.children[verb_idx].token.end()].strip()
 
