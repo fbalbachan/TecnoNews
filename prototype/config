@@ -30,6 +30,7 @@ freeling_dict = %(resources_dir)s/freeling_es.dic
 verbs_que = %(resources_dir)s/verbs-que-es.dat
 resources_dir = /home/nvaras/entinews/prototype/resources
 categories = %(resources_dir)s/categories.csv
+countries = %(resources_dir)s/nombre_pais_ESP.csv
 
 [wordpress]
 host = http://tecnolecto.com/blog/xmlrpc.php

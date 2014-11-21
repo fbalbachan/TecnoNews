@@ -11,6 +11,7 @@ class CategorizerTest(unittest.TestCase):
 		self.config.read('config')
 		categories_file =  self.config.get("resources", "categories")
 		categories = unicode_csv_reader(open(categories_file, 'r'), first_line_is_header = False, delimiter=',')
+		self.countries = unicode_csv_reader(open(categories_file, 'r'), first_line_is_header = False, delimiter=',')
 		self.categories_dict = {}
 		for row in categories:
 			self.categories_dict[row[0]] = [ element for element in row[1:] if element != '']
@@ -38,6 +39,13 @@ class CategorizerTest(unittest.TestCase):
 		self.assertTrue(u'economía' in categories)
 		self.assertTrue(u'tecnología' in categories)
 
+
+	def test_special_caracters(self):
+		tags = [u'Afganistán']
+		categories = Categorizer(tags).get_or_else()
+		self.assertIsNotNone(categories)
+		print categories
+		self.assertTrue(len(categories) > 0)
 
 if __name__ == '__main__':
 	unittest.main()
