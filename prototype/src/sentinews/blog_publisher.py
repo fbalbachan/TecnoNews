@@ -6,6 +6,7 @@ from wordpress_xmlrpc.methods.users import GetUserInfo
 from wordpress_xmlrpc.methods import taxonomies
 from src.sentinews.news_entry import NewsEntry
 import ConfigParser
+from src.sentinews.categorizer import *
 
 
 class BlogPublisher(object):
@@ -25,9 +26,10 @@ class BlogPublisher(object):
 		post.title = entry.title
 		post.content = entry.content
 		post.content += "<br><br><strong> Fuente: " + entry.source + "</strong>"
+		categories = list(Categorizer(entry.tags).get_or_else())
 		post.terms_names = {
 		  'post_tag': entry.tags,
-		  'category': ['testcat', 'testcat2']
+		  'category': categories
 		}
 		post.post_status = 'publish'
 		self.client.call(NewPost(post))

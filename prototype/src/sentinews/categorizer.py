@@ -1,0 +1,38 @@
+# -*- coding: utf-8 -*-
+import ConfigParser
+from src.utils.csvwrapper import unicode_csv_reader
+from unidecode import unidecode
+from sets import Set
+
+class Categorizer(object):
+
+	def __init__(self, tags):
+		if len(tags) == 0:
+			raise ValueError('Tags must not be empty!')
+		else:
+			self.tags = tags
+			self.config = ConfigParser.ConfigParser()
+			self.config.read('config')
+			categories_file =  self.config.get("resources", "categories")
+			categories_reader = unicode_csv_reader(open(categories_file, 'r'), first_line_is_header = False, delimiter=',')
+			self.categories_dict = {}
+			for row in categories_reader:
+				self.categories_dict[row[0]] = [ element for element in row if element != '']
+			self.categories = self.__create_categories()
+
+
+	def get_or_else(self):
+		
+		return self.categories if self.categories is not None else []
+
+
+	def __create_categories(self):
+		categories = Set([])
+		for element in self.tags:
+			for category, list_tags in self.categories_dict.iteritems():
+				for tag in list_tags:
+					ltag = tag.lower()
+					lelement = element.lower()
+					if unidecode(ltag).find(unidecode(lelement)) > -1:
+						categories.add(category.decode('utf-8'))
+		return categories

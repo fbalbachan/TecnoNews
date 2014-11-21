@@ -23,7 +23,7 @@ class TestBlogPublisher(unittest.TestCase):
         src.sentinews.blog_publisher.PASS = 'tecnonews1'
 
         content = 'Hola. <a href=http://www.google.com>Link de prueba</a>.'
-        entry = NewsEntry('Hola, a diego le gusta hacer pruebas',content,['test', 'sentinews'], 'fuente_de_prueba')
+        entry = NewsEntry('Hola, a diego le gusta hacer pruebas',content,['salud', 'droga'], 'fuente_de_prueba')
         self.blog_publisher.publish(entry)
 
     def test_get_categories(self):

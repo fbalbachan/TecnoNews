@@ -2,6 +2,7 @@
 import unittest
 import ConfigParser
 from src.utils.csvwrapper import unicode_csv_reader
+from src.sentinews.categorizer import *
 
 class CategorizerTest(unittest.TestCase):
 
@@ -20,9 +21,22 @@ class CategorizerTest(unittest.TestCase):
 		self.assertTrue(len(self.categories_dict) > 0)
 
 
-	def test_create_single_categoria(self):
-		pass
+	def test_raise_error_empty_tags(self):
+		with self.assertRaises(ValueError) as cm:
+			Categorizer([])
 
+		self.assertEquals(cm.exception.message, 'Tags must not be empty!' )
+
+
+	def test_create_single_category(self):
+		tags = [u'Medicina',u'Empresa', u'Aplicación', u'Crimen', u'Salud']
+		categories = Categorizer(tags).get_or_else()
+		self.assertIsNotNone(categories)
+		print categories
+		self.assertTrue(len(categories) == 4)
+		self.assertTrue(u'salud' in categories)
+		self.assertTrue(u'economía' in categories)
+		self.assertTrue(u'tecnología' in categories)
 
 
 if __name__ == '__main__':
