@@ -21,12 +21,25 @@ class TestRewriter(unittest.TestCase):
         self.analyzer = ParagraphAnalyzer(self.sentenceAnalyzer)
 
     def __(self):
+        print "___________----____--_"
         ontology = FreelingDictionaryParser.from_resource()
         print ontology.get_lexical_form("haber", { "mode" : "indicative", "time" : "presente", "person" : 2, "number" : "singular"})
 
     def test_dislocate_cite(self):
         self.strategies = [TextualCite([True], [""])]
 
+        # FIXME: kase when the Fc next to '"' clousing simbol is inside of another structure
+        # self.kase('"Desafortunadamente, son muchos", dijo el hombre y añadió: "Nuestros heridos están graves".', '"--Desafortunadamente, son muchos", dijo el hombre y añadió: "Nuestros heridos están graves".')
+
+        # TODO: Write Correct result case
+        # Maradona dijo esto: " "
+        # self.kase('“Yo sabía que las mejores notas no definen a los estudiantes que han desarrollado un aprendizaje más profundo”, dijo al informar de la génesis de su última obra, así como tampoco “los que ganan más dinero”.',
+        #           '“Yo sabía que las mejores notas no definen a los estudiantes que han desarrollado un aprendizaje más profundo”, dijo al informar de la génesis de su última obra, así como tampoco “los que ganan más dinero”.')
+        self.kase('“El segundo es asegurar que no sufran de enfermedades transmisibles que no les permitan desempeñar al máximo las tareas de un policía entrenado”, afirmó.',
+                  'afirmó, “El segundo es asegurar que no sufran de enfermedades transmisibles que no les permitan desempeñar al máximo las tareas de un policía entrenado”.')
+        self.kase('"Desafortunadamente ganamos", dijo el hombre, "Nuestros heridos están graves"', 'el hombre, "Nuestros heridos están graves" dijo, "Desafortunadamente ganamos"')
+        self.kase('“Una cosa es lo que afirmen los periódicos y otra la realidad de las cosas”, comentó Lobón, que reveló que Hacienda y el Atlético están en este momento negociando modificaciones en el convenio patrimonial de 2008 para “quitar todo aquello que estaba afectado por los juegos olímpicos y para programar la nueva situación y la ejecución de obras”.',
+                  'Lobón, que reveló que Hacienda y el Atlético están en este momento negociando modificaciones en el convenio patrimonial de 2008 para “quitar todo aquello que estaba afectado por los juegos olímpicos y para programar la nueva situación y la ejecución de obras” comentó, “Una cosa es lo que afirmen los periódicos y otra la realidad de las cosas”.')
         self.kase('“Es un paso adelante clave para hacer de Nueva York una ciudad más igual, abierta y conectada”, asegura el alcalde demócrata.',
                   'el alcalde demócrata asegura, “Es un paso adelante clave para hacer de Nueva York una ciudad más igual, abierta y conectada”.')
         self.kase('“Se suspende esta negociación hasta tanto no se aclare y se liberen estas personas”, dijo Maradona hoy, rodeado de la cúpula militar.',
@@ -66,6 +79,11 @@ class TestRewriter(unittest.TestCase):
         text = Rewriter(paragraph, self.ontology, self.strategies).rewrite()
         print "\t[SOURCE]", paragraph.text
         print "\t[EDITED]", text
+
+        # if not text == edited:
+        #     import difflib
+        #     diff = difflib.ndiff(None, text, edited)
+        #
 
         self.assertEqual(text, edited)
 
