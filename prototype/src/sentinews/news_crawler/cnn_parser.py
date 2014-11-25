@@ -24,7 +24,9 @@ class CNNParser:
               logger = get_logger('tecnonews')
               logger.info('Tags not found: %s' %(article.find('span', class_ = "cnnBlogFiledBy cnn_categories")))
               tags = []
-            new_entries.append(NewsEntry(title, content, tags, self.source)) 
+
+            if (content.find('{(function()') == -1):
+                new_entries.append(NewsEntry(title, content, tags, self.source)) 
 
         return new_entries[0]
 
