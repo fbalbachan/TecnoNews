@@ -38,7 +38,7 @@ class Categorizer(object):
 					ltag = tag.lower()
 					lelement = element.lower()
 					if unidecode(lelement) in self.countries_list:
-						categories.add('sociedad')
-					if unidecode(ltag).find(unidecode(lelement)) > -1:
+						categories.add('internacionales')
+					if unidecode(lelement).find(unidecode(ltag)) > -1:
 						categories.add(category)
 		return categories

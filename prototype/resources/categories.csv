@@ -1,14 +1,14 @@
 salud,medicina,,,,,,,
-economia,industria,trabajo,negocio,empresa,finanza,,,
-política,administracion,politica,,,,,
-deporte,futbol,baloncesto,,,,,,
-entretenimiento,cine,celebridad,espectaculo,evento,festival,television
-turismo,viaje,viajes y turismo,,,,,,
-tecnologia,gadget,aplicacion,,,,,,
-cultura,arte,literatura,musica,,,,,
-ciencia,medio ambiente,espacial,,,,,,
-interes general,galeria,,,,,,,
-sociedad,{nombre_pais},,,,,,,
-policiales,droga,crimen,delito,,,,,
+economía,economia,industria,trabajo,negocio,empresa,finanza,,,,
+política,administracion,politica,eleccion,,,,
+entretenimiento,cine,celebridad,espectaculo,evento,festival,television,musica
+turismo,viaje,,,,,,
+tecnología,gadget,aplicacion,internet,tecnologia,informat,,,
+cultura,arte,literatura,,,,,
+ciencia,espacial,,,,,,
+deporte,futbol,equipo,baloncesto,automovilismo,,,,
+interés general,galeria,interes,,,,,,
+internacionales,{nombre_pais},,,,,,,
+policiales,droga,crimen,delito,policia,,,,
 clima,tiempo,sismo,terremoto,inundaciones,lluvia,tormenta,huracan,tornado,nieve
 mujer,moda,desfile,vestimenta,pareja
