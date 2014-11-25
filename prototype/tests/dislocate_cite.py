@@ -27,8 +27,12 @@ class TestRewriter(unittest.TestCase):
 
     def test_dislocate_cite(self):
         self.strategies = [TextualCite([True], [""])]
-        self.kase('Maradona afirma: "solo yo se"', '"Solo yo se", afirma Maradona.')
-        self.kase('Hombre afirma: "solo yo se"', '"Solo yo se", afirma hombre.')
+
+        # Check before verb_que text
+        self.kase('"Ella es así", Fernando dijo.', 'Dijo Fernando: "Ella es así".')
+        # check revwrite sentence without final '.'
+        self.kase('Maradona afirma: "solo yo se"', '"Solo yo se", afirma Maradona')
+        self.kase('Hombre afirma: "solo yo se"', '"Solo yo se", afirma hombre')
         # FIXME: kase when the Fc next to '"' clousing simbol is inside of another structure
         self.kase('"Desafortunadamente, son muchos", dijo el hombre y añadió: "Nuestros heridos están graves".', '"Desafortunadamente, son muchos", dijo el hombre y añadió: "Nuestros heridos están graves".')
 

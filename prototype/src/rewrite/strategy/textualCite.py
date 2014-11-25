@@ -160,24 +160,20 @@ class TextualCite:
 
 
     def get_verbs_que_idx_using_verbs(self, node, verb_list, start_child=0, end_child=None):
-        print "start_child", start_child
+
         if not end_child:
             end_child = len(node.children) - 1
-        print "end_child", end_child
+
 
         # Search for the idx of the child of node which has a verb in verb_list
         verb_list_ocurrences_idx = []
         # TODO: move outside the function for eficiency
         verb_list_leaf = [verb.leaf().joined_text() for verb in verb_list]
-        print verb_list_leaf
         for idx, child in enumerate(node.children):
             for leave in child.leaves():
                 if leave.joined_text() in verb_list_leaf and start_child <= idx <= end_child:
-                    print "ocurrence", leave, idx
                     verb_list_ocurrences_idx.append(idx)
 
-        print "Ending verb_list_ocurrences_idx"
-        print "verb_list_ocurrences_idx", verb_list_ocurrences_idx
         return verb_list_ocurrences_idx
 
     def get_verbs_que_idx_deep(self, node, startChild):
@@ -273,9 +269,8 @@ class TextualCite:
             if verb_text and verb_text != "":
                 group_verb_rewritten += verb_text + " "
 
-            # TODO: Check this out, we must use pre_verb_text
-            # if pre_verb_text and pre_verb_text != "":
-            #     print "pre_verb_text", pre_verb_text
+            if pre_verb_text and pre_verb_text != "":
+                group_verb_rewritten += pre_verb_text
 
             group_verb_rewritten = group_verb_rewritten[0].upper() + group_verb_rewritten[1:]
             rewritten_sentence = group_verb_rewritten.strip() + ": " + cite
@@ -313,7 +308,9 @@ class TextualCite:
             before_verb = text[node.children[0].token.start():node.children[verb_idx-1].token.end()].strip()
             # cite -2 becouse before cite we ask to be  ',' or ':'
             between_verb_and_cite = text[node.children[verb_idx+1].token.start():node.children[cite_indexes[0]-2].token.end()].strip()
-            rewritten_sentence = cite + ',' + between_verb_and_cite + " " + verb + " " + before_verb + "."
+            rewritten_sentence = cite + ',' + between_verb_and_cite + " " + verb + " " + before_verb
+            if sentence.text[-1] == '.':
+                rewritten_sentence += '.'
 
         if verb_idx > cite_indexes[1]:
             pass
