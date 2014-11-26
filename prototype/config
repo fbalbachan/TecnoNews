@@ -11,7 +11,7 @@ tagger_port = 9999
 
 [resources]
 
-resources_dir = /apps/entinews/prototype/resources
+resources_dir = /Users/diegoram/dev/entinews/prototype/resources
 verbal_scripts = %(resources_dir)s/scripts_verbales.csv
 sentiwordnet = %(resources_dir)s/sentiwordnet.csv
 general_resources = %(resources_dir)s/general_resources
@@ -33,6 +33,4 @@ categories = %(resources_dir)s/categories.csv
 countries = %(resources_dir)s/nombre_pais_ESP.csv
 
 [wordpress]
-host = http://tecnolecto.com/blog/xmlrpc.php
-user = tecnolecto_news
-pass = news tecno lecto
+user_per_categories = %(resources_dir)s/wordpress_users_categories.csv
