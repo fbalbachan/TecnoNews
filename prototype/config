@@ -11,7 +11,7 @@ tagger_port = 9999
 
 [resources]
 
-resources_dir = /Users/diegoram/dev/entinews/prototype/resources
+resources_dir = /nvaras/entinews/prototype/resources
 verbal_scripts = %(resources_dir)s/scripts_verbales.csv
 sentiwordnet = %(resources_dir)s/sentiwordnet.csv
 general_resources = %(resources_dir)s/general_resources
@@ -31,6 +31,4 @@ freeling_dict = %(resources_dir)s/freeling_es.dic
 verbs_que = %(resources_dir)s/verbs-que-es.dat
 categories = %(resources_dir)s/categories.csv
 countries = %(resources_dir)s/nombre_pais_ESP.csv
-
-[wordpress]
 user_per_categories = %(resources_dir)s/wordpress_users_categories.csv

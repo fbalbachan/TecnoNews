@@ -11,28 +11,19 @@ from src.sentinews.categorizer import *
 
 class BlogPublisher(object):
 
-	def __init__(self):
-		self.config = ConfigParser.ConfigParser()
-		self.config.read('config')
-		host, user, password = self.config.get('wordpress', 'host'), self.config.get('wordpress', 'user'), \
-			self.config.get('wordpress', 'pass') 
-		print host
-		print user
-		print password
-		self.client = Client(host, user, password) 
-
 	def publish(self, entry):
 		post = WordPressPost()
 		post.title = entry.title
 		post.content = entry.content
 		post.content += "<br><br><strong> Fuente: " + entry.source + "</strong>"
-		categories = list(Categorizer(entry.tags).get_or_else())
 		post.terms_names = {
-		  'post_tag': entry.tags,
-		  'category': categories
+		  'category': entry.categories
 		}
 		post.post_status = 'publish'
-		self.client.call(NewPost(post))
+		client = None
+		for host in entry.destination:
+			client = Client(host.host, host.user, host.password )
+			client.call(NewPost(post))
 
 
 	def get_categories(self):
