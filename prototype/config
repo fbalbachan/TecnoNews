@@ -34,6 +34,4 @@ countries = %(resources_dir)s/nombre_pais_ESP.csv
 persons = %(resources_dir)s/person.cls
 
 [wordpress]
-host = http://tecnolecto.com/blog/xmlrpc.php
-user = tecnolecto_news
-pass = news tecno lecto
+user_per_categories = %(resources_dir)s/wordpress_users_categories.csv

@@ -7,3 +7,5 @@ class NewsEntry(object):
         self.content = content
         self.tags = tags
         self.source = source
+        self.categories = None
+        self.destination = None 
