@@ -24,8 +24,3 @@ class BlogPublisher(object):
 		for host in entry.destination:
 			client = Client(host.host, host.user, host.password )
 			client.call(NewPost(post))
-
-
-	def get_categories(self):
-
-		return self.client.call(taxonomies.GetTerms('category'))

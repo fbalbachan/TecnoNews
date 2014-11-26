@@ -27,7 +27,7 @@ class Categorizer(object):
 
 	def get_or_else(self):
 		
-		return self.categories if self.categories is not None else []
+		return self.categories if self.categories is not None else ['interés general']
 
 
 	def __create_categories(self):
