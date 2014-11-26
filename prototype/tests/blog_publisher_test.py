@@ -22,15 +22,23 @@ class TestBlogPublisher(unittest.TestCase):
         src.sentinews.blog_publisher.USER = 'tecnonews'
         src.sentinews.blog_publisher.PASS = 'tecnonews1'
 
-        content = 'Hola. <a href=http://www.google.com>Link de prueba</a>.'
+        content = 'Hola. <a href=http://www.google.com>Link de prueba</a>. y mas texto no analizado'
         entry = NewsEntry('Hola, a diego le gusta hacer pruebas',content,['salud', 'droga'], 'fuente_de_prueba')
+        print entry.destination
         self.blog_publisher.publish(entry)
 
-    def test_get_categories(self):
-        categories = self.blog_publisher.get_categories()
-        self.assertTrue(categories is not None)
-        print categories
-        self.assertTrue(len(categories) > 0)
+
+    def test_publish_tecnologia(self):
+        # Completar con datos de testing
+        #Must have .../xmlrpc.php
+        import src.sentinews.blog_publisher
+        src.sentinews.blog_publisher.HOST = 'http://tecnonews.comule.com/xmlrpc.php'
+        src.sentinews.blog_publisher.USER = 'tecnonews'
+        src.sentinews.blog_publisher.PASS = 'tecnonews1'
+
+        content = 'Hola. <a href=http://www.google.com>Link de prueba</a>. en la seccion de autos'
+        entry = NewsEntry('Hola, a diego le gusta hacer pruebas',content,['automovilismo', 'aplicación'], 'fuente_de_prueba')
+        self.blog_publisher.publish(entry)
 
 if __name__ == '__main__':
     unittest.main()

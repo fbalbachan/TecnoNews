@@ -17,11 +17,14 @@ class PublisherHostTest(unittest.TestCase):
 		user_per_categories = unicode_csv_reader(open(user_per_categories_file, 'r'),
 			first_line_is_header=False, delimiter=',')
 		self.user_per_categories_dict = {}
+		i = 0
 		for row in user_per_categories:
-			self.user_per_categories_dict[row[1]] = {}
-			self.user_per_categories_dict[row[1]]['host'] = row[0]
-			self.user_per_categories_dict[row[1]]['password'] = row[2]
-			self.user_per_categories_dict[row[1]]['categories'] = [element for element in row[3:] if element != '']
+			self.user_per_categories_dict[i] = {}
+			self.user_per_categories_dict[i]['host'] = row[0]
+			self.user_per_categories_dict[i]['user'] = row[1]
+			self.user_per_categories_dict[i]['password'] = row[2]
+			self.user_per_categories_dict[i]['categories'] = [element for element in row[3:] if element != '']
+			i = i + 1
 
 
 	def test_user_per_categories(self):
@@ -36,7 +39,6 @@ class PublisherHostTest(unittest.TestCase):
 		self.assertEquals(newEntry.title, 'Hoy llegue temprano')
 		self.assertIsNotNone(newEntry.categories)
 		self.assertTrue(len(newEntry.categories) > 0)
-		print newEntry.categories
 		self.assertTrue(len(newEntry.destination) > 0)
 		for host in newEntry.destination:
 			print host.user
