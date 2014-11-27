@@ -11,6 +11,7 @@ class DateTimeStrategy:
         return any(( self.applies_to_clause(clause) for clause in sentence.clauses_of_level(0) ))
 
     def rewrite(self, sentence, node):
+        # Select first, becouse the others some times are garbage
         clause = [ clause for clause in sentence.clauses_of_level(0) if self.applies_to_clause(clause) ][0]
         return self.rewrite_clause(clause)
 

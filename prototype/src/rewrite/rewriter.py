@@ -19,6 +19,7 @@ from src.rewrite.strategy.subjuntiveImperfectStrategy import SubjuntiveImperfect
 from src.rewrite.strategy.synonymsStrategy import SynonymsStrategy
 from src.rewrite.strategy.tieneQueToModalDeber import TieneQueToModalDeber
 from src.rewrite.strategy.textualCite import TextualCite
+from src.rewrite.strategy.voicePassiveStrategy import VoicePassiveStrategy
 
 
 class Rewriter:
@@ -46,7 +47,8 @@ class Rewriter:
                 AlthoughClauseDislocationStrategy(),
                 DateTimeStrategy(ontology),
                 SegunToDijoDislocationStrategy(),
-                TextualCite()
+                TextualCite(),
+                VoicePassiveStrategy()
             ]
         else:
             self.replacementStrategies = []
