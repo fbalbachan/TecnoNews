@@ -1,3 +1,5 @@
+hombre
+mujer
 abad
 abadesa
 abertzal

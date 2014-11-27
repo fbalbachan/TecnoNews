@@ -11,7 +11,7 @@ tagger_port = 9999
 
 [resources]
 
-resources_dir = /apps/entinews/prototype/resources
+resources_dir = /home/nvaras/entinews/prototype/resources
 verbal_scripts = %(resources_dir)s/scripts_verbales.csv
 sentiwordnet = %(resources_dir)s/sentiwordnet.csv
 general_resources = %(resources_dir)s/general_resources
