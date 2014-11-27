@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import ConfigParser
 from src.sentinews.categorizer import Categorizer
-from sets import Set
 from src.sentinews.publisher_host import WPHost
 from src.utils.csvwrapper import unicode_csv_reader
 from unidecode import unidecode
@@ -44,12 +43,16 @@ class NewsEntry(object):
 
 
 	def __get_hosts(self,categories):
-		hosts = Set([])
+		host_pivot = []
+		hosts = set([])
 		for category in categories:
 			for key in self.user_per_categories_dict:
 				for user_category in self.user_per_categories_dict[key]['categories']:
 					if unidecode(user_category.lower()) == unidecode(category.lower()):
-						hosts.add(WPHost(self.user_per_categories_dict[key]['host'], 
+						new_host = WPHost(self.user_per_categories_dict[key]['host'], 
 							self.user_per_categories_dict[key]['user'],
-							self.user_per_categories_dict[key]['password']))
+							self.user_per_categories_dict[key]['password']) 
+
+						if not(new_host in hosts):
+							hosts.add(new_host)
 		return hosts
