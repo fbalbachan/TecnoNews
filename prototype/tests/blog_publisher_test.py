@@ -36,8 +36,8 @@ class TestBlogPublisher(unittest.TestCase):
         src.sentinews.blog_publisher.USER = 'tecnonews'
         src.sentinews.blog_publisher.PASS = 'tecnonews1'
 
-        content = 'Hola. <a href=http://www.google.com>Link de prueba</a>. en la seccion de autos'
-        entry = NewsEntry('Hola, a diego le gusta hacer pruebas',content,['automovilismo', 'aplicación'], 'fuente_de_prueba')
+        content = 'Hola. <a href=http://www.google.com>Link de prueba</a>. en la seccion de autos publicado una sola vez'
+        entry = NewsEntry('Hola, a diego le gusta hacer pruebas',content,['automovilismo', 'aplicación', 'festival'], 'fuente_de_prueba')
         self.blog_publisher.publish(entry)
 
 if __name__ == '__main__':
