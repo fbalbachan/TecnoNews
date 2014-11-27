@@ -48,7 +48,7 @@ class Rewriter:
                 DateTimeStrategy(ontology),
                 SegunToDijoDislocationStrategy(),
                 TextualCite(),
-                VoicePassiveStrategy()
+                VoicePassiveStrategy(ontology)
             ]
         else:
             self.replacementStrategies = []
