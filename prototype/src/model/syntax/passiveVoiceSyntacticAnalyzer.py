@@ -23,7 +23,10 @@ class PassiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         return self.search_subord_at(side, distance, which)
 
     def od(self):
-        entities = self.verb_matching_subject_entities(3, 2)
+        # From domain knowledge we know the the entities musty be at:
+        # max distance left 6, max distance left distance right 5
+        # Insight come from oracle Fernando
+        entities = self.verb_matching_subject_entities(6, 5)
         return [ entities[0] ] if entities else [ self.tacit_od() ]
 
     def tacit_od(self):

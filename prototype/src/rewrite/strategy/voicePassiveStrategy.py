@@ -42,14 +42,14 @@ class VoicePassiveStrategy:
                clause.node.label != "subord-rel"
 
     def is_complete(self, clause):
-        # print "clause.has_structure('subject')", clause.has_structure('subject')
-        # print "clause.structure('subject').is_tacit()", clause.structure('subject').is_tacit()
-        # print "clause.structure('subject').is_tacit()", clause.structure('subject')
-        # # help(clause.has_structure('subject'))
-        # print "is_complete"
-        # print "clause.has_structure('subject')", clause.has_structure('subject')
-        # print "clause.has_structure('od')", clause.has_structure('od')
-        # print "is_complete", clause.has_structure('subject') and clause.has_structure('od')
+        print "is_complete"
+        print "clause", clause
+        print "clause.has_structure('subject')", clause.has_structure('subject')
+        print "clause.structure('subject').is_tacit()", clause.structure('subject').is_tacit()
+        print "clause.has_structure('od')", clause.has_structure('od')
+        print "clause.structure('od').is_tacit()", clause.structure('od').is_tacit()
+        print "is_complete", clause.has_structure('subject') and not clause.structure('subject').is_tacit() and \
+               clause.has_structure('od') and not clause.structure('od').is_tacit()
         return clause.has_structure('subject') and not clause.structure('subject').is_tacit() and \
                clause.has_structure('od') and not clause.structure('od').is_tacit()
 
@@ -93,8 +93,10 @@ class VoicePassiveStrategy:
         # text = self.compose_text_for(source_leaves, groups_with_position, clause)
         # print "----Clauses:", clauses
         clause = clauses[0]
-        # print node
-        #
+        print node
+
+        print "clause.structure('subject')", clause.structure('subject')
+        print "clause.structure('od')", clause.structure('od')
         # print "clause", clause
         # print "clause.voice", clause.voice
         # print "clause.verb", clause.verb
@@ -102,67 +104,87 @@ class VoicePassiveStrategy:
         # print "clause.structure('subject')", clause.structure('subject')
         # print "clause.structure('od')", clause.structure('od')
         #
-        # try:
+        try:
 
-        # print "self.is_animated(clause.structure('od').entity())", self.is_animated(clause.structure('od').entity())
-        # get the first leaf to extract the msi
-        leaf = clause.verb.leaves()[0]
-        # print "leaf.msi", leaf.msi
-        # number person mode, time
+            # print "self.is_animated(clause.structure('od').entity())", self.is_animated(clause.structure('od').entity())
+            # get the first leaf to extract the msi
+            leaf = clause.verb.leaves()[0]
+            # print "leaf.msi", leaf.msi
+            # number person mode, time
 
-        msi = {"mode": leaf.msi["mode"], "time": leaf.msi["time"], "person": leaf.msi["person"],
-               "number": clause.structure('subject').msi()['number']}
-        # print "leaf.lemma", leaf.lemma
+            msi = {"mode": leaf.msi["mode"], "time": leaf.msi["time"], "person": clause.structure('subject').msi()["person"],
+                   "number": clause.structure('subject').msi()['number']}
+            # print "leaf.lemma", leaf.lemma
 
-        # transform the last leaf of verb (ie clause.verb) to the msi of the first leaf of verb
-        lexical_forms = self.ontology.get_lexical_forms(clause.verb.lemma(), msi)
-        rewrited_verb = filter(lambda lf: lf.text != leaf.lexical_form, lexical_forms)[0].text
-        # print "rewrited_verb", rewrited_verb
+            # transform the last leaf of verb (ie clause.verb) to the msi of the first leaf of verb
+            lexical_forms = self.ontology.get_lexical_forms(clause.verb.lemma(), msi)
+            rewrited_verb = filter(lambda lf: lf.text != leaf.lexical_form, lexical_forms)[0].text
+            # print "rewrited_verb", rewrited_verb
 
-        text = clause.__repr__()
-        verb = clause.structure('verb').lexical_form()
-        subject = clause.structure('subject').lexical_form()
-        od = clause.structure('od').lexical_form()
+            text = clause.__repr__()
+            verb = clause.structure('verb').lexical_form()
+            subject = clause.structure('subject').lexical_form()
+            od = clause.structure('od').lexical_form()
 
-        # Very strong asumption is always a "por" before the OD in the original clause
-        # this is valid only when the clause is complete
-        # repls = (verb, rewrited_verb), ("por " + subject, od), (od, subject)
-        if self.is_animated(clause.structure('od').entity()):
-            repls = (verb, rewrited_verb), ("por " + subject, 'a ' + od), (od, subject)
-        else:
-            repls = (verb, rewrited_verb), ("por " + subject, od), (od, subject)
+            subject_rewritten = subject
+            od_rewritten = od
 
-        verb_leaves = clause.structure('verb').entity().leaves()
-        subject_leaves = clause.structure('subject').entity().leaves()
-        clause_nds_idx = clause.proper_leaves()[-1].token.end()
-        # print "clause node leaves", clause.node.leaves()
-        #
-        # print "sentence.token", sentence.token
-        # print "clause.proper_leaves()", clause.proper_leaves()
-        # print "clause.proper_leaves()[-1]", clause.proper_leaves()[-1]
-        # print "clause.proper_leaves()[-1]", clause.proper_leaves()[-1].token.start()
-        # print "clause.proper_leaves()[-1].token.start", clause.proper_leaves()[-1].token.end()
-        # print "clause.proper_leaves()[-1].token.ends", clause.proper_leaves()[-1].token.end()
-        # print "clause.proper_leaves()[-1].token.start/ends", sentence.text[clause.proper_leaves()[-1].token.start():clause.proper_leaves()[-1].token.end()]
-        #
-        # print "clause_nds_idx", clause_nds_idx
-        # print "sentence.text", sentence.text
-        # print "sentence.text[clause_nds_idx]", sentence.text[clause_nds_idx]
-        # print "text before clause ends :", sentence.text[:clause_nds_idx]
-        # print "text after clause ends:", sentence.text[clause_nds_idx:]
-        #
-        # print "subject_leaves", subject_leaves[0]
+            subject_pattern = "por " + subject
 
-        # reemplace verb TODO: valida use of indices in several cases
-        # text = text[:verb_leaves[0].token.start()] + rewrited_verb + text[verb_leaves[-1].token.end():]
-        ntext = self.multiple_replace(text, *repls)
+            # print "clause.structure('od').entity().msi", clause.structure('od').entity().msi
+            # # TODO: move to a method
+            # # if the fist leaf is not a proper name we lower it
+            # if clause.node.leaves()[0].msi['category'] != 'noun' or (
+            #     clause.node.leaves()[0].msi['category'] == 'noun' and
+            #                 clause.node.leaves()[0].msi['semantic_classification'] is None
+            # ):
+            #     # Lower the first letter of the original text
+            #     text = text[0].lower() + text[1:]
+            #     # lower the od
+            #     od_rewritten = od[0].lower() + od[1:]
+            #     subject_rewritten = subject[0].upper() + subject[1:]
 
 
-        # except Exception as e:
-        #         print e.message
-        #         ex_type, ex, tb = sys.exc_info()
-        #         traceback.print_tb(tb)
-        #         raise
+
+            # assumption: is always a "por" before the OD in the original clause
+            if self.is_animated(clause.structure('od').entity()):
+                 od_rewritten = 'a ' + od_rewritten
+
+            repls = (verb, rewrited_verb), (subject_pattern, od_rewritten), (od, subject_rewritten)
+
+            verb_leaves = clause.structure('verb').entity().leaves()
+            subject_leaves = clause.structure('subject').entity().leaves()
+            clause_nds_idx = clause.proper_leaves()[-1].token.end()
+            # print "clause node leaves", clause.node.leaves()
+            #
+            # print "sentence.token", sentence.token
+            # print "clause.proper_leaves()", clause.proper_leaves()
+            # print "clause.proper_leaves()[-1]", clause.proper_leaves()[-1]
+            # print "clause.proper_leaves()[-1]", clause.proper_leaves()[-1].token.start()
+            # print "clause.proper_leaves()[-1].token.start", clause.proper_leaves()[-1].token.end()
+            # print "clause.proper_leaves()[-1].token.ends", clause.proper_leaves()[-1].token.end()
+            # print "clause.proper_leaves()[-1].token.start/ends", sentence.text[clause.proper_leaves()[-1].token.start():clause.proper_leaves()[-1].token.end()]
+            #
+            # print "clause_nds_idx", clause_nds_idx
+            # print "sentence.text", sentence.text
+            # print "sentence.text[clause_nds_idx]", sentence.text[clause_nds_idx]
+            # print "text before clause ends :", sentence.text[:clause_nds_idx]
+            # print "text after clause ends:", sentence.text[clause_nds_idx:]
+            #
+            # print "subject_leaves", subject_leaves[0]
+
+            # reemplace verb TODO: valida use of indices in several cases
+            # text = text[:verb_leaves[0].token.start()] + rewrited_verb + text[verb_leaves[-1].token.end():]
+
+
+            ntext = self.multiple_replace(text, *repls)
+
+
+        except Exception as e:
+                print e.message
+                ex_type, ex, tb = sys.exc_info()
+                traceback.print_tb(tb)
+                raise
         return Rewrite(clause.node, ntext.replace('_', ' '))
 
 
