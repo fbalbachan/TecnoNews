@@ -32,4 +32,5 @@ verbs_que = %(resources_dir)s/verbs-que-es.dat
 categories = %(resources_dir)s/categories.csv
 countries = %(resources_dir)s/nombre_pais_ESP.csv
 persons = %(resources_dir)s/person.cls
+demonym = %(resources_dir)s/twGENT.dat
 user_per_categories = %(resources_dir)s/wordpress_users_categories.csv
