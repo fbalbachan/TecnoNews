@@ -17,10 +17,12 @@ class BlogPublisher(object):
 		post.content = entry.content
 		post.content += "<br><br><strong> Fuente: " + entry.source + "</strong>"
 		post.terms_names = {
-		  'category': entry.categories
+                  'category': entry.categories
 		}
 		post.post_status = 'publish'
 		client = None
 		for host in entry.destination:
 			client = Client(host.host, host.user, host.password )
 			client.call(NewPost(post))
+
+                
