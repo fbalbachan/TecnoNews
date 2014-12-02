@@ -3,13 +3,13 @@ from src.rewrite.rewrite import Rewrite
 from src.utils.collectionUtils import dict_by
 from src.utils.stringUtils import set_first_letter_case
 from src.model.entity.tacitEntity import TacitEntity
+from src.utils.logger_utils import *
+
 
 import ConfigParser
 import re
-import sys, traceback # TODO: remove
+import sys, traceback
 
-# TODO: process all the clausules where the rewrite can be made
-# TODO: check when 'a' is added before an 'el'
 # TODO: in the child of the node of the closure check if the vser sabd
 
 
@@ -24,12 +24,19 @@ class VoicePassiveStrategy:
 
     def rewrite(self, sentence, node):
         try:
-            clauses = [clause for clause in sentence.clauses if self.applies_to_clause(clause)]
+            clauses = [[clause, sentence.clauses[idx+1]] for idx, clause in enumerate(sentence.clauses)
+                       if self.applies_to_clause(clause) and idx+1 < len(sentence.clauses)]
+
+            #check the last clause
+            last_clause = sentence.clauses[-1]
+            if self.applies_to_clause(last_clause):
+                clauses.append([last_clause, None])
         except Exception as e:
-                # print e.message
-                ex_type, ex, tb = sys.exc_info()
-                traceback.print_tb(tb)
-                raise
+            logger = get_logger('tecnonews')
+            logger.info("VoicePassiveStrategy Rewriting:")
+            logger.info(e.message)
+            ex_type, ex, tb = sys.exc_info()
+            logger.info(traceback.format_tb(tb))
         return self.rewrite_clause(node, sentence, clauses)
 
     def applies_to_clause(self, clause):
@@ -38,30 +45,6 @@ class VoicePassiveStrategy:
                clause.node.label == "verb-pass"
 
     def is_complete(self, clause):
-        # print "is_complete"
-        # print "clause", clause
-        # print "clause.node", clause.node
-        # print "clause.proper_tree()", clause.proper_tree()
-        # print "clause.has_structure('subject')", clause.has_structure('subject')
-        # if clause.has_structure('subject'):
-        #     print "clause.structure('subject').is_tacit()", clause.structure('subject').is_tacit()
-        # print "clause.has_structure('od')", clause.has_structure('od')
-        # try:
-        #     if clause.has_structure('od'):
-        #         print clause.structure('od')
-        #         print "clause.structure('od').is_tacit()", clause.structure('od').is_tacit()
-        #         if clause.structure('od').is_tacit():
-        #             print "clause.structure('od').coref_chain", clause.structure('od').entity().coref_chain
-        #         if clause.structure('od').entity().coref_chain != [] and clause.structure('od').is_tacit():
-        #             print "clause.structure('od').entity().referenced()", \
-        #             clause.structure('od').entity().referenced()
-        # except Exception as e:
-        #     print e.message
-        #     ex_type, ex, tb = sys.exc_info()
-        #     traceback.print_tb(tb)
-        #     raise
-        # print "is_complete", clause.has_structure('subject') and not clause.structure('subject').is_tacit() and \
-        #        clause.has_structure('od') and not clause.structure('od').is_tacit()
         return clause.has_structure('subject') and not clause.structure('subject').is_tacit() and \
                clause.has_structure('od') and (not clause.structure('od').is_tacit() or
                                                (clause.structure('od').is_tacit() and
@@ -106,8 +89,6 @@ class VoicePassiveStrategy:
 
         :type od: Entity
         """
-        # try:
-        # kernel is not defined if is
         if od.is_tacit():
             return True
         else:
@@ -119,22 +100,13 @@ class VoicePassiveStrategy:
         return False
 
     def rewrite_clause(self, node, sentence, clauses):
-        # grouped = self.grouped_references_for(clause)
-        # groups_with_position = [ (group, self.position_of(group, clause)) for group in grouped ]
-        #
-        # source_leaves = self.source_leaves_for(clause)
-        #
-        # text = self.compose_text_for(source_leaves, groups_with_position, clause)
-        # print "----Clauses:", clauses
-        clause = clauses[0]
-
         try:
+            clause = clauses[0][0]
+            next_clause = clauses[0][1]
+            print clauses
 
-            # print "self.is_animated(clause.structure('od').entity())", self.is_animated(clause.structure('od').entity())
             # get the first leaf to extract the msi
             leaf = clause.verb.leaves()[0]
-            # print "leaf.msi", leaf.msi
-            # number person mode, time
 
             msi = {"mode": leaf.msi["mode"], "time": leaf.msi["time"], "person": clause.structure('subject').msi()["person"],
                    "number": clause.structure('subject').msi()['number']}
@@ -161,39 +133,31 @@ class VoicePassiveStrategy:
 
             subject_pattern = "por " + subject
 
+            # lower case od if is not a proper name
             od_msi = clause.structure('od').entity().msi
             if not self.is_proper_name(od_msi):
                 od_rewritten = od[0].lower() + od[1:]
 
-            # assumption: is always a "por" before the OD in the original clause
-            if self.is_animated(clause.structure('od').entity()):
-                 od_rewritten = 'a ' + od_rewritten
+            if clause.structure('od').entity() and not clause.structure('od').is_tacit():
+                od_msi = clause.structure('od').all_entities()[0].leaves()[0].msi
 
-            repls = (verb, rewrited_verb), (subject_pattern, od_rewritten), (od, subject_rewritten)
+            if self.is_animated(clause.structure('od').entity()) or\
+            (od_msi['category'] == 'pronoun' and od_msi['type'] == 'personal'):
+                if od_rewritten[0:3] == 'el ':
+                    od_rewritten = 'al ' + od_rewritten[3:]
+                elif od_rewritten[0:3] == 'yo ' or od_rewritten[0:3] == 'yo':
+                    od_rewritten = 'a mí'
+                else:
+                    od_rewritten = 'a ' + od_rewritten
 
-            verb_leaves = clause.structure('verb').entity().leaves()
-            subject_leaves = clause.structure('subject').entity().leaves()
-            clause_nds_idx = clause.proper_leaves()[-1].token.end()
-            # print "clause node leaves", clause.node.leaves()
-            #
-            # print "sentence.token", sentence.token
-            # print "clause.proper_leaves()", clause.proper_leaves()
-            # print "clause.proper_leaves()[-1]", clause.proper_leaves()[-1]
-            # print "clause.proper_leaves()[-1]", clause.proper_leaves()[-1].token.start()
-            # print "clause.proper_leaves()[-1].token.start", clause.proper_leaves()[-1].token.end()
-            # print "clause.proper_leaves()[-1].token.ends", clause.proper_leaves()[-1].token.end()
-            # print "clause.proper_leaves()[-1].token.start/ends", sentence.text[clause.proper_leaves()[-1].token.start():clause.proper_leaves()[-1].token.end()]
-            #
-            # print "clause_nds_idx", clause_nds_idx
-            # print "sentence.text", sentence.text
-            # print "sentence.text[clause_nds_idx]", sentence.text[clause_nds_idx]
-            # print "text before clause ends :", sentence.text[:clause_nds_idx]
-            # print "text after clause ends:", sentence.text[clause_nds_idx:]
-            #
-            # print "subject_leaves", subject_leaves[0]
-
-            # reemplace verb TODO: valida use of indices in several cases
-            # text = text[:verb_leaves[0].token.start()] + rewrited_verb + text[verb_leaves[-1].token.end():]
+            if next_clause and next_clause.relative_entity == clause.structure('subject').entity():
+                subject_rewritten = subject_rewritten + " " + next_clause.__repr__().strip()
+                repls = (verb, rewrited_verb), (subject_pattern, od_rewritten), (od, subject_rewritten), (next_clause.__repr__(), '')
+            elif next_clause and next_clause.relative_entity == clause.structure('od').entity():
+                od_rewritten = od_rewritten + " " + next_clause.__repr__().strip()
+                repls = (verb, rewrited_verb), (subject_pattern, od_rewritten), (od, subject_rewritten), ( " " + next_clause.__repr__(), '')
+            else:
+                repls = (verb, rewrited_verb), (subject_pattern, od_rewritten), (od, subject_rewritten)
 
             ntext = self.multiple_replace(text, *repls)
 
@@ -201,14 +165,22 @@ class VoicePassiveStrategy:
             if clause.structure('od').is_tacit():
                 ntext = subject_rewritten + " " + ntext
 
-            # TODO: check if the first letter of the clausele is the first of the sentence
-            #     ntext = ntext[0].upper() + ntext[1:]
+            # Fix space with point at the end
+            if ntext[-2:] == ' .':
+                ntext = ntext[:-2] + '.'
+
+            if sentence.paragraph.text[0:10] == text[0:10]:
+                ntext = ntext[0].upper() + ntext[1:]
 
         except Exception as e:
-                print e.message
-                ex_type, ex, tb = sys.exc_info()
-                traceback.print_tb(tb)
-        return Rewrite(clause.node, ntext.replace('_', ' '))
+            ex_type, ex, tb = sys.exc_info()
+            traceback.print_tb(tb)
+            ex_type, ex, tb = sys.exc_info()
+            logger = get_logger('tecnonews')
+            logger.info("VoicePassiveStrategy Rewriting:")
+            logger.info(e.message)
+            logger.info(traceback.print_tb(tb))
+        return Rewrite(clause.node, ntext.replace('_', ' ').strip())
 
 
     def is_proper_name(self, msi):
