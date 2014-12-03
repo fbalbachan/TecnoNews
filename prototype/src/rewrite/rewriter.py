@@ -20,6 +20,7 @@ from src.rewrite.strategy.synonymsStrategy import SynonymsStrategy
 from src.rewrite.strategy.tieneQueToModalDeber import TieneQueToModalDeber
 from src.rewrite.strategy.textualCite import TextualCite
 from src.rewrite.strategy.voicePassiveStrategy import VoicePassiveStrategy
+from src.rewrite.strategy.partialVoicePassiveStrategy import PartialVoicePassiveStrategy
 
 
 class Rewriter:
