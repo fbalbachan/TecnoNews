@@ -84,38 +84,57 @@ class VoicePassiveStrategy:
 
         return demonym
 
-    def is_animated(self, od):
+    def is_animated(self, entity):
         """
 
         :type od: Entity
         """
-        if od.is_tacit():
-            return True
-        else:
-            if od.kernel.lemma in self.persons \
-                    or od.kernel.lemma in self.demonym\
-                    or od.msi['semantic_classification'] == 'person':
-                return True
 
+        try:
+            # if the entity has kernel
+            if entity.kernel:
+                # return if the kernel is animated or not
+                return self._is_animted_single_entity(entity.kernel.lemma, entity.msi)
+
+            # if there isn't a kernel check if there is a list of entities
+            elif entity.node == 'coor-n':
+                # check all the child entities
+                for child in entity.children:
+                    # if some of the entities are animated then return True
+                    if self._is_animted_single_entity(child.kernel.lemma, child.msi):
+                        return True
+            else:
+                child = entity.children[0]
+                return self._is_animted_single_entity(child.kernel.lemma, child.msi)
+
+        except Exception as e:
+            print e.message
+            ex_type, ex, tb = sys.exc_info()
+            traceback.print_tb(tb)
+            raise
+
+        # other cases return False
         return False
+
+    def _is_animted_single_entity(self, lemma, msi):
+        return lemma in self.persons \
+            or lemma in self.demonym\
+            or msi['semantic_classification'] == 'person'
 
     def rewrite_clause(self, node, sentence, clauses):
         try:
             clause = clauses[0][0]
             next_clause = clauses[0][1]
-            print clauses
 
             # get the first leaf to extract the msi
             leaf = clause.verb.leaves()[0]
 
             msi = {"mode": leaf.msi["mode"], "time": leaf.msi["time"], "person": clause.structure('subject').msi()["person"],
                    "number": clause.structure('subject').msi()['number']}
-            # print "leaf.lemma", leaf.lemma
 
             # transform the last leaf of verb (ie clause.verb) to the msi of the first leaf of verb
             lexical_forms = self.ontology.get_lexical_forms(clause.verb.lemma(), msi)
             rewrited_verb = filter(lambda lf: lf.text != leaf.lexical_form, lexical_forms)[0].text
-            # print "rewrited_verb", rewrited_verb
 
             text = clause.node.leaves_string()
             verb = clause.structure('verb').lexical_form()
@@ -141,7 +160,7 @@ class VoicePassiveStrategy:
             if clause.structure('od').entity() and not clause.structure('od').is_tacit():
                 od_msi = clause.structure('od').all_entities()[0].leaves()[0].msi
 
-            if self.is_animated(clause.structure('od').entity()) or\
+            if clause.structure('od').entity().is_tacit() or self.is_animated(clause.structure('od').entity()) or\
             (od_msi['category'] == 'pronoun' and od_msi['type'] == 'personal'):
                 if od_rewritten[0:3] == 'el ':
                     od_rewritten = 'al ' + od_rewritten[3:]
@@ -169,10 +188,19 @@ class VoicePassiveStrategy:
             if ntext[-2:] == ' .':
                 ntext = ntext[:-2] + '.'
 
-            if sentence.paragraph.text[0:10] == text[0:10]:
+            # Uppercase if produced text if the start of a sentence
+            paragraph = sentence.paragraph.text.decode("utf-8")
+            start = clause.proper_leaves()[0].token.start()
+
+            if start > 0:
+                if start > 2:
+                    if paragraph[start-2:start].strip(' ') in ['"', ':', '.', '-']:
+                        ntext = ntext[0].upper() + ntext[1:]
+            elif start == 0:
                 ntext = ntext[0].upper() + ntext[1:]
 
         except Exception as e:
+            print e.message
             ex_type, ex, tb = sys.exc_info()
             traceback.print_tb(tb)
             ex_type, ex, tb = sys.exc_info()

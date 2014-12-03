@@ -26,12 +26,14 @@ class TestRewriter(unittest.TestCase):
     def test_dislocate_cite(self):
         self.strategies = [VoicePassiveStrategy(self.ontology)]
 
-
+        self.kase('El acusado declaró: los noruegos habían sido conquistados por un inglés en 1066', 'El acusado declaró: Un inglés conquistaba a los noruegos en 1066')
+        self.kase('Los noruegos habían sido conquistados por un inglés en 1066, pero yo fui sentenciado a muerte por el juez.','Un inglés conquistaba a los noruegos en 1066, pero el juez sentenció a muerte a mí.')
+        self.kase('El hombre y la mujer fueron asesinados por otra persona', 'Otra persona asesinó al hombre y la mujer')
         self.kase('La mujer que vive al lado había sido asesinada por su marido.', 'Su marido asesinaba a la mujer que vive a el lado.')
         self.kase('Los noruegos fueron conquistados por alguien que dormía allí', 'Alguien que dormía allí conquistó a los noruegos')
         self.kase('El manuscrito que el pasado lunes fue hallado en el Mar Muerto por arqueólogos israelíes era falso', 'Arqueólogos israelíes el pasado lunes hallaron en el Mar Muerto el manuscrito que era falso')
         self.kase('El hombre comentó que el pasado lunes el manuscrito fue hallado en el Mar Muerto por arqueólogos israelíes', 'El hombre comentó que el pasado lunes arqueólogos israelíes hallaron en el Mar Muerto el manuscrito')
-        self.kase('Los noruegos habían sido conquistados por un inglés en 1066, pero yo fui sentenciado a muerte por el juez.','Un inglés conquistaba a los noruegos en 1066, pero el juez sentenció a muerte a mí.')
+
         self.kase('El hombre que era mi amigo había sido asesinado por Oswald', 'Oswald asesinaba al hombre que era mi amigo')
         self.kase('El noruego sabe que el no fue contagiado por los germenes del laboratorio.', 'El noruego sabe que el los germenes no contagiaron a él de el laboratorio.')
         self.kase('Los noruegos saben que ellos no fueron conquistados por los ingleses en el año 1066.', 'Los noruegos saben que los ingleses no conquistaron a ellos en el año 1066.')
