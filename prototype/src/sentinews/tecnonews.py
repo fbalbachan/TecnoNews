@@ -15,17 +15,20 @@ class TecnoNews(object):
       logger = get_logger('tecnonews')
       entries =  NewsCrawler().crawl_all()
       logger.info("Entries to publish: %s" % len(entries))
-
       for entry in entries:
         self._process(entry)
       logger.info("Done.")
 
     def _process(self, entry):
         try:
+          # logger.info("original")
+          # logger.info(entry.content)
           c = NewsRewriter(entry)
           logger.info("publishing note: " + entry.source)
           c.rewrite()
-          c.publish()
+          # logger.info("rewrited")
+          # logger.info(c.rewritten_entry.content)
+          # c.publish()
         except Exception, e:
             logger.info(traceback.format_exc())
 

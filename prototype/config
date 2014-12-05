@@ -9,6 +9,12 @@ client      = /opt/freeling-3.0/bin/analyzer_client
 parser_port = 10000
 tagger_port = 9999
 
+[freeling_language]
+
+host        = tecnolecto.com
+client      = /usr/local/bin/analyzer_client
+language_port = 10001
+
 [resources]
 
 resources_dir = /home/nvaras/entinews/prototype/resources

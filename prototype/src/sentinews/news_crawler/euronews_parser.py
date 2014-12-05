@@ -5,9 +5,13 @@ from urllib import urlopen
 from src.sentinews.news_entry import NewsEntry
 from bs4 import BeautifulSoup
 from src.utils.logger_utils import *
+from src.utils.languageFilter import LanguageFilter
 
 
 class EuroNewsParser(object):
+    def __init__(self):
+        self.language_filter = LanguageFilter()
+
     base_path = 'http://es.euronews.com'
     source = u'Euronews'
 
@@ -21,6 +25,7 @@ class EuroNewsParser(object):
             title = title = article.find(
                 'span', {'class': 'bulletin-title'}).text[12:]
             content, tags = self.___extract_content(article)
+            content = self.language_filter.only_spanish_paragraph(content.encode("utf-8"))
             if len(content) > 1:
                 new_entries.append(NewsEntry(title, content, tags, self.source))
 
