@@ -28,7 +28,7 @@ class TecnoNews(object):
           c.rewrite()
           # logger.info("rewrited")
           # logger.info(c.rewritten_entry.content)
-          # c.publish()
+          c.publish()
         except Exception, e:
             logger.info(traceback.format_exc())
 
