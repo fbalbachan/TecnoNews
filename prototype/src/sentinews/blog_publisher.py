@@ -15,7 +15,7 @@ class BlogPublisher(object):
 		post = WordPressPost()
 		post.title = entry.title
 		post.content = entry.content
-		post.content += "<br><br><strong> Fuente: " + entry.source + "</strong>"
+		#post.content += "<br><br><strong> Fuente: " + entry.source + "</strong>"
 		post.terms_names = {
                   'category': entry.categories
 		}
