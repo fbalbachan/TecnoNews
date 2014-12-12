@@ -1,5 +1,7 @@
 #-*- coding: utf-8 -*-
-import os, ConfigParser
+import os
+import ConfigParser
+import re
 
 
 class FreelingLanguageDetectorClient:
@@ -8,7 +10,8 @@ class FreelingLanguageDetectorClient:
 
     def get_client_output_for(self, text):
         if type(text) != str: raise Exception("Solo se acepta unicode codificado a string.")
-        # text = text.replace('"', '\\"')
+
+        text = re.sub(r'[)|(|.|,|"|!|@|#|\$|%|^|&|\*]', ' ', text)
 
         config = self.config
 
