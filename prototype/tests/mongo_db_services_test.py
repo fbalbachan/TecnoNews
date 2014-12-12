@@ -1,4 +1,5 @@
 import unittest
+from src.services.mongodb.news_entries_service import NewsEntriesService
 
 class NewsEntryMongoServiceTest(unittest.TestCase):
 	
