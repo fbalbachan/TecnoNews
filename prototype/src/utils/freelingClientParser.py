@@ -11,7 +11,7 @@ class FreelingClientParser:
         text = text.replace('"', '\\"')
 
         config = self.config
-        command = "echo '%s'" + ' | ' + config["client"] + ' ' + config["host"] + ':' + config["parser_port"]
+        command = 'echo "%s" | ' + config["client"] + ' ' + config["host"] + ':' + config["parser_port"]
 
         raw_output = os.popen((command % text)).read()
         #return [line.strip() for line in raw_output.split('\n')]
