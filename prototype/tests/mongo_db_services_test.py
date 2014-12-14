@@ -13,7 +13,7 @@ class NewsEntryMongoServiceTest(unittest.TestCase):
 		self.assertIsNotNone(self.service)
 
 	def test_create_single_news_entry_record(self):
-		news = NewsEntry('Diego gana el prode', 'Reamente lo ganó', ['deportes'],
+		news = NewsEntry('Diego gana el prode', 'Reamente lo ganó', ['deportes','salud', 'delito'],
 			'Euronews')
 
 		self.assertIsNotNone(news)
@@ -37,7 +37,10 @@ class NewsEntryMongoServiceTest(unittest.TestCase):
 
 
 	def test_retrieve_list_by_categories(self):
-		pass
+		cursor = self.service.get_list({'categories': {'$in': ['policiales']}})
+		self.assertIsNotNone(cursor)
+		self.assertTrue(cursor.count() > 0)
+		print cursor.count()
 
 
 if __name__ == '__main__':
