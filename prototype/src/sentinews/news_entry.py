@@ -4,6 +4,7 @@ from src.sentinews.categorizer import Categorizer
 from src.sentinews.publisher_host import WPHost
 from src.utils.csvwrapper import unicode_csv_reader
 from unidecode import unidecode
+from datetime import datetime
 
 '''Struct class to contain the news information'''
 
@@ -17,6 +18,9 @@ class NewsEntry(object):
 		self.source = source
 		self.categories = None
 		self.destination = None
+		self.title_lematized = None
+		self.content_lematized = None
+		self.published_date = datetime.utcnow()
 		self.config = ConfigParser.ConfigParser()
 		self.__setUp()
 
@@ -56,3 +60,9 @@ class NewsEntry(object):
 						if not(new_host in hosts):
 							hosts.add(new_host)
 		return hosts
+
+	def to_dict(self):
+		return {'title': self.title, 'content': self.content, 'tags': self.tags,
+		'sources': self.source, 'categories': self.categories, 
+		'published_date': self.published_date, 'title_lematized': self.title_lematized,
+		'content_lematized': self.content_lematized}

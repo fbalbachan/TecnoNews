@@ -15,9 +15,15 @@ host        = tecnolecto.com
 client      = /usr/local/bin/analyzer_client
 language_port = 10001
 
+[mongodb]
+
+host = localhost
+port = 27017
+db = sentinews
+
 [resources]
 
-resources_dir = /home/nvaras/entinews/prototype/resources
+resources_dir = /Users/diegoram/dev/entinews/prototype/resources
 verbal_scripts = %(resources_dir)s/scripts_verbales.csv
 sentiwordnet = %(resources_dir)s/sentiwordnet.csv
 general_resources = %(resources_dir)s/general_resources
