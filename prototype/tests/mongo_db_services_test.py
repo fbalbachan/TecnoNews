@@ -13,8 +13,9 @@ class NewsEntryMongoServiceTest(unittest.TestCase):
 		self.assertIsNotNone(self.service)
 
 	def test_create_single_news_entry_record(self):
-		news = NewsEntry('Diego gana el prode', 'Reamente lo ganó', ['deportes','salud', 'delito'],
-			'Euronews')
+		news = NewsEntry(title='Diego gana el prode', content='Reamente lo ganó', 
+			tags=['deportes','salud', 'delito'],source='Euronews',
+			title_lematized="", content_lematized="", rewrite_content="")
 
 		self.assertIsNotNone(news)
 		news_id = self.service.save(news)
@@ -23,24 +24,24 @@ class NewsEntryMongoServiceTest(unittest.TestCase):
 
 
 	def test_retrieve_single_news_entry_record(self):
-		news = self.service.get_list({'title': 'Diego gana el prode'})
-		self.assertIsNotNone(news)
-		self.assertTrue(news.count() > 0)
+		news_list = self.service.get_list({'title': 'Diego gana el prode'})
+		self.assertIsNotNone(news_list)
+		self.assertTrue(len(news_list) > 0)
+		self.assertEquals(news_list[0].title, 'Diego gana el prode')
 
 
 	def test_retrieve_news_entry_list_by_given_date(self):
 		oneday = timedelta(days=1)
-		cursor = self.service.get_list({'published_date': {'$gte': datetime.utcnow() - oneday}})
-		self.assertIsNotNone(cursor)
-		self.assertTrue(cursor.count() > 0)
-		print cursor.count()
+		news_list = self.service.get_list({'published_date': {'$gte': datetime.utcnow() - oneday}})
+		self.assertIsNotNone(news_list)
+		self.assertTrue(len(news_list) > 0)
+		
 
 
 	def test_retrieve_list_by_categories(self):
-		cursor = self.service.get_list({'categories': {'$in': ['policiales']}})
-		self.assertIsNotNone(cursor)
-		self.assertTrue(cursor.count() > 0)
-		print cursor.count()
+		news_list = self.service.get_list({'categories': {'$in': ['policiales']}})
+		self.assertIsNotNone(news_list)
+		self.assertTrue(len(news_list) > 0)
 
 
 if __name__ == '__main__':

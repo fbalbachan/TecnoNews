@@ -1,4 +1,5 @@
 from connector import MongoConnector
+from src.sentinews.news_entry import NewsEntry
 
 class NewsEntriesService(object):
 
@@ -25,4 +26,8 @@ class NewsEntriesService(object):
 		criteria: dict 
 			this is the object to use on mongodb find statement
 		"""
-		return self.news_entries.find(criteria)
+		return [ NewsEntry(title=entry['title'], content=entry['content'],
+			tags=entry['tags'], source=entry['source'], categories=entry['categories'],
+			title_lematized=entry['title_lematized'], content_lematized=entry['content_lematized'],
+			rewrite_content=entry['rewrite_content'])
+		for entry in self.news_entries.find(criteria)]
