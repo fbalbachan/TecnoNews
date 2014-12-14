@@ -1,6 +1,7 @@
 import unittest
 from src.services.mongodb.news_entries_service import NewsEntriesService
 from src.sentinews.news_entry import NewsEntry
+from datetime import datetime, timedelta
 
 class NewsEntryMongoServiceTest(unittest.TestCase):
 	
@@ -11,7 +12,7 @@ class NewsEntryMongoServiceTest(unittest.TestCase):
 	def test_check_service_creation(self):
 		self.assertIsNotNone(self.service)
 
-	def test_create_service_single_service_model(self):
+	def test_create_single_news_entry_record(self):
 		news = NewsEntry('Diego gana el prode', 'Reamente lo ganó', ['deportes'],
 			'Euronews')
 
@@ -21,17 +22,21 @@ class NewsEntryMongoServiceTest(unittest.TestCase):
 		print news_id
 
 
-	def test_create_single_news_entry_record(self):
+	def test_retrieve_single_news_entry_record(self):
 		news = self.service.get_list({'title': 'Diego gana el prode'})
 		self.assertIsNotNone(news)
 		self.assertTrue(news.count() > 0)
 
 
-	def test_retrieve_single_news_entry_record(self):
-		pass
-
-
 	def test_retrieve_news_entry_list_by_given_date(self):
+		oneday = timedelta(days=1)
+		cursor = self.service.get_list({'published_date': {'$gte': datetime.utcnow() - oneday}})
+		self.assertIsNotNone(cursor)
+		self.assertTrue(cursor.count() > 0)
+		print cursor.count()
+
+
+	def test_retrieve_list_by_categories(self):
 		pass
 
 
