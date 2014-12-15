@@ -5,6 +5,10 @@ class ReferentRanker:
         self.paragraph = paragraph
 
     def rank(self):
+        """
+
+        :rtype : list of tuples, each tuple is (Referent, score) where score is int or float
+        """
         functions_by_entity = self.arrange_entities_by_function()
 
         score_by_referent = {}

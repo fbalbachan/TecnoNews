@@ -8,6 +8,7 @@ class LanguageFilter(object):
 
     def __init__(self):
         self.filter = FreelingLanguageDetectorClient()
+
     def only_spanish_paragraph(self, text):
 
         content_es = ""

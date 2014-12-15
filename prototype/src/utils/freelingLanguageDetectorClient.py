@@ -11,7 +11,8 @@ class FreelingLanguageDetectorClient:
     def get_client_output_for(self, text):
         if type(text) != str: raise Exception("Solo se acepta unicode codificado a string.")
 
-        text = re.sub(r'[)|(|.|,|"|!|@|#|\$|%|^|&|\*]', ' ', text)
+        # TODO: check if
+        text = re.sub(r"""[)|(|.|,|"|!|'|@|#|\$|%|^|&|\*]""", ' ', text)
 
         config = self.config
 
