@@ -65,7 +65,8 @@ class NewsEntry(object):
 		return hosts
 
 	def to_dict(self):
-		return {'title': unicode(self.title), 'content': unicode(self.content), 'tags': self.tags,
+		return {'title': unicode(self.title), 'content': unicode(self.content), 
+		'tags': [unicode(tag) for tag in self.tags],
 		'source': self.source, 'categories': self.categories, 
 		'published_date': self.published_date, 'title_lematized': self.title_lematized,
-		'content_lematized': self.content_lematized, url: self.url}
+		'content_lematized': self.content_lematized, 'url': self.url}

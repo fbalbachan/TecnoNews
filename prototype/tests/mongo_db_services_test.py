@@ -14,7 +14,7 @@ class NewsEntryMongoServiceTest(unittest.TestCase):
 		self.assertIsNotNone(self.service)
 
 	def test_create_single_news_entry_record(self):
-		news = NewsEntry(title='Diego gana el prode', content='Reamente lo ganó', 
+		news = NewsEntry(title='Diego gana el prode', content=u'Reamente lo ganó', 
 			tags=['deportes','salud', 'delito'],source='Euronews',
 			url="http://feed.clarin.com",
 			title_lematized="", content_lematized="")
