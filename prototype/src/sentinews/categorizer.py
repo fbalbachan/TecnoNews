@@ -33,13 +33,16 @@ class Categorizer(object):
 
 	def __create_categories(self):
 		categories = Set([])
-		for element in self.tags:
-			for category, list_tags in self.categories_dict.iteritems():
-				for tag in list_tags:
-					ltag = tag.lower()
-					lelement = element.lower()
-					if unidecode(lelement) in self.countries_list:
-						categories.add('internacionales')
-					if unidecode(lelement).find(unidecode(ltag)) > -1:
-						categories.add(category)
+		if len(self.tags) > 0:
+			for element in self.tags:
+				for category, list_tags in self.categories_dict.iteritems():
+					for tag in list_tags:
+						ltag = tag.lower()
+						lelement = element.lower()
+						if unidecode(lelement) in self.countries_list:
+							categories.add('internacionales')
+						if unidecode(lelement).find(unidecode(ltag)) > -1:
+							categories.add(category)
+		else:
+			categories.add('interés general')
 		return categories

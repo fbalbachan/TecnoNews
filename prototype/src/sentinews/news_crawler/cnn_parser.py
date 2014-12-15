@@ -44,8 +44,8 @@ class CNNParser:
               tags = []
 
             if (content.find('function()') == -1):
-                new_entries.append(NewsEntry(title, content, tags, self.source)) 
-        return new_entries[0] if len(new_entries) > 0 else NewsEntry('','',['dummie'],'')
+                new_entries.append(NewsEntry(title, content, tags, self.source, url)) 
+        return new_entries[0] if len(new_entries) > 0 else NewsEntry('','',['dummie'],'','')
 
         
     def _remove_cnn_header(self, text):

@@ -28,11 +28,11 @@ class EuroNewsParser(object):
         for article in articles:
             title = title = article.find(
                 'span', {'class': 'bulletin-title'}).text[12:]
-            content, tags = self.___extract_content(article)
+            content, tags, article_url = self.___extract_content(article)
             if self.language_filter_status == 'ON':
                 content = self.language_filter.only_spanish_paragraph(content.encode("utf-8"))
             if len(content) > 1  and len(tags) > 0:
-                new_entries.append(NewsEntry(title, content, tags, self.source))
+                new_entries.append(NewsEntry(title, content, tags, self.source, article_url))
 
         return new_entries
 
@@ -61,6 +61,6 @@ class EuroNewsParser(object):
                 if not ul_tags is None: 
                     li_tags = soup.find('ul', {'class': 'kwl'}).find_all('li')
                     tags = [tag.find('a').text for tag in li_tags]
-            return " ".join(content_str), tags
+            return " ".join(content_str), tags, article_url
         else:
             return ''
