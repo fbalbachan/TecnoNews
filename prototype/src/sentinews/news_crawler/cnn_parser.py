@@ -7,12 +7,16 @@ from src.sentinews.news_entry import NewsEntry
 from bs4 import BeautifulSoup
 from src.utils.logger_utils import *
 from src.utils.languageFilter import LanguageFilter
+from ConfigParser import ConfigParser
 
 
 class CNNParser:
 
     def __init__(self):
         self.language_filter = LanguageFilter()
+        config = ConfigParser()
+        config.read('config')
+        self.language_filter_status = config.get('language_filter', 'status')
 
     source = u"CNN en español"
     def parse(self, url, limit=1):
@@ -30,7 +34,8 @@ class CNNParser:
             content = self._remove_cnn_header(article.find('div').text)
 
             if (content.find('function()') == -1):
-                content = self.language_filter.only_spanish_paragraph(content.encode("utf-8"))
+                if self.language_filter_status == 'ON':
+                    content = self.language_filter.only_spanish_paragraph(content.encode("utf-8"))
             try:
               tags = article.find('span', class_ = "cnnBlogFiledBy cnn_categories").text[11:].split(u"\xa0\u2022\xa0")
             except:

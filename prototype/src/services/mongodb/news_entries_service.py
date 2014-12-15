@@ -28,6 +28,5 @@ class NewsEntriesService(object):
 		"""
 		return [ NewsEntry(title=entry['title'], content=entry['content'],
 			tags=entry['tags'], source=entry['source'], categories=entry['categories'],
-			title_lematized=entry['title_lematized'], content_lematized=entry['content_lematized'],
-			rewrite_content=entry['rewrite_content'])
+			title_lematized=entry['title_lematized'], content_lematized=entry['content_lematized'])
 		for entry in self.news_entries.find(criteria)]

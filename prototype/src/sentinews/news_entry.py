@@ -12,7 +12,7 @@ from datetime import datetime
 class NewsEntry(object):
 
 	def __init__(self, title, content, tags, source, categories = None,
-		title_lematized=None, content_lematized=None, rewrite_content=None):
+		title_lematized=None, content_lematized=None):
 		self.title = title
 		self.content = content
 		self.tags = tags
@@ -21,7 +21,6 @@ class NewsEntry(object):
 		self.destination = None
 		self.title_lematized = title_lematized
 		self.content_lematized = content_lematized
-		self.rewrite_content = rewrite_content
 		self.published_date = datetime.utcnow()
 		self.config = ConfigParser.ConfigParser()
 		if self.categories is None:
@@ -65,7 +64,7 @@ class NewsEntry(object):
 		return hosts
 
 	def to_dict(self):
-		return {'title': self.title, 'content': self.content, 'tags': self.tags,
+		return {'title': unicode(self.title), 'content': unicode(self.content), 'tags': self.tags,
 		'source': self.source, 'categories': self.categories, 
 		'published_date': self.published_date, 'title_lematized': self.title_lematized,
-		'content_lematized': self.content_lematized, 'rewrite_content': self.rewrite_content}
+		'content_lematized': self.content_lematized}

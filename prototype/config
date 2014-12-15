@@ -21,6 +21,9 @@ host = localhost
 port = 27017
 db = sentinews
 
+[language_filter]
+status = OFF
+
 [resources]
 
 resources_dir = /Users/diegoram/dev/entinews/prototype/resources

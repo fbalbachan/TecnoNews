@@ -1,15 +1,14 @@
-import sqlite3
 import ConfigParser
+from src.services.mongodb.news_entries_service import NewsEntriesService 
 
 class Crawler(object):
     
     def _filter_entries(self, entries):
         ''' Filter entries that already exist in the DB,
             we dont want to parse them again. '''
-        cursor = sqlite3.connect("news_crawler.db").cursor()
-        titles = cursor.execute("SELECT title FROM original_news_entries").fetchall()
-        titles = [title[0] for title in titles]
-        return [entry for entry in entries if entry.title not in titles]
+        service = NewsEntriesService()
+        return [entry for entry in entries 
+        if len(service.get_list({'title': unicode(entry.title)})) == 0]
 
     def _filter_by_tag(self, news_entries):
         Config = ConfigParser.ConfigParser()
