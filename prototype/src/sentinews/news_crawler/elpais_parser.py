@@ -6,11 +6,15 @@ from src.sentinews.news_entry import NewsEntry
 from bs4 import BeautifulSoup
 from src.utils.logger_utils import *
 from src.utils.languageFilter import LanguageFilter
+from ConfigParser import ConfigParser
 
 class ElPaisParser(object):
 
     def __init__(self):
         self.language_filter = LanguageFilter()
+        config = ConfigParser()
+        config.read('config')
+        self.language_filter_status = config.get('language_filter', 'status')
 
     source = u'El País'
 
@@ -24,7 +28,8 @@ class ElPaisParser(object):
                 article_url = article.find('h2').find('a')['href']
                 content, tags = self.__extract_content(article_url)
 
-                content = self.language_filter.only_spanish_paragraph(content.encode("utf-8"))
+                if self.language_filter_status == 'ON':
+                    content = self.language_filter.only_spanish_paragraph(content.encode("utf-8"))
 
                 if len(content) > 1 and len(tags) > 0:
                     new_entries.append(NewsEntry(title, content, tags, self.source))

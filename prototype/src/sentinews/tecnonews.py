@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from src.sentinews.news_rewriter import NewsRewriter
 from src.sentinews.news_crawler.news_crawler import NewsCrawler
-form src.services.mongodb.news_entries_service import NewsEntriesService
+from src.services.mongodb.news_entries_service import NewsEntriesService
 from src.utils.logger_utils import *
 import traceback
 import datetime
@@ -31,11 +31,15 @@ class TecnoNews(object):
         try:
           c = NewsRewriter(entry)
           logger.info("publishing note: " + entry.source)
-          c.rewrite()
+          #try:   
+          #  c.rewrite()
+          #except Exception, e:
+          #  logger.error("rewrite for new(%s) fails. " % (entry.title))
+          
           
           self.service.save(entry)
-          
-          c.publish()
+
+          #c.publish()
         except Exception, e:
             logger.info(traceback.format_exc())
 

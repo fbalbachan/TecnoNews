@@ -6,11 +6,15 @@ from src.sentinews.news_entry import NewsEntry
 from bs4 import BeautifulSoup
 from src.utils.logger_utils import *
 from src.utils.languageFilter import LanguageFilter
+from ConfigParser import ConfigParser
 
 
 class EuroNewsParser(object):
     def __init__(self):
         self.language_filter = LanguageFilter()
+        config = ConfigParser()
+        config.read('config')
+        self.language_filter_status = config.get('language_filter', 'status')
 
     base_path = 'http://es.euronews.com'
     source = u'Euronews'
@@ -25,8 +29,9 @@ class EuroNewsParser(object):
             title = title = article.find(
                 'span', {'class': 'bulletin-title'}).text[12:]
             content, tags = self.___extract_content(article)
-            content = self.language_filter.only_spanish_paragraph(content.encode("utf-8"))
-            if len(content) > 1:
+            if self.language_filter_status == 'ON':
+                content = self.language_filter.only_spanish_paragraph(content.encode("utf-8"))
+            if len(content) > 1  and len(tags) > 0:
                 new_entries.append(NewsEntry(title, content, tags, self.source))
 
         return new_entries
@@ -35,6 +40,7 @@ class EuroNewsParser(object):
     def ___extract_content(self, article):
         article_url = article.find('a', {'class': 'read-more-button'})['href']
         soup = BeautifulSoup(urlopen(self.base_path + article_url).read())
+        print 'url ' + self.base_path + article_url
         if soup is not None:
             paragraphs =  None
             try:
@@ -51,8 +57,10 @@ class EuroNewsParser(object):
             content_str = [ text + '\n' for text in content_paragraphs_list]
             tags = []
             if paragraphs is not None:
-                li_tags = soup.find('ul', {'class': 'kwl'}).find_all('li')
-                tags = [tag.find('a').text for tag in li_tags]
+                ul_tags = soup.find('ul', {'class': 'kwl'})
+                if not ul_tags is None: 
+                    li_tags = soup.find('ul', {'class': 'kwl'}).find_all('li')
+                    tags = [tag.find('a').text for tag in li_tags]
             return " ".join(content_str), tags
         else:
             return ''

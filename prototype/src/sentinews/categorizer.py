@@ -4,25 +4,26 @@ from src.utils.csvwrapper import unicode_csv_reader
 from unidecode import unidecode
 from sets import Set
 import codecs
+import warnings
 
 class Categorizer(object):
 
 	def __init__(self, tags):
 		if len(tags) == 0:
-			raise ValueError('Tags must not be empty!')
-		else:
-			self.tags = tags
-			self.config = ConfigParser.ConfigParser()
-			self.config.read('config')
-			categories_file =  self.config.get("resources", "categories")
-			countries_file = self.config.get("resources", "countries")
-			categories_reader = unicode_csv_reader(open(categories_file, 'r'), first_line_is_header = False, delimiter=',')
-			self.categories_dict = {}
-			for row in categories_reader:
-				self.categories_dict[row[0]] = [ element for element in row if element != '']
-			countries_reader = unicode_csv_reader(open(countries_file, 'r'), first_line_is_header = False, delimiter=',')
-			self.countries_list = [unidecode(country[0].lower()) for country in countries_reader]
-			self.categories = self.__create_categories()
+			warnings.warn('Tags must not be empty!')
+		
+		self.tags = tags
+		self.config = ConfigParser.ConfigParser()
+		self.config.read('config')
+		categories_file =  self.config.get("resources", "categories")
+		countries_file = self.config.get("resources", "countries")
+		categories_reader = unicode_csv_reader(open(categories_file, 'r'), first_line_is_header = False, delimiter=',')
+		self.categories_dict = {}
+		for row in categories_reader:
+			self.categories_dict[row[0]] = [ element for element in row if element != '']
+		countries_reader = unicode_csv_reader(open(countries_file, 'r'), first_line_is_header = False, delimiter=',')
+		self.countries_list = [unidecode(country[0].lower()) for country in countries_reader]
+		self.categories = self.__create_categories()
 
 
 	def get_or_else(self):
