@@ -26,7 +26,8 @@ class NewsEntriesService(object):
 		criteria: dict 
 			this is the object to use on mongodb find statement
 		"""
-		return [ NewsEntry(title=entry['title'], content=entry['content'],
-			tags=entry['tags'], source=entry['source'], categories=entry['categories'],
-			title_lematized=entry['title_lematized'], content_lematized=entry['content_lematized'])
+		return [ NewsEntry(title=entry['title'], content=entry['content'], 
+			tags=entry['tags'], source=entry['source'], url=entry['url'],
+			categories=entry['categories'],title_lematized=entry['title_lematized'],
+			content_lematized=entry['content_lematized'])
 		for entry in self.news_entries.find(criteria)]
