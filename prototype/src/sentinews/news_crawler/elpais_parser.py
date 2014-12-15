@@ -32,7 +32,7 @@ class ElPaisParser(object):
                     content = self.language_filter.only_spanish_paragraph(content.encode("utf-8"))
 
                 if len(content) > 1 and len(tags) > 0:
-                    new_entries.append(NewsEntry(title, content, tags, self.source))
+                    new_entries.append(NewsEntry(title, content, tags, self.source, article_url))
         return new_entries
 
 

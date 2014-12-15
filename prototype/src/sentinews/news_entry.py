@@ -11,7 +11,7 @@ from datetime import datetime
 
 class NewsEntry(object):
 
-	def __init__(self, title, content, tags, source, categories = None,
+	def __init__(self, title, content, tags, source, url, categories = None,
 		title_lematized=None, content_lematized=None):
 		self.title = title
 		self.content = content
@@ -22,6 +22,7 @@ class NewsEntry(object):
 		self.title_lematized = title_lematized
 		self.content_lematized = content_lematized
 		self.published_date = datetime.utcnow()
+		self.url = url
 		self.config = ConfigParser.ConfigParser()
 		if self.categories is None:
 			self.__setUp()
@@ -67,4 +68,4 @@ class NewsEntry(object):
 		return {'title': unicode(self.title), 'content': unicode(self.content), 'tags': self.tags,
 		'source': self.source, 'categories': self.categories, 
 		'published_date': self.published_date, 'title_lematized': self.title_lematized,
-		'content_lematized': self.content_lematized}
+		'content_lematized': self.content_lematized, url: self.url}

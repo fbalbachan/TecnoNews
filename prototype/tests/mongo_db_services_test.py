@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import unittest
 from src.services.mongodb.news_entries_service import NewsEntriesService
 from src.sentinews.news_entry import NewsEntry
@@ -15,7 +16,8 @@ class NewsEntryMongoServiceTest(unittest.TestCase):
 	def test_create_single_news_entry_record(self):
 		news = NewsEntry(title='Diego gana el prode', content='Reamente lo ganó', 
 			tags=['deportes','salud', 'delito'],source='Euronews',
-			title_lematized="", content_lematized="", rewrite_content="")
+			url="http://feed.clarin.com",
+			title_lematized="", content_lematized="")
 
 		self.assertIsNotNone(news)
 		news_id = self.service.save(news)
