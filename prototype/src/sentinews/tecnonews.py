@@ -27,6 +27,7 @@ class TecnoNews(object):
             self._process(entry)
         logger.info("Done.")
 
+
     def _process(self, entry):
         try:
             c = NewsRewriter(entry)
@@ -37,6 +38,9 @@ class TecnoNews(object):
                 logger.error("rewrite for new(%s) fails. " % (entry.title))
 
             self.service.save(entry)
+
+          
+          self.service.save(entry)
 
             c.publish()
         except Exception, e:
