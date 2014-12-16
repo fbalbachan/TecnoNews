@@ -11,16 +11,13 @@ from datetime import datetime
 
 class NewsEntry(object):
 
-	def __init__(self, title, content, tags, source, url, categories = None,
-		title_lematized=None, content_lematized=None):
+	def __init__(self, title, content, tags, source, url=None, categories = None):
 		self.title = title
 		self.content = content
 		self.tags = tags
 		self.source = source
 		self.categories = categories
 		self.destination = None
-		self.title_lematized = title_lematized
-		self.content_lematized = content_lematized
 		self.published_date = datetime.utcnow()
 		self.url = url
 		self.config = ConfigParser.ConfigParser()
@@ -68,5 +65,4 @@ class NewsEntry(object):
 		return {'title': unicode(self.title), 'content': unicode(self.content), 
 		'tags': [unicode(tag) for tag in self.tags],
 		'source': self.source, 'categories': self.categories, 
-		'published_date': self.published_date, 'title_lematized': self.title_lematized,
-		'content_lematized': self.content_lematized, 'url': self.url}
+		'published_date': self.published_date,'url': self.url}

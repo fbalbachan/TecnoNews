@@ -21,7 +21,6 @@ class CNNParser:
     source = u"CNN en español"
     def parse(self, url, limit=1):
         soup = BeautifulSoup(urlopen(url).read())
-
         # TODO: check if this is working ok and use it
         # kill all script and style elements
         # for script in soup(["script", "style"]):
@@ -44,7 +43,7 @@ class CNNParser:
               tags = []
 
             if (content.find('function()') == -1):
-                new_entries.append(NewsEntry(title, content, tags, self.source, url)) 
+                new_entries.append(NewsEntry(title, content, tags, self.source, url=url)) 
         return new_entries[0] if len(new_entries) > 0 else NewsEntry('','',['dummie'],'','')
 
         
