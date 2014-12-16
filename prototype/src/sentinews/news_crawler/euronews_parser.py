@@ -32,7 +32,7 @@ class EuroNewsParser(object):
             if self.language_filter_status == 'ON':
                 content = self.language_filter.only_spanish_paragraph(content.encode("utf-8"))
             if len(content) > 1  and len(tags) > 0:
-                new_entries.append(NewsEntry(title, content, tags, self.source, article_url))
+                new_entries.append(NewsEntry(title, content, tags, self.source, url=article_url))
 
         return new_entries
 
@@ -40,7 +40,6 @@ class EuroNewsParser(object):
     def ___extract_content(self, article):
         article_url = article.find('a', {'class': 'read-more-button'})['href']
         soup = BeautifulSoup(urlopen(self.base_path + article_url).read())
-        print 'url ' + self.base_path + article_url
         if soup is not None:
             paragraphs =  None
             try:
@@ -61,6 +60,6 @@ class EuroNewsParser(object):
                 if not ul_tags is None: 
                     li_tags = soup.find('ul', {'class': 'kwl'}).find_all('li')
                     tags = [tag.find('a').text for tag in li_tags]
-            return " ".join(content_str), tags, article_url
+            return " ".join(content_str), tags, self.base_path + article_url
         else:
             return ''

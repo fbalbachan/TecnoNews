@@ -3,6 +3,8 @@ import unittest
 from src.services.mongodb.news_entries_service import NewsEntriesService
 from src.sentinews.news_entry import NewsEntry
 from datetime import datetime, timedelta
+from src.services.mongodb.connector import MongoConnector
+
 
 class NewsEntryMongoServiceTest(unittest.TestCase):
 	
