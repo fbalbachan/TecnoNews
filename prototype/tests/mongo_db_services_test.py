@@ -10,28 +10,30 @@ class NewsEntryMongoServiceTest(unittest.TestCase):
 	
 
 	def setUp(self):
-		self.service = NewsEntriesService()
+		self.service = NewsEntriesService('test')
+		self.db = MongoConnector.get_instance('test')
+		if self.db is not None:
+			self.db.drop_collection('news_entries')
+		self.news = NewsEntry(title=u'Diego ganó el prode', content=u'Reamente lo ganó', 
+			tags=['deportes','salud', 'delito'],source='Euronews',
+			url="http://feed.clarin.com")
+
+		self.news_id = self.service.save(self.news)
+
 
 	def test_check_service_creation(self):
 		self.assertIsNotNone(self.service)
 
 	def test_create_single_news_entry_record(self):
-		news = NewsEntry(title='Diego gana el prode', content=u'Reamente lo ganó', 
-			tags=['deportes','salud', 'delito'],source='Euronews',
-			url="http://feed.clarin.com",
-			title_lematized="", content_lematized="")
-
-		self.assertIsNotNone(news)
-		news_id = self.service.save(news)
-		self.assertIsNotNone(news_id)
-		print news_id
+		self.assertIsNotNone(self.news_id)
+		print self.news_id
 
 
 	def test_retrieve_single_news_entry_record(self):
-		news_list = self.service.get_list({'title': 'Diego gana el prode'})
+		news_list = self.service.get_list({'title': 'Diego ganó el prode'})
 		self.assertIsNotNone(news_list)
 		self.assertTrue(len(news_list) > 0)
-		self.assertEquals(news_list[0].title, 'Diego gana el prode')
+		self.assertEquals(news_list[0].title, self.news.title)
 
 
 	def test_retrieve_news_entry_list_by_given_date(self):

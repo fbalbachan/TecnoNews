@@ -5,8 +5,8 @@ class NewsEntriesService(object):
 
 	COLLECTION = 'news_entries'
 
-	def __init__(self):
-		self.db = MongoConnector.get_instance()
+	def __init__(self, mode=None):
+		self.db = MongoConnector.get_instance(mode)
 		self.news_entries = self.db[NewsEntriesService.COLLECTION]
 
 	def save(self,news_entry):

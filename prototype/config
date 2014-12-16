@@ -20,6 +20,7 @@ language_port = 10001
 host = localhost
 port = 27017
 db = sentinews
+db_test = sentinews_test
 
 [language_filter]
 status = OFF
