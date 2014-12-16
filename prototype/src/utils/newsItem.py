@@ -11,10 +11,10 @@ class NewsItem(object):
 
         self.title = title
         self.title_lemmatized = ''
-        self.content_lemmatized = self.lemmatized_content()
-        self.entities = self.most_relevant_entities(self.content)
+        # self.content_lemmatized = self.lemmatized_content()
+        self.entities = self.most_relevant_entities()
         self.clean_text = self.get_clean_text()
-        self.clean_content_lemmatized = self.get_cleaned_content_lemmatized()
+        # self.clean_content_lemmatized = self.get_cleaned_content_lemmatized()
         self.paragraph = ''
 
 
@@ -35,7 +35,7 @@ class NewsItem(object):
         return paragraph
 
     # TODO: move this outside when this goes to production and
-    def rank_of_entities(self, text):
+    def rank_of_entities(self):
         from src.model.referent.referentRanker import ReferentRanker
         # from src.model.paragraph.paragraphAnalyzer import ParagraphAnalyzer
         # from src.model.paragraph.paragraph import Paragraph
@@ -48,9 +48,16 @@ class NewsItem(object):
         EntityUnifier(paragraph).unify()
         return ReferentRanker(paragraph).rank()
 
-    def most_relevant_entities(self, text):
-        ranked_entities_list = self.rank_of_entities(text)
-        return [x[0] for i, x in enumerate(ranked_entities_list) if i < 5]
+    def most_relevant_entities(self):
+        ranked_entities_list = self.rank_of_entities()
+        entities_classification = []
+
+        for entity in ranked_entities_list:
+            entities_classification.append({'semantic': entity[0].semantic_classification(),
+             'name': entity[0].name(), 'score': entity[1]})
+
+        return entities_classification
+
 
     def lemmatized_content(self):
         lemmatized = ''

@@ -19,27 +19,26 @@ class TecnoNews(object):
 
 
     def run(self):
-      logger = get_logger('tecnonews')
-      entries =  NewsCrawler().crawl_all()
-      logger.info("Entries to publish: %s" % len(entries))
-      for entry in entries:
-        self._process(entry)
-      logger.info("Done.")
-
+        logger = get_logger('tecnonews')
+        entries =  NewsCrawler().crawl_all()
+        logger.info("Entries to publish: %s" % len(entries))
+        for entry in entries:
+            entry.set_analisys_info()
+            self._process(entry)
+        logger.info("Done.")
 
     def _process(self, entry):
         try:
-          c = NewsRewriter(entry)
-          logger.info("publishing note: " + entry.source)
-          #try:   
-          #  c.rewrite()
-          #except Exception, e:
-          #  logger.error("rewrite for new(%s) fails. " % (entry.title))
-          
-          
-          self.service.save(entry)
+            c = NewsRewriter(entry)
+            logger.info("publishing note: " + entry.source)
+            try:
+                c.rewrite()
+            except Exception, e:
+                logger.error("rewrite for new(%s) fails. " % (entry.title))
 
-          #c.publish()
+            self.service.save(entry)
+
+            c.publish()
         except Exception, e:
             logger.info(traceback.format_exc())
 

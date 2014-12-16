@@ -52,41 +52,20 @@ class TextDistance(object):
         else:
             return "%.2f" % similarity
 
-
-    # Most relevant list of Entities
-    # @staticmethod
-    # def rank_of_entities(text):
-    #     from src.model.referent.referentRanker import ReferentRanker
-    #     from src.model.paragraph.paragraphAnalyzer import ParagraphAnalyzer
-    #     from src.model.paragraph.paragraph import Paragraph
-    #     from src.model.referent.entityUnifier import EntityUnifier
-    #
-    #     analyzer = ParagraphAnalyzer()
-    #     paragraph = Paragraph.from_text(text)
-    #     analyzer.analyze(paragraph)
-    #     EntityUnifier(paragraph).unify()
-    #     return ReferentRanker(paragraph).rank()
-    #
-    # @staticmethod
-    # def most_relevant_entities(renked_entities_list):
-    #
-    #     return [x[0] for i, x in enumerate(renked_entities_list) if i < 5]
-
     @staticmethod
     def relevant_entities_coincidence(newsItem1, newsItem2):
-        # ranked_entities1 = TextDistance.rank_of_entities(text1)
-        # entities_text1 = TextDistance.most_relevant_entities(ranked_entities1)
-        entities_text1 = newsItem1.entities
-
-        # ranked_entities2 = TextDistance.rank_of_entities(text2)
-        # entities_text2 = TextDistance.most_relevant_entities(ranked_entities2)
-        entities_text2 = newsItem2.entities
+        from pprint import pprint
+        print "newsItem1.entities", pprint(newsItem1.entities[:5])
+        print "newsItem2.entities", pprint(newsItem2.entities[:5])
+        print '\n'
+        print "newsItem1.entities", pprint(newsItem1.entities)
+        print "newsItem2.entities", pprint(newsItem2.entities)
 
         coincidences_count = 0
-        for entity in entities_text1:
+        for entity in newsItem1.entities[:5]:
 
-            coincidences = [e for e in entities_text2 if e.name() == entity.name()
-            and e.semantic_classification() == entity.semantic_classification()]
+            coincidences = [e for e in newsItem2.entities[:5] if entity['name'] == e['name']
+            and entity['semantic'] == e['semantic']]
             if len(coincidences) > 0:
                 coincidences_count += 1
 

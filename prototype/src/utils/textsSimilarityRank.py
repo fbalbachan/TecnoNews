@@ -95,54 +95,59 @@ def save_test_data(original, to_compare):
 
 
 if __name__ == "__main__":
-    # import os
+    import os
     import pickle
     from src.utils.newsItem import NewsItem
-    # from pprint import pprint
-    # files = os.listdir('src/utils/texts/')
-    # print files
-    # original_file = files[-1]
-    #
-    # files.remove(original_file)
-    # original = NewsItem.from_file('src/utils/texts/', original_file)
-    #
-    # text_to_compare = []
-    #
+    from pprint import pprint
+    files = os.listdir('src/utils/texts/')
+    print files
+    original_file = files[-1]
+
+    files.remove(original_file)
+    original = NewsItem.from_file('src/utils/texts/', original_file)
+
+    text_to_compare = []
+
+    item = NewsItem.from_file('src/utils/texts/', files[-1])
+
+    text_to_compare.append(item)
+
     # for file_name in files:
     #     item = NewsItem.from_file('src/utils/texts/', file_name)
     #     text_to_compare.append(item)
 
-    with open('original.pkl', 'rb') as input:
-        original = pickle.load(input)
+    # with open('original.pkl', 'rb') as input:
+    #     original = pickle.load(input)
+    #
+    # original_file = original.file_name
+    #
+    # with open('to_compare.pkl', 'rb') as input:
+    #     text_to_compare = pickle.load(input)
 
-    original_file = original.file_name
-
-    with open('to_compare.pkl', 'rb') as input:
-        text_to_compare = pickle.load(input)
     tsr = TextSimilarityRank(original, text_to_compare)
 
-    print "\n"
-    print "similarity lemmatized filename original:", original_file
-    for result in tsr.get_similarity_rank_content_lemmatized():
-        print result[0], result[1].file_name
-
-    print "\n"
-    print "similarity filename original:", original_file
-
-    for result in tsr.get_similarity_rank():
-        print result[0], result[1].file_name
-
-    print "\n"
-    print "similarity filename original WO stopwords:", original_file
-
-    for result in tsr.get_similarity_rank_cleaned():
-        print result[0], result[1].file_name
-
-    print "\n"
-    print "similarity filename original WO stopwords lemmatized:", original_file
-
-    for result in tsr.get_similarity_rank_clean_content_lemmatized():
-        print result[0], result[1].file_name
+    # print "\n"
+    # print "similarity lemmatized filename original:", original_file
+    # for result in tsr.get_similarity_rank_content_lemmatized():
+    #     print result[0], result[1].file_name
+    #
+    # print "\n"
+    # print "similarity filename original:", original_file
+    #
+    # for result in tsr.get_similarity_rank():
+    #     print result[0], result[1].file_name
+    #
+    # print "\n"
+    # print "similarity filename original WO stopwords:", original_file
+    #
+    # for result in tsr.get_similarity_rank_cleaned():
+    #     print result[0], result[1].file_name
+    #
+    # print "\n"
+    # print "similarity filename original WO stopwords lemmatized:", original_file
+    #
+    # for result in tsr.get_similarity_rank_clean_content_lemmatized():
+    #     print result[0], result[1].file_name
 
     print "\n"
     print "similarity entities:", original_file
