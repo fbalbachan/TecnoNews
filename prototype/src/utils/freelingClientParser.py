@@ -1,20 +1,26 @@
 #-*- coding: utf-8 -*-
-import os, ConfigParser
+import ConfigParser
+import subprocess
+# import os
 
-# Debería llamarse "FreelingParserClientParser"..
+
 class FreelingClientParser:
     def parse(self, text):
         return self.get_client_output_for(text)
 
     def get_client_output_for(self, text):
-        if type(text) != str: raise Exception("Solo se acepta unicode codificado a string.")
+        if type(text) != str: raise Exception("The parse method only accept unicode strings.")
         text = text.replace('"', '\\"')
 
         config = self.config
-        command = 'echo "%s" | ' + config["client"] + ' ' + config["host"] + ':' + config["parser_port"]
+        # command = 'echo "%s" | ' + config["client"] + ' ' + config["host"] + ':' + config["parser_port"]
+        #
+        # raw_output = os.popen((command % text)).read()
+        p = subprocess.Popen([config["client"], config["host"] + ':' + config["parser_port"]],
+                             stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
 
-        raw_output = os.popen((command % text)).read()
-        #return [line.strip() for line in raw_output.split('\n')]
+        raw_output = p.communicate(input=text)[0]
+
         return raw_output.split('\n')
 
     def setup_config(self):

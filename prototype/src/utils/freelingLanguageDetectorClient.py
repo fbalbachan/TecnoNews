@@ -1,7 +1,7 @@
 #-*- coding: utf-8 -*-
-import os
 import ConfigParser
 import re
+import subprocess
 
 
 class FreelingLanguageDetectorClient:
@@ -16,9 +16,13 @@ class FreelingLanguageDetectorClient:
 
         config = self.config
 
-        command = "echo '%s'" + ' | ' + config["client"] + ' ' + config["host"] + ' ' + config["language_port"]
+        # command = "echo '%s'" + ' | ' + config["client"] + ' ' + config["host"] + ' ' + config["language_port"]
+        # raw_output = os.popen((command % text)).read()
 
-        raw_output = os.popen((command % text)).read()
+        p = subprocess.Popen([config["client"], config["host"] + ':' + config["language_port"]],
+                             stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
+
+        raw_output = p.communicate(input=text)[0]
         return raw_output.split('\n')
 
     def setup_config(self):
