@@ -14,7 +14,7 @@ class NewsEntryMongoServiceTest(unittest.TestCase):
 		self.db = MongoConnector.get_instance('test')
 		if self.db is not None:
 			self.db.drop_collection('news_entries')
-		self.news = NewsEntry(title=u'Diego ganó el prode', content=u'Reamente lo ganó', 
+		self.news = NewsEntry(title=u'Diego ganó el prode', content=u'Reamente lo ganó. Aun laburando de ñoqui', 
 			tags=['deportes','salud', 'delito'],source='Euronews',
 			url="http://feed.clarin.com")
 
@@ -43,6 +43,19 @@ class NewsEntryMongoServiceTest(unittest.TestCase):
 		self.assertTrue(len(news_list) > 0)
 		
 
+	def test_retrieve_news_by_given_date(self):
+		"""there is an expected error regarding time difference btw creation and retrieve moment"""
+		five_seconds = timedelta(seconds=5)
+		news_list = self.service.get_list({'published_date': {'$gte': self.news.published_date - five_seconds}})
+		self.assertIsNotNone(news_list)
+		self.assertTrue(len(news_list) == 1)
+		self.assertEquals(news_list[0].content, self.news.content)
+
+	def test_retrieve_news_by_given_date_fail(self):
+		five_seconds = timedelta(seconds=5)
+		news_list = self.service.get_list({'published_date': {'$gte': self.news.published_date + five_seconds}})
+		self.assertIsNotNone(news_list)
+		self.assertTrue(len(news_list) == 0)
 
 	def test_retrieve_list_by_categories(self):
 		news_list = self.service.get_list({'categories': {'$in': ['policiales']}})
