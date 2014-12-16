@@ -27,7 +27,7 @@ status = OFF
 
 [resources]
 
-resources_dir = /Users/diegoram/dev/entinews/prototype/resources
+resources_dir = /home/nvaras/entinews/prototype/resources
 verbal_scripts = %(resources_dir)s/scripts_verbales.csv
 sentiwordnet = %(resources_dir)s/sentiwordnet.csv
 general_resources = %(resources_dir)s/general_resources
