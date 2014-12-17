@@ -23,7 +23,7 @@ db = sentinews
 db_test = sentinews_test
 
 [language_filter]
-status = OFF
+status = ON
 
 [resources]
 
