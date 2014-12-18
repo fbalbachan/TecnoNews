@@ -1,7 +1,6 @@
 #-*- coding: utf-8 -*-
 import ConfigParser
 import subprocess
-# import os
 
 
 class FreelingClientParser:
@@ -13,9 +12,6 @@ class FreelingClientParser:
         text = text.replace('"', '\\"')
 
         config = self.config
-        # command = 'echo "%s" | ' + config["client"] + ' ' + config["host"] + ':' + config["parser_port"]
-        #
-        # raw_output = os.popen((command % text)).read()
         p = subprocess.Popen([config["client"], config["host"] + ':' + config["parser_port"]],
                              stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
 
