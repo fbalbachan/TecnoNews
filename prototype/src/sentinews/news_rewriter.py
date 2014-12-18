@@ -79,9 +79,12 @@ class NewsRewriter(object):
 
         return '<p><img title="%s" src=%s></img></p> %s' %(img_alts[image], image, self.rewritten_entry.content)
 
+    def rewrite_title(self):
+        analysis = self._analyze(self.original_entry.title)
+        rewriter = Rewriter(analysis['paragraph'])
+        self.rewritten_entry.title = rewriter.rewrite()
 
-
-    def rewrite(self):
+    def rewrite_content(self):
         analysis = self._analyze(self.original_entry.content)
         analysis["referent_ranking"] = ReferentRanker(analysis["paragraph"]).rank()
         analysis["generated_content"] = WikipediaContentGenerator(analysis).generate()
