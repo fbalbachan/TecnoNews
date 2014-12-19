@@ -69,8 +69,28 @@ class NewsEntry(object):
         return hosts
 
     def to_dict(self):
-        return {'title': unicode(self.title), 'content': unicode(self.content),
-                'tags': [unicode(tag) for tag in self.tags],
+        # TODO : make a generic method to make it in a DRY mode
+        if isinstance(self.title, unicode):
+            title = self.title
+        else:
+            print type(self.title)
+            title = unicode(self.title, 'utf-8')
+
+        if isinstance(self.content, unicode):
+            content = self.content
+        else:
+            print type(self.content)
+            content = unicode(self.content, 'utf-8')
+
+        utags = []
+        for tag in self.tags:
+            if isinstance(tag, unicode):
+                utags.append(tag)
+            else:
+                utags.append(unicode(tag, 'utf-8'))
+
+        return {'title': title, 'content': content,
+                'tags': utags,
                 'source': self.source, 'categories': self.categories,
                 'entities': self.entities,
                 'published_date': self.published_date, 'url': self.url}
