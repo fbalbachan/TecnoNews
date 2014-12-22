@@ -33,13 +33,13 @@ class TecnoNews(object):
             c = NewsRewriter(entry)
             logger.info("publishing note: " + entry.source)
             try:
-                c.rewrite_title()
+                # c.rewrite_title()
                 c.rewrite_content()
+                c.publish()
+                self.service.save(entry)
             except Exception, e:
-                logger.error("rewrite for new(%s) fails. " % (entry.title))
+                logger.error("rewriting fail: %s " % (entry.title))
 
-            self.service.save(entry)
-            c.publish()
         except Exception, e:
             logger.info(traceback.format_exc())
 

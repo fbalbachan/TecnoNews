@@ -83,6 +83,7 @@ class NewsRewriter(object):
         analysis = self._analyze(self.original_entry.title)
         rewriter = Rewriter(analysis['paragraph'])
         self.rewritten_entry.title = rewriter.rewrite()
+        self.rewritten_entry.title = self.original_entry.title
 
     def rewrite_content(self):
         analysis = self._analyze(self.original_entry.content)

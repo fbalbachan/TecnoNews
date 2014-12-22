@@ -23,6 +23,8 @@ class NewsCrawler(object):
     self.crawlers_by_id = {
         "cnn_spanish": CNNCrawler, "euronews": EuroNewsCrawler,
         "elpais": ElPaisCrawler}
+    
+
 
   def _cursor_start(self):
     db = MongoConnector.get_instance()
@@ -33,6 +35,8 @@ class NewsCrawler(object):
         datetime.utcnow()))
       self.service.save(Feed('elpais','http://elpais.com/tag/fecha/hoy',
         datetime.utcnow()))
+
+
 
   def crawl_all(self):
     entries = []
