@@ -4,5 +4,5 @@ export PATH=$PATH:/opt/freeling-3.0/bin
 while true
 do
     python src/sentinews/tecnonews.py
-    sleep 10m
+    sleep 15m
 done

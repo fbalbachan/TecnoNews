@@ -36,9 +36,10 @@ class TecnoNews(object):
                 # c.rewrite_title()
                 c.rewrite_content()
                 c.publish()
-                self.service.save(entry)
             except Exception, e:
                 logger.error("rewriting fail: %s " % (entry.title))
+
+            self.service.save(entry)
 
         except Exception, e:
             logger.info(traceback.format_exc())
