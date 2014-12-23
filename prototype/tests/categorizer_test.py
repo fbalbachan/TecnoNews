@@ -33,19 +33,28 @@ class CategorizerTest(unittest.TestCase):
 		tags = [u'Medicina',u'Empresa', u'Aplicación', u'Crimen', u'Salud']
 		categories = Categorizer(tags).get_or_else()
 		self.assertIsNotNone(categories)
-		print categories
 		self.assertTrue(len(categories) == 4)
-		self.assertTrue(u'salud' in categories)
-		self.assertTrue(u'economía' in categories)
-		self.assertTrue(u'tecnología' in categories)
+		print 'categories'
+		print categories
+		self.assertTrue('salud' in categories)
+		self.assertTrue('economía' in categories)
+		self.assertTrue('tecnología' in categories)
 
 
 	def test_special_caracters(self):
 		tags = [u'Afganistán']
 		categories = Categorizer(tags).get_or_else()
 		self.assertIsNotNone(categories)
-		print categories
 		self.assertTrue(len(categories) > 0)
+
+	def test_not_defined_category(self):
+		tags = ['religión']
+		categories = Categorizer(tags).get_or_else()
+		self.assertIsNotNone(categories)
+		print categories
+		self.assertTrue(len(categories) == 1)
+		self.assertEquals(categories[0] == 'interés general')
+
 
 if __name__ == '__main__':
 	unittest.main()
