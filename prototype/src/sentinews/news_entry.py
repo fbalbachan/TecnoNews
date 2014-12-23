@@ -10,6 +10,8 @@ import traceback
 
 'Struct class to contain the news information'
 
+logger = get_logger('tecnonews')
+
 
 class NewsEntry(object):
     def __init__(self, title, content, tags, source, url=None, categories=None):

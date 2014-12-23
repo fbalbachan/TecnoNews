@@ -22,21 +22,22 @@ class TecnoNews(object):
         logger = get_logger('tecnonews')
         entries =  NewsCrawler().crawl_all()
         logger.info("Entries to publish: %s" % len(entries))
+
         for entry in entries:
-            entry.set_analisys_info()
             self._process(entry)
         logger.info("Done.")
 
     def _process(self, entry):
         try:
+            entry.set_analisys_info()
             c = NewsRewriter(entry)
-            logger.info("<Tecnonews><_process> publishing note: " + entry.source)
+            logger.info('<Tecnonews> <_process> publishing note: ' + entry.source)
             try:
                 # c.rewrite_title()
                 c.rewrite_content()
                 c.publish()
             except Exception, e:
-                logger.error("<Tecnonews><_process> rewriting fail: %s " % (entry.title))
+                logger.error("<Tecnonews> <_process> rewriting fail: %s " % (entry.title))
 
         except Exception, e:
             logger.info(traceback.format_exc())
