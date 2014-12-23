@@ -25,7 +25,6 @@ class NewsCrawler(object):
         "elpais": ElPaisCrawler}
     
 
-
   def _cursor_start(self):
     db = MongoConnector.get_instance()
     if db['system']['namespaces'].find({'name': 'sentinews.feeds'}).count() == 0:  

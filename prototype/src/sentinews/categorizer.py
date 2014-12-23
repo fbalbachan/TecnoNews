@@ -28,8 +28,8 @@ class Categorizer(object):
 
 	def get_or_else(self):
 		
-		return self.categories if self.categories is not None else ['interés general']
-
+		return self.categories if self.categories is not None else []
+                
 
 	def __create_categories(self):
 		categories = Set([])
@@ -43,6 +43,6 @@ class Categorizer(object):
 							categories.add('internacionales')
 						if unidecode(lelement).find(unidecode(ltag)) > -1:
 							categories.add(category)
-		else:
-			categories.add('interés general')
+		#else:
+		#	categories.add('interes_general')
 		return categories
