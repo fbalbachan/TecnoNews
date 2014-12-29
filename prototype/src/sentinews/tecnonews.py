@@ -13,10 +13,8 @@ class TecnoNews(object):
     def __init__(self):
       self.service = NewsEntriesService()
 
-
     def test(self):
       logger.info("OKOK")
-
 
     def run(self):
         logger = get_logger('tecnonews')

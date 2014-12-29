@@ -29,10 +29,9 @@ class CNNCrawler:
     def _filter_entries(self, entries):
         ''' Filter entries that already exist in the DB,
             we dont want to parse them again. '''
-        
         service = NewsEntriesService()
         list_entries = [entry for entry in entries 
-            if len(service.get_list({'title': unicode(entry.title)})) == 0]
+            if len(service.get_list({'url': unicode(entry.link)})) == 0]
         return list_entries
 
     def _filter_by_tag(self, news_entries):
