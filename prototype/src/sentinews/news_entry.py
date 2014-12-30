@@ -10,6 +10,8 @@ import traceback
 
 'Struct class to contain the news information'
 
+logger = get_logger('tecnonews')
+
 
 class NewsEntry(object):
     def __init__(self, title, content, tags, source, url=None, categories=None):
@@ -100,9 +102,9 @@ class NewsEntry(object):
             ranked_entities_list = self.rank_of_entities()
         except Exception, e:
             logger = get_logger('tecnonews')
-            logger.error("NewsEntry most_relevant_entities :" + e.message)
-            logger.error("NewsEntry most_relevant_entities :" + traceback.format_exc())
-            # If we have an error geting the rank list just return empty relevant entities
+            logger.error("<NewsEntry> <most_relevant_entities>")
+            logger.error(traceback.format_exc())
+            # If we have an error getting the rank list just return empty relevant entities
             return []
 
         entities_classification = []

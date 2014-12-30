@@ -16,32 +16,27 @@ from datetime import datetime
 
 
 class NewsCrawler(object):
+    def __init__(self):
+        self.service = FeedService()
+        self._cursor_start()
+        self.crawlers_by_id = {
+            "cnn_spanish": CNNCrawler, "euronews": EuroNewsCrawler,
+            "elpais": ElPaisCrawler}
 
-  def __init__(self):
-    self.service = FeedService()
-    self._cursor_start()
-    self.crawlers_by_id = {
-        "cnn_spanish": CNNCrawler, "euronews": EuroNewsCrawler,
-        "elpais": ElPaisCrawler}
-    
+    def _cursor_start(self):
+        db = MongoConnector.get_instance()
+        if db['system']['namespaces'].find({'name': 'sentinews.feeds'}).count() == 0:
+            self.service.save(Feed('cnn_spanish', 'http://cnnespanol.cnn.com/feed/',
+                                   datetime.utcnow()))
+            self.service.save(Feed('euronews', 'http://es.euronews.com/noticias/boletin/',
+                                   datetime.utcnow()))
+            self.service.save(Feed('elpais', 'http://elpais.com/tag/fecha/hoy',
+                                   datetime.utcnow()))
 
-
-  def _cursor_start(self):
-    db = MongoConnector.get_instance()
-    if db['system']['namespaces'].find({'name': 'sentinews.feeds'}).count() == 0:  
-      self.service.save(Feed('cnn_spanish', 'http://cnnespanol.cnn.com/feed/',
-        datetime.utcnow()))
-      self.service.save(Feed('euronews', 'http://es.euronews.com/noticias/boletin/',
-        datetime.utcnow()))
-      self.service.save(Feed('elpais','http://elpais.com/tag/fecha/hoy',
-        datetime.utcnow()))
-
-
-
-  def crawl_all(self):
-    entries = []
-    for feed in self.service.get_all():
-        crawler = self.crawlers_by_id[feed.id]()
-        news_entries = crawler.crawl()
-        entries.extend(news_entries)
-    return entries
+    def crawl_all(self):
+        entries = []
+        for feed in self.service.get_all():
+            crawler = self.crawlers_by_id[feed.id]()
+            news_entries = crawler.crawl()
+            entries.extend(news_entries)
+        return entries
