@@ -28,5 +28,6 @@ class NewsEntriesService(object):
 		"""
 		return [ NewsEntry(title=entry['title'], content=entry['content'], 
 			tags=entry['tags'], source=entry['source'], url=entry['url'],
-			categories=entry['categories'])
+			categories=entry['categories'], 
+			wp_id=entry['wp_id'] if 'wp-id' in entry else None)
 		for entry in self.news_entries.find(criteria)]
