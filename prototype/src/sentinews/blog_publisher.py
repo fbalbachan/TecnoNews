@@ -23,6 +23,6 @@ class BlogPublisher(object):
 		client = None
 		for host in entry.destination:
 			client = Client(host.host, host.user, host.password )
-			client.call(NewPost(post))
+			entry.wp_id = client.call(NewPost(post))
 
                 

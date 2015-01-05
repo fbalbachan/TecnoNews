@@ -14,7 +14,8 @@ logger = get_logger('tecnonews')
 
 
 class NewsEntry(object):
-    def __init__(self, title, content, tags, source, url=None, categories=None):
+    def __init__(self, title, content, tags, source, url=None, categories=None,
+        wp_id=None):
         self.title = title
         self.content = content
         self.clean_text = None
@@ -25,6 +26,7 @@ class NewsEntry(object):
         self.destination = None
         self.published_date = datetime.utcnow()
         self.url = url
+        self.wp_id = wp_id
         self.config = ConfigParser.ConfigParser()
         if self.categories is None:
             self.__setUp()
@@ -78,7 +80,8 @@ class NewsEntry(object):
                 'tags': self.safe_unicode_list(self.tags),
                 'source': self.source, 'categories': self.categories,
                 'entities': self.entities,
-                'published_date': self.published_date, 'url': self.url}
+                'published_date': self.published_date, 'url': self.url,
+                'wp_id': self.wp_id}
 
     def analyzed_paragraph(self):
         from src.model.paragraph.paragraphAnalyzer import ParagraphAnalyzer
