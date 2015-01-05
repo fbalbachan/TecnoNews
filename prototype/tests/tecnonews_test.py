@@ -9,14 +9,17 @@ import datetime
 from src.sentinews.news_crawler.cnn_parser import CNNParser
 import wikipedia as wk
 from src.sentinews.news_crawler.cnn_crawler import CNNCrawler
+import unittest
 
-''' Clase para testear una sola noticia end to end '''
+class TecnonewsTest(unittest.TestCase):
+	''' Clase para testear una sola noticia end to end '''
 
-link = "http://cnnespanol.cnn.com/2014/09/22/policia-investiga-ataques-racistas-contra-mario-balotelli-tras-un-tuit-del-futbolista/"
+	def test_end_2_end(self):
+		link = "http://cnnespanol.cnn.com/2014/09/22/policia-investiga-ataques-racistas-contra-mario-balotelli-tras-un-tuit-del-futbolista/"
 
-parser = CNNParser()
-news_entry = parser.parse(link)
-CNNCrawler()
-c = NewsRewriter(news_entry)
-c.rewrite()
-c.publish()
+		parser = CNNParser()
+		news_entry = parser.parse(link)
+		CNNCrawler()
+		c = NewsRewriter(news_entry)
+		#c.rewrite()
+		c.publish()
