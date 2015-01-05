@@ -24,7 +24,7 @@ class NewsEntry(object):
         self.source = source
         self.categories = categories
         self.destination = None
-        self.published_date = datetime.utcnow()
+        self.published_date = None
         self.url = url
         self.wp_id = wp_id
         self.config = ConfigParser.ConfigParser()

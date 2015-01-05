@@ -4,7 +4,7 @@ from src.sentinews.news_crawler.news_crawler import NewsCrawler
 from src.services.mongodb.news_entries_service import NewsEntriesService
 from src.utils.logger_utils import *
 import traceback
-import datetime
+from datetime import datetime
 
 logger = get_logger('tecnonews')
 
@@ -32,8 +32,10 @@ class TecnoNews(object):
             logger.info('<Tecnonews> <_process> publishing note: ' + entry.source)
             try:
                 # c.rewrite_title()
-                c.rewrite_content()
+                #c.rewrite_content()
                 c.publish()
+                entry.publish_date = datetime.utcnow()
+                entry.wp_id = c.rewritten_entry.wp_id
             except Exception, e:
                 logger.error("<Tecnonews> <_process> rewriting fail: %s " % (entry.title))
 
