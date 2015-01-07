@@ -28,6 +28,9 @@ class NewsEntry(object):
         self.url = url
         self.wp_id = wp_id
         self.config = ConfigParser.ConfigParser()
+        self.config.read('config')
+        self.wp_prefix_url = self.config.get('wordpress','url_post_base_path')
+
         if self.categories is None:
             self.__setUp()
 
@@ -38,7 +41,6 @@ class NewsEntry(object):
             self.entities = self.most_relevant_entities()
 
     def __setUp(self):
-        self.config.read('config')
         user_per_categories_file = self.config.get(
             'resources', 'user_per_categories')
         user_per_categories = unicode_csv_reader(open(user_per_categories_file, 'r'),
@@ -167,3 +169,8 @@ class NewsEntry(object):
                 str_text = text
 
         return str_text
+
+    @property 
+    def wp_url(self):
+        return self.wp_prefix_url + self.wp_id if self.wp_prefix_url is not None else ''
+
