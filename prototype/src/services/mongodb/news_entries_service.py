@@ -34,8 +34,22 @@ class NewsEntriesService(object):
 
 
 	def get_by_date_range(self, start=None, to=None, limit=None):
+		""" Retrieve a list of a news_entries by a given date UTC rage 
+		Parameters
+		----------
+		start: datetime
+			date to start
+		to: date
+			date to finish
+		"""
 		return self.get_list({'wp_id':{'$ne': None},'published_date': {'$gte':start, '$lte': to}}, limit)
 
 
 	def get_by_categories(self, categories, limit=None):
+		""" Retrieve a list of news_entries by a given categories array, at least one element would match
+		Parameters
+		----------
+		categories: list
+			list of searched categories
+		"""
 		return self.get_list({'wp_id':{'$ne': None}, 'categories':{'$in': categories}},limit)
