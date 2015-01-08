@@ -54,3 +54,20 @@ class NewsEntriesService(object):
 			list of searched categories
 		"""
 		return self.get_list({'wp_id':{'$ne': None}, 'categories':{'$in': categories}},limit)
+
+
+	def get_by_categories_date_range(self, start, to, categories, limit=None):
+		"""Retrieve a list of news entries by a given categories array and date range
+		Parameters
+		----------
+		start: date
+			date to start from
+		to: date
+			date to stop
+		categories: list
+			list of searched categories
+		"""
+		return self.get_list({'wp_id':{'$ne': None},
+		 'categories':{'$in': categories},
+		 'published_date': {'$gte':start, '$lte': to}},
+		 limit)
