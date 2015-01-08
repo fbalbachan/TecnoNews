@@ -29,7 +29,8 @@ class BlogPublisher(object):
 
 			post.content += '</ul>'
 		post.terms_names = {
-                  'category': entry.categories
+				'post_tag': entry.tags,
+                'category': entry.categories
 		}
 		post.post_status = 'publish'
 		client = None
