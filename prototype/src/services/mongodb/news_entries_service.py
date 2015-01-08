@@ -19,7 +19,7 @@ class NewsEntriesService(object):
 		pass
 
 
-	def get_list(self,criteria):
+	def get_list(self, criteria, limit=None):
 		""" Retrieve a list of new entries 
 		Parameters
 		----------
@@ -30,4 +30,12 @@ class NewsEntriesService(object):
 			tags=entry['tags'], source=entry['source'], url=entry['url'],
 			categories=entry['categories'], 
 			wp_id=entry['wp_id'] if 'wp_id' in entry else None)
-		for entry in self.news_entries.find(criteria)]
+		for entry in self.news_entries.find(criteria).limit(limit if limit is not None else 0)]
+
+
+	def get_by_date_range(self, start=None, to=None, limit=None):
+		return self.get_list({'wp_id':{'$ne': None},'published_date': {'$gte':start, '$lte': to}}, limit)
+
+
+	def get_by_categories(self, categories, limit=None):
+		return self.get_list({'wp_id':{'$ne': None}, 'categories':{'$in': categories}},limit)
