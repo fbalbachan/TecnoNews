@@ -1,33 +1,33 @@
 from connector import MongoConnector
 from src.sentinews.news_entry import NewsEntry
 
+
 class NewsEntriesService(object):
+    COLLECTION = 'news_entries'
 
-	COLLECTION = 'news_entries'
+    def __init__(self, mode=None):
+        self.db = MongoConnector.get_instance(mode)
+        self.news_entries = self.db[NewsEntriesService.COLLECTION]
 
-	def __init__(self, mode=None):
-		self.db = MongoConnector.get_instance(mode)
-		self.news_entries = self.db[NewsEntriesService.COLLECTION]
+    def save(self, news_entry):
+        """ this method returns the objectId assigned"""
 
-	def save(self,news_entry):
-		""" this method returns the objectId assigned"""
-
-		return self.news_entries.insert(news_entry.to_dict())
+        return self.news_entries.insert(news_entry.to_dict())
 
 
-	def delete(self,id):
-		pass
+    def delete(self, id):
+        pass
 
 
 	def get_list(self, criteria, limit=None):
-		""" Retrieve a list of new entries 
+        """ Retrieve a list of new entries
 		Parameters
 		----------
 		criteria: dict 
 			this is the object to use on mongodb find statement
 		"""
-		return [ NewsEntry(title=entry['title'], content=entry['content'], 
-			tags=entry['tags'], source=entry['source'], url=entry['url'],
+        return [NewsEntry(title=entry['title'], content=entry['content'],
+                          tags=entry['tags'], source=entry['source'], url=entry['url'],
 			categories=entry['categories'], 
 			wp_id=entry['wp_id'] if 'wp_id' in entry else None,
 			related=entry['related'] if 'related' in entry else None)

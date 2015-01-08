@@ -19,7 +19,7 @@ class NewsEntry(object):
         self.title = title
         self.content = content
         self.clean_text = None
-        self.entities = None
+        self.entities = entities
         self.tags = tags
         self.source = source
         self.categories = categories

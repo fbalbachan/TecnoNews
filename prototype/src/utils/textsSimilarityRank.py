@@ -1,6 +1,5 @@
 from src.utils.textDistance import TextDistance
 from src.utils.newsItem import NewsItem
-# import ConfigParser
 
 
 class TextSimilarityRank(object):

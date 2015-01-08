@@ -52,21 +52,51 @@ class TextDistance(object):
         else:
             return "%.2f" % similarity
 
-    @staticmethod
-    def relevant_entities_coincidence(newsItem1, newsItem2):
+
+    def relevant_entities_coincidence(self, newsItem1, newsItem2):
         from pprint import pprint
-        print "newsItem1.entities", pprint(newsItem1.entities[:5])
-        print "newsItem2.entities", pprint(newsItem2.entities[:5])
-        print '\n'
-        print "newsItem1.entities", pprint(newsItem1.entities)
-        print "newsItem2.entities", pprint(newsItem2.entities)
+        # import logging
+        # logger = logging.getLogger()
+        # logger.info("\ncomparing: ")
+        # logger.info("\t%s Entities:" % newsItem1.url)
+        # logger.info("\t%s", self._top_five(newsItem1.entities))
+        # logger.info("With:")
+        # logger.info("\t%s Entities:" % newsItem2.url)
+        # logger.info("\t%s", self._top_five(newsItem2.entities))
 
         coincidences_count = 0
-        for entity in newsItem1.entities[:5]:
+        for entity in self._top_five(newsItem1.entities):
 
-            coincidences = [e for e in newsItem2.entities[:5] if entity['name'] == e['name']
+            coincidences = [e for e in self._top_five(newsItem2.entities) if entity['name'] == e['name']
             and entity['semantic'] == e['semantic']]
             if len(coincidences) > 0:
                 coincidences_count += 1
 
         return coincidences_count
+
+    def _top_five(self, entities):
+        """
+        get the entities within the first 5 top scores levels
+        (include miltiple entities in with the same score as one level)
+        """
+        if len(entities) <= 0:
+            return []
+
+        current = entities[0]['score']
+        count = 1
+
+        top5entities = []
+
+        for idx, entity in enumerate(entities[1:]):
+            if entity['score'] != current:
+                if count == 5:
+                    top5entities = entities[:idx]
+                    break
+                else:
+                    count += 1
+                    current = entity['score']
+
+        if count < 5:
+            top5entities = entities
+
+        return top5entities
