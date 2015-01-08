@@ -11,6 +11,7 @@ import wikipedia as wk
 from src.sentinews.news_crawler.cnn_crawler import CNNCrawler
 import unittest
 from src.services.mongodb.news_entries_service import NewsEntriesService
+from bson.objectid import ObjectId
 
 class TecnonewsTest(unittest.TestCase):
 	''' Clase para testear una sola noticia end to end '''
@@ -25,6 +26,9 @@ class TecnonewsTest(unittest.TestCase):
 		self.news_entry = parser.parse(link2)
 		c = NewsRewriter(self.news_entry)
 		#c.rewrite()
+		#be carefull to have a news entry on the collection properly before start
+		c.rewritten_entry.related = [ObjectId('54ae64c6a95c24c432f8ac94') for i in range(0,2)]
+
 		c.publish()
 
 		self.news_entry.wp_id = c.rewritten_entry.wp_id
