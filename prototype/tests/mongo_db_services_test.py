@@ -100,6 +100,15 @@ class NewsEntryMongoServiceTest(unittest.TestCase):
 		news_list = self.service.get_list({'_id': self.news_id})
 		self.assertTrue(len(news_list[0].related) == 5)
 
+	def test_retrieve_list_by_date_range_plus_category(self):
+		categories= ['deporte']
+		start = datetime.utcnow() - timedelta(days=2)
+		to = datetime.utcnow()
+		news_list = self.service.get_by_categories_date_range(start,to,categories)
+		print 'new list ' + str(len(news_list))
+		self.assertIsNotNone(news_list)
+		self.assertTrue(len(news_list) == 1)
+
 
 if __name__ == '__main__':
 	unittest.main()
