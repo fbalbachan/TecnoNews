@@ -5,6 +5,7 @@ from src.services.mongodb.news_entries_service import NewsEntriesService
 from src.sentinews.news_entry import NewsEntry
 from datetime import datetime, timedelta
 from src.services.mongodb.connector import MongoConnector
+from bson.objectid import ObjectId
 
 
 class NewsEntryMongoServiceTest(unittest.TestCase):
@@ -17,7 +18,8 @@ class NewsEntryMongoServiceTest(unittest.TestCase):
 			self.db.drop_collection('news_entries')
 		self.news = NewsEntry(title=u'Diego ganó el prode', content=u'Reamente lo ganó. Aun laburando de ñoqui', 
 			tags=['deportes','salud', 'delito'],source='Euronews',
-			url="http://feed.clarin.com", wp_id='999')
+			url="http://feed.clarin.com", wp_id='999',
+			related=[ObjectId() for i in range(0,5)])
 		self.news.published_date = datetime.utcnow()
 		self.news_id = self.service.save(self.news)
 
@@ -44,7 +46,7 @@ class NewsEntryMongoServiceTest(unittest.TestCase):
 		
 
 	def test_retrieve_news_by_given_date(self):
-		"""there is an expected error regarding time difference btw creation and retrieve moment"""
+		#"""there is an expected error regarding time difference btw creation and retrieve moment"""
 		five_seconds = timedelta(seconds=5)
 		news_list = self.service.get_list({'published_date': {'$gte': self.news.published_date - five_seconds}})
 		self.assertIsNotNone(news_list)
@@ -85,12 +87,19 @@ class NewsEntryMongoServiceTest(unittest.TestCase):
 		self.assertIsNotNone(news_list)
 		self.assertTrue(len(news_list) > 0)
 
+
 	def test_retrieve_empty_list_by_category(self):
 		categories = ['internacional']
 		news_list = self.service.get_by_categories(categories=categories)
 		self.assertIsNotNone(categories)
 		self.assertTrue(len(news_list) == 0)
-		
+
+
+	def test_related_news(self):
+
+		news_list = self.service.get_list({'_id': self.news_id})
+		self.assertTrue(len(news_list[0].related) == 5)
+
 
 if __name__ == '__main__':
 	unittest.main()
