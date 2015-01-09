@@ -1,13 +1,15 @@
 # -*- coding:utf-8 -*-
 from src.utils.textDistance import TextDistance
-from src.sentinews.news_entry import NewsEntry
 import ConfigParser
 
 
 class RelatedNewsEntries(object):
-    def __init__(self, original, to_compare_news_entries):
+    def __init__(self, original, to_compare_news_entries=None):
         self.news_original = original
-        self.news_to_compare = to_compare_news_entries
+        if to_compare_news_entries is None:
+            self.load_news_entries(days=7)
+        else:
+            self.news_to_compare = to_compare_news_entries
         self.text_distance = TextDistance()
         self.stopwords = self.load_stopwords()
 
@@ -36,11 +38,23 @@ class RelatedNewsEntries(object):
             try:
                 u_text = unicode(text, 'utf-8', errors='ignore')
             except Exception, e:
-                logger = get_logger('tecnonews')
-                logger.info("NewsEntry safe_unicode :" + e.message)
                 u_text = text
 
         return u_text
+
+    def load_news_entries(self, days):
+        from datetime import datetime, timedelta
+        from src.services.mongodb.news_entries_service import NewsEntriesService
+
+        nes = NewsEntriesService()
+
+        fromDate = datetime.utcnow() - timedelta(days=days)
+        toDate = datetime.utcnow()
+
+        news_to_compare = nes.get_by_categories_date_range(fromDate=fromDate, toDate=toDate,
+                                                           categories=self.news_original.categories)
+
+        self.news_to_compare = news_to_compare
 
     def pre_process(self, news_entry):
         if not news_entry.clean_text:
@@ -114,77 +128,32 @@ class RelatedNewsEntries(object):
 
         return sorted(similarities, key=lambda x: x[0], reverse=True)
 
-
-
     def get_related(self):
-        original = self.news_original
 
-        # print "\n"
-        # print "Title distance:", original.title
-        #
-        # for result in tsr.get_title_distance_rank():
-        #     if float(result[0]) < 0.9:
-        #         print result[0], result[1].url
+        import logging
+        from logging.handlers import RotatingFileHandler
+        import logging.handlers
 
-        # print "\n"
-        # print "similarity lemmatized filename original:", original_file
-        # for result in tsr.get_similarity_rank_content_lemmatized():
-        #     print result[0], result[1].url
-        #
-        # print "\n"
-        # print "similarity original:", original.title
-        #
-        # for result in tsr.get_similarity_rank():
-        #     if float(result[0]) > 20.0:
-        #         print result[0], result[1].url
+        logging.basicConfig(level=logging.INFO, format='%(message)s')
 
-
-        # print "\n"
-        # print "similarity filename original WO stopwords lemmatized:", original_file
-        #
-        # for result in tsr.get_similarity_rank_clean_content_lemmatized():
-        #     print result[0], result[1].url
-
-        for result in tsr.get_similarity_rank_entities():
-            if result[0] > 1:
-                logger.info("%s %s %s" % (result[0], result[1].url, result[1].title))
-            else:
-                self.news_to_compare.remove(result[1])
-
-        # logger.info("similarity original WO stopwords")
-
-        for result in tsr.get_similarity_rank_cleaned():
-            if float(result[0]) > 20.0:
-                logger.info("%s %s %s" % (result[0], result[1].url, result[1].title))
-            else:
-                self.news_to_compare.remove(result[1])
-
-        logger.info("Title distance cleaned: %s" % original.title)
-        for result in tsr.get_title_distance_rank():
-            if float(result[0]) <= 0.9:
-                logger.info("%s %s %s" % (result[0], result[1].url, result[1].title))
-            else:
-                self.news_to_compare.remove(result[1])
-
-        logger.info("Original\n %s - %s %s" % (original.source, original.title, original.categories))
-        logger.info("\nrelated articles from different source:")
-
-
-        if len(self.news_to_compare) > 0:
-            for result in self.news_to_compare:
-                if self.safe_unicode(original.source) != self.safe_unicode(result.source):
-                    logger.info("\t With different source")
-                    logger.error("\t>>> %s %s" %  (result.url, result.title))
-        else:
-            logger.info("No one")
-
-
-    def get_related_human_frendly(self):
+        logger = logging.getLogger('Related News')
+        # logger.addHandler(logging.FileHandler('logs/related.log', 'a'))
+        logger.addHandler(RotatingFileHandler('logs/related.log', 'a',
+            maxBytes=5000000, backupCount=50))
+        logger.addHandler(logging.StreamHandler())
 
         final_result = []
         cleaned_original_title = ' '.join([w for w in self.news_original.title.split() if w not in self.stopwords])
 
+        logger.info("---------------")
+        logger.info("case: %s" % self.news_original.url)
+        logger.info("title: %s" % self.news_original.title)
+        logger.info("Number of news to search for a related: %s" % len(self.news_to_compare))
+
         for newsItem in self.news_to_compare:
+            if not newsItem.url:
+                continue
+
             logger.info("\ncase comparing to:")
             logger.info("\t%s" % newsItem.title)
             logger.info("\t%s\n" % newsItem.url)
@@ -219,8 +188,9 @@ class RelatedNewsEntries(object):
 
             logger.info("\t\tscore: %s" % score)
 
-        logger.info("---\n")
+        logger.info("---------------")
 
+        return final_result
 
 def save_test_data(original, to_compare):
     import pickle
@@ -234,34 +204,32 @@ def save_test_data(original, to_compare):
 
 if __name__ == "__main__":
     from src.services.mongodb.news_entries_service import NewsEntriesService
+    from datetime import datetime, timedelta
     import logging
     # from __future__ import print_function
 
-    logging.basicConfig(level=logging.INFO, format='%(message)s')
-    logger = logging.getLogger()
-    logger.addHandler(logging.FileHandler('related.log', 'a'))
+    # logging.basicConfig(level=logging.INFO, format='%(message)s')
+    # logger = logging.getLogger('Related News')
+    # logger.addHandler(logging.FileHandler('related.log', 'a'))
 
-    nes = NewsEntriesService()
-
-    news_to_compare = nes.get_last_n_days(1, ['internacionales'])
-
-    logger.info("Total Cases: %i" % len(news_to_compare))
-    for ntc in news_to_compare:
-        if not ntc.url:
-            continue
-            
-        logger.info("---------------")
-        original = ntc
-        logger.info("case: %s" % original.url)
-        logger.info("title: %s" % original.title)
-
-        # Find all in the same category in the last 5 days with different url
-        news_to_compare = nes.get_last_n_days(1, original.categories, original.url, base_date=original.published_date)
-
-        logger.info("Comparing to %s articles" % len(news_to_compare))
-        # print "len", len(news_to_compare)
-        tsr = RelatedNewsEntries(original, news_to_compare)
-
-        tsr.get_related_human_frendly()
-
-        logger.info("---------------")
+    # fromDate = datetime.now() - timedelta(days=1)
+    # toDate = datetime.now()
+    #
+    # news_to_compare = nes.get_by_categories_date_range(fromDate=fromDate, toDate=toDate,
+    #                                                    categories=['internacionales'])
+    #
+    # logger.info("Total Cases: %i" % len(news_to_compare))
+    # for ntc in news_to_compare:
+    #     if not ntc.url:
+    #         continue
+    #
+    #     logger.info("---------------")
+    #     original = ntc
+    #     logger.info("case: %s" % original.url)
+    #     logger.info("title: %s" % original.title)
+    #
+    #     tsr = RelatedNewsEntries(original)
+    #
+    #     tsr.get_related()
+    #
+    #     logger.info("---------------")

@@ -4,7 +4,6 @@ from src.sentinews.categorizer import Categorizer
 from src.sentinews.publisher_host import WPHost
 from src.utils.csvwrapper import unicode_csv_reader
 from unidecode import unidecode
-from datetime import datetime
 from src.utils.logger_utils import *
 import traceback
 
@@ -15,7 +14,7 @@ logger = get_logger('tecnonews')
 
 class NewsEntry(object):
     def __init__(self, title, content, tags, source, url=None, categories=None,
-        wp_id=None, related=None):
+        wp_id=None, related=[], entities=None, published_date=None):
         self.title = title
         self.content = content
         self.clean_text = None
@@ -24,7 +23,7 @@ class NewsEntry(object):
         self.source = source
         self.categories = categories
         self.destination = None
-        self.published_date = None
+        self.published_date = published_date
         self.url = url
         self.wp_id = wp_id
         self.related = related
@@ -40,6 +39,11 @@ class NewsEntry(object):
             self.clean_text = self.get_clean_text()
         if not self.entities:
             self.entities = self.most_relevant_entities()
+
+    def set_related_news(self, related_news_entries):
+        for news_entry in related_news_entries:
+            self.related.append(related_news_entries.wp_id)
+
 
     def __setUp(self):
         user_per_categories_file = self.config.get(
