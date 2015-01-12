@@ -44,7 +44,7 @@ class NewsEntry(object):
 
     def set_related_news(self, related_news_entries):
         for news_entry in related_news_entries:
-            self.related.append(related_news_entries.object_id)
+            self.related.append(news_entry.object_id)
 
 
     def __setUp(self):

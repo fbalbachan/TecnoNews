@@ -12,7 +12,7 @@ class LanguageFilter(object):
     def only_spanish_paragraph(self, text):
 
         content_es = ""
-        spanish_like_languages = ['es', 'pt', 'it', 'ca', 'fr']
+        spanish_like_languages = ['es']
         for paragraph in text.split('\n'):
             if self.filter.get_client_output_for(paragraph)[0] \
                     in spanish_like_languages:

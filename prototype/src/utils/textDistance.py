@@ -11,7 +11,7 @@ class TextDistance(object):
 
     def __init__(self):
         self.threshold = 90.00
-        self.valid_token_regex = re.compile(r"""[+-<>=]?\d+([/.,:]\d+)?[°%]?(x\d+)?|\w+([-/_\\]?\w+)?""", re.U)
+        self.valid_token_regex = re.compile(r"""[+-<>=]?\d+([/.,:']\d+)?[°%]?(x\d+)?|\w+([-/_\\]?\w+)?""", re.U)
         self.tokenizer_custom = nltk.tokenize.RegexpTokenizer(self.valid_token_regex)
 
     @staticmethod
@@ -67,8 +67,8 @@ class TextDistance(object):
         coincidences_count = 0
         for entity in self._top_five(newsItem1.entities):
 
-            coincidences = [e for e in self._top_five(newsItem2.entities) if entity['name'] == e['name']
-            and entity['semantic'] == e['semantic']]
+            coincidences = [e for e in self._top_five(newsItem2.entities) if entity['name'] == e['name']]
+            # and entity['semantic'] == e['semantic']]
             if len(coincidences) > 0:
                 coincidences_count += 1
 
