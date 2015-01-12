@@ -46,7 +46,7 @@ class TecnoNews(object):
                 # c.rewrite_title()
                 c.rewrite_content()
                 c.publish()
-                entry.publish_date = datetime.utcnow()
+                entry.published_date = datetime.utcnow()
                 entry.wp_id = c.rewritten_entry.wp_id
             except Exception, e:
                 logger.error("<Tecnonews> <_process> rewriting fail: %s " % (entry.title))

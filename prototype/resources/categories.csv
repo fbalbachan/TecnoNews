@@ -1,13 +1,13 @@
 salud,medicina,farmacia,ambient,drogas,,,,
 economía,economia,industria,trabajo,negocio,empresa,finanza,pobreza,comercio,importacion,exportacion,consumo,venta,mercado,tarifa,,
 política,politica,eleccion,legisla,ministerio,poder,gobierno,,
-entretenimiento,cine,celebridad,espectaculo,evento,festival,television,musica
+espectáculos,entretenimiento,cine,celebridad,espectaculo,evento,festival,television,musica
 turismo,viaje,,,,,,
 tecnología,gadget,aplicacion,internet,tecnologia,informat,,,
 cultura,arte,literatura,,,,,
 ciencia,espacial,espaciales,,,,,
 deporte,futbol,equipo,baloncesto,automovilismo,,,,
-interés general,galeria,interes,sociedad,,,,
+interés general,galeria,interes,sociedad,curiosidad,,,
 internacionales,{nombre_pais},,,,,,,
 policiales,crimen,delito,policia,drogas,accidente,robo,inseguridad,,
 clima,tiempo,sismo,terremoto,inundaciones,lluvia,tormenta,huracan,inundacion,tornado,nieve

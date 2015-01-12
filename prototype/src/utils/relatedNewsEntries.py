@@ -2,6 +2,7 @@
 from src.utils.textDistance import TextDistance
 import ConfigParser
 
+related_logger = None
 
 class RelatedNewsEntries(object):
     def __init__(self, original, to_compare_news_entries=None):
@@ -17,6 +18,26 @@ class RelatedNewsEntries(object):
         self.pre_process(self.news_original)
         for news in self.news_to_compare:
             self.pre_process(news)
+
+        self.get_logger()
+
+    @staticmethod
+    def get_logger():
+        global related_logger
+        if not related_logger:
+            import logging
+            from logging.handlers import RotatingFileHandler
+            import logging.handlers
+
+            logging.basicConfig(level=logging.INFO, format='%(message)s')
+
+            logger = logging.getLogger('Related News')
+            # logger.addHandler(logging.FileHandler('logs/related.log', 'a'))
+            logger.addHandler(RotatingFileHandler('logs/related.log', 'a',
+                maxBytes=5000000, backupCount=50))
+            logger.addHandler(logging.StreamHandler())
+            related_logger = logger
+        return related_logger
 
     def load_stopwords(self):
         stopwords = []
@@ -122,7 +143,7 @@ class RelatedNewsEntries(object):
         similarities = []
         cleaned_original_title = ' '.join([w for w in self.news_original.title.split() if w not in self.stopwords])
         for newsItem in self.news_to_compare:
-            cleaned_title = ' '.join([w for w in newsItem.title.split() if w not in self.stopwords])
+            cleaned_title = ' '.join([w.lower() for w in newsItem.title.split() if w not in self.stopwords])
             similarity = self.text_distance.title_distance(cleaned_original_title, cleaned_title)
             similarities.append([similarity, newsItem])
 
@@ -130,43 +151,31 @@ class RelatedNewsEntries(object):
 
     def get_related(self):
 
-        import logging
-        from logging.handlers import RotatingFileHandler
-        import logging.handlers
-
-        logging.basicConfig(level=logging.INFO, format='%(message)s')
-
-        logger = logging.getLogger('Related News')
-        # logger.addHandler(logging.FileHandler('logs/related.log', 'a'))
-        logger.addHandler(RotatingFileHandler('logs/related.log', 'a',
-            maxBytes=5000000, backupCount=50))
-        logger.addHandler(logging.StreamHandler())
-
         final_result = []
         cleaned_original_title = ' '.join([w for w in self.news_original.title.split() if w not in self.stopwords])
 
-        logger.info("---------------")
-        logger.info("case: %s" % self.news_original.url)
-        logger.info("title: %s" % self.news_original.title)
-        logger.info("Number of news to search for a related: %s" % len(self.news_to_compare))
+        related_logger.info("---------------")
+        related_logger.info("case: %s" % self.news_original.url)
+        related_logger.info("title: %s" % self.news_original.title)
+        related_logger.info("Number of news to search for a related: %s" % len(self.news_to_compare))
 
         for newsItem in self.news_to_compare:
             if not newsItem.url:
                 continue
 
-            logger.info("\ncase comparing to:")
-            logger.info("\t%s" % newsItem.title)
-            logger.info("\t%s\n" % newsItem.url)
-            logger.info("\tmetrics:")
+            related_logger.info("\ncase comparing to:")
+            related_logger.info("\t%s" % newsItem.title)
+            related_logger.info("\t%s\n" % newsItem.url)
+            related_logger.info("\tmetrics:")
             entities_coincidence = self.text_distance.relevant_entities_coincidence(self.news_original, newsItem)
-            logger.info("\t\tEntities coincidence %s" % entities_coincidence)
+            related_logger.info("\t\tEntities coincidence %s" % entities_coincidence)
             similarity = self.text_distance.similarity(self.news_original.clean_text, newsItem.clean_text)
-            logger.info("\t\tContet Similarity %s" % similarity)
+            related_logger.info("\t\tContet Similarity %s" % similarity)
 
             cleaned_title = ' '.join([w for w in newsItem.title.split() if w not in self.stopwords])
             title_distance = self.text_distance.title_distance(cleaned_original_title, cleaned_title)
 
-            logger.info("\t\tTitle Distance %s" % title_distance)
+            related_logger.info("\t\tTitle Distance %s" % title_distance)
 
             score = 0
             if entities_coincidence > 1:
@@ -186,9 +195,9 @@ class RelatedNewsEntries(object):
                 logger.info(">>>")
                 final_result.append(newsItem)
 
-            logger.info("\t\tscore: %s" % score)
+            related_logger.info("\t\tscore: %s" % score)
 
-        logger.info("---------------")
+        related_logger.info("---------------")
 
         return final_result
 
@@ -208,28 +217,29 @@ if __name__ == "__main__":
     import logging
     # from __future__ import print_function
 
-    # logging.basicConfig(level=logging.INFO, format='%(message)s')
-    # logger = logging.getLogger('Related News')
-    # logger.addHandler(logging.FileHandler('related.log', 'a'))
+    logging.basicConfig(level=logging.INFO, format='%(message)s')
+    logger = logging.getLogger('Related News')
+    logger.addHandler(logging.FileHandler('related.log', 'a'))
 
-    # fromDate = datetime.now() - timedelta(days=1)
-    # toDate = datetime.now()
-    #
-    # news_to_compare = nes.get_by_categories_date_range(fromDate=fromDate, toDate=toDate,
-    #                                                    categories=['internacionales'])
-    #
-    # logger.info("Total Cases: %i" % len(news_to_compare))
-    # for ntc in news_to_compare:
-    #     if not ntc.url:
-    #         continue
-    #
-    #     logger.info("---------------")
-    #     original = ntc
-    #     logger.info("case: %s" % original.url)
-    #     logger.info("title: %s" % original.title)
-    #
-    #     tsr = RelatedNewsEntries(original)
-    #
-    #     tsr.get_related()
-    #
-    #     logger.info("---------------")
+    fromDate = datetime.now() - timedelta(days=1)
+    toDate = datetime.now()
+
+    nes = NewsEntriesService()
+    news_to_compare = nes.get_by_categories_date_range(fromDate=fromDate, toDate=toDate,
+                                                       categories=['internacionales'])
+
+    logger.info("Total Cases: %i" % len(news_to_compare))
+    for ntc in news_to_compare:
+        if not ntc.url:
+            continue
+
+        logger.info("---------------")
+        original = ntc
+        logger.info("case: %s" % original.url)
+        logger.info("title: %s" % original.title)
+
+        tsr = RelatedNewsEntries(original)
+
+        tsr.get_related()
+        # tsr.get_similarity_rank_cleaned()
+        logger.info("---------------")
