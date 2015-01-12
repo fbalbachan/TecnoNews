@@ -22,7 +22,7 @@ class BlogPublisher(object):
 			post.content += "<br><br><strong> La misma noticia en otras coberturas:</strong>"
 			post.content += '<ul>'
 			for related_news_id in entry.related:
-				unmarshalled_news = news_service.get_list({'wp_id': related_news_id})
+				unmarshalled_news = news_service.get_list({'_id': related_news_id})
 				if len(unmarshalled_news) == 1:
 					post.content += '<li><a href="' + unmarshalled_news[0].wp_url + '">'
 					post.content += unmarshalled_news[0].title +'</a></li>'

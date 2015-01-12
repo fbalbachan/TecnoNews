@@ -30,7 +30,8 @@ class NewsEntriesService(object):
                           published_date=entry['published_date'],
                           entities=entry['entities'],
                           wp_id=entry['wp_id'] if 'wp_id' in entry else None,
-                          related=entry['related'] if 'related' in entry else None)
+                          related=entry['related'] if 'related' in entry else None,
+                          object_id=entry['_id'])
                 for entry in self.news_entries.find(criteria).limit(limit if limit is not None else 0)]
 
 

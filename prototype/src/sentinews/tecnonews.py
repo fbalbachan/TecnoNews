@@ -44,8 +44,8 @@ class TecnoNews(object):
             logger.info('<Tecnonews> <_process> publishing note: ' + entry.source)
             try:
                 # c.rewrite_title()
-                #c.rewrite_content()
-                # c.publish()
+                c.rewrite_content()
+                c.publish()
                 entry.publish_date = datetime.utcnow()
                 entry.wp_id = c.rewritten_entry.wp_id
             except Exception, e:
@@ -55,7 +55,7 @@ class TecnoNews(object):
             logger.info(traceback.format_exc())
 
         # Always save
-        # self.service.save(entry)
+        self.service.save(entry)
 
 
 

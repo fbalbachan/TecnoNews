@@ -105,9 +105,21 @@ class NewsEntryMongoServiceTest(unittest.TestCase):
 		start = datetime.utcnow() - timedelta(days=2)
 		to = datetime.utcnow()
 		news_list = self.service.get_by_categories_date_range(start,to,categories)
-		print 'new list ' + str(len(news_list))
 		self.assertIsNotNone(news_list)
 		self.assertTrue(len(news_list) == 1)
+
+	def test_retrieve_list_with_object_id(self):
+		news_list = self.service.get_list({'title': 'Diego ganó el prode'})
+		self.assertIsNotNone(news_list)
+		self.assertTrue(len(news_list) == 1)
+		self.assertTrue(isinstance(news_list[0].object_id, ObjectId))
+		for related_new_object_id in news_list[0].related:
+			self.assertTrue(isinstance(related_new_object_id, ObjectId))
+
+		unmarshalled_news = self.service.get_list({'_id': news_list[0].object_id})
+		self.assertIsNotNone(unmarshalled_news)
+		self.assertTrue(len(unmarshalled_news) == 1)
+		self.assertEquals(unmarshalled_news[0].title, self.news.title )
 
 
 if __name__ == '__main__':
