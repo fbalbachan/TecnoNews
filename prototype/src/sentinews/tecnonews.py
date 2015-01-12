@@ -55,6 +55,9 @@ class TecnoNews(object):
             logger.info(traceback.format_exc())
 
         # Always save
+        logger.info("<<<")
+        logger.info("entry : %s" % entry.title)
+        logger.info("relateds: %s" % entry.related)
         self.service.save(entry)
 
 

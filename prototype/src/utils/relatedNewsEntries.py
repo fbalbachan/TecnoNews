@@ -36,6 +36,7 @@ class RelatedNewsEntries(object):
             logger.addHandler(RotatingFileHandler('logs/related.log', 'a',
                 maxBytes=5000000, backupCount=50))
             logger.addHandler(logging.StreamHandler())
+            logger.propagate = False
             related_logger = logger
         return related_logger
 
@@ -160,15 +161,18 @@ class RelatedNewsEntries(object):
         related_logger.info("Number of news to search for a related: %s" % len(self.news_to_compare))
 
         for newsItem in self.news_to_compare:
-            if not newsItem.url:
+            if not newsItem.url or newsItem.url == self.news_original.url:
                 continue
 
+            related_logger.info("\ntitle: %s" % self.news_original.title)
             related_logger.info("\ncase comparing to:")
             related_logger.info("\t%s" % newsItem.title)
             related_logger.info("\t%s\n" % newsItem.url)
             related_logger.info("\tmetrics:")
+
             entities_coincidence = self.text_distance.relevant_entities_coincidence(self.news_original, newsItem)
             related_logger.info("\t\tEntities coincidence %s" % entities_coincidence)
+
             similarity = self.text_distance.similarity(self.news_original.clean_text, newsItem.clean_text)
             related_logger.info("\t\tContet Similarity %s" % similarity)
 
@@ -193,9 +197,14 @@ class RelatedNewsEntries(object):
 
             if score >= 40:
                 logger.info(">>>")
-                final_result.append(newsItem)
+                final_result.append([newsItem, score])
+                related_logger.info("%s %s" % (newsItem.title, score))
 
             related_logger.info("\t\tscore: %s" % score)
+
+        related_logger.info("asociated :")
+        for r in final_result:
+            related_logger.info("%s %s" % (r[0].title, r[1]))
 
         related_logger.info("---------------")
 

@@ -45,12 +45,12 @@ class TextDistance(object):
         try:
             similarity = (1+B_2) * ((unigrams * bigrams) / ((B_2 * unigrams) + bigrams))
         except ZeroDivisionError:
-            similarity = "0.00"
+            similarity = 0.00
 
         if numpy.isnan(similarity):
-            return "0.00"
+            return 0
         else:
-            return "%.2f" % similarity
+            return similarity
 
 
     def relevant_entities_coincidence(self, newsItem1, newsItem2):

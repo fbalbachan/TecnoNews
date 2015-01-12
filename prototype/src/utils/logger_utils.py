@@ -5,6 +5,7 @@ from logging.handlers import RotatingFileHandler
 
 log_obj = None
 def get_logger(file):
+    #make it a dict and use it to check for diferent files
     global log_obj
     if not log_obj:
         logger    = logging.getLogger(file)
