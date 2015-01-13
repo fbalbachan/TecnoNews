@@ -93,6 +93,17 @@ class RelatedNewsEntries(object):
 
         return sorted(similarities, key=lambda x: x[0], reverse=True)
 
+    def get_related_entities_top_5_not_in_list(self, same_news):
+        same_news_ids = [enty.object_id for enty in same_news]
+        related = [] #Array of ids
+        for newsItem in self.news_to_compare:
+            coincidence = self.text_distance.relevant_entities_coincidence(self.news_original, newsItem)
+            if coincidence >= 2 and newsItem.object_id not in same_news_ids:
+                related.append([coincidence, newsItem])
+
+        sorted_related_top5 = sorted(related, key=lambda x: x[0], reverse=True)[:5]
+        return [x[1] for x in sorted_related_top5]
+
     def get_similarity_rank_original(self):
         similarities = []
 

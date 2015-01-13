@@ -44,15 +44,10 @@ class NewsEntry(object):
             self.entities = self.most_relevant_entities()
 
     def set_related_news(self, related_news_entries):
-        self.related = []
-        for news_entry in related_news_entries:
-            self.related.append(copy.deepcopy(news_entry.object_id))
+        self.related = [entry.object_id for entry in related_news_entries]
 
     def set_news_versions(self, other_versions):
-        self.versions = []
-        for news_entry in other_versions:
-            self.versions.append(news_entry.object_id)
-
+        self.versions = [entry.object_id for entry in other_versions]
 
     def __setUp(self):
         user_per_categories_file = self.config.get(
