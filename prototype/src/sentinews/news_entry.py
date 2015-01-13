@@ -46,8 +46,7 @@ class NewsEntry(object):
     def set_related_news(self, related_news_entries):
         self.related = []
         for news_entry in related_news_entries:
-            self.related.append(news_entry.object_id)
-
+            self.related.append(copy.deepcopy(news_entry.object_id))
 
     def set_news_versions(self, other_versions):
         self.versions = []

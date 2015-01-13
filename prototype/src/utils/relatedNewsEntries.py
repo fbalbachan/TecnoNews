@@ -174,7 +174,7 @@ class RelatedNewsEntries(object):
             related_logger.info("\t\tEntities coincidence %s" % entities_coincidence)
 
             similarity = self.text_distance.similarity(self.news_original.clean_text, newsItem.clean_text)
-            related_logger.info("\t\tContet Similarity %s" % similarity)
+            related_logger.info("\t\tContent Similarity %s" % similarity)
 
             cleaned_title = ' '.join([w for w in newsItem.title.split() if w not in self.stopwords])
             title_distance = self.text_distance.title_distance(cleaned_original_title, cleaned_title)
@@ -185,18 +185,20 @@ class RelatedNewsEntries(object):
             if entities_coincidence > 1:
                 score += 30
 
-            if title_distance <= 0.9:
+            if 0.6 < title_distance <= 0.95:
                 score += 20
-
-            if 5.0 <= similarity < 30:
-                score += 10
-            elif 30.0 <= similarity < 50:
+            elif title_distance <= 0.6:
                 score += 30
-            elif 50.0 <= similarity <= 100:
+
+            if 5.0 <= similarity < 10:
+                score += 10
+            elif 10.0 <= similarity < 30:
+                score += 30
+            elif 30.0 <= similarity <= 100:
                 score += 50
 
             if score >= 40:
-                logger.info(">>>")
+                related_logger.info(">>>")
                 final_result.append([newsItem, score])
                 related_logger.info("%s %s" % (newsItem.title, score))
 
@@ -208,7 +210,7 @@ class RelatedNewsEntries(object):
 
         related_logger.info("---------------")
 
-        return final_result
+        return [x[0] for x in final_result]
 
 def save_test_data(original, to_compare):
     import pickle

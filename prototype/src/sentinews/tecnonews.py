@@ -31,11 +31,14 @@ class TecnoNews(object):
         try:
             entry.set_analisys_info()
             try:
+                entry.related = []# hack to avoid side effect wich is setting all entries
+                #with the same related
                 tsr = RelatedNewsEntries(entry)
                 other_versions = tsr.get_other_versions()
                 entry.set_news_versions(other_versions)
                 #TODO populate related array
                 entry.related = None
+                logger.info("After entry.related : %s" % entry.related)
                 logger.info("<Tecnonews> <_process> related_news number %s" % len(related_news))
             except Exception, e:
                 logger.error("<Tecnonews> <_process> related_news %s" % entry.title)
@@ -46,8 +49,8 @@ class TecnoNews(object):
             logger.info('<Tecnonews> <_process> publishing note: ' + entry.source)
             try:
                 # c.rewrite_title()
-                c.rewrite_content()
-                c.publish()
+                # c.rewrite_content()
+                # c.publish()
                 entry.published_date = datetime.utcnow()
                 entry.wp_id = c.rewritten_entry.wp_id
             except Exception, e:
@@ -60,7 +63,7 @@ class TecnoNews(object):
         logger.info("<<<")
         logger.info("entry : %s" % entry.title)
         logger.info("relateds: %s" % entry.related)
-        self.service.save(entry)
+        # self.service.save(entry)
 
 
 
