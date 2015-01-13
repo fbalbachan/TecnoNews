@@ -32,8 +32,10 @@ class TecnoNews(object):
             entry.set_analisys_info()
             try:
                 tsr = RelatedNewsEntries(entry)
-                related_news = tsr.get_related()
-                entry.set_related_news(related_news)
+                other_versions = tsr.get_other_versions()
+                entry.set_news_versions(other_versions)
+                #TODO populate related array
+                entry.related = None
                 logger.info("<Tecnonews> <_process> related_news number %s" % len(related_news))
             except Exception, e:
                 logger.error("<Tecnonews> <_process> related_news %s" % entry.title)

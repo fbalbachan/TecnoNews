@@ -150,7 +150,7 @@ class RelatedNewsEntries(object):
 
         return sorted(similarities, key=lambda x: x[0], reverse=True)
 
-    def get_related(self):
+    def get_other_versions(self):
 
         final_result = []
         cleaned_original_title = ' '.join([w for w in self.news_original.title.split() if w not in self.stopwords])
@@ -249,6 +249,6 @@ if __name__ == "__main__":
 
         tsr = RelatedNewsEntries(original)
 
-        tsr.get_related()
+        tsr.get_other_versions()
         # tsr.get_similarity_rank_cleaned()
         logger.info("---------------")

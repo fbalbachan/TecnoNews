@@ -19,7 +19,8 @@ class NewsEntryMongoServiceTest(unittest.TestCase):
 		self.news = NewsEntry(title=u'Diego ganó el prode', content=u'Reamente lo ganó. Aun laburando de ñoqui', 
 			tags=['deportes','salud', 'delito'],source='Euronews',
 			url="http://feed.clarin.com", wp_id='999',
-			related=[ObjectId() for i in range(0,5)])
+			related=[ObjectId() for i in range(0,5)],
+			versions=[ObjectId() for i in range(0,3)])
 		self.news.published_date = datetime.utcnow()
 		self.news_id = self.service.save(self.news)
 
@@ -115,6 +116,10 @@ class NewsEntryMongoServiceTest(unittest.TestCase):
 		self.assertTrue(isinstance(news_list[0].object_id, ObjectId))
 		for related_new_object_id in news_list[0].related:
 			self.assertTrue(isinstance(related_new_object_id, ObjectId))
+
+		self.assertEquals(len(news_list[0].versions), 3)
+		for version_id in news_list[0].versions:
+			self.assertTrue(isinstance(version_id, ObjectId))
 
 		unmarshalled_news = self.service.get_list({'_id': news_list[0].object_id})
 		self.assertIsNotNone(unmarshalled_news)

@@ -15,7 +15,7 @@ logger = get_logger('tecnonews')
 class NewsEntry(object):
     def __init__(self, title, content, tags, source, url=None, categories=None,
         wp_id=None, related=[], entities=None, published_date=None,
-        object_id=None):
+        object_id=None, versions=None):
         self.title = title
         self.content = content
         self.clean_text = None
@@ -29,6 +29,7 @@ class NewsEntry(object):
         self.wp_id = wp_id
         self.related = related
         self.object_id = object_id
+        self.versions = versions
         self.config = ConfigParser.ConfigParser()
         self.config.read('config')
         self.wp_prefix_url = self.config.get('wordpress','url_post_base_path')
@@ -43,8 +44,15 @@ class NewsEntry(object):
             self.entities = self.most_relevant_entities()
 
     def set_related_news(self, related_news_entries):
+        self.related = []
         for news_entry in related_news_entries:
             self.related.append(news_entry.object_id)
+
+
+    def set_news_versions(self, other_versions):
+        self.versions = []
+        for news_entry in other_versions:
+            self.versions.append(news_entry.object_id)
 
 
     def __setUp(self):
@@ -90,7 +98,8 @@ class NewsEntry(object):
                 'source': self.source, 'categories': self.categories,
                 'entities': self.entities,
                 'published_date': self.published_date, 'url': self.url,
-                'wp_id': self.wp_id, 'related': self.related}
+                'wp_id': self.wp_id, 'related': self.related,
+                'versions': self.versions}
 
     def analyzed_paragraph(self):
         from src.model.paragraph.paragraphAnalyzer import ParagraphAnalyzer
