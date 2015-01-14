@@ -41,6 +41,7 @@ class TecnoNews(object):
             except Exception, e:
                 logger.error("<Tecnonews> <_process> related_news %s" % entry.title)
                 logger.error("<Tecnonews> <_process> related_news %s" % traceback.format_exc())
+                logger.info(traceback.format_exc())
 
             c = NewsRewriter(entry)
 
@@ -53,7 +54,7 @@ class TecnoNews(object):
                 entry.wp_id = c.rewritten_entry.wp_id
             except Exception, e:
                 logger.error("<Tecnonews> <_process> rewriting fail: %s " % (entry.title))
-
+                logger.info(traceback.format_exc())
         except Exception, e:
             logger.info(traceback.format_exc())
 
