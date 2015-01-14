@@ -26,7 +26,9 @@ class NewsRewriter(object):
         self.rewritten_entry = NewsEntry(original_entry.title,
                                          original_entry.content,
                                          original_entry.tags,
-                                         original_entry.source)
+                                         original_entry.source,
+                                         related=original_entry.related,
+                                         versions=original_entry.versions)
 
     def _get_alt_text(self, im, h):
         im2 = [(x.split('/')[-1].split('.')[0], x) for x in im]

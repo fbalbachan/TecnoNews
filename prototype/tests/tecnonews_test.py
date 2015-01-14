@@ -23,20 +23,25 @@ class TecnonewsTest(unittest.TestCase):
 		link = "http://cnnespanol.cnn.com/2014/09/22/policia-investiga-ataques-racistas-contra-mario-balotelli-tras-un-tuit-del-futbolista/"
 		link2 = 'http://cnnespanol.cnn.com/2015/01/06/una-familia-llora-la-perdida-de-siete-seres-queridos-en-el-vuelo-de-airasia/'
 		parser = CNNParser()
-		self.news_entry = parser.parse(link2)
-		c = NewsRewriter(self.news_entry)
-		#c.rewrite()
-		#be carefull to have a news entry on the collection properly before start
 		related_news = self.service.get_list({},1)
-		self.assertIsNotNone(related_news)
 		print 'len: ' + str(len(related_news))
 		self.assertTrue(len(related_news) == 1)
-		c.rewritten_entry.set_news_versions(related_news)
-		c.rewritten_entry.set_related_news(related_news)
-		c.publish()
+
+		self.assertIsNotNone(related_news)
+
+		self.news_entry = parser.parse(link2)
 
 		self.news_entry.set_related_news(related_news)
 		self.news_entry.set_news_versions(related_news)
+
+		c = NewsRewriter(self.news_entry)
+		self.assertTrue(len(c.rewritten_entry.versions) > 0)
+		self.assertTrue(len(c.rewritten_entry.related) > 0)
+		#c.rewrite()
+		#be carefull to have a news entry on the collection properly before start
+		
+		c.publish()
+
 		self.news_entry.wp_id = c.rewritten_entry.wp_id
 		self.object_id = self.service.save(self.news_entry)		
 		
