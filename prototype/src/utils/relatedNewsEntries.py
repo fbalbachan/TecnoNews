@@ -32,7 +32,6 @@ class RelatedNewsEntries(object):
             logging.basicConfig(level=logging.INFO, format='%(message)s')
 
             logger = logging.getLogger('Related News')
-            # logger.addHandler(logging.FileHandler('logs/related.log', 'a'))
             logger.addHandler(RotatingFileHandler('logs/related.log', 'a',
                 maxBytes=5000000, backupCount=50))
             logger.addHandler(logging.StreamHandler())
@@ -161,6 +160,7 @@ class RelatedNewsEntries(object):
 
         return sorted(similarities, key=lambda x: x[0], reverse=True)
 
+
     def get_other_versions(self):
 
         final_result = []
@@ -187,7 +187,8 @@ class RelatedNewsEntries(object):
             similarity = self.text_distance.similarity(self.news_original.clean_text, newsItem.clean_text)
             related_logger.info("\t\tContent Similarity %s" % similarity)
 
-            cleaned_title = ' '.join([w for w in newsItem.title.split() if w not in self.stopwords])
+            # TODO: Move this to a method
+            cleaned_title = ' '.join([w for w in newsItem.title.split() if w.lower() not in self.stopwords])
             title_distance = self.text_distance.title_distance(cleaned_original_title, cleaned_title)
 
             related_logger.info("\t\tTitle Distance %s" % title_distance)
