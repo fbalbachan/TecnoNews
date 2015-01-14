@@ -221,8 +221,9 @@ class RelatedNewsEntries(object):
             related_logger.info("%s %s" % (r[0].title, r[1]))
 
         related_logger.info("---------------")
+        sorted_final = sorted(final_result, key=lambda x: x[1], reverse=True)
 
-        return [x[0] for x in final_result]
+        return [x[0] for x in sorted_final]
 
 def save_test_data(original, to_compare):
     import pickle

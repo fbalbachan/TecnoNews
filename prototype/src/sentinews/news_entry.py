@@ -130,7 +130,7 @@ class NewsEntry(object):
         return entities_classification
 
     def get_clean_text(self):
-        return ' '.join([w for w in self.content.split() if w not in self.load_stopwords()])
+        return ' '.join([w for w in self.content.split() if w.lower() not in self.load_stopwords()])
 
     def load_stopwords(self):
         import ConfigParser
