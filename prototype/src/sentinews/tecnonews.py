@@ -32,7 +32,7 @@ class TecnoNews(object):
             entry.set_analisys_info()
             try:
                 tsr = RelatedNewsEntries(entry)
-                other_versions = tsr.get_other_versions()
+                other_versions = tsr.get_other_versions_top_ten()
                 entry.set_news_versions(other_versions)
                 related = tsr.get_related_entities_top_5_not_in_list(other_versions)
                 entry.set_related_news(related)

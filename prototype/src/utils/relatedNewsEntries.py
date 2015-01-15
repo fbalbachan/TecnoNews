@@ -5,10 +5,12 @@ import ConfigParser
 related_logger = None
 
 class RelatedNewsEntries(object):
+    DAYS_IN_THE_PAST_TO_SEARCH = 5
+
     def __init__(self, original, to_compare_news_entries=None):
         self.news_original = original
         if to_compare_news_entries is None:
-            self.load_news_entries(days=7)
+            self.load_news_entries(days=DAYS_IN_THE_PAST_TO_SEARCH)
         else:
             self.news_to_compare = to_compare_news_entries
         self.text_distance = TextDistance()
@@ -160,6 +162,9 @@ class RelatedNewsEntries(object):
 
         return sorted(similarities, key=lambda x: x[0], reverse=True)
 
+    def get_other_versions_top_ten(self):
+        other_versions = self.get_other_versions()
+        return other_versions[:10]
 
     def get_other_versions(self):
 
