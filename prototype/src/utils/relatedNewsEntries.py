@@ -5,9 +5,10 @@ import ConfigParser
 related_logger = None
 
 class RelatedNewsEntries(object):
-    DAYS_IN_THE_PAST_TO_SEARCH = 5
 
     def __init__(self, original, to_compare_news_entries=None):
+        DAYS_IN_THE_PAST_TO_SEARCH = 5 #number of days to search
+
         self.news_original = original
         if to_compare_news_entries is None:
             self.load_news_entries(days=DAYS_IN_THE_PAST_TO_SEARCH)
