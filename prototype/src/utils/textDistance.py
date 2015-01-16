@@ -10,8 +10,7 @@ import numpy
 class TextDistance(object):
 
     def __init__(self):
-        self.threshold = 90.00
-        self.valid_token_regex = re.compile(r"""[+-<>=]?\d+([/.,:']\d+)?[°%]?(x\d+)?|\w+([-/_\\]?\w+)?""", re.U)
+        self.valid_token_regex = re.compile(r"""[a-záéíóúñäëïöüáàâéèêíìîóòôúùûãçêôõø]+""", re.U)
         self.tokenizer_custom = nltk.tokenize.RegexpTokenizer(self.valid_token_regex)
 
     @staticmethod
@@ -19,11 +18,10 @@ class TextDistance(object):
         return nltk.cluster.cosine_distance(numpy.array(x),
                                         numpy.array(y))
 
-    @staticmethod
-    def title_distance(title1, title2):
+    def title_distance(self, title1, title2):
         from nltk import jaccard_distance
-        word_set1 = set(title1.split())
-        word_set2 = set(title2.split())
+        word_set1 = set(self.tokenize(title1))
+        word_set2 = set(self.tokenize(title2))
         return jaccard_distance(word_set1, word_set2)
 
     def tokenize(self, text):
