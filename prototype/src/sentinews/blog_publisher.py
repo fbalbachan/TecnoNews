@@ -8,6 +8,7 @@ from src.sentinews.news_entry import NewsEntry
 import ConfigParser
 from src.sentinews.categorizer import *
 from src.services.mongodb.news_entries_service import NewsEntriesService
+from datetime import datetime
 
 
 class BlogPublisher(object):
@@ -25,7 +26,9 @@ class BlogPublisher(object):
 				unmarshalled_news = news_service.get_list({'_id': version_news_id})
 				if len(unmarshalled_news) == 1:
 					post.content += '<li><a href="' + unmarshalled_news[0].wp_url + '">'
-					post.content += unmarshalled_news[0].title +'</a></li>'
+					post.content += unmarshalled_news[0].title +'</a><span>&nbsp;'
+					post.content += unmarshalled_news[0].published_date.strftime('%B %d, %Y')
+					post.content += '</span>'
 
 			post.content += '</ul>'
 
@@ -36,7 +39,9 @@ class BlogPublisher(object):
 				unmarshalled_news = news_service.get_list({'_id': related_id})
 				if len(unmarshalled_news) == 1:
 					post.content += '<li><a href="' + unmarshalled_news[0].wp_url + '">'
-					post.content += unmarshalled_news[0].title +'</a></li>'
+					post.content += unmarshalled_news[0].title +'</a><span>&nbsp;'
+					post.content += unmarshalled_news[0].published_date.strftime('%B %d, %Y')
+					post.content += '</span>'
 			post.content += '</ul>'
 
 
