@@ -10,7 +10,7 @@ import numpy
 class TextDistance(object):
 
     def __init__(self):
-        self.valid_token_regex = re.compile(r"""[a-záéíóúñäëïöüáàâéèêíìîóòôúùûãçêôõø]+""", re.U)
+        self.valid_token_regex = re.compile(r'[áéíóúñäëïöüáàâéèêíìîóòôúùûãçêôõø]*(\w+)[áéíóúñäëïöüáàâéèêíìîóòôúùûãçêôõø]*(\w*)')
         self.tokenizer_custom = nltk.tokenize.RegexpTokenizer(self.valid_token_regex)
 
     @staticmethod

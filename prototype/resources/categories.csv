@@ -1,4 +1,4 @@
-salud,medicina,farmacia,ambient,drogas,,,,
+salud,medicina,farmacia,drogas,ambient,,,
 economía,economia,industria,trabajo,negocio,empresa,finanza,pobreza,comercio,importacion,exportacion,consumo,venta,mercado,tarifa,,
 política,politica,eleccion,legisla,ministerio,poder,gobierno,,
 espectáculos,entretenimiento,cine,celebridad,espectaculo,evento,festival,television,musica
@@ -7,8 +7,8 @@ tecnología,gadget,aplicacion,internet,tecnologia,informat,,,
 cultura,arte,literatura,,,,,
 ciencia,espacial,espaciales,,,,,
 deporte,futbol,equipo,baloncesto,automovilismo,,,,
-interés general,galeria,interes,sociedad,curiosidad,,,
+interés general,galeria,interes,sociedad,curiosidad,educa,,
 internacionales,{nombre_pais},,,,,,,
 policiales,crimen,delito,policia,drogas,accidente,robo,inseguridad,terroris,atentado,,
-clima,tiempo,sismo,terremoto,inundaciones,lluvia,tormenta,huracan,inundacion,tornado,nieve
+clima,tiempo,sismo,terremoto,inundaciones,lluvia,tormenta,huracan,inundacion,tornado,nieve,volcan,,
 mujer,moda,desfile,vestimenta,pareja,familia,machis,feminis,genero

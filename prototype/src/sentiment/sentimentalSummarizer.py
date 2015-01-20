@@ -19,6 +19,8 @@ class SentimentalSummarizer:
 
     def normalize(self, summary):
         for dimension in ["positive", "negative"]:
+            if not dimension in summary:
+                summary[dimension] = 0
             value = summary[dimension]
             if value >= 80:
                 value = 80 + ((value - 80) / 20)
