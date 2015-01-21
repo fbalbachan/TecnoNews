@@ -15,5 +15,5 @@ class FeedService(object):
 
 
 	def get_all(self):
-		return [Feed(feed['id'], feed['url'], feed['lastupdated']) 
+		return [Feed(feed['id'], feed['url'], feed['parser'], feed['lastupdated']) 
 		for feed in self.feeds.find({})]

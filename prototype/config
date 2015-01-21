@@ -23,14 +23,14 @@ db = sentinews
 db_test = sentinews_test
 
 [language_filter]
-status = ON
+status = OFF
 
 [wordpress]
-url_post_base_path = http://tecnolecto.com/blog/?p=
+url_post_base_path = http://tecnonews.comule.com/?p=
 
 [resources]
 
-resources_dir = /home/nvaras/entinews/prototype/resources
+resources_dir = /Users/diegoram/dev/entinews/prototype/resources
 verbal_scripts = %(resources_dir)s/scripts_verbales.csv
 sentiwordnet = %(resources_dir)s/sentiwordnet.csv
 general_resources = %(resources_dir)s/general_resources
@@ -53,4 +53,4 @@ categories = %(resources_dir)s/categories.csv
 countries = %(resources_dir)s/nombre_pais_ESP.csv
 persons = %(resources_dir)s/person.cls
 demonym = %(resources_dir)s/twGENT.dat
-user_per_categories = %(resources_dir)s/wordpress_users_categories.csv
+user_per_categories = %(resources_dir)s/wordpress_users_categories_test.csv

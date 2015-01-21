@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from src.services.mongodb.feeds_service import FeedService
-from src.sentinews.news_crawler.cnn_crawler import CNNCrawler
-from src.sentinews.news_crawler.euronews_crawler import EuroNewsCrawler
-from src.sentinews.news_crawler.elpais_crawler import ElPaisCrawler
+from src.sentinews.crawler import Crawler
 from src.sentinews.feeds import Feed
 from src.services.mongodb.connector import MongoConnector
 from datetime import datetime
@@ -19,24 +17,21 @@ class NewsCrawler(object):
     def __init__(self):
         self.service = FeedService()
         self._cursor_start()
-        self.crawlers_by_id = {
-            "cnn_spanish": CNNCrawler, "euronews": EuroNewsCrawler,
-            "elpais": ElPaisCrawler}
 
     def _cursor_start(self):
         db = MongoConnector.get_instance()
         if db['system']['namespaces'].find({'name': 'sentinews.feeds'}).count() == 0:
             self.service.save(Feed('cnn_spanish', 'http://cnnespanol.cnn.com/feed/',
-                                   datetime.utcnow()))
-            self.service.save(Feed('euronews', 'http://es.euronews.com/noticias/boletin/',
-                                   datetime.utcnow()))
-            self.service.save(Feed('elpais', 'http://elpais.com/tag/fecha/hoy',
-                                   datetime.utcnow()))
+                                   'cnn_parser.CNNParser',datetime.utcnow()))
+            self.service.save(Feed('euronews', 'http://feeds.feedburner.com/euronews/es/news?format=xml',
+                                   'euronews_parser.EuroNewsParser',datetime.utcnow()))
+            self.service.save(Feed('elpais', 'http://ep00.epimg.net/rss/elpais/portada_america.xml',
+                                   'elpais_parser.ElPaisParser',datetime.utcnow()))
 
     def crawl_all(self):
         entries = []
+        crawler = Crawler()
         for feed in self.service.get_all():
-            crawler = self.crawlers_by_id[feed.id]()
-            news_entries = crawler.crawl()
+            news_entries = crawler.crawl(feed.parser, feed.url)
             entries.extend(news_entries)
         return entries
