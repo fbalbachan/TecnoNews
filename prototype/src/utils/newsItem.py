@@ -1,5 +1,5 @@
-__author__ = 'arkat'
-
+__author__ = 'Pablo Perez De Angelis'
+from src.utils.textDistance import TextDistance
 
 class NewsItem(object):
 
@@ -68,7 +68,9 @@ class NewsItem(object):
         return lemmatized
 
     def get_clean_text(self):
-        return ' '.join([w for w in self.content.split() if w not in self.load_stopwords()])
+        # Use TextDistance pre processing to clean the text
+        td = TextDistance()
+        return td.pre_process(self.content)
 
     def load_stopwords(self):
         import ConfigParser
