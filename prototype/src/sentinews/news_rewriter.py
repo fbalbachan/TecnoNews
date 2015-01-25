@@ -79,7 +79,7 @@ class NewsRewriter(object):
         
         logger.info("IMAGE URL: %s %s", image, img_alts[image])
 
-        return '<p><img title="%s" src=%s></img></p> %s' %(img_alts[image], image, self.rewritten_entry.content)
+        return '<p><img title="%s" src=%s></img></p> <p><small>Foto: Wikipedia - %s</small></p> %s' %(img_alts[image], image,img_alts[image], self.rewritten_entry.content)
 
     def rewrite_title(self):
         analysis = self._analyze(self.original_entry.title)

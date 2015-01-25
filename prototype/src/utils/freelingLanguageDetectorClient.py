@@ -12,7 +12,7 @@ class FreelingLanguageDetectorClient:
         if type(text) != str: raise Exception("Solo se acepta unicode codificado a string.")
 
         # TODO: check if
-        text = re.sub(r"""[)(.,"'!¡@#%^&¿\?\$\*]""", ' ', text)
+        text = re.sub(r"""[)|(|.|,|"|!|'|@|#|\$|%|^|&|\*]""", ' ', text)
 
         config = self.config
 

@@ -64,17 +64,20 @@ class HyperlinkProcessor(object):
     def _get_linkedIn_links(self):
         for entity in self.entities:
             if entity.classification() == 'person':
-                link = ''
                 if 'names' in entity.attributes and 'surnames' in entity.attributes:
                     person = " ".join(entity.attributes['names']) + " " + " ".join(entity.attributes['surnames'])
                     link = self._get_first_gresult(LINKEDIN_GQUERY + person)
-                if link != '':
-                    self.links_by_entity[entity]['linkedin'] = link
+                    if link != '':
+                        self.links_by_entity[entity]['linkedin'] = link
                 else:
-                    if 'names' in entity.attributes:
+                    if 'names' in entity.attributes:  # not 'surnames' in entity.attributes is implied
                         person = entity.attributes['names']
-                    else:
+                    elif 'surnames' in entity.attributes:
                         person = entity.attributes['surnames']
+                    else:
+                        # If doesn't have name or surname continue with the next case
+                        continue
+
                     person = " ".join(person)
                     self.links_by_entity[entity]['google'] = (GSEARCH_BASE_URL + urllib.quote_plus(person))
 

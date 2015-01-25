@@ -1,17 +1,52 @@
 #!/usr/bin/env python2.7
 # -*- coding:utf-8 -*-
-
+__author__ = 'Pablo Perez De Angelis'
 import nltk
 import re
-
 import numpy
 
 
 class TextDistance(object):
 
     def __init__(self):
-        self.valid_token_regex = re.compile(r"""[a-záéíóúñäëïöüáàâéèêíìîóòôúùûãçêôõø]+""", re.U)
+        self.valid_token_regex = re.compile(r'[áéíóúñäëïöüáàâéèêíìîóòôúùûãçêôõø]*(\w+)[áéíóúñäëïöüáàâéèêíìîóòôúùûãçêôõø]*(\w*)')
         self.tokenizer_custom = nltk.tokenize.RegexpTokenizer(self.valid_token_regex)
+        self.stopwords = self.load_stopwords()
+
+    def tokenize(self, text):
+            return self.tokenizer_custom.tokenize(text.strip().lower())
+
+    def pre_process(self, text):
+        # Lower text and tokenize
+        text = self.tokenizer_custom.tokenize(text.strip().lower())
+        # Clean Stopwords (already lowered)
+        text = [w for w in text if w not in self.stopwords]
+        return text
+
+    def load_stopwords(self):
+        import ConfigParser
+        stopwords = []
+        config = ConfigParser.ConfigParser()
+        config.read("config")
+
+        stopwords_filename = config.get("resources", "stopwords_es_clean")
+
+        for line in open(stopwords_filename, 'r'):
+            if line[0] not in ['<', '%', '\n']:
+                stopwords.append(self.safe_unicode(line.rstrip('\n')))
+
+        return stopwords
+
+    def safe_unicode(self, text):
+        if isinstance(text, unicode):
+            u_text = text
+        else:
+            try:
+                u_text = unicode(text, 'utf-8', errors='ignore')
+            except Exception, e:
+                u_text = text
+
+        return u_text
 
     @staticmethod
     def cosine(x, y):
@@ -20,48 +55,38 @@ class TextDistance(object):
 
     def title_distance(self, title1, title2):
         from nltk import jaccard_distance
-        word_set1 = set(self.tokenize(title1))
-        word_set2 = set(self.tokenize(title2))
+        word_set1 = set(self.pre_process(title1))
+        word_set2 = set(self.pre_process(title2))
         return jaccard_distance(word_set1, word_set2)
 
-    def tokenize(self, text):
-        return self.tokenizer_custom.tokenize(text.strip().lower())
-
     def distance(self, text1, text2, n):
-        tokens1, tokens2 = self.tokenize(text1), self.tokenize(text2)
+        tokens1, tokens2 = self.pre_process(text1), self.pre_process(text2)
         ngrams1, ngrams2 = nltk.ngrams(tokens1, n), nltk.ngrams(tokens2, n)
         f1, f2 = nltk.FreqDist(ngrams1), nltk.FreqDist(ngrams2)
         dimensiones = set(ngrams1).union(set(ngrams2))
         v1, v2 = [f1.get(d, 0) for d in dimensiones], [f2.get(d, 0) for d in dimensiones]
-        return self.cosine(v1,v2) * 100
+        return self.cosine(v1, v2) * 100
 
-    def similarity(self, text1, text2, B=0.9):
+    def similarity(self, text1, text2, b=0.9):
         unigrams = self.distance(text1, text2, 1)
         bigrams = self.distance(text1, text2, 2)
-        B_2 = pow(B, 2)
 
-        try:
-            similarity = (1+B_2) * ((unigrams * bigrams) / ((B_2 * unigrams) + bigrams))
-        except ZeroDivisionError:
-            similarity = 0.00
+        b_2 = pow(b, 2)
+
+        # similarity = (1+b_2) * ((unigrams * bigrams) / ((b_2 * unigrams) + bigrams))
+        partial = ((b_2 * unigrams) + bigrams)
+
+        if partial != 0.0:
+            similarity = (1+b_2) * ((unigrams * bigrams) / partial)
+        else:
+            similarity = 0.0
 
         if numpy.isnan(similarity):
-            return 0
-        else:
-            return similarity
+            similarity = 0.0
 
+        return similarity
 
     def relevant_entities_coincidence(self, newsItem1, newsItem2):
-        from pprint import pprint
-        # import logging
-        # logger = logging.getLogger()
-        # logger.info("\ncomparing: ")
-        # logger.info("\t%s Entities:" % newsItem1.url)
-        # logger.info("\t%s", self._top_five(newsItem1.entities))
-        # logger.info("With:")
-        # logger.info("\t%s Entities:" % newsItem2.url)
-        # logger.info("\t%s", self._top_five(newsItem2.entities))
-
         coincidences_count = 0
         for entity in self._top_five(newsItem1.entities):
 
@@ -75,7 +100,7 @@ class TextDistance(object):
     def _top_five(self, entities):
         """
         get the entities within the first 5 top scores levels
-        (include miltiple entities in with the same score as one level)
+        (include multiple entities in with the same score as one level)
         """
         if len(entities) <= 0:
             return []

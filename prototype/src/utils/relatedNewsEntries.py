@@ -1,4 +1,5 @@
 # -*- coding:utf-8 -*-
+__author__ = 'Pablo Perez De Angelis'
 from src.utils.textDistance import TextDistance
 import ConfigParser
 
@@ -170,7 +171,6 @@ class RelatedNewsEntries(object):
     def get_other_versions(self):
 
         final_result = []
-        cleaned_original_title = ' '.join([w for w in self.news_original.title.split() if w not in self.stopwords])
 
         related_logger.info("---------------")
         related_logger.info("case: %s" % self.news_original.url)
@@ -193,27 +193,11 @@ class RelatedNewsEntries(object):
             similarity = self.text_distance.similarity(self.news_original.clean_text, newsItem.clean_text)
             related_logger.info("\t\tContent Similarity %s" % similarity)
 
-            # TODO: Move this to a method
-            cleaned_title = ' '.join([w for w in newsItem.title.split() if w.lower() not in self.stopwords])
-            title_distance = self.text_distance.title_distance(cleaned_original_title, cleaned_title)
+            title_distance = self.text_distance.title_distance(self.news_original.title, newsItem.title)
 
             related_logger.info("\t\tTitle Distance %s" % title_distance)
 
-            score = 0
-            if entities_coincidence > 1:
-                score += 30
-
-            if 0.6 < title_distance <= 0.95:
-                score += 20
-            elif title_distance <= 0.6:
-                score += 30
-
-            if 5.0 <= similarity < 10:
-                score += 10
-            elif 10.0 <= similarity < 30:
-                score += 30
-            elif 30.0 <= similarity <= 100:
-                score += 50
+            score = self.related_score(entities_coincidence, similarity, title_distance)
 
             if score >= 40:
                 related_logger.info(">>>")
@@ -230,6 +214,25 @@ class RelatedNewsEntries(object):
         sorted_final = sorted(final_result, key=lambda x: x[1], reverse=True)
 
         return [x[0] for x in sorted_final]
+
+    def related_score(self, entities_coincidence, similarity, title_distance):
+        score = 0
+        if entities_coincidence > 1:
+            score += 30
+
+        if 0.6 < title_distance <= 0.95:
+            score += 20
+        elif title_distance <= 0.6:
+            score += 30
+
+        if 5.0 <= similarity < 10:
+            score += 10
+        elif 10.0 <= similarity < 30:
+            score += 30
+        elif 30.0 <= similarity <= 100:
+            score += 50
+
+        return score
 
 def save_test_data(original, to_compare):
     import pickle
