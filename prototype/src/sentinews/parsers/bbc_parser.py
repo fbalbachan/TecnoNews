@@ -8,7 +8,6 @@ class BBCParser(object):
 
 	def parse(self, url, tags=None):
 		content = ''
-		print url
 		soup = BeautifulSoup(urlopen(url))
 		if soup is not None:
 			article = soup.find('div', {'class': 'story-body'})
@@ -16,6 +15,6 @@ class BBCParser(object):
 				title = article.find('h1', {'class': 'story-body__h1'}).text
 				paragraphs = article.find('div', {'class': 'story-body__inner'}).find_all('p')
 				content = ' '.join([paragraph.text + '\n' for paragraph in paragraphs])
-			
+		
 		return NewsEntry(title, content, tags, self.source,
 				url=url) if len(content) > 1 and len(tags) > 0 else None

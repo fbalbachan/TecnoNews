@@ -2,30 +2,29 @@
 from src.sentinews.blog_publisher import BlogPublisher
 from src.sentinews.news_entry import NewsEntry
 from src.sentinews.news_rewriter import NewsRewriter
-from src.sentinews.news_crawler.news_crawler import NewsCrawler
+from src.sentinews.news_crawler import NewsCrawler
 from src.utils.logger_utils import *
 import traceback
-import datetime
-from src.sentinews.news_crawler.cnn_parser import CNNParser
+from datetime import datetime
+from src.sentinews.parsers import *
 import wikipedia as wk
-from src.sentinews.news_crawler.cnn_crawler import CNNCrawler
 import unittest
 from src.services.mongodb.news_entries_service import NewsEntriesService
 from bson.objectid import ObjectId
+from src.sentinews.crawler import Crawler
 
 class TecnonewsTest(unittest.TestCase):
 	''' Clase para testear una sola noticia end to end '''
-	service = NewsEntriesService('test')
+	service = NewsEntriesService()
 	news_entry = None
 	object_id = None
 
-	def test_end_2_end(self):
+	def _test_end_2_end(self):
 		link = "http://cnnespanol.cnn.com/2014/09/22/policia-investiga-ataques-racistas-contra-mario-balotelli-tras-un-tuit-del-futbolista/"
 		link2 = 'http://cnnespanol.cnn.com/2015/01/06/una-familia-llora-la-perdida-de-siete-seres-queridos-en-el-vuelo-de-airasia/'
-		parser = CNNParser()
-		related_news = self.service.get_list({},1)
-		print 'len: ' + str(len(related_news))
-		self.assertTrue(len(related_news) == 1)
+		parser = cnn_parser.CNNParser()
+		related_news = self.service.get_list({'wp_id': {'$ne': None}},1)
+		#self.assertTrue(len(related_news) == 1)
 
 		self.assertIsNotNone(related_news)
 
@@ -50,7 +49,41 @@ class TecnonewsTest(unittest.TestCase):
 		self.assertEquals(unmarshalled_entry.wp_url[:12], "http://tecno")
 
 
+	def _test_crawl_entire_source(self):
 
+		self.service.remove_all()
+
+		entries = Crawler().crawl('cnn_parser.CNNParser', 'http://cnnespanol.cnn.com/feed/')
+		self.assertIsNotNone(entries)
+		self.assertTrue(len(entries) > 0)
+		for entry in entries:
+			related_news = self.service.get_list({'wp_id': {'$ne': None}},1)
+			entry.set_related_news(related_news)
+			entry.set_news_versions(related_news)
+			c = NewsRewriter(entry)
+			c.publish()
+			entry.wp_id = c.rewritten_entry.wp_id
+			entry.published_date = datetime.utcnow()
+			object_id = self.service.save(entry)
+			self.assertIsNotNone(object_id)
+
+	def test_crawl_all_sources(self):
+
+		self.service.remove_all()
+
+		entries = NewsCrawler().crawl_all()
+		self.assertIsNotNone(entries)
+		self.assertTrue(len(entries) > 0)
+		for entry in entries:
+			related_news = self.service.get_list({'wp_id': {'$ne': None}},1)
+			entry.set_related_news(related_news)
+			entry.set_news_versions(related_news)
+			c = NewsRewriter(entry)
+			c.publish()
+			entry.wp_id = c.rewritten_entry.wp_id
+			entry.published_date = datetime.utcnow()
+			object_id = self.service.save(entry)
+			self.assertIsNotNone(object_id)
 
 
 

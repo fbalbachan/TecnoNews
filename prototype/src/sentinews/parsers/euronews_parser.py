@@ -42,12 +42,13 @@ class EuroNewsParser(object):
                 if not ul_tags is None: 
                     li_tags = soup.find('ul', {'class': 'kwl'}).find_all('li')
                     tags = [tag.find('a').text for tag in li_tags]
-            content = " ".join(content_str), tags, self.base_path + url
+            content = " ".join(content_str)
         else:
             content = ''
         
         title = soup.find(
             'div', {'id': 'title-wrap-new'}).find('h1').find('a').text
+        
         if self.language_filter_status == 'ON':
             content = self.language_filter.only_spanish_paragraph(content.encode("utf-8"))
         

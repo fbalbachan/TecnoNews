@@ -19,6 +19,7 @@ class BlogPublisher(object):
 		post.title = entry.title
 		post.content = entry.content
 
+		print entry.source
 		if len(entry.versions) > 0:
 			post.content += "<br><br><strong> La misma noticia en otras coberturas:</strong>"
 			post.content += '<ul>'
@@ -44,7 +45,7 @@ class BlogPublisher(object):
 					post.content += '</span>'
 			post.content += '</ul>'
 
-
+		post.content += '<br><strong>' + entry.source + '</strong>'
 		post.terms_names = {
 				'post_tag': entry.tags,
                 'category': entry.categories

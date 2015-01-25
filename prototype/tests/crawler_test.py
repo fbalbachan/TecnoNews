@@ -30,6 +30,8 @@ class CrawlerTest(unittest.TestCase):
 		self.assertTrue(len(entries) > 0)
 		for entry in entries:
 			print entry.title
+			print type(entry.content)
+			
 
 
 	def test_crawl_bbc_america(self):

@@ -15,5 +15,6 @@ class FeedService(object):
 
 
 	def get_all(self):
-		return [Feed(feed['id'], feed['url'], feed['parser'], feed['lastupdated']) 
+		return [Feed(feed['id'], feed['url'], feed['parser'], feed['lastupdated'],
+			feed['default_tags'] if 'default_tags' in feed else None) 
 		for feed in self.feeds.find({})]

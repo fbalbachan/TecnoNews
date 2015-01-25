@@ -27,11 +27,14 @@ class NewsCrawler(object):
                                    'euronews_parser.EuroNewsParser',datetime.utcnow()))
             self.service.save(Feed('elpais', 'http://ep00.epimg.net/rss/elpais/portada_america.xml',
                                    'elpais_parser.ElPaisParser',datetime.utcnow()))
+            self.service.save(Feed('bbc', 'http://www.bbc.co.uk/mundo/temas/america_latina/index.xml',
+                                   'bbc_parser.BBCParser',datetime.utcnow(),['america']))
 
     def crawl_all(self):
-        entries = []
-        crawler = Crawler()
-        for feed in self.service.get_all():
-            news_entries = crawler.crawl(feed.parser, feed.url)
-            entries.extend(news_entries)
-        return entries
+      entries = []
+      crawler = Crawler()
+      for feed in self.service.get_all():
+          print feed
+          news_entries = crawler.crawl(feed.parser, feed.url[0][0], feed.default_tags)
+          entries.extend(news_entries)
+      return entries
