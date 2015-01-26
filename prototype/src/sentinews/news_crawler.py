@@ -27,8 +27,22 @@ class NewsCrawler(object):
                                    'euronews_parser.EuroNewsParser',datetime.utcnow()))
             self.service.save(Feed('elpais', 'http://ep00.epimg.net/rss/elpais/portada_america.xml',
                                    'elpais_parser.ElPaisParser',datetime.utcnow()))
-            self.service.save(Feed('bbc', 'http://www.bbc.co.uk/mundo/temas/america_latina/index.xml',
+            self.service.save(Feed('bbc_america', 'http://www.bbc.co.uk/mundo/temas/america_latina/index.xml',
                                    'bbc_parser.BBCParser',datetime.utcnow(),['america']))
+            self.service.save(Feed('bbc_internacional', 'http://www.bbc.co.uk/mundo/temas/internacional/index.xml',
+                                   'bbc_parser.BBCParser',datetime.utcnow(),['america']))
+            self.service.save(Feed('bbc_economia', 'http://www.bbc.co.uk/mundo/temas/economia/index.xml',
+                                   'bbc_parser.BBCParser',datetime.utcnow(),['economia']))
+            self.service.save(Feed('bbc_tecnologia', 'http://www.bbc.co.uk/mundo/temas/tecnologia/index.xml',
+                                   'bbc_parser.BBCParser',datetime.utcnow(),['tecnologia']))
+            self.service.save(Feed('bbc_ciencia', 'http://www.bbc.co.uk/mundo/temas/ciencia/index.xml',
+                                   'bbc_parser.BBCParser',datetime.utcnow(),['ciencia']))
+            self.service.save(Feed('bbc_salud', 'http://www.bbc.co.uk/mundo/temas/salud/index.xml',
+                                   'bbc_parser.BBCParser',datetime.utcnow(),['salud']))
+            self.service.save(Feed('bbc_cultura', 'http://www.bbc.co.uk/mundo/temas/cultura/index.xml',
+                                   'bbc_parser.BBCParser',datetime.utcnow(),['sociedad']))
+            self.service.save(Feed('bbc_deportes', 'http://www.bbc.co.uk/mundo/temas/deportes/index.xml',
+                                   'bbc_parser.BBCParser',datetime.utcnow(),['deportes']))
 
     def crawl_all(self):
       entries = []
