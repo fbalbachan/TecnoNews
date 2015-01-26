@@ -1,8 +1,7 @@
 import unittest
 from bs4 import BeautifulSoup
 from urllib2 import urlopen, Request
-from src.sentinews.news_crawler.euronews_parser import EuroNewsParser
-from src.sentinews.news_crawler.euronews_crawler import EuroNewsCrawler
+from src.sentinews.parsers.euronews_parser import EuroNewsParser
 from src.sentinews.news_entry import NewsEntry
 
 class TestEuroNewsCrawler(unittest.TestCase):
@@ -50,25 +49,10 @@ class TestEuroNewsCrawler(unittest.TestCase):
 		self.assertEquals(entry.source, u'euronews')
 
 	def test_create_single_entry(self):
-		new_entries = EuroNewsParser().parse('http://es.euronews.com/noticias/boletin/')
-		self.assertTrue(new_entries is not None)
-		self.assertTrue(len(new_entries) == 1)
-
-
-	def test_create_list_entries(self):
-		new_entries = EuroNewsParser().parse('http://es.euronews.com/noticias/boletin/',5)
-		self.assertTrue(new_entries is not None)
-		self.assertTrue(len(new_entries) == 5)
-
-
-	def test_create_filtered_list_entries(self):
-		filtered_list = EuroNewsCrawler().crawl()
-		self.assertTrue(filtered_list is not None)
-		print len(filtered_list)
-		print filtered_list[0].source
-		print filtered_list[1].source
-
-		self.assertTrue(len(filtered_list) == 5)	
+		new_entry = EuroNewsParser().parse('http://es.euronews.com/2015/01/21/cuba-y-eeuu-discrepan-por-la-inmigracion-en-sus-primeras-conversaciones')
+		self.assertTrue(new_entry is not None)
+		self.assertTrue(len(new_entry.title) > 0)
+		print new_entry.title 
 
 
 if __name__ == '__main__':

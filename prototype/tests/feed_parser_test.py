@@ -1,6 +1,6 @@
 import unittest
 import feedparser
-from src.sentinews.news_crawler import * 
+from src.sentinews.parsers import * 
 
 class FeedParserTest(unittest.TestCase):
 

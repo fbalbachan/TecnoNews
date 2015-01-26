@@ -46,6 +46,7 @@ class CNNParser:
 
             if (content.find('function()') == -1) and len(tags) > 0:
                 new_entries.append(NewsEntry(title, content, tags, self.source, url=url)) 
+        
         return new_entries[0] if len(new_entries) > 0 else NewsEntry('','',['dummie'],'','')
 
         

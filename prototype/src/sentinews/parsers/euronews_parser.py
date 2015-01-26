@@ -19,29 +19,11 @@ class EuroNewsParser(object):
     base_path = 'http://es.euronews.com'
     source = u'Euronews'
 
-    def parse(self, url, limit=1):
+    def parse(self, url):
         soup = BeautifulSoup(urlopen(url).read())
-        articles = soup.find(
-            'ul', {'id': 'bulletin-list'}).find_all('li', limit=limit)
-
-        new_entries = []
-        for article in articles:
-            title = title = article.find(
-                'span', {'class': 'bulletin-title'}).text[12:]
-            content, tags, article_url = self.___extract_content(article)
-            if self.language_filter_status == 'ON':
-                content = self.language_filter.only_spanish_paragraph(content.encode("utf-8"))
-            if len(content) > 1  and len(tags) > 0:
-                new_entries.append(NewsEntry(title, content, tags, self.source, url=article_url))
-
-        return new_entries
-
-
-    def ___extract_content(self, article):
-        article_url = article.find('a', {'class': 'read-more-button'})['href']
-        soup = BeautifulSoup(urlopen(self.base_path + article_url).read())
+        paragraphs =  None
+        tags = []
         if soup is not None:
-            paragraphs =  None
             try:
                 paragraphs = soup.find('div', {'id': 'articleTranscript'}).find_all('p')
             except Exception, e:
@@ -60,6 +42,16 @@ class EuroNewsParser(object):
                 if not ul_tags is None: 
                     li_tags = soup.find('ul', {'class': 'kwl'}).find_all('li')
                     tags = [tag.find('a').text for tag in li_tags]
-            return " ".join(content_str), tags, self.base_path + article_url
+            content = " ".join(content_str)
         else:
-            return ''
+            content = ''
+        
+        title = soup.find(
+            'div', {'id': 'title-wrap-new'}).find('h1').find('a').text
+        
+        if self.language_filter_status == 'ON':
+            content = self.language_filter.only_spanish_paragraph(content.encode("utf-8"))
+        
+        
+        return NewsEntry(title, content, tags, self.source, url=url) \
+            if len(content) > 1  and len(tags) > 0 else None

@@ -14,8 +14,8 @@ class NewsEntriesService(object):
 
         return self.news_entries.insert(news_entry.to_dict())
 
-    def delete(self, id):
-        pass
+    def remove_all(self):
+        return self.news_entries.remove({})
 
     def get_list(self, criteria, limit=None):
         """ Retrieve a list of new entries
