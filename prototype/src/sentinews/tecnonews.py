@@ -4,8 +4,8 @@ from src.sentinews.news_crawler.news_crawler import NewsCrawler
 from src.services.mongodb.news_entries_service import NewsEntriesService
 from src.utils.relatedNewsEntries import RelatedNewsEntries
 from src.utils.logger_utils import *
-from src.utils.similarParagraph import SimilarParagraph
 import traceback
+from datetime import datetime
 
 logger = get_logger('tecnonews')
 
@@ -20,7 +20,7 @@ class TecnoNews(object):
     def run(self):
         logger = get_logger('tecnonews')
         logger.info("<Tecnonews> <run> Running start")
-        entries = NewsCrawler().crawl_all()
+        entries =  NewsCrawler().crawl_all()
         logger.info("Entries to publish: %s" % len(entries))
 
         for entry in entries:
@@ -28,7 +28,6 @@ class TecnoNews(object):
         logger.info("Done.")
 
     def _process(self, entry):
-        other_versions = []
         try:
             entry.set_analisys_info()
             try:
@@ -44,17 +43,15 @@ class TecnoNews(object):
                 logger.error("<Tecnonews> <_process> related_news %s" % traceback.format_exc())
                 logger.info(traceback.format_exc())
 
-            sp = SimilarParagraph(entry, other_versions)
-            # c = NewsRewriter(entry)
+            c = NewsRewriter(entry)
 
             logger.info('<Tecnonews> <_process> publishing note: ' + entry.source)
             try:
                 # c.rewrite_title()
-                # c.rewrite_content()
-                # c.publish()
-                # entry.published_date = datetime.utcnow()
-                # entry.wp_id = c.rewritten_entry.wp_id
-                pass
+                c.rewrite_content()
+                c.publish()
+                entry.published_date = datetime.utcnow()
+                entry.wp_id = c.rewritten_entry.wp_id
             except Exception, e:
                 logger.error("<Tecnonews> <_process> rewriting fail: %s " % (entry.title))
                 logger.info(traceback.format_exc())
@@ -65,7 +62,7 @@ class TecnoNews(object):
         logger.info("<<<")
         logger.info("entry : %s" % entry.title)
         logger.info("relateds: %s" % entry.related)
-        # self.service.save(entry)
+        self.service.save(entry)
 
 
 
