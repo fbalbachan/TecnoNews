@@ -32,6 +32,7 @@ class TextInserter:
             previous_paragraph = self.paragraph_of(referent_index)
             if previous_paragraph not in injections: injections[previous_paragraph] = []
             injections[previous_paragraph].append(content)
+
         return injections
 
     def paragraph_of(self, index):
