@@ -88,7 +88,7 @@ class NewsRewriter(object):
         self.rewritten_entry.title = self.original_entry.title
 
     def rewrite_content(self):
-        analysis = self._analyze(self.rewritten_entry.content)
+        analysis = self._analyze(self.original_entry.content)
         analysis["referent_ranking"] = ReferentRanker(analysis["paragraph"]).rank()
         analysis["generated_content"] = WikipediaContentGenerator(analysis).generate()
         text_inserter = TextInserter(analysis)
