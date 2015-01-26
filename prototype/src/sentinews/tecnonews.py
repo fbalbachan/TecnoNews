@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from src.sentinews.news_rewriter import NewsRewriter
-from src.sentinews.news_crawler.news_crawler import NewsCrawler
+from src.sentinews.news_crawler import NewsCrawler
 from src.services.mongodb.news_entries_service import NewsEntriesService
 from src.utils.relatedNewsEntries import RelatedNewsEntries
 from src.utils.logger_utils import *
