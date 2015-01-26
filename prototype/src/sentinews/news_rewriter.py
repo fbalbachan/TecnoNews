@@ -8,6 +8,7 @@ from src.extension.textInserter import TextInserter
 from src.rewrite.rewriter import Rewriter
 from src.model.referent.referentRanker import ReferentRanker
 from src.extension.wikipediaContentGenerator import WikipediaContentGenerator
+from src.utils.similarParagraph import SimilarParagraph
 from src.utils.logger_utils import *
 import re
 
@@ -90,16 +91,23 @@ class NewsRewriter(object):
     def rewrite_content(self):
         analysis = self._analyze(self.original_entry.content)
         analysis["referent_ranking"] = ReferentRanker(analysis["paragraph"]).rank()
-        analysis["generated_content"] = WikipediaContentGenerator(analysis).generate()
+
+        # Generating content
+        analysis["generated_content_wiki"] = WikipediaContentGenerator(analysis).generate()
+        analysis["generated_content_other_sources"] = SimilarParagraph(analysis=analysis,
+                                                                       other_versions=self.original_entry.versions)
+
+        wikiinfo = analysis["generated_content_wiki"]
+        ranking = analysis["referent_ranking"]
+
+        # Insert new content
         text_inserter = TextInserter(analysis)
         self.rewritten_entry.content = text_inserter.get()
-
-        wikiinfo =  analysis["generated_content"]
-        ranking =  analysis["referent_ranking"]
 
         analysis = self._analyze(self.rewritten_entry.content)
         rewriter = Rewriter(analysis['paragraph'])
         self.rewritten_entry.content = rewriter.rewrite()
+
 
         analysis = self._analyze(self.rewritten_entry.content)
         hyperlink_processor = HyperlinkProcessor(analysis)

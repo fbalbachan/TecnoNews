@@ -8,21 +8,28 @@ class TextInserter:
         self.paragraph_indexes = self.compute_paragraph_indexes()
 
     def get(self):
-        injections = self.get_injections()
+        injections_wiki = self.get_injections_wiki()
+        injections_paragraphs = self.get_injection_paragraphs_other_sources()
+
         generated = ""
 
         for paragraph in self.paragraphs:
             generated += paragraph + "\n"
-            if paragraph in injections:
-                for content in injections[paragraph]:
+
+            # if there is some paragraph to append
+            if paragraph in injections_paragraphs:
+                generated += injections_paragraphs[paragraph]
+
+            if paragraph in injections_wiki:
+                for content in injections_wiki[paragraph]:
                     generated += content + "\n"
 
         return generated.strip()
 
-    def get_injections(self):
+    def get_injections_wiki(self):
         injections = {}
 
-        contents = self.analysis["generated_content"]
+        contents = self.analysis["generated_content_wiki"]
 
         for c in contents: print c
         print "--"
@@ -32,6 +39,15 @@ class TextInserter:
             previous_paragraph = self.paragraph_of(referent_index)
             if previous_paragraph not in injections: injections[previous_paragraph] = []
             injections[previous_paragraph].append(content)
+        return injections
+
+    def get_injection_paragraphs_other_sources(self):
+        injections = {}
+        content = self.analysis["generated_content_other_sources"]
+        for paragraph_number in content.keys():
+            paragraph = self.paragraphs[paragraph_number]
+            injections[paragraph] = content[paragraph_number]
+
         return injections
 
     def paragraph_of(self, index):
