@@ -15,7 +15,7 @@ class CrawlerTest(unittest.TestCase):
 
 
 	def test_crawl_elpais(self):
-		url = 'http://ep00.epimg.net/rss/elpais/portada_america.xml'
+		url = 'http://ep00.epimg.net/rss/tags/ultimas_noticias.xml'
 		entries = self.crawler.crawl('elpais_parser.ElPaisParser', url)
 		self.assertIsNotNone(entries)
 		self.assertTrue(len(entries) > 0)
