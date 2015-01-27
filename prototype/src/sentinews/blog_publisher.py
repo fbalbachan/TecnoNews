@@ -44,7 +44,6 @@ class BlogPublisher(object):
 					post.content += '</span>'
 			post.content += '</ul>'
 
-		post.content += '<br><strong>' + entry.source + '</strong>'
 		post.terms_names = {
 				'post_tag': entry.tags,
                 'category': entry.categories
