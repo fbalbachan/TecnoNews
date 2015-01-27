@@ -19,7 +19,6 @@ class BlogPublisher(object):
 		post.title = entry.title
 		post.content = entry.content
 
-		print entry.source
 		if len(entry.versions) > 0:
 			post.content += "<br><br><strong> La misma noticia en otras coberturas:</strong>"
 			post.content += '<ul>'
