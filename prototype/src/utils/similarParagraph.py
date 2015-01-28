@@ -15,10 +15,8 @@ class SimilarParagraph:
             paragraph_logger.error('analysis["paragraph"].text is not unicode')
             paragraph_logger.error('decoding analysis["paragraph"].text to unicode')
             self.text = unicode(self.text, 'utf-8')
-        print "type of text from analysis %s" % type(self.text)
         self.paragraphs = self.get_paragraphs(self.text)
         self.load_other_sources(other_versions)
-        print type(other_versions[0].content)
         self.clean_candidate_paragraphs()
 
     @staticmethod
