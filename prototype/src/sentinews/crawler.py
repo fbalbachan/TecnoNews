@@ -36,6 +36,7 @@ class Crawler(object):
         parser = self.create_parser(eval(cls_parser))
         news_entries = []
         parsed_feeds = feedparser.parse(url)
+        parsed_entries = parsed_feeds 
         filtered_entries = self._filter_entries(parsed_feeds["entries"])
         for entry in filtered_entries:
             if default_tags is not None:
@@ -43,6 +44,7 @@ class Crawler(object):
             else:
                 news_entry = parser.parse(entry["link"])
                 
-            news_entries.append(news_entry)
+            if news_entry is not None: 
+                news_entries.append(news_entry)
         filtered_by_tags = self._filter_by_tag(news_entries)
         return filtered_by_tags

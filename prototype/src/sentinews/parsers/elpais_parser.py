@@ -23,6 +23,7 @@ class ElPaisParser(object):
         paragraphs = ''
         tags = []
         new_entries = []
+        title = ''
         if soup is not None:
             news_body = soup.find('div', {'id': 'cuerpo_noticia'})
             if news_body is not None:
@@ -35,9 +36,12 @@ class ElPaisParser(object):
                         'ul').find_all('li')
                     tags = [li.find('a').text for li in list_tag]
   
-        title = soup.find('h1', {'id': 'titulo_noticia'}).text
+        title_obj = soup.find('h1', {'id': 'titulo_noticia'})
+        if title_obj is not None:
+            title = title_obj.text
+              
         content = ' '.join(paragraphs)
         if self.language_filter_status == 'ON':
             content = self.language_filter.only_spanish_paragraph(content.encode("utf-8"))
     
-        return NewsEntry(title, content, tags, self.source, url=url) if len(content) > 1 and len(tags) > 0 else None
+        return NewsEntry(title, content, tags, self.source, url=url) if len(content) > 1 and len(tags) > 0 and len(title) > 0 else None
