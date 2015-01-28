@@ -89,13 +89,15 @@ class NewsRewriter(object):
         self.rewritten_entry.title = self.original_entry.title
 
     def rewrite_content(self):
+        # TODO: Check every step catch exceptions and return OK|Fail
+        # FIXME: analysis.text is str insted of unicode!!
         analysis = self._analyze(self.original_entry.content)
         analysis["referent_ranking"] = ReferentRanker(analysis["paragraph"]).rank()
 
         # Generating content
         analysis["generated_content_wiki"] = WikipediaContentGenerator(analysis).generate()
-        analysis["generated_content_other_sources"] = SimilarParagraph(analysis=analysis,
-                                                                       other_versions=self.original_entry.versions)
+        sp = SimilarParagraph(analysis=analysis, other_versions=self.rewritten_entry.other_versions)
+        analysis["generated_content_other_sources"] = sp.get_generated_content()
 
         wikiinfo = analysis["generated_content_wiki"]
         ranking = analysis["referent_ranking"]
@@ -108,12 +110,11 @@ class NewsRewriter(object):
         rewriter = Rewriter(analysis['paragraph'])
         self.rewritten_entry.content = rewriter.rewrite()
 
-
         analysis = self._analyze(self.rewritten_entry.content)
         hyperlink_processor = HyperlinkProcessor(analysis)
         self.rewritten_entry.content = hyperlink_processor.get_text_with_hyperlinks()
 
-        if wikiinfo and filter(lambda (referent, score): referent == wikiinfo[0][0] and score > 1., ranking): 
+        if wikiinfo and filter(lambda (referent, score): referent == wikiinfo[0][0] and score > 1., ranking):
             logger.info("WIKIINFO: %s", str(wikiinfo))
             self.rewritten_entry.content  = self.insert_main_image(wikiinfo[0][2])
         else:

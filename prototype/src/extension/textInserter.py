@@ -10,16 +10,20 @@ class TextInserter:
     def get(self):
         injections_wiki = self.get_injections_wiki()
         injections_paragraphs = self.get_injection_paragraphs_other_sources()
+        generated = u""
 
-        generated = ""
-
-        for paragraph in self.paragraphs:
-            generated += paragraph + "\n"
+        for idx, paragraph in enumerate(self.paragraphs):
+            if not isinstance(paragraph, unicode):
+                paragraph = unicode(paragraph, 'utf-8')
+                # TODO: Transform all to unicode at the beginning of the
+                # pipeline!!!
+            generated += paragraph + u"\n"
 
             # if there is some paragraph to append
-            if paragraph in injections_paragraphs:
-                generated += injections_paragraphs[paragraph]
+            if idx in injections_paragraphs.keys():
+                generated += injections_paragraphs[idx]
 
+            #TODO: may use idx por para todo
             if paragraph in injections_wiki:
                 for content in injections_wiki[paragraph]:
                     generated += content + "\n"
@@ -42,13 +46,7 @@ class TextInserter:
         return injections
 
     def get_injection_paragraphs_other_sources(self):
-        injections = {}
-        content = self.analysis["generated_content_other_sources"]
-        for paragraph_number in content.keys():
-            paragraph = self.paragraphs[paragraph_number]
-            injections[paragraph] = content[paragraph_number]
-
-        return injections
+        return self.analysis["generated_content_other_sources"]
 
     def paragraph_of(self, index):
         for paragraph in self.paragraphs:
