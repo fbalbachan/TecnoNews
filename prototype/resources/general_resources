@@ -11,7 +11,7 @@ invalid_ne = fuente,cnn_en_español,cnn,isis,juzgado_penal,fuente_cnn_en_españo
 
 [rewrite]
 
-blacklist = CNN,ISIS,Servicio_Secreto,Maven,MAVEN,Corea,Clic,Com,Norte,Sur,Guerrero,Yo,Gobierno,gobierno,Ejército,ejército,Senado,senado,Estado,estado,Congreso,congreso,Pentágono,pentágono,Supremo,supremo,Irán,Europa,Michael_Brown,Arte_psicodélico,Interior,interior,Holland-Dozier-Holland,Policía,Rayo,América,Asia,Paris,Cristiano
+blacklist = CNN,ISIS,Servicio_Secreto,Maven,MAVEN,Corea,Clic,Com,Norte,Sur,Guerrero,Yo,Gobierno,gobierno,Ejército,ejército,Senado,senado,Estado,estado,Congreso,congreso,Pentágono,pentágono,Supremo,supremo,Irán,Europa,Michael_Brown,Arte_psicodélico,Interior,interior,Holland-Dozier-Holland,Policía,Rayo,América,Asia,Paris,Cristiano,Santos
 
 
 [syntax]
