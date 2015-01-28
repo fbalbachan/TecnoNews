@@ -64,7 +64,7 @@ class TecnoNews(object):
         except Exception, e:
             logger.info(traceback.format_exc())
 
-        # self.service.save(entry)
+        self.service.save(entry)
 
         logger.info("<Tecnonews> <_process> END processing %s" % entry.title)
 
