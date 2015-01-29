@@ -23,6 +23,7 @@ class EuroNewsParser(object):
         soup = BeautifulSoup(urlopen(url).read())
         paragraphs =  None
         tags = []
+        title = ''
         if soup is not None:
             try:
                 paragraphs = soup.find('div', {'id': 'articleTranscript'}).find_all('p')
@@ -46,12 +47,15 @@ class EuroNewsParser(object):
         else:
             content = ''
         
-        title = soup.find(
-            'div', {'id': 'title-wrap-new'}).find('h1').find('a').text
+        title_obj = soup.find(
+            'div', {'id': 'title-wrap-new'}).find('h1').find('a')
+
+        if title_obj is not None:
+            title = title_obj.text
         
         if self.language_filter_status == 'ON':
             content = self.language_filter.only_spanish_paragraph(content.encode("utf-8"))
         
         
         return NewsEntry(title, content, tags, self.source, url=url) \
-            if len(content) > 1  and len(tags) > 0 else None
+            if len(content) > 1  and len(tags) > 0 and len(title) > 0 else None

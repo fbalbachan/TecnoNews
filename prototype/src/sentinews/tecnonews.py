@@ -5,7 +5,7 @@ from src.services.mongodb.news_entries_service import NewsEntriesService
 from src.utils.relatedNewsEntries import RelatedNewsEntries
 from src.utils.logger_utils import *
 import traceback
-import datetime
+from datetime import datetime
 
 logger = get_logger('tecnonews')
 
