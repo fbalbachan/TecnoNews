@@ -53,4 +53,16 @@ class NewsCrawler(object):
           print feed
           news_entries = crawler.crawl(feed.parser, feed.url[0][0], feed.default_tags)
           entries.extend(news_entries)
-      return entries
+
+      return self.__clean_duplicated(entries)
+
+    def __clean_duplicated(self, entries):
+        cleaned_entries = []
+        cleaned_entries_urls = []
+
+        for entry in entries:
+            if entry.url not in cleaned_entries_urls:
+                cleaned_entries.append(entry)
+                cleaned_entries_urls.append(entry.url)
+
+        return cleaned_entries
