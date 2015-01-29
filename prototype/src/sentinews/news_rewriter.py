@@ -100,6 +100,7 @@ class NewsRewriter(object):
         analysis["generated_content_other_sources"] = sp.get_generated_content()
 
         wikiinfo = analysis["generated_content_wiki"]
+        paragraph_from_other_cover = analysis["generated_content_other_sources"]
         ranking = analysis["referent_ranking"]
 
         # Insert new content
@@ -119,6 +120,13 @@ class NewsRewriter(object):
             self.rewritten_entry.content  = self.insert_main_image(wikiinfo[0][2])
         else:
             logger.info("NO REFERENT SCORE > 1")
+
+
+        # self.rewritten_entry.content += """[eyesonly logged="in"] wikiinfo: <br/>""" + str(wikiinfo) \
+        #                                  + " other cover: <br/>" + str(paragraph_from_other_cover)  + "[/eyesonly]"
+        # print "------------"
+        # print wikiinfo
+        # print "------------"
 
     def publish(self):
         publisher = BlogPublisher()

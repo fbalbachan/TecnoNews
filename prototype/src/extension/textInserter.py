@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+
 class TextInserter:
     def __init__(self, analysis):
         self.analysis = analysis
@@ -8,7 +9,8 @@ class TextInserter:
         self.paragraph_indexes = self.compute_paragraph_indexes()
 
     def get(self):
-        injections_wiki = self.get_injections_wiki()
+        injections_wiki = self.get_injections_wiki_idx()
+        print "injections_wiki", injections_wiki, "\n"
         injections_paragraphs = self.get_injection_paragraphs_other_sources()
         generated = u""
 
@@ -23,14 +25,14 @@ class TextInserter:
             if idx in injections_paragraphs.keys():
                 generated += injections_paragraphs[idx]
 
-            #TODO: may use idx por para todo
-            if paragraph in injections_wiki:
-                for content in injections_wiki[paragraph]:
+            if idx in injections_wiki.keys():
+                for content in injections_wiki[idx]:
+                    print "injected"
                     generated += content + "\n"
 
         return generated.strip()
 
-    def get_injections_wiki(self):
+    def get_injections_wiki_idx(self):
         injections = {}
 
         contents = self.analysis["generated_content_wiki"]
@@ -40,9 +42,17 @@ class TextInserter:
 
         for referent, content, page in contents[0:2]:  # @UnusedVariable
             referent_index = referent.first_occurrence().token.start()
-            previous_paragraph = self.paragraph_of(referent_index)
-            if previous_paragraph not in injections: injections[previous_paragraph] = []
-            injections[previous_paragraph].append(content)
+            previous_paragraph_idx = self.idx_paragraph_of(referent_index)
+            if previous_paragraph_idx not in injections:
+
+                # TODO: Transform all to unicode at the beginning of the
+                # pipeline!!!
+
+                if not isinstance(content, unicode):
+                    content = unicode(content, 'utf-8')
+
+                injections[previous_paragraph_idx] = []
+            injections[previous_paragraph_idx].append(content)
         return injections
 
     def get_injection_paragraphs_other_sources(self):
@@ -51,7 +61,18 @@ class TextInserter:
     def paragraph_of(self, index):
         for paragraph in self.paragraphs:
             start, end = self.paragraph_indexes[paragraph]
-            if index >= start and index < end: return paragraph
+            if start <= index < end: return paragraph
+
+    def idx_paragraph_of(self, index):
+        paragraph_idx = None
+
+        for idx, paragraph in enumerate(self.paragraphs):
+            start, end = self.paragraph_indexes[paragraph]
+            if start <= index < end:
+                paragraph_idx = idx
+                break
+
+        return paragraph_idx
 
     def compute_paragraph_indexes(self):
         paragraph_indexes = {}
