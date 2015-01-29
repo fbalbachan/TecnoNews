@@ -28,7 +28,7 @@ class TextInserter:
             if idx in injections_wiki.keys():
                 for content in injections_wiki[idx]:
                     print "injected"
-                    generated += content + "\n"
+                    generated += content + u"\n"
 
         return generated.strip()
 
@@ -43,16 +43,17 @@ class TextInserter:
         for referent, content, page in contents[0:2]:  # @UnusedVariable
             referent_index = referent.first_occurrence().token.start()
             previous_paragraph_idx = self.idx_paragraph_of(referent_index)
+
             if previous_paragraph_idx not in injections:
-
-                # TODO: Transform all to unicode at the beginning of the
-                # pipeline!!!
-
-                if not isinstance(content, unicode):
-                    content = unicode(content, 'utf-8')
-
                 injections[previous_paragraph_idx] = []
+
+            # TODO: Transform all to unicode at the beginning of the
+            # pipeline!!!
+            if not isinstance(content, unicode):
+                content = unicode(content, 'utf-8')
+
             injections[previous_paragraph_idx].append(content)
+
         return injections
 
     def get_injection_paragraphs_other_sources(self):

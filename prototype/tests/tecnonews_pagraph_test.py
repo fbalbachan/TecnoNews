@@ -43,7 +43,6 @@ class TecnonewsTest(unittest.TestCase):
 
             # c.rewrite_title()
             c.rewrite_content()
-            print c.rewritten_entry.content
             c.publish()
             # entry.published_date = datetime.utcnow()
             # entry.wp_id = c.rewritten_entry.wp_id
