@@ -1,7 +1,7 @@
 __author__ = 'Pablo Perez De Angelis'
 
 from src.utils.textDistance import TextDistance
-import numpy
+from collections import defaultdict
 
 paragraph_logger = None
 
@@ -18,6 +18,7 @@ class SimilarParagraph:
         self.paragraphs = self.get_paragraphs(self.text)
         self.load_other_sources(other_versions)
         self.clean_candidate_paragraphs()
+        self.paragraphs_selected = defaultdict(lambda: '')
 
     @staticmethod
     def get_logger():
@@ -112,14 +113,28 @@ class SimilarParagraph:
         for k in t1_paragraphs.keys():
             paragraph_logger.info("paragraph %d of t1_paragraphs" % k)
             simil_idx, simil_k = self.max_similarity_of_paragraph_l(t0_paragraphs, t1_paragraphs[k])
-            if simil_k < min_simil or min_simil_idx == -1:
+
+            if simil_k > 0 and (simil_k < min_simil or min_simil_idx == -1):
                 min_simil = simil_k
                 min_simil_idx = k
                 t0_max_simil = simil_idx
+
         return min_simil, min_simil_idx, t0_max_simil
 
+    # TODO: Remove injection_mark after betha testing is over
+    def select_paragraph(self, simil, t1_p, t0_p, paragraphs, injection_mark):
+
+        if t1_p != -1:
+            paragraph_logger.info("\nselected paragraph: %s" % t1_p)
+            paragraph_logger.info(paragraphs[t1_p])
+            self.add_result_paragraph(t0_p, paragraphs[t1_p], injection_mark)
+            del paragraphs[t1_p]
+
+    def add_result_paragraph(self, idx, paragraph, injection_mark):
+        self.paragraphs_selected[idx] += injection_mark + paragraph + injection_mark
+
     def get_generated_content(self):
-        generated = {}
+
         paragraph_logger.info("numered paragraphs\n")
         paragraph_logger.info("Original:\n")
         paragraph_logger.info(self.paragraphs)
@@ -132,46 +147,33 @@ class SimilarParagraph:
         # First paragraph from paragraph_c1
         simil, t1_p, t0_p = self.less_similar_paragraph(self.paragraphs, self.paragraph_c1)
         paragraph_logger.info("%s, %s, %s" % (simil, t1_p, t0_p))
+        injection_mark = u"\n>>>\n"
 
-        if t1_p != -1:
-            paragraph_logger.info("\nselected paragraph: %s" % t1_p)
-            paragraph_logger.info(self.paragraph_c1[t1_p])
-            if not t0_p in generated.keys():
-                generated[t0_p] = "\n>>>\n" + self.paragraph_c1[t1_p] + "\n>>>\n"
-            else:
-                generated[t0_p] += "\n>>>\n" + self.paragraph_c1[t1_p] + "\n>>>\n"
-
-            del self.paragraph_c1[t1_p]
+        self.select_paragraph(simil, t1_p, t0_p, self.paragraph_c1, injection_mark)
+        assert t1_p not in self.paragraph_c1
 
         paragraph_logger.info("--------------\n")
         # Second paragraph from paragraph_c1
         simil, t1_p, t0_p = self.less_similar_paragraph(self.paragraphs, self.paragraph_c1)
         paragraph_logger.info("%s, %s, %s" % (simil, t1_p, t0_p))
 
-        if t1_p != -1:
-            paragraph_logger.info("\nselected paragraph: %s" % t1_p)
-            paragraph_logger.info(self.paragraph_c1[t1_p])
+        injection_mark = u"\n>>\n"
+        self.select_paragraph(simil, t1_p, t0_p, self.paragraph_c1, injection_mark)
+        assert t1_p not in self.paragraph_c1
 
-            if not t0_p in generated.keys():
-                generated[t0_p] = "\n>>\n" + self.paragraph_c1[t1_p] + "\n>>\n"
-            else:
-                generated[t0_p] += "\n>>\n" + self.paragraph_c1[t1_p] + "\n>>\n"
-
-
+        paragraph_logger.info("--------------\n")
         # First paragraph from paragraphs_c2
         simil, t1_p, t0_p = self.less_similar_paragraph(self.paragraphs, self.paragraph_c2)
 
-        if t1_p != -1:
-            paragraph_logger.info("\nselected paragraph: %s" % t1_p)
-            paragraph_logger.info(self.paragraph_c1[t1_p])
+        injection_mark = u"\n>\n"
+        self.select_paragraph(simil, t1_p, t0_p, self.paragraph_c2, injection_mark)
+        assert t1_p not in self.paragraph_c2
 
-            if not t0_p in generated.keys():
-                generated[t0_p] = "\n>\n" + self.paragraph_c2[t1_p] + "\n>\n"
-            else:
-                generated[t0_p] += "\n>\n" + self.paragraph_c2[t1_p] + "\n>\n"
+        paragraph_logger.info("--------------\n")
+        paragraph_logger.info("\ngenerated %s" % self.paragraphs_selected)
 
-        paragraph_logger.info("\ngenerated %s" % generated)
-        return generated
+        return self.paragraphs_selected
+
 
 def test_news1_news2():
 
