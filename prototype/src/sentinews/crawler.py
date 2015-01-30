@@ -2,9 +2,12 @@ import ConfigParser
 from src.services.mongodb.news_entries_service import NewsEntriesService
 from src.sentinews.parsers import *
 import feedparser
+from src.utils.sanitize import Sanitizer
 
 
 class Crawler(object):
+
+    sanitizer = Sanitizer()
 
     def _filter_entries(self, entries):
         ''' Filter entries that already exist in the DB,
@@ -43,8 +46,9 @@ class Crawler(object):
                 news_entry = parser.parse(entry["link"], default_tags)    
             else:
                 news_entry = parser.parse(entry["link"])
-                
+
             if news_entry is not None: 
+                news_entry.content = self.sanitizer(news_entry.content)
                 news_entries.append(news_entry)
         filtered_by_tags = self._filter_by_tag(news_entries)
         return filtered_by_tags
