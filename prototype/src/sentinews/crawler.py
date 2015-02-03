@@ -48,7 +48,7 @@ class Crawler(object):
 
         filtered_entries = self._filter_entries(parsed_feeds["entries"])
 
-        for idx, entry in enumerate(filtered_entries[:3]):
+        for idx, entry in enumerate(filtered_entries):
             crawler_logger.info("processing %s of %s" % (idx, len(filtered_entries)))
             # TODO: simplify this making parse.parse accept degault_tags as None
             if default_tags is not None:
