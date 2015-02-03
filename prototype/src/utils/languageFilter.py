@@ -14,14 +14,12 @@ class LanguageFilter(object):
         content_es = ""
         spanish_like_languages = ['es']
         for paragraph in text.split('\n'):
-
-            # avoid check language of empty paragraphs
-            if paragraph == '\n':
+            if paragraph == u'' or paragraph == u' ':
                 continue
-
             if self.filter.get_client_output_for(paragraph)[0] \
                     in spanish_like_languages:
-                content_es += paragraph + "\n"
+                content_es += paragraph + u"\n"
             else:
-                logger.info("Is not spanish paragraph:" + paragraph)
+                import re
+                logger.info("Is not spanish paragraph:" + re.escape(paragraph))
         return content_es

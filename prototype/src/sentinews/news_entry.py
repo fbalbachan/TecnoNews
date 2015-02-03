@@ -63,7 +63,7 @@ class NewsEntry(object):
             self.user_per_categories_dict[i]['host'] = row[0]
             self.user_per_categories_dict[i]['password'] = row[2]
             self.user_per_categories_dict[i]['categories'] = [
-                element for element in row[3:] if element != '']
+                unicode(element, 'utf-8') for element in row[3:] if element != '']
             i += 1
 
         self.categories = list(Categorizer(self.tags).get_or_else())
@@ -71,12 +71,11 @@ class NewsEntry(object):
 
 
     def __get_hosts(self, categories):
-        host_pivot = []
         hosts = set([])
         for category in categories:
             for key in self.user_per_categories_dict:
                 for user_category in self.user_per_categories_dict[key]['categories']:
-                    if unidecode(user_category.lower()) == unidecode(category.lower()):
+                    if user_category.lower() == category.lower():
                         new_host = WPHost(self.user_per_categories_dict[key]['host'],
                                           self.user_per_categories_dict[key]['user'],
                                           self.user_per_categories_dict[key]['password'])

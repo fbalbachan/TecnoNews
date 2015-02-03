@@ -19,6 +19,7 @@ class CNNParser:
         self.language_filter_status = config.get('language_filter', 'status')
 
     source = u"CNN en español"
+
     def parse(self, url, limit=1):
         soup = BeautifulSoup(urlopen(url).read())
         # TODO: check if this is working ok and use it
@@ -26,28 +27,26 @@ class CNNParser:
         # for script in soup(["script", "style"]):
         #     script.extract()    # rip scripts and styles out
 
-        articles = soup.findAll('div' , { "class" : "cnnRightPost" }, limit=limit)
+        articles = soup.findAll('div', { "class" : "cnnRightPost" }, limit=limit)
         new_entries = []
         for article in articles:
             title = article.find('h1').text
             content = self._remove_cnn_header(article.find('div').text)
 
-            if (content.find('function()') == -1):
+            if content.find('function()') == -1:
                 if self.language_filter_status == 'ON':
-                    content = self.language_filter.only_spanish_paragraph(content.encode("utf-8"))
+                    content = self.language_filter.only_spanish_paragraph(content)
             try:
-              tags = article.find('span', class_ = "cnnBlogFiledBy cnn_categories").text[11:].split(u"\xa0\u2022\xa0")
+                tags = article.find('span', class_ = "cnnBlogFiledBy cnn_categories").text[11:].split(u"\xa0\u2022\xa0")
             except:
-              continue
-              logger = get_logger('tecnonews')
-              logger.info('Tags not found: %s' %(article.find('span', class_ = "cnnBlogFiledBy cnn_categories")))
-              tags = []
-              
+                logger = get_logger('tecnonews')
+                logger.info('Tags not found: %s' %(article.find('span', class_ = "cnnBlogFiledBy cnn_categories")))
+                tags = []
 
             if (content.find('function()') == -1) and len(tags) > 0:
                 new_entries.append(NewsEntry(title, content, tags, self.source, url=url)) 
         
-        return new_entries[0] if len(new_entries) > 0 else NewsEntry('','',['dummie'],'','')
+        return new_entries[0] if len(new_entries) > 0 else NewsEntry('', '', ['dummie'], '', '')
 
         
     def _remove_cnn_header(self, text):

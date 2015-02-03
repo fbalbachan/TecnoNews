@@ -54,7 +54,7 @@ class EuroNewsParser(object):
             title = title_obj.text
         
         if self.language_filter_status == 'ON':
-            content = self.language_filter.only_spanish_paragraph(content.encode("utf-8"))
+            content = self.language_filter.only_spanish_paragraph(content)
         
         
         return NewsEntry(title, content, tags, self.source, url=url) \

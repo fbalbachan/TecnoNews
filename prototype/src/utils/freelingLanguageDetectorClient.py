@@ -9,7 +9,8 @@ class FreelingLanguageDetectorClient:
         return self.get_client_output_for(text)
 
     def get_client_output_for(self, text):
-        if type(text) != str: raise Exception("Solo se acepta unicode codificado a string.")
+        if not isinstance(text, unicode):
+            raise Exception("Must provide unicode strings.")
 
         # TODO: check if
         text = re.sub(r"""[)|(|.|,|"|!|'|@|#|\$|%|^|&|\*]""", ' ', text)
@@ -19,7 +20,7 @@ class FreelingLanguageDetectorClient:
         p = subprocess.Popen([config["client"], config["host"], config["language_port"]],
                              stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
 
-        raw_output = p.communicate(input=text)[0]
+        raw_output = p.communicate(input=text.encode('utf-8'))[0]
         return raw_output.split('\n')
 
     def setup_config(self):
