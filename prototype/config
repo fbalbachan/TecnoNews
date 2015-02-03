@@ -53,4 +53,5 @@ categories = %(resources_dir)s/categories.csv
 countries = %(resources_dir)s/nombre_pais_ESP.csv
 persons = %(resources_dir)s/person.cls
 demonym = %(resources_dir)s/twGENT.dat
+marks_to_avoid_paragraphs = %(resources_dir)s/paragraph_to_avoid
 user_per_categories = %(resources_dir)s/wordpress_users_categories.csv
