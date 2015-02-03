@@ -13,7 +13,7 @@ class Sanitizer():
 
     def process_content(self, content):
 
-        new_content = ''.join([paragraph for paragraph in content.split('\n')
+        new_content = '\n'.join([paragraph for paragraph in content.split('\n')
                        if not any(x == paragraph[:len(x)] for x in self.paragraph_to_avoid)])
 
         if self.language_filter_status == 'ON':
