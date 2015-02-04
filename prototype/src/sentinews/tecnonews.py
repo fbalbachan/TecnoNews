@@ -68,7 +68,7 @@ class TecnoNews(object):
             logger.info(traceback.format_exc())
             logger.error("%s" % e.message)
 
-        self.service.save(entry)
+        # self.service.save(entry)
 
         logger.info("<Tecnonews> <_process> END processing %s" % entry.title)
 
