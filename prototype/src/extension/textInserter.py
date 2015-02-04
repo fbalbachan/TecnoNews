@@ -5,8 +5,11 @@ class TextInserter:
     def __init__(self, analysis):
         self.analysis = analysis
         self.text = self.analysis["paragraph"].text
-        self.paragraphs = self.text.split("\n")
+        self.paragraphs = self.get_paragraphs()
         self.paragraph_indexes = self.compute_paragraph_indexes()
+
+    def get_paragraphs(self):
+        return [paragraph for paragraph in self.text.split("\n") if paragraph != '']
 
     def get(self):
         injections_wiki = self.get_injections_wiki_idx()
