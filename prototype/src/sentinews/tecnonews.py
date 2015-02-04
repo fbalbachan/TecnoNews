@@ -50,10 +50,11 @@ class TecnoNews(object):
             # Add the other_version entries (only ids) to be used in paragraph insertion
             rewriter.rewritten_entry.other_versions = other_versions
 
-            logger.info('<Tecnonews> <_process> publishing note: ' + entry.source)
+            logger.info('<Tecnonews> <_process> rewriting note: ' + entry.source)
             try:
                 # rewriter.rewrite_title()
                 rewriter.rewrite_content()
+                logger.info('<Tecnonews> <_process> pubishing: ' + entry.source)
                 rewriter.publish()
                 entry.published_date = datetime.utcnow()
                 entry.wp_id = rewriter.rewritten_entry.wp_id

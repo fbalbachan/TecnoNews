@@ -147,7 +147,7 @@ class SimilarParagraph:
         # First paragraph from paragraph_c1
         simil, t1_p, t0_p = self.less_similar_paragraph(self.paragraphs, self.paragraph_c1)
         paragraph_logger.info("%s, %s, %s" % (simil, t1_p, t0_p))
-        injection_mark = u"\n>>>\n"
+        injection_mark = u""
 
         self.select_paragraph(simil, t1_p, t0_p, self.paragraph_c1, injection_mark)
         assert t1_p not in self.paragraph_c1
@@ -157,7 +157,7 @@ class SimilarParagraph:
         simil, t1_p, t0_p = self.less_similar_paragraph(self.paragraphs, self.paragraph_c1)
         paragraph_logger.info("%s, %s, %s" % (simil, t1_p, t0_p))
 
-        injection_mark = u"\n>>\n"
+        injection_mark = u""
         self.select_paragraph(simil, t1_p, t0_p, self.paragraph_c1, injection_mark)
         assert t1_p not in self.paragraph_c1
 
@@ -165,7 +165,7 @@ class SimilarParagraph:
         # First paragraph from paragraphs_c2
         simil, t1_p, t0_p = self.less_similar_paragraph(self.paragraphs, self.paragraph_c2)
 
-        injection_mark = u"\n>\n"
+        injection_mark = u""
         self.select_paragraph(simil, t1_p, t0_p, self.paragraph_c2, injection_mark)
         assert t1_p not in self.paragraph_c2
 

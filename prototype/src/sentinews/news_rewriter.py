@@ -121,6 +121,7 @@ class NewsRewriter(object):
         else:
             logger.info("NO REFERENT SCORE > 1")
 
+        self.post_process()
 
         # self.rewritten_entry.content += """[eyesonly logged="in"] wikiinfo: <br/>""" + str(wikiinfo) \
         #                                  + " other cover: <br/>" + str(paragraph_from_other_cover)  + "[/eyesonly]"
@@ -135,3 +136,11 @@ class NewsRewriter(object):
     def _analyze(self, text):
         return Sentilecto().analyze(text)
 
+    def post_process(self):
+        content = ''
+
+        for paragraph in self.rewritten_entry.content.split('\n'):
+            if len(paragraph) > 0:
+                content += '<p>' + paragraph[0].upper() + paragraph[1:] + '</p>'
+
+        self.rewritten_entry.content = content
