@@ -59,11 +59,14 @@ class TecnoNews(object):
                 entry.published_date = datetime.utcnow()
                 entry.wp_id = rewriter.rewritten_entry.wp_id
                 pass
-            except Exception, e:
+            except Exception as e:
                 logger.error("<Tecnonews> <_process> rewriting fail: %s " % (entry.title))
+                logger.error("%s" % e.message)
                 logger.info(traceback.format_exc())
-        except Exception, e:
+
+        except Exception as e:
             logger.info(traceback.format_exc())
+            logger.error("%s" % e.message)
 
         self.service.save(entry)
 

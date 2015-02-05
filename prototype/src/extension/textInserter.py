@@ -26,12 +26,11 @@ class TextInserter:
 
             # if there is some paragraph to append
             if idx in injections_paragraphs.keys():
-                generated += injections_paragraphs[idx] + u"\n"
+                generated += u"\n" + injections_paragraphs[idx] + u"\n"
 
             if idx in injections_wiki.keys():
                 for content in injections_wiki[idx]:
-                    print "injected"
-                    generated += content + u"\n"
+                    generated += u"\n" + content + u"\n"
 
         return generated.strip()
 

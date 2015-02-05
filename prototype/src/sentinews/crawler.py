@@ -3,6 +3,7 @@ from src.services.mongodb.news_entries_service import NewsEntriesService
 from src.sentinews.parsers import *
 import feedparser
 from src.utils.sanitize import Sanitizer
+import traceback
 
 crawler_logger = None
 
@@ -48,17 +49,23 @@ class Crawler(object):
 
         filtered_entries = self._filter_entries(parsed_feeds["entries"])
 
-        for idx, entry in enumerate(filtered_entries):
+        for idx, feedParserDict in enumerate(filtered_entries):
             crawler_logger.info("processing %s of %s" % (idx, len(filtered_entries)))
-            # TODO: simplify this making parse.parse accept degault_tags as None
-            if default_tags is not None:
-                news_entry = parser.parse(entry["link"], default_tags)    
-            else:
-                news_entry = parser.parse(entry["link"])
+            crawler_logger.info("entry url: %s" % feedParserDict["link"])
+            try:
+                # TODO: simplify this making parse.parse accept degault_tags as None
+                if default_tags is not None:
+                    news_entry = parser.parse(feedParserDict["link"], default_tags)
+                else:
+                    news_entry = parser.parse(feedParserDict["link"])
 
-            if news_entry is not None: 
-                news_entry.content = self.sanitizer.process_content(news_entry.content)
-                news_entries.append(news_entry)
+                if news_entry is not None:
+                    news_entry.content = self.sanitizer.process_content(news_entry.content)
+                    news_entries.append(news_entry)
+            except Exception as e:
+                crawler_logger.error("<crawler> <crawl> %s" % feedParserDict["link"])
+                crawler_logger.error(traceback.format_exc())
+                crawler_logger.error("%s" % e.message)
 
         filtered_by_tags = self._filter_by_tag(news_entries)
 
