@@ -12,8 +12,8 @@ from src.utils.similarParagraph import SimilarParagraph
 from src.utils.logger_utils import *
 import re
 
-import wikipedia as wk
 logger = get_logger('tecnonews')
+
 
 class NewsRewriter(object):
     ''' Main class that contains all information 
@@ -47,40 +47,75 @@ class NewsRewriter(object):
         return res
 
     def insert_main_image(self, wikipage):
-        ## TODO CAMBIAR
+        # TODO Rewrite this
+        # TODO Extract this to a class
 
         img_alts = self._get_alt_text(wikipage.images, wikipage.html())
-        images = img_alts.keys()
+        images_urls = img_alts.keys()
 
-        search_string = wikipage.original_title.lower().split()
+        title_words = wikipage.original_title.lower().split()
+        logger.info("search_string %s " % title_words)
 
-        res = []
-        for x in search_string:
-            if len(x) < 4:
+        images_urls = self.pre_filter_images_urls(images_urls)
+
+        candidate_urls = []
+        for word in title_words:
+            if len(word) < 4:
+                # ignore short words
                 continue
 
-            for y in images:
-                if x in y.lower():
-                    if 'logo' in y:
-                        res = [y]
-                    else:
-                        if y not in res:
-                            res.append(y)
+            for url in images_urls:
+                if word in url.lower():
+                    if url not in candidate_urls:
+                        candidate_urls.append(url)
 
-        for x in res:
-            if "Flag" in x:
-                res = [x]
+        logger.info("results %s " % candidate_urls)
+
+        for url in candidate_urls:
+            # ie we choose url if it is a Flag (ie have the flag word in it)
+            if 'logo' in url:
+                candidate_urls = [url]
                 break
-        if not images:
-            return self.rewritten_entry.content
-        if res:
-            image = res[0]
-        else:
-            image = images[0]
-        
-        logger.info("IMAGE URL: %s %s", image, img_alts[image])
+            elif 'Flag' in url:
+                candidate_urls = [url]
+                break
 
-        return '<p><img title="%s" src=%s></img></p> <p><small>Foto: Wikipedia - %s</small></p> %s' %(img_alts[image], image,img_alts[image], self.rewritten_entry.content)
+        logger.info("results after %s " % candidate_urls)
+
+        if candidate_urls:
+            selected_image = candidate_urls[0]
+        else:
+            # TODO Re think this default criteria
+            # we didn't get a candidate just use the first one
+            logger.info("Selection first image of the results becouse no criteria")
+            selected_image = images_urls[0]
+        
+        logger.info("IMAGE URL: %s", selected_image)
+        logger.info("IMAGE alt text: %s ", img_alts[selected_image])
+
+        rewritten_content = ''
+
+        if selected_image:
+            rewritten_content = u'<p><img title="%s" src=%s></img></p> <p><small>Foto: Wikipedia - %s</small></p>' % (img_alts[selected_image],
+                                                                                                                       selected_image,
+                                                                                                                       img_alts[selected_image])
+        rewritten_content += self.rewritten_entry.content
+
+        return rewritten_content
+
+    @staticmethod
+    def pre_filter_images_urls(images_urls):
+
+        # TODO: make a resource with this info
+        blacklist = ['Commons-', 'Wikinews-logo', 'Flag_of_None', 'Red_pog',
+                     'Wikisource-logo', 'Red_pog', 'Estany', 'Flag_of_Egypt',
+                     'Ice_hockey_pictogram', 'Spanish Language Wiki.svg',
+                     'Kit right arm blueshoulders.png', 'Tetragrammaton']
+
+        filtered_urls = [url for url in images_urls
+                         if not any(black_string in url for black_string in blacklist)]
+
+        return filtered_urls
 
     def rewrite_title(self):
         analysis = self._analyze(self.original_entry.title)
@@ -117,7 +152,8 @@ class NewsRewriter(object):
 
         if wikiinfo and filter(lambda (referent, score): referent == wikiinfo[0][0] and score > 1., ranking):
             logger.info("WIKIINFO: %s", str(wikiinfo))
-            self.rewritten_entry.content  = self.insert_main_image(wikiinfo[0][2])
+            logger.info("Searching for %s " % wikiinfo[0][2])
+            self.rewritten_entry.content = self.insert_main_image(wikiinfo[0][2])
         else:
             logger.info("NO REFERENT SCORE > 1")
 
