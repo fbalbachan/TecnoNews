@@ -2,7 +2,9 @@
 
 ### Estructura de archivos
 
-A diferencia de como se hacia antes, ahora, en vez de tener dos pares de módulos, uno por el crawler y otro por el parser, estamos usando una sola carpeta que contiene solamente los módulos que se encargaran de parsear cada fuente en particular
+A diferencia de como se hacia antes, ahora, en vez de tener dos pares de módulos, uno por el crawler y otro por el
+parser, estamos usando una sola carpeta que contiene solamente los módulos que se encargaran de parsear cada fuente en
+particular.
 
 ### Pasos necesarios
 
