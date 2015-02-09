@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from src.utils.freelingLanguageDetectorClient import FreelingLanguageDetectorClient
 from src.utils.logger_utils import get_logger
-import goslate
+
 
 logger = get_logger('tecnonews')
 
@@ -10,7 +10,6 @@ class LanguageFilter(object):
 
     def __init__(self):
         self.filter = FreelingLanguageDetectorClient()
-        self.gs = goslate.Goslate()
 
     def only_spanish_paragraph(self, text):
 
