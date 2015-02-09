@@ -1,17 +1,17 @@
 import ConfigParser
 from src.services.mongodb.news_entries_service import NewsEntriesService
 from src.sentinews.parsers import *
+from src.utils.logger_utils import get_crawler_logger
 import feedparser
 from src.utils.sanitize import Sanitizer
 import traceback
 
-crawler_logger = None
+crawler_logger = get_crawler_logger()
 
 
 class Crawler(object):
 
     def __init__(self):
-        self.get_logger()
         self.sanitizer = Sanitizer()
 
     def _filter_entries(self, entries):
@@ -71,21 +71,3 @@ class Crawler(object):
 
         crawler_logger.info("Ends parser %s" % cls_parser)
         return filtered_by_tags
-
-    @staticmethod
-    def get_logger():
-        global crawler_logger
-        if not crawler_logger:
-            import logging
-            from logging.handlers import RotatingFileHandler
-            import logging.handlers
-
-            logging.basicConfig(level=logging.INFO, format='%(message)s')
-
-            logger = logging.getLogger('Crawler')
-            logger.addHandler(RotatingFileHandler('logs/crawlers.log', 'a',
-                maxBytes=5000000, backupCount=50))
-            logger.addHandler(logging.StreamHandler())
-            logger.propagate = False
-            crawler_logger = logger
-        return crawler_logger

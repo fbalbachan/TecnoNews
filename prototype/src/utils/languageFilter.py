@@ -5,6 +5,7 @@ import goslate
 
 logger = get_logger('tecnonews')
 
+
 class LanguageFilter(object):
 
     def __init__(self):
@@ -19,9 +20,8 @@ class LanguageFilter(object):
             if paragraph.strip() == u'':
                 continue
 
-            # if self.filter.get_client_output_for(paragraph)[0] \
-            #         in spanish_like_languages:
-            if self.gs.detect(paragraph) in spanish_like_languages:
+            if self.filter.get_client_output_for(paragraph)[0] \
+                    in spanish_like_languages:
                 content_es += paragraph.strip() + u"\n"
             else:
                 logger.info("Is not spanish paragraph:" + paragraph)
