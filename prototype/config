@@ -4,8 +4,6 @@ raise_exception = False
 
 [instance]
 id = 0
-name = noticiasbit
-domain = noticiasbit.com
 
 [news_sources]
 feeds_to_process = cnn_spanish,euronews

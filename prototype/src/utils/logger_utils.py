@@ -12,7 +12,7 @@ def get_logger(file):
     global log_obj
     if not log_obj:
         instance_info = get_instance_info()
-        file = instance_info["domain"] + "-" + file
+        file = "instance" + instance_info["id"] + "-" + file
         logger = logging.getLogger(file)
         logger.propagate = False
         handler = logging.FileHandler('logs/' + file + '.log')
@@ -37,7 +37,7 @@ def get_crawler_logger():
         from logging.handlers import RotatingFileHandler
         import logging.handlers
         instance_info = get_instance_info()
-        crawlers_filename = instance_info["domain"] + "-crawlers"
+        crawlers_filename = "instance" + instance_info["id"] + "-crawlers"
         logging.basicConfig(level=logging.INFO, format='%(message)s')
 
         logger = logging.getLogger('Crawler')
@@ -54,6 +54,4 @@ def get_instance_info():
     config = ConfigParser.ConfigParser()
     config.read("config")
     instance_info["id"] = config.getint("instance", "id")
-    instance_info["name"] = config.get("instance", "name")
-    instance_info["domain"] = config.get("instance", "domain")
     return instance_info
