@@ -10,20 +10,20 @@ feeds_to_process = cnn_spanish,euronews
 
 [freeling]
 
-host        = tecnolecto.com
-client      = /opt/freeling-3.0/bin/analyzer_client
+host        = 85.10.210.172
+client      = ../externals/freeling/analyzer_client
 parser_port = 10000
 tagger_port = 9999
 
 [freeling_language]
 
-host        = tecnolecto.com
-client      = /usr/local/bin/analyzer_client
-language_port = 10001
+host        = 85.10.210.172
+client      = ../externals/freeling/analyzer_client
+language_port = 10101
 
 [mongodb]
 
-host = localhost
+host = 85.10.210.172
 port = 27017
 db = sentinews
 db_test = sentinews_test
@@ -32,7 +32,7 @@ db_test = sentinews_test
 status = ON
 
 [wordpress]
-url_post_base_path = http://tecnolecto.com/blog/?p=
+url_post_base_path = http://noticiasbit.com/
 
 [resources]
 
