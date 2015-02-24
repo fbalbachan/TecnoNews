@@ -1,21 +1,20 @@
 # -*- coding: utf-8 -*-
-import ConfigParser
+
 from src.sentinews.categorizer import Categorizer
 from src.sentinews.publisher_host import WPHost
 from src.utils.csvwrapper import unicode_csv_reader
-from unidecode import unidecode
 from src.utils.logger_utils import *
 import traceback
-
-'Struct class to contain the news information'
+import ConfigParser
 
 logger = get_logger('tecnonews')
 
 
 class NewsEntry(object):
     def __init__(self, title, content, tags, source, url=None, categories=None,
-        wp_id=None, related=[], entities=None, published_date=None,
-        object_id=None, versions=None):
+                 wp_id=None, wp_url=None, related=None, entities=None,
+                 published_date=None, object_id=None, versions=None):
+
         self.title = title
         self.content = content
         self.clean_text = None
@@ -27,15 +26,19 @@ class NewsEntry(object):
         self.published_date = published_date
         self.url = url
         self.wp_id = wp_id
+        self.wp_url = wp_url
         self.related = related
         self.object_id = object_id
         self.versions = versions
         self.config = ConfigParser.ConfigParser()
         self.config.read('config')
-        self.wp_prefix_url = self.config.get('wordpress','url_post_base_path')
+        # self.wp_prefix_url = self.config.get('wordpress','url_post_base_path')
+
+        if self.related is None:
+            self.related = []
 
         if self.categories is None:
-            self.__setUp()
+            self.__setup()
 
     def set_analisys_info(self):
         if not self.clean_text:
@@ -49,9 +52,9 @@ class NewsEntry(object):
     def set_news_versions(self, other_versions):
         self.versions = [entry.object_id for entry in other_versions]
 
-    def __setUp(self):
+    def __setup(self):
         user_per_categories_file = self.config.get(
-            'resources', 'user_per_categories')
+            'wordpress', 'user_per_categories')
         user_per_categories = unicode_csv_reader(open(user_per_categories_file, 'r'),
                                                  first_line_is_header=False, delimiter=',')
 
@@ -69,7 +72,6 @@ class NewsEntry(object):
         self.categories = list(Categorizer(self.tags).get_or_else())
         self.destination = self.__get_hosts(self.categories)
 
-
     def __get_hosts(self, categories):
         hosts = set([])
         for category in categories:
@@ -85,14 +87,10 @@ class NewsEntry(object):
         return hosts
 
     def to_dict(self):
-        return {'title': self.safe_unicode(self.title),
-                'content': self.safe_unicode(self.content),
-                'tags': self.safe_unicode_list(self.tags),
-                'source': self.source, 'categories': self.categories,
-                'entities': self.entities,
-                'published_date': self.published_date, 'url': self.url,
-                'wp_id': self.wp_id, 'related': self.related,
-                'versions': self.versions}
+        return dict(title=self.safe_unicode(self.title), content=self.safe_unicode(self.content),
+                    tags=self.safe_unicode_list(self.tags), source=self.source, categories=self.categories,
+                    entities=self.entities, published_date=self.published_date, url=self.url, wp_id=self.wp_id,
+                    wp_url=self.wp_url, related=self.related, versions=self.versions)
 
     def analyzed_paragraph(self):
         from src.model.paragraph.paragraphAnalyzer import ParagraphAnalyzer
@@ -114,9 +112,9 @@ class NewsEntry(object):
     def most_relevant_entities(self):
         try:
             ranked_entities_list = self.rank_of_entities()
-        except Exception, e:
+        except Exception as e:
             logger = get_logger('tecnonews')
-            logger.error("<NewsEntry> <most_relevant_entities>")
+            logger.error("<NewsEntry> <most_relevant_entities> %s " % e.message)
             logger.error(traceback.format_exc())
             # If we have an error getting the rank list just return empty relevant entities
             return []
@@ -178,8 +176,4 @@ class NewsEntry(object):
                 str_text = text
 
         return str_text
-
-    @property 
-    def wp_url(self):
-        return self.wp_prefix_url + self.wp_id if self.wp_prefix_url is not None else ''
 

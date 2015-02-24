@@ -9,13 +9,10 @@ from datetime import datetime
 
 logger = get_logger('tecnonews')
 
+
 class TecnoNews(object):
-
     def __init__(self):
-      self.service = NewsEntriesService()
-
-    def test(self):
-      logger.info("OKOK")
+        self.service = NewsEntriesService()
 
     def run(self):
         logger = get_logger('tecnonews')
@@ -41,8 +38,9 @@ class TecnoNews(object):
                 entry.set_related_news(related)
                 logger.info("<Tecnonews> <_process> same news different coverage number %s" % len(other_versions))
                 logger.info("<Tecnonews> <_process> related_news number %s" % len(related))
-            except Exception, e:
+            except Exception as e:
                 logger.error("<Tecnonews> <_process> related_news %s" % entry.title)
+                logger.error("<Tecnonews> <_process> related_news %s" % e.message)
                 logger.error("<Tecnonews> <_process> related_news %s" % traceback.format_exc())
                 logger.info(traceback.format_exc())
 
@@ -50,17 +48,20 @@ class TecnoNews(object):
             # Add the other_version entries (only ids) to be used in paragraph insertion
             rewriter.rewritten_entry.other_versions = other_versions
 
-            logger.info('<Tecnonews> <_process> rewriting note: ' + entry.source)
+            logger.info('<Tecnonews> <_process> rewriting note: ' + entry.title)
             try:
                 # rewriter.rewrite_title()
                 rewriter.rewrite_content()
-                logger.info('<Tecnonews> <_process> pubishing: ' + entry.source)
-                rewriter.publish()
+                logger.info('<Tecnonews> <_process> publishing: ' + entry.title)
+                wp_id, wp_url = rewriter.publish()
+                entry.wp_id = wp_id
+                entry.wp_url = wp_url
+
+                # TODO: check if we must use datetime from wp
                 entry.published_date = datetime.utcnow()
-                entry.wp_id = rewriter.rewritten_entry.wp_id
-                pass
+
             except Exception as e:
-                logger.error("<Tecnonews> <_process> rewriting fail: %s " % (entry.title))
+                logger.error("<Tecnonews> <_process> rewriting fail: %s " % entry.title)
                 logger.error("%s" % e.message)
                 logger.info(traceback.format_exc())
 
@@ -68,9 +69,10 @@ class TecnoNews(object):
             logger.info(traceback.format_exc())
             logger.error("%s" % e.message)
 
-        # self.service.save(entry)
+        self.service.save(entry)
 
         logger.info("<Tecnonews> <_process> END processing %s" % entry.title)
+
 
 if __name__ == '__main__':
     TecnoNews().run()

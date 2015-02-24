@@ -29,10 +29,10 @@ db = sentinews
 db_test = sentinews_test
 
 [language_filter]
-status = ON
+status = OFF
 
 [wordpress]
-url_post_base_path = http://noticiasbit.com/
+user_per_categories = wordpress/wordpress_users_categories_test.csv
 
 [resources]
 
@@ -60,4 +60,3 @@ countries = %(resources_dir)s/nombre_pais_ESP.csv
 persons = %(resources_dir)s/person.cls
 demonym = %(resources_dir)s/twGENT.dat
 marks_to_avoid_paragraphs = %(resources_dir)s/paragraph_to_avoid
-user_per_categories = %(resources_dir)s/wordpress_users_categories_test.csv

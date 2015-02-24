@@ -167,7 +167,7 @@ class NewsRewriter(object):
 
     def publish(self):
         publisher = BlogPublisher()
-        publisher.publish(self.rewritten_entry)
+        return publisher.publish(self.rewritten_entry)
 
     def _analyze(self, text):
         return Sentilecto().analyze(text)
