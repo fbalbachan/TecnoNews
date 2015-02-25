@@ -31,8 +31,10 @@ db_test = sentinews_test
 [language_filter]
 status = OFF
 
-[wordpress]
-user_per_categories = wordpress/wordpress_users_categories_test.csv
+[publishing]
+category_host_to_publish = publishing/wordpress_category_host_to_publish_test.json
+categories_priority = publishing/categories_priority.json
+
 
 [resources]
 
@@ -56,7 +58,7 @@ adverb_forms = %(resources_dir)s/adverb_forms.csv
 freeling_dict = %(resources_dir)s/freeling_es.dic
 verbs_que = %(resources_dir)s/verbs-que-es.dat
 categories = %(resources_dir)s/categories.csv
-countries = %(resources_dir)s/nombre_pais_ESP.csv
+countries = %(resources_dir)s/countries_name_es.csv
 persons = %(resources_dir)s/person.cls
 demonym = %(resources_dir)s/twGENT.dat
 marks_to_avoid_paragraphs = %(resources_dir)s/paragraph_to_avoid

@@ -17,5 +17,9 @@ class BBCParser(object):
                 paragraphs = article.find('div', {'class': 'story-body__inner'}).find_all('p')
                 content = ' '.join([paragraph.text + '\n' for paragraph in paragraphs])
 
-        return NewsEntry(title, content, tags, self.source,
-                         url=url) if len(content) > 1 and len(tags) > 0 else None
+        news_parsed = None
+
+        if len(content) > 1 and len(tags) > 0:
+            news_parsed = NewsEntry(title, content, tags, self.source, url=url)
+
+        return news_parsed

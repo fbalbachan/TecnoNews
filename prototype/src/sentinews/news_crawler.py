@@ -6,6 +6,9 @@ from src.sentinews.crawler import Crawler
 from src.sentinews.feeds import Feed
 from src.services.mongodb.connector import MongoConnector
 from datetime import datetime
+from src.utils.logger_utils import get_crawler_logger
+
+crawler_logger = get_crawler_logger()
 
 
 class NewsCrawler(object):

@@ -43,5 +43,10 @@ class ElPaisParser(object):
         content = ' '.join(paragraphs)
         if self.language_filter_status == 'ON':
             content = self.language_filter.only_spanish_paragraph(content)
-    
-        return NewsEntry(title, content, tags, self.source, url=url) if len(content) > 1 and len(tags) > 0 and len(title) > 0 else None
+
+        news_parsed = None
+
+        if len(content) > 1 and len(tags) > 0 and len(title) > 0:
+            news_parsed = NewsEntry(title, content, tags, self.source, url=url)
+
+        return news_parsed

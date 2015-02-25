@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import ConfigParser
 from src.utils.csvwrapper import unicode_csv_reader
-from sets import Set
 import warnings
 
 
@@ -36,7 +35,7 @@ class Categorizer(object):
         return self.categories if self.categories is not None else []
 
     def __create_categories(self):
-        categories = Set([])
+        categories = set([])
         if len(self.tags) > 0:
             for element in self.tags:
                 for category, list_tags in self.categories_dict.iteritems():
@@ -48,6 +47,10 @@ class Categorizer(object):
                             categories.add('internacionales')
                         if lelement.find(ltag) > -1:
                             categories.add(category)
-        #else:
-        #	categories.add('interes_general')
+
+        if not categories:
+            # If fails to categorize set default category
+            categories = {'interés general'}
+
+        assert categories
         return categories

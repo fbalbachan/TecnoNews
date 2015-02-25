@@ -1,0 +1,87 @@
+{
+    "salud":
+    {
+        "url": "http://tecnolecto.com/blog/xmlrpc.php",
+        "username": "tecnolecto_news",
+        "password": "news tecno lecto"
+
+    },
+    "economía":
+    {
+        "url": "http://tecnolecto.com/blog/xmlrpc.php",
+        "username": "tecnolecto_news",
+        "password": "news tecno lecto"
+    },
+    "política":
+    {
+        "url": "http://tecnolecto.com/blog/xmlrpc.php",
+        "username": "tecnolecto_news",
+        "password": "news tecno lecto"
+    },
+    "entretenimiento":
+    {
+        "url": "http://tecnolecto.com/blog/xmlrpc.php",
+        "username": "tecnolecto_news",
+        "password": "news tecno lecto"
+    },
+    "turismo":
+    {
+        "url": "http://tecnolecto.com/blog/xmlrpc.php",
+        "username": "tecnolecto_news",
+        "password": "news tecno lecto"
+    },
+    "tecnología":
+    {
+        "url": "http://tecnolecto.com/blog/xmlrpc.php",
+        "username": "tecnolecto_news",
+        "password": "news tecno lecto"
+    },
+    "cultura":
+    {
+        "url": "http://tecnolecto.com/blog/xmlrpc.php",
+        "username": "tecnolecto_news",
+        "password": "news tecno lecto"
+    },
+    "ciencia":
+    {
+        "url": "http://tecnolecto.com/blog/xmlrpc.php",
+        "username": "tecnolecto_news",
+        "password": "news tecno lecto"
+    },
+    "deporte":
+    {
+        "url": "http://tecnolecto.com/blog/xmlrpc.php",
+        "username": "tecnolecto_news",
+        "password": "news tecno lecto"
+    },
+    "interés general":
+    {
+        "url": "http://tecnolecto.com/blog/xmlrpc.php",
+        "username": "tecnolecto_news",
+        "password": "news tecno lecto"
+    },
+    "internacionales":
+    {
+        "url": "http://tecnolecto.com/blog/xmlrpc.php",
+        "username": "tecnolecto_news",
+        "password": "news tecno lecto"
+    },
+    "policiales":
+    {
+        "url": "http://tecnolecto.com/blog/xmlrpc.php",
+        "username": "tecnolecto_news",
+        "password": "news tecno lecto"
+    },
+    "clima":
+    {
+        "url": "http://tecnolecto.com/blog/xmlrpc.php",
+        "username": "tecnolecto_news",
+        "password": "news tecno lecto"
+    },
+    "mujer":
+    {
+        "url": "http://tecnolecto.com/blog/xmlrpc.php",
+        "username": "tecnolecto_news",
+        "password": "news tecno lecto"
+    }
+}

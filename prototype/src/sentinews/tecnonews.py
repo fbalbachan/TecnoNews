@@ -18,6 +18,7 @@ class TecnoNews(object):
         logger = get_logger('tecnonews')
         logger.info("<Tecnonews> <run> Running start")
         entries = NewsCrawler().crawl_all()
+
         logger.info("<Tecnonews> <run> Entries to publish: %s" % len(entries))
 
         for idx, entry in enumerate(entries):

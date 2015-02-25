@@ -28,6 +28,7 @@ class NewsRewriter(object):
                                          original_entry.content,
                                          original_entry.tags,
                                          original_entry.source,
+                                         categories=original_entry.categories,
                                          related=original_entry.related,
                                          versions=original_entry.versions)
 

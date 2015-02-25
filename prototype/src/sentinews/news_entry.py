@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from src.sentinews.categorizer import Categorizer
-from src.sentinews.publisher_host import WPHost
-from src.utils.csvwrapper import unicode_csv_reader
 from src.utils.logger_utils import *
 import traceback
 import ConfigParser
@@ -32,13 +30,23 @@ class NewsEntry(object):
         self.versions = versions
         self.config = ConfigParser.ConfigParser()
         self.config.read('config')
-        # self.wp_prefix_url = self.config.get('wordpress','url_post_base_path')
 
         if self.related is None:
             self.related = []
 
-        if self.categories is None:
-            self.__setup()
+        if not self.categories:
+            self.set_categories()
+
+    def set_categories(self):
+        self.categories = list(Categorizer(self.tags).get_or_else())
+
+        assert self.categories
+
+        if len(self.categories) == 1 and list(self.categories)[0] == 'interes general':
+            logger.info("Tags to be categorized")
+            logger.info("tags %s" % self.tags)
+            logger.info("url  %s" % self.url)
+
 
     def set_analisys_info(self):
         if not self.clean_text:
@@ -51,40 +59,6 @@ class NewsEntry(object):
 
     def set_news_versions(self, other_versions):
         self.versions = [entry.object_id for entry in other_versions]
-
-    def __setup(self):
-        user_per_categories_file = self.config.get(
-            'wordpress', 'user_per_categories')
-        user_per_categories = unicode_csv_reader(open(user_per_categories_file, 'r'),
-                                                 first_line_is_header=False, delimiter=',')
-
-        self.user_per_categories_dict = {}
-        i = 0
-        for row in user_per_categories:
-            self.user_per_categories_dict[i] = {}
-            self.user_per_categories_dict[i]['user'] = row[1]
-            self.user_per_categories_dict[i]['host'] = row[0]
-            self.user_per_categories_dict[i]['password'] = row[2]
-            self.user_per_categories_dict[i]['categories'] = [
-                unicode(element, 'utf-8') for element in row[3:] if element != '']
-            i += 1
-
-        self.categories = list(Categorizer(self.tags).get_or_else())
-        self.destination = self.__get_hosts(self.categories)
-
-    def __get_hosts(self, categories):
-        hosts = set([])
-        for category in categories:
-            for key in self.user_per_categories_dict:
-                for user_category in self.user_per_categories_dict[key]['categories']:
-                    if user_category.lower() == category.lower():
-                        new_host = WPHost(self.user_per_categories_dict[key]['host'],
-                                          self.user_per_categories_dict[key]['user'],
-                                          self.user_per_categories_dict[key]['password'])
-
-                        if not (new_host in hosts):
-                            hosts.add(new_host)
-        return hosts
 
     def to_dict(self):
         return dict(title=self.safe_unicode(self.title), content=self.safe_unicode(self.content),

@@ -4,12 +4,19 @@ from wordpress_xmlrpc import Client, WordPressPost
 from wordpress_xmlrpc.methods.posts import NewPost, GetPost
 from src.services.mongodb.news_entries_service import NewsEntriesService
 from src.utils.logger_utils import *
+import ConfigParser
 
 logger = get_logger('tecnonews')
 
 
 class BlogPublisher(object):
+
+    def __init__(self):
+        self.config = ConfigParser.ConfigParser()
+        self.config.read('config')
+
     def publish(self, entry, test=False):
+        # TODO: simplify this method extract formating logic of each section to new methods
         news_service = NewsEntriesService() if not test else NewsEntriesService('test')
         post = WordPressPost()
         post.title = entry.title
@@ -47,8 +54,8 @@ class BlogPublisher(object):
         post.post_status = 'publish'
 
         # use only one host to publish for now the first but we must guarantee unicity
-        host = entry.destination.pop()
-        client = Client(host.host, host.user, host.password)
+        host = self.select_category_to_publish(entry)
+        client = Client(host['url'], host['username'], host['password'])
         # Post new entry
         wp_id = client.call(NewPost(post))
         # Get the just posted wordpress entry and save the url
@@ -60,3 +67,35 @@ class BlogPublisher(object):
 
         return wp_id, wp_url
 
+    def get_category_host_to_publish(self):
+        import json
+        user_per_categories_file = self.config.get('publishing', 'category_host_to_publish')
+
+        with open(user_per_categories_file) as f:
+            categories_host = json.loads(f.read())
+        return categories_host
+
+    def get_categories_priority(self):
+        import json
+        categories_priority_file = self.config.get('publishing', 'categories_priority')
+
+        with open(categories_priority_file) as f:
+            categories_priority = json.loads(f.read())
+        return categories_priority
+
+    def select_category_to_publish(self, entry):
+        assert entry.categories
+
+        categories_hosts = self.get_category_host_to_publish()
+        categories_priority = self.get_categories_priority()
+
+        selected_host = None
+
+        for category in categories_priority:
+            if category in entry.categories:
+                selected_host = categories_hosts[category]
+                break
+
+        assert selected_host
+
+        return selected_host

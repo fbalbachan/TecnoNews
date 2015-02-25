@@ -54,14 +54,15 @@ class Crawler(object):
             crawler_logger.info("entry url: %s" % feedParserDict["link"])
             try:
                 # TODO: simplify this making parse.parse accept degault_tags as None
-                if default_tags is not None:
+                if default_tags:
                     news_entry = parser.parse(feedParserDict["link"], default_tags)
                 else:
                     news_entry = parser.parse(feedParserDict["link"])
 
-                if news_entry is not None:
+                if news_entry:
                     news_entry.content = self.sanitizer.process_content(news_entry.content)
                     news_entries.append(news_entry)
+
             except Exception as e:
                 crawler_logger.error("<crawler> <crawl> %s" % feedParserDict["link"])
                 crawler_logger.error(traceback.format_exc())
