@@ -16,7 +16,7 @@ pattern*
 shared/log/*.log
 test-result/*
 tmp/*
-prototype/logs
+prototype/logs/*
 prototype/sentence.txt
 prototype/no/*
 prototype/webapp/webapp_path
