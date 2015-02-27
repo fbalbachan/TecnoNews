@@ -1,8 +1,7 @@
-cd /home/nvaras/entinews/prototype
+cd ../prototype
 export PYTHONPATH=$PYTHONPATH:`pwd`
-export PATH=$PATH:/opt/freeling-3.0/bin
 while true
 do
     python src/sentinews/tecnonews.py
-    sleep 15m
+    sleep 1m
 done
