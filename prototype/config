@@ -32,7 +32,7 @@ db_test = sentinews_test
 status = OFF
 
 [publishing]
-category_host_to_publish = publishing/wordpress_category_host_to_publish_test.json
+category_host_to_publish = publishing/wordpress_category_host_to_publish.json
 categories_priority = publishing/categories_priority.json
 
 

@@ -1,87 +1,87 @@
 {
     "salud":
     {
-        "url": "http://tecnolecto.com/blog/xmlrpc.php",
-        "username": "tecnolecto_news",
-        "password": "news tecno lecto"
+        "url": "http://saludbit.com/xmlrpc.php",
+        "username": "noamjurafsky",
+        "password": "6503b89221548c7cde2128570003d410"
 
     },
     "economía":
     {
-        "url": "http://tecnolecto.com/blog/xmlrpc.php",
-        "username": "tecnolecto_news",
-        "password": "news tecno lecto"
+        "url": "http://economiabit.com/xmlrpc.php",
+        "username": "noamjurafsky",
+        "password": "6503b89221548c7cde2128570003d410"
     },
     "política":
     {
-        "url": "http://tecnolecto.com/blog/xmlrpc.php",
-        "username": "tecnolecto_news",
-        "password": "news tecno lecto"
+        "url": "http://politicabit.com/xmlrpc.php",
+        "username": "noamjurafsky",
+        "password": "6503b89221548c7cde2128570003d410"
     },
     "entretenimiento":
     {
-        "url": "http://tecnolecto.com/blog/xmlrpc.php",
-        "username": "tecnolecto_news",
-        "password": "news tecno lecto"
+        "url": "http://espectaculosbit.com/xmlrpc.php",
+        "username": "noamjurafsky",
+        "password": "6503b89221548c7cde2128570003d410"
     },
     "turismo":
     {
         "url": "http://tecnolecto.com/blog/xmlrpc.php",
-        "username": "tecnolecto_news",
-        "password": "news tecno lecto"
+        "username": "noamjurafsky",
+        "password": "6503b89221548c7cde2128570003d410"
     },
     "tecnología":
     {
-        "url": "http://tecnolecto.com/blog/xmlrpc.php",
-        "username": "tecnolecto_news",
-        "password": "news tecno lecto"
+        "url": "http://tecnologiabit.com/xmlrpc.php",
+        "username": "noamjurafsky",
+        "password": "6503b89221548c7cde2128570003d410"
     },
     "cultura":
     {
-        "url": "http://tecnolecto.com/blog/xmlrpc.php",
-        "username": "tecnolecto_news",
-        "password": "news tecno lecto"
+        "url": "http://espectaculosbit.com/xmlrpc.php",
+        "username": "noamjurafsky",
+        "password": "6503b89221548c7cde2128570003d410"
     },
     "ciencia":
     {
-        "url": "http://tecnolecto.com/blog/xmlrpc.php",
-        "username": "tecnolecto_news",
-        "password": "news tecno lecto"
+        "url": "http://cienciasbit.com/xmlrpc.php",
+        "username": "noamjurafsky",
+        "password": "6503b89221548c7cde2128570003d410"
     },
     "deporte":
     {
-        "url": "http://tecnolecto.com/blog/xmlrpc.php",
-        "username": "tecnolecto_news",
-        "password": "news tecno lecto"
+        "url": "http://deportebit.com/xmlrpc.php",
+        "username": "noamjurafsky",
+        "password": "6503b89221548c7cde2128570003d410"
     },
     "interés general":
     {
-        "url": "http://tecnolecto.com/blog/xmlrpc.php",
-        "username": "tecnolecto_news",
-        "password": "news tecno lecto"
+        "url": "http://noticiasbit.com/xmlrpc.php",
+        "username": "noamjurafsky",
+        "password": "6503b89221548c7cde2128570003d410"
     },
     "internacionales":
     {
-        "url": "http://tecnolecto.com/blog/xmlrpc.php",
-        "username": "tecnolecto_news",
-        "password": "news tecno lecto"
+        "url": "http://noticiasbit.com/xmlrpc.php",
+        "username": "noamjurafsky",
+        "password": "6503b89221548c7cde2128570003d410"
     },
     "policiales":
     {
-        "url": "http://tecnolecto.com/blog/xmlrpc.php",
-        "username": "tecnolecto_news",
-        "password": "news tecno lecto"
+        "url": "http://noticiasbit.com/xmlrpc.php",
+        "username": "noamjurafsky",
+        "password": "6503b89221548c7cde2128570003d410"
     },
     "clima":
     {
-        "url": "http://tecnolecto.com/blog/xmlrpc.php",
-        "username": "tecnolecto_news",
-        "password": "news tecno lecto"
+        "url": "http://noticiasbit.com/xmlrpc.php",
+        "username": "noamjurafsky",
+        "password": "6503b89221548c7cde2128570003d410"
     },
     "mujer":
     {
-        "url": "http://tecnolecto.com/blog/xmlrpc.php",
-        "username": "tecnolecto_news",
-        "password": "news tecno lecto"
+        "url": "http://mujerbit.com/xmlrpc.php",
+        "username": "noamjurafsky",
+        "password": "6503b89221548c7cde2128570003d410"
     }
 }
