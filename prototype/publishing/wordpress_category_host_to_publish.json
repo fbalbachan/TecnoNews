@@ -2,86 +2,86 @@
     "salud":
     {
         "url": "http://saludbit.com/xmlrpc.php",
-        "username": "noamjurafsky",
+        "username": "charlesbrown",
         "password": "6503b89221548c7cde2128570003d410"
 
     },
     "economía":
     {
         "url": "http://economiabit.com/xmlrpc.php",
-        "username": "noamjurafsky",
+        "username": "charlesbrown",
         "password": "6503b89221548c7cde2128570003d410"
     },
     "política":
     {
         "url": "http://politicabit.com/xmlrpc.php",
-        "username": "noamjurafsky",
+        "username": "charlesbrown",
         "password": "6503b89221548c7cde2128570003d410"
     },
     "entretenimiento":
     {
         "url": "http://espectaculosbit.com/xmlrpc.php",
-        "username": "noamjurafsky",
+        "username": "charlesbrown",
         "password": "6503b89221548c7cde2128570003d410"
     },
     "turismo":
     {
-        "url": "http://tecnolecto.com/blog/xmlrpc.php",
-        "username": "noamjurafsky",
+        "url": "http://turismobit.com/xmlrpc.php",
+        "username": "charlesbrown",
         "password": "6503b89221548c7cde2128570003d410"
     },
     "tecnología":
     {
         "url": "http://tecnologiabit.com/xmlrpc.php",
-        "username": "noamjurafsky",
+        "username": "charlesbrown",
         "password": "6503b89221548c7cde2128570003d410"
     },
     "cultura":
     {
         "url": "http://espectaculosbit.com/xmlrpc.php",
-        "username": "noamjurafsky",
+        "username": "charlesbrown",
         "password": "6503b89221548c7cde2128570003d410"
     },
     "ciencia":
     {
         "url": "http://cienciasbit.com/xmlrpc.php",
-        "username": "noamjurafsky",
+        "username": "charlesbrown",
         "password": "6503b89221548c7cde2128570003d410"
     },
     "deporte":
     {
         "url": "http://deportebit.com/xmlrpc.php",
-        "username": "noamjurafsky",
+        "username": "charlesbrown",
         "password": "6503b89221548c7cde2128570003d410"
     },
     "interés general":
     {
         "url": "http://noticiasbit.com/xmlrpc.php",
-        "username": "noamjurafsky",
+        "username": "charlesbrown",
         "password": "6503b89221548c7cde2128570003d410"
     },
     "internacionales":
     {
         "url": "http://noticiasbit.com/xmlrpc.php",
-        "username": "noamjurafsky",
+        "username": "charlesbrown",
         "password": "6503b89221548c7cde2128570003d410"
     },
     "policiales":
     {
         "url": "http://noticiasbit.com/xmlrpc.php",
-        "username": "noamjurafsky",
+        "username": "charlesbrown",
         "password": "6503b89221548c7cde2128570003d410"
     },
     "clima":
     {
         "url": "http://noticiasbit.com/xmlrpc.php",
-        "username": "noamjurafsky",
+        "username": "charlesbrown",
         "password": "6503b89221548c7cde2128570003d410"
     },
     "mujer":
     {
         "url": "http://mujerbit.com/xmlrpc.php",
-        "username": "noamjurafsky",
+        "username": "charlesbrown",
         "password": "6503b89221548c7cde2128570003d410"
     }
 }
