@@ -29,10 +29,12 @@ db = sentinews
 db_test = sentinews_test
 
 [language_filter]
-status = ON
+status = OFF
 
-[wordpress]
-url_post_base_path = http://noticiasbit.com/
+[publishing]
+category_host_to_publish = publishing/wordpress_category_host_to_publish.json
+categories_priority = publishing/categories_priority.json
+
 
 [resources]
 
@@ -56,8 +58,7 @@ adverb_forms = %(resources_dir)s/adverb_forms.csv
 freeling_dict = %(resources_dir)s/freeling_es.dic
 verbs_que = %(resources_dir)s/verbs-que-es.dat
 categories = %(resources_dir)s/categories.csv
-countries = %(resources_dir)s/nombre_pais_ESP.csv
+countries = %(resources_dir)s/countries_name_es.csv
 persons = %(resources_dir)s/person.cls
 demonym = %(resources_dir)s/twGENT.dat
 marks_to_avoid_paragraphs = %(resources_dir)s/paragraph_to_avoid
-user_per_categories = %(resources_dir)s/wordpress_users_categories_test.csv
