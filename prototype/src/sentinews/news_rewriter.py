@@ -36,7 +36,7 @@ class NewsRewriter(object):
         im2 = [(x.split('/')[-1].split('.')[0], x) for x in im]
 
         res = {}
-        for img,url in im2:
+        for img, url in im2:
             try:
                 x = re.search("\<img.*%s.*/>" % img, h).group(0)
                 s = re.search("alt=\".*\" src=", x).group(0)
@@ -47,7 +47,7 @@ class NewsRewriter(object):
                 res[url] = url
         return res
 
-    def insert_main_image(self, wikipage):
+    def get_main_image_url(self, wikipage):
         # TODO Rewrite this
         # TODO Extract this to a class
 
@@ -94,15 +94,11 @@ class NewsRewriter(object):
         logger.info("IMAGE URL: %s", selected_image)
         logger.info("IMAGE alt text: %s ", img_alts[selected_image])
 
-        rewritten_content = ''
+        title = img_alts[selected_image]
+        url = selected_image
+        description = img_alts[selected_image]
 
-        if selected_image:
-            rewritten_content = u'<p><img title="%s" src=%s></img></p> <p><small>Foto: Wikipedia - %s</small></p>' % (img_alts[selected_image],
-                                                                                                                       selected_image,
-                                                                                                                       img_alts[selected_image])
-        rewritten_content += self.rewritten_entry.content
-
-        return rewritten_content
+        return dict(title=title, url=url, description=description)
 
     @staticmethod
     def pre_filter_images_urls(images_urls):
@@ -154,7 +150,8 @@ class NewsRewriter(object):
         if wikiinfo and filter(lambda (referent, score): referent == wikiinfo[0][0] and score > 1., ranking):
             logger.info("WIKIINFO: %s", str(wikiinfo))
             logger.info("Searching for %s " % wikiinfo[0][2])
-            self.rewritten_entry.content = self.insert_main_image(wikiinfo[0][2])
+            self.rewritten_entry.image = self.get_main_image_url(wikiinfo[0][2])
+            logger.info("Url selected %s" % self.rewritten_entry.image['url'])
         else:
             logger.info("NO REFERENT SCORE > 1")
 

@@ -55,7 +55,9 @@ class NewsCrawler(object):
     def crawl_all(self):
         entries = []
         crawler = Crawler()
-        for feed in self.feed_service.get_feeds_to_process(self.feeds_to_process):
+        feeds_to_process = self.feed_service.get_feeds_to_process(self.feeds_to_process)
+
+        for feed in feeds_to_process:
             news_entries = crawler.crawl(feed.parser, feed.url[0][0], feed.default_tags)
             entries.extend(news_entries)
 

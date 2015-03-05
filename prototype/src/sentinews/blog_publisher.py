@@ -2,9 +2,13 @@
 
 from wordpress_xmlrpc import Client, WordPressPost
 from wordpress_xmlrpc.methods.posts import NewPost, GetPost
+from wordpress_xmlrpc.methods import media, posts
 from src.services.mongodb.news_entries_service import NewsEntriesService
 from src.utils.logger_utils import *
 import ConfigParser
+import urllib
+from wordpress_xmlrpc.compat import xmlrpc_client
+import mimetypes
 
 logger = get_logger('tecnonews')
 
@@ -55,7 +59,24 @@ class BlogPublisher(object):
 
         # use only one host to publish for now the first but we must guarantee unicity
         host = self.select_category_to_publish(entry)
+        logger.info("publishing into host %s" % host['url'])
+
         client = Client(host['url'], host['username'], host['password'])
+
+        if entry.image:
+            logger.info("image info" % entry.image)
+            image_data = self.get_data_upload_image(entry.image)
+
+            response = client.call(media.UploadFile(image_data))
+            # response == {
+            #       'id': 6,
+            #       'file': 'picture.jpg'
+            #       'url': 'http://www.example.com/wp-content/uploads/2012/04/16/picture.jpg',
+            #       'type': 'image/jpeg',
+            # }
+
+            post.thumbnail = response['id']
+
         # Post new entry
         wp_id = client.call(NewPost(post))
         # Get the just posted wordpress entry and save the url
@@ -96,6 +117,28 @@ class BlogPublisher(object):
                 selected_host = categories_hosts[category]
                 break
 
+        if not selected_host:
+            logger.error("Not Selected Host")
+            logger.error("Categories %s " % entry.categories)
+
         assert selected_host
 
         return selected_host
+
+    def get_data_upload_image(self, img):
+
+        image=urllib.URLopener()
+        image.retrieve(img['url'])
+        filename = url.split('/')[-1]
+        # prepare metadata
+        data = dict(name=filename)
+
+        #guess mimetype
+        data['type'] = mimetypes.read_mime_types(filename) or mimetypes.guess_type(filename)[0]
+
+        # read the binary file and let the XMLRPC library encode it into base64
+        with open(filename, 'rb') as img:
+                data['bits'] = xmlrpc_client.Binary(img.read())
+
+        return data
+

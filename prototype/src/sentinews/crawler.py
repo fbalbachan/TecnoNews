@@ -70,5 +70,6 @@ class Crawler(object):
 
         filtered_by_tags = self._filter_by_tag(news_entries)
 
+        crawler_logger.info("filtered %s " % [x.title for x in filtered_entries])
         crawler_logger.info("Ends parser %s" % cls_parser)
         return filtered_by_tags
