@@ -126,9 +126,10 @@ class BlogPublisher(object):
         return selected_host
 
     def get_data_upload_image(self, img):
+        url = img['url']
 
         image=urllib.URLopener()
-        image.retrieve(img['url'])
+        image.retrieve(url)
         filename = url.split('/')[-1]
         # prepare metadata
         data = dict(name=filename)
