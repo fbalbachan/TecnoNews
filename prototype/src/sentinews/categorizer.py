@@ -50,7 +50,7 @@ class Categorizer(object):
 
         if not categories:
             # If fails to categorize set default category
-            categories = {'interés general'}
+            categories = {u'interés general'}
 
         assert categories
         return categories

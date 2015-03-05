@@ -11,7 +11,7 @@ logger = get_logger('tecnonews')
 class NewsEntry(object):
     def __init__(self, title, content, tags, source, url=None, categories=None,
                  wp_id=None, wp_url=None, related=None, entities=None,
-                 published_date=None, object_id=None, versions=None):
+                 published_date=None, object_id=None, versions=None, image=None):
 
         self.title = title
         self.content = content
@@ -30,6 +30,7 @@ class NewsEntry(object):
         self.versions = versions
         self.config = ConfigParser.ConfigParser()
         self.config.read('config')
+        self.image = image
 
         if self.related is None:
             self.related = []
@@ -46,7 +47,6 @@ class NewsEntry(object):
             logger.info("Tags to be categorized")
             logger.info("tags %s" % self.tags)
             logger.info("url  %s" % self.url)
-
 
     def set_analisys_info(self):
         if not self.clean_text:
