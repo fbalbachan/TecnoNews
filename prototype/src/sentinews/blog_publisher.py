@@ -140,8 +140,9 @@ class BlogPublisher(object):
 
         #guess mimetype
         data['type'] = mimetypes.read_mime_types(filename) or mimetypes.guess_type(filename)[0]
+        logger.info("Mimetype: %s" % data['type'])
 
-        if data['type'] == 'image/svg+xml':
+        if data['type'] == 'image/svg+xml' or filename.split('.')[1] == 'svg':
             filename_wo_extension = filename.split('.')[0]
             filename_png = filename_wo_extension + '.png'
 
