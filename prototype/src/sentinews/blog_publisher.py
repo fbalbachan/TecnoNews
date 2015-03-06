@@ -132,7 +132,7 @@ class BlogPublisher(object):
         description = img['description']
 
         image = urllib.URLopener()
-        f, o = image.retrieve(url)
+        tmp_filepath, o = image.retrieve(url)
         filename = url.split('/')[-1]
 
         # prepare metadata
@@ -144,12 +144,13 @@ class BlogPublisher(object):
         if data['type'] == 'image/svg+xml':
             filename_wo_extension = filename.split('.')[0]
             filename_png = filename_wo_extension + '.png'
-            f = '/tmp/' + filename_png
-            with open(f).read() as svg:
+
+            with open(tmp_filepath).read() as svg:
                 to_png(svg, '/tmp/' + filename_png)
 
+            tmp_filepath = '/tmp/' + filename_png
         # read the binary file and let the XMLRPC library encode it into base64
-        with open(f, 'rb') as img:
+        with open(tmp_filepath, 'rb') as img:
                 data['bits'] = xmlrpc_client.Binary(img.read())
 
         return data
