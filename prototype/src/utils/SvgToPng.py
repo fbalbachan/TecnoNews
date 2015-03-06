@@ -1,4 +1,4 @@
-import cairocffi as cairo
+import cairo
 import rsvg
 
 

@@ -145,8 +145,8 @@ class BlogPublisher(object):
             filename_wo_extension = filename.split('.')[0]
             filename_png = filename_wo_extension + '.png'
 
-            with open(tmp_filepath).read() as svg:
-                to_png(svg, '/tmp/' + filename_png)
+            svg = open(tmp_filepath).read()
+            to_png(svg, '/tmp/' + filename_png)
 
             tmp_filepath = '/tmp/' + filename_png
         # read the binary file and let the XMLRPC library encode it into base64
