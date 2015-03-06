@@ -128,8 +128,8 @@ class BlogPublisher(object):
     def get_data_upload_image(self, img):
         url = img['url']
 
-        image=urllib.URLopener()
-        image.retrieve(url)
+        image = urllib.URLopener()
+        f, o = image.retrieve(url)
         filename = url.split('/')[-1]
         # prepare metadata
         data = dict(name=filename)
@@ -138,7 +138,7 @@ class BlogPublisher(object):
         data['type'] = mimetypes.read_mime_types(filename) or mimetypes.guess_type(filename)[0]
 
         # read the binary file and let the XMLRPC library encode it into base64
-        with open(filename, 'rb') as img:
+        with open(f, 'rb') as img:
                 data['bits'] = xmlrpc_client.Binary(img.read())
 
         return data
