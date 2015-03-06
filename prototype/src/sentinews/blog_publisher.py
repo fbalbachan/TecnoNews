@@ -127,12 +127,15 @@ class BlogPublisher(object):
 
     def get_data_upload_image(self, img):
         url = img['url']
+        title = img['title']
+        description = img['description']
 
         image = urllib.URLopener()
         f, o = image.retrieve(url)
         filename = url.split('/')[-1]
+
         # prepare metadata
-        data = dict(name=filename)
+        data = dict(name=filename, title=title, description=description)
 
         #guess mimetype
         data['type'] = mimetypes.read_mime_types(filename) or mimetypes.guess_type(filename)[0]
