@@ -9,6 +9,7 @@ import ConfigParser
 import urllib
 from wordpress_xmlrpc.compat import xmlrpc_client
 import mimetypes
+from src.utils.SvgToPng import to_png
 
 logger = get_logger('tecnonews')
 
@@ -139,6 +140,13 @@ class BlogPublisher(object):
 
         #guess mimetype
         data['type'] = mimetypes.read_mime_types(filename) or mimetypes.guess_type(filename)[0]
+
+        if data['type'] == 'svg':
+            filename_wo_extension = filename.split('.')[0]
+            filename_png = filename_wo_extension + '.png'
+            f = '/tmp/' + filename_png
+            with open(f).read() as svg:
+                to_png(svg, '/tmp/' + filename_png)
 
         # read the binary file and let the XMLRPC library encode it into base64
         with open(f, 'rb') as img:
