@@ -150,9 +150,10 @@ class BlogPublisher(object):
             to_png(svg, '/tmp/' + filename_png)
 
             tmp_filepath = '/tmp/' + filename_png
+            data['name'] = filename_png
+
         # read the binary file and let the XMLRPC library encode it into base64
         with open(tmp_filepath, 'rb') as img:
                 data['bits'] = xmlrpc_client.Binary(img.read())
 
         return data
-
