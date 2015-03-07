@@ -36,6 +36,17 @@ class NewsEntriesService(object):
                           versions=entry['versions'] if 'versions' in entry else None)
                 for entry in self.news_entries.find(criteria).limit(limit if limit is not None else 0)]
 
+    def already_in_db(self, url):
+        """ Return true
+         | false
+        Parameters
+        ----------
+        criteria: dict
+        this is the object to use on mongodb find statement
+        """
+        criteria = dict(url=url)
+
+        return len(self.news_entries.find(criteria)) > 0
 
     def get_by_date_range(self, start=None, to=None, limit=None):
         """ Retrieve a list of a news_entries by a given date UTC rage
@@ -48,7 +59,6 @@ class NewsEntriesService(object):
         """
         return self.get_list({'wp_id': {'$ne': None}, 'published_date': {'$gte': start, '$lte': to}}, limit)
 
-
     def get_by_categories(self, categories, limit=None):
         """ Retrieve a list of news_entries by a given categories array, at least one element would match
         Parameters
@@ -57,7 +67,6 @@ class NewsEntriesService(object):
             list of searched categories
         """
         return self.get_list({'wp_id': {'$ne': None}, 'categories': {'$in': categories}}, limit)
-
 
     def get_by_categories_date_range(self, fromDate, toDate, categories, limit=None):
         """Retrieve a list of news entries by a given categories array and date range

@@ -12,7 +12,6 @@ class FeedService(object):
     def save(self, feed):
         return self.feeds.insert(feed.to_dict())
 
-
     def get_all(self):
         return [Feed(feed['id'], feed['url'], feed['parser'], feed['lastupdated'],
                      feed['default_tags'] if 'default_tags' in feed else None)

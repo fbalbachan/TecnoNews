@@ -1,7 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from re import sub
 from urllib import urlopen
 from src.sentinews.news_entry import NewsEntry
 from bs4 import BeautifulSoup
@@ -55,7 +54,6 @@ class CNNParser:
 
         return parsed_news
         # return new_entries[0] if len(new_entries) > 0 else NewsEntry('', '', ['dummie'], '', '')
-
 
     def _remove_cnn_header(self, text):
         dashes = [u'\u2014', u'\u2013', '-']
