@@ -46,7 +46,7 @@ class NewsEntriesService(object):
         """
         criteria = dict(url=url)
 
-        return len(self.news_entries.find(criteria)) > 0
+        return len([entry for entry in self.news_entries.find(criteria)]) > 0
 
     def get_by_date_range(self, start=None, to=None, limit=None):
         """ Retrieve a list of a news_entries by a given date UTC rage
