@@ -33,7 +33,7 @@ class NewsCrawler(object):
                                         'euronews_parser.EuroNewsParser', datetime.utcnow()))
             self.feed_service.save(Feed('elpais', 'http://ep00.epimg.net/rss/tags/ultimas_noticias.xml',
                                         'elpais_parser.ElPaisParser', datetime.utcnow()))
-            self.feed_service.save(Feed('elpais_america', 'http://ep00.epimg.net/rss/tags/ultimas_noticias.xml',
+            self.feed_service.save(Feed('elpais_america', 'http://ep00.epimg.net/rss/elpais/portada_america.xml',
                                         'elpais_parser.ElPaisParser', datetime.utcnow()))
             self.feed_service.save(Feed('bbc_america', 'http://www.bbc.co.uk/mundo/temas/america_latina/index.xml',
                                         'bbc_parser.BBCParser', datetime.utcnow(), ['america']))
