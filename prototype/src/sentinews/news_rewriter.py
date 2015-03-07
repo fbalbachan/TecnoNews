@@ -88,17 +88,24 @@ class NewsRewriter(object):
         else:
             # TODO Re think this default criteria
             # we didn't get a candidate just use the first one
-            logger.info("Selection first image of the results becouse no criteria")
-            selected_image = images_urls[0]
-        
-        logger.info("IMAGE URL: %s", selected_image)
-        logger.info("IMAGE alt text: %s ", img_alts[selected_image])
+            logger.info("Selection first image of the results because no criteria")
+            if len(images_urls) > 0:
+                selected_image = images_urls[0]
+            else:
+                selected_image = None
 
-        title = img_alts[selected_image]
-        url = selected_image
-        description = img_alts[selected_image]
+        image_info_dict = None
+        if selected_image:
 
-        return dict(title=title, url=url, description=description)
+            logger.info("IMAGE URL: %s", selected_image)
+            logger.info("IMAGE alt text: %s ", img_alts[selected_image])
+
+            title = img_alts[selected_image]
+            url = selected_image
+            description = img_alts[selected_image]
+            image_info_dict = dict(title=title, url=url, description=description)
+
+        return image_info_dict
 
     @staticmethod
     def pre_filter_images_urls(images_urls):
@@ -150,8 +157,12 @@ class NewsRewriter(object):
         if wikiinfo and filter(lambda (referent, score): referent == wikiinfo[0][0] and score > 1., ranking):
             logger.info("WIKIINFO: %s", str(wikiinfo))
             logger.info("Searching for %s " % wikiinfo[0][2])
-            self.rewritten_entry.image = self.get_main_image_url(wikiinfo[0][2])
-            logger.info("Url selected %s" % self.rewritten_entry.image['url'])
+            entry_image = self.get_main_image_url(wikiinfo[0][2])
+            if entry_image:
+                self.rewritten_entry.image = entry_image
+                logger.info("Url selected %s" % self.rewritten_entry.image['url'])
+            else:
+                logger.info("None image selected")
         else:
             logger.info("NO REFERENT SCORE > 1")
 
