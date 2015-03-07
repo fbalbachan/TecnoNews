@@ -7,6 +7,7 @@ from src.sentinews.feeds import Feed
 from src.services.mongodb.connector import MongoConnector
 from datetime import datetime
 from src.utils.logger_utils import get_crawler_logger
+from src.services.mongodb.news_entries_service import NewsEntriesService
 
 crawler_logger = get_crawler_logger()
 
@@ -61,7 +62,18 @@ class NewsCrawler(object):
             news_entries = crawler.crawl(feed.parser, feed.url[0][0], feed.default_tags)
             entries.extend(news_entries)
 
+        entries = self.discard_already_processed(entries)
         return self.__clean_duplicated(entries)
+
+    def discard_already_processed(self, entries):
+        ns = NewsEntriesService()
+        new_entries = []
+
+        for entry in entries:
+            if not ns.already_in_db(entry.url):
+                new_entries.append(entry)
+
+        return new_entries
 
     def __clean_duplicated(self, entries):
         cleaned_entries = []
