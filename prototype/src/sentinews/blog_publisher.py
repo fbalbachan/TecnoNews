@@ -136,7 +136,9 @@ class BlogPublisher(object):
         filename = url.split('/')[-1]
 
         # prepare metadata
-        data = dict(name=filename, title=title, description=description)
+        import re
+        filename_safe = re.sub('[^A-Za-z0-9]+', '', filename)
+        data = dict(name=filename_safe, title=title, description=description)
 
         #guess mimetype
         data['type'] = mimetypes.read_mime_types(filename) or mimetypes.guess_type(filename)[0]

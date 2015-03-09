@@ -6,7 +6,7 @@ raise_exception = False
 id = 0
 
 [news_sources]
-feeds_to_process = cnn_spanish,euronews
+feeds_to_process = bbc_america
 
 [freeling]
 
@@ -18,8 +18,8 @@ tagger_port = 9999
 [freeling_language]
 
 host        = 85.10.210.172
-client      = ../externals/freeling/analyzer_client
-language_port = 10101
+client      = ../externals/freeling/analyzer_client_lang_ident
+language_port = 10102
 
 [mongodb]
 
@@ -29,10 +29,10 @@ db = sentinews
 db_test = sentinews_test
 
 [language_filter]
-status = OFF
+status = ON
 
 [publishing]
-category_host_to_publish = publishing/wordpress_category_host_to_publish.json
+category_host_to_publish = publishing/wordpress_category_host_to_publish_test.json
 categories_priority = publishing/categories_priority.json
 
 
