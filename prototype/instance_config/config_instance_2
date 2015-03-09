@@ -3,7 +3,7 @@
 raise_exception = False
 
 [instance]
-id = 1
+id = 2
 
 [news_sources]
 feeds_to_process = bbc_america,bbc_internacional
