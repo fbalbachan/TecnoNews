@@ -18,8 +18,8 @@ tagger_port = 9999
 [freeling_language]
 
 host        = 85.10.210.172
-client      = ../externals/freeling/analyzer_client
-language_port = 10101
+client      = ../externals/freeling/analyzer_client_lang_ident
+language_port = 10102
 
 [mongodb]
 
@@ -29,7 +29,7 @@ db = sentinews
 db_test = sentinews_test
 
 [language_filter]
-status = OFF
+status = ON
 
 [publishing]
 category_host_to_publish = publishing/wordpress_category_host_to_publish.json
