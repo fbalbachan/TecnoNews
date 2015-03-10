@@ -1,9 +1,0 @@
-Instalar:
-    $ pip install wikipedia
-    $ pip install python-wordpress-xmlrpc
-    $ pip install pysqlite
-
-Para webserver:
-
-    * Wordpress
-    * Este plugin de wordpress: http://wordpress.org/plugins/xml-rpc-modernization/

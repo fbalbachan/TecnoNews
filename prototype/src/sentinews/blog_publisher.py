@@ -134,19 +134,23 @@ class BlogPublisher(object):
         image = urllib.URLopener()
         tmp_filepath, o = image.retrieve(url)
         filename = url.split('/')[-1]
+        filename_wo_extension = filename.split('.')[0]
+        filename_extension = filename.split('.')[-1]
 
         # prepare metadata
         import re
-        filename_safe = re.sub('[^A-Za-z0-9]+', '', filename)
-        data = dict(name=filename_safe, title=title, description=description)
+        filename_wo_extension_safe = re.sub('[^A-Za-z0-9]+', '', filename_wo_extension)
+        data = dict(name=filename_wo_extension_safe + '.' + filename_extension,
+                    title=title,
+                    description=description)
 
         #guess mimetype
         data['type'] = mimetypes.read_mime_types(filename) or mimetypes.guess_type(filename)[0]
         logger.info("Mimetype: %s" % data['type'])
 
         if data['type'] == 'image/svg+xml' or filename.split('.')[1] == 'svg':
-            filename_wo_extension = filename.split('.')[0]
-            filename_png = filename_wo_extension + '.png'
+
+            filename_png = filename_wo_extension_safe + '.png'
 
             svg = open(tmp_filepath).read()
             to_png(svg, '/tmp/' + filename_png)

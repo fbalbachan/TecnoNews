@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from src.sentinews.news_rewriter import NewsRewriter
 from src.sentinews.news_crawler import NewsCrawler
+from src.utils.textDistance import TextDistance
 from src.services.mongodb.news_entries_service import NewsEntriesService
 from src.utils.relatedNewsEntries import RelatedNewsEntries
 from src.utils.logger_utils import *
@@ -53,13 +54,17 @@ class TecnoNews(object):
             try:
                 # rewriter.rewrite_title()
                 rewriter.rewrite_content()
-                logger.info('<Tecnonews> <_process> publishing: ' + entry.title)
-                wp_id, wp_url = rewriter.publish()
-                entry.wp_id = wp_id
-                entry.wp_url = wp_url
+                valid_to_publish = self.valid_to_publish(rewriter)
+                if valid_to_publish:
+                    logger.info('<Tecnonews> <_process> publishing: ' + entry.title)
+                    wp_id, wp_url = rewriter.publish()
+                    entry.wp_id = wp_id
+                    entry.wp_url = wp_url
 
-                # TODO: check if we must use datetime from wp
-                entry.published_date = datetime.utcnow()
+                    # TODO: check if we must use datetime from wp
+                    entry.published_date = datetime.utcnow()
+                else:
+                    logger.info("Not publishing")
 
             except Exception as e:
                 logger.error("<Tecnonews> <_process> rewriting fail: %s " % entry.title)
@@ -74,6 +79,19 @@ class TecnoNews(object):
 
         logger.info("<Tecnonews> <_process> END processing %s" % entry.title)
 
+    def valid_to_publish(self, rewriter_instance):
+        td = TextDistance()
+        td.stopwords = []  #avoid using stopwords filter
+
+        similarity = td.similarity(rewriter_instance.original_entry.content,
+                                   rewriter_instance.rewritten_entry.content)
+
+        logger.info("similarity %s" % similarity)
+        return similarity < 60
 
 if __name__ == '__main__':
-    TecnoNews().run()
+    import time
+    while True:
+        TecnoNews().run()
+        logger.info("Sleeping")
+        time.sleep(60)
