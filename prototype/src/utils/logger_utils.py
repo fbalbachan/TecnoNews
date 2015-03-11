@@ -49,6 +49,27 @@ def get_crawler_logger():
         crawler_logger = logger
     return crawler_logger
 
+logger_similarity = None
+
+def get_logger_similarity():
+    global logger_similarity
+    if not logger_similarity:
+        import logging
+        from logging.handlers import RotatingFileHandler
+        import logging.handlers
+        instance_info = get_instance_info()
+        crawlers_filename = "instance" + str(instance_info["id"]) + "-similarity"
+        logging.basicConfig(level=logging.INFO, format='%(message)s')
+
+        logger = logging.getLogger('similarity')
+        logger.addHandler(RotatingFileHandler('logs/' + crawlers_filename + '.log',
+                                              'a',
+                                              maxBytes=5000000, backupCount=5))
+        logger.addHandler(logging.StreamHandler())
+        logger.propagate = False
+        logger_similarity = logger
+    return logger_similarity
+
 def get_instance_info():
     instance_info = {}
     config = ConfigParser.ConfigParser()
