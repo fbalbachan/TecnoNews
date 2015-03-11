@@ -9,7 +9,7 @@ import traceback
 from datetime import datetime
 
 logger = get_logger('tecnonews')
-
+logger_similarity = get_logger_similarity()
 
 class TecnoNews(object):
     def __init__(self):
@@ -54,7 +54,21 @@ class TecnoNews(object):
             try:
                 # rewriter.rewrite_title()
                 rewriter.rewrite_content()
+
+                logger_similarity.info("\n--------\n")
+                logger_similarity.info("url: %s" % rewriter.original_entry.url)
+                logger_similarity.info("Original content")
+                logger_similarity.info("%s" % rewriter.original_entry.content)
+                logger_similarity.info("Original rewritten content")
+                logger_similarity.info("%s" % rewriter.rewritten_entry.content)
+
+
                 valid_to_publish = self.valid_to_publish(rewriter)
+
+                logger_similarity.info("valid to publish %s " % valid_to_publish)
+                logger_similarity.info("\n--------\n")
+
+
                 if valid_to_publish:
                     logger.info('<Tecnonews> <_process> publishing: ' + entry.title)
                     wp_id, wp_url = rewriter.publish()
@@ -87,6 +101,8 @@ class TecnoNews(object):
                                    rewriter_instance.rewritten_entry.content)
 
         logger.info("similarity %s" % similarity)
+        logger_similarity.info("similarity %s" % similarity)
+
         return similarity < 60
 
 if __name__ == '__main__':
