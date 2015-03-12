@@ -5,6 +5,7 @@ from src.utils.textDistance import TextDistance
 from src.services.mongodb.news_entries_service import NewsEntriesService
 from src.utils.relatedNewsEntries import RelatedNewsEntries
 from src.utils.logger_utils import *
+from BeautifulSoup import BeautifulSoup
 import traceback
 from datetime import datetime
 
@@ -56,16 +57,17 @@ class TecnoNews(object):
                 rewriter.rewrite_content()
 
                 logger_similarity.info("\n--------\n")
-                logger_similarity.info("url: %s" % rewriter.original_entry.url)
+                logger_similarity.info("url: %s\n" % rewriter.original_entry.url)
                 logger_similarity.info("Original content")
                 logger_similarity.info("%s" % rewriter.original_entry.content)
-                logger_similarity.info("Original rewritten content")
-                logger_similarity.info("%s" % rewriter.rewritten_entry.content)
+                logger_similarity.info("Rewritten content")
+                clean_rewrited = BeautifulSoup(rewriter.rewritten_entry.content).getText()
+                logger_similarity.info("%s" % clean_rewrited)
 
 
                 valid_to_publish = self.valid_to_publish(rewriter)
 
-                logger_similarity.info("valid to publish %s " % valid_to_publish)
+                logger_similarity.info("\n\nvalid to publish %s " % valid_to_publish)
                 logger_similarity.info("\n--------\n")
 
 
@@ -96,12 +98,12 @@ class TecnoNews(object):
     def valid_to_publish(self, rewriter_instance):
         td = TextDistance()
         td.stopwords = []  #avoid using stopwords filter
-
+        clean_rewrited = BeautifulSoup(rewriter_instance.rewritten_entry.content).getText()
         similarity = td.similarity(rewriter_instance.original_entry.content,
-                                   rewriter_instance.rewritten_entry.content)
+                                   clean_rewrited)
 
-        logger.info("similarity %s" % similarity)
-        logger_similarity.info("similarity %s" % similarity)
+        logger.info("\nsimilarity %s" % similarity)
+        logger_similarity.info("\nsimilarity %s" % similarity)
 
         return similarity < 60
 

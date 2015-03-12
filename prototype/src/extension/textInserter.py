@@ -17,6 +17,8 @@ class TextInserter:
         injections_paragraphs = self.get_injection_paragraphs_other_sources()
         generated = u""
 
+        injected_count = 0  # keep the count of how many paragraph we add to the news
+
         for idx, paragraph in enumerate(self.paragraphs):
             if not isinstance(paragraph, unicode):
                 paragraph = unicode(paragraph, 'utf-8')
@@ -26,13 +28,15 @@ class TextInserter:
 
             # if there is some paragraph to append
             if idx in injections_paragraphs.keys():
+                injected_count += 1
                 generated += u"\n" + injections_paragraphs[idx] + u"\n"
 
             if idx in injections_wiki.keys():
+                injected_count += 1
                 for content in injections_wiki[idx]:
                     generated += u"\n" + content + u"\n"
 
-        return generated.strip()
+        return injected_count, generated.strip()
 
     def get_injections_wiki_idx(self):
         injections = {}

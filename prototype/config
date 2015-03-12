@@ -6,7 +6,7 @@ raise_exception = False
 id = 0
 
 [news_sources]
-feeds_to_process = elpais
+feeds_to_process = cnn_spanish,euronews
 
 [freeling]
 
@@ -32,7 +32,7 @@ db_test = sentinews_test
 status = ON
 
 [publishing]
-category_host_to_publish = publishing/wordpress_category_host_to_publish_test.json
+category_host_to_publish = publishing/wordpress_category_host_to_publish.json
 categories_priority = publishing/categories_priority.json
 
 
