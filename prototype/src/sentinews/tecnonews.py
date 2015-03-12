@@ -5,7 +5,7 @@ from src.utils.textDistance import TextDistance
 from src.services.mongodb.news_entries_service import NewsEntriesService
 from src.utils.relatedNewsEntries import RelatedNewsEntries
 from src.utils.logger_utils import *
-from BeautifulSoup import BeautifulSoup
+from bs4 import BeautifulSoup
 import traceback
 from datetime import datetime
 
