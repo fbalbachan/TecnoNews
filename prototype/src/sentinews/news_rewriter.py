@@ -31,6 +31,7 @@ class NewsRewriter(object):
                                          categories=original_entry.categories,
                                          related=original_entry.related,
                                          versions=original_entry.versions)
+        self.injected_count = 0
 
     def _get_alt_text(self, im, h):
         im2 = [(x.split('/')[-1].split('.')[0], x) for x in im]
@@ -144,7 +145,7 @@ class NewsRewriter(object):
 
         # Insert new content
         text_inserter = TextInserter(analysis)
-        self.rewritten_entry.content = text_inserter.get()
+        self.injected_count, self.rewritten_entry.content = text_inserter.get()
 
         analysis = self._analyze(self.rewritten_entry.content)
         rewriter = Rewriter(analysis['paragraph'])
