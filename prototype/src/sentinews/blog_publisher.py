@@ -5,6 +5,7 @@ from wordpress_xmlrpc.methods.posts import NewPost, GetPost
 from wordpress_xmlrpc.methods import media, posts
 from src.services.mongodb.news_entries_service import NewsEntriesService
 from src.utils.logger_utils import *
+from src.utils.configProvider import ConfigProvider
 import ConfigParser
 import urllib
 from wordpress_xmlrpc.compat import xmlrpc_client
@@ -17,8 +18,7 @@ logger = get_logger('tecnonews')
 class BlogPublisher(object):
 
     def __init__(self):
-        self.config = ConfigParser.ConfigParser()
-        self.config.read('config')
+        self.config = ConfigProvider()
 
     def publish(self, entry, test=False):
         # TODO: simplify this method extract formating logic of each section to new methods

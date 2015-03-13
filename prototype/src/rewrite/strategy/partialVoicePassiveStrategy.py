@@ -1,5 +1,6 @@
 #-*- coding: utf-8 -*-
 from src.rewrite.rewrite import Rewrite
+from src.utils.configProvider import ConfigProvider
 from src.utils.collectionUtils import dict_by
 from src.utils.stringUtils import set_first_letter_case
 from src.model.entity.tacitEntity import TacitEntity
@@ -56,8 +57,7 @@ class PartialVoicePassiveStrategy:
         :return: list of words as list
         """
         persons = []
-        config = ConfigParser.ConfigParser()
-        config.read("config")
+        config = ConfigProvider()
         persons_filename = config.get("resources", "persons")
 
         for line in open(persons_filename, 'r'):
@@ -73,8 +73,7 @@ class PartialVoicePassiveStrategy:
         :return: list of words as list
         """
         demonym = []
-        config = ConfigParser.ConfigParser()
-        config.read("config")
+        config = ConfigProvider()
         demonym_filename = config.get("resources", "demonym")
 
         for line in open(demonym_filename, 'r'):

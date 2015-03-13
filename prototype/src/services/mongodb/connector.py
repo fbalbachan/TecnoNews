@@ -1,5 +1,5 @@
 from pymongo import MongoClient
-import ConfigParser
+from src.utils.configProvider import ConfigProvider
 
 
 class MongoConnector(object):
@@ -8,8 +8,7 @@ class MongoConnector(object):
     @classmethod
     def get_instance(cls, mode=None):
         if MongoConnector.__db is None:
-            config = ConfigParser.ConfigParser()
-            config.read('config')
+            config = ConfigProvider()
             client = MongoClient(config.get('mongodb', 'host'),
                                  int(config.get('mongodb', 'port')))
             if not mode is None and mode == 'test':

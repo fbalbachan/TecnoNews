@@ -2,6 +2,7 @@
 
 from src.sentinews.categorizer import Categorizer
 from src.utils.logger_utils import *
+from src.utils.configProvider import ConfigProvider
 import traceback
 import ConfigParser
 
@@ -28,8 +29,7 @@ class NewsEntry(object):
         self.related = related
         self.object_id = object_id
         self.versions = versions
-        self.config = ConfigParser.ConfigParser()
-        self.config.read('config')
+        self.config = ConfigProvider()
         self.image = image
 
         if self.related is None:
@@ -107,9 +107,7 @@ class NewsEntry(object):
         import ConfigParser
 
         stopwords = []
-        config = ConfigParser.ConfigParser()
-        config.read("config")
-
+        config = ConfigProvider()
         stopwords_filename = config.get("resources", "stopwords_es_clean")
 
         for line in open(stopwords_filename, 'r'):

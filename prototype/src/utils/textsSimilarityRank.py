@@ -15,19 +15,6 @@ class TextSimilarityRank(object):
     def get_similarity_rank(self):
         return self.get_similarity_rank_original()
 
-    # def load_stopwords(self):
-    #     stopwords = []
-    #     config = ConfigParser.ConfigParser()
-    #     config.read("config")
-    #
-    #     stopwords_filename = config.get("resources", "stopwords_es_clean")
-    #
-    #     for line in open(stopwords_filename, 'r'):
-    #         if line[0] not in ['<', '%', '\n']:
-    #             stopwords.append(line.rstrip('\n'))
-    #
-    #     return stopwords
-
     def get_similarity_rank_entities(self):
         similarities = []
 

@@ -1,12 +1,11 @@
 #-*- coding: utf-8 -*-
-from ConfigParser import ConfigParser
+from src.utils.configProvider import ConfigProvider
 from codecs import open
 from os.path import join
 from unidecode import unidecode
 
 def load_namelists():
-    config = ConfigParser()
-    config.read("config")
+    config = ConfigProvider()
     directory = join(dict(config.items("resources"))["resources_dir"], "gender_detection")
 
     names = {}
