@@ -105,7 +105,7 @@ class TecnoNews(object):
         logger.info("\nsimilarity %s" % similarity)
         logger_similarity.info("\nsimilarity %s" % similarity)
 
-        return similarity < 60
+        return similarity <= 80
 
 if __name__ == '__main__':
     import time
