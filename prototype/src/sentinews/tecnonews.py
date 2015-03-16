@@ -13,6 +13,7 @@ from datetime import datetime
 logger = get_logger('tecnonews')
 logger_similarity = get_logger_similarity()
 
+
 class TecnoNews(object):
     def __init__(self):
         self.config = ConfigProvider()

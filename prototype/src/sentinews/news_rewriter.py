@@ -148,11 +148,6 @@ class NewsRewriter(object):
         self.injected_count, self.rewritten_entry.content = text_inserter.get()
         logger.info("Injected Count %s" % self.injected_count)
 
-        # Portada minimal logic
-        if self.injected_count > 2 and self.rewritten_entry.image:
-            self.rewritten_entry.categories.append("portada")
-            logger.info("Portada")
-
         analysis = self._analyze(self.rewritten_entry.content)
         rewriter = Rewriter(analysis['paragraph'])
         self.rewritten_entry.content = rewriter.rewrite()
@@ -162,8 +157,8 @@ class NewsRewriter(object):
         self.rewritten_entry.content = hyperlink_processor.get_text_with_hyperlinks()
 
         if wikiinfo and filter(lambda (referent, score): referent == wikiinfo[0][0] and score > 1., ranking):
-            logger.info("WIKIINFO: %s", str(wikiinfo))
-            logger.info("Searching for %s " % wikiinfo[0][2])
+            # logger.info("WIKIINFO: %s", str(wikiinfo))
+            # logger.info("Searching for %s " % wikiinfo[0][2])
             entry_image = self.get_main_image_url(wikiinfo[0][2])
             if entry_image:
                 self.rewritten_entry.image = entry_image
