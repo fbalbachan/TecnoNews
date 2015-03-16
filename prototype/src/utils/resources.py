@@ -1,5 +1,5 @@
 #-*- coding: utf-8 -*-
-from src.utils.configProvider import ConfigProvider
+from ConfigParser import ConfigParser
 # from src.decorators.singleton import singleton
 
 # @singleton
@@ -8,10 +8,16 @@ class Resources:
         self.load_resource_file()
 
     def load_resource_file(self):
-        config = ConfigProvider()
-        self.source_config = config
+        Config = ConfigParser()
+        Config.read("config")
+        self.source_config = Config
+        self.source_config = ConfigProvider()
+
         resources_file = dict(Config.items("resources"))["general_resources"]
 
+        Config =  ConfigParser()
+        Config.read(resources_file)
+        self.config = Config
         self.config = config.read(resources_file)
 
     def get_config(self, section, key):
