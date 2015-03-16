@@ -107,7 +107,8 @@ class TecnoNews(object):
         logger.info("\nsimilarity %s" % similarity)
         logger_similarity.info("\nsimilarity %s" % similarity)
 
-        return similarity <= 95
+        # return similarity <= 95
+        return rewriter_instance.injected_count > 0
 
 if __name__ == '__main__':
     import time

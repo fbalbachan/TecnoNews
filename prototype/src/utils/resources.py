@@ -11,14 +11,12 @@ class Resources:
         Config = ConfigParser()
         Config.read("config")
         self.source_config = Config
-        self.source_config = ConfigProvider()
 
         resources_file = dict(Config.items("resources"))["general_resources"]
 
         Config =  ConfigParser()
         Config.read(resources_file)
         self.config = Config
-        self.config = config.read(resources_file)
 
     def get_config(self, section, key):
         return dict(self.source_config.items(section))[key]
