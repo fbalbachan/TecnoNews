@@ -8,8 +8,8 @@ class Resources:
         self.load_resource_file()
 
     def load_resource_file(self):
-        self.source_config = ConfigProvider()
-
+        config = ConfigProvider()
+        self.source_config = config
         resources_file = dict(Config.items("resources"))["general_resources"]
 
         self.config = config.read(resources_file)
