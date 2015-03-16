@@ -146,6 +146,12 @@ class NewsRewriter(object):
         # Insert new content
         text_inserter = TextInserter(analysis)
         self.injected_count, self.rewritten_entry.content = text_inserter.get()
+        logger.info("Injected Count %s" % self.injected_count)
+
+        # Portada minimal logic
+        if self.injected_count > 2 and self.rewritten_entry.image:
+            self.rewritten_entry.categories.append("portada")
+            logger.info("Portada")
 
         analysis = self._analyze(self.rewritten_entry.content)
         rewriter = Rewriter(analysis['paragraph'])
