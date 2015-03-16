@@ -6,7 +6,6 @@ from wordpress_xmlrpc.methods import media, posts
 from src.services.mongodb.news_entries_service import NewsEntriesService
 from src.utils.logger_utils import *
 from src.utils.configProvider import ConfigProvider
-import ConfigParser
 import urllib
 from wordpress_xmlrpc.compat import xmlrpc_client
 import mimetypes
@@ -51,6 +50,14 @@ class BlogPublisher(object):
                     post.content += unmarshalled_news[0].published_date.strftime('%B %d, %Y')
                     post.content += '</span>'
             post.content += '</ul>'
+
+        # Portada minimal logic
+        logger.info("post.injected_count %s" % post.injected_count)
+        logger.info("post.image %s" % post.image)
+
+        if post.injected_count > 2 and post.image:
+            post.rewritten_entry.categories.append("Portada")
+            logger.info("Portada")
 
         post.terms_names = {
             'post_tag': entry.tags,
