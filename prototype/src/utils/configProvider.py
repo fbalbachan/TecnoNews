@@ -23,3 +23,11 @@ class ConfigProvider(object):
         :return: String
         """
         return cls.cfg.get(section, value)
+
+    @classmethod
+    def items(cls, section):
+        return cls.cfg.items(section)
+
+    @classmethod
+    def getint(cls, section, value):
+        return cls.cfg.get(section, value)

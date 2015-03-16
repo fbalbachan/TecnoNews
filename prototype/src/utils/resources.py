@@ -1,21 +1,18 @@
 #-*- coding: utf-8 -*-
-from ConfigParser import ConfigParser
+from src.utils.configProvider import ConfigProvider
+from src.decorators.singleton import singleton
 
-
+@singleton
 class Resources:
     def __init__(self):
         self.load_resource_file()
 
     def load_resource_file(self):
-        Config = ConfigParser()
-        Config.read("config")
-        self.source_config = Config
+        self.source_config = ConfigProvider()
 
         resources_file = dict(Config.items("resources"))["general_resources"]
 
-        Config =  ConfigParser()
-        Config.read(resources_file)
-        self.config = Config
+        self.config = config.read(resources_file)
 
     def get_config(self, section, key):
         return dict(self.source_config.items(section))[key]
@@ -36,5 +33,3 @@ class Resources:
         for value in string.split(","):
             values.add(value.strip())
         return values
-
-instance = Resources()

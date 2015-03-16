@@ -5,6 +5,7 @@ from src.utils.textDistance import TextDistance
 from src.services.mongodb.news_entries_service import NewsEntriesService
 from src.utils.relatedNewsEntries import RelatedNewsEntries
 from src.utils.logger_utils import *
+from src.utils.configProvider import ConfigProvider
 from bs4 import BeautifulSoup
 import traceback
 from datetime import datetime
@@ -14,6 +15,7 @@ logger_similarity = get_logger_similarity()
 
 class TecnoNews(object):
     def __init__(self):
+        self.config = ConfigProvider()
         self.service = NewsEntriesService()
 
     def run(self):
@@ -105,7 +107,7 @@ class TecnoNews(object):
         logger.info("\nsimilarity %s" % similarity)
         logger_similarity.info("\nsimilarity %s" % similarity)
 
-        return similarity <= 80
+        return similarity <= 95
 
 if __name__ == '__main__':
     import time

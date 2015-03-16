@@ -4,6 +4,7 @@ from src.sentinews.parsers import *
 from src.utils.logger_utils import get_crawler_logger
 import feedparser
 from src.utils.sanitize import Sanitizer
+from src.utils.configProvider import ConfigProvider
 import traceback
 
 crawler_logger = get_crawler_logger()
@@ -28,8 +29,7 @@ class Crawler(object):
                 and not '/video_fotos/' in entry.link]
 
     def _filter_by_tag(self, news_entries):
-        Config = ConfigParser.ConfigParser()
-        Config.read("config")
+        Config = ConfigProvider()
 
         tags_filename = Config.get("resources", "tags_to_filter")
         with open(tags_filename) as tags_file:

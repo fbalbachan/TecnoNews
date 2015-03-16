@@ -3,6 +3,7 @@ import ConfigParser
 
 from src.sentiment.verbalScript import VerbalScript
 from src.utils.csvwrapper import unicode_csv_reader
+from src.utils.configProvider import ConfigProvider
 
 
 allowed_boxes_according_to_verb_transitivity = {
@@ -58,8 +59,7 @@ def allowed_boxes(transitivity):
     return result
 
 # load verb resources from file
-Config = ConfigParser.ConfigParser()
-Config.read("config")
+Config = ConfigProvider()
 
 verb_file =  Config.get("resources", "verbal_scripts")
 verb_file_reader = unicode_csv_reader(open(verb_file, 'r'), first_line_is_header = False, delimiter=',')

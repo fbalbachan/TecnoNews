@@ -1,6 +1,6 @@
 #-*- coding: utf-8 -*-
 #import ConfigParser
-import os, ConfigParser
+from src.utils.configProvider import ConfigProvider
 import subprocess
 
 
@@ -20,8 +20,7 @@ class FreelingClientParser:
         return raw_output.split('\n')
 
     def setup_config(self):
-        Config = ConfigParser.ConfigParser()
-        Config.read("config")
+        Config = ConfigProvider()
         self.config = dict(Config.items("freeling"))
 
     def __init__(self):
