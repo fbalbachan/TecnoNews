@@ -4,7 +4,7 @@ __author__ = 'Pablo Perez De Angelis'
 import nltk
 import re
 import numpy
-
+from src.utils.configProvider import ConfigProvider
 
 class TextDistance(object):
 
@@ -24,10 +24,8 @@ class TextDistance(object):
         return text
 
     def load_stopwords(self):
-        import ConfigParser
         stopwords = []
-        config = ConfigParser.ConfigParser()
-        config.read("config")
+        config = ConfigProvider()
 
         stopwords_filename = config.get("resources", "stopwords_es_clean")
 

@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-import ConfigParser
+from src.utils.configProvider import ConfigProvider
 import csv
 import re
 
 from src.rewrite.rewrite import Rewrite
-from src.utils.stringUtils import set_first_letter_case
+# from src.utils.stringUtils import set_first_letter_case
 
 
 class SynonymsStrategy:
@@ -17,7 +17,7 @@ class SynonymsStrategy:
     def applies_to(self, clause):
         for leaf in clause.proper_leaves():
             if (leaf.lemma in self.synonyms.keys() or
-                leaf.lexical_form in self.adverbs.keys()):
+                        leaf.lexical_form in self.adverbs.keys()):
                 return True
         return False
 
@@ -36,7 +36,8 @@ class SynonymsStrategy:
                 else:
                     concept = ontology.concept(synonym)
                     leaf_msi = self._msi_transform(leaf.msi)
-                    lexical_forms = [form for form in concept.lexical_forms if  leaf_msi == self._msi_transform(form.msi)]
+                    lexical_forms = [form for form in concept.lexical_forms if
+                                     leaf_msi == self._msi_transform(form.msi)]
                     if lexical_forms:
                         replacement = lexical_forms[0].text
                 if replacement:
@@ -59,9 +60,8 @@ class SynonymsStrategy:
         # replacements for the same word.
 
         replacements = {}
-        Config = ConfigParser.ConfigParser()
-        Config.read("config")
-        replacements_filename =  Config.get("resources", resource)
+        config = ConfigProvider()
+        replacements_filename = config.get("resources", resource)
         for line in csv.reader(open(replacements_filename, 'r')):
             replacements[line[0]] = line[1]
             replacements[line[1]] = line[0]
@@ -69,9 +69,8 @@ class SynonymsStrategy:
 
     def _get_locucions(self):
         locucions = {}
-        Config = ConfigParser.ConfigParser()
-        Config.read("config")
-        locucions_filename =  Config.get("resources", "locucions")
+        config = ConfigProvider()
+        locucions_filename = config.get("resources", "locucions")
         regex = re.compile('<.[^_]+>')
         for line in open(locucions_filename, 'r'):
             line = line.strip().split()
@@ -80,15 +79,15 @@ class SynonymsStrategy:
 
     def _msi_transform(self, msi):
         result_msi = {}
-        if 'number' in msi: result_msi['number'] =  msi['number']
-        if 'gender' in msi: result_msi['gender'] =  msi['gender']
+        if 'number' in msi: result_msi['number'] = msi['number']
+        if 'gender' in msi: result_msi['gender'] = msi['gender']
 
         if msi['category'] == 'adjective':
-            if 'grade' in msi: result_msi['grade'] =  msi['grade']
+            if 'grade' in msi: result_msi['grade'] = msi['grade']
         elif msi['category'] == 'verb':
-            if 'mode' in msi: result_msi['mode'] =  msi['mode']
-            if 'person' in msi: result_msi['person'] =  msi['person']
-            if 'time' in msi: result_msi['time'] =  msi['time']
+            if 'mode' in msi: result_msi['mode'] = msi['mode']
+            if 'person' in msi: result_msi['person'] = msi['person']
+            if 'time' in msi: result_msi['time'] = msi['time']
         result_msi['category'] = msi['category']
         return result_msi
 

@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import ConfigParser
 from src.services.mongodb.feeds_service import FeedService
 from src.sentinews.crawler import Crawler
 from src.sentinews.feeds import Feed
@@ -8,6 +7,7 @@ from src.services.mongodb.connector import MongoConnector
 from datetime import datetime
 from src.utils.logger_utils import get_crawler_logger
 from src.services.mongodb.news_entries_service import NewsEntriesService
+from src.utils.configProvider import ConfigProvider
 
 crawler_logger = get_crawler_logger()
 
@@ -19,8 +19,7 @@ class NewsCrawler(object):
       Table original_news_entries: title, text and url of all news read.
     """
     def __init__(self):
-        config = ConfigParser.ConfigParser()
-        config.read("config")
+        config = ConfigProvider()
         self.feeds_to_process = list(config.get("news_sources", "feeds_to_process").split(','))
         self.feed_service = FeedService()
         self._cursor_start()

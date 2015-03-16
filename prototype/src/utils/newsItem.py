@@ -1,5 +1,6 @@
 __author__ = 'Pablo Perez De Angelis'
 from src.utils.textDistance import TextDistance
+from src.utils.configProvider import ConfigProvider
 
 class NewsItem(object):
 
@@ -73,10 +74,8 @@ class NewsItem(object):
         return td.pre_process(self.content)
 
     def load_stopwords(self):
-        import ConfigParser
         stopwords = []
-        config = ConfigParser.ConfigParser()
-        config.read("config")
+        config = ConfigProvider()
 
         stopwords_filename = config.get("resources", "stopwords_es_clean")
 

@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 __author__ = 'Pablo Perez De Angelis'
 from src.utils.textDistance import TextDistance
-import ConfigParser
+from src.utils.configProvider import ConfigProvider
 
 related_logger = None
 
@@ -45,8 +45,7 @@ class RelatedNewsEntries(object):
 
     def load_stopwords(self):
         stopwords = []
-        config = ConfigParser.ConfigParser()
-        config.read("config")
+        config = ConfigProvider()
 
         stopwords_filename = config.get("resources", "stopwords_es_clean")
 

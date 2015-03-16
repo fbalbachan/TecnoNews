@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import ConfigParser
+from src.utils.configProvider import ConfigProvider
 from src.utils.csvwrapper import unicode_csv_reader
 import warnings
 
@@ -10,8 +10,7 @@ class Categorizer(object):
             warnings.warn('Tags must not be empty!')
 
         self.tags = tags
-        self.config = ConfigParser.ConfigParser()
-        self.config.read('config')
+        self.config = ConfigProvider()
         categories_file = self.config.get("resources", "categories")
         countries_file = self.config.get("resources", "countries")
 

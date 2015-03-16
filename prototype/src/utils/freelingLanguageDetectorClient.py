@@ -1,5 +1,5 @@
 #-*- coding: utf-8 -*-
-import ConfigParser
+from src.utils.configProvider import ConfigProvider
 import re
 import subprocess
 
@@ -24,8 +24,7 @@ class FreelingLanguageDetectorClient:
         return raw_output.split('\n')
 
     def setup_config(self):
-        Config = ConfigParser.ConfigParser()
-        Config.read("config")
+        Config = ConfigProvider()
         self.config = dict(Config.items("freeling_language"))
 
     def __init__(self):

@@ -1,13 +1,12 @@
 from src.utils.languageFilter import LanguageFilter
-from ConfigParser import ConfigParser
+from src.utils.configProvider import ConfigProvider
 
 
 class Sanitizer():
 
     def __init__(self):
         self.language_filter = LanguageFilter()
-        self.config = ConfigParser()
-        self.config.read('config')
+        self.config = ConfigProvider()
         self.language_filter_status = self.config.get('language_filter', 'status')
         self.paragraph_to_avoid = self._load_banned_paragraphs()
 

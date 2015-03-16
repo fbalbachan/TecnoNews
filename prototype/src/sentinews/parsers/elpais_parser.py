@@ -6,14 +6,13 @@ from src.sentinews.news_entry import NewsEntry
 from bs4 import BeautifulSoup
 from src.utils.logger_utils import *
 from src.utils.languageFilter import LanguageFilter
-from ConfigParser import ConfigParser
+from src.utils.configProvider import ConfigProvider
 
 class ElPaisParser(object):
 
     def __init__(self):
         self.language_filter = LanguageFilter()
-        config = ConfigParser()
-        config.read('config')
+        config = ConfigProvider()
         self.language_filter_status = config.get('language_filter', 'status')
 
     source = u'El País'

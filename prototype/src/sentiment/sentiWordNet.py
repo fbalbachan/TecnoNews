@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
-import ConfigParser
 
+from src.utils.configProvider import ConfigProvider
 from src.sentiment.sentimentalValuedObject import SentimentalValuedObject
 from src.utils.csvwrapper import unicode_csv_reader
 
 
 def load_sentiwordnet():
-    Config = ConfigParser.ConfigParser()
-    Config.read("config")
+    Config = ConfigProvider()
 
     sentiwordnet_file =  Config.get("resources", "sentiwordnet")
     reader = unicode_csv_reader(open(sentiwordnet_file, 'r'), first_line_is_header=False, delimiter=',')

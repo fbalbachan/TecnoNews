@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
-from ConfigParser import ConfigParser
+from src.utils.configProvider import ConfigProvider
 from ast import literal_eval
 import logging
 from traceback import format_exc
 
 
 def default_raise_exception():
-    Config = ConfigParser()
-    Config.read("config")
+    Config = ConfigProvider()
+
     string = dict(Config.items("debug"))["raise_exception"]
     return literal_eval(string)
 

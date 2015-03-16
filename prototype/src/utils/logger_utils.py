@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
-import ConfigParser
+from src.utils.configProvider import ConfigProvider
 import logging
 from logging.handlers import RotatingFileHandler
 
@@ -72,7 +72,6 @@ def get_logger_similarity():
 
 def get_instance_info():
     instance_info = {}
-    config = ConfigParser.ConfigParser()
-    config.read("config")
+    config = ConfigProvider()
     instance_info["id"] = config.getint("instance", "id")
     return instance_info

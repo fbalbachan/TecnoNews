@@ -3,7 +3,7 @@ from src.rewrite.rewrite import Rewrite
 from src.utils.stringUtils import set_first_letter_case
 from src.parser.leafNode import LeafNode
 from src.parser.labelNode import LabelNode
-import ConfigParser
+from src.utils.configProvider import ConfigProvider
 
 class TextualCite:
     def __init__(self, dislocation=None, changes=None):
@@ -15,7 +15,7 @@ class TextualCite:
         # if changes is None:
         #     self.changes = ["de_acuerdo_con", ""]
 
-        self.verbs_que = self._get_verbs_que()
+        self.verbs_que = self._get_verbs_que
         self.head_nodes = ["grup-verb", "subord-rel", "subord", "subord-ger", "verb-pass"]
 
     def applies_to(self, sentence, node):
@@ -68,6 +68,7 @@ class TextualCite:
 
         return applies_normal or applies_quote_root
 
+    @property
     def _get_verbs_que(self):
         """
         load resource list of verbs que
@@ -75,8 +76,7 @@ class TextualCite:
         :return: list of words as list
         """
         verbs_que = []
-        config = ConfigParser.ConfigParser()
-        config.read("config")
+        config = ConfigProvider()
         verbs_que_filename = config.get("resources", "verbs_que")
 
         for line in open(verbs_que_filename, 'r'):
