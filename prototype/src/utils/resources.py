@@ -1,8 +1,8 @@
 #-*- coding: utf-8 -*-
 from src.utils.configProvider import ConfigProvider
-from src.decorators.singleton import singleton
+# from src.decorators.singleton import singleton
 
-@singleton
+# @singleton
 class Resources:
     def __init__(self):
         self.load_resource_file()
@@ -33,3 +33,5 @@ class Resources:
         for value in string.split(","):
             values.add(value.strip())
         return values
+
+instance = Resources()
