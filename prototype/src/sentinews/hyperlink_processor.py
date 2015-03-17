@@ -175,13 +175,22 @@ class HyperlinkProcessor(object):
 
     def _get_first_gresult(self, searchfor):
         data = self._google_search(searchfor)
+        first_result = None
+
         try:
-            data = None
-            return data['responseData']['results'][0]['url']
-        except Exception, e:
+            results = data.get('responseData', {}).get('results')
+            if len(results) > 0:
+                first_result = results[0].get('url', {})
+
+        except Exception as e:
             logger = get_logger('tecnonews')
             logger.info("HyperlinkProcessor:")
             logger.info("Searchfor: %s", searchfor)
             logger.info("JSON %s" % data)
             logger.info(traceback.format_exc())
-            return ''
+            logger.info("%s" % e.message)
+
+        if not first_result:
+            first_result = ''
+
+        return first_result

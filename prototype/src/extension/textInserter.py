@@ -29,12 +29,16 @@ class TextInserter:
             # if there is some paragraph to append
             if idx in injections_paragraphs.keys():
                 injected_count += 1
+                generated += u'[eyesonly logged="in"] Start paragraph from other coverage [/eyesonly]\n'
                 generated += u"\n" + injections_paragraphs[idx] + u"\n"
+                generated += u'[eyesonly logged="in"] Ends paragraph from other coverage [/eyesonly]'
 
             if idx in injections_wiki.keys():
                 injected_count += 1
                 for content in injections_wiki[idx]:
+                    generated += u'[eyesonly logged="in"] Starts paragraph from wiki [/eyesonly]\n'
                     generated += u"\n" + content + u"\n"
+                    generated += u'[eyesonly logged="in"] Ends paragraph from wiki [/eyesonly] '
 
         return injected_count, generated.strip()
 
