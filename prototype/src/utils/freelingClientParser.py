@@ -5,6 +5,15 @@ import subprocess
 
 
 class FreelingClientParser:
+
+    def __init__(self):
+        config = ConfigProvider()
+        self.config = dict(config.items("freeling"))
+
+    def health_check(self):
+        #TODO: implement
+        return True
+
     def parse(self, text):
         return self.get_client_output_for(text)
 
@@ -19,9 +28,3 @@ class FreelingClientParser:
 
         return raw_output.split('\n')
 
-    def setup_config(self):
-        Config = ConfigProvider()
-        self.config = dict(Config.items("freeling"))
-
-    def __init__(self):
-        self.setup_config()

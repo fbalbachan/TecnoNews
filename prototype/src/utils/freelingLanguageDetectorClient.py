@@ -1,10 +1,20 @@
 #-*- coding: utf-8 -*-
 from src.utils.configProvider import ConfigProvider
+from src.decorators.singleton import singleton
 import re
 import subprocess
 
-
+@singleton
 class FreelingLanguageDetectorClient:
+    def __init__(self):
+        config = ConfigProvider()
+        self.config = dict(config.items("freeling_language"))
+        self.calls_count = 0
+
+    def health_check(self):
+        #TODO: implement
+        return True
+
     def parse(self, text):
         return self.get_client_output_for(text)
 
@@ -23,9 +33,3 @@ class FreelingLanguageDetectorClient:
         raw_output = p.communicate(input=text.encode('utf-8'))[0]
         return raw_output.split('\n')
 
-    def setup_config(self):
-        Config = ConfigProvider()
-        self.config = dict(Config.items("freeling_language"))
-
-    def __init__(self):
-        self.setup_config()

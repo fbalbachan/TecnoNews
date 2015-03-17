@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from src.sentinews.news_rewriter import NewsRewriter
 from src.sentinews.news_crawler import NewsCrawler
+from src.utils.freelingLanguageDetectorClient import FreelingLanguageDetectorClient
+from src.utils.freelingClientParser import FreelingClientParser
 from src.utils.textDistance import TextDistance
 from src.services.mongodb.news_entries_service import NewsEntriesService
 from src.utils.relatedNewsEntries import RelatedNewsEntries
@@ -17,7 +19,15 @@ logger_similarity = get_logger_similarity()
 class TecnoNews(object):
     def __init__(self):
         self.config = ConfigProvider()
+        self.freeling_lang_ident = FreelingLanguageDetectorClient()
+        self.freeling_parse = FreelingClientParser()
         self.service = NewsEntriesService()
+
+    def enviroment_health(self):
+        li_health = self.freeling_lang_ident.health_check()
+        parse_health = self.freeling_parse.health_check()
+
+        return li_health and parse_health
 
     def run(self):
         logger = get_logger('tecnonews')
@@ -29,6 +39,8 @@ class TecnoNews(object):
         for idx, entry in enumerate(entries):
             logger.info("<Tecnonews> <run> processing entry %s of %s" % (idx, len(entries)))
             self._process(entry)
+
+        logger.info("Freeling ident calls number:%s" % self.freeling_lang_ident.calls_count)
         logger.info("<Tecnonews> <run> Done.")
 
     def _process(self, entry):
@@ -113,7 +125,13 @@ class TecnoNews(object):
 
 if __name__ == '__main__':
     import time
+    tn = TecnoNews()
     while True:
-        TecnoNews().run()
+        if tn.enviroment_health():
+            tn.run()
+        else:
+            #TODO: must fix the enviroment
+            logger.info("Not running becouse enviroment is not health")
+
         logger.info("Sleeping")
         time.sleep(60)

@@ -148,6 +148,8 @@ class NewsRewriter(object):
         self.injected_count, self.rewritten_entry.content = text_inserter.get()
         logger.info("Injected Count %s" % self.injected_count)
 
+        self.rewritten_entry.injected_count = self.injected_count
+
         analysis = self._analyze(self.rewritten_entry.content)
         rewriter = Rewriter(analysis['paragraph'])
         self.rewritten_entry.content = rewriter.rewrite()

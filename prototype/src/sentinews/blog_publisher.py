@@ -52,11 +52,11 @@ class BlogPublisher(object):
             post.content += '</ul>'
 
         # Portada minimal logic
-        logger.info("post.injected_count %s" % post.injected_count)
-        logger.info("post.image %s" % post.image)
+        logger.info("post.injected_count %s" % entry.injected_count)
+        logger.info("post.image %s" % entry.image)
 
-        if post.injected_count > 2 and post.image:
-            post.rewritten_entry.categories.append("Portada")
+        if entry.injected_count > 2 and entry.image:
+            entry.categories.append("Portada")
             logger.info("Portada")
 
         post.terms_names = {
