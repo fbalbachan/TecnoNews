@@ -21,7 +21,7 @@ class NewsRewriter(object):
         the rewritten result. 
         Ties the crawler, the rewrite strategies and
         the publisher. '''
-    
+
     def __init__(self, original_entry):
         self.original_entry = original_entry
         self.rewritten_entry = NewsEntry(original_entry.title,
@@ -32,6 +32,7 @@ class NewsRewriter(object):
                                          related=original_entry.related,
                                          versions=original_entry.versions)
         self.injected_count = 0
+        self.to_insert_canonical = []
 
     def _get_alt_text(self, im, h):
         im2 = [(x.split('/')[-1].split('.')[0], x) for x in im]
@@ -41,7 +42,7 @@ class NewsRewriter(object):
             try:
                 x = re.search("\<img.*%s.*/>" % img, h).group(0)
                 s = re.search("alt=\".*\" src=", x).group(0)
-                s = s[s.find('"')+1:]
+                s = s[s.find('"') + 1:]
                 s = s[:s.find('"')]
                 res[url] = s
             except:
@@ -97,7 +98,6 @@ class NewsRewriter(object):
 
         image_info_dict = None
         if selected_image:
-
             logger.info("IMAGE URL: %s", selected_image)
             logger.info("IMAGE alt text: %s ", img_alts[selected_image])
 
@@ -138,6 +138,7 @@ class NewsRewriter(object):
         analysis["generated_content_wiki"] = WikipediaContentGenerator(analysis).generate()
         sp = SimilarParagraph(analysis=analysis, other_versions=self.rewritten_entry.other_versions)
         analysis["generated_content_other_sources"] = sp.get_generated_content()
+        self.to_insert_canonical = self.rewritten_entry.other_versions[:2]
 
         wikiinfo = analysis["generated_content_wiki"]
         paragraph_from_other_cover = analysis["generated_content_other_sources"]
@@ -180,7 +181,9 @@ class NewsRewriter(object):
 
     def publish(self):
         publisher = BlogPublisher()
-        return publisher.publish(self.rewritten_entry)
+        wp_id, wp_url = publisher.publish(self.rewritten_entry)
+        publisher.insert_canonical(self.to_insert_canonical, wp_url)
+        return wp_id, wp_url
 
     def _analyze(self, text):
         return Sentilecto().analyze(text)

@@ -170,3 +170,16 @@ class BlogPublisher(object):
                 data['bits'] = xmlrpc_client.Binary(img.read())
 
         return data
+
+    def insert_canonical(self, entries, new_post_url):
+        # TODO: workaround this hardcoded data
+        user = 'emmettbrown'
+        password = '6503b89221548c7cde2128570003d410'
+
+        for entry in entries:
+            url = entry.wp_url.split('.com')[0] + '.com/xmlrpc.php'
+            client = Client(url, user, password)
+            wpost = client.call(posts.GetPost(entry.wp_id))
+            wpost.custom_fields = [dict(key='my_canonical', value=new_post_url)]
+            client.call(posts.EditPost(entry.wp_id, wpost))
+            logger.info("inserted cannonical in %s" % entry.wp_url)
