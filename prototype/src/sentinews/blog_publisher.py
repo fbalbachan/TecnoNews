@@ -55,7 +55,7 @@ class BlogPublisher(object):
         logger.info("post.injected_count %s" % entry.injected_count)
         logger.info("post.image %s" % entry.image)
 
-        if entry.injected_count > 2 and entry.image:
+        if entry.injected_count >= 2 and entry.image:
             entry.categories.append("Portada")
             logger.info("Portada")
 

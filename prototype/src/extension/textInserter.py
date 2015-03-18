@@ -24,21 +24,25 @@ class TextInserter:
                 paragraph = unicode(paragraph, 'utf-8')
                 # TODO: Transform all to unicode at the beginning of the
                 # pipeline!!!
-            generated += paragraph + u"\n"
+            generated += paragraph + u'\n'
 
             # if there is some paragraph to append
             if idx in injections_paragraphs.keys():
                 injected_count += 1
-                generated += u'[eyesonly logged="in"] Start paragraph from other coverage [/eyesonly]\n'
-                generated += u"\n" + injections_paragraphs[idx] + u"\n"
-                generated += u'[eyesonly logged="in"] Ends paragraph from other coverage [/eyesonly]'
+                generated += u'[eyesonly logged="in"]' \
+                             + u'<p><strong>Start paragraph from other coverage</strong></p>[/eyesonly]'
+                generated += u'\n' + injections_paragraphs[idx] + u'\n'
+                generated += u'[eyesonly logged="in"]' \
+                             + u'<p><strong> Ends paragraph from other coverage<strong></p>[/eyesonly]'
 
             if idx in injections_wiki.keys():
                 injected_count += 1
                 for content in injections_wiki[idx]:
-                    generated += u'[eyesonly logged="in"] Starts paragraph from wiki [/eyesonly]\n'
-                    generated += u"\n" + content + u"\n"
-                    generated += u'[eyesonly logged="in"] Ends paragraph from wiki [/eyesonly] '
+                    generated += u'[eyesonly logged="in"]' \
+                                 + u'<p><strong>Starts paragraph from wiki</strong></p> [/eyesonly]\n'
+                    generated += u'\n' + content + u'\n'
+                    generated += u'[eyesonly logged="in"]' \
+                                 + u'<p><strong>Ends paragraph from wiki</strong></p>[/eyesonly]'
 
         return injected_count, generated.strip()
 
