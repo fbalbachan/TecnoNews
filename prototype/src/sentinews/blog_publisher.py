@@ -20,36 +20,11 @@ class BlogPublisher(object):
         self.config = ConfigProvider()
 
     def publish(self, entry, test=False):
-        # TODO: simplify this method extract formating logic of each section to new methods
+        # TODO: simplify this method extract formatting logic of each section to new methods
         news_service = NewsEntriesService() if not test else NewsEntriesService('test')
         post = WordPressPost()
         post.title = entry.title
         post.content = entry.content
-
-        if len(entry.versions) > 0:
-            post.content += "<br><br><strong> La misma noticia en otras coberturas:</strong>"
-            post.content += '<ul>'
-            for version_news_id in entry.versions:
-                unmarshalled_news = news_service.get_list({'_id': version_news_id})
-                if len(unmarshalled_news) == 1:
-                    post.content += '<li><a href="' + unmarshalled_news[0].wp_url + '">'
-                    post.content += unmarshalled_news[0].title + '</a><span>&nbsp;'
-                    post.content += unmarshalled_news[0].published_date.strftime('%B %d, %Y')
-                    post.content += '</span>'
-
-            post.content += '</ul>'
-
-        if len(entry.related) > 0:
-            post.content += '<br><br><strong> Noticias relacionadas:</strong>'
-            post.content += '<ul>'
-            for related_id in entry.related:
-                unmarshalled_news = news_service.get_list({'_id': related_id})
-                if len(unmarshalled_news) == 1:
-                    post.content += '<li><a href="' + unmarshalled_news[0].wp_url + '">'
-                    post.content += unmarshalled_news[0].title + '</a><span>&nbsp;'
-                    post.content += unmarshalled_news[0].published_date.strftime('%B %d, %Y')
-                    post.content += '</span>'
-            post.content += '</ul>'
 
         # Portada minimal logic
         logger.info("post.injected_count %s" % entry.injected_count)
