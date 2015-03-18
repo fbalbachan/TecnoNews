@@ -17,8 +17,13 @@ logger_similarity = get_logger_similarity()
 
 
 class TecnoNews(object):
-    def __init__(self):
-        self.config = ConfigProvider()
+    def __init__(self, config_provider=None):
+
+        if not config_provider:
+            self.config = ConfigProvider()
+        else:
+            self.config = config_provider
+
         self.freeling_lang_ident = FreelingLanguageDetectorClient()
         self.freeling_parse = FreelingClientParser()
         self.service = NewsEntriesService()
@@ -124,13 +129,27 @@ class TecnoNews(object):
         return rewriter_instance.injected_count > 0
 
 if __name__ == '__main__':
+    # import argparse
     import time
+    # from shutil import copyfile
+    # TODO: use args and fix syncronization problem when copy config files
+    # parser = argparse.ArgumentParser(description='Instanciate instance of NaturalNews.')
+    # parser.add_argument('--instance', type=int, nargs=1,
+    #                help='The instance identificator')
+    # args = parser.parse_args()
+    # config_file = u'instance_config/config_instance_' + unicode(args.instance[0])
+    # print config_file
+
+    # copyfile(config_file, 'config')
+    # time.sleep(1)
     tn = TecnoNews()
+    print tn.config.get('instance', 'id')
+
     while True:
         if tn.enviroment_health():
             tn.run()
         else:
-            #TODO: must fix the enviroment
+            #TODO: must fix the enviroment somehow
             logger.info("Not running becouse enviroment is not health")
 
         logger.info("Sleeping")
