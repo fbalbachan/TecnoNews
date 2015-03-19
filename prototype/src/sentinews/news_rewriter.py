@@ -183,6 +183,7 @@ class NewsRewriter(object):
         publisher = BlogPublisher()
         wp_id, wp_url = publisher.publish(self.rewritten_entry)
         publisher.insert_canonical(self.to_insert_canonical, wp_url)
+        publisher.remove_from_portada(self.to_insert_canonical)
         return wp_id, wp_url
 
     def _analyze(self, text):

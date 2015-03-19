@@ -158,3 +158,22 @@ class BlogPublisher(object):
             wpost.custom_fields = [dict(key='my_canonical', value=new_post_url)]
             client.call(posts.EditPost(entry.wp_id, wpost))
             logger.info("inserted cannonical in %s" % entry.wp_url)
+
+    def remove_from_portada(self, entries):
+        # TODO: workaround this hardcoded data
+        user = 'emmettbrown'
+        password = '6503b89221548c7cde2128570003d410'
+
+        for entry in entries:
+            url = entry.wp_url.split('.com')[0] + '.com/xmlrpc.php'
+            client = Client(url, user, password)
+            wpost = client.call(posts.GetPost(entry.wp_id))
+
+            for t in wpost.terms:
+                if t.name == 'Portada':
+                    print t.id
+                    wpost.terms.remove(t)
+                    break
+
+            client.call(posts.EditPost(entry.wp_id, wpost))
+            logger.info("inserted cannonical in %s" % entry.wp_url)
