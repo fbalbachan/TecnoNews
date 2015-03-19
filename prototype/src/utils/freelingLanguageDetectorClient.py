@@ -12,9 +12,11 @@ class FreelingLanguageDetectorClient:
         self.calls_count = 0
 
     def health_check(self):
-        #TODO: implement
-        return True
+        expected = ['it', '']
+        result = self.parse(u"Siamo fuori della coppa")
+        return expected == result
 
+    #TODO:refactor and rename it to lang_ident
     def parse(self, text):
         return self.get_client_output_for(text)
 
