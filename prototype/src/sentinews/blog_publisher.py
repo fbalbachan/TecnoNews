@@ -46,13 +46,16 @@ class BlogPublisher(object):
 
             post.thumbnail = response['id']
 
-        # Portada minimal logic
-        logger.info("post.injected_count %s" % entry.injected_count)
-        logger.info("post.thumbnail %s" % post.thumbnail)
+            # Portada minimal logic
+            logger.info("post.injected_count %s" % entry.injected_count)
+            logger.info("post.thumbnail %s" % post.thumbnail)
 
-        if entry.injected_count >= 2 and post.thumbnail:
-            entry.categories.append("Portada")
-            logger.info("Portada")
+            if entry.injected_count >= 2 and post.thumbnail:
+                entry.categories.append("Portada")
+                logger.info("Portada")
+
+        else:
+            logger.info("doesnt have image")
 
         post.terms_names = {
             'post_tag': entry.tags,

@@ -178,9 +178,10 @@ class HyperlinkProcessor(object):
         first_result = None
 
         try:
-            results = data.get('responseData', {}).get('results')
-            if len(results) > 0:
-                first_result = results[0].get('url', {})
+            if data:
+                results = data.get('responseData', {}).get('results')
+                if len(results) > 0:
+                    first_result = results[0].get('url', {})
 
         except Exception as e:
             logger = get_logger('tecnonews')
