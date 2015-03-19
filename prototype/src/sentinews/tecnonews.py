@@ -27,6 +27,8 @@ class TecnoNews(object):
         self.freeling_lang_ident = FreelingLanguageDetectorClient()
         self.freeling_parse = FreelingClientParser()
         self.service = NewsEntriesService()
+        self.published_in_this_run = 0
+        self.not_published_in_this_run = 0
 
     def enviroment_health(self):
         li_health = self.freeling_lang_ident.health_check()
@@ -37,6 +39,9 @@ class TecnoNews(object):
     def run(self):
         logger = get_logger('tecnonews')
         logger.info("<Tecnonews> <run> Running start")
+        self.published_in_this_run = 0
+        self.not_published_in_this_run = 0
+
         entries = NewsCrawler().crawl_all()
 
         logger.info("<Tecnonews> <run> Entries to publish: %s" % len(entries))
@@ -46,6 +51,8 @@ class TecnoNews(object):
             self._process(entry)
 
         logger.info("Freeling ident calls number:%s" % self.freeling_lang_ident.calls_count)
+        logger.info("not published: %s \n Published: %s" % (self.not_published_in_this_run,
+                                                            self.published_in_this_run))
         logger.info("<Tecnonews> <run> Done.")
 
     def _process(self, entry):
@@ -90,7 +97,6 @@ class TecnoNews(object):
                 logger_similarity.info("\n\nvalid to publish %s " % valid_to_publish)
                 logger_similarity.info("\n--------\n")
 
-
                 if valid_to_publish:
                     logger.info('<Tecnonews> <_process> publishing: ' + entry.title)
                     wp_id, wp_url = rewriter.publish()
@@ -99,7 +105,9 @@ class TecnoNews(object):
 
                     # TODO: check if we must use datetime from wp
                     entry.published_date = datetime.utcnow()
+                    self.published_in_this_run += 1
                 else:
+                    self.not_published_in_this_run += 1
                     logger.info("Not publishing")
 
             except Exception as e:
