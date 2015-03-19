@@ -21,6 +21,8 @@ class FreelingLanguageDetectorClient:
         return self.get_client_output_for(text)
 
     def get_client_output_for(self, text):
+        self.calls_count += 1
+
         if not isinstance(text, unicode):
             raise Exception("Must provide unicode strings.")
 
