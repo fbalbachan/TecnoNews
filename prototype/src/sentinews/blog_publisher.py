@@ -26,20 +26,6 @@ class BlogPublisher(object):
         post.title = entry.title
         post.content = entry.content
 
-        # Portada minimal logic
-        logger.info("post.injected_count %s" % entry.injected_count)
-        logger.info("post.image %s" % entry.image)
-
-        if entry.injected_count >= 2 and entry.image:
-            entry.categories.append("Portada")
-            logger.info("Portada")
-
-        post.terms_names = {
-            'post_tag': entry.tags,
-            'category': entry.categories
-        }
-        post.post_status = 'publish'
-
         # use only one host to publish for now the first but we must guarantee unicity
         host = self.select_category_to_publish(entry)
         logger.info("publishing into host %s" % host['url'])
@@ -47,8 +33,8 @@ class BlogPublisher(object):
         client = Client(host['url'], host['username'], host['password'])
 
         if entry.image:
-            logger.info("image info" % entry.image)
             image_data = self.get_data_upload_image(entry.image)
+            logger.info("image info %s" % image_data)
 
             response = client.call(media.UploadFile(image_data))
             # response == {
@@ -59,6 +45,20 @@ class BlogPublisher(object):
             # }
 
             post.thumbnail = response['id']
+
+        # Portada minimal logic
+        logger.info("post.injected_count %s" % entry.injected_count)
+        logger.info("post.thumbnail %s" % post.thumbnail)
+
+        if entry.injected_count >= 2 and post.thumbnail:
+            entry.categories.append("Portada")
+            logger.info("Portada")
+
+        post.terms_names = {
+            'post_tag': entry.tags,
+            'category': entry.categories
+        }
+        post.post_status = 'publish'
 
         # Post new entry
         wp_id = client.call(NewPost(post))
