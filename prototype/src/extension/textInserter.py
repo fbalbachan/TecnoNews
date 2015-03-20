@@ -18,6 +18,7 @@ class TextInserter:
         generated = u""
 
         injected_count = 0  # keep the count of how many paragraph we add to the news
+        wiki_inyected = False
 
         for idx, paragraph in enumerate(self.paragraphs):
             if not isinstance(paragraph, unicode):
@@ -29,20 +30,23 @@ class TextInserter:
             # if there is some paragraph to append
             if idx in injections_paragraphs.keys():
                 injected_count += 1
-                generated += u'[eyesonly logged="in"]' \
-                             + u'<p><strong>Start paragraph from other coverage</strong></p>[/eyesonly]'
+                # generated += u'[eyesonly logged="in"]' \
+                #              + u'<p><strong>Start paragraph from other coverage</strong></p>[/eyesonly]'
                 generated += u'\n' + injections_paragraphs[idx] + u'\n'
-                generated += u'[eyesonly logged="in"]' \
-                             + u'<p><strong> Ends paragraph from other coverage<strong></p>[/eyesonly]'
+                # generated += u'[eyesonly logged="in"]' \
+                #              + u'<p><strong> Ends paragraph from other coverage<strong></p>[/eyesonly]'
 
             if idx in injections_wiki.keys():
-                injected_count += 1
+                wiki_inyected = True
                 for content in injections_wiki[idx]:
-                    generated += u'[eyesonly logged="in"]' \
-                                 + u'<p><strong>Starts paragraph from wiki</strong></p> [/eyesonly]\n'
+                    # generated += u'[eyesonly logged="in"]' \
+                    #              + u'<p><strong>Starts paragraph from wiki</strong></p> [/eyesonly]\n'
                     generated += u'\n' + content + u'\n'
-                    generated += u'[eyesonly logged="in"]' \
-                                 + u'<p><strong>Ends paragraph from wiki</strong></p>[/eyesonly]'
+                    # generated += u'[eyesonly logged="in"]' \
+                    #              + u'<p><strong>Ends paragraph from wiki</strong></p>[/eyesonly]'
+
+            if wiki_inyected:
+                injected_count += 1
 
         return injected_count, generated.strip()
 
