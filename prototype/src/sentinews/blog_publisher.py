@@ -50,9 +50,13 @@ class BlogPublisher(object):
             logger.info("post.injected_count %s" % entry.injected_count)
             logger.info("post.thumbnail %s" % post.thumbnail)
 
+            if post.thumbnail:
+                entry.categories.append("CON FOTO")
+                logger.info("CON FOTO")
+
             if entry.injected_count >= 2 and post.thumbnail:
-                entry.categories.append("Portada")
-                logger.info("Portada")
+                entry.categories.append("DESTACADA")
+                logger.info("DESTACADA")
 
         else:
             logger.info("doesnt have image")
@@ -61,6 +65,7 @@ class BlogPublisher(object):
             'post_tag': entry.tags,
             'category': entry.categories
         }
+
         post.post_status = 'publish'
 
         # Post new entry
@@ -173,7 +178,7 @@ class BlogPublisher(object):
             wpost = client.call(posts.GetPost(entry.wp_id))
 
             for t in wpost.terms:
-                if t.name == 'Portada':
+                if t.name == 'DESTACADA':
                     print t.id
                     wpost.terms.remove(t)
                     break
