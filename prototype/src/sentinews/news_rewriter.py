@@ -173,11 +173,6 @@ class NewsRewriter(object):
 
         self.post_process()
 
-        # self.rewritten_entry.content += """[eyesonly logged="in"] wikiinfo: <br/>""" + str(wikiinfo) \
-        #                                  + " other cover: <br/>" + str(paragraph_from_other_cover)  + "[/eyesonly]"
-        # print "------------"
-        # print wikiinfo
-        # print "------------"
 
     def publish(self):
         publisher = BlogPublisher()

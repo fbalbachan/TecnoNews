@@ -45,8 +45,8 @@ class TextInserter:
                     # generated += u'[eyesonly logged="in"]' \
                     #              + u'<p><strong>Ends paragraph from wiki</strong></p>[/eyesonly]'
 
-            if wiki_inyected:
-                injected_count += 1
+        if wiki_inyected:
+            injected_count += 1
 
         return injected_count, generated.strip()
 

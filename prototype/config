@@ -3,23 +3,23 @@
 raise_exception = False
 
 [instance]
-id = 4
+id = 0
 
 [news_sources]
-feeds_to_process = bbc_ciencia,bbc_salud,bbc_cultura,bbc_deportes
+feeds_to_process = cnn_spanish,euronews
 
 [freeling]
 
 host        = 85.10.210.172
 client      = ../externals/freeling/analyzer_client
-parser_port = 10004
+parser_port = 10000
 tagger_port = 9999
 
 [freeling_language]
 
 host        = 85.10.210.172
 client      = ../externals/freeling/analyzer_client_lang_ident
-language_port = 10106
+language_port = 10102
 
 [mongodb]
 

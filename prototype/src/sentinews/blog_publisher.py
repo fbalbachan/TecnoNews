@@ -6,6 +6,7 @@ from wordpress_xmlrpc.methods import media, posts
 from src.services.mongodb.news_entries_service import NewsEntriesService
 from src.utils.logger_utils import *
 from src.utils.configProvider import ConfigProvider
+from src.utils.imgeProcessor import to_desired_size
 import urllib
 from wordpress_xmlrpc.compat import xmlrpc_client
 import mimetypes
@@ -61,9 +62,13 @@ class BlogPublisher(object):
         else:
             logger.info("doesnt have image")
 
+        camelCategories = []
+        for category in entry.categories:
+            camelCategories.append(category[0].upper() + category[1:])
+
         post.terms_names = {
             'post_tag': entry.tags,
-            'category': entry.categories
+            'category': camelCategories
         }
 
         post.post_status = 'publish'
@@ -148,6 +153,10 @@ class BlogPublisher(object):
             tmp_filepath = '/tmp/' + filename_png
             data['name'] = filename_png
 
+        # Write into tmp_filepath a resized/ croped version of the image
+        # TODO: Use the information about if it is a flag, person o map to optimizice
+        # the resize/crop to the better image portion selection
+        to_desired_size(tmp_filepath)
         # read the binary file and let the XMLRPC library encode it into base64
         with open(tmp_filepath, 'rb') as img:
                 data['bits'] = xmlrpc_client.Binary(img.read())

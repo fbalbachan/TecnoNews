@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import ConfigParser
 from src.services.mongodb.news_entries_service import NewsEntriesService
 from src.sentinews.parsers import *
@@ -26,7 +28,9 @@ class Crawler(object):
                 and not '/videos/' in entry.link
                 and not '/inenglish/' in entry.link
                 and not '/album/' in entry.link
-                and not '/video_fotos/' in entry.link]
+                and not '/video_fotos/' in entry.link
+                and not u'#As\xedLoVivimos' in entry.title
+                and not u'resumen' in entry.title]
 
     def _filter_by_tag(self, news_entries):
         Config = ConfigProvider()
