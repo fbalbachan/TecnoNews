@@ -112,10 +112,10 @@ class NewsRewriter(object):
     def pre_filter_images_urls(images_urls):
 
         # TODO: make a resource with this info
-        blacklist = ['Commons-', 'Wikinews-logo', 'Flag_of_None', 'Red_pog',
-                     'Wikisource-logo', 'Red_pog', 'Estany', 'Flag_of_Egypt',
-                     'Ice_hockey_pictogram', 'Spanish Language Wiki.svg',
-                     'Kit right arm blueshoulders.png', 'Tetragrammaton']
+        blacklist = ['Commons-', 'Wikispecies-logo', 'Wiktionary-logo-es', 'Wikinews-logo', 'None', 'Spanish_Wikiquote.SVG', 'P_vip.svg', 'Globe-with-clock.svg', 'Yes_check.svg', 'Red_pog',
+                     'Wikisource-logo', 'Falta imagen', 'Estany', 'Flag_of_Egypt',
+                     'Ice_hockey_pictogram', 'Firmado pero no ratificado.', 'Spanish Language Wiki.svg',
+                      'Kit right arm blueshoulders.png', 'Tetragrammaton']
 
         filtered_urls = [url for url in images_urls
                          if not any(black_string in url for black_string in blacklist)]
@@ -173,11 +173,6 @@ class NewsRewriter(object):
 
         self.post_process()
 
-        # self.rewritten_entry.content += """[eyesonly logged="in"] wikiinfo: <br/>""" + str(wikiinfo) \
-        #                                  + " other cover: <br/>" + str(paragraph_from_other_cover)  + "[/eyesonly]"
-        # print "------------"
-        # print wikiinfo
-        # print "------------"
 
     def publish(self):
         publisher = BlogPublisher()

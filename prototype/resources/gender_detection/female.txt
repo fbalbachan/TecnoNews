@@ -201,6 +201,7 @@ SENCE,spanish
 EMILIANA,spanish
 CELESTINA,spanish
 VIOLETA,spanish
+VIVIANA,spanish
 MAGDALENA,spanish
 BERENGÁRIA,spanish
 NEVA,spanish
