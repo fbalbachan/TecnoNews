@@ -155,9 +155,11 @@ class NewsRewriter(object):
         rewriter = Rewriter(analysis['paragraph'])
         self.rewritten_entry.content = rewriter.rewrite()
 
-        analysis = self._analyze(self.rewritten_entry.content)
-        hyperlink_processor = HyperlinkProcessor(analysis)
-        self.rewritten_entry.content = hyperlink_processor.get_text_with_hyperlinks()
+        # Disable hyperlink insert until we fix some problems
+        # TODO: Fix it
+        # analysis = self._analyze(self.rewritten_entry.content)
+        # hyperlink_processor = HyperlinkProcessor(analysis)
+        # self.rewritten_entry.content = hyperlink_processor.get_text_with_hyperlinks()
 
         if wikiinfo and filter(lambda (referent, score): referent == wikiinfo[0][0] and score > 1., ranking):
             # logger.info("WIKIINFO: %s", str(wikiinfo))

@@ -38,31 +38,27 @@ class BlogPublisher(object):
             logger.info("image info %s" % image_data)
 
             response = client.call(media.UploadFile(image_data))
-            # response == {
-            #       'id': 6,
-            #       'file': 'picture.jpg'
-            #       'url': 'http://www.example.com/wp-content/uploads/2012/04/16/picture.jpg',
-            #       'type': 'image/jpeg',
-            # }
-
-            post.thumbnail = response['id']
-
-            # Portada minimal logic
-            logger.info("post.injected_count %s" % entry.injected_count)
-            logger.info("post.thumbnail %s" % post.thumbnail)
-
-            if post.thumbnail:
-                entry.categories.append("CON FOTO")
-                logger.info("CON FOTO")
-
-            if entry.injected_count >= 2 and post.thumbnail:
-                entry.categories.append("DESTACADA")
-                logger.info("DESTACADA")
+            logger.info("response after upload image %s " % response)
+            post.thumbnail = int(response['id'])
 
         else:
             logger.info("doesnt have image")
 
         camelCategories = []
+
+        # Portada minimal logic
+        logger.info("post.injected_count %s" % entry.injected_count)
+        logger.info("post.thumbnail %s" % post.thumbnail)
+
+        if isinstance(post.thumbnail, int):
+            camelCategories.append("CON FOTO")
+            logger.info("CON FOTO")
+
+        assert isinstance(entry.injected_count, int)
+        if entry.injected_count >= 2 and isinstance(post.thumbnail, int):
+            camelCategories.append("DESTACADA")
+            logger.info("DESTACADA")
+
         for category in entry.categories:
             camelCategories.append(category[0].upper() + category[1:])
 
@@ -121,7 +117,8 @@ class BlogPublisher(object):
 
         return selected_host
 
-    def get_data_upload_image(self, img):
+    @staticmethod
+    def get_data_upload_image(img):
         url = img['url']
         title = img['title']
         description = img['description']
@@ -152,6 +149,7 @@ class BlogPublisher(object):
 
             tmp_filepath = '/tmp/' + filename_png
             data['name'] = filename_png
+            data['type'] = mimetypes.read_mime_types(filename_png) or mimetypes.guess_type(filename_png)[0]
 
         # Write into tmp_filepath a resized/ croped version of the image
         # TODO: Use the information about if it is a flag, person o map to optimizice
