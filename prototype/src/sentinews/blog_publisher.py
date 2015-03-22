@@ -50,7 +50,7 @@ class BlogPublisher(object):
         # Portada minimal logic
         logger.info("post.injected_count %s" % entry.injected_count)
 
-        if post.thumbnail and isinstance(post.thumbnail, int):
+        if hasattr(post, 'thumbnail') and isinstance(post.thumbnail, int):
             camelCategories.append("CON FOTO")
             logger.info("CON FOTO")
 
