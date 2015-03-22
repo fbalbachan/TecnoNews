@@ -40,6 +40,7 @@ class BlogPublisher(object):
             response = client.call(media.UploadFile(image_data))
             logger.info("response after upload image %s " % response)
             post.thumbnail = int(response['id'])
+            logger.info("post.thumbnail %s" % post.thumbnail)
 
         else:
             logger.info("doesnt have image")
@@ -48,7 +49,6 @@ class BlogPublisher(object):
 
         # Portada minimal logic
         logger.info("post.injected_count %s" % entry.injected_count)
-        logger.info("post.thumbnail %s" % post.thumbnail)
 
         if isinstance(post.thumbnail, int):
             camelCategories.append("CON FOTO")
