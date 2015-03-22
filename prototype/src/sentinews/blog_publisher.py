@@ -55,7 +55,8 @@ class BlogPublisher(object):
             logger.info("CON FOTO")
 
         assert isinstance(entry.injected_count, int)
-        if entry.injected_count >= 2 and isinstance(post.thumbnail, int):
+        if hasattr(post, 'thumbnail') \
+                and isinstance(post.thumbnail, int) and entry.injected_count >= 2:
             camelCategories.append("DESTACADA")
             logger.info("DESTACADA")
 
