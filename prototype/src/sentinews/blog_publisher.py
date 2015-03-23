@@ -27,6 +27,8 @@ class BlogPublisher(object):
         post.title = entry.title
         post.content = entry.content
 
+        thumbnail = None
+
         # use only one host to publish for now the first but we must guarantee unicity
         host = self.select_category_to_publish(entry)
         logger.info("publishing into host %s" % host['url'])
@@ -39,7 +41,8 @@ class BlogPublisher(object):
 
             response = client.call(media.UploadFile(image_data))
             logger.info("response after upload image %s " % response)
-            post.thumbnail = int(response['id'])
+            thumbnail = int(response['id'])
+
             logger.info("post.thumbnail %s" % post.thumbnail)
 
         else:
@@ -49,6 +52,9 @@ class BlogPublisher(object):
 
         # Portada minimal logic
         logger.info("post.injected_count %s" % entry.injected_count)
+
+        if thumbnail:
+            post.thumbnail = thumbnail
 
         if hasattr(post, 'thumbnail') and isinstance(post.thumbnail, int):
             camelCategories.append("CON FOTO")
@@ -78,6 +84,15 @@ class BlogPublisher(object):
         else:
             logger.error("not wp_id %s" % wp_id)
             wp_url = ""
+
+        # re assign the image and update post
+        # Because we have cases where the image is uploaded and the thumbnail
+        # is not assigned
+
+        if thumbnail:
+            wpost = client.call(posts.GetPost(wp_id))
+            wpost.thumbnail = thumbnail
+            client.call(posts.EditPost(wp_id, wpost))
 
         return wp_id, wp_url
 
