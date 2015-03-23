@@ -20,23 +20,29 @@ class BlogPublisher(object):
     def __init__(self):
         self.config = ConfigProvider()
 
-    def publish(self, entry, test=False):
-        # TODO: simplify this method extract formatting logic of each section to new methods
-        news_service = NewsEntriesService() if not test else NewsEntriesService('test')
-        post = WordPressPost()
-        post.title = entry.title
-        post.content = entry.content
+    @staticmethod
+    def check_and_remove_con_foto(client, wp_id):
+        wpost = client.call(posts.GetPost(wp_id))
+        print wpost.thumbnail
+        if not wpost.thumbnail:
+            cf = None
+            # TODO: use taxonomies insted of checking the name
+            for t in wpost.terms:
+                if t.name == 'CON FOTO':
+                    print t.name
+                    # we are in the case where we upload a photo asign it and
+                    # some how thumbnail is not setted so remove category 'CON FOTO'
+                    cf = t
+            if cf:
+                wpost.terms.remove(cf)
+        client.call(posts.EditPost(wp_id, wpost))
 
+    def process_image(self, client, entry, post_id):
         thumbnail = None
-
-        # use only one host to publish for now the first but we must guarantee unicity
-        host = self.select_category_to_publish(entry)
-        logger.info("publishing into host %s" % host['url'])
-
-        client = Client(host['url'], host['username'], host['password'])
-
         if entry.image:
             image_data = self.get_data_upload_image(entry.image)
+            image_data['post_id'] = post_id
+
             logger.info("image info %s" % image_data)
 
             response = client.call(media.UploadFile(image_data))
@@ -48,8 +54,9 @@ class BlogPublisher(object):
         else:
             logger.info("doesnt have image")
 
-        camelCategories = []
+        return thumbnail
 
+    def special_catogory_insertion(self, entry, post, thumbnail):
         # Portada minimal logic
         logger.info("post.injected_count %s" % entry.injected_count)
 
@@ -57,14 +64,28 @@ class BlogPublisher(object):
             post.thumbnail = thumbnail
 
         if hasattr(post, 'thumbnail') and isinstance(post.thumbnail, int):
-            camelCategories.append("CON FOTO")
+            post.terms_names['category'].append("CON FOTO")
             logger.info("CON FOTO")
 
         assert isinstance(entry.injected_count, int)
+
         if hasattr(post, 'thumbnail') \
                 and isinstance(post.thumbnail, int) and entry.injected_count >= 2:
-            camelCategories.append("DESTACADA")
+            post.terms_names['category'].append("DESTACADA")
             logger.info("DESTACADA")
+
+    def publish(self, entry, test=False):
+        news_service = NewsEntriesService() if not test else NewsEntriesService('test')
+        post = WordPressPost()
+        post.title = entry.title
+        post.content = entry.content
+
+        host = self.select_category_to_publish(entry)
+        logger.info("publishing into host %s" % host['url'])
+
+        client = Client(host['url'], host['username'], host['password'])
+
+        camelCategories = []
 
         for category in entry.categories:
             camelCategories.append(category[0].upper() + category[1:])
@@ -74,25 +95,23 @@ class BlogPublisher(object):
             'category': camelCategories
         }
 
-        post.post_status = 'publish'
-
-        # Post new entry
+        # Post new entry as draft
         wp_id = client.call(NewPost(post))
+
         # Get the just posted wordpress entry and save the url
         if wp_id:
-            wp_url = client.call(GetPost(wp_id)).link
+            # get the draft post upload and associate image
+            # set publish
+            post = client.call(GetPost(wp_id))
+            wp_url = post.link
+            thumbnail = self.process_image(client, entry, wp_id)
+            self.special_catogory_insertion(entry, post, thumbnail)
+            post.post_status = 'publish'
+            client.call(posts.EditPost(wp_id, wpost))
+
         else:
             logger.error("not wp_id %s" % wp_id)
             wp_url = ""
-
-        # re assign the image and update post
-        # Because we have cases where the image is uploaded and the thumbnail
-        # is not assigned
-
-        if thumbnail:
-            wpost = client.call(posts.GetPost(wp_id))
-            wpost.thumbnail = thumbnail
-            client.call(posts.EditPost(wp_id, wpost))
 
         return wp_id, wp_url
 
