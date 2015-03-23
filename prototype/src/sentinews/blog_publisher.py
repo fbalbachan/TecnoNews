@@ -43,7 +43,7 @@ class BlogPublisher(object):
             logger.info("response after upload image %s " % response)
             thumbnail = int(response['id'])
 
-            logger.info("post.thumbnail %s" % post.thumbnail)
+            logger.info("thumbnail id:%s" % post.thumbnail)
 
         else:
             logger.info("doesnt have image")
