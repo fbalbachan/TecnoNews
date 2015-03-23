@@ -3,6 +3,7 @@
 from wordpress_xmlrpc import Client, WordPressPost
 from wordpress_xmlrpc.methods.posts import NewPost, GetPost
 from wordpress_xmlrpc.methods import media, posts
+from wordpress_xmlrpc.methods import taxonomies
 from src.services.mongodb.news_entries_service import NewsEntriesService
 from src.utils.logger_utils import *
 from src.utils.configProvider import ConfigProvider
@@ -56,22 +57,29 @@ class BlogPublisher(object):
 
         return thumbnail
 
-    def special_catogory_insertion(self, entry, post, thumbnail):
+    def get_category_instance(self, client, name):
+        categories = client.call(taxonomies.GetTerms('category'))
+        for cat in categories:
+            if cat.name == name:
+                return cat
+
+    def special_catogory_insertion(self, client, entry, post, thumbnail):
         # Portada minimal logic
         logger.info("post.injected_count %s" % entry.injected_count)
 
         if thumbnail:
             post.thumbnail = thumbnail
-
         if hasattr(post, 'thumbnail') and isinstance(post.thumbnail, int):
-            post.terms_names['category'].append("CON FOTO")
+            con_foto_instance = self.get_category_instance(client, "CON FOTO")
+            post.terms.append(con_foto_instance)
             logger.info("CON FOTO")
 
         assert isinstance(entry.injected_count, int)
 
         if hasattr(post, 'thumbnail') \
                 and isinstance(post.thumbnail, int) and entry.injected_count >= 2:
-            post.terms_names['category'].append("DESTACADA")
+            destacada_instance = self.get_category_instance(client, "DESTACADA")
+            post.terms.append(destacada_instance)
             logger.info("DESTACADA")
 
     def publish(self, entry, test=False):
@@ -105,7 +113,10 @@ class BlogPublisher(object):
             post = client.call(GetPost(wp_id))
             wp_url = post.link
             thumbnail = self.process_image(client, entry, wp_id)
-            self.special_catogory_insertion(entry, post, thumbnail)
+            self.special_catogory_insertion(client=client,
+                                            entry=entry,
+                                            post=post,
+                                            thumbnail=thumbnail)
             post.post_status = 'publish'
             client.call(posts.EditPost(wp_id, wpost))
 
