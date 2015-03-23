@@ -118,7 +118,7 @@ class BlogPublisher(object):
                                             post=post,
                                             thumbnail=thumbnail)
             post.post_status = 'publish'
-            client.call(posts.EditPost(wp_id, wpost))
+            client.call(posts.EditPost(wp_id, post))
 
         else:
             logger.error("not wp_id %s" % wp_id)
