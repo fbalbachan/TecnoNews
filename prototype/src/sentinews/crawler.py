@@ -30,7 +30,7 @@ class Crawler(object):
                 and not '/album/' in entry.link
                 and not '/video_fotos/' in entry.link
                 and not u'#As\xedLoVivimos' in entry.title
-                and not u'resumen' in entry.title]
+                and not u'Resumen' in entry.title]
 
     def _filter_by_tag(self, news_entries):
         Config = ConfigProvider()
