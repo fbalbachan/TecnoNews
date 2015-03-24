@@ -29,10 +29,10 @@ class BlogPublisher(object):
             cf = None
             # TODO: use taxonomies insted of checking the name
             for t in wpost.terms:
-                if t.name == 'CON FOTO':
+                if t.name == 'z con foto':
                     print t.name
                     # we are in the case where we upload a photo asign it and
-                    # some how thumbnail is not setted so remove category 'CON FOTO'
+                    # some how thumbnail is not setted so remove category 'z con foto
                     cf = t
             if cf:
                 wpost.terms.remove(cf)
@@ -70,17 +70,17 @@ class BlogPublisher(object):
         if thumbnail:
             post.thumbnail = thumbnail
         if hasattr(post, 'thumbnail') and isinstance(post.thumbnail, int):
-            con_foto_instance = self.get_category_instance(client, "CON FOTO")
+            con_foto_instance = self.get_category_instance(client, "z con foto")
             post.terms.append(con_foto_instance)
-            logger.info("CON FOTO")
+            logger.info("z con foto")
 
         assert isinstance(entry.injected_count, int)
 
         if hasattr(post, 'thumbnail') \
                 and isinstance(post.thumbnail, int) and entry.injected_count >= 2:
-            destacada_instance = self.get_category_instance(client, "DESTACADA")
+            destacada_instance = self.get_category_instance(client, "z destacada")
             post.terms.append(destacada_instance)
-            logger.info("DESTACADA")
+            logger.info("z destacada")
 
     def publish(self, entry, test=False):
         news_service = NewsEntriesService() if not test else NewsEntriesService('test')
@@ -231,7 +231,7 @@ class BlogPublisher(object):
             wpost = client.call(posts.GetPost(entry.wp_id))
 
             for t in wpost.terms:
-                if t.name == 'DESTACADA':
+                if t.name == 'z destacada':
                     print t.id
                     wpost.terms.remove(t)
                     break
