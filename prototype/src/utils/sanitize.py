@@ -3,7 +3,6 @@ from src.utils.configProvider import ConfigProvider
 
 
 class Sanitizer():
-
     def __init__(self):
         self.language_filter = LanguageFilter()
         self.config = ConfigProvider()
@@ -13,7 +12,7 @@ class Sanitizer():
     def process_content(self, content):
 
         new_content = '\n'.join([paragraph for paragraph in content.split('\n')
-                       if not any(x == paragraph[:len(x)] for x in self.paragraph_to_avoid)])
+                                 if not any(x == paragraph[:len(x)] for x in self.paragraph_to_avoid)])
 
         if self.language_filter_status == 'ON':
             # Becouse we have a mixed encodes in pipeline be shure it is unicode
@@ -22,6 +21,12 @@ class Sanitizer():
 
             new_content = self.language_filter.only_spanish_paragraph(new_content)
         return new_content
+
+    def filter_paragraph_to_avoid(self, entry):
+        entry.content = '\n'.join([paragraph for paragraph in entry.content.split('\n')
+                                   if not any(x == paragraph[:len(x)] for x in self.paragraph_to_avoid)])
+
+        return entry
 
     def _load_banned_paragraphs(self):
         """

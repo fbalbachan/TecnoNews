@@ -1,6 +1,7 @@
 import cairo
 import rsvg
-from PIL import Image
+import wand
+
 
 
 def to_png(data, ofile, maxwidth=0, maxheight=0):
@@ -30,9 +31,9 @@ def to_png(data, ofile, maxwidth=0, maxheight=0):
     context.scale(xscale, yscale)
     svg.render_cairo(context)
     surface.write_to_png(ofile)
-    im = Image.open(ofile)
-    background = Image.new('RGBA', im.size, (238, 238, 238))
-    background.paste(im, im)
-    background.save(ofile)
+
+    with wand.Image(filename=ofile) as img:
+        img.background_color = wand.Color("#EEEEEE")
+        img.save(filename=ofile)
 
 
