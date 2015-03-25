@@ -175,7 +175,6 @@ class NewsRewriter(object):
 
         self.post_process()
 
-
     def publish(self):
         publisher = BlogPublisher()
         wp_id, wp_url = publisher.publish(self.rewritten_entry)
@@ -188,6 +187,10 @@ class NewsRewriter(object):
 
     def post_process(self):
         content = ''
+
+        import re
+        re.sub(r'EL PAÍS|EL PAIS',  u'el diario El País de España',
+               self.rewritten_entry.content)
 
         for paragraph in self.rewritten_entry.content.split('\n'):
             if len(paragraph) > 0:
