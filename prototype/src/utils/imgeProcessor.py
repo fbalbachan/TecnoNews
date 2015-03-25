@@ -24,9 +24,12 @@ def to_desired_size(filepath, desired_h=380, desired_w=700):
     # crop calculator
     resized_image_w, resized_image_h = resized_image.size
     cut_amount_w = (resized_image_w - desired_w) / 2
+    cut_amount_h = (resized_image_h - desired_h) / 2
 
-    crop_box = (0+cut_amount_w, 0, resized_image_w-cut_amount_w, desired_h)
-    print crop_box
+    crop_box = (0+cut_amount_w,
+                0+cut_amount_h,
+                resized_image_w - cut_amount_w,
+                resized_image_h - cut_amount_h)
 
     final_image = resized_image.crop(crop_box)
 
