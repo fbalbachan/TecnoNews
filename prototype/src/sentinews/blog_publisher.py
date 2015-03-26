@@ -227,6 +227,7 @@ class BlogPublisher(object):
             client = Client(url, user, password)
             wpost = client.call(posts.GetPost(entry.wp_id))
             wpost.custom_fields = [dict(key='my_canonical', value=new_post_url)]
+            wpost.thumbnail = wpost.thumbnail['attachment_id']
             client.call(posts.EditPost(entry.wp_id, wpost))
             logger.info("inserted cannonical in %s" % entry.wp_url)
 
@@ -246,5 +247,6 @@ class BlogPublisher(object):
                     wpost.terms.remove(t)
                     break
 
+            wpost.thumbnail = wpost.thumbnail['attachment_id']
             client.call(posts.EditPost(entry.wp_id, wpost))
             logger.info("inserted cannonical in %s" % entry.wp_url)
