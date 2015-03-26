@@ -123,8 +123,9 @@ class BlogPublisher(object):
             post.post_status = 'publish'
 
             logger.info("post.thumbnail %s" % post.thumbnail)
-            if post.thumbnail:
-                int(post.thumbnail)
+            if post.thumbnail or post.thumbnail == []:
+                if post.thumbnail != []:
+                    post.thumbnail = int(post.thumbnail)
                 client.call(posts.EditPost(wp_id, post))
             else:
                 logger.info("Not int post.thumbnail %s" % post.thumbnail)
