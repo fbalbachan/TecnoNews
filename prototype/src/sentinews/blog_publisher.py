@@ -11,7 +11,7 @@ from wordpress_xmlrpc.methods import taxonomies
 from src.services.mongodb.news_entries_service import NewsEntriesService
 from src.utils.logger_utils import *
 from src.utils.configProvider import ConfigProvider
-from src.utils.imgeProcessor import to_desired_size
+from src.utils.imgeProcessor import to_desired_size, add_background
 from wordpress_xmlrpc.compat import xmlrpc_client
 from src.utils.SvgToPng import to_png
 
@@ -222,6 +222,12 @@ class BlogPublisher(object):
         # TODO: Use the information about if it is a flag, person o map to optimizice
         # the resize/crop to the better image portion selection
         to_desired_size(tmp_filepath)
+        try:
+            add_background(tmp_filepath)
+        except Exception as e:
+            logger.error("Error inserting background")
+            logger.error("%s" % e.message)
+
         # read the binary file and let the XMLRPC library encode it into base64
         with open(tmp_filepath, 'rb') as img:
                 data['bits'] = xmlrpc_client.Binary(img.read())

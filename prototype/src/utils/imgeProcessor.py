@@ -35,3 +35,11 @@ def to_desired_size(filepath, desired_h=380, desired_w=700):
 
     # final_image.show()
     final_image.save(filepath, quality=90)
+
+
+def add_background(filepath):
+    from wand.image import Image
+    from wand.color import Color
+    with Image(filename=filepath) as img:
+        img.background_color = Color("#EEEEEE")
+        img.save(filename=filepath)
