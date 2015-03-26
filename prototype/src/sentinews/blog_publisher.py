@@ -253,17 +253,21 @@ class BlogPublisher(object):
         password = '6503b89221548c7cde2128570003d410'
 
         for entry in entries:
-            url = entry.wp_url.split('.com')[0] + '.com/xmlrpc.php'
-            client = Client(url, user, password)
-            wpost = client.call(posts.GetPost(entry.wp_id))
+            try:
+                url = entry.wp_url.split('.com')[0] + '.com/xmlrpc.php'
+                client = Client(url, user, password)
+                wpost = client.call(posts.GetPost(entry.wp_id))
 
-            for t in wpost.terms:
-                if t.name == 'z destacada':
-                    print t.id
-                    wpost.terms.remove(t)
-                    break
+                for t in wpost.terms:
+                    if t.name == 'z destacada':
+                        print t.id
+                        wpost.terms.remove(t)
+                        break
 
-            if wpost.thumbnail:
-                wpost.thumbnail = wpost.thumbnail['attachment_id']
-            client.call(posts.EditPost(entry.wp_id, wpost))
-            logger.info("inserted cannonical in %s" % entry.wp_url)
+                if wpost.thumbnail:
+                    wpost.thumbnail = wpost.thumbnail['attachment_id']
+                client.call(posts.EditPost(entry.wp_id, wpost))
+                logger.info("remove from portada in %s" % entry.wp_url)
+            except Exception as e:
+                logger.error("Couldn't remove from portada %s" % entry.wp_id)
+                logger.error("%s" % e.message)
