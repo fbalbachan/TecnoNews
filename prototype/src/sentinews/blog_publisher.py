@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 
+import wordpress_xmlrpc
+import urllib
+import mimetypes
+
 from wordpress_xmlrpc import Client, WordPressPost
 from wordpress_xmlrpc.methods.posts import NewPost, GetPost
 from wordpress_xmlrpc.methods import media, posts
@@ -8,10 +12,9 @@ from src.services.mongodb.news_entries_service import NewsEntriesService
 from src.utils.logger_utils import *
 from src.utils.configProvider import ConfigProvider
 from src.utils.imgeProcessor import to_desired_size
-import urllib
 from wordpress_xmlrpc.compat import xmlrpc_client
-import mimetypes
 from src.utils.SvgToPng import to_png
+
 
 logger = get_logger('tecnonews')
 
@@ -63,24 +66,37 @@ class BlogPublisher(object):
             if cat.name == name:
                 return cat
 
-    def special_catogory_insertion(self, client, entry, post, thumbnail):
+    def special_catogory_insertion(self, client, entry, post):
         # Portada minimal logic
         logger.info("post.injected_count %s" % entry.injected_count)
+        has_valid_thubmnail_id = False
 
-        if thumbnail:
-            post.thumbnail = thumbnail
-        if hasattr(post, 'thumbnail') and isinstance(post.thumbnail, int):
+        if hasattr(post, 'thumbnail'):
+            if post.thumbnail:
+                has_valid_thubmnail_id = True
+
+        if has_valid_thubmnail_id:
             con_foto_instance = self.get_category_instance(client, "z con foto")
-            post.terms.append(con_foto_instance)
-            logger.info("z con foto")
+            if not isinstance(con_foto_instance,
+                              wordpress_xmlrpc.wordpress.WordPressTerm):
+                logger.error("Category 'z con foto' isn't there, not applying that category")
+
+            else:
+
+                post.terms.append(con_foto_instance)
+                logger.info("z con foto")
 
         assert isinstance(entry.injected_count, int)
 
-        if hasattr(post, 'thumbnail') \
-                and isinstance(post.thumbnail, int) and entry.injected_count >= 2:
+        if has_valid_thubmnail_id and entry.injected_count >= 2:
             destacada_instance = self.get_category_instance(client, "z destacada")
-            post.terms.append(destacada_instance)
-            logger.info("z destacada")
+
+            if not isinstance(destacada_instance,
+                              wordpress_xmlrpc.wordpress.WordPressTerm):
+                logger.error("Category 'z destacada' isn't there, not applying that category")
+            else:
+                post.terms.append(destacada_instance)
+                logger.info("z destacada")
 
     def publish(self, entry, test=False):
         news_service = NewsEntriesService() if not test else NewsEntriesService('test')
@@ -116,19 +132,14 @@ class BlogPublisher(object):
             post = client.call(GetPost(wp_id))
             wp_url = post.link
             thumbnail = self.process_image(client, entry, wp_id)
+            if thumbnail:
+                post.thumbnail = thumbnail
+
             self.special_catogory_insertion(client=client,
                                             entry=entry,
-                                            post=post,
-                                            thumbnail=thumbnail)
+                                            post=post)
             post.post_status = 'publish'
-
-            logger.info("post.thumbnail %s" % post.thumbnail)
-            if post.thumbnail or post.thumbnail == []:
-                if post.thumbnail != []:
-                    post.thumbnail = int(post.thumbnail)
-                client.call(posts.EditPost(wp_id, post))
-            else:
-                logger.info("Not int post.thumbnail %s" % post.thumbnail)
+            client.call(posts.EditPost(wp_id, post))
 
         else:
             logger.error("not wp_id %s" % wp_id)
