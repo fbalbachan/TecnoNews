@@ -188,9 +188,13 @@ class NewsRewriter(object):
     def post_process(self):
         content = ''
 
-        import re
-        re.sub(r'EL PAÍS|EL PAIS',  u'el diario El País de España',
-               self.rewritten_entry.content, flags=re.UNICODE)
+        try:
+            import re
+            re.sub(r'EL PAÍS|EL PAIS',  u'el diario El País de España',
+                   self.rewritten_entry.content, flags=re.UNICODE)
+        except Exception as e:
+                logger.error("Couldn't reeplace EL PAIS string %s" % entry.wp_id)
+                logger.error("%s" % e.message)
 
         for paragraph in self.rewritten_entry.content.split('\n'):
             if len(paragraph) > 0:
