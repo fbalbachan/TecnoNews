@@ -236,12 +236,16 @@ class BlogPublisher(object):
         for entry in entries:
             url = entry.wp_url.split('.com')[0] + '.com/xmlrpc.php'
             client = Client(url, user, password)
-            wpost = client.call(posts.GetPost(entry.wp_id))
-            wpost.custom_fields = [dict(key='my_canonical', value=new_post_url)]
-            if wpost.thumbnail:
-                wpost.thumbnail = wpost.thumbnail['attachment_id']
-            client.call(posts.EditPost(entry.wp_id, wpost))
-            logger.info("inserted cannonical in %s" % entry.wp_url)
+            try:
+                wpost = client.call(posts.GetPost(entry.wp_id))
+                wpost.custom_fields = [dict(key='my_canonical', value=new_post_url)]
+                if wpost.thumbnail:
+                    wpost.thumbnail = wpost.thumbnail['attachment_id']
+                client.call(posts.EditPost(entry.wp_id, wpost))
+                logger.info("inserted cannonical in %s" % entry.wp_url)
+            except Exception as e:
+                logger.error("Couldn't recover and update entry %s" % entry.wp_id)
+                logger.error("%s" % e.message)
 
     def remove_from_portada(self, entries):
         # TODO: workaround this hardcoded data
