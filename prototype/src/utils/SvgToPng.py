@@ -4,7 +4,6 @@ from wand.image import Image
 from wand.color import Color
 
 
-
 def to_png(data, ofile, maxwidth=0, maxheight=0):
 
     svg = rsvg.Handle(data=data)
