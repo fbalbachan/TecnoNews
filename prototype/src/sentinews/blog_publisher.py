@@ -108,8 +108,9 @@ class BlogPublisher(object):
         logger.info("wp_id response from newPost %s" % wp_id)
 
         # Get the just posted wordpress entry and save the url
-        if wp_id and isinstance(wp_id, int):
-            logger.info("wp_id not an int")
+        if wp_id:
+            wp_id = int(wp_id)
+            logger.info("wp_id %s" % wp_id)
             # get the draft post upload and associate image
             # set publish
             post = client.call(GetPost(wp_id))
@@ -122,7 +123,8 @@ class BlogPublisher(object):
             post.post_status = 'publish'
 
             logger.info("post.thumbnail %s" % post.thumbnail)
-            if isinstance(post.thumbnail, int):
+            if post.thumbnail:
+                int(post.thumbnail)
                 client.call(posts.EditPost(wp_id, post))
             else:
                 logger.info("Not int post.thumbnail %s" % post.thumbnail)
