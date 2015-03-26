@@ -105,7 +105,8 @@ class TecnoNews(object):
                     wp_id, wp_url = rewriter.publish()
                     entry.wp_id = wp_id
                     entry.wp_url = wp_url
-
+                    if wp_id:
+                        logger.info('<Tecnonews> <_process> published %s' % wp_url)
                     # TODO: check if we must use datetime from wp
                     entry.published_date = datetime.utcnow()
                     self.published_in_this_run += 1

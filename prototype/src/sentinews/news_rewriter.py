@@ -190,7 +190,7 @@ class NewsRewriter(object):
 
         import re
         re.sub(r'EL PAÍS|EL PAIS',  u'el diario El País de España',
-               self.rewritten_entry.content)
+               self.rewritten_entry.content, flags=re.UNICODE)
 
         for paragraph in self.rewritten_entry.content.split('\n'):
             if len(paragraph) > 0:
