@@ -193,7 +193,7 @@ class NewsRewriter(object):
             re.sub(r'EL PAÍS|EL PAIS',  u'el diario El País de España',
                    self.rewritten_entry.content, flags=re.UNICODE)
         except Exception as e:
-                logger.error("Couldn't reeplace EL PAIS string %s" % entry.wp_id)
+                logger.error("Couldn't reeplace EL PAIS string")
                 logger.error("%s" % e.message)
 
         for paragraph in self.rewritten_entry.content.split('\n'):
