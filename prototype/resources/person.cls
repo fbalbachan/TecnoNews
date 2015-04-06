@@ -522,7 +522,6 @@ pedagoga
 pedagogo
 pelotari
 periodista
-perro
 persona
 personaje
 pianista
