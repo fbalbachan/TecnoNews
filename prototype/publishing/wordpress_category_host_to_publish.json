@@ -1,7 +1,7 @@
 {
     "salud":
     {
-        "url": "http://salutbit.com/xmlrpc.php",
+        "url": "http://saludbit.com/xmlrpc.php",
         "username": "emmettbrown",
         "password": "6503b89221548c7cde2128570003d410"
 
