@@ -198,6 +198,10 @@ class NewsRewriter(object):
 
         for paragraph in self.rewritten_entry.content.split('\n'):
             if len(paragraph) > 0:
+                #patch to clean wrong formated paragraphs
+                if paragraph[0] in [u',', u'.']:
+                    paragraph = paragraph[1:].strip()
+
                 content += '<p>' + paragraph[0].upper() + paragraph[1:] + '</p>'
 
         self.rewritten_entry.content = content
