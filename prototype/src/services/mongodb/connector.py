@@ -18,4 +18,23 @@ class MongoConnector(object):
 
         return MongoConnector.__db
 
+    @classmethod
+    def get_db_name(cls):
+        config = ConfigProvider()
+        return config.get('mongodb', 'db')
 
+    @classmethod
+    def clone_test_db(cls):
+
+        config = ConfigProvider()
+        # production = config.get('mongodb', 'db')
+        # test = config.get('mongodb', 'db_test')
+        production = 'sentinews'
+        testing = 'sentinews_test'
+        client = MongoClient(config.get('mongodb', 'host'),
+                                 int(config.get('mongodb', 'port')))
+
+        client.drop_database(testing)
+        client.admin.command('copydb',
+                         fromdb=production,
+                         todb=testing)

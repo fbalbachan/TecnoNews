@@ -4,13 +4,15 @@ from re import sub
 from urllib import urlopen
 from src.sentinews.news_entry import NewsEntry
 from bs4 import BeautifulSoup
+from src.sentinews.parsers.generic_parser import GenericParser
 from src.utils.logger_utils import *
 from src.utils.languageFilter import LanguageFilter
 from src.utils.configProvider import ConfigProvider
 
 
-class EuroNewsParser(object):
+class EuroNewsParser(GenericParser):
     def __init__(self):
+        super(EuroNewsParser, self).__init__()
         self.language_filter = LanguageFilter()
         config = ConfigProvider()
         self.language_filter_status = config.get('language_filter', 'status')
@@ -46,14 +48,14 @@ class EuroNewsParser(object):
         else:
             content = ''
 
+        content = self.sanitize(content)
+
         title_obj = soup.find(
             'div', {'id': 'title-wrap-new'}).find('h1').find('a')
 
         if title_obj is not None:
             title = title_obj.text
 
-        if self.language_filter_status == 'ON':
-            content = self.language_filter.only_spanish_paragraph(content)
 
         news_parsed = None
         if len(content) > 1 and len(tags) > 0 and len(title) > 0:

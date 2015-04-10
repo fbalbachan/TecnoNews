@@ -1,9 +1,13 @@
 from bs4 import BeautifulSoup
 from urllib2 import urlopen
 from src.sentinews.news_entry import NewsEntry
+from src.sentinews.parsers.generic_parser import GenericParser
 
 
-class BBCParser(object):
+class BBCParser(GenericParser):
+    def __init__(self):
+        super(BBCParser, self).__init__()
+
     source = 'BBC'
 
     def parse(self, url, tags=None):
@@ -16,6 +20,7 @@ class BBCParser(object):
                 title = article.find('h1', {'class': 'story-body__h1'}).text
                 paragraphs = article.find('div', {'class': 'story-body__inner'}).find_all('p')
                 content = ' '.join([paragraph.text + '\n' for paragraph in paragraphs])
+                content = self.sanitize(content)
 
         news_parsed = None
 
