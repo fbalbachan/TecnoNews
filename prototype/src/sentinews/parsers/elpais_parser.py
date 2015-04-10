@@ -4,13 +4,16 @@ from re import sub
 from urllib import urlopen
 from src.sentinews.news_entry import NewsEntry
 from bs4 import BeautifulSoup
+from src.sentinews.parsers.generic_parser import GenericParser
 from src.utils.logger_utils import *
 from src.utils.languageFilter import LanguageFilter
 from src.utils.configProvider import ConfigProvider
 
-class ElPaisParser(object):
+
+class ElPaisParser(GenericParser):
 
     def __init__(self):
+        super(ElPaisParser, self).__init__()
         self.language_filter = LanguageFilter()
         config = ConfigProvider()
         self.language_filter_status = config.get('language_filter', 'status')
@@ -40,8 +43,7 @@ class ElPaisParser(object):
             title = title_obj.text
               
         content = ' '.join(paragraphs)
-        if self.language_filter_status == 'ON':
-            content = self.language_filter.only_spanish_paragraph(content)
+        content = self.sanitize(content)
 
         news_parsed = None
 

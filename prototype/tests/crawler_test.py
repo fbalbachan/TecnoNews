@@ -1,6 +1,6 @@
 import unittest
 from src.sentinews.crawler import Crawler
-from src.utils.sanitize import Sanitizer
+from src.utils.sanitizer import Sanitizer
 
 
 class CrawlerTest(unittest.TestCase):

@@ -6,20 +6,20 @@ raise_exception = False
 id = 99
 
 [news_sources]
-feeds_to_process = cnn_spanish,euronews
+feeds_to_process = cnn_spanish
 
 [freeling]
 
 host        = 85.10.210.172
 client      = ../externals/freeling/analyzer_client
-parser_port = 10000
+parser_port = 10007
 tagger_port = 9999
 
 [freeling_language]
 
 host        = 85.10.210.172
 client      = ../externals/freeling/analyzer_client_lang_ident
-language_port = 10102
+language_port = 10109
 
 [mongodb]
 

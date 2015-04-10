@@ -5,7 +5,7 @@ from src.services.mongodb.news_entries_service import NewsEntriesService
 from src.sentinews.parsers import *
 from src.utils.logger_utils import get_crawler_logger
 import feedparser
-from src.utils.sanitize import Sanitizer
+from src.utils.sanitizer import Sanitizer
 from src.utils.configProvider import ConfigProvider
 import traceback
 
@@ -30,7 +30,8 @@ class Crawler(object):
                 and not '/album/' in entry.link
                 and not '/video_fotos/' in entry.link
                 and not u'#As\xedLoVivimos' in entry.title
-                and not u'Resumen' in entry.title]
+                and not u'Resumen' in entry.title
+                and not u'CNN' in entry.title]
 
     def _filter_by_tag(self, news_entries):
         Config = ConfigProvider()
@@ -43,7 +44,7 @@ class Crawler(object):
     def create_parser(self, cls_parser):
         return cls_parser()
 
-    def crawl(self, cls_parser, url, default_tags=None):
+    def crawl(self, cls_parser, url, default_tags=None, max_number_to_parse=5):
         crawler_logger.info("Start parser %s" % cls_parser)
         crawler_logger.info("Parsing url %s" % url)
 
@@ -52,6 +53,7 @@ class Crawler(object):
         parsed_feeds = feedparser.parse(url)
 
         filtered_entries = self._filter_entries(parsed_feeds["entries"])
+        filtered_entries = filtered_entries[:max_number_to_parse]
 
         for idx, feedParserDict in enumerate(filtered_entries):
             crawler_logger.info("processing %s of %s" % (idx, len(filtered_entries)))

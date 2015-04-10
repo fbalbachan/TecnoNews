@@ -5,15 +5,15 @@ from urllib import urlopen
 from src.sentinews.news_entry import NewsEntry
 from bs4 import BeautifulSoup
 from src.utils.logger_utils import get_crawler_logger
-from src.utils.languageFilter import LanguageFilter
 from src.utils.configProvider import ConfigProvider
+from src.sentinews.parsers.generic_parser import GenericParser
 
 logger = get_crawler_logger()
 
 
-class CNNParser:
+class CNNParser(GenericParser):
     def __init__(self):
-        self.language_filter = LanguageFilter()
+        super(CNNParser, self).__init__()
         config = ConfigProvider()
         self.language_filter_status = config.get('language_filter', 'status')
 
@@ -31,10 +31,8 @@ class CNNParser:
         for article in articles:
             title = article.find('h1').text
             content = self._remove_cnn_header(article.find('div').text)
+            content = self.sanitize(content)
 
-            if content.find('function()') == -1:
-                if self.language_filter_status == 'ON':
-                    content = self.language_filter.only_spanish_paragraph(content)
             try:
                 tags = article.find('span', class_="cnnBlogFiledBy cnn_categories").text[11:].split(u"\xa0\u2022\xa0")
             except:

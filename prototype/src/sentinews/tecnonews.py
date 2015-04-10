@@ -8,7 +8,6 @@ from src.services.mongodb.news_entries_service import NewsEntriesService
 from src.utils.relatedNewsEntries import RelatedNewsEntries
 from src.utils.logger_utils import *
 from src.utils.configProvider import ConfigProvider
-from src.utils.sanitize import Sanitizer
 from bs4 import BeautifulSoup
 import traceback
 from datetime import datetime
@@ -29,7 +28,6 @@ class TecnoNews(object):
         self.freeling_lang_ident = FreelingLanguageDetectorClient()
         self.freeling_parse = FreelingClientParser()
         self.service = NewsEntriesService()
-        self.sanitizer = Sanitizer()
         self.published_in_this_run = 0
         self.not_published_in_this_run = 0
 
@@ -60,7 +58,6 @@ class TecnoNews(object):
 
     def _process(self, entry):
         logger.info("<Tecnonews> <_process> START processing %s" % entry.title)
-        entry = self.sanitizer.filter_paragraph_to_avoid(entry=entry)
         other_versions = []
         try:
             entry.set_analisys_info()
