@@ -235,10 +235,15 @@ class BlogPublisher(object):
         return data
 
     def insert_canonical(self, entries, new_post_url):
+
+        # don't insert canonical if we use the test
+        instance_id = self.config.get('instance', 'id')
+        if instance_id == 'Test':
+            return
+
         # TODO: workaround this hardcoded data
         user = 'emmettbrown'
         password = '6503b89221548c7cde2128570003d410'
-
         for entry in entries:
             url = entry.wp_url.split('.com')[0] + '.com/xmlrpc.php'
             client = Client(url, user, password)

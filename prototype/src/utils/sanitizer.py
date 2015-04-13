@@ -30,6 +30,9 @@ class Sanitizer():
 
         new_content = re.sub(u'\(CNN\)', u'', new_content)
         new_content = re.sub(u'\( CNN Español \)', u'', new_content)
+        re.sub(r'a EL PAÍS|a EL PAIS',  u'al diario El País de España',
+                   new_content, flags=re.UNICODE)
+
         new_content = re.sub(u', enviad(a|o) especial de euronews\.', u'', new_content)
 
         new_content = re.sub(r'(La|El) enviad(a|o) especial de euronews(\ a\ la\ zona)?,',
