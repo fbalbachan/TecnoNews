@@ -199,13 +199,17 @@ class NewsRewriter(object):
 
         logger.info("base tags %s " % base_tags)
 
-        base_tags.extend(new_tags_list)
+        for tag in new_tags_list:
+            if tag not in base_tags:
+                base_tags.append(tag)
+
+            if len(base_tags) >= 15:
+                break
 
         logger.info("new tags %s" % base_tags)
         new_tags = list(set(base_tags))
 
         self.rewritten_entry.tags = new_tags
-        logger.info("adding tags from ranking: %s", new_tags_list)
 
     def post_process(self):
         content = ''
@@ -215,7 +219,7 @@ class NewsRewriter(object):
             re.sub(r' +',  u' ', self.rewritten_entry.content, flags=re.UNICODE)
 
         except Exception as e:
-                logger.error("Couldn't reeplace EL PAIS string")
+                logger.error("Couldn't clean multiple spaces")
                 logger.error("%s" % e.message)
 
         for paragraph in self.rewritten_entry.content.split('\n'):

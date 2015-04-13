@@ -6,7 +6,7 @@ from src.sentinews.news_crawler import NewsCrawler
 from src.utils.logger_utils import *
 import traceback
 from datetime import datetime
-from src.sentinews.parsers import cnn_parser
+from src.sentinews.parsers import bbc_parser, cnn_parser
 import wikipedia as wk
 import unittest
 from src.services.mongodb.news_entries_service import NewsEntriesService
@@ -24,13 +24,16 @@ class TecnonewsTest(unittest.TestCase):
         # TODO: Complete
         link = "http://cnnespanol.cnn.com/2014/09/22/policia-investiga-ataques-racistas-contra-mario-balotelli-tras-un-tuit-del-futbolista/"
         link2 = 'http://cnnespanol.cnn.com/2015/01/06/una-familia-llora-la-perdida-de-siete-seres-queridos-en-el-vuelo-de-airasia/'
-        parser = cnn_parser.CNNParser()
+        link3 = 'http://www.bbc.co.uk/mundo/ultimas_noticias/2015/04/150412_ultnot_colombia_falsos_positivos_generales_fp'
+        parser = bbc_parser.BBCParser()
+        # parser = cnn_parser.CNNParser()
         # related_news = self.service.get_list({'wp_id': {'$ne': None}}, 1)
         related_news = []
 
         # self.assertIsNotNone(related_news)
 
-        self.news_entry = parser.parse(url=link2, limit=1)
+        # self.news_entry = parser.parse(url=link2)
+        self.news_entry = parser.parse(url=link3, tags=['america'])
 
         self.news_entry.set_related_news(related_news)
         self.news_entry.set_news_versions(related_news)
