@@ -144,6 +144,8 @@ class NewsRewriter(object):
         paragraph_from_other_cover = analysis["generated_content_other_sources"]
         ranking = analysis["referent_ranking"]
 
+        self.add_tags_from_ranking(analysis["referent_ranking"])
+
         # Insert new content
         text_inserter = TextInserter(analysis)
         self.injected_count, self.rewritten_entry.content = text_inserter.get()
@@ -185,13 +187,33 @@ class NewsRewriter(object):
     def _analyze(self, text):
         return Sentilecto().analyze(text)
 
+    def add_tags_from_ranking(self, ranking):
+        new_tags_list = [r[0].name() for r in ranking]
+        logger.info("Tags in Ranking %s" % new_tags_list)
+        if not new_tags_list:
+            print "Empte tags to add"
+
+        base_tags = self.rewritten_entry.tags
+        if not base_tags:
+            base_tags = []
+
+        logger.info("base tags %s " % base_tags)
+
+        base_tags.extend(new_tags_list)
+
+        logger.info("new tags %s" % base_tags)
+        new_tags = list(set(base_tags))
+
+        self.rewritten_entry.tags = new_tags
+        logger.info("adding tags from ranking: %s", new_tags_list)
+
     def post_process(self):
         content = ''
 
         try:
             import re
-            re.sub(r'EL PAÍS|EL PAIS',  u'el diario El País de España',
-                   self.rewritten_entry.content, flags=re.UNICODE)
+            re.sub(r' +',  u' ', self.rewritten_entry.content, flags=re.UNICODE)
+
         except Exception as e:
                 logger.error("Couldn't reeplace EL PAIS string")
                 logger.error("%s" % e.message)
