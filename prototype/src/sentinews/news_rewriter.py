@@ -201,8 +201,8 @@ class NewsRewriter(object):
 
         for tag in new_tags_list:
             if tag not in base_tags:
-                re.sub('_', ' ', tag)
-                base_tags.append(tag)
+                tag_clean = re.sub('_', ' ', tag)
+                base_tags.append(tag_clean)
 
             if len(base_tags) >= 15:
                 break
