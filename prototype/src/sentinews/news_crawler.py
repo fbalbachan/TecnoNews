@@ -26,8 +26,14 @@ class NewsCrawler(object):
 
     def _cursor_start(self):
         db = MongoConnector.get_instance()
+        insert_feed_in_db = True
 
-        if db['system']['namespaces'].find({'name': MongoConnector.get_db_name()}).count() == 0:
+        if 'feeds' in db.collection_names():
+            # if not zero insert_feed_in_db is False
+            if db['feeds'].count():
+                insert_feed_in_db = False
+
+        if insert_feed_in_db:
             self.feed_service.save(Feed('cnn_spanish', 'http://cnnespanol.cnn.com/feed/',
                                         'cnn_parser.CNNParser', datetime.utcnow()))
             self.feed_service.save(Feed('euronews', 'http://feeds.feedburner.com/euronews/es/news?format=xml',
