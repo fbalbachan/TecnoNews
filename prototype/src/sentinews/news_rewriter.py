@@ -201,6 +201,7 @@ class NewsRewriter(object):
 
         for tag in new_tags_list:
             if tag not in base_tags:
+                re.sub('_', ' ', tag)
                 base_tags.append(tag)
 
             if len(base_tags) >= 15:
@@ -215,7 +216,6 @@ class NewsRewriter(object):
         content = ''
 
         try:
-            import re
             re.sub(r' +',  u' ', self.rewritten_entry.content, flags=re.UNICODE)
 
         except Exception as e:
