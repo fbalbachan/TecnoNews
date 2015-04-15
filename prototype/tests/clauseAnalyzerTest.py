@@ -32,9 +32,10 @@ class TestClauseAnalyzer(unittest.TestCase):
         test_file = open(file)
         line_number = 0
         for line in test_file:
-            line_number = line_number + 1
+            line_number += 1
             line = line.strip("\n").strip(" ").replace("\t", "")
-            if not line or self.is_comment(line): continue
+            if not line or self.is_comment(line):
+                continue
 
             if self.begin_with_keyword(line):
                 self.update_frame_and_assert(line, frame)
@@ -49,7 +50,7 @@ class TestClauseAnalyzer(unittest.TestCase):
                 for referent in paragraph.referents():
                     print "  REF", referent.semantic_classification(), referent
 
-                frame = { "paragraph" : paragraph }
+                frame = {"paragraph": paragraph}
 
                 if len(paragraph.sentences) == 1:
                     self.sentence(line, frame)
@@ -94,7 +95,8 @@ class TestClauseAnalyzer(unittest.TestCase):
         frame["sentence"] = sentence
         self.show_info_for(sentence)
 
-        if len(sentence.clauses) == 1: self.clause(str(sentence.clauses[0]), frame)
+        if len(sentence.clauses) == 1:
+            self.clause(str(sentence.clauses[0]), frame)
 
     def update_frame_and_assert(self, assertion, frame):
         string = assertion
@@ -233,14 +235,16 @@ class TestClauseAnalyzer(unittest.TestCase):
 
     def begin_with_keyword(self, string):
         string = string.replace(" ", "")
-        return any(( string.startswith(keyword + ":") for keyword in self.keywords ))
+        return any((string.startswith(keyword + ":") for keyword in self.keywords))
 
     def is_comment(self, string):
         return string.startswith("#")
 
-    structure_keywords = [ "subject", "od", "oi", "equative", "regimen", "instrument_goal", "adjuncts", "verb" ]
-    keywords = ["clause", "lemma", "msi", "entity", "sentence", "count", "go", "adverb", "sent_ev", "value",
-                "attribute", "referent", "reference", "datetime" ] + structure_keywords
+    structure_keywords = ["subject", "od", "oi", "equative", "regimen", "instrument_goal", "adjuncts", "verb"]
+
+    keywords = ["clause", "lemma", "msi", "entity", "sentence", "count",
+                "go", "adverb", "sent_ev", "value", "attribute", "referent",
+                "reference", "datetime"] + structure_keywords
 
 if __name__ == '__main__':
     unittest.main()

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from src.model.sentence.sentenceSplitter import SentenceSplitter
+import src.model.entity
 
 class Paragraph:
     def __init__(self, sentences = [], text = ""):

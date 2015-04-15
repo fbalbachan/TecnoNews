@@ -13,7 +13,7 @@ from src.utils.invoker import Invoker
 class SentenceAnalyzer:
     def __init__(self, tree_parser = FreelingTreeParser()):
         self.tree_parser = tree_parser
-        self.context = { "sentences" : [] }
+        self.context = {"sentences": []}
         self.invoker = Invoker()
 
     def analyze(self, sentence):
@@ -21,24 +21,29 @@ class SentenceAnalyzer:
         TokenizationGuesser(sentence).guess()
 
         sentence.clauses = ClauseExtractor().extract_from(sentence)
-        for method in [ self.analyze_clauses_of, self.analyze_global_operators_of, self.analyze_sentimentally ]:
+
+        analyze_methods = [self.analyze_clauses_of,
+                           self.analyze_global_operators_of,
+                           self.analyze_sentimentally]
+
+        for method in analyze_methods:
             self.invoker.invoke(method, sentence)
 
     def analyze_sentimentally(self, sentence):
-        sentimentalAnalyzer =  SentimentalAnalyzer()
+        sentimental_analyzer = SentimentalAnalyzer()
 
         for clause in sentence.clauses:
-            sentimentalAnalyzer.analyze(clause)
+            sentimental_analyzer.analyze(clause)
 
     def analyze_global_operators_of(self, sentence):
         GlobalOperatorAnalyzer(sentence).analyze()
 
     def analyze_clauses_of(self, sentence):
         self.context["clauses"] = []
-        clauseAnalyzer = ClauseAnalyzer()
-        clauseAnalyzer.context = self.context
+        clause_analyzer = ClauseAnalyzer()
+        clause_analyzer.context = self.context
         for clause in sentence.clauses:
-            clauseAnalyzer.analyze(clause)
+            clause_analyzer.analyze(clause)
             self.context["clauses"].append(clause)
 
     def set_parse_tree_to(self, sentence):
@@ -49,5 +54,6 @@ class SentenceAnalyzer:
         #print "LEAVES", node.leaves()
 
         print node.tree_representation()
-        for leaf in node.leaves():  print leaf.original_lexical_form, leaf.lemma, leaf.msi
+        for leaf in node.leaves():
+            print leaf.original_lexical_form, leaf.lemma, leaf.msi
         print "--"

@@ -33,8 +33,8 @@ class SentenceSplitter:
 
             return text[index:match.start(0)] + replacement
 
-        validator = lambda match: \
-            (not self.is_number(match)) and self.is_valid_delimiter_before_period(match.group(1))
+		validator = lambda match: \
+			(not self.is_number(match)) and self.is_valid_delimiter_before_period(match.group(1))
 
         def default_replace(text, index, match):
             return text[index:match.end(1)] + match.group(2)

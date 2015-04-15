@@ -26,23 +26,53 @@ tacit_subjects = {
     (3, 'plural', 'feminine')  : 'ellas',
 }
 
-def somebody():
-    return TacitEntity("alguien", { "category" : "pronoun", "number" : "singular", "gender" : "neutral",
-                                    "person" : 3, "type" : "indefinite", "case" : None,
-                                    "semantic_classification" : None })
+def get_entity_some(animity, is_implicit=False):
+    if animity == "animated":
+        entity_some = somebody()
+    elif animity == "inanimate":
+        entity_some = something()
+    elif animity == "bianimate":
+        entity_some = bianimate_something()
 
-def implicit_somebody():
-    entity = somebody()
-    entity.attributes = { "tacit" : None, "implicit" : None }
-    return entity
+    if is_implicit:
+        entity_some = implicit(entity_some)
+
+    return entity_some
+
+def bianimate_something():
+    return TacitEntity("algo", {"category": "pronoun", "number": "invariable", "gender": "neutral",
+                                "person": 3, "type": "indefinite", "case": None, "animity": "bianimate",
+                                "semantic_classification": None})
+
+def somebody():
+    return TacitEntity("alguien", {"category": "pronoun", "number": "invariable", "gender": "neutral",
+                                   "person": 3, "type": "indefinite", "case": None, "animity": "animated",
+                                   "semantic_classification": None})
+
+def something():
+    return TacitEntity("algo", {"category": "pronoun", "number": "invariable", "gender": "neutral",
+                                "person": 3, "type": "indefinite", "case": None, "animity": "inanimate",
+                                "semantic_classification": None})
 
 def this():
-    return TacitEntity("esto", { "category" : "pronoun", "number" : "singular", "gender" : "neutral",
-                                 "person" : 3, "type" : "demostrative", "case" : None,
-                                 "semantic_classification" : None })
+    return TacitEntity("esto", {"category": "pronoun", "number": "singular", "gender": "neutral",
+                                "person": 3, "type": "demostrative", "case": None, "animity": "inanimate",
+                                "semantic_classification": None})
+
+def implicit(entity):
+    entity.attributes = {"tacit": None, "implicit": None}
+    return entity
+
+def implicit_somebody():
+    return implicit(somebody())
+
+def implicit_something():
+    return implicit(something())
+
+def implicit_bianimate_something():
+    return implicit(bianimate_something())
 
 def tacit_subject_for(verb):
-    gender = verb.msi['gender']
-    if not gender:
-        gender = "neutral"
-    return tacit_subjects[(verb.msi['person'], verb.msi['number'], gender)]
+    gender = verb.msi['gender'] if verb.msi['gender'] else "neutral"
+    tacit_subject = tacit_subjects[(verb.msi['person'], verb.msi['number'], gender)]
+    return tacit_subject

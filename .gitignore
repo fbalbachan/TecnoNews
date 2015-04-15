@@ -11,11 +11,13 @@
 bin/*
 build/*
 dist/*
+externals/*
 output/*
 pattern*
 shared/log/*.log
 test-result/*
 tmp/*
+*.iml
 prototype/logs
 prototype/sentence.txt
 prototype/no/*

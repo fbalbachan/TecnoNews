@@ -63,7 +63,9 @@ class Clause(TreeNode):
         root = self.proper_tree()
         leaves = root.leaves()
         return root.label in [ "subord", "subord-rel" ] and \
-            bool(filter(lambda leaf: leaf.msi["category"] == "pronoun" and leaf.msi["type"] == "relative", leaves))
+            bool(filter(lambda leaf: leaf.msi["category"] == "pronoun"
+                                     and leaf.msi["type"] == "relative",
+                        leaves))
 
     def is_subordinated_with(self, header_lexical_form):
         return self.is_subordinated_with_any([ header_lexical_form ])
@@ -84,10 +86,12 @@ class Clause(TreeNode):
     def structure(self, name):
         return filter(lambda structure: structure.name == name, self.syntactic_structures)[0]
 
-    def subord_entities_closest_to_verb_at(self, side, allowed_distance, which_node = lambda node: True):
-        which = lambda entity, node: entity.is_subordinated() and entity.highest_subordinating_node() == node \
-                    and which_node(node)
+    def subord_entities_closest_to_verb_at(self, side, allowed_distance, which_node=lambda node: True):
+        which = lambda entity, node: entity.is_subordinated() \
+                                     and entity.highest_subordinating_node() == node \
+                                     and which_node(node)
         entities_with_node = self.to_entities_with_node(self.nodes_closest_to_verb_at(side, allowed_distance), which)
+
         return self.grouped_by_node(entities_with_node)
 
     def subord_entities(self, which_node = lambda node: True):
@@ -106,14 +110,14 @@ class Clause(TreeNode):
             entities.extend(self.entities_closest_to_verb_at(side, distance))
         return entities
 
-    def all_entities(self):
-        entities = self.entities + self.tacit_entities()
-        if self.relative_entity: entities.append(self.relative_entity)
-        return entities
-
     def entities_closest_to_verb_at(self, side, allowed_distance = float("inf")):
         by_component = zip(*self.to_entities_with_node(self.nodes_closest_to_verb_at(side, allowed_distance)))
         entities = list(by_component[0]) if by_component else []
+        return entities
+
+    def all_entities(self):
+        entities = self.entities + self.tacit_entities()
+        if self.relative_entity: entities.append(self.relative_entity)
         return entities
 
     def leaves_at_left(self):
@@ -136,7 +140,6 @@ class Clause(TreeNode):
         return [ entity for entity in self.entities if entity not in assigned_entities
                 and not any([ assigned.contains(entity) for assigned in assigned_entities ]) ]
 
-
     def tacit_entities(self):
         return sum([ structure.tacit_entities for structure in self.syntactic_structures ], [])
 
@@ -154,31 +157,37 @@ class Clause(TreeNode):
             if last_node == node:
                 entities[-1].append(entity)
             else:
-                entities.append([ entity ])
+                entities.append([entity])
             last_node = node
         return entities
 
     def to_entities_with_node(self, nodes, which = lambda entity, node: entity.node == node, entities = None):
-        if not entities: entities = self.lonely_entities()
+        if not entities:
+            entities = self.lonely_entities()
 
         entities_with_node = []
         for node in nodes:
-            entities_with_node.extend( (entity, node) for entity in entities if which(entity, node) )
+            entities_with_node.extend((entity, node) for entity in entities if which(entity, node))
         return entities_with_node
 
     def verb_level_nodes(self):
         verb_node = self.verb.node
         return verb_node.father.children
 
-    def nodes_closest_to_verb_at(self, side, allowed_distance = float("inf")):
+    def nodes_closest_to_verb_at(self, side, allowed_distance=float("inf")):
         verb = self.verb.node
-        nodes_with_position = [ (verb.absolute_distance_to(node), node) for node in self.verb_level_nodes()
-                                  if verb.position_of(node) == side]
-        closest = self.sorted_by_closest(nodes_with_position, allowed_distance)
-        return [ node for position, node in closest ]  # @UnusedVariable
+        nodes_with_position = [(verb.absolute_distance_to(node), node) for node in self.verb_level_nodes()
+                               if verb.position_of(node) == side]
+        closest_with_pos = self.sorted_by_closest(nodes_with_position, allowed_distance)
+
+        closest = [node for position, node in closest_with_pos]
+
+        return closest  # @UnusedVariable
 
     def sorted_by_closest(self, things_with_position, allowed_distance):
-        return sorted(filter(lambda (position, entity): position <= allowed_distance, things_with_position))
+        within_distance = filter(lambda (position, entity): position <= allowed_distance,
+                                 things_with_position)
+        return sorted(within_distance)
 
     def set_father(self, clause):
         self.father = clause

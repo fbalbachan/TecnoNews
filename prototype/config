@@ -31,7 +31,7 @@ db_test = sentinews_test
 
 [resources]
 
-resources_dir = /home/nvaras/entinews/prototype/resources
+resources_dir = /usr/local/bin/analyzer_client
 verbal_scripts = %(resources_dir)s/scripts_verbales.csv
 sentiwordnet = %(resources_dir)s/sentiwordnet.csv
 general_resources = %(resources_dir)s/general_resources
@@ -53,5 +53,6 @@ verbs_que = %(resources_dir)s/verbs-que-es.dat
 categories = %(resources_dir)s/categories.csv
 countries = %(resources_dir)s/nombre_pais_ESP.csv
 persons = %(resources_dir)s/person.cls
-demonym = %(resources_dir)s/twGENT.dat
+animals = %(resources_dir)s/animal.csv
+demonyms = %(resources_dir)s/twGENT.dat
 marks_to_avoid_paragraphs = %(resources_dir)s/paragraph_to_avoid

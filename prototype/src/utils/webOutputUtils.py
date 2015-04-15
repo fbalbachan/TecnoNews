@@ -29,12 +29,16 @@ class WebOutputUtils:
     def entity_tooltip(self, entity):
         tooltip = self.msi_string(entity.msi)
 
+        if ( entity.category() == "noun" or entity.category() == "pronoun" ) and "animity" in entity.msi:
+            tooltip = tooltip + " " + entity.msi["animity"]
+
         if entity.category() == "noun" and entity.msi["type"] == "proper":
             tooltip = tooltip + " " + str(entity.msi["semantic_classification"]).upper()
 
         if entity.category() == "verb":
             tooltip = tooltip + " - Transitivity " + entity.transitivity + " - Sentiment script " + \
                 entity.sentimental_script.klass
+
         return tooltip
 
     def e_sv_neg_ev(self, entity):

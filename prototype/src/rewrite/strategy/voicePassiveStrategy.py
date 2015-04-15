@@ -18,7 +18,7 @@ class VoicePassiveStrategy:
     def __init__(self, ontology):
         self.ontology = ontology
         self.persons = self._get_persons()
-        self.demonym = self._get_demonym()
+        self.demonyms = self._get_demonyms()
 
     def applies_to(self, sentence, node):
         return any(( self.applies_to_clause(clause) for clause in sentence.clauses))
@@ -67,21 +67,21 @@ class VoicePassiveStrategy:
 
         return persons
 
-    def _get_demonym(self):
+    def _get_demonyms(self):
         """
         load resource list of animated persons
 
         :return: list of words as list
         """
-        demonym = []
+        demonyms = []
         config = ConfigProvider()
-        demonym_filename = config.get("resources", "demonym")
+        demonyms_filename = config.get("resources", "demonyms")
 
-        for line in open(demonym_filename, 'r'):
+        for line in open(demonyms_filename, 'r'):
             if line[0] not in ['<', '%', '\n']:
-                demonym.append(line.rstrip('\n'))
+                demonyms.append(line.rstrip('\n'))
 
-        return demonym
+        return demonyms
 
     def is_animated(self, entity):
         """
@@ -93,18 +93,18 @@ class VoicePassiveStrategy:
             # if the entity has kernel
             if entity.kernel:
                 # return if the kernel is animated or not
-                return self._is_animted_single_entity(entity.kernel.lemma, entity.msi)
+                return self._is_animated_single_entity(entity.kernel.lemma, entity.msi)
 
             # if there isn't a kernel check if there is a list of entities
             elif entity.node == 'coor-n':
                 # check all the child entities
                 for child in entity.children:
                     # if some of the entities are animated then return True
-                    if self._is_animted_single_entity(child.kernel.lemma, child.msi):
+                    if self._is_animated_single_entity(child.kernel.lemma, child.msi):
                         return True
             else:
                 child = entity.children[0]
-                return self._is_animted_single_entity(child.kernel.lemma, child.msi)
+                return self._is_animated_single_entity(child.kernel.lemma, child.msi)
 
         except Exception as e:
             print e.message
@@ -115,9 +115,9 @@ class VoicePassiveStrategy:
         # other cases return False
         return False
 
-    def _is_animted_single_entity(self, lemma, msi):
+    def _is_animated_single_entity(self, lemma, msi):
         return lemma in self.persons \
-            or lemma in self.demonym\
+            or lemma in self.demonyms\
             or msi['semantic_classification'] == 'person'
 
     def rewrite_clause(self, node, sentence, clauses):
@@ -133,7 +133,7 @@ class VoicePassiveStrategy:
 
             # transform the last leaf of verb (ie clause.verb) to the msi of the first leaf of verb
             lexical_forms = self.ontology.get_lexical_forms(clause.verb.lemma(), msi)
-            rewrited_verb = filter(lambda lf: lf.text != leaf.lexical_form, lexical_forms)[0].text
+            rewritten_verb = filter(lambda lf: lf.text != leaf.lexical_form, lexical_forms)[0].text
 
             text = clause.node.leaves_string()
             verb = clause.structure('verb').lexical_form()
@@ -170,12 +170,12 @@ class VoicePassiveStrategy:
 
             if next_clause and next_clause.relative_entity == clause.structure('subject').entity():
                 subject_rewritten = subject_rewritten + " " + next_clause.__repr__().strip()
-                repls = (verb, rewrited_verb), (subject_pattern, od_rewritten), (od, subject_rewritten), (next_clause.__repr__(), '')
+                repls = (verb, rewritten_verb), (subject_pattern, od_rewritten), (od, subject_rewritten), (next_clause.__repr__(), '')
             elif next_clause and next_clause.relative_entity == clause.structure('od').entity():
                 od_rewritten = od_rewritten + " " + next_clause.__repr__().strip()
-                repls = (verb, rewrited_verb), (subject_pattern, od_rewritten), (od, subject_rewritten), ( " " + next_clause.__repr__(), '')
+                repls = (verb, rewritten_verb), (subject_pattern, od_rewritten), (od, subject_rewritten), ( " " + next_clause.__repr__(), '')
             else:
-                repls = (verb, rewrited_verb), (subject_pattern, od_rewritten), (od, subject_rewritten)
+                repls = (verb, rewritten_verb), (subject_pattern, od_rewritten), (od, subject_rewritten)
 
             ntext = self.multiple_replace(text, *repls)
 

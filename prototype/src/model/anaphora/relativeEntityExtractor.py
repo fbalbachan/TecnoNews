@@ -1,6 +1,4 @@
 #-*- coding: utf-8 -*-
-from src.ling.tacit_subjects import somebody
-
 
 class RelativeEntityExtractor:
 

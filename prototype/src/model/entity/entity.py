@@ -2,7 +2,6 @@
 from src.model.entity.tacitEntity import TacitEntity
 from src.model.tokenization.token import Token
 
-
 class Entity (TacitEntity):
 
     def __init__(self, node):
@@ -10,9 +9,7 @@ class Entity (TacitEntity):
         self.kernel = None
         self.father = None
         self.proper_node = None
-
         self.token = self.build_token()
-
         TacitEntity.__init__(self, self.lexical_form(), {}, {})
 
     def is_subordinated_with_preposition(self, preposition):
@@ -38,7 +35,8 @@ class Entity (TacitEntity):
         if not self.is_subordinated(): return None
         node = self.highest_subordinating_node()
         first_leaf = node.leaves()[0]
-        if first_leaf.msi["type"] != "preposition": return None
+        if first_leaf.msi["type"] != "preposition": 
+			return None
         return first_leaf
 
     def is_subordinated(self):
@@ -46,7 +44,9 @@ class Entity (TacitEntity):
 
     def subordinating_nodes(self):
         path_to_root = self.node.path_to_root()
-        return filter(lambda node: node.label in [ "coor-sp", "grup-sp", "sp-de", "grup-sp-inf" ], path_to_root)
+        return filter(lambda node:
+                            node.label in ["coor-sp", "grup-sp", "sp-de", "grup-sp-inf"],
+                      path_to_root)
 
     def is_tacit(self):
         return False
@@ -62,8 +62,10 @@ class Entity (TacitEntity):
 
     def __repr__(self):
         _repr = self.lexical_form
-        if self.is_possessed(): _repr = _repr + " (of " + repr(self.owner) + ")"
-        if self.is_linked(): _repr = _repr + " (" + self.referenced().lexical_form + ")"
+        if self.is_possessed():
+            _repr = _repr + " (of " + repr(self.owner) + ")"
+        if self.is_linked():
+            _repr = _repr + " (" + self.referenced().lexical_form + ")"
         return _repr
 
     def name(self):
@@ -72,3 +74,4 @@ class Entity (TacitEntity):
     @staticmethod
     def only_maximal(entities):
         return filter(lambda entity: not any([ other.contains(entity) for other in entities ]), entities)
+

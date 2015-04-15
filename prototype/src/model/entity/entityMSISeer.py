@@ -1,10 +1,26 @@
 # -*- coding: utf-8 -*-
 
+from src.model.entity.entitySemanticAnalyzer import EntitySemanticAnalyzer
+from src.utils.resources import instance as resources
+import ConfigParser
+
 class EntityMSISeer:
+
+    def __init__(self):
+        #TODO: Warning this would be accessing the config file each time an entity is instantiated
+        config = ConfigParser.ConfigParser()
+        config.read("config")
+        self.persons = self._get_items(config, "persons")
+        self.demonyms = self._get_items(config, "demonyms")
+        self.animals = self._get_items(config, "animals")
+
     def msi_of(self, entity):
         label = entity.node.label
-        msi = self.msi_seer_by_label[label](self, entity) if label in self.msi_seer_by_label else {}
-        return msi
+        entity.msi = self.msi_seer_by_label[label](self, entity) if label in self.msi_seer_by_label else {}
+        semantic_analyzer = EntitySemanticAnalyzer()
+        semantic_analyzer.analyze(entity)
+        entity.msi["animity"] = self.calculate_animity_for(entity)
+        return entity.msi
 
     def msi_of_single(self, entity):
         node = entity.node
@@ -69,22 +85,115 @@ class EntityMSISeer:
             gender = "neutral"
 
         msi["gender"] = gender
+
         return msi
 
     def msi_of_leaf(self, entity):
-        node = entity.node
-        return node.leaves()[0].msi
+        msi = entity.node.leaves()[0].msi
+        return msi
 
     def msi_of_infinity(self, entity):
-        return { "category" : "noun", "gender" : None, "person" : 3, "number" : "singular", "type" : None,
-                "semantic_classification" : None }
+        return { "category" : "noun", "gender" : None, "person" : 3,
+                 "number" : "singular", "type" : None, "semantic_classification" : None }
 
-    msi_seer_by_label = {   "sn" : msi_of_single,
-                            "grup-nom-ms" : msi_of_single,
-                            "grup-nom-fs" : msi_of_single,
-                            "grup-nom-mp" : msi_of_single,
-                            "grup-nom-fp" : msi_of_single,
-                            "coor-n" : msi_of_coordinated,
-                            "patons" : msi_of_leaf,
-                            "ptonic" : msi_of_leaf,
-                            "grup-verb-inf" : msi_of_infinity }
+    def calculate_animity_for(self, entity):
+        defaultAnimityValue = "inanimate"
+
+        # If the entity had an animity value, other than the default, then return it (assuming it was previously calculated).
+        if "animity" in entity.msi and entity.msi["animity"] is not defaultAnimityValue:
+            return entity.msi["animity"]
+
+        elif entity.has_attr("implicit") or entity.node.label in ["grup-verb-inf"]:
+            return "inanimate"
+
+        # Entities with 1 token being a "paton" or "ptonic"
+        elif len(entity.token.components) is 1 and entity.node.label in ["patons","ptonic"]:
+            if entity.msi['person'] in [1,2]:
+                return "animated"
+
+            if entity.msi['person'] is 3 and entity.msi['case'] == "dative":
+                return "animated"
+
+            if entity.msi['person'] is 3:
+                return "bianimate"
+
+        # if it has kernel, return kernel's animity
+        elif entity.kernel:
+            return self._calculate_animity_single(entity.msi, entity.kernel)
+
+        # (has no kernel, is not a "patons") if it is "coor-n", then look into children animity
+        elif entity.node.label is "coor-n":
+            for child in entity.children:
+                childAnimity = self.calculate_animity_for(child)
+                # if at least one of the child entities has animity return that
+                if childAnimity is not defaultAnimityValue:
+                    return childAnimity
+
+        elif len(entity.children) > 0:
+            child = entity.children[0]
+            return self.calculate_animity_for(child)
+
+        # other cases
+        return defaultAnimityValue
+
+    def _calculate_animity_single(self, msi, kernel):
+
+        lemma = kernel.lemma
+        if not isinstance(lemma, unicode):
+            lemma = unicode(lemma, "utf-8")
+
+        if msi['category'] is "pronoun" and msi['type'] is "personal" and msi['person'] in [1,2]:
+            animity = "animated"
+
+        elif msi['category'] is "pronoun" and msi['type'] is "personal" and msi['case'] is "dative":
+            animity = "animated"
+
+        elif msi['category'] is "pronoun" and msi['type'] is "personal" and msi['person'] is 3:
+            animity = "bianimate"
+
+        elif msi['category'] is "pronoun" and msi['type'] is "indefinite" and lemma in ["alguien","nadie"]:
+            animity = "animated"
+
+        #check lemma against resources
+        elif lemma in (self.persons + self.demonyms + self.animals) \
+           or 'semantic_classification' in msi \
+              and (msi['semantic_classification'] == 'person'
+                   or msi['semantic_classification'] == 'organization'):
+
+            animity = "animated"
+
+        else:
+            defaultAnimityValue = "inanimate"
+            animity = defaultAnimityValue
+
+        return animity
+
+    def _get_items(self, config, resource):
+        """
+        load resource list of items
+
+        :return: list of unicode words as list
+        """
+        items = []
+        items_filename = config.get("resources", resource)
+
+        for line in open(items_filename, 'r'):
+            if line[0] not in ['<', '%', '\n']:
+                item = (line.rstrip('\n')).rstrip('\r')
+                if not isinstance(item, unicode):
+                    item = unicode(item, 'utf-8')
+
+                items.append(item)
+
+        return items
+
+    # Module Globals
+    msi_seer_by_label = {"sn" : msi_of_single,
+                         "grup-nom-ms" : msi_of_single,
+                         "grup-nom-fs" : msi_of_single,
+                         "grup-nom-mp" : msi_of_single,
+                         "grup-nom-fp" : msi_of_single,
+                         "coor-n" : msi_of_coordinated,
+                         "patons" : msi_of_leaf,
+                         "ptonic" : msi_of_leaf,
+                         "grup-verb-inf" : msi_of_infinity}

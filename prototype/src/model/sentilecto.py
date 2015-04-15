@@ -18,6 +18,7 @@ class Sentilecto:
 
         analyzer = ParagraphAnalyzer()
         paragraph = Paragraph.from_text(text)
+
         analyzer.analyze(paragraph)
 
         analysis["paragraph"] = paragraph
@@ -31,6 +32,5 @@ class Sentilecto:
         tagged_text, tag_mapping = ParagraphEntityTagger().tag_all(paragraph, "span")
         analysis["tagged_text"] = tagged_text
         analysis["tag_mapping"] = tag_mapping
-
 
         return analysis

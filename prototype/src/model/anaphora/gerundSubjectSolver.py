@@ -10,7 +10,7 @@ class GerundSubjectSolver:
         subject = clause.structure("subject")
 
         if clause.is_root():
-            subject.tacit_entities = [ somebody() ]
+            subject.tacit_entities = [somebody()]
             return
 
         father = clause.father
@@ -18,6 +18,6 @@ class GerundSubjectSolver:
             father_subject = father.structure("subject")
             entity = father_subject.entity()
             if father_subject.is_tacit():
-                subject.tacit_entities = [ entity ]
+                subject.tacit_entities = [entity]
             else:
-                subject.entities = [ entity ]
+                subject.entities = [entity]

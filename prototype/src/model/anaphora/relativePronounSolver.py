@@ -12,8 +12,10 @@ class RelativePronounSolver:
 
         if self.is_possesive_relative():
             self.solve_possesive_relative()
+
         elif self.is_undefined_relative():
             self.solve_undefined_relative()
+
         elif self.is_valid_linker():
             solve_method_by_voice = { "active" : self.solve_active_voice, "passive" : self.solve_passive_voice }
             solve_method_by_voice[clause.voice]()

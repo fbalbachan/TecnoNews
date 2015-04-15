@@ -5,7 +5,6 @@ from src.model.anaphora.personalPronounSolver import PersonalPronounSolver
 from src.model.anaphora.relativeEntityExtractor import RelativeEntityExtractor
 from src.model.anaphora.relativePronounSolver import RelativePronounSolver
 from src.model.entity.entityExtractor import EntityExtractor
-from src.model.entity.verb import Verb
 from src.model.entity.verbExtractor import VerbExtractor
 from src.model.syntax.activeVoiceSyntacticAnalizer import ActiveVoiceSyntacticAnalyzer
 from src.model.syntax.dateTimeFinder import DateTimeFinder
@@ -22,27 +21,39 @@ class ClauseAnalyzer:
 
     def analyze(self, clause):
         clause.voice = self.voice_of(clause)
-        if clause.voice: clause.verb = self.verb_of(clause)
+        if clause.voice:
+            clause.verb = self.verb_of(clause)
 
         clause.entities = self.entities_of(clause)
+
         self.create_empty_syntactic_structures_for(clause)
+
         self.perform_prior_relative_analysis_of(clause)
 
-        for method in self.analyze_order_for(clause): method(clause)
+        analyze_methods = self.analyze_order_for(clause)
+        for method in analyze_methods:
+            method(clause)
 
         self.analyze_kind_of_cataphoric_structure_of(clause)
 
     def analyze_kind_of_cataphoric_structure_of(self, clause):
-        if clause.has_structure("subject") and clause.structure("subject").is_tacit() and \
-            clause.has_kind_of_cataphoric_structure(): clause.attributes.append("pseudo_cataphoric")
+        if clause.has_structure("subject") \
+           and clause.structure("subject").is_tacit() \
+           and clause.has_kind_of_cataphoric_structure():
+
+            clause.attributes.append("pseudo_cataphoric")
 
     def analyze_order_for(self, clause):
         relative_solver_order = [ self.analyze_syntactically, self.solve_relative ]
+
         if self.relative_needs_to_be_solved_first(clause):
             relative_solver_order.reverse()
 
-        return relative_solver_order + [self.solve_gerund, self.solve_personal_pronouns, self.find_adverbs,
-                                        self.find_unassigned_adjectives, self.find_time_references ]
+        return relative_solver_order + [self.solve_gerund,
+                                        self.solve_personal_pronouns,
+                                        self.find_adverbs,
+                                        self.find_unassigned_adjectives,
+                                        self.find_time_references]
 
     def relative_needs_to_be_solved_first(self, clause):
         if not clause.is_relative(): return False
@@ -60,7 +71,8 @@ class ClauseAnalyzer:
 
     def create_empty_syntactic_structures_for(self, clause):
         for name in self.allowed_syntactic_structures_for(clause):
-            clause.syntactic_structures.append(SyntacticStructure(name, clause))
+            structure = SyntacticStructure(name, clause)
+            clause.syntactic_structures.append(structure)
 
     def find_unassigned_adjectives(self, clause):
         entities_and_verb = clause.entities + [ clause.verb ] if clause.voice else []
@@ -88,9 +100,9 @@ class ClauseAnalyzer:
         PersonalPronounSolver(clause, self.context).solve()
 
     def analyze_syntactically(self, clause):
-        syntactic_analyzer_by_voice = { "active" : ActiveVoiceSyntacticAnalyzer,
+        syntactic_analyzer_by_voice = {"active" : ActiveVoiceSyntacticAnalyzer,
                                        "passive" : PassiveVoiceSyntacticAnalyzer,
-                                       None : SyntacticAnalyzer }
+                                       None : SyntacticAnalyzer}
         analyzer = syntactic_analyzer_by_voice[clause.voice](clause)
         analyzer.analyze(clause)
 
@@ -98,10 +110,9 @@ class ClauseAnalyzer:
         active_voice_structures  = lambda clause: allowed_boxes(clause.verb.transitivity)
         passive_voice_structures = lambda clause: allowed_boxes_for_passive_verbs
         none_voice_structures = lambda clause: allowed_boxes_for_unimember_sentences
-        structures_getter_by_voice = { \
-                                 None :  none_voice_structures,
-                                 "active" : active_voice_structures,
-                                 "passive" : passive_voice_structures }
+        structures_getter_by_voice = { None :  none_voice_structures,
+                                       "active" : active_voice_structures,
+                                       "passive" : passive_voice_structures }
         return structures_getter_by_voice[clause.voice](clause)
 
     def verb_of(self, clause):

@@ -25,7 +25,8 @@ class SyntacticStructure:
         for entity in entities: self.append(entity)
 
     def append(self, entity):
-        if not self.accept(entity): raise Exception(self.name + " no acepta la entidad " + str(entity))
+        if not self.accept(entity):
+            raise Exception(self.name + " no acepta la entidad " + str(entity))
 
         entity_list = self.tacit_entities if entity.is_tacit() else self.entities
         entity_list.append(entity)

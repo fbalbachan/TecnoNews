@@ -147,7 +147,6 @@ AGUSTÍN,spanish
 ÁLVARO,spanish
 LEANDRO,spanish
 BAYARDO,spanish
-,spanish
 AARÓN,spanish
 OSVALDO,spanish
 VICENTE,spanish
@@ -806,7 +805,6 @@ TERENCE,english
 FERDINAND,english
 JOLYON,english
 STORM,english
-,english
 WISDOM,english
 COLBY,english
 DUFFY,english
@@ -3308,7 +3306,6 @@ FIORENZO,italian
 PONZIO,italian
 GUGLIELMO,italian
 ERMINIO,italian
-,italian
 SANSONE,italian
 UGO,italian
 CESARE,italian
@@ -3721,7 +3718,6 @@ ALAIN,french
 DION,french
 ROLANDE,french
 GAUTHIER,french
-,french
 PHILIPPE,french
 BAUDOUIN,french
 EVRARD,french
@@ -3863,7 +3859,6 @@ KACPER,polish
 KORNELI,polish
 JĘDRZEJ,polish
 EUGENIUSZ,polish
-,polish
 BONIFACY,polish
 CYRYL,polish
 KRZYŚ,polish
@@ -4277,7 +4272,6 @@ HULDERICH,german
 GERFRIED,german
 BAMBER,german
 ALWIN,german
-,german
 MORENCY,german
 APSEL,german
 BERNT,german
@@ -4453,7 +4447,6 @@ ZEVADYA,hebrew
 LAVAN,hebrew
 ELYEHOWEYNAY,hebrew
 BINYAMIYN,hebrew
-,hebrew
 UTZ,hebrew
 ABIYHAYIL,hebrew
 URYAN,hebrew
@@ -5659,7 +5652,6 @@ STELIOS,greek
 ANDONIS,greek
 TIMO,greek
 CHARALAMPOS,greek
-,greek
 AMARANDOS,greek
 HYMÊN,greek
 STYLIANOS,greek
@@ -5974,7 +5966,6 @@ KEIJI,japanese
 HITOSHI,japanese
 MASAYOSHI,japanese
 SHUICHI,japanese
-,japanese
 SHIG,japanese
 TAKEHIKO,japanese
 AKIHIRO,japanese
@@ -5985,7 +5976,6 @@ HIDEO,japanese
 KUROU,japanese
 SHOICHI,japanese
 ISAMU,japanese
-協,japanese
 MASASHI,japanese
 KENSHIN,japanese
 MASA,japanese
@@ -6121,7 +6111,6 @@ GRUFFYDD,welsh
 CADWALLADER,welsh
 ENFYS,welsh
 BRENIN,welsh
-,welsh
 GORONWY,welsh
 GWILYM,welsh
 GWRGENAU,welsh
@@ -6428,7 +6417,6 @@ CAÉMGEN,irish
 ANRAOI,irish
 SLOANE,irish
 MATHÚIN,irish
-,irish
 RUAIDHRÍ,irish
 LACHTNA,irish
 BALLINAMORE,irish
@@ -6842,7 +6830,6 @@ SUCKI,nativeamerican
 WIKVAYA,nativeamerican
 ROWTAG,nativeamerican
 GUDAHI,nativeamerican
-,nativeamerican
 AVONACO,nativeamerican
 SEWATI,nativeamerican
 KITCHI,nativeamerican
@@ -6985,7 +6972,6 @@ XIANLIANG,chinese
 JIAN,chinese
 HONGHUI,chinese
 TINGGUANG,chinese
-,chinese
 YAOTING,chinese
 LING,chinese
 HENG,chinese
@@ -7115,7 +7101,6 @@ BOITUMELO,african
 ARKENKHEREL,african
 BLYDS,african
 ARKAMUN,african
-,african
 AKWASI,african
 BAAS,african
 CHIGARU,african

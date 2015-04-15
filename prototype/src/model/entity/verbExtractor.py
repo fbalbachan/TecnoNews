@@ -30,7 +30,8 @@ class VerbExtractor:
             leaves = node.leaves_of_category("verb")
 
             if leaves[0].lemma == "estar":
-                if not (len(leaves) > 1 and leaves[1].msi["mode"] == "gerundio"): leaves = [ leaves[0] ]
+                if not (len(leaves) > 1 and leaves[1].msi["mode"] == "gerundio"):
+                    leaves = [ leaves[0] ]
                 return leaves
 
             ser_node = filter(lambda child: not child.is_leaf() and child.label == "parti-ser", root.children)
