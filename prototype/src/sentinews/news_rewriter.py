@@ -213,6 +213,7 @@ class NewsRewriter(object):
         self.rewritten_entry.tags = new_tags
 
     def post_process(self):
+        import traceback
         content = ''
 
         try:
@@ -221,6 +222,7 @@ class NewsRewriter(object):
         except Exception as e:
                 logger.error("Couldn't clean multiple spaces")
                 logger.error("%s" % e.message)
+                logger.error(traceback.format_exc())
 
         for paragraph in self.rewritten_entry.content.split('\n'):
             if len(paragraph) > 0:
