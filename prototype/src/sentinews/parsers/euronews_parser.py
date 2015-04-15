@@ -22,6 +22,10 @@ class EuroNewsParser(GenericParser):
 
     def parse(self, url):
         soup = BeautifulSoup(urlopen(url).read())
+        # rip out script and style elements
+        for script in soup(["script", "style"]):
+            script.extract()
+
         paragraphs = None
         tags = []
         title = ''

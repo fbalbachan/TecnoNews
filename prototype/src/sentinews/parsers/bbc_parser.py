@@ -14,6 +14,10 @@ class BBCParser(GenericParser):
         content = None
         title = None
         soup = BeautifulSoup(urlopen(url))
+        # rip out script and style elements
+        for script in soup(["script", "style"]):
+            script.extract()
+
         if soup is not None:
             article = soup.find('div', {'class': 'story-body'})
             if article is not None:

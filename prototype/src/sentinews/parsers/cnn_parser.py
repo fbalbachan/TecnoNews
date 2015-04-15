@@ -21,10 +21,10 @@ class CNNParser(GenericParser):
 
     def parse(self, url, limit=1):
         soup = BeautifulSoup(urlopen(url).read())
-        # TODO: check if this is working ok and use it
-        # kill all script and style elements
-        # for script in soup(["script", "style"]):
-        #     script.extract()    # rip scripts and styles out
+
+        # rip out script and style elements
+        for script in soup(["script", "style"]):
+            script.extract()
 
         articles = soup.findAll('div', {"class": "cnnRightPost"}, limit=limit)
         new_entries = []
