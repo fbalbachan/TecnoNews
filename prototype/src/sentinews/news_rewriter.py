@@ -216,7 +216,7 @@ class NewsRewriter(object):
         content = ''
 
         try:
-            re.sub(r' +',  u' ', self.rewritten_entry.content, flags=re.UNICODE)
+            self.rewritten_entry.content = re.sub(r' +',  u' ', self.rewritten_entry.content)
 
         except Exception as e:
                 logger.error("Couldn't clean multiple spaces")

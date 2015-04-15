@@ -161,7 +161,7 @@ if __name__ == '__main__':
             tn.run()
         else:
             #TODO: must fix the enviroment somehow
-            logger.info("Not running becouse enviroment is not health")
+            logger.error("Not running becouse enviroment is not health")
 
         logger.info("Sleeping")
         time.sleep(60)
