@@ -200,8 +200,9 @@ class NewsRewriter(object):
         logger.info("base tags %s " % base_tags)
 
         for tag in new_tags_list:
-            if tag not in base_tags:
-                tag_clean = re.sub('_', ' ', tag)
+            tag_clean = re.sub('_', ' ', tag)
+            tag_clen_utf = tag_clean.decode('utf-8')
+            if tag_clen_utf not in base_tags:
                 base_tags.append(tag_clean)
 
             if len(base_tags) >= 15:
