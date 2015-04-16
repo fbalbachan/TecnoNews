@@ -66,46 +66,38 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
                                       lambda: self.search_nominal_od_at_same_level_nodes("left", 2, verbal_animity))
 
         nominal_entities_under_prep_a = \
-                self.find_entities_by(lambda: self.search_nominal_od_under_prep_a("right", 4, "animated"),
-                                      lambda: self.search_nominal_od_under_prep_a("left", 3, "animated"))
+                self.find_entities_by(lambda: self.search_nominal_od_under_prep_a("right", 4),
+                                      lambda: self.search_nominal_od_under_prep_a("left", 3))
 
         pronominal_entities = \
                 self.find_entities_by(lambda: self.search_pronoun_at("right", 3, verbal_animity),
                                       lambda: self.search_pronoun_at("left", 3, verbal_animity))
 
-        entities = nominal_entities_at_same_level_nodes
-        entities += nominal_entities_under_prep_a if verbal_animity is not "inanimate" else []
-        entities += pronominal_entities
+        candidate_entities_matching_anim = nominal_entities_at_same_level_nodes \
+                                         + self.filter_by_animity(nominal_entities_under_prep_a, verbal_animity) \
+                                         + pronominal_entities
 
-        if not entities:
-            is_implicit=True
-            return [get_entity_some(verbal_animity, is_implicit)]
+        candidate_entities = nominal_entities_at_same_level_nodes \
+                             + nominal_entities_under_prep_a \
+                             + pronominal_entities
 
-        entities[0].msi["animity"] = most_specific(entities[0].msi["animity"], verbal_animity)
-        if not entities[0].is_subordinated_with_preposition("a"):
-            return [entities[0]]
+        if candidate_entities[0].is_subordinated_with_preposition("a"):
+            linked = self.link_duplicated_od_for(candidate_entities[0])
+            if linked:
+                return [candidate_entities[0], linked]
+            else:
+                return [candidate_entities_matching_anim[0]]
+        else:
+            return [candidate_entities[0]]
 
-        # Has prep "a"
-        entities[0].msi["animity"] = "animated"
-        linked = self.link_duplicated_od_for(entities)
-        if not linked:
-            return [entities[0]]
-
-        # Found linked
-        linked.msi["animity"] = "animated"
-        return [entities[0], linked]
-
-    def link_duplicated_od_for(self, entities):
-        acusative_pronoun = self.search_duplicated_od_for(entities)
+    def link_duplicated_od_for(self, candidate_od):
+        acusative_pronoun = self.search_duplicated_od_for(candidate_od)
         if acusative_pronoun:
-            acusative_pronoun.add_coreference(entities[0])
-            entities.append(acusative_pronoun)
+            acusative_pronoun.add_coreference(candidate_od)
 
         return acusative_pronoun
 
-    def search_duplicated_od_for(self, entities):
-
-        source_od = entities[0]
+    def search_duplicated_od_for(self, source_od):
 
         closest_entities = self.clause.entities_closest_to_verb(("left", 3), ("right", 2))
         acusative_pronouns = self.only_acusative_pronouns_of(closest_entities)
