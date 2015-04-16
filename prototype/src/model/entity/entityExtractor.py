@@ -10,6 +10,7 @@ class EntityExtractor:
         self.clause = clause
 
     def extract(self):
+        #print "Entering extract()"
         root = self.clause.proper_tree()
         entity_nodes = root.nodes_with_labels(self.entity_labels) + self.infinitive_structures() + \
             self.relative_abnormal_nodes()
@@ -59,6 +60,7 @@ class EntityExtractor:
         return entities_by_node.values()
 
     def assign_msi(self, entities):
+        #print "Entering assign_msi"
         entity_msi_seer = EntityMSISeer()
         for entity in entities:
             entity.msi = entity_msi_seer.msi_of(entity)

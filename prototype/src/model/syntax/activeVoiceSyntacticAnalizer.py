@@ -11,6 +11,7 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         SyntacticAnalyzer.__init__(self, clause)
 
     def subject(self):
+        #print "Entering ActiveVoiceSyntacticAnalyzer.subject()"
         clause = self.clause
         if clause.is_gerund():
             subject = []
@@ -26,6 +27,7 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
             return self.tacit_or_implicit_subject(verbal_animity)
 
     def tacit_or_implicit_subject(self, verbal_animity="bianimate"):
+        #print "Subject is tacit or implicit"
 
         if self.is_root_relative_clause():
             is_implicit = True
@@ -44,7 +46,6 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         return clause.is_relative() and clause.is_root()
 
     def tacit_subject(self, verbal_animity="bianimate"):
-
         verb = self.clause.verb
         pronoun = verb.matching_pronoun()
         pronoun_msi = verb.matching_pronoun_msi()
@@ -57,6 +58,7 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         return TacitEntity(pronoun, pronoun_msi)
 
     def od(self):
+        #print "Entering ActiveVoiceSyntacticAnalyzer.od()"
         verbal_animity = self.clause.verb.affected_object_animity
 
         nominal_entities_at_same_level_nodes = \
@@ -121,6 +123,7 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         return result
 
     def oi(self):
+        #print "Entering ActiveVoiceSyntacticAnalyzer.oi()"
         entities = self.find_entities_by(lambda: self.search_nominal_oi_at("right", 3, "animated"),
                                          lambda: self.search_nominal_oi_at("left", 3, "animated"),
                                          lambda: self.search_pronoun_at("left", 2, "animated"),
@@ -132,6 +135,7 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
             return []
 
     def regimen(self):
+        #print "Entering ActiveVoiceSyntacticAnalyzer.regimen()"
         verbal_animity = self.clause.verb.affected_object_animity
         at_right = lambda: self.search_regime_at("right", 3, verbal_animity)
         at_left  = lambda: self.search_regime_at("left", 2, verbal_animity)
@@ -143,6 +147,7 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
             return []
 
     def equative(self):
+        #print "Entering ActiveVoiceSyntacticAnalyzer.equative()"
         verbal_animity = self.clause.verb.affected_object_animity
         entities = self.valid_subject_entities(2, 3) + self.search_subords_with_prep_at("right", 3, "de", "para")
         entities = self.filter_by_animity(entities, verbal_animity)

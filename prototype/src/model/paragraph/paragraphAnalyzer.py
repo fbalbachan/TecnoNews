@@ -10,6 +10,7 @@ class ParagraphAnalyzer:
         self.invoker = Invoker()
 
     def analyze(self, paragraph):
+        #print "Entering ParagraphAnalyzer.analize()"
         self.context["sentences"] = []
 
         for sentence in paragraph.sentences:

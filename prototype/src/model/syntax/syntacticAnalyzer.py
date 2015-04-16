@@ -14,10 +14,12 @@ class SyntacticAnalyzer:
                 structure.append_all(entities)
 
     def subject(self):
+        #print "Entering SyntacticAnalyzer.subject()"
         entities = self.clause.lonely_entities()
         return [ entities[0] ] if entities else []
 
     def verb(self):
+        #print "Entering SyntacticAnalyzer.verb()"
         return [ self.clause.verb ]
 
     def instrument_goal(self):

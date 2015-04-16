@@ -15,6 +15,7 @@ class EntityMSISeer:
         self.animals = self._get_items(config, "animals")
 
     def msi_of(self, entity):
+        #print "Entering msi_of"
         label = entity.node.label
         entity.msi = self.msi_seer_by_label[label](self, entity) if label in self.msi_seer_by_label else {}
         semantic_analyzer = EntitySemanticAnalyzer()

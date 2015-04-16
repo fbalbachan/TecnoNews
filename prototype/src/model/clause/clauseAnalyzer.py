@@ -20,6 +20,7 @@ class ClauseAnalyzer:
         self.context = {}
 
     def analyze(self, clause):
+		#print "Entering Clause.Analyze"
         clause.voice = self.voice_of(clause)
         if clause.voice:
             clause.verb = self.verb_of(clause)
@@ -90,16 +91,20 @@ class ClauseAnalyzer:
         clause.time_references = DateTimeFinder(clause).find()
 
     def solve_relative(self, clause):
+        #print "Entering solve_relative"
         if clause.is_relative() and clause.relative_entity: RelativePronounSolver(clause).solve()
 
     def solve_gerund(self, clause):
+        #print "Entering solve_gerund"
         if clause.voice and clause.is_gerund():
             GerundSubjectSolver(clause).solve()
 
     def solve_personal_pronouns(self, clause):
+        #print "Entering solve_personal_pronouns"
         PersonalPronounSolver(clause, self.context).solve()
 
     def analyze_syntactically(self, clause):
+        #print "Entering analyze_syntactically"
         syntactic_analyzer_by_voice = {"active" : ActiveVoiceSyntacticAnalyzer,
                                        "passive" : PassiveVoiceSyntacticAnalyzer,
                                        None : SyntacticAnalyzer}
@@ -119,6 +124,7 @@ class ClauseAnalyzer:
         return VerbExtractor(clause).extract()
 
     def entities_of(self, clause):
+        #print "Entering entities_of"
         return EntityExtractor(clause).extract()
 
     def voice_of(self, clause):

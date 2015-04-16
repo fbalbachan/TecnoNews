@@ -10,6 +10,7 @@ class PassiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         SyntacticAnalyzer.__init__(self, clause)
 
     def subject(self):
+        #print "Entering PassiveVoiceSyntacticAnalyzer.subject()"
         at_right = lambda: self.search_subject_at("right", 3)
         at_left  = lambda: self.search_subject_at("left", 3)
 
@@ -36,6 +37,7 @@ class PassiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         return self.search_subord_at(side, distance, which)
 
     def od(self):
+        #print "Entering PassiveVoiceSyntacticAnalyzer.od()"
         # From domain knowledge we know that entities must be at: max distance left 6, max distance right 5
         # (insight come from oracle Fernando)
 
@@ -53,6 +55,7 @@ class PassiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         return [od_entity]
 
     def tacit_od(self):
+        print "OD is tacit"
         verb = self.clause.verb
         pronoun = verb.matching_pronoun()
         pronoun_msi = verb.matching_pronoun_msi()

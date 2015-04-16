@@ -12,17 +12,17 @@ class PersonalPronounSolver:
         for pronoun, structure in self.pronouns_in_order():
             self.link(structure, pronoun)
 
-    def link(self, structure, entity):
-        coref_searcher = PersonalPronounCoreferenceSearcher(self.clause, self.context, entity)
+    def link(self, structure, pronoun):
+        coref_searcher = PersonalPronounCoreferenceSearcher(self.clause, self.context, pronoun)
         referenced_entity = coref_searcher.search()
         if referenced_entity:
             if structure.name in Verb.boxes_with_scripted_animity:
                 verbal_animity = self.clause.verb.get_script_animity_for(structure.name)
                 if referenced_entity.animity_matches(verbal_animity):
-                    entity.msi["animity"] = most_specific(verbal_animity,referenced_entity.msi["animity"])
-                    entity.add_coreference(referenced_entity)
+                    pronoun.msi["animity"] = most_specific(verbal_animity,referenced_entity.msi["animity"])
+                    pronoun.add_coreference(referenced_entity)
             else:
-                entity.add_coreference(referenced_entity)
+                pronoun.add_coreference(referenced_entity)
 
     def pronouns_in_order(self):
         clause = self.clause

@@ -6,7 +6,6 @@ from src.model.go.globalOperatorAnalyzer import GlobalOperatorAnalyzer
 from src.model.sentence.tokenizationGuesser import TokenizationGuesser
 from src.parser.freelingTreeParser import FreelingTreeParser
 from src.sentiment.sentimentalAnalyzer import SentimentalAnalyzer
-from src.sentiment.sentimentalSummarizer import SentimentalSummarizer
 from src.utils.invoker import Invoker
 
 
@@ -17,6 +16,7 @@ class SentenceAnalyzer:
         self.invoker = Invoker()
 
     def analyze(self, sentence):
+        #print "Entering SentenceAnalyzer.analyze()"
         self.set_parse_tree_to(sentence)
         TokenizationGuesser(sentence).guess()
 
@@ -39,6 +39,7 @@ class SentenceAnalyzer:
         GlobalOperatorAnalyzer(sentence).analyze()
 
     def analyze_clauses_of(self, sentence):
+        #print "Entering analyze_clauses_of"
         self.context["clauses"] = []
         clause_analyzer = ClauseAnalyzer()
         clause_analyzer.context = self.context
