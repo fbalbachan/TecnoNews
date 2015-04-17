@@ -17,6 +17,7 @@ class CNNParserTest(unittest.TestCase):
         url = 'http://cnnespanol.cnn.com/2015/04/17/mike-huckabee-promete-un-anuncio-sobre-2016-para-este-viernes-por-la-noche/'
         url = 'http://cnnespanol.cnn.com/2015/04/08/el-avance-de-isis-en-el-sur-de-siria-una-buena-noticia-para-al-asad/'
         url = 'http://cnnespanol.cnn.com/2015/04/14/police-de-arizona-tramples-of-way-intentional-a-un-suspicious-to-arrest/'
+
         entry = CNNParser().parse(url=url)
         self.assertIsNotNone(entry)
         print "Content:", entry.content, '\n'

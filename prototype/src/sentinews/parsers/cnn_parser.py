@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+import traceback
 
 from urllib import urlopen
 from src.sentinews.news_entry import NewsEntry
@@ -51,16 +52,21 @@ class CNNParser(GenericParser):
             logger.error("Has JS!! %s")
             return None
 
-        if len(tags):
+        if len(tags) and not u'video' in categories:
             tags = list(tags)
-            new_entry = NewsEntry(title=title, content=content,
+            try:
+                new_entry = NewsEntry(title=title, content=content,
                                   tags=tags,
                                   source=self.source,
                                   url=url,
                                   categories=categories)
 
+            except Exception as e:
+                logger.error("%s" % e.message)
+                logger.error(traceback.format_exc())
+
         if not new_entry:
-            logger.error("Parser CNN Error")
+            logger.error("Couldn't parse news in CNN ")
             logger.error("Url: %s " % url)
 
         return new_entry
