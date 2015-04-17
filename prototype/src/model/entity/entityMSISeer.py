@@ -157,9 +157,10 @@ class EntityMSISeer:
 
         #check lemma against resources
         elif lemma in (self.persons + self.demonyms + self.animals) \
-           or 'semantic_classification' in msi \
-              and (msi['semantic_classification'] == 'person'
-                   or msi['semantic_classification'] == 'organization'):
+             or 'semantic_classification' in msi \
+                and (msi['semantic_classification'] == 'person'
+                     or msi['semantic_classification'] == 'organization'
+                     or msi['semantic_classification'] == 'other'):
 
             animity = "animated"
 

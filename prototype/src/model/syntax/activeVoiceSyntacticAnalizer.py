@@ -4,7 +4,7 @@ from src.ling.tacit_subjects import implicit_somebody, this, get_entity_some
 from src.model.entity.tacitEntity import TacitEntity
 from src.model.entity.animity import most_specific
 from src.model.syntax.syntacticAnalyzer import SyntacticAnalyzer
-
+from src.model.entity.entity import Entity
 
 class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
     def __init__(self, clause):
@@ -81,19 +81,28 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
                              + nominal_entities_under_prep_a \
                              + pronominal_entities
 
+        if not candidate_entities:
+            is_implicit=True
+            return [get_entity_some(verbal_animity, is_implicit)]
+
         if candidate_entities[0].is_subordinated_with_preposition("a"):
-            linked = self.link_duplicated_od_for(candidate_entities[0])
+            linked = self.link_duplicated_od_for(candidate_entities)
             if linked:
                 return [candidate_entities[0], linked]
             else:
+                if not candidate_entities_matching_anim:
+                    is_implicit=True
+                    return [get_entity_some(verbal_animity, is_implicit)]
+
                 return [candidate_entities_matching_anim[0]]
         else:
             return [candidate_entities[0]]
 
-    def link_duplicated_od_for(self, candidate_od):
-        acusative_pronoun = self.search_duplicated_od_for(candidate_od)
+    def link_duplicated_od_for(self, od_candidates):
+        acusative_pronoun = self.search_duplicated_od_for(od_candidates[0])
         if acusative_pronoun:
-            acusative_pronoun.add_coreference(candidate_od)
+            acusative_pronoun.add_coreference(od_candidates[0])
+            od_candidates.append(acusative_pronoun)
 
         return acusative_pronoun
 
@@ -160,6 +169,7 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
 
     def search_nominal_oi_at(self, side, distance, animity="bianimate"):
         entities = self.search_subords_with_prep_at(side, distance, "a", "para")
+        entities = Entity.only_maximal(entities)
         entities = self.filter_infinitives(entities)
         entities = self.filter_by_animity(entities, animity)
         return entities
@@ -172,6 +182,7 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
 
     def search_nominal_od_under_prep_a(self, side, distance, verbal_animity="bianimate"):
         entities = self.search_subords_with_prep_at(side, distance, "a")
+        entities = Entity.only_maximal(entities)
         entities = self.filter_infinitives(entities)
         entities = self.filter_by_animity(entities, verbal_animity)
         return entities

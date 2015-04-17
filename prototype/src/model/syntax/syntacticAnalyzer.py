@@ -10,8 +10,10 @@ class SyntacticAnalyzer:
         # El orden en que se extraen las FSS es importante.
         for structure in clause.syntactic_structures:
             if structure.is_empty():
+                #print "\n\nEntities for ", structure.name, " before calculus", structure.all_entities(), "\n\n"
                 entities = getattr(self, structure.name, lambda: [])()
                 structure.append_all(entities)
+                #print "\n\nEntities for ", structure.name, " after calculus", structure.all_entities(), "\n\n"
 
     def subject(self):
         #print "Entering SyntacticAnalyzer.subject()"
@@ -54,6 +56,12 @@ class SyntacticAnalyzer:
                  + clause.entities_closest_to_verb_at("right", distance_at_right)
         valid_subject_entities = self.only_valid_subject_entities_of(entities)
         return valid_subject_entities
+
+    def filter_group_sp_inf(self, entities):
+        entities_without_group_sp_inf = filter(lambda entity: entity.node.label is not "group-sp-inf",
+									           entities)
+        return entities_without_group_sp_inf
+
 
     def filter_infinitives(self, entities):
         entities_without_infs = filter(lambda entity: not entity.has_attr("infinitive"),
