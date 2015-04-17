@@ -31,9 +31,10 @@ class TecnonewsTest(unittest.TestCase):
         related_news = []
 
         # self.assertIsNotNone(related_news)
-
+        print self.news_entry
         self.news_entry = parser.parse(url=link2)
         # self.news_entry = parser.parse(url=link3, tags=['america'])
+        print self.news_entry
 
         self.news_entry.set_related_news(related_news)
         self.news_entry.set_news_versions(related_news)

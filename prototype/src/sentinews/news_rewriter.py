@@ -217,14 +217,6 @@ class NewsRewriter(object):
         import traceback
         content = ''
 
-        try:
-            self.rewritten_entry.content = re.sub(r' +',  u' ', self.rewritten_entry.content)
-
-        except Exception as e:
-                logger.error("Couldn't clean multiple spaces")
-                logger.error("%s" % e.message)
-                logger.error(traceback.format_exc())
-
         for paragraph in self.rewritten_entry.content.split('\n'):
             if len(paragraph) > 0:
                 #patch to clean wrong formated paragraphs
@@ -232,5 +224,14 @@ class NewsRewriter(object):
                     paragraph = paragraph[1:].strip()
 
                 content += '<p>' + paragraph[0].upper() + paragraph[1:] + '</p>'
+
+        try:
+            logger.info("Is content unicode %s" % isinstance(content, unicode))
+            content = re.sub(r' +',  u' ', content)
+
+        except Exception as e:
+                logger.error("Couldn't clean multiple spaces")
+                logger.error("%s" % e.message)
+                logger.error(traceback.format_exc())
 
         self.rewritten_entry.content = content

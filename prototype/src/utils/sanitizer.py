@@ -28,8 +28,7 @@ class Sanitizer():
         if self.language_filter_status == 'ON':
             new_content = self.language_filter.only_spanish_paragraph(new_content)
 
-        new_content = re.sub(u'\(CNN\)', u'', new_content)
-        new_content = re.sub(u'\( CNN Español \)', u'', new_content)
+        new_content = re.sub(u'\(CNN (Español ?)?\) ?(-|–)?', u'', new_content)
         re.sub(r'a EL PAÍS|a EL PAIS',  u'al diario El País de España',
                    new_content, flags=re.UNICODE)
 

@@ -139,6 +139,8 @@ class BlogPublisher(object):
                                             entry=entry,
                                             post=post)
             post.post_status = 'publish'
+            self.insert_source_data(entry=entry, post=post)
+
             client.call(posts.EditPost(wp_id, post))
 
         else:
@@ -282,3 +284,7 @@ class BlogPublisher(object):
             except Exception as e:
                 logger.error("Couldn't remove from portada %s" % entry.wp_id)
                 logger.error("%s" % e.message)
+
+    def insert_source_data(self, entry, post):
+        post.custom_fields.append(dict(key='source', value=entry.source))
+

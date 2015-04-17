@@ -26,47 +26,42 @@ class CNNParser(GenericParser):
         for script in soup(["script", "style"]):
             script.extract()
 
-        articles = soup.findAll('div', {"class": "cnnRightPost"}, limit=limit)
-        new_entries = []
-        for article in articles:
-            title = article.find('h1').text
-            content = self._remove_cnn_header(article.find('div').text)
-            content = self.sanitize(content)
+        tweets = []
 
-            try:
-                tags = article.find('span', class_="cnnBlogFiledBy cnn_categories").text[11:].split(u"\xa0\u2022\xa0")
-            except:
-                logger.info('Tags not found: %s' % (article.find('span', class_="cnnBlogFiledBy cnn_categories")))
-                tags = []
+        for tweet in soup.findAll('div', {"class": "embed-twitter"}):
+            tweets.append(tweet)
+            tweet.extract()
 
-            if (content.find('function()') == -1) and len(tags) > 0:
-                new_entries.append(NewsEntry(title, content, tags, self.source, url=url))
+        new_entry = None
+        title = soup.find('h1', {"class":"headline-article-main"}).text
+        content = soup.find('div', {"class":"content-body-text"}).text
+        content = self.sanitize(content)
+        categories = [soup.find('div', {"class":"cat-section"}).text.strip()]
 
-        parsed_news = None
-        if len(new_entries) > 1:
-            logger.info("Warning cnn parser has more than one news parsed modify ")
+        tags = set()
 
-        if len(new_entries) > 0:
-            parsed_news = new_entries[0]
+        tag_links = soup.findAll('div', {"class": "tags"})
+        for tag in tag_links:
+            links = tag.findAll('a')
+            for l in links:
+                tags.add(l.text)
 
-        return parsed_news
-        # return new_entries[0] if len(new_entries) > 0 else NewsEntry('', '', ['dummie'], '', '')
+        manual_test_js = content.find('function()') == -1
+        if not manual_test_js:
+            logger.error("Has JS!! %s")
+            return None
 
-    def _remove_cnn_header(self, text):
-        dashes = [u'\u2014', u'\u2013', '-']
+        if len(tags):
+            tags = list(tags)
+            new_entry = NewsEntry(title=title, content=content,
+                                  tags=tags,
+                                  source=self.source,
+                                  url=url,
+                                  categories=categories)
 
-        text_with_dash = text[:100]
-        positions = [(dash, text_with_dash.find(dash)) for dash in dashes if text_with_dash.find(dash) > -1]
+        if not new_entry:
+            logger.error("Parser CNN Error")
+            logger.error("Url: %s " % url)
 
-        min_pos = 9999
-        min_dash = None
-        for dash, pos in positions:
-            if pos < min_pos:
-                min_pos = pos
-                min_dash = dash
+        return new_entry
 
-        if min_dash:
-            text_without_dash = text_with_dash.split(min_dash)[1][1:]
-            text = text_without_dash + text[100:]
-
-        return text        
