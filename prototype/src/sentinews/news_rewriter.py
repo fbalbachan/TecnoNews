@@ -215,18 +215,21 @@ class NewsRewriter(object):
 
     def post_process(self):
         import traceback
-        content = ''
+        from src.utils.unicodeTools import safe_unicode
+        # content = u''
+        content = safe_unicode(self.rewritten_entry.content)
 
-        for paragraph in self.rewritten_entry.content.split('\n'):
+        for paragraph in content.split('\n'):
             if len(paragraph) > 0:
                 #patch to clean wrong formated paragraphs
                 if paragraph[0] in [u',', u'.']:
                     paragraph = paragraph[1:].strip()
 
-                content += '<p>' + paragraph[0].upper() + paragraph[1:] + '</p>'
+                content += u'<p>' + paragraph[0].upper() + paragraph[1:] + u'</p>'
 
         try:
             logger.info("Is content unicode %s" % isinstance(content, unicode))
+            # content = safe_unicode(content)
             content = re.sub(r' +',  u' ', content)
 
         except Exception as e:

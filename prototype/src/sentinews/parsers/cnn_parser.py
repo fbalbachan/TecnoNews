@@ -59,7 +59,7 @@ class CNNParser(GenericParser):
                                   tags=tags,
                                   source=self.source,
                                   url=url,
-                                  categories=categories)
+                                  original_categories=categories)
 
             except Exception as e:
                 logger.error("%s" % e.message)

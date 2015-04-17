@@ -10,8 +10,8 @@ logger = get_logger('tecnonews')
 
 
 class NewsEntry(object):
-    def __init__(self, title, content, tags, source, url=None, categories=None,
-                 wp_id=None, wp_url=None, related=None, entities=None,
+    def __init__(self, title, content, tags, source, url=None, original_categories=None,
+                 categories=None, wp_id=None, wp_url=None, related=None, entities=None,
                  published_date=None, object_id=None, versions=None, image=None):
 
         self.title = title
@@ -20,6 +20,7 @@ class NewsEntry(object):
         self.entities = entities
         self.tags = tags
         self.source = source
+        self.original_categories = original_categories
         self.categories = categories
         self.destination = None
         self.published_date = published_date
@@ -62,7 +63,8 @@ class NewsEntry(object):
 
     def to_dict(self):
         return dict(title=self.safe_unicode(self.title), content=self.safe_unicode(self.content),
-                    tags=self.safe_unicode_list(self.tags), source=self.source, categories=self.categories,
+                    tags=self.safe_unicode_list(self.tags), source=self.source,
+                    original_categories=self.original_categories, categories=self.categories,
                     entities=self.entities, published_date=self.published_date, url=self.url, wp_id=self.wp_id,
                     wp_url=self.wp_url, related=self.related, versions=self.versions)
 
