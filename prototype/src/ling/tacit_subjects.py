@@ -1,37 +1,34 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from src.model.entity.tacitEntity import TacitEntity
+from src.model.entity.animity import Animity
 
+tacit_subjects = {(0, 'singular', 'neutral'): None,
+                  (1, 'singular', 'neutral'): 'yo',
+                  (2, 'singular', 'neutral'): 'tú',
 
-tacit_subjects = {
-    (0, 'singular', 'neutral') : None,
+                  (3, 'invariable', 'neutral'): 'lo',
+                  (3, 'singular', 'neutral')  : 'él/ella',
+                  (3, 'singular', 'masculine'): 'él',
+                  (3, 'singular', 'feminine') : 'ella',
 
-    (1, 'singular', 'neutral') : 'yo',
+                  (1, 'plural', 'neutral')  : 'nosotros/nosotras',
+                  (1, 'plural', 'masculine'): 'nosotros',
+                  (1, 'plural', 'feminine') : 'nosotras',
 
-    (2, 'singular', 'neutral') : 'tú',
+                  (2, 'plural', 'neutral')  : 'ustedes',
 
-    (3, 'invariable', 'neutral') : 'lo',
-    (3, 'singular', 'neutral')   : 'él/ella',
-    (3, 'singular', 'masculine') : 'él',
-    (3, 'singular', 'feminine')  : 'ella',
+                  (3, 'plural', 'neutral')  : 'ellos/ellas',
+                  (3, 'plural', 'masculine'): 'ellos',
+                  (3, 'plural', 'feminine') : 'ellas',}
 
-    (1, 'plural', 'neutral')   : 'nosotros/nosotras',
-    (1, 'plural', 'masculine') : 'nosotros',
-    (1, 'plural', 'feminine')  : 'nosotras',
-
-    (2, 'plural', 'neutral')   : 'ustedes',
-
-    (3, 'plural', 'neutral')   : 'ellos/ellas',
-    (3, 'plural', 'masculine') : 'ellos',
-    (3, 'plural', 'feminine')  : 'ellas',
-}
 
 def get_entity_some(animity, is_implicit=False):
-    if animity == "animated":
+    if animity == Animity.animated:
         entity_some = somebody()
-    elif animity == "inanimate":
+    elif animity == Animity.inanimate:
         entity_some = something()
-    elif animity == "bianimate":
+    else:  # Animity.bianimate:
         entity_some = bianimate_something()
 
     if is_implicit:
@@ -39,38 +36,47 @@ def get_entity_some(animity, is_implicit=False):
 
     return entity_some
 
+
 def bianimate_something():
     return TacitEntity("algo", {"category": "pronoun", "number": "invariable", "gender": "neutral",
-                                "person": 3, "type": "indefinite", "case": None, "animity": "bianimate",
+                                "person": 3, "type": "indefinite", "case": None, "animity": Animity.bianimate,
                                 "semantic_classification": None})
+
 
 def somebody():
     return TacitEntity("alguien", {"category": "pronoun", "number": "invariable", "gender": "neutral",
-                                   "person": 3, "type": "indefinite", "case": None, "animity": "animated",
+                                   "person": 3, "type": "indefinite", "case": None, "animity": Animity.animated,
                                    "semantic_classification": None})
+
 
 def something():
     return TacitEntity("algo", {"category": "pronoun", "number": "invariable", "gender": "neutral",
-                                "person": 3, "type": "indefinite", "case": None, "animity": "inanimate",
+                                "person": 3, "type": "indefinite", "case": None, "animity": Animity.inanimate,
                                 "semantic_classification": None})
+
 
 def this():
     return TacitEntity("esto", {"category": "pronoun", "number": "singular", "gender": "neutral",
-                                "person": 3, "type": "demostrative", "case": None, "animity": "inanimate",
+                                "person": 3, "type": "demonstrative", "case": None, "animity": Animity.inanimate,
                                 "semantic_classification": None})
+
 
 def implicit(entity):
     entity.attributes = {"tacit": None, "implicit": None}
     return entity
 
+
 def implicit_somebody():
     return implicit(somebody())
+
 
 def implicit_something():
     return implicit(something())
 
+
 def implicit_bianimate_something():
     return implicit(bianimate_something())
+
 
 def tacit_subject_for(verb):
     gender = verb.msi['gender'] if verb.msi['gender'] else "neutral"

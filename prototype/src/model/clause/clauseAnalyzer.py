@@ -47,7 +47,7 @@ class ClauseAnalyzer:
     def analyze_order_for(self, clause):
         relative_solver_order = [ self.analyze_syntactically, self.solve_relative ]
 
-        if self.relative_needs_to_be_solved_first(clause):
+        if ClauseAnalyzer.relative_needs_to_be_solved_first(clause):
             relative_solver_order.reverse()
 
         return relative_solver_order + [self.solve_gerund,
@@ -56,13 +56,18 @@ class ClauseAnalyzer:
                                         self.find_unassigned_adjectives,
                                         self.find_time_references]
 
-    def relative_needs_to_be_solved_first(self, clause):
-        if not clause.is_relative(): return False
+    @staticmethod
+    def relative_needs_to_be_solved_first(clause):
+        if not clause.is_relative():
+            return False
+
+        is_equative_que = lambda clause: clause.relative_linker_words() == ["que"] \
+                                         and clause.voice \
+                                         and clause.verb.transitivity == "EQUATIVE"
 
         unique_destination_linkers = [ ["quien"], ["quienes"], ["cuyo"], ["cuya"], ["cuyos"], ["cuyas"], ["lo", "cual"]]
-        is_equative_que = lambda clause: clause.relative_linker_words() == ["que"] and clause.voice and \
-            clause.verb.transitivity == "EQUATIVE"
-        if clause.relative_linker_words() in unique_destination_linkers or is_equative_que(clause): return True
+        if clause.relative_linker_words() in unique_destination_linkers or is_equative_que(clause):
+            return True
 
     def perform_prior_relative_analysis_of(self, clause):
         if clause.is_relative():

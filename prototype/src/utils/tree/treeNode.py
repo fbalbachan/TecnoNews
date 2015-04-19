@@ -14,7 +14,7 @@ class TreeNode:
     def __iter__(self):
         return InDepthNodeIterator(self)
 
-    def leaves(self, iterator = InDepthNodeIterator):
+    def leaves(self, iterator=InDepthNodeIterator):
         return filter(lambda node: node.is_leaf(), iterator(self))
 
     def is_subordinated(self):
@@ -27,7 +27,7 @@ class TreeNode:
         level = 0
         father = self.father
         while father:
-            level = level + 1
+            level += 1
             father = father.father
         return level
 
@@ -56,9 +56,11 @@ class TreeNode:
     def is_equivalent_to(self, other):
         if len(self.children) != len(other.children):
             return False
-        return all( this.is_equivalent_to(that) for this, that in zip(self.children, other.children))
 
-    # El subárbol devuelto es independiente y es copia profunda del original.
+        is_equivalent = all(this.is_equivalent_to(that) for this, that in zip(self.children, other.children))
+        return is_equivalent
+
+    # El subárbol devuelto es independiente y copia profunda del original.
     def cloned_by_original(self, without_nodes):
         iterator = InDepthNodeIterator(self, without_nodes)
 
@@ -76,6 +78,7 @@ class TreeNode:
             cloned.children = []
 
             cloned_by_original[original_node] = cloned
+
         return cloned_by_original
 
     def root(self):
@@ -106,7 +109,8 @@ class TreeNode:
 
     def contains(self, node):
         for each in self:
-            if each is node: return True
+            if each is node:
+                return True
         return False
 
     @staticmethod

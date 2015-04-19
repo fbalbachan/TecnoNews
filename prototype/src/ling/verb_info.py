@@ -3,6 +3,7 @@ import ConfigParser
 
 from src.sentiment.verbalScript import VerbalScript
 from src.utils.csvwrapper import unicode_csv_reader
+from src.model.entity.animity import Animity
 from src.utils.configProvider import ConfigProvider
 
 
@@ -31,9 +32,9 @@ transitivity_values = {
 }
 
 animity_values = {
-    'Anim': 'animated',
-    'Bi': 'bianimate',
-    'No': 'inanimate'
+    'Anim': Animity.animated,
+    'Bi': Animity.bianimate,
+    'No': Animity.inanimate
 }
 
 scripts = {
@@ -73,7 +74,7 @@ def get_script_animity_for(verbLemma, roleName):
         result = verbs[lemma]['animity'][roleName]
 
     except KeyError:
-        result = "bianimate"
+        result = Animity.bianimate
 
     return result
 
@@ -85,7 +86,9 @@ verb_file =  Config.get("resources", "verbal_scripts")
 verb_file_reader = unicode_csv_reader(open(verb_file, 'r'), first_line_is_header = False, delimiter=',')
 verbs = {}
 
-for lemma, script_klass, transitivity_code, agentive_coef, objective_coef, subjAnimity_code, odAnimity_code in verb_file_reader:
+for lemma, script_klass, transitivity_code, agentive_coef, \
+    objective_coef, subjAnimity_code, odAnimity_code in verb_file_reader:
+
     coefs = []
     for coef in [agentive_coef, objective_coef]:
         coef = coef.strip()

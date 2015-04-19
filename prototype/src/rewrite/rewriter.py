@@ -15,7 +15,7 @@ from src.rewrite.strategy.modalDeberToTieneQue import ModalDeberToTieneQue
 from src.rewrite.strategy.pastCompoundToSimpleStrategy import PastCompoundToSimpleStrategy
 from src.rewrite.strategy.pastSimpleToCompoundStrategy import PastSimpleToCompoundStrategy
 from src.rewrite.strategy.segunToDijoDislocationStrategy import SegunToDijoDislocationStrategy
-from src.rewrite.strategy.subjuntiveImperfectStrategy import SubjuntiveImperfectStrategy
+from src.rewrite.strategy.subjunctiveImperfectStrategy import SubjunctiveImperfectStrategy
 from src.rewrite.strategy.synonymsStrategy import SynonymsStrategy
 from src.rewrite.strategy.tieneQueToModalDeber import TieneQueToModalDeber
 from src.rewrite.strategy.textualCite import TextualCite
@@ -34,7 +34,7 @@ class Rewriter:
                 PastSimpleToCompoundStrategy(ontology),
                 PastCompoundToSimpleStrategy(ontology),
 
-                SubjuntiveImperfectStrategy(ontology),
+                SubjunctiveImperfectStrategy(ontology),
 
                 FutureToGoConstructionStrategy(ontology),
                 GoConstructionToFutureStrategy(ontology),
@@ -135,7 +135,9 @@ class Rewriter:
                             self.append_if_not_overlaps(rewrite, replacements)
                     else:
                         self.append_if_not_overlaps(rewrites, replacements)
-            except: print format_exc()
+            except:
+                print format_exc()
+
         return replacements
 
     def append_if_not_overlaps(self, rewrite, rewrites):

@@ -1,5 +1,6 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 from src.model.entity.entity import Entity
+from src.model.entity.animity import Animity
 
 
 class SyntacticAnalyzer:
@@ -10,13 +11,13 @@ class SyntacticAnalyzer:
         # El orden en que se extraen las FSS es importante.
         for structure in clause.syntactic_structures:
             if structure.is_empty():
-                #print "\n\nEntities for ", structure.name, " before calculus", structure.all_entities(), "\n\n"
+                # print "\n\nEntities for ", structure.name, " before calculus", structure.all_entities(), "\n\n"
                 entities = getattr(self, structure.name, lambda: [])()
                 structure.append_all(entities)
-                #print "\n\nEntities for ", structure.name, " after calculus", structure.all_entities(), "\n\n"
+                # print "\n\nEntities for ", structure.name, " after calculus", structure.all_entities(), "\n\n"
 
     def subject(self):
-        #print "Entering SyntacticAnalyzer.subject()"
+        # print "Entering SyntacticAnalyzer.subject()"
         entities = self.clause.lonely_entities()
         return [ entities[0] ] if entities else []
 
@@ -116,7 +117,7 @@ class SyntacticAnalyzer:
         subord_entities = [item for sublist in all_subord_entities for item in sublist]
         return subord_entities
 
-    def search_pronoun_at(self, side, distance, animity="bianimate"):
+    def search_pronoun_at(self, side, distance, animity=Animity.bianimate):
         pronouns = self.only_pronouns_of(self.clause.entities_closest_to_verb_at(side, distance))
         pronouns = self.filter_by_animity(pronouns, animity)
 
@@ -140,7 +141,7 @@ class SyntacticAnalyzer:
 
     def only_valid_subject_entities_of(self, entities):
         is_valid_pronoun = lambda entity: entity.category() == "pronoun" \
-                                          and entity.msi["case"] in [None, "personal", "demostrative", "nominative"]
+                                          and entity.msi["case"] in [None, "personal", "demonstrative", "nominative"]
 
         valid_subject_entities = filter(lambda entity: not entity.node.label == "patons"
                                                        and (entity.category() in ["noun", "determinant"]

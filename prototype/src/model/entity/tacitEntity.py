@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from src.model.referent.referent import Referent
 from src.sentiment.entitySentimentalValue import EntitySentimentalValue
-from src.model.entity.animity import animities_match
+from src.model.entity.animity import Animity
 
 
 class TacitEntity:
@@ -11,7 +11,7 @@ class TacitEntity:
 
         self.lexical_form = lexical_form
         if 'animity' not in msi:
-            msi["animity"] = "inanimate"
+            msi["animity"] = Animity.inanimate
         self.msi = msi
         self.children = []
         self.owner = None
@@ -84,10 +84,10 @@ class TacitEntity:
         return True
 
     def animity_matches(self, animity):
-        return animities_match(self.msi["animity"], animity)
+        return Animity.animities_match(self.msi["animity"], animity)
 
     def matches_animity_of(self, entity):
-        return animities_match(self.msi["animity"], entity.msi["animity"])
+        return Animity.animities_match(self.msi["animity"], entity.msi["animity"])
 
     def is_linked(self):
         return bool(self.coref_chain)

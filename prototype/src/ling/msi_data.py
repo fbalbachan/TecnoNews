@@ -22,7 +22,7 @@ attribute_map = {"A": {1: ("type", {"Q": "calificative", "O": "ordinal", "0": No
 
                  "R": {1: ("type", {"G": "general", "N": "negative"})},
 
-                 "D": {1: ("type", {"D": "demostrative", "P": "possesive", "T": "interrogative", "E": "exclamative", "I": "indefinite", "A": "articulo"}),
+                 "D": {1: ("type", {"D": "demonstrative", "P": "possessive", "T": "interrogative", "E": "exclamative", "I": "indefinite", "A": "articulo"}),
                        2: ("person", {"1" : 1, "2": 2, "3": 3, "0": None}),
                        3: ("gender", {"M": "masculine", "F": "feminine", "C": "neutral", "N": "neutral"}),  # "common"
                        4: ("number", {"S": "singular", "P": "plural", "N": "singular"}),                     # "invariable"
@@ -35,13 +35,13 @@ attribute_map = {"A": {1: ("type", {"Q": "calificative", "O": "ordinal", "0": No
                        6: ("grade", {"A": "augmentative", "D": "diminutive", "0": None})},
 
                  "V": {1: ("type", {"M": "main", "A": "auxiliar", "S": "semiauxiliar"}),
-                       2: ("mode", {"I": "indicative", "S": "subjuntive", "M": "imperative", "N": "infinitive", "G": "gerundio", "P": "participio"}),
+                       2: ("mode", {"I": "indicative", "S": "subjunctive", "M": "imperative", "N": "infinitive", "G": "gerundio", "P": "participio"}),
                        3: ("time", {"P": "presente", "I": "imperfecto", "F": "futuro", "S": "pasado", "C": "condicional", "0": "singular"}),     # None
                        4: ("person", {"1" : 1, "2": 2, "3": 3, "0": None}),
                        5: ("number", {"S": "singular", "P": "plural", "0": None}),
                        6: ("gender", {"M": "masculine", "F": "feminine", "0": None})},
 
-                 "P": {1: ("type", {"P": "personal", "D": "demostrative", "X": "possesive", "I": "indefinite", "T": "interrogative", "R": "relative", "E": "exclamative", "0": None}),
+                 "P": {1: ("type", {"P": "personal", "D": "demonstrative", "X": "possessive", "I": "indefinite", "T": "interrogative", "R": "relative", "E": "exclamative", "0": None}),
                        2: ("person", {"1" : 1, "2": 2, "3": 3, "0": None}),
                        3: ("gender", {"M": "masculine", "F": "feminine", "C": "neutral", "N": "neutral", "0" : None}), # "common"
                        4: ("number", {"S": "singular", "P": "plural", "N": "impersonal/invariable", "0" : None}),

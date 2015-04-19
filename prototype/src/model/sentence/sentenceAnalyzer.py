@@ -16,30 +16,32 @@ class SentenceAnalyzer:
         self.invoker = Invoker()
 
     def analyze(self, sentence):
-        #print "Entering SentenceAnalyzer.analyze()"
+        # print "Entering SentenceAnalyzer.analyze()"
         self.set_parse_tree_to(sentence)
         TokenizationGuesser(sentence).guess()
 
-        sentence.clauses = ClauseExtractor().extract_from(sentence)
+        sentence.clauses = ClauseExtractor.extract_from(sentence)
 
         analyze_methods = [self.analyze_clauses_of,
-                           self.analyze_global_operators_of,
-                           self.analyze_sentimentally]
+                           SentenceAnalyzer.analyze_global_operators_of,
+                           SentenceAnalyzer.analyze_sentimentally]
 
         for method in analyze_methods:
             self.invoker.invoke(method, sentence)
 
-    def analyze_sentimentally(self, sentence):
+    @staticmethod
+    def analyze_sentimentally(sentence):
         sentimental_analyzer = SentimentalAnalyzer()
 
         for clause in sentence.clauses:
             sentimental_analyzer.analyze(clause)
 
-    def analyze_global_operators_of(self, sentence):
+    @staticmethod
+    def analyze_global_operators_of(sentence):
         GlobalOperatorAnalyzer(sentence).analyze()
 
     def analyze_clauses_of(self, sentence):
-        #print "Entering analyze_clauses_of"
+        # print "Entering analyze_clauses_of"
         self.context["clauses"] = []
         clause_analyzer = ClauseAnalyzer()
         clause_analyzer.context = self.context

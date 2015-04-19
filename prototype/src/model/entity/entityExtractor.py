@@ -1,4 +1,4 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 from src.model.entity.entity import Entity
 from src.model.entity.entityMSISeer import EntityMSISeer
 from src.parser.parseNode import ParseNode
@@ -10,21 +10,22 @@ class EntityExtractor:
         self.clause = clause
 
     def extract(self):
-        #print "Entering extract()"
+        # print "Entering EntityExtractor.extract()"
         root = self.clause.proper_tree()
         entity_nodes = root.nodes_with_labels(self.entity_labels) + self.infinitive_structures() + \
             self.relative_abnormal_nodes()
 
         entities = self.entities_for(entity_nodes)
-        entities = sorted(entities, key = lambda entity: entity.node.level(), reverse = True)
+        entities = sorted(entities, key=lambda entity: entity.node.level(), reverse = True)
         entities = self.remove_invalid_coordinated(entities)
 
         self.assign_msi(entities)
-        self.compute_proper_tree_for(entities)
+        EntityExtractor.compute_proper_tree_for(entities)
 
         return entities
 
-    def compute_proper_tree_for(self, entities):
+    @staticmethod
+    def compute_proper_tree_for(entities):
         for entity in entities:
             original = entity.node
             foreign_nodes = [ child.node for child in entity.children ]
@@ -33,7 +34,7 @@ class EntityExtractor:
     def remove_invalid_coordinated(self, entities):
         return filter(lambda entity: not (entity.node.label == "coor-n" and len(entity.children) == 1), entities)
 
-    def entities_for(self, nodes, attributes = []):
+    def entities_for(self, nodes, attributes=[]):
         entities_by_node = {}
 
         by_level = ParseNode.by_level(nodes)
@@ -66,15 +67,17 @@ class EntityExtractor:
             entity.msi = entity_msi_seer.msi_of(entity)
 
     def relative_abnormal_nodes(self):
-        desired_labels = [ "grup-nom-ms", "grup-nom-fs", "grup-nom-mp", "grup-nom-fp" ]
+        desired_labels = ["grup-nom-ms", "grup-nom-fs", "grup-nom-mp", "grup-nom-fp"]
         root = self.clause.proper_tree()
-        return filter(lambda node: node.father.subordinates_others(), root.nodes_with_labels(desired_labels))
+
+        return filter(lambda node: node.father.subordinates_others(),
+                      root.nodes_with_labels(desired_labels))
 
     def infinitive_structures(self):
         clause = self.clause
         root = clause.proper_tree()
         return root.nodes_with_labels(["grup-verb-inf"])
 
-    attributes_by_label = { "grup-verb-inf" : [("infinitive", None)], "coor-n": [("coordinated", None)] }
+    attributes_by_label = {"grup-verb-inf": [("infinitive", None)], "coor-n": [("coordinated", None)]}
 
     entity_labels = ["sn", "patons", "ptonic", "coor-n"]

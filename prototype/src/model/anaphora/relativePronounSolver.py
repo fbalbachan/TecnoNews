@@ -10,8 +10,8 @@ class RelativePronounSolver:
     def solve(self):
         clause = self.clause
 
-        if self.is_possesive_relative():
-            self.solve_possesive_relative()
+        if self.is_possessive_relative():
+            self.solve_possessive_relative()
 
         elif self.is_undefined_relative():
             self.solve_undefined_relative()
@@ -31,17 +31,17 @@ class RelativePronounSolver:
         destination_by_voice = { "active" : "subject", "passive" : "od" }
         destination = clause.structure(destination_by_voice[clause.voice])
 
-        msi = { "category" : "pronoun", "type" : "demostrative", "gender" : "neutral", "person" : 3,
-               "number" : "singular", "case" : None, "semantic_classification": None }
+        msi = {"category": "pronoun", "type": "demonstrative", "gender": "neutral", "person": 3,
+               "number": "singular", "case": None, "semantic_classification": None}
         undefined_pronoun = TacitEntity("eso", msi)
 
         destination.append(undefined_pronoun)
 
-    def is_possesive_relative(self):
+    def is_possessive_relative(self):
         pronoun = self.linker[0].lexical_form
         return pronoun in [ "cuyo", "cuya", "cuyos", "cuyas" ]
 
-    def solve_possesive_relative(self):
+    def solve_possessive_relative(self):
         clause = self.clause
         possessed_entity = clause.sorted(clause.lonely_entities(), False)[0]
         possessed_entity.owner = clause.relative_entity

@@ -29,7 +29,7 @@ class GlobalOperatorAnalyzer:
 
     def setup_finders(self):
         self.finders = [ self.negation_finder, self.conditional_verb_finder, self.imperative_finder,
-            self.possibility_word_finder, self.subjuntive_finder, self.verb_poder_finder, self.deontic_modality_finder,
+            self.possibility_word_finder, self.subjunctive_finder, self.verb_poder_finder, self.deontic_modality_finder,
             self.future_finder, self.volitive_finder, self.verbs_with_subordinated_finder, self.condition_finder,
             self.subord_with_header_finder, self.modal_verb_deber_finder, self.modal_verbs_of_possibility_finder ]
 
@@ -75,7 +75,7 @@ class GlobalOperatorAnalyzer:
         if clause.voice and clause.verb.leaves()[0].lemma == "poder":
             return [ GlobalOperator("possibility", clause.verb)]
 
-    def subjuntive_finder(self, clause):
+    def subjunctive_finder(self, clause):
         if clause.voice and clause.verb.leaves()[0].msi["mode"] == "subjuntive" and (clause.is_relative() or \
             (clause.is_subordinated() and clause.proper_leaves()[0].lemma == "cuando")):
             return [ GlobalOperator("possibility", clause.verb)]

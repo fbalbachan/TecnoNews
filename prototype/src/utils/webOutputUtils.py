@@ -29,7 +29,8 @@ class WebOutputUtils:
     def entity_tooltip(self, entity):
         tooltip = self.msi_string(entity.msi)
 
-        if ( entity.category() == "noun" or entity.category() == "pronoun" ) and "animity" in entity.msi:
+        if (entity.category() == "noun" or entity.category() == "pronoun") \
+           and "animity" in entity.msi:
             tooltip = tooltip + " " + entity.msi["animity"]
 
         if entity.category() == "noun" and entity.msi["type"] == "proper":

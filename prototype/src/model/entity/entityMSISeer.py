@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from src.model.entity.entitySemanticAnalyzer import EntitySemanticAnalyzer
-from src.utils.resources import instance as resources
+from src.model.entity.animity import Animity
+
 import ConfigParser
 
 class EntityMSISeer:
@@ -98,25 +99,25 @@ class EntityMSISeer:
                  "number" : "singular", "type" : None, "semantic_classification" : None }
 
     def calculate_animity_for(self, entity):
-        defaultAnimityValue = "inanimate"
+        defaultAnimityValue = Animity.inanimate
 
         # If the entity had an animity value, other than the default, then return it (assuming it was previously calculated).
         if "animity" in entity.msi and entity.msi["animity"] is not defaultAnimityValue:
             return entity.msi["animity"]
 
         elif entity.has_attr("implicit") or entity.node.label in ["grup-verb-inf"]:
-            return "inanimate"
+            return Animity.inanimate
 
         # Entities with 1 token being a "paton" or "ptonic"
         elif len(entity.token.components) is 1 and entity.node.label in ["patons","ptonic"]:
             if entity.msi['person'] in [1,2]:
-                return "animated"
+                return Animity.animated
 
             if entity.msi['person'] is 3 and entity.msi['case'] == "dative":
-                return "animated"
+                return Animity.animated
 
             if entity.msi['person'] is 3:
-                return "bianimate"
+                return Animity.bianimate
 
         # if it has kernel, return kernel's animity
         elif entity.kernel:
@@ -144,16 +145,16 @@ class EntityMSISeer:
             lemma = unicode(lemma, "utf-8")
 
         if msi['category'] is "pronoun" and msi['type'] is "personal" and msi['person'] in [1,2]:
-            animity = "animated"
+            animity = Animity.animated
 
         elif msi['category'] is "pronoun" and msi['type'] is "personal" and msi['case'] is "dative":
-            animity = "animated"
+            animity = Animity.animated
 
         elif msi['category'] is "pronoun" and msi['type'] is "personal" and msi['person'] is 3:
-            animity = "bianimate"
+            animity = Animity.bianimate
 
         elif msi['category'] is "pronoun" and msi['type'] is "indefinite" and lemma in ["alguien","nadie"]:
-            animity = "animated"
+            animity = Animity.animated
 
         #check lemma against resources
         elif lemma in (self.persons + self.demonyms + self.animals) \
@@ -162,11 +163,11 @@ class EntityMSISeer:
                      or msi['semantic_classification'] == 'organization'
                      or msi['semantic_classification'] == 'other'):
 
-            animity = "animated"
+            animity = Animity.animated
 
         else:
-            defaultAnimityValue = "inanimate"
-            animity = defaultAnimityValue
+            default_animity_value = Animity.inanimate
+            animity = default_animity_value
 
         return animity
 
@@ -191,11 +192,11 @@ class EntityMSISeer:
 
     # Module Globals
     msi_seer_by_label = {"sn" : msi_of_single,
-                         "grup-nom-ms" : msi_of_single,
-                         "grup-nom-fs" : msi_of_single,
-                         "grup-nom-mp" : msi_of_single,
-                         "grup-nom-fp" : msi_of_single,
-                         "coor-n" : msi_of_coordinated,
-                         "patons" : msi_of_leaf,
-                         "ptonic" : msi_of_leaf,
-                         "grup-verb-inf" : msi_of_infinity}
+                         "grup-nom-ms": msi_of_single,
+                         "grup-nom-fs": msi_of_single,
+                         "grup-nom-mp": msi_of_single,
+                         "grup-nom-fp": msi_of_single,
+                         "coor-n": msi_of_coordinated,
+                         "patons": msi_of_leaf,
+                         "ptonic": msi_of_leaf,
+                         "grup-verb-inf": msi_of_infinity}

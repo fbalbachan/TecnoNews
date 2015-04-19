@@ -1,7 +1,7 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 from src.model.anaphora.personalPronounCoreferenceSearcher import PersonalPronounCoreferenceSearcher
 from src.model.entity.verb import Verb
-from src.model.entity.animity import most_specific
+from src.model.entity.animity import Animity
 
 class PersonalPronounSolver:
     def __init__(self, clause, context):
@@ -19,7 +19,7 @@ class PersonalPronounSolver:
             if structure.name in Verb.boxes_with_scripted_animity:
                 verbal_animity = self.clause.verb.get_script_animity_for(structure.name)
                 if referenced_entity.animity_matches(verbal_animity):
-                    pronoun.msi["animity"] = most_specific(verbal_animity,referenced_entity.msi["animity"])
+                    pronoun.msi["animity"] = Animity.most_specific(verbal_animity,referenced_entity.msi["animity"])
                     pronoun.add_coreference(referenced_entity)
             else:
                 pronoun.add_coreference(referenced_entity)

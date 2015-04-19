@@ -48,7 +48,7 @@ class Clause(TreeNode):
         return [ leaf.lexical_form for leaf in self.relative_linker ]
 
     def original_by_proper(self, proper):
-        original_by_proper = { v : k for k, v in self.proper_by_original.items()}
+        original_by_proper = {v: k for k, v in self.proper_by_original.items()}
         return original_by_proper[proper]
 
     def entity_by_original(self, node):
@@ -62,19 +62,25 @@ class Clause(TreeNode):
     def is_relative(self):
         root = self.proper_tree()
         leaves = root.leaves()
-        return root.label in [ "subord", "subord-rel" ] and \
-            bool(filter(lambda leaf: leaf.msi["category"] == "pronoun"
-                                     and leaf.msi["type"] == "relative",
-                        leaves))
+
+        relative_pronouns = filter(lambda leaf: leaf.msi["category"] == "pronoun"
+                                                and leaf.msi["type"] == "relative",
+                                   leaves)
+
+        there_are_relative_pronouns = bool(relative_pronouns)
+
+        return root.label in ["subord", "subord-rel"] and there_are_relative_pronouns
 
     def is_subordinated_with(self, header_lexical_form):
-        return self.is_subordinated_with_any([ header_lexical_form ])
+        return self.is_subordinated_with_any([header_lexical_form])
 
     def is_subordinated_with_any(self, header_lexical_forms):
         if self.is_subordinated() and not self.is_relative():
             header = self.proper_leaves()[0]
-            return header.msi["category"] == "conjunction" and header.msi["type"] == "subordinated" and \
-                header.lexical_form in header_lexical_forms
+            return header.msi["category"] == "conjunction" \
+                   and header.msi["type"] == "subordinated" \
+                   and header.lexical_form in header_lexical_forms
+
         return False
 
     def is_gerund(self):

@@ -1,4 +1,4 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 from src.utils.tree.treeNode import TreeNode
 
 
@@ -36,5 +36,5 @@ class ParseNode(TreeNode):
     def is_subordinate(self):
         return any( (node.subordinates_others() for node in self.path_to_root()) )
 
-    def label_node_chlidren(self):
+    def label_node_children(self):
         return filter(lambda child: not child.is_leaf(), self.children)
