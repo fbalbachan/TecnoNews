@@ -76,23 +76,23 @@ class GlobalOperatorAnalyzer:
             return [ GlobalOperator("possibility", clause.verb)]
 
     def subjunctive_finder(self, clause):
-        if clause.voice and clause.verb.leaves()[0].msi["mode"] == "subjuntive" and (clause.is_relative() or \
-            (clause.is_subordinated() and clause.proper_leaves()[0].lemma == "cuando")):
+        if clause.voice and clause.verb.leaves()[0].msi["mode"] == "subjunctive" and (clause.is_relative()
+          or (clause.is_subordinated() and clause.proper_leaves()[0].lemma == "cuando")):
             return [ GlobalOperator("possibility", clause.verb)]
 
     def possibility_word_finder(self, clause):
-        possibility_forms = [ "probablemente", "posiblemente", "supuestamente", "aparentemente", "tal_vez", "acaso",
-                             "quizá", "quizás" ]
+        possibility_forms = ["probablemente", "posiblemente", "supuestamente", "aparentemente",
+                             "tal_vez", "acaso", "quizá", "quizás"]
         leaves = filter(lambda leaf: leaf.lexical_form in possibility_forms, clause.proper_leaves())
-        return [ GlobalOperator("possibility", leaf) for leaf in leaves ]
+        return [GlobalOperator("possibility", leaf) for leaf in leaves]
 
     def imperative_finder(self, clause):
         if clause.voice and clause.verb.leaves()[0].msi["mode"] == "imperative":
-            return [ GlobalOperator("imperative", clause.verb)]
+            return [GlobalOperator("imperative", clause.verb)]
 
     def conditional_verb_finder(self, clause):
         if clause.voice and clause.verb.leaves()[0].msi["time"] == "condicional":
-            return [ GlobalOperator("possibility", clause.verb)]
+            return [GlobalOperator("possibility", clause.verb)]
 
     def negation_finder(self, clause):
         return NegativeParticleFinder(clause).find()

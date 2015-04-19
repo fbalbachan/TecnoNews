@@ -9,7 +9,7 @@ class SubjunctiveImperfectStrategy:
 
     def applies_to(self, clause):
         verb = clause.verb
-        return clause.voice == "active" and verb.matches_msi({ "mode" : "subjuntive", "time" : "imperfecto" }) \
+        return clause.voice == "active" and verb.matches_msi({"mode": "subjunctive", "time" : "imperfecto"}) \
             and not verb.is_locution()
 
     def rewrite(self, clause):
@@ -17,13 +17,16 @@ class SubjunctiveImperfectStrategy:
         verb = clause.verb
         leaf = verb.leaf()
 
-        lexical_forms = ontology.get_lexical_forms(leaf.lemma, self.msi_for(leaf))
-        rewrited_verb = filter(lambda lf: lf.text != leaf.lexical_form, lexical_forms)[0].text
+        lexical_forms = ontology.get_lexical_forms(leaf.lemma, SubjunctiveImperfectStrategy.msi_for(leaf))
+        rewritten_verb = filter(lambda lf: lf.text != leaf.lexical_form, lexical_forms)[0].text
 
-        return Rewrite.preserving_case(verb.node, rewrited_verb)
+        return Rewrite.preserving_case(verb.node, rewritten_verb)
 
-    def msi_for(self, verb):
+
+    @staticmethod
+    def msi_for(verb):
         msi = verb.msi
-        return { "mode" : "subjuntive", "time" : "imperfecto", "person" : msi["person"], "number" : msi["number"]}
+        return {"mode": "subjunctive", "time": "imperfecto",
+                "person": msi["person"], "number": msi["number"]}
 
     type = "replacement"

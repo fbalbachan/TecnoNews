@@ -17,12 +17,13 @@ class GoConstructionToFutureStrategy:
         verb = clause.verb
         ir_leaf = verb.leaves()[0]
 
-        rewrited_verb = ontology.get_lexical_form(verb.lemma(), self.msi_for(ir_leaf)).text
+        rewritten_verb = ontology.get_lexical_form(verb.lemma(), GoConstructionToFutureStrategy.msi_for(ir_leaf)).text
 
-        return Rewrite.preserving_case(verb.node, rewrited_verb)
+        return Rewrite.preserving_case(verb.node, rewritten_verb)
 
-    def msi_for(self, verb):
+    @staticmethod
+    def msi_for(verb):
         msi = verb.msi
-        return { "mode" : "indicative", "time" : "futuro", "person" : msi["person"], "number" : msi["number"]}
+        return {"mode": "indicative", "time": "futuro", "person": msi["person"], "number": msi["number"]}
 
     type = "replacement"

@@ -45,7 +45,7 @@ class ClauseAnalyzer:
             clause.attributes.append("pseudo_cataphoric")
 
     def analyze_order_for(self, clause):
-        relative_solver_order = [ self.analyze_syntactically, self.solve_relative ]
+        relative_solver_order = [self.analyze_syntactically, self.solve_relative]
 
         if ClauseAnalyzer.relative_needs_to_be_solved_first(clause):
             relative_solver_order.reverse()
@@ -65,8 +65,11 @@ class ClauseAnalyzer:
                                          and clause.voice \
                                          and clause.verb.transitivity == "EQUATIVE"
 
-        unique_destination_linkers = [ ["quien"], ["quienes"], ["cuyo"], ["cuya"], ["cuyos"], ["cuyas"], ["lo", "cual"]]
-        if clause.relative_linker_words() in unique_destination_linkers or is_equative_que(clause):
+        unique_destination_linkers = [["quien"], ["quienes"], ["cuyo"], ["cuya"], ["cuyos"], ["cuyas"],
+                                      ["lo", "cual"]]
+
+        if clause.relative_linker_words() in unique_destination_linkers \
+           or is_equative_que(clause):
             return True
 
     def perform_prior_relative_analysis_of(self, clause):

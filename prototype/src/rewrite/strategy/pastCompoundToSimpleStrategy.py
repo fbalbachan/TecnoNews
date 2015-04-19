@@ -19,14 +19,17 @@ class PastCompoundToSimpleStrategy:
         inflected_leaf = verb.leaves()[0]
         action_leaf = verb.modal_verb() if verb.has_modal() else verb.leaf()
 
-        lf = ontology.get_lexical_form(action_leaf.lemma, self.msi_for(inflected_leaf))
+        lf = ontology.get_lexical_form(action_leaf.lemma, PastCompoundToSimpleStrategy.msi_for(inflected_leaf))
 
-        rewrited_verb = lf.text
-        if verb.has_modal(): rewrited_verb += " " + verb.leaf().lexical_form
+        rewritten_verb = lf.text
+        if verb.has_modal():
+            rewritten_verb += " " + verb.leaf().lexical_form
 
-        return Rewrite.preserving_case(verb.node, rewrited_verb)
+        return Rewrite.preserving_case(verb.node, rewritten_verb)
 
-    def msi_for(self, verb):
+
+    @staticmethod
+    def msi_for(verb):
         msi = verb.msi
         return { "mode" : "indicative", "time" : "pasado", "person" : msi["person"], "number" : msi["number"]}
 

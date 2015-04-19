@@ -100,17 +100,30 @@ class RelativePronounSolver:
     def guess_linker_leaves(clause):
         leaves = clause.proper_tree().leaves()
         linker = []
-        last_leaf_of_relative = clause.relative_entity.leaves()[-1] # Parche por bug de freeling (ej. 'con la que')
-        if last_leaf_of_relative.msi["category"] == "adposition": linker.append(last_leaf_of_relative)
 
-        category_sequences = [ [ "adposition", "determinant", "pronoun" ], [ "adposition", "pronoun" ] ]
+        # Parche por bug de freeling (ej. 'con la que')
+        last_leaf_of_relative = clause.relative_entity.leaves()[-1]
+        if last_leaf_of_relative.msi["category"] == "adposition":
+            linker.append(last_leaf_of_relative)
+
+        category_sequences = [["adposition", "determinant", "pronoun"],
+                              ["adposition", "pronoun"]]
+
         for category_sequence in category_sequences:
             while category_sequence:
+
                 arranged = zip(category_sequence, leaves)
-                if all([ leaf.msi["category"] == expected_category for (expected_category, leaf) in arranged ]):
+
+                initial_leaves_match_category_seq = \
+                    all([leaf.msi["category"] == expected_category for (expected_category, leaf) in arranged])
+
+                if initial_leaves_match_category_seq:
                     category_sequence = []
                     linker.extend(zip(*arranged)[1])
                 else:
                     category_sequence = category_sequence[1:]
-            if linker: break
+
+            if linker:
+                break
+
         return linker

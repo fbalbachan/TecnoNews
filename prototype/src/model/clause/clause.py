@@ -45,7 +45,7 @@ class Clause(TreeNode):
         return bool(filter(lambda operator: operator.klass in classes, self.global_operators))
 
     def relative_linker_words(self):
-        return [ leaf.lexical_form for leaf in self.relative_linker ]
+        return [leaf.lexical_form for leaf in self.relative_linker]
 
     def original_by_proper(self, proper):
         original_by_proper = {v: k for k, v in self.proper_by_original.items()}
@@ -167,7 +167,7 @@ class Clause(TreeNode):
             last_node = node
         return entities
 
-    def to_entities_with_node(self, nodes, which = lambda entity, node: entity.node == node, entities = None):
+    def to_entities_with_node(self, nodes, which=lambda entity, node: entity.node == node, entities=None):
         if not entities:
             entities = self.lonely_entities()
 

@@ -17,13 +17,15 @@ class TieneQueToModalDeber:
 
         action_leaf = verb.leaf()
 
-        lf = ontology.get_lexical_form("deber", self.msi_for(verb))
+        lf = ontology.get_lexical_form("deber", TieneQueToModalDeber.msi_for(verb))
 
-        rewrited_verb = lf.text + " " + repr(action_leaf)
+        rewritten_verb = lf.text + " " + repr(action_leaf)
 
-        return Rewrite.preserving_case(verb.node, rewrited_verb)
+        return Rewrite.preserving_case(verb.node, rewritten_verb)
 
-    def msi_for(self, verb):
+
+    @staticmethod
+    def msi_for(verb):
         msi = verb.msi
         return { attr: value for attr, value in msi.items() if attr in ["category", "number", "person", "mode", "time"] }
 
