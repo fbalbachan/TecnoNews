@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from src.model.syntax.syntacticStructureEntityValidator import SyntacticStructureEntityValidator
 
+
 class SyntacticStructure:
     def __init__(self, name, clause):
         self.name = name
@@ -16,13 +17,14 @@ class SyntacticStructure:
         self.append(new_entity)
 
     def remove(self, entity):
-        for entity_list in [ self.entities, self.tacit_entities ]:
+        for entity_list in [self.entities, self.tacit_entities]:
             if entity in entity_list:
                 entity_list.remove(entity)
                 break
 
     def append_all(self, entities):
-        for entity in entities: self.append(entity)
+        for entity in entities:
+            self.append(entity)
 
     def append(self, entity):
         if not self.accept(entity):

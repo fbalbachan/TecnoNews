@@ -2,11 +2,11 @@
 from src.model.referent.referent import Referent
 from src.sentiment.entitySentimentalValue import EntitySentimentalValue
 from src.model.entity.animity import Animity
-
+from collections import deque
 
 class TacitEntity:
 
-    # Cuidado! El diccionario attributes se instancia siempre con una referencia al mismo diccionario default!
+    # Warning! The dictionary of attributes is always instantiated with a reference to the same default dictionary!
     def __init__(self, lexical_form, msi, attributes={"tacit": None}):
 
         self.lexical_form = lexical_form
@@ -61,18 +61,23 @@ class TacitEntity:
                   and self.matches_gender_of(entity)
         return matches
 
-    def matches_number_of(self, entity):
+    def number_matches(self, number):
         msi = self.msi
         return msi["number"] == "invariable" \
-               or entity.msi["number"] == "invariable" \
-               or msi["number"] == entity.msi["number"]
+               or number == "invariable" \
+               or msi["number"] == number
+
+    def matches_number_of(self, entity):
+        return self.number_matches(entity.msi["number"])
+
+    def gender_matches(self, gender):
+        neutral_genders = ["neutral", "common"]
+        return self.msi["gender"] in neutral_genders \
+               or gender in neutral_genders \
+               or self.msi["gender"] == gender
 
     def matches_gender_of(self, entity):
-        neutral_genders = ["neutral", "common"]
-        msi = self.msi
-        return msi["gender"] in neutral_genders \
-               or entity.msi["gender"] in neutral_genders \
-               or msi["gender"] == entity.msi["gender"]
+        return self.gender_matches(entity.msi["gender"])
 
     def matches_msi(self, msi):
         for key, value in msi.items():
@@ -97,6 +102,21 @@ class TacitEntity:
 
     def is_coordinated(self):
         return self.has_attr("coordinated")
+
+    def get_nested_entities(self, include_myself=False):
+        nested_entities = []
+        q = deque()
+
+        if include_myself:
+            nested_entities.append(self)
+
+        q.extend(self.children)
+        while len(q) > 0:
+            next_entity = q.popleft()
+            nested_entities.append(next_entity)
+            q.extend(next_entity.children)
+
+        return nested_entities
 
     def has_attr(self, attribute):
         return attribute in self.attributes

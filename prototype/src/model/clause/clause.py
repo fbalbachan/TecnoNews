@@ -1,4 +1,4 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 from src.utils.tree.treeNode import TreeNode
 
 
@@ -39,7 +39,7 @@ class Clause(TreeNode):
 
     def has_kind_of_cataphoric_structure(self):
         return self.verb.transitivity == "EQUATIVE" and \
-            any(( child.is_subordinated_with("que") for child in self.children ))
+               any((child.is_subordinated_with("que") for child in self.children))
 
     def has_global_operator_of(self, *classes):
         return bool(filter(lambda operator: operator.klass in classes, self.global_operators))
@@ -71,6 +71,64 @@ class Clause(TreeNode):
 
         return root.label in ["subord", "subord-rel"] and there_are_relative_pronouns
 
+    def is_quien_relative(self):
+        if not self.is_relative():
+            return False
+
+        is_quien_vector = map(lambda word: word in ["quien", "quienes", "quién", "quiénes"], self.relative_linker_words())
+        return any(is_quien_vector)
+
+    def is_cuyo_relative(self):
+        if not self.is_relative():
+            return False
+        is_cuyo_vector = map(lambda word: word in ["cuyo", "cuya", "cuyos", "cuyas"], self.relative_linker_words())
+        return any(is_cuyo_vector)
+
+    def try_to_get_number_from_relative_linker(self):
+        if not self.is_relative():
+            raise Exception("La cláusula no es una relativa (", str(self), ").")
+
+        # ["los", "las", "cuyos", "cuyas", "quienes", "quiénes", "cuales", "cuáles"],
+        is_plural_vector = map(lambda leaf: leaf.msi["number"] is "plural", self.relative_linker)
+        # ["el", "la", "lo", "cuyo", "cuya", "quien", "quién", "cual", "cuál"]
+        is_singular_vector = map(lambda leaf: leaf.msi["number"] is "singular", self.relative_linker)
+        is_invariable_vector = map(lambda leaf: leaf.msi["number"] is "invariable", self.relative_linker)
+        is_impersonal_invariable_vector = map(lambda leaf: leaf.msi["number"] is "impersonal/invariable", self.relative_linker)
+
+        if any(is_singular_vector):
+            number = "singular"
+        elif any(is_plural_vector):
+            number = "plural"
+        elif any(is_invariable_vector):
+            number = "invariable"
+        elif any(is_impersonal_invariable_vector):
+            number = "impersonal/invariable"
+        else:
+            number = None
+
+        return number
+
+    def try_to_get_gender_from_relative_linker(self):
+        if not self.is_relative():
+            raise Exception("La cláusula no es una relativa (", str(self), ").")
+
+        # "el", "los", "cuyo", "cuyos"
+        is_masculine_vector = map(lambda leaf: leaf.msi["gender"] is "masculine", self.relative_linker)
+        # "la", "las", "cuya", "cuyas"
+        is_feminine_vector = map(lambda leaf: leaf.msi["gender"] is "feminine", self.relative_linker)
+        is_neutral_vector = map(lambda leaf: leaf.msi["gender"] is "neutral", self.relative_linker)
+
+        if any(is_masculine_vector):
+            gender = "masculine"
+        elif any(is_feminine_vector):
+            gender = "feminine"
+        elif any(is_neutral_vector):
+            gender = "neutral"
+        else:
+            gender = None
+
+        return gender
+
     def is_subordinated_with(self, header_lexical_form):
         return self.is_subordinated_with_any([header_lexical_form])
 
@@ -87,10 +145,11 @@ class Clause(TreeNode):
         return self.verb.msi["mode"] == "gerundio"
 
     def has_structure(self, name):
-        return name in [ structure.name for structure in self.syntactic_structures ]
+        return name in [structure.name for structure in self.syntactic_structures]
 
     def structure(self, name):
-        return filter(lambda structure: structure.name == name, self.syntactic_structures)[0]
+        return filter(lambda structure: structure.name == name,
+                      self.syntactic_structures)[0]
 
     def subord_entities_closest_to_verb_at(self, side, allowed_distance, which_node=lambda node: True):
         which = lambda entity, node: entity.is_subordinated() \
@@ -100,14 +159,14 @@ class Clause(TreeNode):
 
         return self.grouped_by_node(entities_with_node)
 
-    def subord_entities(self, which_node = lambda node: True):
+    def subord_entities(self, which_node=lambda node: True):
         which = lambda entity, node: entity.is_subordinated() and entity.highest_subordinating_node() == node \
-                    and which_node(node)
+                                     and which_node(node)
         entities_with_node = self.to_entities_with_node(list(self.proper_tree()), which)
         return self.grouped_by_node(entities_with_node)
 
     def verb_level_entities(self):
-        by_component = zip(*self.to_entities_with_node(self.verb_level_nodes(), entities = self.entities))
+        by_component = zip(*self.to_entities_with_node(self.verb_level_nodes(), entities=self.entities))
         return list(by_component[0]) if by_component else []
 
     def entities_closest_to_verb(self, *sides_and_distances):
@@ -116,7 +175,7 @@ class Clause(TreeNode):
             entities.extend(self.entities_closest_to_verb_at(side, distance))
         return entities
 
-    def entities_closest_to_verb_at(self, side, allowed_distance = float("inf")):
+    def entities_closest_to_verb_at(self, side, allowed_distance=float("inf")):
         by_component = zip(*self.to_entities_with_node(self.nodes_closest_to_verb_at(side, allowed_distance)))
         entities = list(by_component[0]) if by_component else []
         return entities
@@ -139,22 +198,22 @@ class Clause(TreeNode):
         return tacit_value if entity.is_tacit() else self.proper_leaves().index(entity.leaves()[0])
 
     def sorted(self, entities, tacit_first):
-        return sorted(entities, key = lambda entity: self.index_of(entity, tacit_first) )
+        return sorted(entities, key=lambda entity: self.index_of(entity, tacit_first))
 
     def lonely_entities(self):
         assigned_entities = self.assigned_entities()
-        return [ entity for entity in self.entities if entity not in assigned_entities
-                and not any([ assigned.contains(entity) for assigned in assigned_entities ]) ]
+        return [entity for entity in self.entities if entity not in assigned_entities
+                and not any([assigned.contains(entity) for assigned in assigned_entities])]
 
     def tacit_entities(self):
-        return sum([ structure.tacit_entities for structure in self.syntactic_structures ], [])
+        return sum([structure.tacit_entities for structure in self.syntactic_structures], [])
 
     def assigned_entities(self):
-        return sum([ structure.entities for structure in self.syntactic_structures ], [])
+        return sum([structure.entities for structure in self.syntactic_structures], [])
 
     def assigned_entities_with_referenced_ones(self):
-        return [ entity.referenced() if entity.is_linked() else entity for entity in self.assigned_entities() + \
-                self.tacit_entities() ]
+        return [entity.referenced() if entity.is_linked() else entity for entity in self.assigned_entities() + \
+                self.tacit_entities()]
 
     def grouped_by_node(self, entities_with_node):
         entities = []
@@ -205,4 +264,4 @@ class Clause(TreeNode):
         return self.proper_tree().leaves()
 
     def __repr__(self):
-        return " ".join([ str(leaf)for leaf in self.proper_leaves()])
+        return " ".join([str(leaf) for leaf in self.proper_leaves()])

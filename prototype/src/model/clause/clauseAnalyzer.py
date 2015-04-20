@@ -32,33 +32,26 @@ class ClauseAnalyzer:
 
         ClauseAnalyzer.perform_prior_relative_analysis_of(clause)
 
-        analyze_methods = self.get_analyzer_solver_and_finder_methods(clause)
+        analyze_methods = self.get_analyzer_solver_and_finder_methods_in_order(clause)
         for method in analyze_methods:
             method(clause)
 
         ClauseAnalyzer.analyze_kind_of_cataphoric_structure_of(clause)
 
-    @staticmethod
-    def analyze_kind_of_cataphoric_structure_of(clause):
-        if clause.has_structure("subject") \
-           and clause.structure("subject").is_tacit() \
-           and clause.has_kind_of_cataphoric_structure():
+    def get_analyzer_solver_and_finder_methods_in_order(self, clause):
 
-            clause.attributes.append("pseudo_cataphoric")
-
-    def get_analyzer_solver_and_finder_methods(self, clause):
-
-        methods = [ClauseAnalyzer.analyze_syntactically,
-                   ClauseAnalyzer.solve_relative]
+        syntactic_relative_methods_in_order = [ClauseAnalyzer.analyze_syntactically,
+                                               ClauseAnalyzer.solve_relative]
 
         if ClauseAnalyzer.relative_needs_to_be_solved_first(clause):
-            methods.reverse()
+            syntactic_relative_methods_in_order.reverse()
 
-        methods += [ClauseAnalyzer.solve_gerund,
-                    self.solve_personal_pronouns,
-                    ClauseAnalyzer.find_adverbs,
-                    ClauseAnalyzer.find_unassigned_adjectives,
-                    ClauseAnalyzer.find_time_references]
+        methods = syntactic_relative_methods_in_order + \
+                  [ClauseAnalyzer.solve_gerund,
+                   self.solve_personal_pronouns,
+                   ClauseAnalyzer.find_adverbs,
+                   ClauseAnalyzer.find_unassigned_adjectives,
+                   ClauseAnalyzer.find_time_references]
         return methods
 
     @staticmethod
@@ -66,9 +59,9 @@ class ClauseAnalyzer:
         if not clause.is_relative():
             return False
 
-        is_equative_que = lambda clause: clause.relative_linker_words() == ["que"] \
-                                         and clause.voice \
-                                         and clause.verb.transitivity == "EQUATIVE"
+        is_equative_que = lambda clause_var: clause_var.relative_linker_words() == ["que"] \
+                                             and clause_var.voice \
+                                             and clause_var.verb.transitivity == "EQUATIVE"
 
         unique_destination_linkers = [["quien"], ["quienes"],
                                       ["cuyo"], ["cuya"], ["cuyos"], ["cuyas"],
@@ -79,6 +72,14 @@ class ClauseAnalyzer:
             return True
 
         return False
+
+    @staticmethod
+    def analyze_kind_of_cataphoric_structure_of(clause):
+        if clause.has_structure("subject") \
+                and clause.structure("subject").is_tacit() \
+                and clause.has_kind_of_cataphoric_structure():
+
+            clause.attributes.append("pseudo_cataphoric")
 
     @staticmethod
     def perform_prior_relative_analysis_of(clause):
