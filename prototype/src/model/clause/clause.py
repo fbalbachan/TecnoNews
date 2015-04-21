@@ -85,15 +85,23 @@ class Clause(TreeNode):
         return any(is_cuyo_vector)
 
     def try_to_get_number_from_relative_linker(self):
+        """
+
+        :rtype : basestring or None
+        """
         if not self.is_relative():
             raise Exception("La cláusula no es una relativa (", str(self), ").")
 
-        # ["los", "las", "cuyos", "cuyas", "quienes", "quiénes", "cuales", "cuáles"],
+        # ["los cuales", "las cuales", "quienes"],
         is_plural_vector = map(lambda leaf: leaf.msi["number"] is "plural", self.relative_linker)
-        # ["el", "la", "lo", "cuyo", "cuya", "quien", "quién", "cual", "cuál"]
+
+        # ["el cual", "la cual", "quien"]
         is_singular_vector = map(lambda leaf: leaf.msi["number"] is "singular", self.relative_linker)
+
         is_invariable_vector = map(lambda leaf: leaf.msi["number"] is "invariable", self.relative_linker)
-        is_impersonal_invariable_vector = map(lambda leaf: leaf.msi["number"] is "impersonal/invariable", self.relative_linker)
+
+        is_impersonal_invariable_vector = map(lambda leaf: leaf.msi["number"] is "impersonal/invariable",
+                                              self.relative_linker)
 
         if any(is_singular_vector):
             number = "singular"
@@ -112,10 +120,12 @@ class Clause(TreeNode):
         if not self.is_relative():
             raise Exception("La cláusula no es una relativa (", str(self), ").")
 
-        # "el", "los", "cuyo", "cuyos"
+        # "el cual", "los cuales"
         is_masculine_vector = map(lambda leaf: leaf.msi["gender"] is "masculine", self.relative_linker)
-        # "la", "las", "cuya", "cuyas"
+
+        # "la cual", "las cuales"
         is_feminine_vector = map(lambda leaf: leaf.msi["gender"] is "feminine", self.relative_linker)
+
         is_neutral_vector = map(lambda leaf: leaf.msi["gender"] is "neutral", self.relative_linker)
 
         if any(is_masculine_vector):

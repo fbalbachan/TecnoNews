@@ -8,7 +8,7 @@ class SyntacticAnalyzer:
         self.clause = clause
 
     def analyze(self, clause):
-        # El orden en que se extraen las FSS es importante.
+        # The order in which the FSS are extracted matters.
         for structure in clause.syntactic_structures:
             if structure.is_empty():
                 # print "\n\nEntities for ", structure.name, " before calculus", structure.all_entities(), "\n\n"
@@ -62,7 +62,6 @@ class SyntacticAnalyzer:
         entities_without_group_sp_inf = filter(lambda entity: entity.node.label is not "group-sp-inf",
 									           entities)
         return entities_without_group_sp_inf
-
 
     def filter_infinitives(self, entities):
         entities_without_infs = filter(lambda entity: not entity.has_attr("infinitive"),

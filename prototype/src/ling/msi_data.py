@@ -110,7 +110,7 @@ attribute_map = {"A": {1: ("type",     {"Q": "calificative",
                                           "T": "interrogative", "R": "relative",
                                           "E": "exclamative",   "0": None}),
 
-                       2: ("person",     {"1": 1, "2": 2, "3": 3, "0": None}),                               # "common"
+                       2: ("person",     {"1": 1, "2": 2, "3": 3, "0": None}),  # "common"
 
                        3: ("gender",     {"M": "masculine", "F": "feminine",
                                           "C": "neutral",   "N": "neutral",
@@ -136,7 +136,7 @@ attribute_map = {"A": {1: ("type",     {"Q": "calificative",
                        2: ("person", {"1": 1, "2": 2, "3": 3}),
 
                        3: ("gender", {"M": "masculine", "F": "feminine",
-                                      "C": "neutral",   "N": "neutral"}), # "common"
+                                      "C": "neutral",   "N": "neutral"}),  # "common"
 
                        4: ("number", {"S": "singular", "P": "plural",
                                       "N": "impersonal/invariable"}),
