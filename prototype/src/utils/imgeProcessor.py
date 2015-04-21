@@ -1,12 +1,14 @@
+from src.utils.configProvider import ConfigProvider
+
 __author__ = 'Pablo Perez De Angelis'
 
 from PIL import Image
 import cv2
 
 
-def to_desired_size(image_path, desired_h=380, desired_w=700):
+def to_desired_size(img_path, desired_h=380, desired_w=700):
 
-    im = Image.open(image_path)
+    im = Image.open(img_path)
 
     image_w, image_h = im.size
     aspect_ratio = image_h / float(image_w)
@@ -22,11 +24,13 @@ def to_desired_size(image_path, desired_h=380, desired_w=700):
 
     resized_image = im.resize((final_width, final_height), Image.ANTIALIAS)
 
-    resized_image.save(image_path, quality=90)
-    face_center = find_faces(image_path=image_path)
+    resized_image.save(img_path, quality=90)
+    face_center = find_faces(image_path=img_path)
 
     # crop calc
     resized_image_w, resized_image_h = resized_image.size
+
+    crop_box = None
 
     if not face_center:
         # we just use old cropping algorithm
@@ -57,7 +61,7 @@ def to_desired_size(image_path, desired_h=380, desired_w=700):
     final_image = resized_image.crop(crop_box)
 
     # final_image.show()
-    final_image.save(image_path, quality=90)
+    final_image.save(img_path, quality=90)
 
 
 def add_background(filepath):
@@ -69,8 +73,8 @@ def add_background(filepath):
 
 
 def find_faces(image_path):
-    # TODO: Extract to config
-    cascPath = 'haarcascade_frontalface_default.xml'
+    cascPath = ConfigProvider().get('resources', 'frontal_face')
+
     face_cascade = cv2.CascadeClassifier(cascPath)
     # Read the image
     image = cv2.imread(image_path)
