@@ -1,8 +1,10 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 from itertools import chain
 from src.utils.tree.treeNode import TreeNode
 
+
 class PersonalPronounCoreferenceSearcher:
+
     def __init__(self, clause, context, pronoun):
         self.clause = clause
         self.context = context
@@ -52,7 +54,7 @@ class PersonalPronounCoreferenceSearcher:
             entities = self.entities_to_be_searched_in(structure)
             entities = self.only_matching_entities(entities, clause)
             entities = filter(lambda entity: entity.matches_animity_of(self.pronoun),
-                                       entities)
+                              entities)
 
             already_placed_entities = self.clause.assigned_entities_with_referenced_ones()
             non_linked_entities = filter(lambda entity: entity not in already_placed_entities,
@@ -99,11 +101,15 @@ class PersonalPronounCoreferenceSearcher:
         pronoun_case = self.pronoun.msi["case"]
         return PersonalPronounCoreferenceSearcher.search_order_by_voice[clause.voice][pronoun_case]
 
-    search_order_by_voice = {"active" : { None       : ["subject", "od", "oi", "regimen", "equative",
+    search_order_by_voice = {"active":  {None:         ["subject", "od", "oi", "regimen", "equative",
                                                         "instrument_goal", "adjuncts"],
-                                          "acusative": ["od", "subject", "regimen", "oi", "equative",
-                                                        "instrument_goal", "adjuncts"]},
-                             "passive": { None       : ["od", "subject", "instrument_goal", "adjuncts"],
-                                          "acusative": ["subject", "od", "instrument_goal", "adjuncts"]},
-                             None     : { None       : ["subject", "instrument_goal"],
-                                          "acusative": ["subject", "instrument_goal"]}}
+                                         "accusative": ["od", "subject", "regimen", "oi", "equative",
+                                                        "instrument_goal", "adjuncts"]
+                                         },
+                             "passive": {None:         ["od", "subject", "instrument_goal", "adjuncts"],
+                                         "accusative": ["subject", "od", "instrument_goal", "adjuncts"]
+                                         },
+                             None:      {None:         ["subject", "instrument_goal"],
+                                         "accusative": ["subject", "instrument_goal"]
+                                         }
+                             }

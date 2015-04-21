@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from src.model.entity.entity import Entity
-from src.model.entity.animity import Animity
+from src.model.entity.animity_enum import AnimityEnum
 
 
 class SyntacticAnalyzer:
@@ -12,18 +12,21 @@ class SyntacticAnalyzer:
         for structure in clause.syntactic_structures:
             if structure.is_empty():
                 # print "\n\nEntities for ", structure.name, " before calculus", structure.all_entities(), "\n\n"
-                entities = getattr(self, structure.name, lambda: [])()
+
+                get_slot_entities_method = getattr(self, structure.name, lambda: [])
+                entities = get_slot_entities_method()
                 structure.append_all(entities)
+
                 # print "\n\nEntities for ", structure.name, " after calculus", structure.all_entities(), "\n\n"
 
     def subject(self):
         # print "Entering SyntacticAnalyzer.subject()"
         entities = self.clause.lonely_entities()
-        return [ entities[0] ] if entities else []
+        return [entities[0]] if entities else []
 
     def verb(self):
-        #print "Entering SyntacticAnalyzer.verb()"
-        return [ self.clause.verb ]
+        # print "Entering SyntacticAnalyzer.verb()"
+        return [self.clause.verb]
 
     def instrument_goal(self):
         def which(node):
@@ -60,12 +63,12 @@ class SyntacticAnalyzer:
 
     def filter_group_sp_inf(self, entities):
         entities_without_group_sp_inf = filter(lambda entity: entity.node.label is not "group-sp-inf",
-									           entities)
+                                               entities)
         return entities_without_group_sp_inf
 
     def filter_infinitives(self, entities):
         entities_without_infs = filter(lambda entity: not entity.has_attr("infinitive"),
-									   entities)
+                                       entities)
         return entities_without_infs
 
     def filter_by_animity(self, entities, verbal_animity):
@@ -116,7 +119,7 @@ class SyntacticAnalyzer:
         subord_entities = [item for sublist in all_subord_entities for item in sublist]
         return subord_entities
 
-    def search_pronoun_at(self, side, distance, animity=Animity.bianimate):
+    def search_pronoun_at(self, side, distance, animity=AnimityEnum.bianimate):
         pronouns = self.only_pronouns_of(self.clause.entities_closest_to_verb_at(side, distance))
         pronouns = self.filter_by_animity(pronouns, animity)
 
@@ -133,7 +136,7 @@ class SyntacticAnalyzer:
         return filter(lambda entity: entity.category() == "pronoun",
                       entities)
 
-    def only_acusative_pronouns_of(self, entities):
+    def only_accusative_pronouns_of(self, entities):
         return filter(lambda entity: entity.category() == "pronoun"
                                      and entity.msi["case"] == "acusative",
                       entities)

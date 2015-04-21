@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from src.model.entity.tacitEntity import TacitEntity
-from src.model.entity.animity import Animity
+from src.model.entity.animity_enum import AnimityEnum
 
 tacit_subjects = {(0, 'singular', 'neutral'): None,
                   (1, 'singular', 'neutral'): 'yo',
@@ -24,11 +24,11 @@ tacit_subjects = {(0, 'singular', 'neutral'): None,
 
 
 def get_entity_some(animity, is_implicit=False):
-    if animity == Animity.animated:
+    if animity == AnimityEnum.animated:
         entity_some = somebody()
-    elif animity == Animity.inanimate:
+    elif animity == AnimityEnum.inanimate:
         entity_some = something()
-    else:  # Animity.bianimate:
+    else:  # AnimityEnum.bianimate:
         entity_some = bianimate_something()
 
     if is_implicit:
@@ -39,25 +39,25 @@ def get_entity_some(animity, is_implicit=False):
 
 def bianimate_something():
     return TacitEntity("algo", {"category": "pronoun", "number": "invariable", "gender": "neutral",
-                                "person": 3, "type": "indefinite", "case": None, "animity": Animity.bianimate,
+                                "person": 3, "type": "indefinite", "case": None, "animity": AnimityEnum.bianimate,
                                 "semantic_classification": None})
 
 
 def somebody():
     return TacitEntity("alguien", {"category": "pronoun", "number": "invariable", "gender": "neutral",
-                                   "person": 3, "type": "indefinite", "case": None, "animity": Animity.animated,
+                                   "person": 3, "type": "indefinite", "case": None, "animity": AnimityEnum.animated,
                                    "semantic_classification": None})
 
 
 def something():
     return TacitEntity("algo", {"category": "pronoun", "number": "invariable", "gender": "neutral",
-                                "person": 3, "type": "indefinite", "case": None, "animity": Animity.inanimate,
+                                "person": 3, "type": "indefinite", "case": None, "animity": AnimityEnum.inanimate,
                                 "semantic_classification": None})
 
 
 def this():
     return TacitEntity("esto", {"category": "pronoun", "number": "singular", "gender": "neutral",
-                                "person": 3, "type": "demonstrative", "case": None, "animity": Animity.inanimate,
+                                "person": 3, "type": "demonstrative", "case": None, "animity": AnimityEnum.inanimate,
                                 "semantic_classification": None})
 
 

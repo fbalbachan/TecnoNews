@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from src.model.referent.referent import Referent
 from src.sentiment.entitySentimentalValue import EntitySentimentalValue
-from src.model.entity.animity import Animity
+from src.model.entity.animity_enum import AnimityEnum
 from collections import deque
 
 class TacitEntity:
@@ -11,7 +11,7 @@ class TacitEntity:
 
         self.lexical_form = lexical_form
         if 'animity' not in msi:
-            msi["animity"] = Animity.inanimate
+            msi["animity"] = AnimityEnum.inanimate
         self.msi = msi
         self.children = []
         self.owner = None
@@ -81,7 +81,7 @@ class TacitEntity:
 
     def matches_msi(self, msi):
         for key, value in msi.items():
-            if not key in self.msi:
+            if key not in self.msi:
                 return False
 
             if self.msi[key] != value:      #TODO: add here specialized comparisons instead of "=="
@@ -89,10 +89,10 @@ class TacitEntity:
         return True
 
     def animity_matches(self, animity):
-        return Animity.animities_match(self.msi["animity"], animity)
+        return AnimityEnum.animities_match(self.msi["animity"], animity)
 
     def matches_animity_of(self, entity):
-        return Animity.animities_match(self.msi["animity"], entity.msi["animity"])
+        return AnimityEnum.animities_match(self.msi["animity"], entity.msi["animity"])
 
     def is_linked(self):
         return bool(self.coref_chain)
@@ -126,7 +126,8 @@ class TacitEntity:
 
     def __repr__(self):
         _repr = ("(implicit)" if self.has_attr("implicit") else "(tacit)") + " " + self.lexical_form
-        if self.is_linked(): _repr = _repr + " (" + self.referenced().lexical_form + ")"
+        if self.is_linked():
+            _repr = _repr + " (" + self.referenced().lexical_form + ")"
         return _repr
 
     def name(self):

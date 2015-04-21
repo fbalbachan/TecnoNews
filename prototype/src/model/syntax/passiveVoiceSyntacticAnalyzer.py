@@ -2,7 +2,7 @@
 from src.ling.tacit_subjects import get_entity_some
 from src.model.entity.tacitEntity import TacitEntity
 from src.model.syntax.syntacticAnalyzer import SyntacticAnalyzer
-from src.model.entity.animity import Animity
+from src.model.entity.animity_enum import AnimityEnum
 
 
 class PassiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
@@ -19,10 +19,10 @@ class PassiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         entities = filter(lambda entity: entity.animity_matches(verbal_animity),
                           entities)
         if entities:
-            entities[0].msi["animity"] = Animity.most_specific(verbal_animity, entities[0].msi["animity"])
+            entities[0].msi["animity"] = AnimityEnum.most_specific(verbal_animity, entities[0].msi["animity"])
             subject = [entities[0]]
         else:
-            is_implicit=True
+            is_implicit = True
             subject = [get_entity_some(verbal_animity, is_implicit)]
 
         return subject
@@ -45,7 +45,7 @@ class PassiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         entities = self.verb_matching_subject_entities(6, 5)
         entities = filter(lambda entity: entity.animity_matches(verbal_animity)
                                          and (not self.starts_with_accepted_preposition(entity.node, "a")
-                                              or Animity.animities_match(verbal_animity, Animity.animated)),
+                                              or AnimityEnum.animities_match(verbal_animity, AnimityEnum.animated)),
                           entities)
         if entities:
             od_entity = entities[0]
@@ -61,10 +61,10 @@ class PassiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         pronoun_msi = verb.matching_pronoun_msi()
         pronoun_person = pronoun_msi['person']
 
-        if pronoun_person in [1,2]:
-            pronoun_msi['animity'] = Animity.animated
+        if pronoun_person in [1, 2]:
+            pronoun_msi['animity'] = AnimityEnum.animated
 
         else:  # pronoun_person is 3:
-            pronoun_msi['animity'] = Animity.bianimate
+            pronoun_msi['animity'] = AnimityEnum.bianimate
 
         return TacitEntity(pronoun, pronoun_msi)

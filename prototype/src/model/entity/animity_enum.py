@@ -1,8 +1,8 @@
-__author__ = 'Martin Carames'
+__author__ = 'Martin Caramés'
 from enum import Enum
 
 
-class Animity(Enum):
+class AnimityEnum(Enum):
     animated = "animated"
     bianimate = "bianimate"
     inanimate = "inanimate"
@@ -30,13 +30,12 @@ class Animity(Enum):
         else:
             return None
 
-
     @classmethod
-    def animities_match(cls, anim1, anim2):
+    def animities_match(cls, animity1, animity2):
         """
 
         :rtype : bool
         """
-        match = anim1 in [anim2, cls.bianimate] \
-                or anim2 == cls.bianimate
+        match = animity1 in [animity2, cls.bianimate] \
+               or animity2 == cls.bianimate
         return match

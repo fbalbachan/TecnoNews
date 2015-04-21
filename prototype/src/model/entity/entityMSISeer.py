@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 
 from src.model.entity.entitySemanticAnalyzer import EntitySemanticAnalyzer
-from src.model.entity.animity import Animity
+from src.model.entity.animity_enum import AnimityEnum
 
 import ConfigParser
 
 class EntityMSISeer:
 
     def __init__(self):
-        #TODO: Warning this would be accessing the config file each time an entity is instantiated
+        # TODO: Warning this would be accessing the config file each time an entity is instantiated
         config = ConfigParser.ConfigParser()
         config.read("config")
         self.persons = self._get_items(config, "persons")
@@ -16,7 +16,7 @@ class EntityMSISeer:
         self.animals = self._get_items(config, "animals")
 
     def msi_of(self, entity):
-        #print "Entering msi_of"
+        # print "Entering msi_of"
         label = entity.node.label
         entity.msi = self.msi_seer_by_label[label](self, entity) if label in self.msi_seer_by_label else {}
         semantic_analyzer = EntitySemanticAnalyzer()
@@ -32,8 +32,8 @@ class EntityMSISeer:
 
         nouns = self.filter_banned(node.leaves_of_category("noun") + node.leaves_of_category("number"), banned_nodes)
         if self.has_unexchangeable_appositional_relationship(nouns):
-            entity.attributes["class"] = [ nouns[0].lexical_form ]
-            nouns = [ nouns[1] ]
+            entity.attributes["class"] = [nouns[0].lexical_form]
+            nouns = [nouns[1]]
 
         other_leaves = node.leaves_of_category("pronoun", "determinant", "adjective")
         useful_leaves = nouns + self.filter_banned(other_leaves, banned_nodes)
@@ -48,7 +48,8 @@ class EntityMSISeer:
             msi["type"] = "common"
             msi["category"] = "noun"
 
-        if not "person" in msi or not msi["person"]: msi["person"] = 3
+        if "person" not in msi or not msi["person"]:
+            msi["person"] = 3
 
         self.disambiguate_if_necessary(msi, useful_leaves)
 
@@ -64,7 +65,7 @@ class EntityMSISeer:
         if not leaves: return
         leaves = leaves[::-1]
 
-        non_neutral_attribute_values = { "gender" : [ "masculine", "feminine"], "number" : [ "singular", "plural"] }
+        non_neutral_attribute_values = {"gender": ["masculine", "feminine"], "number": ["singular", "plural"]}
 
         for attribute, non_neutral_values in non_neutral_attribute_values.items():
             if msi[attribute] not in non_neutral_values:
@@ -95,29 +96,29 @@ class EntityMSISeer:
         return msi
 
     def msi_of_infinity(self, entity):
-        return { "category" : "noun", "gender" : None, "person" : 3,
-                 "number" : "singular", "type" : None, "semantic_classification" : None }
+        return {"category": "noun", "gender": None, "person": 3,
+                 "number": "singular", "type": None, "semantic_classification": None}
 
     def calculate_animity_for(self, entity):
-        defaultAnimityValue = Animity.inanimate
+        default_animity_value = AnimityEnum.inanimate
 
-        # If the entity had an animity value, other than the default, then return it (assuming it was previously calculated).
-        if "animity" in entity.msi and entity.msi["animity"] is not defaultAnimityValue:
+        # If entity has an animity value, other than the default, then return it (assuming it was previously calculated)
+        if "animity" in entity.msi and entity.msi["animity"] is not default_animity_value:
             return entity.msi["animity"]
 
         elif entity.has_attr("implicit") or entity.node.label in ["grup-verb-inf"]:
-            return Animity.inanimate
+            return AnimityEnum.inanimate
 
         # Entities with 1 token being a "paton" or "ptonic"
         elif len(entity.token.components) is 1 and entity.node.label in ["patons","ptonic"]:
             if entity.msi['person'] in [1,2]:
-                return Animity.animated
+                return AnimityEnum.animated
 
             if entity.msi['person'] is 3 and entity.msi['case'] == "dative":
-                return Animity.animated
+                return AnimityEnum.animated
 
             if entity.msi['person'] is 3:
-                return Animity.bianimate
+                return AnimityEnum.bianimate
 
         # if it has kernel, return kernel's animity
         elif entity.kernel:
@@ -126,17 +127,17 @@ class EntityMSISeer:
         # (has no kernel, is not a "patons") if it is "coor-n", then look into children animity
         elif entity.node.label is "coor-n":
             for child in entity.children:
-                childAnimity = self.calculate_animity_for(child)
+                child_animity = self.calculate_animity_for(child)
                 # if at least one of the child entities has animity return that
-                if childAnimity is not defaultAnimityValue:
-                    return childAnimity
+                if child_animity is not default_animity_value:
+                    return child_animity
 
         elif len(entity.children) > 0:
             child = entity.children[0]
             return self.calculate_animity_for(child)
 
         # other cases
-        return defaultAnimityValue
+        return default_animity_value
 
     def _calculate_animity_single(self, msi, kernel):
 
@@ -144,29 +145,29 @@ class EntityMSISeer:
         if not isinstance(lemma, unicode):
             lemma = unicode(lemma, "utf-8")
 
-        if msi['category'] is "pronoun" and msi['type'] is "personal" and msi['person'] in [1,2]:
-            animity = Animity.animated
+        if msi['category'] is "pronoun" and msi['type'] is "personal" and msi['person'] in [1, 2]:
+            animity = AnimityEnum.animated
 
         elif msi['category'] is "pronoun" and msi['type'] is "personal" and msi['case'] is "dative":
-            animity = Animity.animated
+            animity = AnimityEnum.animated
 
         elif msi['category'] is "pronoun" and msi['type'] is "personal" and msi['person'] is 3:
-            animity = Animity.bianimate
+            animity = AnimityEnum.bianimate
 
-        elif msi['category'] is "pronoun" and msi['type'] is "indefinite" and lemma in ["alguien","nadie"]:
-            animity = Animity.animated
+        elif msi['category'] is "pronoun" and msi['type'] is "indefinite" and lemma in ["alguien", "nadie"]:
+            animity = AnimityEnum.animated
 
-        #check lemma against resources
+        # check lemma against resources
         elif lemma in (self.persons + self.demonyms + self.animals) \
              or 'semantic_classification' in msi \
                 and (msi['semantic_classification'] == 'person'
                      or msi['semantic_classification'] == 'organization'
                      or msi['semantic_classification'] == 'other'):
 
-            animity = Animity.animated
+            animity = AnimityEnum.animated
 
         else:
-            default_animity_value = Animity.inanimate
+            default_animity_value = AnimityEnum.inanimate
             animity = default_animity_value
 
         return animity
@@ -191,7 +192,7 @@ class EntityMSISeer:
         return items
 
     # Module Globals
-    msi_seer_by_label = {"sn" : msi_of_single,
+    msi_seer_by_label = {"sn": msi_of_single,
                          "grup-nom-ms": msi_of_single,
                          "grup-nom-fs": msi_of_single,
                          "grup-nom-mp": msi_of_single,

@@ -119,7 +119,7 @@ attribute_map = {"A": {1: ("type",     {"Q": "calificative",
                        4: ("number",     {"S": "singular", "P": "plural",
                                           "N": "impersonal/invariable", "0": None}),
 
-                       5: ("case",       {"N": "nominative", "A": "acusative",
+                       5: ("case",       {"N": "nominative", "A": "accusative",
                                           "D": "dative",     "O": "oblicuo",
                                           "0": None}),
 
@@ -141,7 +141,7 @@ attribute_map = {"A": {1: ("type",     {"Q": "calificative",
                        4: ("number", {"S": "singular", "P": "plural",
                                       "N": "impersonal/invariable"}),
 
-                       5: ("case",   {"N": "nominative", "A": "acusative",
+                       5: ("case",   {"N": "nominative", "A": "accusative",
                                       "D": "dative",     "O": "oblique"}),
 
                        6: ("owner",  {"S": "singular",

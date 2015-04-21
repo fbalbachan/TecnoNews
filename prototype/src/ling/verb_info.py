@@ -32,10 +32,11 @@ transitivity_values = {
 }
 
 animity_values = {
-    'Anim': Animity.animated,
-    'Bi': Animity.bianimate,
-    'No': Animity.inanimate
+    'Anim': AnimityEnum.animated,
+    'Bi': AnimityEnum.bianimate,
+    'No': AnimityEnum.inanimate
 }
+
 
 scripts = {
     'A': 'AGENTIVE',
@@ -46,17 +47,20 @@ scripts = {
     'S': 'SWITCH',
 }
 
-def get_sentimental_script_of(lemma):
+
+def get_sentimental_script_of(verb_lemma):
     try:
-        return verbs[lemma.lower()]['script']
+        return verbs[verb_lemma.lower()]['script']
     except KeyError:
-        return VerbalScript(lemma)
+        return VerbalScript(verb_lemma)
+
 
 def get_transitivity(verb):
     try:
         return verbs[verb.lower()]['transitivity']
     except KeyError:
         return transitivity_values["I"]
+
 
 def allowed_boxes(transitivity):
     try:
@@ -65,16 +69,17 @@ def allowed_boxes(transitivity):
         result = None
     return result
 
-def get_script_animity_for(verbLemma, roleName):
-    try:
-        if roleName in ["od","equative","regimen"]:
-            roleName = "oaf"
 
-        lemma = verbLemma.lower()
-        result = verbs[lemma]['animity'][roleName]
+def get_script_animity_for(verb_lemma, role_name):
+    try:
+        if role_name in ["od", "equative", "regimen"]:
+            role_name = "oaf"
+
+        verb_lemma = verb_lemma.lower()
+        result = verbs[verb_lemma]['animity'][role_name]
 
     except KeyError:
-        result = Animity.bianimate
+        result = AnimityEnum.bianimate
 
     return result
 
@@ -82,12 +87,12 @@ def get_script_animity_for(verbLemma, roleName):
 # Load verb resources from file
 Config = ConfigProvider()
 
-verb_file =  Config.get("resources", "verbal_scripts")
-verb_file_reader = unicode_csv_reader(open(verb_file, 'r'), first_line_is_header = False, delimiter=',')
+verb_file = Config.get("resources", "verbal_scripts")
+verb_file_reader = unicode_csv_reader(open(verb_file, 'r'), first_line_is_header=False, delimiter=',')
 verbs = {}
 
 for lemma, script_klass, transitivity_code, agentive_coef, \
-    objective_coef, subjAnimity_code, odAnimity_code in verb_file_reader:
+        objective_coef, subjAnimity_code, odAnimity_code in verb_file_reader:
 
     coefs = []
     for coef in [agentive_coef, objective_coef]:
@@ -96,9 +101,9 @@ for lemma, script_klass, transitivity_code, agentive_coef, \
             coef = "0"
         coefs.append(float(coef) / 100)
 
-    verbs[lemma]                 = {}
-    verbs[lemma]['script']       = VerbalScript(lemma, scripts[script_klass], coefs[0], coefs[1])
-    verbs[lemma]['transitivity'] = transitivity_values[transitivity_code]
-    verbs[lemma]['boxes']        = allowed_boxes_according_to_verb_transitivity[transitivity_values[transitivity_code]]
-    verbs[lemma]['animity']      = { 'subject': animity_values[subjAnimity_code],
-                                     'oaf': animity_values[odAnimity_code] }
+    verbs[lemma] =                  {}
+    verbs[lemma]['script'] =        VerbalScript(lemma, scripts[script_klass], coefs[0], coefs[1])
+    verbs[lemma]['transitivity'] =  transitivity_values[transitivity_code]
+    verbs[lemma]['boxes'] =         allowed_boxes_according_to_verb_transitivity[transitivity_values[transitivity_code]]
+    verbs[lemma]['animity'] =       { 'subject': animity_values[subjAnimity_code],
+                                      'oaf': animity_values[odAnimity_code] }
