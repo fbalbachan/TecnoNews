@@ -1,11 +1,12 @@
 __author__ = 'Pablo Perez De Angelis'
 
 from PIL import Image
+import cv2
 
 
-def to_desired_size(filepath, desired_h=380, desired_w=700):
+def to_desired_size(image_path, desired_h=380, desired_w=700):
 
-    im = Image.open(filepath)
+    im = Image.open(image_path)
 
     image_w, image_h = im.size
     aspect_ratio = image_h / float(image_w)
@@ -21,20 +22,42 @@ def to_desired_size(filepath, desired_h=380, desired_w=700):
 
     resized_image = im.resize((final_width, final_height), Image.ANTIALIAS)
 
-    # crop calculator
-    resized_image_w, resized_image_h = resized_image.size
-    cut_amount_w = (resized_image_w - desired_w) / 2
-    cut_amount_h = (resized_image_h - desired_h) / 2
+    resized_image.save(image_path, quality=90)
+    face_center = find_faces(image_path=image_path)
 
-    crop_box = (0+cut_amount_w,
-                0+cut_amount_h,
-                resized_image_w - cut_amount_w,
-                resized_image_h - cut_amount_h)
+    # crop calc
+    resized_image_w, resized_image_h = resized_image.size
+
+    if not face_center:
+        # we just use old cropping algorithm
+        cut_amount_w = (resized_image_w - desired_w) / 2
+        cut_amount_h = (resized_image_h - desired_h) / 2
+
+        crop_box = (0+cut_amount_w,
+                    0+cut_amount_h,
+                    resized_image_w - cut_amount_w,
+                    resized_image_h - cut_amount_h)
+    else:
+        # use faces crop algorithm
+        cut_amount_w = (resized_image_w - desired_w) / 2
+        face_center_h = face_center[1]
+
+        if face_center_h - desired_h/2 > 0:
+            h_top = face_center_h - desired_h/2
+        else:
+            h_top = 0
+
+        h_bottom = h_top + desired_h
+
+        crop_box = (0+cut_amount_w,
+                    h_top,
+                    resized_image_w - cut_amount_w,
+                    h_bottom)
 
     final_image = resized_image.crop(crop_box)
 
     # final_image.show()
-    final_image.save(filepath, quality=90)
+    final_image.save(image_path, quality=90)
 
 
 def add_background(filepath):
@@ -43,3 +66,35 @@ def add_background(filepath):
     with Image(filename=filepath) as img:
         img.background_color = Color("#EEEEEE")
         img.save(filename=filepath)
+
+
+def find_faces(image_path):
+    # TODO: Extract to config
+    cascPath = 'haarcascade_frontalface_default.xml'
+    face_cascade = cv2.CascadeClassifier(cascPath)
+    # Read the image
+    image = cv2.imread(image_path)
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+    # Detect faces in the image
+    faces = face_cascade.detectMultiScale(
+        gray,
+        scaleFactor=1.3,
+        minNeighbors=6,
+        minSize=(100, 100),
+        flags = cv2.cv.CV_HAAR_SCALE_IMAGE
+    )
+    center = None
+
+    if len(faces) > 0:
+        (x, y, w, h) = faces[0]
+        center = (x+w/2, y+h/2)
+
+    return center
+
+if __name__ == '__main__':
+    import sys
+
+    image_path = sys.argv[1]
+    find_faces(image_path)
+    to_desired_size(image_path)
