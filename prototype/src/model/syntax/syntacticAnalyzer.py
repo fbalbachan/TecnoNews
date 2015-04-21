@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from src.model.entity.entity import Entity
-from src.model.entity.animity_enum import AnimityEnum
+from src.model.entity.animityEnum import AnimityEnum
 
 
 class SyntacticAnalyzer:
@@ -13,8 +13,8 @@ class SyntacticAnalyzer:
             if structure.is_empty():
                 # print "\n\nEntities for ", structure.name, " before calculus", structure.all_entities(), "\n\n"
 
-                get_slot_entities_method = getattr(self, structure.name, lambda: [])
-                entities = get_slot_entities_method()
+                method_get_slot_entities = getattr(self, structure.name, lambda: [])
+                entities = method_get_slot_entities()
                 structure.append_all(entities)
 
                 # print "\n\nEntities for ", structure.name, " after calculus", structure.all_entities(), "\n\n"

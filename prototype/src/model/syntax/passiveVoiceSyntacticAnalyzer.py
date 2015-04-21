@@ -2,7 +2,7 @@
 from src.ling.tacit_subjects import get_entity_some
 from src.model.entity.tacitEntity import TacitEntity
 from src.model.syntax.syntacticAnalyzer import SyntacticAnalyzer
-from src.model.entity.animity_enum import AnimityEnum
+from src.model.entity.animityEnum import AnimityEnum
 
 
 class PassiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):

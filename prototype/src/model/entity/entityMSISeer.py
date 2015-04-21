@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from src.model.entity.entitySemanticAnalyzer import EntitySemanticAnalyzer
-from src.model.entity.animity_enum import AnimityEnum
+from src.model.entity.animityEnum import AnimityEnum
 
 import ConfigParser
 

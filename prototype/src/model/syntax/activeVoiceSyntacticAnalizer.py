@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from src.ling.tacit_subjects import implicit_somebody, this, get_entity_some
+from src.ling.tacit_subjects import this, get_entity_some
 from src.model.entity.tacitEntity import TacitEntity
 from src.model.syntax.syntacticAnalyzer import SyntacticAnalyzer
 from src.model.entity.entity import Entity
-from src.model.entity.animity_enum import AnimityEnum
+from src.model.entity.animityEnum import AnimityEnum
 
 
 class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):

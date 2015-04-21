@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from src.model.entity.tacitEntity import TacitEntity
-from src.model.entity.animity_enum import AnimityEnum
-from src.ling.gender_enum import GenderEnum
-from src.ling.number_enum import NumberEnum
+from src.model.entity.animityEnum import AnimityEnum
+from src.ling.genderEnum import GenderEnum
+from src.ling.numberEnum import NumberEnum
 from src.model.syntax.syntacticAnalyzer import SyntacticAnalyzer
 
 

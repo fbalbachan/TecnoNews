@@ -2,7 +2,7 @@
 from src.ling.tacit_subjects import tacit_subjects
 from src.ling.verb_info import get_sentimental_script_of, get_transitivity, get_script_animity_for
 from src.model.entity.entity import Entity
-from src.model.entity.animity_enum import AnimityEnum
+from src.model.entity.animityEnum import AnimityEnum
 
 
 # Que el verbo sea una entidad es una licencia como también que exista una función sintáctica superior "verbo".

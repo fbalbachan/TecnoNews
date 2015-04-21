@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from src.model.referent.referent import Referent
 from src.sentiment.entitySentimentalValue import EntitySentimentalValue
-from src.model.entity.animity_enum import AnimityEnum
+from src.model.entity.animityEnum import AnimityEnum
 from collections import deque
 
 class TacitEntity:

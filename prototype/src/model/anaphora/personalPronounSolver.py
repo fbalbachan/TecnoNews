@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from src.model.anaphora.personalPronounCoreferenceSearcher import PersonalPronounCoreferenceSearcher
 from src.model.entity.verb import Verb
-from src.model.entity.animity_enum import AnimityEnum
+from src.model.entity.animityEnum import AnimityEnum
 
 class PersonalPronounSolver:
     def __init__(self, clause, context):

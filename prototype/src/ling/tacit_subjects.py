@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from src.model.entity.tacitEntity import TacitEntity
-from src.model.entity.animity_enum import AnimityEnum
+from src.model.entity.animityEnum import AnimityEnum
 
 tacit_subjects = {(0, 'singular', 'neutral'): None,
                   (1, 'singular', 'neutral'): 'yo',
