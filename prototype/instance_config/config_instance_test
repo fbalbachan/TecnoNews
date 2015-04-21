@@ -62,3 +62,5 @@ countries = %(resources_dir)s/countries_name_es.csv
 persons = %(resources_dir)s/person.cls
 demonym = %(resources_dir)s/twGENT.dat
 marks_to_avoid_paragraphs = %(resources_dir)s/paragraph_to_avoid
+
+frontal_face: %(resources_dir)s/haarcascade_frontalface_default.xml
