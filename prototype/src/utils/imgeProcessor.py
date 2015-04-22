@@ -6,9 +6,11 @@ from PIL import Image
 import cv2
 
 
-def to_desired_size(img_path, desired_h=380, desired_w=700):
+def to_desired_size(img_path, desired_h=380, desired_w=700, test=False):
 
     im = Image.open(img_path)
+    if test:
+        im.show()
 
     image_w, image_h = im.size
     aspect_ratio = image_h / float(image_w)
@@ -60,8 +62,10 @@ def to_desired_size(img_path, desired_h=380, desired_w=700):
 
     final_image = resized_image.crop(crop_box)
 
-    # final_image.show()
-    final_image.save(img_path, quality=90)
+    if test:
+        final_image.show()
+    else:
+        final_image.save(img_path, quality=90)
 
 
 def add_background(filepath):
@@ -72,7 +76,7 @@ def add_background(filepath):
         img.save(filename=filepath)
 
 
-def find_faces(image_path):
+def find_faces(image_path, test=False):
     cascPath = ConfigProvider().get('resources', 'frontal_face')
 
     face_cascade = cv2.CascadeClassifier(cascPath)
@@ -90,6 +94,9 @@ def find_faces(image_path):
     )
     center = None
 
+    if test:
+        print "Faces:", faces
+
     if len(faces) > 0:
         (x, y, w, h) = faces[0]
         center = (x+w/2, y+h/2)
@@ -100,5 +107,5 @@ if __name__ == '__main__':
     import sys
 
     image_path = sys.argv[1]
-    find_faces(image_path)
-    to_desired_size(image_path)
+    find_faces(image_path, test=True)
+    to_desired_size(image_path,test=True)
