@@ -116,7 +116,7 @@ class NewsRewriter(object):
                      'Wikisource-logo', 'Falta imagen', 'Estany', 'Flag_of_Egypt',
                      'Ice_hockey_pictogram', 'Firmado pero no ratificado.', 'Spanish Language Wiki.svg',
                       'Kit right arm blueshoulders.png', 'Tetragrammaton', 'signature', 'Signature', 'sig.',
-                      'LinkedInLogo', 'Twitterlogo']
+                      'LinkedInLogo']
 
         filtered_urls = [url for url in images_urls
                          if not any(black_string in url for black_string in blacklist)]
