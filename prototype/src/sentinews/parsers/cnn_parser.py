@@ -27,6 +27,10 @@ class CNNParser(GenericParser):
         for script in soup(["script", "style"]):
             script.extract()
 
+        # Remove sharedaddy
+        for sharedaddy in soup.findAll('div', {"class": "sharedaddy"}):
+            sharedaddy.extract()
+            
         tweets = []
 
         for tweet in soup.findAll('div', {"class": "embed-twitter"}):
