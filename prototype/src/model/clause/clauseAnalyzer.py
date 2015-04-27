@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from src.ling.verb_info import allowed_boxes, allowed_boxes_for_passive_verbs, allowed_boxes_for_unimember_sentences
+from src.ling.verb_info import allowed_boxes, allowed_boxes_for_passive_verbs, allowed_boxes_for_minor_sentences
 from src.model.anaphora.gerundSubjectSolver import GerundSubjectSolver
 from src.model.anaphora.personalPronounSolver import PersonalPronounSolver
 from src.model.anaphora.relativeEntityExtractor import RelativeEntityExtractor
@@ -146,10 +146,9 @@ class ClauseAnalyzer:
 
     @staticmethod
     def allowed_syntactic_structures_for(clause):
-
         active_voice_structures = lambda clause_var: allowed_boxes(clause_var.verb.transitivity)
         passive_voice_structures = lambda clause_var: allowed_boxes_for_passive_verbs
-        none_voice_structures = lambda clause_var: allowed_boxes_for_unimember_sentences
+        none_voice_structures = lambda clause_var: allowed_boxes_for_minor_sentences
 
         structures_getter_by_voice = {None:      none_voice_structures,
                                       "active":  active_voice_structures,

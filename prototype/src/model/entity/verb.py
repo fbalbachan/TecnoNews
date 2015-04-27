@@ -5,7 +5,7 @@ from src.model.entity.entity import Entity
 from src.model.entity.animityEnum import AnimityEnum
 
 
-# Que el verbo sea una entidad es una licencia como también que exista una función sintáctica superior "verbo".
+# The verb being an entity is a license, same as the existence of a superior syntactic function "Verb".
 class Verb(Entity):
 
     def __init__(self, node, voice, leaves):
@@ -91,14 +91,6 @@ class Verb(Entity):
 
         else:
             return None
-
-    def get_valid_matching_animity(self, structure_name, entity):
-        if structure_name in self.boxes_with_scripted_animity:
-            script_animity = self.get_script_animity_for(structure_name)
-            if entity.animity_matches(script_animity):
-                return AnimityEnum.most_specific(script_animity, entity.msi["animity"])
-
-        return None
 
     def __repr__(self):
         return " ".join([str(leaf) for leaf in self._leaves]) + " (" + self.lemma() + ") " + \

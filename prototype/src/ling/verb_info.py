@@ -19,7 +19,7 @@ allowed_boxes_according_to_verb_transitivity = {
 
 allowed_boxes_for_passive_verbs = ['verb', 'subject', 'od', 'instrument_goal', 'adjuncts']
 
-allowed_boxes_for_unimember_sentences = ['instrument_goal', 'subject', 'adjuncts']
+allowed_boxes_for_minor_sentences = ['instrument_goal', 'subject', 'adjuncts']
 
 transitivity_values = {
     'T': 'TRANSITIVE',
@@ -84,6 +84,22 @@ def get_script_animity_for(verb_lemma, role_name):
     return result
 
 
+def get_animity_value(animity_code):
+    if animity_code in ['Anim', 'Bi', 'No']:
+        return animity_values[animity_code]
+    else:
+        print "Wrong animity code in resource: ", animity_code
+        return animity_values['Bi']
+
+
+def get_transitivity_value(p_transitivity_code):
+    if p_transitivity_code in ['T', 'I', 'R', 'E', 'X', 'H', 'M']:
+        return transitivity_values[p_transitivity_code]
+    else:
+        print "Wrong transitivity code in resource: ", p_transitivity_code
+        return transitivity_values['I']
+
+
 # Load verb resources from file
 Config = ConfigProvider()
 
@@ -91,7 +107,7 @@ verb_file = Config.get("resources", "verbal_scripts")
 verb_file_reader = unicode_csv_reader(open(verb_file, 'r'), first_line_is_header=False, delimiter=',')
 verbs = {}
 
-for lemma, script_klass, transitivity_code, agentive_coef, \
+for lemma, script_class, transitivity_code, agentive_coef, \
         objective_coef, subjAnimity_code, odAnimity_code in verb_file_reader:
 
     coefs = []
@@ -101,9 +117,12 @@ for lemma, script_klass, transitivity_code, agentive_coef, \
             coef = "0"
         coefs.append(float(coef) / 100)
 
-    verbs[lemma] =                  {}
-    verbs[lemma]['script'] =        VerbalScript(lemma, scripts[script_klass], coefs[0], coefs[1])
-    verbs[lemma]['transitivity'] =  transitivity_values[transitivity_code]
-    verbs[lemma]['boxes'] =         allowed_boxes_according_to_verb_transitivity[transitivity_values[transitivity_code]]
-    verbs[lemma]['animity'] =       { 'subject': animity_values[subjAnimity_code],
-                                      'oaf': animity_values[odAnimity_code] }
+    verbs[lemma] = {}
+    verbs[lemma]['script'] = VerbalScript(lemma, scripts[script_class], coefs[0], coefs[1])
+    verbs[lemma]['transitivity'] = transitivity_values[transitivity_code]
+    verbs[lemma]['boxes'] = allowed_boxes_according_to_verb_transitivity[transitivity_values[transitivity_code]]
+    verbs[lemma]['animity'] = {'subject': get_animity_value(subjAnimity_code),
+                               'oaf': get_animity_value(odAnimity_code)}
+
+
+

@@ -1,4 +1,5 @@
-__author__ = 'Martin Caramés'
+# -*- coding: utf-8 -*-
+__author__ = 'Martin Caramés Abente'
 from enum import Enum
 
 

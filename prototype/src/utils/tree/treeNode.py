@@ -95,15 +95,21 @@ class TreeNode:
         proper_positions = self.leaf_positions()
         other_positions = node.leaf_positions()
 
-        if proper_positions[0] < other_positions[0]     : return "right"
-        if proper_positions[-1] > other_positions[-1]   : return "left"
+        if proper_positions[0] < other_positions[0]:
+            return "right"
+
+        if proper_positions[-1] > other_positions[-1]:
+            return "left"
+
         return "inside"
 
     def absolute_distance_to(self, node):
         return abs(self.distance_to(node))
 
     def distance_to(self, node):
-        if self.level() != node.level(): raise Exception("Los nodos no son hermanos.")
+        if self.level() != node.level():
+            raise Exception("Los nodos no son hermanos.")
+
         brothers = self.father.children
         return brothers.index(node) - brothers.index(self)
 
