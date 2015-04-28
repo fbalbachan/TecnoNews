@@ -4248,7 +4248,7 @@ escorificar,N,X,,,Bi,Bi
 escorzar,N,X,,,Bi,Bi
 escoscar,N,X,,,Bi,Bi
 escotar,N,X,,,Bi,Bi
-escribir,N,T,,,Bi,No
+escribir,N,T,,,Anim,No
 escriturar,N,T,,,Bi,No
 escrutar,N,T,,,Bi,Bi
 escuadrar,N,T,,,Bi,No
@@ -6246,7 +6246,7 @@ provenir,N,I,,,Bi,Bi
 providenciar,N,X,,,Bi,Bi
 provocar,A,T,,,Bi,Bi
 proyectar,N,T,,,Bi,No
-publicar,N,T,,,Bi,Bi
+publicar,N,T,,,Anim,Bi
 publicitar,N,T,,,Bi,Bi
 pudelar,N,X,,,Bi,Bi
 pudrir,A,T,,,Bi,Bi
