@@ -373,7 +373,7 @@ afiliar,N,T,,,Anim,Anim
 afiligranar,N,T,,,Bi,Bi
 afinar,A,T,,,Bi,No
 afincar,N,I,,,Bi,Bi
-afirmar,N,T,,,Bi,No
+afirmar,N,T,,,Anim,No
 afistular,N,T,,,Bi,Bi
 afligir,A,T,,,Bi,Anim
 afligirse,A,I,,,Anim,Bi
@@ -4486,7 +4486,7 @@ exteriorizar,N,T,,,Bi,No
 exterminar,A,T,,,Bi,Bi
 extinguir,N,I,,,Bi,Bi
 extirpar,S,T,80,-60,Bi,Bi
-extorsionar,A,T,,,Bi,Bi
+extorsionar,A,T,,,Anim,Anim
 extractar,N,X,,,Bi,No
 extraditar,N,T,,,Anim,Anim
 extraer,N,T,,,Bi,Bi
@@ -5152,7 +5152,7 @@ inventar,N,T,,,Bi,Bi
 inventariar,N,T,,,Bi,No
 invernar,N,I,,,Bi,Bi
 invertir,A,T,,,Bi,Bi
-investigar,N,T,,,Bi,Bi
+investigar,N,T,,,Anim,Bi
 investir,N,T,,,Bi,Bi
 invitar,N,T,,,Bi,Bi
 invocar,O,T,,,Bi,Bi
