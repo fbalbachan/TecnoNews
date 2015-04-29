@@ -20,7 +20,7 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
             return subject
 
         verbal_animity = clause.verb.subject_animity
-        entities = self.verb_matching_subject_entities(4, 3)
+        entities = self.verb_matching_subject_entities(5, 4)
         entities = self.filter_by_animity(entities, verbal_animity)
 
         if entities:
@@ -61,9 +61,45 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         # print "Entering ActiveVoiceSyntacticAnalyzer.od()"
         verbal_animity = self.clause.verb.affected_object_animity
 
+        [nominal_entities_at_same_level_nodes,
+         nominal_entities_under_prep_a, pronominal_entities] = self.get_od_candidate_entities(verbal_animity)
+
+        candidate_entities = nominal_entities_at_same_level_nodes \
+                             + nominal_entities_under_prep_a \
+                             + pronominal_entities
+
+        candidate_entities_matching_anim = nominal_entities_at_same_level_nodes \
+                                           + self.filter_by_animity(nominal_entities_under_prep_a, verbal_animity) \
+                                           + pronominal_entities
+
+        od = self.search_od(candidate_entities, candidate_entities_matching_anim, verbal_animity)
+
+        return od
+
+    def search_od(self, candidate_entities, candidate_entities_matching_anim, verbal_animity):
+        print "Entering ActiveVoiceSyntacticAnalyzer.search_od()"
+        if not candidate_entities:
+            is_implicit = True
+            return [get_entity_some(verbal_animity, is_implicit)]
+
+        if not candidate_entities[0].is_subordinated_with_preposition("a"):
+            return [candidate_entities[0]]
+
+        linked = self.link_duplicated_od_for(candidate_entities)
+        if linked:
+            return [candidate_entities[0], linked]
+
+        if not candidate_entities_matching_anim:
+            is_implicit = True
+            return [get_entity_some(verbal_animity, is_implicit)]
+
+        return [candidate_entities_matching_anim[0]]
+
+    def get_od_candidate_entities(self, verbal_animity):
+        print "Entering ActiveVoiceSyntacticAnalyzer.get_od_candidate_entities()"
         nominal_entities_at_same_level_nodes = \
-                self.find_entities_by(lambda: self.search_nominal_od_at_same_level_nodes("right", 3, verbal_animity),
-                                      lambda: self.search_nominal_od_at_same_level_nodes("left", 2, verbal_animity))
+                self.find_entities_by(lambda: self.search_nominal_od_at_same_level_nodes("right", 4, verbal_animity),
+                                      lambda: self.search_nominal_od_at_same_level_nodes("left", 3, verbal_animity))
 
         nominal_entities_under_prep_a = \
                 self.find_entities_by(lambda: self.search_nominal_od_under_prep_a("right", 4),
@@ -73,32 +109,12 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
                 self.find_entities_by(lambda: self.search_pronoun_at("right", 3, verbal_animity),
                                       lambda: self.search_pronoun_at("left", 3, verbal_animity))
 
-        candidate_entities_matching_anim = nominal_entities_at_same_level_nodes \
-                                           + self.filter_by_animity(nominal_entities_under_prep_a, verbal_animity) \
-                                           + pronominal_entities
-
-        candidate_entities = nominal_entities_at_same_level_nodes \
-                             + nominal_entities_under_prep_a \
-                             + pronominal_entities
-
-        if not candidate_entities:
-            is_implicit = True
-            return [get_entity_some(verbal_animity, is_implicit)]
-
-        if candidate_entities[0].is_subordinated_with_preposition("a"):
-            linked = self.link_duplicated_od_for(candidate_entities)
-            if linked:
-                return [candidate_entities[0], linked]
-            else:
-                if not candidate_entities_matching_anim:
-                    is_implicit = True
-                    return [get_entity_some(verbal_animity, is_implicit)]
-
-                return [candidate_entities_matching_anim[0]]
-        else:
-            return [candidate_entities[0]]
+        return [nominal_entities_at_same_level_nodes,
+                nominal_entities_under_prep_a,
+                pronominal_entities]
 
     def link_duplicated_od_for(self, od_candidates):
+        # print "Entering ActiveVoiceSyntacticAnalyzer.link_duplicated_od_for()"
         accusative_pronoun = self.search_duplicated_od_for(od_candidates[0])
         if accusative_pronoun:
             accusative_pronoun.add_coreference(od_candidates[0])
@@ -107,7 +123,7 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         return accusative_pronoun
 
     def search_duplicated_od_for(self, source_od):
-
+        # print "Entering ActiveVoiceSyntacticAnalyzer.search_duplicated_od_for()"
         closest_entities = self.clause.entities_closest_to_verb(("left", 3), ("right", 2))
         accusative_pronouns = self.only_accusative_pronouns_of(closest_entities)
         matching_pronouns = filter(lambda pronoun: source_od.matches(pronoun),
@@ -131,6 +147,7 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
                                          lambda: self.search_pronoun_at("right", 2, AnimityEnum.animated))
         if entities:
             entities[0].msi["animity"] = AnimityEnum.most_specific(entities[0].msi["animity"], AnimityEnum.animated)
+
         candidates = [entities[0]] if entities else []
         return candidates
 

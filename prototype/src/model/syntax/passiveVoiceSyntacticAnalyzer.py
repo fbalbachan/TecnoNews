@@ -11,8 +11,8 @@ class PassiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
 
     def subject(self):
         # print "Entering PassiveVoiceSyntacticAnalyzer.subject()"
-        at_right = lambda: self.search_subject_at("right", 3)
-        at_left = lambda: self.search_subject_at("left", 3)
+        at_right = lambda: self.search_subject_at("right", 4)
+        at_left = lambda: self.search_subject_at("left", 4)
 
         verbal_animity = self.clause.verb.subject_animity
         entities = self.find_entities_by(at_right, at_left)

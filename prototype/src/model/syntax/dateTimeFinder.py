@@ -19,7 +19,6 @@ class DateTimeFinder:
         return node.label == "sadv" and node.nodes_with_labels("sn-tmp")
 
     def is_valid_subord(self, node):
-        if node.label != "grup-sp" or node.leaves()[0].lexical_form == "por" or node.leaves()[0].lexical_form == "de": return False
         return any(( check(node) for check in [ self.has_year, self.is_en_plus_num, self.has_time_word ]))
 
     def has_year(self, node):
@@ -30,9 +29,10 @@ class DateTimeFinder:
         return len(leaves) == 2 and leaves[0].lemma == "en" and leaves[1].msi["category"] == "number"
 
     def has_data(self, node):
-        if not (node.leaves()[0].lexical_form == "por" or node.leaves()[0].lexical_form == "de"): return "data" in [ each.label for each in node if not each.is_leaf() ]
+        if not (node.leaves()[0].lexical_form == "por" or node.leaves()[0].lexical_form == "de"):
+            return "data" in [ each.label for each in node if not each.is_leaf() ]
 
     def has_time_word(self, node):
-        if not (node.leaves()[0].lexical_form == "por" or node.leaves()[0].lexical_form == "de"): return bool({ leaf.lemma for leaf in node.leaves() } & self.time_words)
+        return bool({ leaf.lemma for leaf in node.leaves() } & self.time_words)
 
     time_words = { word.lower() for word in resources.parse_csv_in("syntax", "time_words") }

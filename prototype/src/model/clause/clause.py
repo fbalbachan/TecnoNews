@@ -117,6 +117,8 @@ class Clause(TreeNode):
         return number
 
     def try_to_get_gender_from_relative_linker(self):
+        # print "Entering clause.try_to_get_gender_from_relative_linker()"
+
         if not self.is_relative():
             raise Exception("La cláusula no es una relativa (", str(self), ").")
 
@@ -162,6 +164,7 @@ class Clause(TreeNode):
                       self.syntactic_structures)[0]
 
     def subord_entities_closest_to_verb_at(self, side, allowed_distance, which_node=lambda node: True):
+        # print "Entering Clause.subord_entities_closest_to_verb_at() - side ", str(side), " - allowed distance ", str(allowed_distance)
         which = lambda entity, node: entity.is_subordinated() \
                                      and entity.highest_subordinating_node() == node \
                                      and which_node(node)

@@ -56,6 +56,8 @@ class ClauseAnalyzer:
 
     @staticmethod
     def relative_needs_to_be_solved_first(clause):
+        # print "Entering ClauseAnalyzer.relative_needs_to_be_solved_first()"
+
         if not clause.is_relative():
             return False
 
@@ -115,7 +117,7 @@ class ClauseAnalyzer:
 
     @staticmethod
     def solve_relative(clause):
-        # print "Entering solve_relative"
+        # print "Entering solve_relative ( relative entity: ", clause.relative_entity, ")"
 
         if clause.is_relative() and clause.relative_entity:
             RelativePronounSolver(clause).solve()

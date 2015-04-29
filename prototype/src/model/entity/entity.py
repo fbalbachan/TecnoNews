@@ -29,7 +29,8 @@ class Entity (TacitEntity):
         return self.highest_subordinating_node().level()
 
     def highest_subordinating_node(self):
-        return sorted(self.subordinating_nodes(), key = lambda node: node.level())[0]
+        return sorted(self.subordinating_nodes(), 
+					  key=lambda node: node.level())[0]
 
     def header(self):
         if not self.is_subordinated(): return None

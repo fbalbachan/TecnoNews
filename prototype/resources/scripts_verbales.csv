@@ -274,7 +274,7 @@ acristianar,N,T,,,Bi,Bi
 acromatizar,N,T,,,Bi,Bi
 activar,N,T,,,Bi,No
 actualizar,A,T,,,Bi,Bi
-actuar,N,I,,,Anim,Bi
+actuar,N,I,,,Bi,Bi
 acuadrillar,N,X,,,Bi,Bi
 acuantiar,N,X,,,Bi,Bi
 acuartelar,N,I,,,Anim,Bi
@@ -1968,7 +1968,7 @@ confiar,O,R,,,Anim,Bi
 confiarse,A,I,,,Anim,Bi
 configurar,N,T,,,Bi,No
 confinar,O,T,,,Bi,Bi
-confirmar,N,T,,,Bi,Bi
+confirmar,N,T,,,Anim,Bi
 confiscar,N,T,,,Bi,No
 confitar,N,T,,,Bi,Bi
 conflagrar,N,X,,,Bi,Bi
@@ -5866,7 +5866,7 @@ parquear,N,X,,,Bi,Bi
 parrafear,N,X,,,Bi,Bi
 parrandear,N,X,,,Bi,Bi
 partear,N,X,,,Bi,Bi
-participar,N,I,,,Bi,Bi
+participar,N,I,,,Anim,Bi
 particularizar,N,X,,,Bi,Bi
 partir,N,I,,,Bi,Bi
 pasamanar,N,X,,,Bi,Bi

@@ -25,6 +25,7 @@ language_port = 10109
 
 host = 85.10.210.172
 port = 27017
+db = sentinews_test
 db_test = sentinews_test
 
 [language_filter]

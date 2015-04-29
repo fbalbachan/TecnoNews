@@ -12,6 +12,7 @@ class RelativePronounSolver:
         self.linker = clause.relative_linker
 
     def solve(self):
+        # print "Entering RelativePronounSolver.solve()"
         clause = self.clause
 
         if self.is_possessive_relative():
@@ -69,14 +70,16 @@ class RelativePronounSolver:
             destination.append(possessed_entity)
 
     def is_valid_linker(self):
+        # print "Entering RelativePronounSolver.is_valid_linker()"
+
         word = self.linker[0].lexical_form
         is_valid = word not in ["donde", "adonde"]
         return is_valid
 
     def solve_active_voice(self):
         clause = self.clause
-        gender = clause.try_to_get_gender_from_relative_linker()
-        number = clause.try_to_get_number_from_relative_linker()
+        req_gender = clause.try_to_get_gender_from_relative_linker()
+        req_number = clause.try_to_get_number_from_relative_linker()
         is_quien_relative = clause.is_quien_relative()
 
         found = False
@@ -89,22 +92,27 @@ class RelativePronounSolver:
 
             include_myself = True
             structure = clause.structure(destination)
-            verb_animity = clause.verb.get_script_animity_for(destination)
+
+            if destination in clause.verb.boxes_with_scripted_animity:
+                verb_animity = clause.verb.get_script_animity_for(destination)
+                req_animity = verb_animity
+            else:
+                req_animity = AnimityEnum.bianimate
 
             nested_entities = clause.relative_entity.get_nested_entities(include_myself)
             for nested_relative_entity in nested_entities:
 
                 if not RelativePronounSolver.relative_entity_matches_msi(nested_relative_entity,
                                                                          is_quien_relative,
-                                                                         gender, number, verb_animity):
+                                                                         req_gender, req_number, req_animity):
                     continue
 
                 if structure.is_empty() or structure.is_multiple():
                     if is_quien_relative:
                         nested_relative_entity.msi["animity"] = AnimityEnum.animated
 
-                    nested_relative_entity.msi["animity"] = AnimityEnum.most_specific(verb_animity,
-                                                                                  nested_relative_entity.msi["animity"])
+                    nested_relative_entity.msi["animity"] = \
+                        AnimityEnum.most_specific(req_animity,nested_relative_entity.msi["animity"])
                     structure.entities.append(nested_relative_entity)
                     found = True
                     break
@@ -115,7 +123,7 @@ class RelativePronounSolver:
                         nested_relative_entity.msi["animity"] = AnimityEnum.animated
 
                     nested_relative_entity.msi["animity"] = \
-                        AnimityEnum.most_specific(verb_animity, nested_relative_entity.msi["animity"])
+                        AnimityEnum.most_specific(req_animity, nested_relative_entity.msi["animity"])
 
                     structure.replace(entity, nested_relative_entity)
                     found = True
@@ -126,6 +134,8 @@ class RelativePronounSolver:
 
     @staticmethod
     def relative_entity_matches_msi(relative_entity, is_quien_relative, gender, number, verb_animity):
+        # print "Entering RelativePronounSolver.relative_entity_matches_msi - Rel entity: ", relative_entity, \
+        #    " - Verb_animity", str(verb_animity), " - gender ", str(gender), " - number ", str(number)
         matches_animity = (not is_quien_relative or relative_entity.animity_matches(AnimityEnum.animated)) \
                           and relative_entity.animity_matches(verb_animity)
         matches_gender = not gender or relative_entity.gender_matches(gender)
