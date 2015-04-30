@@ -6,7 +6,7 @@ raise_exception = False
 id = Test
 
 [news_sources]
-feeds_to_process = cnn_spanish
+feeds_to_process = elmundo
 
 [freeling]
 

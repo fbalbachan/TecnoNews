@@ -12,7 +12,7 @@ logger = get_logger('tecnonews')
 class NewsEntry(object):
     def __init__(self, title, content, tags, source, url=None, original_categories=None,
                  categories=None, wp_id=None, wp_url=None, related=None, entities=None,
-                 published_date=None, object_id=None, versions=None, image=None):
+                 published_date=None, object_id=None, versions=None, image=None, image_search_string=None):
 
         self.title = title
         self.content = content
@@ -32,6 +32,7 @@ class NewsEntry(object):
         self.versions = versions
         self.config = ConfigProvider()
         self.image = image
+        self.image_search_string = image_search_string
 
         if self.related is None:
             self.related = []
@@ -40,12 +41,25 @@ class NewsEntry(object):
             self.set_categories()
 
     def set_categories(self):
-        self.categories = list(Categorizer(self.tags).get_or_else())
+        # User must provide some info about original category or tags to have a better
+        # category selection. If not we put always the categoty to [u'inter\xe9s general']
+        logger.info("self.original_categories %s" % self.original_categories)
+        if self.original_categories:
+            self.categories = list(Categorizer(self.original_categories).get_or_else())
+            logger.info("Categorizer(self.original_categories)")
+            logger.info("self.categories %s" % self.categories)
+
+        if (not self.categories or self.categories == [u'inter\xe9s general']) \
+                and self.tags:
+            # try to find a category using original categories
+            logger.info("categorization from tags")
+            self.categories = list(Categorizer(self.tags).get_or_else())
 
         assert self.categories
 
-        if len(self.categories) == 1 and list(self.categories)[0] == 'interes general':
+        if len(self.categories) == 1 and list(self.categories)[0] == u'inter\xe9s general':
             logger.info("Tags to be categorized")
+            logger.info("Original Categories %s " % self.original_categories)
             logger.info("tags %s" % self.tags)
             logger.info("url  %s" % self.url)
 

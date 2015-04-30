@@ -18,17 +18,23 @@ class BBCParser(GenericParser):
         for script in soup(["script", "style"]):
             script.extract()
 
-        if soup is not None:
+        for link in soup.findAll('a', {'class': 'story-body__link'}):
+            link.extract()
+
+        for link in soup.findAll('a', {'class': 'story-body__link-external'}):
+            link.extract()
+
+        if soup:
             article = soup.find('div', {'class': 'story-body'})
             if article is not None:
                 title = article.find('h1', {'class': 'story-body__h1'}).text
                 paragraphs = article.find('div', {'class': 'story-body__inner'}).find_all('p')
                 content = ' '.join([paragraph.text + '\n' for paragraph in paragraphs])
-                content = self.sanitize(content)
+                # content = self.sanitize(content)
 
         news_parsed = None
 
-        if len(content) > 1 and len(tags) > 0:
+        if content and len(content) > 1 and tags and len(tags) > 0:
             news_parsed = NewsEntry(title, content, tags, self.source, url=url)
 
         return news_parsed
