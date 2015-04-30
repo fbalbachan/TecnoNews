@@ -2,22 +2,27 @@
 from src.model.entity.entity import Entity
 from src.model.entity.animityEnum import AnimityEnum
 
-
-class SyntacticAnalyzer:
+class SyntacticAnalyzer(object):
     def __init__(self, clause):
         self.clause = clause
 
     def analyze(self, clause):
-        # The order in which the FSS are extracted matters.
+        print "Entering SyntacticAnalyzer.analyze(). Verb: ", str(clause.verb)
+
+        # The order in which the FSynStr are extracted matters.
         for structure in clause.syntactic_structures:
             if structure.is_empty():
-                # print "\n\nEntities for ", structure.name, " before calculus", structure.all_entities(), "\n\n"
+                free_entities = filter(lambda p_entity: p_entity not in clause.assigned_entities(), clause.all_entities())
+                # print "\n\nNot assigned entities for clause: ", free_entities, "\n\n"
 
-                method_get_slot_entities = getattr(self, structure.name, lambda: [])
+                slot_name = structure.name
+                method_get_slot_entities = getattr(self, slot_name, lambda: [])
+
                 entities = method_get_slot_entities()
+
                 structure.append_all(entities)
 
-                # print "\n\nEntities for ", structure.name, " after calculus", structure.all_entities(), "\n\n"
+                print "\n\nEntities for ", structure.name, ": ", structure.all_entities(), "\n\n"
 
     def subject(self):
         # print "Entering SyntacticAnalyzer.subject()"
@@ -26,6 +31,7 @@ class SyntacticAnalyzer:
 
     def verb(self):
         # print "Entering SyntacticAnalyzer.verb()"
+
         return [self.clause.verb]
 
     def instrument_goal(self):
@@ -38,9 +44,10 @@ class SyntacticAnalyzer:
         return Entity.only_maximal(self.clause.lonely_entities())
 
     def search_instrument_goal_at(self, side, distance):
-        return self.filter_infinitives(self.search_subords_with_prep_at(side, distance, ))
+        return SyntacticAnalyzer.filter_infinitives(self.search_subords_with_prep_at(side, distance, ))
 
-    def find_entities_by(self, *methods):
+    @staticmethod
+    def find_entities_by(*methods):
         for method in methods:
             entities = method()
             if entities:
@@ -61,17 +68,20 @@ class SyntacticAnalyzer:
         valid_subject_entities = self.only_valid_subject_entities_of(entities)
         return valid_subject_entities
 
-    def filter_group_sp_inf(self, entities):
+    @staticmethod
+    def filter_group_sp_inf(entities):
         entities_without_group_sp_inf = filter(lambda entity: entity.node.label is not "group-sp-inf",
                                                entities)
         return entities_without_group_sp_inf
 
-    def filter_infinitives(self, entities):
+    @staticmethod
+    def filter_infinitives(entities):
         entities_without_infs = filter(lambda entity: not entity.has_attr("infinitive"),
                                        entities)
         return entities_without_infs
 
-    def filter_by_animity(self, entities, verbal_animity):
+    @staticmethod
+    def filter_by_animity(entities, verbal_animity):
         filtered_entities = filter(lambda entity: entity.animity_matches(verbal_animity),
                                    entities)
         return filtered_entities
@@ -112,7 +122,9 @@ class SyntacticAnalyzer:
         return all_subord_entities[0] if all_subord_entities else []
 
     def search_subords_at(self, side, distance, which=lambda node: True):
+        # print "Entering SyntacticAnalyzer.search_subords_at() - side ", str(side), " - distance ", str(distance)
         all_subord_entities = self.clause.subord_entities_closest_to_verb_at(side, distance, which)
+
         all_subord_entities = [sorted(entities, key=lambda entity: entity.level())
                                for entities in all_subord_entities]
 
@@ -121,7 +133,7 @@ class SyntacticAnalyzer:
 
     def search_pronoun_at(self, side, distance, animity=AnimityEnum.bianimate):
         pronouns = self.only_pronouns_of(self.clause.entities_closest_to_verb_at(side, distance))
-        pronouns = self.filter_by_animity(pronouns, animity)
+        pronouns = SyntacticAnalyzer.filter_by_animity(pronouns, animity)
 
         if pronouns:
             return [pronouns[0]]

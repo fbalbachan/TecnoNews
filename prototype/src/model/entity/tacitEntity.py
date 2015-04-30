@@ -100,6 +100,16 @@ class TacitEntity:
     def is_tacit(self):
         return self.has_attr("tacit")
 
+    def is_implicit(self):
+        return self.has_attr("implicit")
+
+    def is_impersonal(self):
+        return self.has_attr("impersonal")
+
+    def is_explicit(self):
+        explicit = not self.is_implicit() and not self.is_tacit() and not self.is_impersonal()
+        return explicit
+
     def is_coordinated(self):
         return self.has_attr("coordinated")
 
@@ -125,7 +135,8 @@ class TacitEntity:
         return bool(self.owner)
 
     def __repr__(self):
-        _repr = ("(implicit)" if self.has_attr("implicit") else "(tacit)") + " " + self.lexical_form
+        flag = "(implicit)" if self.has_attr("implicit") else "(tacit)" if self.has_attr("tacit") else "(impersonal)"
+        _repr = flag + " " + self.lexical_form
         if self.is_linked():
             _repr = _repr + " (" + self.referenced().lexical_form + ")"
         return _repr

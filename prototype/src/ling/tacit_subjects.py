@@ -49,6 +49,13 @@ def somebody():
                                    "semantic_classification": None})
 
 
+def impersonal_somebody():
+    entity = TacitEntity("alguien", {"category": "pronoun", "number": "invariable", "gender": "neutral",
+                                     "person": 3, "type": "indefinite", "case": None, "animity": AnimityEnum.animated,
+                                     "semantic_classification": None})
+    return impersonal(entity)
+
+
 def something():
     return TacitEntity("algo", {"category": "pronoun", "number": "invariable", "gender": "neutral",
                                 "person": 3, "type": "indefinite", "case": None, "animity": AnimityEnum.inanimate,
@@ -60,6 +67,9 @@ def this():
                                 "person": 3, "type": "demonstrative", "case": None, "animity": AnimityEnum.inanimate,
                                 "semantic_classification": None})
 
+def impersonal(entity):
+    entity.attributes = {"impersonal": None}
+    return entity
 
 def implicit(entity):
     entity.attributes = {"tacit": None, "implicit": None}

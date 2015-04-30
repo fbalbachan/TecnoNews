@@ -52,6 +52,9 @@ class Entity (TacitEntity):
     def is_tacit(self):
         return False
 
+    def is_implicit(self):
+        return False
+
     def lexical_form(self):
         return " ".join([ str(leaf) for leaf in self.node.leaves() if leaf.msi["category"] != "punctuation" ])
 
