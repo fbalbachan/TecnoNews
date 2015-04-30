@@ -22,6 +22,9 @@ class ElMundoParser(GenericParser):
     source = u"El Mundo"
 
     def parse(self, url):
+        if u'/opinion/' in url:
+            return None
+
         soup = BeautifulSoup(urlopen(url).read())
         image_search_string = None
 
