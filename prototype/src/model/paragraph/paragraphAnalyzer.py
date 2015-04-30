@@ -4,13 +4,13 @@ from src.utils.invoker import Invoker
 
 
 class ParagraphAnalyzer:
-    def __init__(self, sentenceAnalyzer = SentenceAnalyzer()):
-        self.sentenceAnalyzer = sentenceAnalyzer
-        self.context = sentenceAnalyzer.context
+    def __init__(self, sentence_analyzer=SentenceAnalyzer()):
+        self.sentenceAnalyzer = sentence_analyzer
+        self.context = sentence_analyzer.context
         self.invoker = Invoker()
 
     def analyze(self, paragraph):
-        #print "Entering ParagraphAnalyzer.analize()"
+        # print "Entering ParagraphAnalyzer.analyze()"
         self.context["sentences"] = []
 
         for sentence in paragraph.sentences:

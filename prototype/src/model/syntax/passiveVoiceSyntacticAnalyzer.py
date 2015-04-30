@@ -15,7 +15,7 @@ class PassiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         at_left = lambda: self.search_subject_at("left", 4)
 
         verbal_animity = self.clause.verb.subject_animity
-        entities = SyntacticAnalyzer.find_entities_by(at_right, at_left)
+        entities = self.find_entities_by(at_right, at_left)
         entities = filter(lambda entity: entity.animity_matches(verbal_animity),
                           entities)
         if entities:
@@ -55,7 +55,7 @@ class PassiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         return [od_entity]
 
     def tacit_od(self):
-        # print "OD is tacit"
+        # print "Entering PassiveVoiceSyntacticAnalyzer.tacit_od()"
         verb = self.clause.verb
         pronoun = verb.matching_pronoun()
         pronoun_msi = verb.matching_pronoun_msi()

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from src.model.entity.tacitEntity import TacitEntity
 from src.model.tokenization.token import Token
+from collections import deque
 
 class Entity (TacitEntity):
 
@@ -22,15 +23,12 @@ class Entity (TacitEntity):
     def leaves(self):
         return self.node.leaves()
 
-    def contains(self, other):
-        return other in self.children
-
     def highest_subordinating_level(self):
         return self.highest_subordinating_node().level()
 
     def highest_subordinating_node(self):
         return sorted(self.subordinating_nodes(), 
-					  key=lambda node: node.level())[0]
+                      key=lambda node: node.level())[0]
 
     def header(self):
         if not self.is_subordinated(): return None
@@ -67,9 +65,9 @@ class Entity (TacitEntity):
     def __repr__(self):
         _repr = self.lexical_form
         if self.is_possessed():
-            _repr = _repr + " (of " + repr(self.owner) + ")"
+            _repr += " (of " + repr(self.owner) + ")"
         if self.is_linked():
-            _repr = _repr + " (" + self.referenced().lexical_form + ")"
+            _repr += " (" + self.referenced().lexical_form + ")"
         return _repr
 
     def name(self):
@@ -79,3 +77,17 @@ class Entity (TacitEntity):
     def only_maximal(entities):
         return filter(lambda entity: not any([ other.contains(entity) for other in entities ]), entities)
 
+    def get_nested_entities(self, include_myself=False):
+        nested_entities = []
+        q = deque()
+
+        if include_myself:
+            nested_entities.append(self)
+
+        q.extend(self.children)
+        while len(q) > 0:
+            next_entity = q.popleft()
+            nested_entities.append(next_entity)
+            q.extend(next_entity.children)
+
+        return nested_entities

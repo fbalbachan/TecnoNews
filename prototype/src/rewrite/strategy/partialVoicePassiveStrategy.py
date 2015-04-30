@@ -119,10 +119,12 @@ class PartialVoicePassiveStrategy:
             or lemma in self.demonyms\
             or msi['semantic_classification'] == 'person'
 
-
     def rewrite_clause(self, node, sentence, clauses):
+
+        clause = clauses[0][0]
+        ntext = ""
+
         try:
-            clause = clauses[0][0]
             next_clause = clauses[0][1]
 
             # get the first leaf to extract the msi
@@ -130,19 +132,16 @@ class PartialVoicePassiveStrategy:
 
             msi = {"mode": leaf.msi["mode"], "time": leaf.msi["time"], "person": 3,
                    "number": clause.structure('od').msi()['number']}
-            # print "leaf.lemma", leaf.lemma
 
             # transform the last leaf of verb (ie clause.verb) to the msi of the first leaf of verb
             lexical_forms = self.ontology.get_lexical_forms(clause.verb.lemma(), msi)
-            rewrited_verb = filter(lambda lf: lf.text != leaf.lexical_form, lexical_forms)[0].text
-            # print "rewrited_verb", rewrited_verb
+            rewritten_verb = filter(lambda lf: lf.text != leaf.lexical_form, lexical_forms)[0].text
 
             text = clause.node.leaves_string()
             verb = clause.structure('verb').lexical_form()
 
             od = clause.structure('od').lexical_form()
             od_rewritten = od
-
 
             # lower case od if is not a proper name
             od_msi = clause.structure('od').entity().msi
@@ -151,15 +150,14 @@ class PartialVoicePassiveStrategy:
 
             if next_clause and next_clause.relative_entity == clause.structure('od').entity():
                 od_rewritten = od_rewritten + " " + next_clause.__repr__().strip()
-                print od_rewritten
-                repls = (verb, ''), (od, ''), ( " " + next_clause.__repr__(), '')
+                repls = (verb, ''), (od, ''), (" " + next_clause.__repr__(), '')
             else:
                 repls = (verb, ''), (od, '')
 
             ntext = self.multiple_replace(text, *repls).strip(' ')
             ntext = ntext[0].lower() + ntext[1:]
 
-            ntext = "se " + rewrited_verb + " " + od_rewritten +  " " + ntext
+            ntext = "se " + rewritten_verb + " " + od_rewritten + " " + ntext
             ntext = ntext.replace(' ,', ',')
             # Fix space with point at the end
             if ntext[-2:] == ' .':
@@ -183,6 +181,7 @@ class PartialVoicePassiveStrategy:
             logger.info("VoicePassiveStrategy Rewriting:")
             logger.info(e.message)
             logger.info(traceback.print_tb(tb))
+
         return Rewrite(clause.node, ntext.replace('_', ' ').strip())
 
 

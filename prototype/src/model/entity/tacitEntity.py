@@ -2,7 +2,6 @@
 from src.model.referent.referent import Referent
 from src.sentiment.entitySentimentalValue import EntitySentimentalValue
 from src.model.entity.animityEnum import AnimityEnum
-from collections import deque
 
 class TacitEntity:
 
@@ -20,14 +19,18 @@ class TacitEntity:
         self.coref_chain = []
         self.referent = Referent(self)
 
+    def contains(self, other):
+        is_contained = other in self.children
+        return is_contained
+
     def referenced(self):
         return self.coref_chain[-1]
 
     def add_coreference(self, referenced):
-        if not referenced.is_linked():
-            self.coref_chain.append(referenced)
-        else:
+        if referenced.is_linked():
             self.coref_chain.extend(referenced.coref_chain)
+        else:
+            self.coref_chain.append(referenced)
 
         self.update_referent(self.referenced().referent)
         self.update_msi()
@@ -113,21 +116,6 @@ class TacitEntity:
     def is_coordinated(self):
         return self.has_attr("coordinated")
 
-    def get_nested_entities(self, include_myself=False):
-        nested_entities = []
-        q = deque()
-
-        if include_myself:
-            nested_entities.append(self)
-
-        q.extend(self.children)
-        while len(q) > 0:
-            next_entity = q.popleft()
-            nested_entities.append(next_entity)
-            q.extend(next_entity.children)
-
-        return nested_entities
-
     def has_attr(self, attribute):
         return attribute in self.attributes
 
@@ -135,7 +123,7 @@ class TacitEntity:
         return bool(self.owner)
 
     def __repr__(self):
-        flag = "(implicit)" if self.has_attr("implicit") else "(tacit)" if self.has_attr("tacit") else "(impersonal)"
+        flag = "(implicit)" if self.has_attr("implicit") else "(impersonal)" if self.has_attr("impersonal") else "(tacit)"
         _repr = flag + " " + self.lexical_form
         if self.is_linked():
             _repr = _repr + " (" + self.referenced().lexical_form + ")"

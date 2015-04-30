@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from src.model.entity.tacitEntity import TacitEntity
 from src.model.entity.animityEnum import AnimityEnum
+from src.ling.numberEnum import NumberEnum
 
 tacit_subjects = {(0, 'singular', 'neutral'): None,
                   (1, 'singular', 'neutral'): 'yo',
@@ -23,37 +24,36 @@ tacit_subjects = {(0, 'singular', 'neutral'): None,
                   (3, 'plural', 'feminine') : 'ellas',}
 
 
-def get_entity_some(animity, is_implicit=False):
+def get_entity_some(animity, is_implicit=False, is_impersonal=False):
     if animity == AnimityEnum.animated:
-        entity_some = somebody()
+        entity = somebody()
     elif animity == AnimityEnum.inanimate:
-        entity_some = something()
+        entity = something()
     else:  # AnimityEnum.bianimate:
-        entity_some = bianimate_something()
+        entity = bianimate_something()
 
     if is_implicit:
-        entity_some = implicit(entity_some)
+        entity = implicit(entity)
+    elif is_impersonal and animity == AnimityEnum.animated:
+        entity = impersonal(entity)
 
-    return entity_some
+    return entity
 
 
 def bianimate_something():
-    return TacitEntity("algo", {"category": "pronoun", "number": "invariable", "gender": "neutral",
-                                "person": 3, "type": "indefinite", "case": None, "animity": AnimityEnum.bianimate,
-                                "semantic_classification": None})
+    entity = something()
+    entity.msi["animity"] = AnimityEnum.bianimate
+    return entity
+
+
+def impersonal_somebody():
+    return impersonal(somebody())
 
 
 def somebody():
     return TacitEntity("alguien", {"category": "pronoun", "number": "invariable", "gender": "neutral",
                                    "person": 3, "type": "indefinite", "case": None, "animity": AnimityEnum.animated,
                                    "semantic_classification": None})
-
-
-def impersonal_somebody():
-    entity = TacitEntity("alguien", {"category": "pronoun", "number": "invariable", "gender": "neutral",
-                                     "person": 3, "type": "indefinite", "case": None, "animity": AnimityEnum.animated,
-                                     "semantic_classification": None})
-    return impersonal(entity)
 
 
 def something():
@@ -67,9 +67,12 @@ def this():
                                 "person": 3, "type": "demonstrative", "case": None, "animity": AnimityEnum.inanimate,
                                 "semantic_classification": None})
 
+
 def impersonal(entity):
-    entity.attributes = {"impersonal": None}
+    entity.attributes = {"tacit": None, "impersonal": None}
+    entity.msi["number"] = NumberEnum.impersonal_invariable
     return entity
+
 
 def implicit(entity):
     entity.attributes = {"tacit": None, "implicit": None}

@@ -23,6 +23,7 @@ class SyntacticStructure:
                 break
 
     def append_all(self, entities):
+        # print "Entering SyntacticStructure.append_all"
         for entity in entities:
             self.append(entity)
 

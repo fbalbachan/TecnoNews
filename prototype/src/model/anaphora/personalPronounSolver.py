@@ -3,6 +3,7 @@ from src.model.anaphora.personalPronounCoreferenceSearcher import PersonalPronou
 from src.model.entity.verb import Verb
 from src.model.entity.animityEnum import AnimityEnum
 
+
 class PersonalPronounSolver:
     def __init__(self, clause, context):
         self.clause = clause
@@ -40,7 +41,7 @@ class PersonalPronounSolver:
         is_valid_personal_pronoun = lambda entity: entity.category() == "pronoun" \
                                                    and entity.msi["type"] == "personal" \
                                                    and entity.msi["person"] == 3 \
-                                                   and entity.msi["case"] in [None, "acusative"]
+                                                   and entity.msi["case"] in [None, "accusative"]
 
         is_valid_indefinite_pronoun = lambda entity: entity.category() == "pronoun" \
                                                      and entity.msi["type"] == "indefinite" \

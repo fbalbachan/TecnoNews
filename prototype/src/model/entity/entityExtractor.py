@@ -16,7 +16,7 @@ class EntityExtractor:
             self.relative_abnormal_nodes()
 
         entities = self.entities_for(entity_nodes)
-        entities = sorted(entities, key=lambda entity: entity.node.level(), reverse = True)
+        entities = sorted(entities, key=lambda entity: entity.node.level(), reverse=True)
         entities = self.remove_invalid_coordinated(entities)
 
         self.assign_msi(entities)
@@ -28,7 +28,7 @@ class EntityExtractor:
     def compute_proper_tree_for(entities):
         for entity in entities:
             original = entity.node
-            foreign_nodes = [ child.node for child in entity.children ]
+            foreign_nodes = [child.node for child in entity.children]
             entity.proper_node = original.cloned_by_original(foreign_nodes)[entity.node]
 
     def remove_invalid_coordinated(self, entities):
@@ -61,7 +61,7 @@ class EntityExtractor:
         return entities_by_node.values()
 
     def assign_msi(self, entities):
-        #print "Entering assign_msi"
+        # print "Entering assign_msi"
         entity_msi_seer = EntityMSISeer()
         for entity in entities:
             entity.msi = entity_msi_seer.msi_of(entity)

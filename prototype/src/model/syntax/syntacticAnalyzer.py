@@ -7,13 +7,13 @@ class SyntacticAnalyzer(object):
         self.clause = clause
 
     def analyze(self, clause):
-        print "Entering SyntacticAnalyzer.analyze(). Verb: ", str(clause.verb)
+        # print "Entering SyntacticAnalyzer.analyze(). Verb: ", str(clause.verb)
 
         # The order in which the FSynStr are extracted matters.
         for structure in clause.syntactic_structures:
             if structure.is_empty():
-                free_entities = filter(lambda p_entity: p_entity not in clause.assigned_entities(), clause.all_entities())
-                # print "\n\nNot assigned entities for clause: ", free_entities, "\n\n"
+                # free = filter(lambda p_ent: p_ent not in clause.assigned_entities(), clause.all_entities())
+                # print "\nNot assigned entities for clause: ", free, "\n"
 
                 slot_name = structure.name
                 method_get_slot_entities = getattr(self, slot_name, lambda: [])
@@ -22,7 +22,7 @@ class SyntacticAnalyzer(object):
 
                 structure.append_all(entities)
 
-                print "\n\nEntities for ", structure.name, ": ", structure.all_entities(), "\n\n"
+                # print "\nEntities for ", structure.name, ": ", structure.all_entities(), "\n"
 
     def subject(self):
         # print "Entering SyntacticAnalyzer.subject()"
@@ -46,8 +46,8 @@ class SyntacticAnalyzer(object):
     def search_instrument_goal_at(self, side, distance):
         return SyntacticAnalyzer.filter_infinitives(self.search_subords_with_prep_at(side, distance, ))
 
-    @staticmethod
-    def find_entities_by(*methods):
+    def find_entities_by(self, *methods):
+        # print "Entering find_entities_by"
         for method in methods:
             entities = method()
             if entities:
@@ -55,16 +55,24 @@ class SyntacticAnalyzer(object):
 
         return []
 
-    def verb_matching_subject_entities(self, distance_at_left, distance_at_right):
-        valid_subject_entities = self.valid_subject_entities(distance_at_left, distance_at_right)
+    def verb_matching_subject_entities(self, distance_at_left, distance_at_right, forward=True):
+
+        valid_subject_entities = self.valid_subject_entities(distance_at_left, distance_at_right, forward)
+
         verb_matching_entities = filter(lambda entity: self.clause.verb.matches(entity),
                                         valid_subject_entities)
         return verb_matching_entities
 
-    def valid_subject_entities(self, distance_at_left, distance_at_right):
+    def valid_subject_entities(self, distance_at_left, distance_at_right, forward=True):
         clause = self.clause
-        entities = clause.entities_closest_to_verb_at("left", distance_at_left) \
-                 + clause.entities_closest_to_verb_at("right", distance_at_right)
+
+        if forward:
+            entities = clause.entities_closest_to_verb_at("left", distance_at_left) \
+                     + clause.entities_closest_to_verb_at("right", distance_at_right)
+        else:
+            entities = clause.entities_closest_to_verb_at("right", distance_at_right) \
+                     + clause.entities_closest_to_verb_at("left", distance_at_left)
+
         valid_subject_entities = self.only_valid_subject_entities_of(entities)
         return valid_subject_entities
 
@@ -95,6 +103,7 @@ class SyntacticAnalyzer(object):
         return entities
 
     def search_subords_with_prep_at(self, side, distance, *accepted_prepositions):
+        # print "Entering SyntacticAnalyzer.search_subords_with_prep_at()"
 
         def which(node):
             return self.starts_with_accepted_preposition(node, *accepted_prepositions)
@@ -124,11 +133,11 @@ class SyntacticAnalyzer(object):
     def search_subords_at(self, side, distance, which=lambda node: True):
         # print "Entering SyntacticAnalyzer.search_subords_at() - side ", str(side), " - distance ", str(distance)
         all_subord_entities = self.clause.subord_entities_closest_to_verb_at(side, distance, which)
-
         all_subord_entities = [sorted(entities, key=lambda entity: entity.level())
                                for entities in all_subord_entities]
 
         subord_entities = [item for sublist in all_subord_entities for item in sublist]
+
         return subord_entities
 
     def search_pronoun_at(self, side, distance, animity=AnimityEnum.bianimate):
@@ -149,8 +158,7 @@ class SyntacticAnalyzer(object):
                       entities)
 
     def only_accusative_pronouns_of(self, entities):
-        return filter(lambda entity: entity.category() == "pronoun"
-                                     and entity.msi["case"] == "acusative",
+        return filter(lambda entity: entity.category() == "pronoun" and entity.msi["case"] == "accusative",
                       entities)
 
     def only_valid_subject_entities_of(self, entities):

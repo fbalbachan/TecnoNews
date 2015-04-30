@@ -169,7 +169,6 @@ class Clause(TreeNode):
                                      and entity.highest_subordinating_node() == node \
                                      and which_node(node)
         entities_with_node = self.to_entities_with_node(self.nodes_closest_to_verb_at(side, allowed_distance), which)
-
         return self.grouped_by_node(entities_with_node)
 
     def subord_entities(self, which_node=lambda node: True):
@@ -189,13 +188,15 @@ class Clause(TreeNode):
         return entities
 
     def entities_closest_to_verb_at(self, side, allowed_distance=float("inf")):
-        by_component = zip(*self.to_entities_with_node(self.nodes_closest_to_verb_at(side, allowed_distance)))
+        entities_with_node = self.to_entities_with_node(self.nodes_closest_to_verb_at(side, allowed_distance))
+        by_component = zip(*entities_with_node)
         entities = list(by_component[0]) if by_component else []
         return entities
 
     def all_entities(self):
         entities = self.entities + self.tacit_entities()
-        if self.relative_entity: entities.append(self.relative_entity)
+        if self.relative_entity:
+            entities.append(self.relative_entity)
         return entities
 
     def leaves_at_left(self):
@@ -214,9 +215,17 @@ class Clause(TreeNode):
         return sorted(entities, key=lambda entity: self.index_of(entity, tacit_first))
 
     def lonely_entities(self):
+        # print "Entering lonely_entities()"
+        unassigned = [entity for entity in self.entities if not self.is_assigned(entity)]
+        return unassigned
+
+    def is_assigned(self, entity):
+        # print "Entering is_assigned(entity) - ", entity
         assigned_entities = self.assigned_entities()
-        return [entity for entity in self.entities if entity not in assigned_entities
-                and not any([assigned.contains(entity) for assigned in assigned_entities])]
+        directly_assigned = entity in assigned_entities
+        contained = [assigned.contains(entity) for assigned in assigned_entities]
+        indirectly_assigned = any(contained)
+        return directly_assigned or indirectly_assigned
 
     def tacit_entities(self):
         return sum([structure.tacit_entities for structure in self.syntactic_structures], [])
@@ -225,7 +234,7 @@ class Clause(TreeNode):
         return sum([structure.entities for structure in self.syntactic_structures], [])
 
     def assigned_entities_with_referenced_ones(self):
-        return [entity.referenced() if entity.is_linked() else entity for entity in self.assigned_entities() + \
+        return [entity.referenced() if entity.is_linked() else entity for entity in self.assigned_entities() +
                 self.tacit_entities()]
 
     def grouped_by_node(self, entities_with_node):
@@ -240,12 +249,14 @@ class Clause(TreeNode):
         return entities
 
     def to_entities_with_node(self, nodes, which=lambda entity, node: entity.node == node, entities=None):
+        # print "Entering clause.to_entities_with_node()"
         if not entities:
             entities = self.lonely_entities()
 
         entities_with_node = []
         for node in nodes:
             entities_with_node.extend((entity, node) for entity in entities if which(entity, node))
+
         return entities_with_node
 
     def verb_level_nodes(self):

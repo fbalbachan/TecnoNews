@@ -88,8 +88,8 @@ class TreeNode:
         return node
 
     def leaf_positions(self):
-        leaf_positions = { leaf: index for (index, leaf) in enumerate(self.root().leaves()) }
-        return sorted([ leaf_positions[leaf] for leaf in self.leaves() ])
+        leaf_positions = {leaf: index for (index, leaf) in enumerate(self.root().leaves())}
+        return sorted([leaf_positions[leaf] for leaf in self.leaves()])
 
     def position_of(self, node):
         proper_positions = self.leaf_positions()

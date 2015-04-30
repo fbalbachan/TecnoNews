@@ -23,8 +23,7 @@ class TextInserter:
         for idx, paragraph in enumerate(self.paragraphs):
             if not isinstance(paragraph, unicode):
                 paragraph = unicode(paragraph, 'utf-8')
-                # TODO: Transform all to unicode at the beginning of the
-                # pipeline!!!
+                # TODO: Transform all to unicode at the beginning of the pipeline!!!
             generated += paragraph + u'\n'
 
             # if there is some paragraph to append
@@ -55,8 +54,9 @@ class TextInserter:
 
         contents = self.analysis["generated_content_wiki"]
 
-        for c in contents: print c
-        print "--"
+        for c in contents:
+            print c
+        print "--------"
 
         for referent, content, page in contents[0:2]:  # @UnusedVariable
             referent_index = referent.first_occurrence().token.start()
@@ -80,7 +80,8 @@ class TextInserter:
     def paragraph_of(self, index):
         for paragraph in self.paragraphs:
             start, end = self.paragraph_indexes[paragraph]
-            if start <= index < end: return paragraph
+            if start <= index < end:
+                return paragraph
 
     def idx_paragraph_of(self, index):
         paragraph_idx = None
