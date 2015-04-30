@@ -58,6 +58,8 @@ class NewsCrawler(object):
                                         'bbc_parser.BBCParser', datetime.utcnow(), ['sociedad']))
             self.feed_service.save(Feed('bbc_deportes', 'http://www.bbc.co.uk/mundo/temas/deportes/index.xml',
                                         'bbc_parser.BBCParser', datetime.utcnow(), ['deportes']))
+            self.feed_service.save(Feed('elmundo', 'http://www.elmundo.es/rss/portada.xml',
+                                        'elmundo_parser.ElMundoParser', datetime.utcnow()))
 
     def crawl_all(self):
         entries = []

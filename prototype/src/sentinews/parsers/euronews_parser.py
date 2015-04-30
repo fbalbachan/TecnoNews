@@ -32,9 +32,10 @@ class EuroNewsParser(GenericParser):
         if soup is not None:
             try:
                 paragraphs = soup.find('div', {'id': 'articleTranscript'}).find_all('p')
-            except Exception, e:
+            except Exception as e:
                 logger = get_logger('tecnonews')
                 logger.error("Problem Parsing euronews new..")
+                logger.error(e.message)
 
             if paragraphs is not None:
                 content_paragraphs_list = [paragraph.text for paragraph in paragraphs]

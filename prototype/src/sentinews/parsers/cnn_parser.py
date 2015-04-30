@@ -38,10 +38,11 @@ class CNNParser(GenericParser):
             tweet.extract()
 
         new_entry = None
-        title = soup.find('h1', {"class":"headline-article-main"}).text
-        content = soup.find('div', {"class":"content-body-text"}).text
+        title = soup.find('h1', {"class": "headline-article-main"}).text
+        content = soup.find('div', {"class": "content-body-text"}).text
         content = self.sanitize(content)
-        categories = [soup.find('div', {"class":"cat-section"}).text.strip()]
+        categories = [soup.find('div', {"class": "cat-section"}).text.strip()]
+        categories = [x for x in categories if not 'CNN' in x]
 
         tags = set()
 

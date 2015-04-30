@@ -120,10 +120,6 @@ class TecnoNews(object):
             logger.info(traceback.format_exc())
             logger.error("%s" % e.message)
 
-
-        if self.instance['id'] != 99:  # If not in test mode
-            self.service.save(entry)
-
         logger.info("<Tecnonews> <_process> END processing %s" % entry.title)
 
     def valid_to_publish(self, rewriter_instance):
