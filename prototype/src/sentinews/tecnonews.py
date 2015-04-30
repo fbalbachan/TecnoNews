@@ -120,6 +120,9 @@ class TecnoNews(object):
             logger.info(traceback.format_exc())
             logger.error("%s" % e.message)
 
+        # Allways save
+        self.service.save(news_entry=entry)
+
         logger.info("<Tecnonews> <_process> END processing %s" % entry.title)
 
     def valid_to_publish(self, rewriter_instance):
