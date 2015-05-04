@@ -50,7 +50,8 @@ class CNNParser(GenericParser):
         for tag in tag_links:
             links = tag.findAll('a')
             for l in links:
-                tags.add(l.text)
+                if not 'CNN' in l.text:  #avoid CNN tags
+                    tags.add(l.text)
 
         manual_test_js = content.find('function()') == -1
         if not manual_test_js:
