@@ -25,7 +25,7 @@ class ElMundoParser(GenericParser):
         if u'/opinion/' in url:
             return None
 
-        soup = BeautifulSoup(urlopen(url).read())
+        soup = BeautifulSoup(self.opener(url).read())
         image_search_string = None
 
         # rip out script and style elements

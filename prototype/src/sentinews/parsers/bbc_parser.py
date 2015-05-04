@@ -1,5 +1,4 @@
 from bs4 import BeautifulSoup
-from urllib2 import urlopen
 from src.sentinews.news_entry import NewsEntry
 from src.sentinews.parsers.generic_parser import GenericParser
 
@@ -11,9 +10,12 @@ class BBCParser(GenericParser):
     source = 'BBC'
 
     def parse(self, url, tags=None):
+        if u'/video_fotos/' in url:
+            return None
+
         content = None
         title = None
-        soup = BeautifulSoup(urlopen(url))
+        soup = BeautifulSoup(self.opener(url))
         # rip out script and style elements
         for script in soup(["script", "style"]):
             script.extract()
