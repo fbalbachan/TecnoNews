@@ -11,8 +11,9 @@ class ClauseExtractor:
 
     @staticmethod
     def extract_from(sentence):
-        clause_separators = ["grup-verb", "subord-rel", "subord", "subord-ger", "verb-pass"]
+        # print "Entering ClauseExtractor. extract_from(sentence) - sentence: ", sentence
 
+        clause_separators = ["grup-verb", "subord-rel", "subord", "subord-ger", "verb-pass"]
         root = sentence.parse_node
         potential_clause_roots = set(root.nodes_with_labels(clause_separators))
         clause_roots = set(ClauseExtractor.filter_invalid_subordinated_clauses(potential_clause_roots) + [root])
@@ -35,8 +36,8 @@ class ClauseExtractor:
         ClauseExtractor.compute_proper_tree_for(clauses)
         clauses = ClauseExtractor.without_invalid_clauses(clauses)
         ClauseExtractor.sort_children_of(clauses, sentence)
-
-        return ClauseExtractor.sorted(clauses, sentence)
+        clauses = ClauseExtractor.sorted(clauses, sentence)
+        return clauses
 
     @staticmethod
     def sort_children_of(clauses, sentence):
@@ -51,13 +52,14 @@ class ClauseExtractor:
     @staticmethod
     def without_invalid_clauses(clauses):
         is_cc = lambda leaf: leaf.msi["category"] == "conjunction" and leaf.msi["type"] == "coordinated"
-        is_punctuation  = lambda leaf: leaf.msi["category"] == "punctuation"
-        invalids = filter(lambda clause: all([ is_cc(leaf) or is_punctuation(leaf)
-                                              for leaf in clause.proper_tree().leaves() ]), clauses)
-        only_valid_clauses = lambda clause: clause not in invalids
+        is_punctuation = lambda leaf: leaf.msi["category"] == "punctuation"
+        invalids = filter(lambda p_clause: all([is_cc(leaf) or is_punctuation(leaf)
+                                                for leaf in p_clause.proper_tree().leaves()]), clauses)
+        only_valid_clauses = lambda p_clause: p_clause not in invalids
         clauses = filter(only_valid_clauses, clauses)
         for clause in clauses:
-            if clause.father in invalids: clause.father = None
+            if clause.father in invalids:
+                clause.father = None
             clause.children = filter(only_valid_clauses, clause.children)
         return clauses
 

@@ -12,7 +12,7 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         SyntacticAnalyzer.__init__(self, clause)
 
     def analyze(self, clause):
-        # print "Entering ActiveVoiceSyntacticAnalyzer.analyze(). Verb: ", str(clause.verb)
+        # print "Entering ActiveVoiceSyntacticAnalyzer.analyze(). Clause: ", clause
 
         if self.there_is_an_impersonal_se():
             pre_subject = self.subject_without_animity_restrictions()
@@ -29,14 +29,20 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
 
     def there_is_an_impersonal_se(self):
         # print "Entering ActiveVoiceSyntacticAnalyzer.there_is_an_impersonal_se()"
-        there_is = self.clause.verb.transitivity is "TRANSITIVE" \
-                   and self.there_is_se_before_verbal_tree()
-
-        return there_is
+        is_transitive = self.clause.verb.transitivity is "TRANSITIVE"
+        se_before_verbal_tree = self.there_is_se_before_verbal_tree()
+        return is_transitive and se_before_verbal_tree
 
     def analyze_impersonal_se(self, is_impersonal_passive, pre_subject, pre_od):
+        # print "Entering ActiveVoiceSyntacticAnalyzer.analyze_impersonal_se()"
         clause = self.clause
         for structure in clause.syntactic_structures:
+            # assigned = filter(lambda entity: clause.is_assigned(entity), clause.all_entities())
+            # unassigned = filter(lambda entity: not clause.is_assigned(entity), clause.all_entities())
+            # print "--------------"
+            # print "Assigned entities for clause: ", assigned
+            # print "Unassigned entities for clause: ", unassigned, "\n"
+
             slot_name = structure.name
             if structure.is_empty():
                 if slot_name == 'subject':
@@ -52,32 +58,36 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
 
                 structure.append_all(entities)
 
+            # print "\nFINAL Entities for ", structure.name, ": ", structure.all_entities()
+            # print "--------------"
+
     def there_is_se_before_verbal_tree(self):
         # print "Entering ActiveVoiceSyntacticAnalyzer.there_is_se_before_verbal_tree()"
         verb_node = self.clause.verb.node
         brothers = verb_node.father.children
-
         while brothers and (brothers[0].label != "morfema-verbal"
                             or len(brothers[0].children) == 0
                             or str(brothers[0].children[0]).lower() != "se"):
-            brothers.pop(0)
+            brothers = brothers[1:]
 
-        there_is = any([brothers[1].contains(leaf) for leaf in self.clause.verb.leaves()])
-
+        there_is = brothers and any([brothers[1].contains(leaf) for leaf in self.clause.verb.leaves()])
         return there_is
 
     @staticmethod
     def is_impersonal_passive(subject):
-        is_impersonal_passive = subject and subject[0].is_explicit() \
-                                        and subject[0].msi["animity"] is AnimityEnum.inanimate
+        is_impersonal_passive = subject \
+                                and subject[0].is_explicit() \
+                                and subject[0].msi["animity"] is AnimityEnum.inanimate
         return is_impersonal_passive
 
     @staticmethod
     def is_impersonal_not_passive(subject, od):
-        still_not_passive = od and (not subject or subject[0].is_tacit() or subject[0].is_implicit())
+        implicit_subject = not subject or subject[0].is_tacit() or subject[0].is_implicit()
+        still_not_passive = od and implicit_subject
         if still_not_passive:
-            explicit = od[0].is_explicit()
-            still_not_passive = od[0].is_explicit() and od[0].msi["animity"] is AnimityEnum.animated
+            od_explicit = od[0].is_explicit()
+            od_animated = od[0].msi["animity"] is AnimityEnum.animated
+            still_not_passive = od_explicit and od_animated
 
         return still_not_passive
 
@@ -96,7 +106,6 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         if entities:
             entities[0].msi["animity"] = AnimityEnum.most_specific(verbal_animity, entities[0].msi["animity"])
             subject = [entities[0]]
-
         else:
             subject = [self.tacit_or_implicit_subject(verbal_animity)]
 
@@ -110,8 +119,8 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
             subject = []
             return subject
 
-        forward = False
-        entities = self.verb_matching_subject_entities(4, 5, forward)
+        left_to_right = False
+        entities = self.verb_matching_subject_entities(4, 5, left_to_right)
 
         if entities:
             subject = [entities[0]]

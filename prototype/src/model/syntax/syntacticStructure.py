@@ -10,7 +10,9 @@ class SyntacticStructure:
         self.tacit_entities = []
 
     def accept(self, entity):
-        return SyntacticStructureEntityValidator(self).accept(entity)
+        # print "Entering SyntacticStructure.accept()"
+        is_accepted = SyntacticStructureEntityValidator(self).accept(entity)
+        return is_accepted
 
     def replace(self, old_entity, new_entity):
         self.remove(old_entity)
@@ -23,11 +25,12 @@ class SyntacticStructure:
                 break
 
     def append_all(self, entities):
-        # print "Entering SyntacticStructure.append_all"
+        # print "Entering SyntacticStructure.append_all()"
         for entity in entities:
             self.append(entity)
 
     def append(self, entity):
+        # print "Entering SyntacticStructure.append()"
         if not self.accept(entity):
             raise Exception(self.name + " no acepta la entidad " + str(entity))
 

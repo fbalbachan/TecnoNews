@@ -75,7 +75,8 @@ class Clause(TreeNode):
         if not self.is_relative():
             return False
 
-        is_quien_vector = map(lambda word: word in ["quien", "quienes", "quién", "quiénes"], self.relative_linker_words())
+        is_quien_vector = map(lambda word: word in ["quien", "quienes", "quién", "quiénes"],
+                              self.relative_linker_words())
         return any(is_quien_vector)
 
     def is_cuyo_relative(self):
@@ -164,7 +165,7 @@ class Clause(TreeNode):
                       self.syntactic_structures)[0]
 
     def subord_entities_closest_to_verb_at(self, side, allowed_distance, which_node=lambda node: True):
-        # print "Entering Clause.subord_entities_closest_to_verb_at() - side ", str(side), " - allowed distance ", str(allowed_distance)
+        # print "Entering Clause.subord_entities_closest_to_verb_at() - side ", side, " - distance ", allowed_distance
         which = lambda entity, node: entity.is_subordinated() \
                                      and entity.highest_subordinating_node() == node \
                                      and which_node(node)
@@ -188,7 +189,9 @@ class Clause(TreeNode):
         return entities
 
     def entities_closest_to_verb_at(self, side, allowed_distance=float("inf")):
-        entities_with_node = self.to_entities_with_node(self.nodes_closest_to_verb_at(side, allowed_distance))
+        # print "Entering Clause.entities_closest_to_verb_at(side, dist) - side: ", side, " - dist: ", allowed_distance
+        closest_to_verb = self.nodes_closest_to_verb_at(side, allowed_distance)
+        entities_with_node = self.to_entities_with_node(closest_to_verb)
         by_component = zip(*entities_with_node)
         entities = list(by_component[0]) if by_component else []
         return entities
@@ -216,15 +219,15 @@ class Clause(TreeNode):
 
     def lonely_entities(self):
         # print "Entering lonely_entities()"
-        unassigned = [entity for entity in self.entities if not self.is_assigned(entity)]
-        return unassigned
+        lonely = [entity for entity in self.entities if not self.is_assigned(entity)]
+        return lonely
 
     def is_assigned(self, entity):
         # print "Entering is_assigned(entity) - ", entity
         assigned_entities = self.assigned_entities()
         directly_assigned = entity in assigned_entities
-        contained = [assigned.contains(entity) for assigned in assigned_entities]
-        indirectly_assigned = any(contained)
+        contained_vector = [assigned.contains(entity) for assigned in assigned_entities]
+        indirectly_assigned = any(contained_vector)
         return directly_assigned or indirectly_assigned
 
     def tacit_entities(self):
@@ -264,14 +267,13 @@ class Clause(TreeNode):
         return verb_node.father.children
 
     def nodes_closest_to_verb_at(self, side, allowed_distance=float("inf")):
+        # print "Entering Clause.nodes_closest_to_verb_at()"
         verb = self.verb.node
         nodes_with_position = [(verb.absolute_distance_to(node), node) for node in self.verb_level_nodes()
                                if verb.position_of(node) == side]
         closest_with_pos = self.sorted_by_closest(nodes_with_position, allowed_distance)
-
         closest = [node for position, node in closest_with_pos]
-
-        return closest  # @UnusedVariable
+        return closest
 
     def sorted_by_closest(self, things_with_position, allowed_distance):
         within_distance = filter(lambda (position, entity): position <= allowed_distance,

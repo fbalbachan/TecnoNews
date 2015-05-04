@@ -10,7 +10,7 @@ from src.utils.invoker import Invoker
 
 
 class SentenceAnalyzer:
-    def __init__(self, tree_parser = FreelingTreeParser()):
+    def __init__(self, tree_parser=FreelingTreeParser()):
         self.tree_parser = tree_parser
         self.context = {"sentences": []}
         self.invoker = Invoker()
@@ -41,7 +41,8 @@ class SentenceAnalyzer:
         GlobalOperatorAnalyzer(sentence).analyze()
 
     def analyze_clauses_of(self, sentence):
-        # print "Entering analyze_clauses_of"
+        # print "Entering SentenceAnalyzer.analyze_clauses_of"
+
         self.context["clauses"] = []
         clause_analyzer = ClauseAnalyzer()
         clause_analyzer.context = self.context

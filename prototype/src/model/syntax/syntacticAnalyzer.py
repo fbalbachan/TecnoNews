@@ -7,14 +7,17 @@ class SyntacticAnalyzer(object):
         self.clause = clause
 
     def analyze(self, clause):
-        # print "Entering SyntacticAnalyzer.analyze(). Verb: ", str(clause.verb)
+        # print "Entering SyntacticAnalyzer.analyze(). Clause: ", clause
 
         # The order in which the FSynStr are extracted matters.
         for structure in clause.syntactic_structures:
-            if structure.is_empty():
-                # free = filter(lambda p_ent: p_ent not in clause.assigned_entities(), clause.all_entities())
-                # print "\nNot assigned entities for clause: ", free, "\n"
+            # assigned = filter(lambda p_ent: clause.is_assigned(p_ent), clause.all_entities())
+            # unassigned = filter(lambda p_ent: not clause.is_assigned(p_ent), clause.all_entities())
+            # print "--------------"
+            # print "Assigned entities for clause: ", assigned
+            # print "Unassigned entities for clause: ", unassigned, "\n"
 
+            if structure.is_empty():
                 slot_name = structure.name
                 method_get_slot_entities = getattr(self, slot_name, lambda: [])
 
@@ -22,7 +25,8 @@ class SyntacticAnalyzer(object):
 
                 structure.append_all(entities)
 
-                # print "\nEntities for ", structure.name, ": ", structure.all_entities(), "\n"
+            # print "\nFINAL Entities for ", structure.name, ": ", structure.all_entities()
+            # print "--------------"
 
     def subject(self):
         # print "Entering SyntacticAnalyzer.subject()"
@@ -55,23 +59,25 @@ class SyntacticAnalyzer(object):
 
         return []
 
-    def verb_matching_subject_entities(self, distance_at_left, distance_at_right, forward=True):
+    def verb_matching_subject_entities(self, distance_at_left, distance_at_right, left_to_right=True):
+        # print "Entering SyntacticAnalyzer.verb_matching_subject_entities()"
 
-        valid_subject_entities = self.valid_subject_entities(distance_at_left, distance_at_right, forward)
-
+        valid_subject_entities = self.valid_subject_entities(distance_at_left, distance_at_right, left_to_right)
         verb_matching_entities = filter(lambda entity: self.clause.verb.matches(entity),
                                         valid_subject_entities)
         return verb_matching_entities
 
-    def valid_subject_entities(self, distance_at_left, distance_at_right, forward=True):
+    def valid_subject_entities(self, distance_at_left, distance_at_right, left_to_right=True):
+        # print "Entering SyntacticAnalyzer.valid_subject_entities()"
         clause = self.clause
 
-        if forward:
-            entities = clause.entities_closest_to_verb_at("left", distance_at_left) \
-                     + clause.entities_closest_to_verb_at("right", distance_at_right)
+        entities_l = clause.entities_closest_to_verb_at("left", distance_at_left)
+        entities_r = clause.entities_closest_to_verb_at("right", distance_at_right)
+
+        if left_to_right:
+            entities = entities_l + entities_r
         else:
-            entities = clause.entities_closest_to_verb_at("right", distance_at_right) \
-                     + clause.entities_closest_to_verb_at("left", distance_at_left)
+            entities = entities_r + entities_l
 
         valid_subject_entities = self.only_valid_subject_entities_of(entities)
         return valid_subject_entities
