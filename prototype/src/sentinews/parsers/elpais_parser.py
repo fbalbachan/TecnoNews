@@ -45,13 +45,15 @@ class ElPaisParser(GenericParser):
         title_obj = soup.find('h1', {'id': 'titulo_noticia'})
         if title_obj is not None:
             title = title_obj.text
-              
+        if u'El resumen del d\xeda de El Pa\xeds' in title:
+            title = None
+
         content = ' '.join(paragraphs)
         content = self.sanitize(content)
 
         news_parsed = None
 
-        if len(content) > 1 and len(tags) > 0 and len(title) > 0:
+        if len(content) > 1 and len(tags) > 0 and title and len(title) > 0:
             news_parsed = NewsEntry(title, content, tags, self.source, url=url)
 
         return news_parsed

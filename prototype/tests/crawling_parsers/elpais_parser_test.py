@@ -22,6 +22,12 @@ class TestElPaisCrawler(unittest.TestCase):
         print "Category:", entry.categories, '\n'
         print "original_categories:", entry.original_categories, '\n'
 
+    def test_resumen_del_dia(self):
+        url = 'http://elpais.com/elpais/2015/05/01/actualidad/1430515195_553826.html'
+
+        entry = ElPaisParser().parse(url=url)
+        self.assertIsNone(entry)
+
     def test_parse_feed(self):
         feeds = feedparser.parse('http://ep00.epimg.net/rss/elpais/portada_america.xml')
         self.assertIsNotNone(feeds)
