@@ -2,10 +2,12 @@ import unittest
 import feedparser
 from src.sentinews.parsers.elmundo_parser import ElMundoParser
 
+feed_url = 'http://www.elmundo.es/rss/portada.xml'
+
 
 class ElMundoParserTest(unittest.TestCase):
     def _test_parse_one_feed(self):
-        feeds = feedparser.parse('http://www.elmundo.es/rss/portada.xml')
+        feeds = feedparser.parse(feed_url)
         self.assertIsNotNone(feeds)
         entries = feeds['entries']
         self.assertIsNotNone(entries)
@@ -32,6 +34,45 @@ class ElMundoParserTest(unittest.TestCase):
             print "Source:", entry.source, '\n'
             print "Category:", entry.categories, '\n'
             print "original_categories:", entry.original_categories, '\n'
+
+    def parse_single_url(self, url):
+
+        entry = ElMundoParser().parse(url=url)
+        if u'/opinion/' in url:
+            print "Nor parsing opinion news"
+            self.assertIsNone(entry)
+        else:
+            self.assertIsNotNone(entry)
+            print "Content:", entry.content, '\n'
+            print "Tags:", entry.tags, '\n'
+            print "Title:", entry.title, '\n'
+            print "Source:", entry.source, '\n'
+            print "Category:", entry.categories, '\n'
+            print "original_categories:", entry.original_categories, '\n'
+
+    def test_all_in_feed(self):
+        feeds = feedparser.parse(feed_url)
+        self.assertIsNotNone(feeds)
+        entries = feeds['entries']
+        self.assertIsNotNone(entries)
+        error_urls = []
+
+        for entry in entries:
+            print u"case:", entry['link'], u"\n"
+            try:
+                self.parse_single_url(entry['link'])
+            except Exception as e:
+                error_urls.append(entry['link'])
+
+                print "Error parsing"
+                print e.message
+
+        print "Total cases: ", len(entries)
+        print "Errors", len(error_urls)
+        print "Urls:", error_urls
+
+
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -2,6 +2,8 @@ import unittest
 from src.sentinews.parsers.elpais_parser import ElPaisParser
 import feedparser
 
+feed_url = 'http://ep00.epimg.net/rss/elpais/portada_america.xml'
+
 
 class TestElPaisCrawler(unittest.TestCase):
     def test_create_single_entry(self):
@@ -28,8 +30,8 @@ class TestElPaisCrawler(unittest.TestCase):
         entry = ElPaisParser().parse(url=url)
         self.assertIsNone(entry)
 
-    def test_parse_feed(self):
-        feeds = feedparser.parse('http://ep00.epimg.net/rss/elpais/portada_america.xml')
+    def _test_parse_feed(self):
+        feeds = feedparser.parse(feed_url)
         self.assertIsNotNone(feeds)
         entries = feeds['entries']
         for entry in entries:
@@ -37,7 +39,37 @@ class TestElPaisCrawler(unittest.TestCase):
             self.assertIsNotNone(entry['link'])
             self.assertTrue(len(entry['link']) > 0)
 
+    def parse_single_url(self, url):
 
+        entry = ElPaisParser().parse(url=url)
+        self.assertIsNotNone(entry)
+        print "Content:", entry.content, '\n'
+        print "Tags:", entry.tags, '\n'
+        print "Title:", entry.title, '\n'
+        print "Source:", entry.source, '\n'
+        print "Category:", entry.categories, '\n'
+        print "original_categories:", entry.original_categories, '\n'
+
+    def test_all_in_feed(self):
+        feeds = feedparser.parse(feed_url)
+        self.assertIsNotNone(feeds)
+        entries = feeds['entries']
+        self.assertIsNotNone(entries)
+        error_urls = []
+
+        for entry in entries:
+            print u"case:", entry['link'], u"\n"
+            try:
+                self.parse_single_url(entry['link'])
+            except Exception as e:
+                error_urls.append(entry['link'])
+
+                print "Error parsing"
+                print e.message
+
+        print "Total cases: ", len(entries)
+        print "Errors", len(error_urls)
+        print "Urls:", error_urls
 
 if __name__ == '__main__':
     unittest.main()

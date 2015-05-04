@@ -21,7 +21,7 @@ class CNNParser(GenericParser):
     source = u"CNN en español"
 
     def parse(self, url, limit=1):
-        soup = BeautifulSoup(urlopen(url).read())
+        soup = BeautifulSoup(self.opener(url).read())
 
         # rip out script and style elements
         for script in soup(["script", "style"]):

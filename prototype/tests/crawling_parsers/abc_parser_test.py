@@ -2,10 +2,12 @@ import unittest
 import feedparser
 from src.sentinews.parsers.abc_parser import ABCParser
 
+feed_url = 'http://www.abc.es/rss/feeds/abc_ultima.xml'
+
 
 class ABCParserTest(unittest.TestCase):
     def _test_parse_one_feed(self):
-        feeds = feedparser.parse('http://www.abc.es/rss/feeds/abc_ultima.xml')
+        feeds = feedparser.parse(feed_url)
         self.assertIsNotNone(feeds)
         entries = feeds['entries']
         self.assertIsNotNone(entries)
@@ -28,23 +30,24 @@ class ABCParserTest(unittest.TestCase):
             print "original_categories:", entry.original_categories, '\n'
 
     def test_all_in_feed(self):
-        feeds = feedparser.parse('http://www.abc.es/rss/feeds/abc_ultima.xml')
+        feeds = feedparser.parse(feed_url)
         self.assertIsNotNone(feeds)
         entries = feeds['entries']
         self.assertIsNotNone(entries)
-        errors_count = 0
+        error_urls = []
 
         for entry in entries:
             print u"case:", entry['link'], u"\n"
             try:
                 self.parse_single_url(entry['link'])
             except Exception as e:
-                errors_count += 1
+                error_urls.append(entry['link'])
                 print "Error parsing"
                 print e.message
 
         print "Total cases: ", len(entries)
-        print "Errors", errors_count
+        print "Errors", len(error_urls)
+        print "Urls:", error_urls
 
     def _test_parse_single_url(self):
         url = 'http://www.abc.es/internacional/20150504/abci-votacion-cambio-electoral-italia-201505041501.html'
