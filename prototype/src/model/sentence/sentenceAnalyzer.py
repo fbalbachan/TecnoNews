@@ -46,6 +46,8 @@ class SentenceAnalyzer:
         self.context["clauses"] = []
         clause_analyzer = ClauseAnalyzer()
         clause_analyzer.context = self.context
+
+        # print "Clauses: ", sentence.clauses
         for clause in sentence.clauses:
             clause_analyzer.analyze(clause)
             self.context["clauses"].append(clause)

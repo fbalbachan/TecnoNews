@@ -20,7 +20,7 @@ class ClauseAnalyzer:
         self.context = {}
 
     def analyze(self, clause):
-        # print "Entering Clause.Analyze"
+        # print "Entering Clause.Analyze (clause: ", clause, ")"
 
         clause.voice = ClauseAnalyzer.voice_of(clause)
         if clause.voice:
@@ -124,7 +124,7 @@ class ClauseAnalyzer:
 
     @staticmethod
     def solve_gerund(clause):
-        # print "Entering solve_gerund"
+        # print "Entering solve_gerund (voice, ", clause.voice, " - is gerund: ", str(clause.is_gerund()), ")"
 
         if clause.voice and clause.is_gerund():
             GerundSubjectSolver(clause).solve()

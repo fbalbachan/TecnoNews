@@ -14,8 +14,7 @@ class SyntacticAnalyzer(object):
             # assigned = filter(lambda p_ent: clause.is_assigned(p_ent), clause.all_entities())
             # unassigned = filter(lambda p_ent: not clause.is_assigned(p_ent), clause.all_entities())
             # print "--------------"
-            # print "Assigned entities for clause: ", assigned
-            # print "Unassigned entities for clause: ", unassigned, "\n"
+            # print "Assigned entities for clause: ", assigned, "\nUnassigned entities for clause: ", unassigned, "\n"
 
             if structure.is_empty():
                 slot_name = structure.name

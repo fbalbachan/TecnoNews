@@ -18,7 +18,7 @@ class ParseNode(TreeNode):
                                        for attribute, value in msi.items() ]), self.leaves())
 
     def leaves_of_category(self, *categories):
-        return sum([ self.leaves_of_msi({ "category" : category }) for category in categories ], [])
+        return sum([self.leaves_of_msi({"category": category}) for category in categories], [])
 
     def leaves_string(self):
         return " ".join([ str(leaf) for leaf in self.leaves() ])

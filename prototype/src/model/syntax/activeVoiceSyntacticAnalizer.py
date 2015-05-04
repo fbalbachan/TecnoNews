@@ -25,6 +25,7 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
                 self.analyze_impersonal_se(is_impersonal_passive, pre_subject, pre_od)
                 return
 
+        # print "Not a case for an impersonal 'se':  going to SyntacticAnalyzer.analyze()"
         super(ActiveVoiceSyntacticAnalyzer, self).analyze(clause)
 
     def there_is_an_impersonal_se(self):
@@ -65,19 +66,25 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         # print "Entering ActiveVoiceSyntacticAnalyzer.there_is_se_before_verbal_tree()"
         verb_node = self.clause.verb.node
         brothers = verb_node.father.children
-        while brothers and (brothers[0].label != "morfema-verbal"
-                            or len(brothers[0].children) == 0
-                            or str(brothers[0].children[0]).lower() != "se"):
+        while brothers and not self.is_node_for_morfema_verbal_se(brothers[0]):
             brothers = brothers[1:]
 
         there_is = brothers and any([brothers[1].contains(leaf) for leaf in self.clause.verb.leaves()])
         return there_is
 
+    def is_node_for_morfema_verbal_se(self, node):
+        is_leaf_se = node.is_leaf() and node.lexical_form == "se"
+        is_label_morfema_verbal = not node.is_leaf() and node.label == "morfema-verbal"
+        has_child = len(node.children) > 0
+        child_is_leaf_se = has_child and node.children[0].is_leaf() and node.children[0].lexical_form == "se"
+        return is_leaf_se or (is_label_morfema_verbal and has_child and child_is_leaf_se)
+
     @staticmethod
     def is_impersonal_passive(subject):
         is_impersonal_passive = subject \
                                 and subject[0].is_explicit() \
-                                and subject[0].msi["animity"] is AnimityEnum.inanimate
+                                and all([entity.msi["animity"] is AnimityEnum.inanimate for entity in subject])
+
         return is_impersonal_passive
 
     @staticmethod
@@ -120,10 +127,10 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
             return subject
 
         left_to_right = False
-        entities = self.verb_matching_subject_entities(4, 5, left_to_right)
+        entities = self.verb_matching_subject_entities(3, 3, left_to_right)
 
         if entities:
-            subject = [entities[0]]
+            subject = entities
         else:
             subject = [self.tacit_or_implicit_subject()]
 
