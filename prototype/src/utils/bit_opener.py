@@ -6,12 +6,11 @@ class BitOpener(FancyURLopener, object):
 
     def __init__(self):
         user_agents = [
-            'Mozilla/5.0 (Windows; U; Windows NT 5.1; it; rv:1.8.1.11) Gecko/20071127 Firefox/2.0.0.11',
-            'Opera/9.25 (Windows NT 5.1; U; en)',
-            'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.1.4322; .NET CLR 2.0.50727)',
-            'Mozilla/5.0 (compatible; Konqueror/3.5; Linux) KHTML/3.5.5 (like Gecko) (Kubuntu)',
-            'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.0.12) Gecko/20070731 Ubuntu/dapper-security Firefox/1.5.0.12',
-            'Lynx/2.8.5rel.1 libwww-FM/2.14 SSL-MM/1.4.1 GNUTLS/1.2.9'
+            'Mozilla/5.0 (X11; Linux i586; rv:31.0; es) Gecko/20100101 Firefox/31.0',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10; es-ES: rv:33.0) Gecko/20100101 Firefox/33.0',
+            'Mozilla/5.0 (X11; Linux 3.5.4-1-ARCH i686; es) KHTML/4.9.1 (like Gecko) Konqueror/4.9',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1; es-ES) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2227.1 Safari/537.36',
+            'Mozilla/5.0 (X11; Linux x86_64; es) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2227.0 Safari/537.36'
         ]
         super(BitOpener, self).__init__()
         self.version = choice(user_agents)

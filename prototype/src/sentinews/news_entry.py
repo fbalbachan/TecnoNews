@@ -34,6 +34,10 @@ class NewsEntry(object):
         self.image = image
         self.image_search_string = image_search_string
 
+        # Defensive programing to avoid wrong encoded
+        assert(isinstance(self.title, unicode))
+        assert(isinstance(self.content, unicode))
+
         if self.related is None:
             self.related = []
 
