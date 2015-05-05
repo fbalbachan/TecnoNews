@@ -29,7 +29,7 @@ class ABCParserTest(unittest.TestCase):
             print "Category:", entry.categories, '\n'
             print "original_categories:", entry.original_categories, '\n'
 
-    def test_all_in_feed(self):
+    def _test_all_in_feed(self):
         feeds = feedparser.parse(feed_url)
         self.assertIsNotNone(feeds)
         entries = feeds['entries']
@@ -49,10 +49,11 @@ class ABCParserTest(unittest.TestCase):
         print "Errors", len(error_urls)
         print "Urls:", error_urls
 
-    def _test_parse_single_url(self):
+    def test_parse_single_url(self):
         url = 'http://www.abc.es/internacional/20150504/abci-votacion-cambio-electoral-italia-201505041501.html'
         url = 'http://www.abc.es/economia/20150504/abci-belgica-prepara-inspectores-para-201505041501.html'
         url = 'http://www.abc.es/economia/20150504/abci-belgica-prepara-inspectores-para-201505041501.html?utm_source=abc&utm_medium=rss&utm_content=uh-rss&utm_campaign=traffic-rss'
+        url = 'http://sevilla.abc.es/andalucia/20150505/sevi-moreno-diaz-hizo-gazpacho-201505051724.html'
 
         entry = ABCParser().parse(url=url)
         if u'/silencio-por-favor/' in url:
@@ -61,8 +62,10 @@ class ABCParserTest(unittest.TestCase):
         else:
             self.assertIsNotNone(entry)
             print "Content:", entry.content, '\n'
+            print isinstance(entry.content, unicode)
             print "Tags:", entry.tags, '\n'
             print "Title:", entry.title, '\n'
+            print isinstance(entry.title, unicode)
             print "Source:", entry.source, '\n'
             print "Category:", entry.categories, '\n'
             print "original_categories:", entry.original_categories, '\n'

@@ -19,7 +19,7 @@ class ABCParser(GenericParser):
         config = ConfigProvider()
         self.language_filter_status = config.get('language_filter', 'status')
 
-    source = u"El Mundo"
+    source = u"ABC"
 
     def parse(self, url):
         if u'/silencio-por-favor/' in url:
@@ -35,7 +35,7 @@ class ABCParser(GenericParser):
         # Remove sharedaddy
         for social in soup.findAll('ul', {"class": "redes-sociales"}):
             social.extract()
-            
+
         tweets = []
 
         for tweet in soup.findAll('div', {"class": "embed-twitter"}):
@@ -71,19 +71,19 @@ class ABCParser(GenericParser):
             tags = list(tags)
             try:
                 new_entry = NewsEntry(title=title, content=content,
-                                  tags=tags,
-                                  source=self.source,
-                                  url=url,
-                                  original_categories=categories,
-                                  image_search_string=image_search_string)
+                                      tags=tags,
+                                      source=self.source,
+                                      url=url,
+                                      original_categories=categories,
+                                      image_search_string=image_search_string)
 
             except Exception as e:
                 logger.error("%s" % e.message)
                 logger.error(traceback.format_exc())
 
         if not new_entry:
-            logger.error("Couldn't parse news in elmundo ")
-            logger.error("Url: %s " % url)
+            logger.error(u"Couldn't parse news in elmundo ")
+            logger.error(u"Url: %s " % url)
 
         return new_entry
 
