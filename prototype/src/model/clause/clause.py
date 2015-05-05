@@ -24,6 +24,7 @@ class Clause(TreeNode):
         self.valuated_adverbs = []
         self.isolated_adjectives = []
         self.time_references = []
+        self.time_entities = []
 
         self.attributes = []
 
@@ -234,7 +235,8 @@ class Clause(TreeNode):
         return sum([structure.tacit_entities for structure in self.syntactic_structures], [])
 
     def assigned_entities(self):
-        return sum([structure.entities for structure in self.syntactic_structures], [])
+        structure_entities = sum([structure.entities for structure in self.syntactic_structures], [])
+        return structure_entities + self.time_entities
 
     def assigned_entities_with_referenced_ones(self):
         return [entity.referenced() if entity.is_linked() else entity for entity in self.assigned_entities() +

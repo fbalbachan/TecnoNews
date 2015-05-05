@@ -6,6 +6,7 @@ from src.model.anaphora.relativeEntityExtractor import RelativeEntityExtractor
 from src.model.anaphora.relativePronounSolver import RelativePronounSolver
 from src.model.entity.entityExtractor import EntityExtractor
 from src.model.entity.verbExtractor import VerbExtractor
+from src.model.entity.entity import Entity
 from src.model.syntax.activeVoiceSyntacticAnalizer import ActiveVoiceSyntacticAnalyzer
 from src.model.syntax.dateTimeFinder import DateTimeFinder
 from src.model.syntax.passiveVoiceSyntacticAnalyzer import PassiveVoiceSyntacticAnalyzer
@@ -32,6 +33,8 @@ class ClauseAnalyzer:
 
         ClauseAnalyzer.perform_prior_relative_analysis_of(clause)
 
+        ClauseAnalyzer.find_time_references(clause)
+
         analyze_methods = self.get_analyzer_solver_and_finder_methods_in_order(clause)
         for method in analyze_methods:
             method(clause)
@@ -46,12 +49,10 @@ class ClauseAnalyzer:
         if ClauseAnalyzer.relative_needs_to_be_solved_first(clause):
             syntactic_relative_methods_in_order.reverse()
 
-        methods = syntactic_relative_methods_in_order + \
-                  [ClauseAnalyzer.solve_gerund,
-                   self.solve_personal_pronouns,
-                   ClauseAnalyzer.find_adverbs,
-                   ClauseAnalyzer.find_unassigned_adjectives,
-                   ClauseAnalyzer.find_time_references]
+        methods = syntactic_relative_methods_in_order + [ClauseAnalyzer.solve_gerund,
+                                                         self.solve_personal_pronouns,
+                                                         ClauseAnalyzer.find_adverbs,
+                                                         ClauseAnalyzer.find_unassigned_adjectives]
         return methods
 
     @staticmethod
@@ -114,6 +115,10 @@ class ClauseAnalyzer:
     @staticmethod
     def find_time_references(clause):
         clause.time_references = DateTimeFinder(clause).find()
+        time_entities_with_references = clause.to_entities_with_node(clause.time_references)
+        time_entities = [entity for (entity, reference) in time_entities_with_references]
+        time_entities = Entity.only_maximal(time_entities)
+        clause.time_entities = time_entities
 
     @staticmethod
     def solve_relative(clause):

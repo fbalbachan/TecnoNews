@@ -75,7 +75,7 @@ class Entity (TacitEntity):
 
     @staticmethod
     def only_maximal(entities):
-        return filter(lambda entity: not any([ other.contains(entity) for other in entities ]), entities)
+        return filter(lambda entity: not any([other.contains(entity) for other in entities]), entities)
 
     def get_nested_entities(self, include_myself=False):
         nested_entities = []
