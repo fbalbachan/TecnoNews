@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 import traceback
 
-from urllib import urlopen
 from src.sentinews.news_entry import NewsEntry
 from bs4 import BeautifulSoup
 from src.utils.logger_utils import get_crawler_logger
@@ -25,7 +24,9 @@ class ABCParser(GenericParser):
         if u'/silencio-por-favor/' in url:
             return None
 
-        soup = BeautifulSoup(self.opener(url).read())
+        soup = BeautifulSoup(self.opener(url).read(),
+                             from_encoding='iso-8859-15')
+
         image_search_string = None
 
         # rip out script and style elements
