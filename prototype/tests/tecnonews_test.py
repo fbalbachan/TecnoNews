@@ -25,6 +25,9 @@ class TecnonewsTest(unittest.TestCase):
         link = "http://cnnespanol.cnn.com/2014/09/22/policia-investiga-ataques-racistas-contra-mario-balotelli-tras-un-tuit-del-futbolista/"
         link2 = 'http://cnnespanol.cnn.com/2015/01/06/una-familia-llora-la-perdida-de-siete-seres-queridos-en-el-vuelo-de-airasia/'
         link = 'http://laguiatv.abc.es/noticias/20150505/abci-skype-marca-201505051954.html'
+        link = 'http://www.abc.es/madrid/20150506/abci-andradas-carrillo-elecciones-complutense-201505052357.html'
+        link = 'http://www.abc.es/deportes/tenis/20150506/abci-entrevista-roger-federer-201505060140.html'
+
         # cnnparser = cnn_parser.CNNParser()
         abc_parser = ABCParser()
 
