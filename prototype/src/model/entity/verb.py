@@ -84,10 +84,8 @@ class Verb(Entity):
                  "gender": msi["gender"], "type": "personal", "case": None, "semantic_classification": None}
 
     def get_script_animity_for(self, structure_name):
-
         if structure_name == "subject":
-            scripted_animity = AnimityEnum.animated if self.is_modal_of("querer") else self.subject_animity
-            return scripted_animity
+            return self.subject_animity
 
         elif structure_name in ["od", "regimen", "equative"]:
             return self.affected_object_animity
