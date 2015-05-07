@@ -70,7 +70,7 @@ def this():
 
 def impersonal(entity):
     entity.attributes = {"tacit": None, "impersonal": None}
-    entity.msi["number"] = NumberEnum.impersonal_invariable
+    entity.msi["number"] = NumberEnum.invariable
     return entity
 
 

@@ -17,7 +17,7 @@ class PersonalPronounSolver:
         coref_searcher = PersonalPronounCoreferenceSearcher(self.clause, self.context, pronoun)
         referenced_entity = coref_searcher.search()
         if referenced_entity:
-            if structure.name in Verb.boxes_with_scripted_animity:
+            if structure.name in Verb.slots_with_scripted_animity:
                 verbal_animity = self.clause.verb.get_script_animity_for(structure.name)
                 if referenced_entity.animity_matches(verbal_animity):
                     pronoun.msi["animity"] = AnimityEnum.most_specific(verbal_animity, referenced_entity.msi["animity"])

@@ -4,6 +4,8 @@ from src.model.entity.animityEnum import AnimityEnum
 from src.ling.genderEnum import GenderEnum
 from src.ling.numberEnum import NumberEnum
 from src.model.syntax.syntacticAnalyzer import SyntacticAnalyzer
+from src.model.entity.verb import Verb
+from src.ling.tacit_subjects import this
 
 
 class RelativePronounSolver:
@@ -38,11 +40,7 @@ class RelativePronounSolver:
                                 "passive": "od"}
         destination = clause.structure(destination_by_voice[clause.voice])
 
-        msi = {"category": "pronoun",  "type": "demonstrative",
-               "gender":   "neutral",  "person": 3,
-               "number":   "singular", "case": None,
-               "semantic_classification": None}
-        undefined_pronoun = TacitEntity("eso", msi)
+        undefined_pronoun = this()
 
         destination.append(undefined_pronoun)
 
@@ -58,16 +56,20 @@ class RelativePronounSolver:
         destination_by_voice = {"active": "subject",
                                 "passive": "od"}
 
-        destination_name = destination_by_voice[clause.voice]
-        destination = clause.structure(destination_name)
+        slot_name = destination_by_voice[clause.voice]
+        slot = clause.structure(slot_name)
 
-        if AnimityEnum.animities_match(possessed_entity.msi["animity"],
-                                   clause.verb.get_script_animity_for(destination_name)):
-            possessed_entity.msi["animity"] = \
-                AnimityEnum.most_specific(possessed_entity.msi["animity"],
-                                          clause.verb.get_script_animity_for(destination_name))
-            possessed_entity.owner.msi["animity"] = possessed_entity.msi["animity"]
-            destination.append(possessed_entity)
+        if slot_name in Verb.slots_with_scripted_animity:
+            if AnimityEnum.animities_match(possessed_entity.msi["animity"],
+                                           clause.verb.get_script_animity_for(slot_name)):
+                possessed_entity.msi["animity"] = \
+                                    AnimityEnum.most_specific(possessed_entity.msi["animity"],
+                                                              clause.verb.get_script_animity_for(slot_name))
+                possessed_entity.owner.msi["animity"] = possessed_entity.msi["animity"]
+                slot.append(possessed_entity)
+
+        else:
+            slot.append(possessed_entity)
 
     def is_valid_linker(self):
         # print "Entering RelativePronounSolver.is_valid_linker()"
@@ -90,7 +92,6 @@ class RelativePronounSolver:
             if not clause.has_structure(destination):
                 continue
 
-            include_myself = True
             structure = clause.structure(destination)
 
             if destination in clause.verb.boxes_with_scripted_animity:
@@ -99,6 +100,7 @@ class RelativePronounSolver:
             else:
                 req_animity = AnimityEnum.bianimate
 
+            include_myself = True
             nested_entities = clause.relative_entity.get_nested_entities(include_myself)
             for nested_relative_entity in nested_entities:
 
@@ -112,7 +114,8 @@ class RelativePronounSolver:
                         nested_relative_entity.msi["animity"] = AnimityEnum.animated
 
                     nested_relative_entity.msi["animity"] = \
-                        AnimityEnum.most_specific(req_animity,nested_relative_entity.msi["animity"])
+                        AnimityEnum.most_specific(req_animity, nested_relative_entity.msi["animity"])
+
                     structure.entities.append(nested_relative_entity)
                     found = True
                     break
@@ -148,12 +151,9 @@ class RelativePronounSolver:
             if clause.has_structure(destination):
                 structure = clause.structure(destination)
                 if not structure.is_empty():
-                    entity = structure.entity()
                     if clause.is_quien_relative():
+                        entity = structure.entity()
                         entity.msi["animity"] = AnimityEnum.animated
-                        gender = clause.try_to_get_gender_from_relative_linker()
-                        if gender:
-                            entity.msi["gender"] = GenderEnum.most_specific(gender, entity.msi["gender"])
                         number = clause.try_to_get_number_from_relative_linker()
                         if number:
                             entity.msi["number"] = NumberEnum.most_specific(number, entity.msi["number"])

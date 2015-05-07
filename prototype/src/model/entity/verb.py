@@ -34,11 +34,12 @@ class Verb(Entity):
         return self._leaves[-1]
 
     def modal_verb(self):
-        if not self.is_compound():
-            return None
-        leaves = self._leaves[-2:]
-        if leaves[1].msi["mode"] == "infinitive":
-            return leaves[0]
+        if self.is_compound():
+            leaves = self._leaves[-2:]
+            if leaves[1].msi["mode"] == "infinitive":
+                return leaves[0]
+
+        return None
 
     def has_modal(self):
         return self.modal_verb() is not None
@@ -83,8 +84,10 @@ class Verb(Entity):
                  "gender": msi["gender"], "type": "personal", "case": None, "semantic_classification": None}
 
     def get_script_animity_for(self, structure_name):
+
         if structure_name == "subject":
-            return self.subject_animity
+            scripted_animity = AnimityEnum.animated if self.is_modal_of("querer") else self.subject_animity
+            return scripted_animity
 
         elif structure_name in ["od", "regimen", "equative"]:
             return self.affected_object_animity
@@ -97,4 +100,4 @@ class Verb(Entity):
                " ".join([self.voice, self.sentimental_script.klass, self.transitivity]) + " " + \
                str(self.msi["person"]) + "°"
 
-    boxes_with_scripted_animity = ["subject", "od", "regimen", "equative"]
+    slots_with_scripted_animity = ["subject", "od", "regimen", "equative"]

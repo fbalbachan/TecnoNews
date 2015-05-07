@@ -946,3 +946,9 @@ coach
 coreógrafo
 coreógrafa
 bombero
+niño
+niña
+manifestante
+víctima
+prisionero
+prisionera

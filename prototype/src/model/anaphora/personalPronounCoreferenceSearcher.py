@@ -67,9 +67,14 @@ class PersonalPronounCoreferenceSearcher:
 
     def entities_to_be_searched_in(self, structure):
         entities = []
-        for entity in filter(lambda entity: not entity.has_attr("implicit"), structure.all_entities()):
-            if not entity.has_attr("infinitive"): entities.append(entity)
-            if entity.is_coordinated() or entity.has_attr("infinitive"): entities.extend(entity.children)
+        non_trace_entities = filter(lambda p_entity: not p_entity.is_trace(), structure.all_entities())
+        for entity in non_trace_entities:
+            if not entity.has_attr("infinitive"):
+                entities.append(entity)
+
+            if entity.is_coordinated() or entity.has_attr("infinitive"):
+                entities.extend(entity.children)
+
         return entities
 
     def only_matching_entities(self, entities, entities_clause):

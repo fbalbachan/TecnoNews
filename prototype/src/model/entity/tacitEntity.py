@@ -113,6 +113,9 @@ class TacitEntity:
         explicit = not self.is_implicit() and not self.is_tacit() and not self.is_impersonal()
         return explicit
 
+    def is_trace(self):
+        return self.has_attr("implicit") or self.has_attr("impersonal")
+
     def is_coordinated(self):
         return self.has_attr("coordinated")
 

@@ -102,17 +102,12 @@ class Clause(TreeNode):
 
         is_invariable_vector = map(lambda leaf: leaf.msi["number"] is "invariable", self.relative_linker)
 
-        is_impersonal_invariable_vector = map(lambda leaf: leaf.msi["number"] is "impersonal/invariable",
-                                              self.relative_linker)
-
         if any(is_singular_vector):
             number = "singular"
         elif any(is_plural_vector):
             number = "plural"
         elif any(is_invariable_vector):
             number = "invariable"
-        elif any(is_impersonal_invariable_vector):
-            number = "impersonal/invariable"
         else:
             number = None
 
@@ -226,10 +221,10 @@ class Clause(TreeNode):
     def is_assigned(self, entity):
         # print "Entering is_assigned(entity) - ", entity
         assigned_entities = self.assigned_entities()
-        directly_assigned = entity in assigned_entities
+        assigned_directly = entity in assigned_entities
         contained_vector = [assigned.contains(entity) for assigned in assigned_entities]
-        indirectly_assigned = any(contained_vector)
-        return directly_assigned or indirectly_assigned
+        assigned_indirectly = any(contained_vector)
+        return assigned_directly or assigned_indirectly
 
     def tacit_entities(self):
         return sum([structure.tacit_entities for structure in self.syntactic_structures], [])

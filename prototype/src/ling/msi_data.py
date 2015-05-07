@@ -117,7 +117,7 @@ attribute_map = {"A": {1: ("type",     {"Q": "calificative",
                                           "0": None}),
 
                        4: ("number",     {"S": "singular", "P": "plural",
-                                          "N": "impersonal/invariable", "0": None}),
+                                          "N": "invariable", "0": None}),
 
                        5: ("case",       {"N": "nominative", "A": "accusative",
                                           "D": "dative",     "O": "oblicuo",
@@ -139,7 +139,7 @@ attribute_map = {"A": {1: ("type",     {"Q": "calificative",
                                       "C": "neutral",   "N": "neutral"}),  # "common"
 
                        4: ("number", {"S": "singular", "P": "plural",
-                                      "N": "impersonal/invariable"}),
+                                      "N": "invariable"}),
 
                        5: ("case",   {"N": "nominative", "A": "accusative",
                                       "D": "dative",     "O": "oblique"}),

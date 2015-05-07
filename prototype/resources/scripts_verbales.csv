@@ -163,7 +163,7 @@ acepillar,N,I,,,Bi,Bi
 aceptar,N,T,,,Anim,Bi
 acequiar,N,T,,,Bi,Bi
 acerar,N,T,,,Bi,Bi
-acercar,N,I,,,Bi,Bi
+acercar,N,R,,,Bi,Bi
 acerrojar,N,T,,,Bi,Bi
 acertar,A,I,,,Bi,Bi
 acetificar,N,T,,,Bi,Bi
@@ -3415,7 +3415,7 @@ electrizar,N,T,,,Bi,Bi
 electrocutar,N,T,,,Bi,Bi
 electrolizar,N,T,,,Bi,Bi
 elegantizar,N,X,,,Bi,Bi
-elegir,N,T,,,Bi,Anim
+elegir,N,T,,,Anim,Bi
 elementar,N,X,,,Bi,Bi
 elevar,N,T,,,Bi,Bi
 elidir,N,T,,,Bi,No
@@ -4165,7 +4165,7 @@ equilibrar,N,T,,,Bi,Bi
 equipar,A,T,,,Bi,Bi
 equiparar,N,T,,,Bi,Bi
 equiponderar,N,X,,,Bi,Bi
-equivaler,N,X,,,Bi,Bi
+equivaler,E,E,,,Bi,Bi
 equivocar,A,I,,,Bi,Bi
 erar,N,T,,,Bi,No
 ergotizar,N,X,,,Bi,Bi
