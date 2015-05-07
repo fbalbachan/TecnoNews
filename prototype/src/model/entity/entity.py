@@ -3,6 +3,7 @@ from src.model.entity.tacitEntity import TacitEntity
 from src.model.tokenization.token import Token
 from collections import deque
 
+
 class Entity (TacitEntity):
 
     def __init__(self, node):
@@ -11,11 +12,17 @@ class Entity (TacitEntity):
         self.father = None
         self.proper_node = None
         self.token = self.build_token()
-        TacitEntity.__init__(self, self.lexical_form(), {}, {})
+
+        lexical_form = self.lexical_form()
+        attributes = {}
+        if lexical_form in ["le", "les"]:
+            attributes["implicit"] = None
+
+        TacitEntity.__init__(self, lexical_form, {}, attributes)
 
     def is_subordinated_with_preposition(self, preposition):
         father = self.node.father
-        return father.label in [ "grup-sp", "sp-de" ] and father.leaves()[0].lexical_form == preposition
+        return father.label in ["grup-sp", "sp-de"] and father.leaves()[0].lexical_form == preposition
 
     def level(self):
         return self.node.level()
@@ -31,11 +38,12 @@ class Entity (TacitEntity):
                       key=lambda node: node.level())[0]
 
     def header(self):
-        if not self.is_subordinated(): return None
+        if not self.is_subordinated():
+            return None
         node = self.highest_subordinating_node()
         first_leaf = node.leaves()[0]
         if first_leaf.msi["type"] != "preposition": 
-			return None
+            return None
         return first_leaf
 
     def is_subordinated(self):
@@ -54,12 +62,12 @@ class Entity (TacitEntity):
         return False
 
     def lexical_form(self):
-        return " ".join([ str(leaf) for leaf in self.node.leaves() if leaf.msi["category"] != "punctuation" ])
+        return " ".join([str(leaf) for leaf in self.node.leaves() if leaf.msi["category"] != "punctuation"])
 
     def build_token(self):
         token = Token()
-        token.components = [ (leaf.token.start(), leaf.token.end()) for leaf in self.node.leaves() \
-                            if leaf.lexical_form not in [","] ]
+        token.components = [(leaf.token.start(), leaf.token.end()) for leaf in self.node.leaves()
+                            if leaf.lexical_form not in [","]]
         return token
 
     def __repr__(self):
@@ -75,7 +83,10 @@ class Entity (TacitEntity):
 
     @staticmethod
     def only_maximal(entities):
-        return filter(lambda entity: not any([other.contains(entity) for other in entities]), entities)
+        maximal = filter(lambda entity:
+                            not any([other.contains(entity) for other in entities]),
+                         entities)
+        return maximal
 
     def get_nested_entities(self, include_myself=False):
         nested_entities = []

@@ -12,8 +12,9 @@ class EntityExtractor:
     def extract(self):
         # print "Entering EntityExtractor.extract()"
         root = self.clause.proper_tree()
-        entity_nodes = root.nodes_with_labels(self.entity_labels) + self.infinitive_structures() + \
-            self.relative_abnormal_nodes()
+        entity_nodes = root.nodes_with_labels(self.entity_labels)\
+                       + self.infinitive_structures() \
+                       + self.relative_abnormal_nodes()
 
         entities = self.entities_for(entity_nodes)
         entities = sorted(entities, key=lambda entity: entity.node.level(), reverse=True)
@@ -48,6 +49,7 @@ class EntityExtractor:
                     entity.attributes.update(self.attributes_by_label[label])
 
                 entity.attributes.update(attributes)
+
                 entities_by_node[node] = entity
 
                 # Update entity object with parent/child relations
@@ -78,6 +80,7 @@ class EntityExtractor:
         root = clause.proper_tree()
         return root.nodes_with_labels(["grup-verb-inf"])
 
-    attributes_by_label = {"grup-verb-inf": [("infinitive", None)], "coor-n": [("coordinated", None)]}
+    attributes_by_label = {"grup-verb-inf": [("infinitive", None)],
+                           "coor-n": [("coordinated", None)]}
 
     entity_labels = ["sn", "patons", "ptonic", "coor-n"]
