@@ -94,7 +94,7 @@ class RelativePronounSolver:
 
             structure = clause.structure(destination)
 
-            if destination in clause.verb.boxes_with_scripted_animity:
+            if destination in clause.verb.slots_with_scripted_animity:
                 verb_animity = clause.verb.get_script_animity_for(destination)
                 req_animity = verb_animity
             else:
