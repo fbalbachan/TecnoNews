@@ -61,6 +61,9 @@ class EuroNewsParser(GenericParser):
         if title_obj is not None:
             title = title_obj.text
 
+        import re
+        title = re.sub(u'Fotos:( )*', u'', title)
+        title = title[0].upper() + title[1:]
 
         news_parsed = None
         if len(content) > 1 and len(tags) > 0 and len(title) > 0:
