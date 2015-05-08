@@ -70,6 +70,7 @@ class EuropaPressParser(GenericParser):
         # the sanitize process
         import re
         content = re.sub(u'\(EUROPA PRESS\) ?(-|–)?', u'', content)
+        content = re.sub(u'\(EDIZIONES\) ?(-|–)?', u'', content)
         content = self.sanitize(content)
 
         manual_test_js = content.find('function()') == -1
