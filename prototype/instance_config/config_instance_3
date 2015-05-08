@@ -6,7 +6,7 @@ raise_exception = False
 id = 3
 
 [news_sources]
-feeds_to_process = bbc_economia,bbc_tecnologia,abc
+feeds_to_process = bbc_economia,bbc_tecnologia,bbc_ciencia,bbc_salud,bbc_cultura,bbc_deportes,abc
 
 [freeling]
 

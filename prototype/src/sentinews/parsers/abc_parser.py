@@ -62,7 +62,6 @@ class ABCParser(GenericParser):
 
         content = soup.find('div', {"itemprop": 'articleBody'}).text
         content = self.sanitize(content)
-
         manual_test_js = content.find('function()') == -1
         if not manual_test_js:
             logger.error("Has JS!! %s")
