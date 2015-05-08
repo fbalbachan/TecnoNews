@@ -62,6 +62,15 @@ class NewsCrawler(object):
                                         'elmundo_parser.ElMundoParser', datetime.utcnow()))
             self.feed_service.save(Feed('abc', 'http://www.abc.es/rss/feeds/abc_ultima.xml',
                                         'abc_parser.ABCParser', datetime.utcnow()))
+            self.feed_service.save(Feed('europa_press_internacional', 'http://www.europapress.es/rss/rss.aspx?ch=69',
+                                        'europapress_parser.EuropaPressParser', datetime.utcnow()))
+            self.feed_service.save(Feed('europa_press_nacional', 'http://www.europapress.es/rss/rss.aspx?ch=66',
+                                        'europapress_parser.EuropaPressParser', datetime.utcnow()))
+            self.feed_service.save(Feed('europa_press_economia', 'http://www.europapress.es/rss/rss.aspx?ch=136',
+                                        'europapress_parser.EuropaPressParser', datetime.utcnow()))
+            self.feed_service.save(Feed('europa_press_deporte', 'http://www.europapress.es/rss/rss.aspx?ch=67',
+                                        'europapress_parser.EuropaPressParser', datetime.utcnow()))
+
 
     def crawl_all(self):
         entries = []
