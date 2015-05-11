@@ -73,16 +73,16 @@ class EntityMSISeer:
                     if leaf.msi[attribute] in non_neutral_values: msi[attribute] = leaf.msi[attribute]
 
     def msi_of_coordinated(self, entity):
-        msi = { "category" : "noun", "number" : "plural", "type" : None, "semantic_classification" : None }
+        msi = {"category": "noun", "number": "plural", "type": None, "semantic_classification": None}
 
         pronouns = sorted(entity.children_of_category("pronoun"), key=lambda pronoun: pronoun.msi["person"])
         msi["person"] = pronouns[0].msi["person"] if pronouns else 3
 
-        genders = [ child.msi["gender"] for child in \
+        genders = [child.msi["gender"] for child in
                    entity.children_of_category("noun") + entity.children_of_category("pronoun")]
         if "masculine" in genders:
             gender = "masculine"
-        elif all(map(lambda gender: gender == "feminine", genders)):
+        elif all(map(lambda p_gender: p_gender == "feminine", genders)):
             gender = "feminine"
         else:
             gender = "neutral"
@@ -97,7 +97,7 @@ class EntityMSISeer:
 
     def msi_of_infinity(self, entity):
         return {"category": "noun", "gender": None, "person": 3,
-                 "number": "singular", "type": None, "semantic_classification": None}
+                "number": "singular", "type": None, "semantic_classification": None}
 
     def calculate_animity_for(self, entity):
         default_animity_value = AnimityEnum.inanimate
@@ -106,12 +106,9 @@ class EntityMSISeer:
         if "animity" in entity.msi and entity.msi["animity"] is not default_animity_value:
             return entity.msi["animity"]
 
-        elif entity.has_attr("implicit") or entity.node.label in ["grup-verb-inf"]:
-            return AnimityEnum.inanimate
-
         # Entities with 1 token being a "paton" or "ptonic"
-        elif len(entity.token.components) is 1 and entity.node.label in ["patons","ptonic"]:
-            if entity.msi['person'] in [1,2]:
+        elif len(entity.token.components) is 1 and entity.node.label in ["patons", "ptonic"]:
+            if entity.msi['person'] in [1, 2]:
                 return AnimityEnum.animated
 
             if entity.msi['person'] is 3 and entity.msi['case'] == "dative":
@@ -119,6 +116,9 @@ class EntityMSISeer:
 
             if entity.msi['person'] is 3:
                 return AnimityEnum.bianimate
+
+        elif entity.has_attr("implicit") or entity.node.label in ["grup-verb-inf"]:
+            return AnimityEnum.inanimate
 
         # if it has kernel, return kernel's animity
         elif entity.kernel:
