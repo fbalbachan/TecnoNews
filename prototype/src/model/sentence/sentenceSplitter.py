@@ -88,18 +88,16 @@ class SentenceSplitter:
                        "|tte|col|lt|sgt|cnel|gral|brig|pref|prof|sr|sra|srta|dir|etc|fed|ee|uu|h|d|ms|s|a|sa|srl|r|l)$")
     abbreviation_regex = re.compile(abbreviation_re, re.U | re.I)
 
-    delimiters = re.compile(ur"""
-                            [!\?]\s+
-                            |(?=\.$)
-                            |\n
-                            |, ?pero\b
-                            |, ?y\b
-                            |, ?entonces
-                            |, ?sin embargo\b
-                            |, ?no obstante
-                            |;
-                            |\.\.\.
-                            |, ?pues\b
-                            """, re.U | re.I | re.VERBOSE)
+    delimiters = re.compile(ur"""[!\?]\s+"""
+                            ur"""|(?=\.$)"""
+                            ur"""|\n"""
+                            ur"""|, ?pero\b"""
+                            ur"""|, ?y\b"""
+                            ur"""|, ?entonces"""
+                            ur"""|, ?sin embargo\b"""
+                            ur"""|, ?no obstante"""
+                            ur"""|;"""
+                            ur"""|\.\.\."""
+                            ur"""|, ?pues\b""", re.U | re.I)
 
     textCleaner = TextCleaner()
