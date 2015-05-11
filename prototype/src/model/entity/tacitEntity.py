@@ -3,11 +3,11 @@ from src.model.referent.referent import Referent
 from src.sentiment.entitySentimentalValue import EntitySentimentalValue
 from src.model.entity.animityEnum import AnimityEnum
 
+
 class TacitEntity:
 
     # Warning! The dictionary of attributes is always instantiated with a reference to the same default dictionary!
     def __init__(self, lexical_form, msi, attributes={"tacit": None}):
-
         self.lexical_form = lexical_form
         if 'animity' not in msi:
             msi["animity"] = AnimityEnum.inanimate

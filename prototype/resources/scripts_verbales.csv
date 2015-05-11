@@ -902,7 +902,7 @@ apuñar,N,X,,,Bi,Bi
 apuñear,N,X,,,Bi,Bi
 apuñetear,N,X,,,Bi,Bi
 apuntalar,A,T,,,Bi,Bi
-apuntar,N,I,,,Bi,Bi
+apuntar,N,R,,,Bi,Bi
 apuntillar,N,X,,,Bi,Bi
 apurar,N,T,,,Bi,Bi
 aquejar,A,T,,,Bi,Bi
@@ -4297,7 +4297,7 @@ espejear,N,X,,,Bi,Bi
 espeluzar,N,X,,,Bi,Bi
 espeluznar,N,X,,,Bi,Bi
 esperanzar,N,X,,,Bi,Anim
-esperar,N,T,,,Bi,Bi
+esperar,N,T,,,Anim,Bi
 espernancar,N,X,,,Bi,Bi
 espesar,N,T,,,Bi,No
 espetar,O,T,,,Anim,Bi

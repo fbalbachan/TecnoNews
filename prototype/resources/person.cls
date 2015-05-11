@@ -952,3 +952,5 @@ manifestante
 víctima
 prisionero
 prisionera
+desarrollador
+desarrolladora
