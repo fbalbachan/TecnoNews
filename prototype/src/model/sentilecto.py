@@ -12,7 +12,8 @@ from src.sentiment.sentimentalSummarizer import SentimentalSummarizer
 
 class Sentilecto:
     def analyze(self, text):
-        if type(text) == unicode: text = text.encode("utf-8") # unicode -> str (encoded)
+        if type(text) == unicode:
+            text = text.encode("utf-8")  # unicode -> str (encoded)
 
         analysis = {}
 

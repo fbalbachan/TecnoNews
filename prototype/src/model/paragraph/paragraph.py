@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
 from src.model.sentence.sentenceSplitter import SentenceSplitter
 import src.model.entity
+import re
+
 
 class Paragraph:
-    def __init__(self, sentences = [], text = ""):
+    def __init__(self, sentences=[], text=""):
         self.sentences = sentences
+        self.original_text = text
+        self.parenthesis_positions_in_original_text = []
         self.text = text
 
     def clauses(self):
@@ -30,10 +34,30 @@ class Paragraph:
     def from_text(text):
         # TODO: Repensar desde la arquitectura si las sentences son de text o del párrafo,
         #       ya que Paragraph(sentences, text) puede ser redundante.
-        paragraph = Paragraph()
-        # Mientras tanto, paragraph es un parámetro -posiblemente redundante-
-        # de SentenceSplitter.sentences_in()
-        sentences = SentenceSplitter().sentences_in(text, paragraph)
+        #       Meanwhile, paragraph is a parameter (possibly redundant) of SentenceSplitter.sentences_in()
+        paragraph = Paragraph([], text)
+        paragraph._process_parenthesis()
+
+        sentences = SentenceSplitter().sentences_in(paragraph.text, paragraph)
         paragraph.sentences = sentences
-        paragraph.text = text
         return paragraph
+
+    def _process_parenthesis(self):
+
+        # This regexp matches text between parenthesis. The text between parenthesis has to meet 2 conditions:
+        # 1) atomic  = it has no '(', ')' chars at all
+        # 2) complex = it has at most 1, balanced, inner pair. Like in: "Hi (how (are) you yoo)?".
+        atom_par = r'\([^()]*\)'
+        complex_par = r'\([^()]*({0})[^()]*\)'.format(atom_par)
+        parenthesis_re = r'({0})|({1})'.format(atom_par, complex_par)
+
+        iter_parenthesis = re.finditer(parenthesis_re, self.original_text)
+        for parenthesis in iter_parenthesis:
+            parenthesis_data = (parenthesis.group(), parenthesis.span())
+            self.parenthesis_positions_in_original_text.append(parenthesis_data)
+
+        self.text = re.sub(parenthesis_re, '', self.original_text)
+
+        # TODO: Remove extra white spaces?
+        #       Using the RE saved in parenthesis_positions_in_original_text?
+        # self.text = re.sub(r'  ', r' ', self.text)
