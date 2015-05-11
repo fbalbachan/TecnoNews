@@ -21,7 +21,7 @@ class ParseNode(TreeNode):
         return sum([self.leaves_of_msi({"category": category}) for category in categories], [])
 
     def leaves_string(self):
-        return " ".join([ str(leaf) for leaf in self.leaves() ])
+        return " ".join([str(leaf) for leaf in self.leaves()])
 
     def nodes_with_labels(self, labels):
         nodes = []
@@ -30,11 +30,21 @@ class ParseNode(TreeNode):
                 nodes.append(node)
         return nodes
 
+    def has_child_with_label(self, label):
+        if self.is_leaf() or not self.children:
+            return False
+
+        for child in self.children:
+            if not child.is_leaf() and child.label == label:
+                return True
+
+        return False
+
     def subordinates_others(self):
         return not self.is_leaf() and self.label in ["subord-rel", "subord"]
 
     def is_subordinate(self):
-        return any( (node.subordinates_others() for node in self.path_to_root()) )
+        return any((node.subordinates_others() for node in self.path_to_root()))
 
     def label_node_children(self):
         return filter(lambda child: not child.is_leaf(), self.children)

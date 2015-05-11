@@ -5,6 +5,7 @@ from src.model.entity.animityEnum import AnimityEnum
 
 import ConfigParser
 
+
 class EntityMSISeer:
 
     def __init__(self):
