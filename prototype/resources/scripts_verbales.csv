@@ -5848,7 +5848,7 @@ paramentar,N,X,,,Bi,Bi
 parametrizar,N,T,,,Bi,No
 parangonar,N,X,,,Bi,Bi
 parapetar,N,X,,,Bi,Bi
-parar,N,X,,,Bi,Bi
+parar,N,T,,,Bi,Bi
 parcelar,N,X,,,Bi,Bi
 parchear,N,X,,,Bi,Bi
 pardear,N,X,,,Bi,Bi
@@ -7694,7 +7694,7 @@ vituallar,N,X,,,Bi,Bi
 vituperar,O,T,,,Bi,Bi
 vivaquear,N,X,,,Bi,Bi
 vivificar,O,T,,,Bi,Bi
-vivir,N,T,,,Anim,Bi
+vivir,N,I,,,Anim,Bi
 vocalizar,N,X,,,Bi,Bi
 vocear,N,X,,,Bi,Bi
 vociferar,A,I,,,Bi,Bi
