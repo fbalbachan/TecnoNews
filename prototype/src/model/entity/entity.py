@@ -15,7 +15,7 @@ class Entity (TacitEntity):
 
         lexical_form = self.lexical_form()
         attributes = {}
-        if lexical_form in ["le", "les"]:
+        if lexical_form in ["se", "le", "les"]:
             attributes["implicit"] = None
 
         TacitEntity.__init__(self, lexical_form, {}, attributes)

@@ -16,7 +16,8 @@ class ClauseExtractor:
         clause_separators = ["grup-verb", "subord-rel", "subord", "subord-ger", "verb-pass"]
         root = sentence.parse_node
         potential_clause_roots = set(root.nodes_with_labels(clause_separators))
-        clause_roots = set(ClauseExtractor.filter_invalid_subordinated_clauses(potential_clause_roots) + [root])
+        potential_clause_roots = ClauseExtractor.filter_invalid_subordinated_clauses(potential_clause_roots)
+        clause_roots = set(potential_clause_roots + [root])
         roots_by_level = ParseNode.by_level(clause_roots)
 
         clauses_by_node = {}
@@ -72,5 +73,5 @@ class ClauseExtractor:
 
     @staticmethod
     def filter_invalid_subordinated_clauses(nodes):
-        return filter(lambda node : not node.is_subordinate()
+        return filter(lambda node: not node.is_subordinate()
                       or (node.is_subordinate() and node.label not in ["grup-verb", "verb-pass"]), nodes)
