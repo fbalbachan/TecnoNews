@@ -121,7 +121,6 @@ class EntityMSISeer:
         elif entity.has_attr("implicit") or entity.node.label in ["grup-verb-inf"]:
             return AnimityEnum.inanimate
 
-        # if it has kernel, return kernel's animity
         elif entity.kernel:
             return self._calculate_animity_single(entity.msi, entity.kernel)
 
