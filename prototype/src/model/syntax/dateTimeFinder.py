@@ -20,20 +20,32 @@ class DateTimeFinder:
         return node.label == "sadv" and node.nodes_with_labels("sn-tmp")
 
     def is_valid_subord(self, node):
-        return any((check(node) for check in [self.has_year, self.is_en_plus_num, self.has_time_word]))
+        time_reference_checks = (check(node) for check in [self.has_year, self.is_en_plus_num, self.has_time_word])
+        return any(time_reference_checks)
 
     def has_year(self, node):
-        return any((match("^[12]\d{3}$", each.lexical_form) for each in node.leaves_of_category("number")))
+        first_leaf = node.leaves()[0]
+        year_regexp = r"^1\d{3}$|^2[012]\d{2}$"  # 1xxx or 20xx or 21xx or 22xx
+        year_matches = [each.father.label == "numero"
+                        and match(year_regexp, each.lexical_form) for each in node.leaves_of_category("number")]
+
+        return first_leaf.msi["category"] == "adposition" \
+               and first_leaf.lexical_form not in self.non_temporal_adpositions \
+               and any(year_matches)
 
     def is_en_plus_num(self, node):
         leaves = node.leaves()
         return len(leaves) == 2 and leaves[0].lemma == "en" and leaves[1].msi["category"] == "number"
 
     def has_data(self, node):
-        if not (node.leaves()[0].lexical_form == "por" or node.leaves()[0].lexical_form == "de"):
-            return "data" in [each.label for each in node if not each.is_leaf()]
+        first_leaf = node.leaves()[0]
+        return first_leaf.msi["category"] == "adposition" \
+               and first_leaf.lexical_form not in self.non_temporal_adpositions \
+               and "data" in [each.label for each in node if not each.is_leaf()]
 
     def has_time_word(self, node):
         return bool({leaf.lemma for leaf in node.leaves()} & self.time_words)
 
     time_words = {word.lower() for word in resources.parse_csv_in("syntax", "time_words")}
+
+    non_temporal_adpositions = ["por", "de", "con", "contra", "a", "ante", "bajo", "sin", "según", "tras", "a_causa_de"]
