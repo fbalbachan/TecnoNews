@@ -46,8 +46,8 @@ class TreeNode:
         return self.tree_representation_for("", "")
 
     def tree_representation_for(self, pad, representation):
-        representation = representation  + pad + repr(self) + "\n"
-        pad = pad + "  "
+        representation = representation + pad + repr(self) + "\n"
+        pad += "  "
         for child in self.children:
             representation = child.tree_representation_for(pad, representation)
         return representation
