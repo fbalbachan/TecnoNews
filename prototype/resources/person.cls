@@ -954,3 +954,5 @@ prisionero
 prisionera
 desarrollador
 desarrolladora
+gente
+humanidad
