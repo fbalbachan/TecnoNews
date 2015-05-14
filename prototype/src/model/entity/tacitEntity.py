@@ -5,15 +5,16 @@ from src.model.entity.animityEnum import AnimityEnum
 
 
 class TacitEntity:
-
-    # Warning! The dictionary of attributes is always instantiated with a reference to the same default dictionary!
-    def __init__(self, lexical_form, msi, attributes={"tacit": None}):
+    def __init__(self, lexical_form, msi, attributes=None):
         self.lexical_form = lexical_form
         if 'animity' not in msi:
             msi["animity"] = AnimityEnum.inanimate
         self.msi = msi
         self.children = []
         self.owner = None
+
+        if not attributes:
+            attributes = {"tacit": None}
         self.attributes = attributes
         self.sentimental_value = EntitySentimentalValue(self)
         self.coref_chain = []
@@ -52,6 +53,9 @@ class TacitEntity:
     def children_of_category(self, category):
         return filter(lambda entity: entity.category() == category, self.children)
 
+    #
+    # Methods related to MSI (morfo-syntatic-information)
+    #
     def classification(self):
         return self.msi["semantic_classification"]
 
@@ -97,6 +101,9 @@ class TacitEntity:
     def matches_animity_of(self, entity):
         return AnimityEnum.animities_match(self.msi["animity"], entity.msi["animity"])
 
+    #
+    # Methods to classify th entity
+    #
     def is_linked(self):
         return bool(self.coref_chain)
 
@@ -110,11 +117,13 @@ class TacitEntity:
         return self.has_attr("impersonal")
 
     def is_explicit(self):
-        explicit = not self.is_implicit() and not self.is_tacit() and not self.is_impersonal()
+        explicit = not self.is_implicit() and \
+                   not self.is_tacit() and \
+                   not self.is_impersonal()
         return explicit
 
     def is_trace(self):
-        return self.has_attr("implicit") or self.has_attr("impersonal")
+        return self.is_implicit() or self.is_impersonal()
 
     def is_coordinated(self):
         return self.has_attr("coordinated")

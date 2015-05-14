@@ -16,8 +16,8 @@ class ContentRewriterAndGenerator:
         analysis["generated_content_wiki"] = WikipediaContentGenerator(analysis).generate()
 
         # TODO: Modifications to adapt Sentilecto's Demo to changes in code introduced for tecnonews
-        #text_inserter = TextInserter(analysis)
-        #changed = text_inserter.get()
+        # text_inserter = TextInserter(analysis)
+        # changed = text_inserter.get()
 
         for referent, content, page in analysis["generated_content_wiki"]:
             if not isinstance(content, unicode):
@@ -25,7 +25,6 @@ class ContentRewriterAndGenerator:
             changed = changed + u"\n" + content
 
         analysis = self._analyze(changed)
-
         rewriter = Rewriter(analysis['paragraph'])
         changed = rewriter.rewrite()
 
