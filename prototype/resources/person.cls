@@ -956,3 +956,4 @@ desarrollador
 desarrolladora
 gente
 humanidad
+personal
