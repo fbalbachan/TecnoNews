@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from src.utils.tree.treeNode import TreeNode
-
+from src.model.entity.entity import Entity
 
 class Clause(TreeNode):
     def __init__(self, node):
@@ -11,7 +11,10 @@ class Clause(TreeNode):
 
         self.voice = None
 
+        self.time_references = []
+
         self.entities = []
+        self.time_entities = []
 
         self.relative_entity = None
         self.relative_linker = []
@@ -23,8 +26,6 @@ class Clause(TreeNode):
 
         self.valuated_adverbs = []
         self.isolated_adjectives = []
-        self.time_references = []
-        self.time_entities = []
 
         self.attributes = []
 
@@ -160,6 +161,32 @@ class Clause(TreeNode):
         return filter(lambda structure: structure.name == name,
                       self.syntactic_structures)[0]
 
+    def leaves_at_left(self):
+        root_leaves = self.root().node.leaves()
+        first_leaf = self.proper_leaves()[0]
+        return root_leaves[:self.index_in_root_of(first_leaf)]
+
+    def index_in_root_of(self, node):
+        return self.root().node.leaves().index(self.original_by_proper(node.leaves()[0]))
+
+    def index_of(self, entity, tacit_first):
+        tacit_value = float("-inf") if tacit_first else float("inf")
+        return tacit_value if entity.is_tacit() else self.proper_leaves().index(entity.leaves()[0])
+
+    def sorted(self, entities, tacit_first):
+        return sorted(entities, key=lambda entity: self.index_of(entity, tacit_first))
+
+    def is_assigned(self, entity):
+        # print "Entering is_assigned(entity) - ", entity
+        assigned_entities = self.assigned_entities()
+        assigned_directly = entity in assigned_entities
+        contained_vector = [assigned.contains(entity) for assigned in assigned_entities]
+        assigned_indirectly = any(contained_vector)
+        return assigned_directly or assigned_indirectly
+
+    #
+    # Methods for accessing ENTITIES
+    #
     def subord_entities_closest_to_verb_at(self, side, allowed_distance, which_node=lambda node: True):
         # print "Entering Clause.subord_entities_closest_to_verb_at() - side ", side, " - distance ", allowed_distance
         which = lambda entity, node: entity.is_subordinated() \
@@ -192,51 +219,31 @@ class Clause(TreeNode):
         entities = list(by_component[0]) if by_component else []
         return entities
 
+    def lonely_entities(self):
+        # print "Entering lonely_entities()"
+        lonely = [entity for entity in self.entities if not self.is_assigned(entity)]
+        return lonely
+
     def all_entities(self):
         entities = self.entities + self.tacit_entities()
         if self.relative_entity:
             entities.append(self.relative_entity)
         return entities
 
-    def leaves_at_left(self):
-        root_leaves = self.root().node.leaves()
-        first_leaf = self.proper_leaves()[0]
-        return root_leaves[:self.index_in_root_of(first_leaf)]
-
-    def index_in_root_of(self, node):
-        return self.root().node.leaves().index(self.original_by_proper(node.leaves()[0]))
-
-    def index_of(self, entity, tacit_first):
-        tacit_value = float("-inf") if tacit_first else float("inf")
-        return tacit_value if entity.is_tacit() else self.proper_leaves().index(entity.leaves()[0])
-
-    def sorted(self, entities, tacit_first):
-        return sorted(entities, key=lambda entity: self.index_of(entity, tacit_first))
-
-    def lonely_entities(self):
-        # print "Entering lonely_entities()"
-        lonely = [entity for entity in self.entities if not self.is_assigned(entity)]
-        return lonely
-
-    def is_assigned(self, entity):
-        # print "Entering is_assigned(entity) - ", entity
-        assigned_entities = self.assigned_entities()
-        assigned_directly = entity in assigned_entities
-        contained_vector = [assigned.contains(entity) for assigned in assigned_entities]
-        assigned_indirectly = any(contained_vector)
-        return assigned_directly or assigned_indirectly
-
     def tacit_entities(self):
         return sum([structure.tacit_entities for structure in self.syntactic_structures], [])
 
     def assigned_entities(self):
         structure_entities = sum([structure.entities for structure in self.syntactic_structures], [])
-        return structure_entities + self.time_entities
+        return structure_entities
 
     def assigned_entities_with_referenced_ones(self):
         return [entity.referenced() if entity.is_linked() else entity for entity in self.assigned_entities() +
                 self.tacit_entities()]
 
+    #
+    # Methods for accessing NODES
+    #
     def grouped_by_node(self, entities_with_node):
         entities = []
         last_node = None
@@ -285,6 +292,24 @@ class Clause(TreeNode):
 
     def proper_leaves(self):
         return self.proper_tree().leaves()
+
+    def put_apart_entities_originating_from_time_references(self):
+        # Entities created from nodes referencing time most probably are not proper entities.
+        # So we add them to clause.time_entities, and remove them from clause.entities to avoid its use in SVO slots
+        time_references_with_sub_nodes = []
+        for time_reference in self.time_references:
+            time_references_with_sub_nodes.append(time_reference)
+            for node in time_reference:
+                time_references_with_sub_nodes.append(node)
+
+        time_entities_with_references = self.to_entities_with_node(time_references_with_sub_nodes)
+        time_entities = [entity for (entity, reference) in time_entities_with_references]
+        time_entities = Entity.only_maximal(time_entities)
+        self.time_entities = time_entities
+
+        for time_entity in time_entities:
+            if time_entity in self.entities:
+                self.entities.remove(time_entity)
 
     def __repr__(self):
         return " ".join([str(leaf) for leaf in self.proper_leaves()])

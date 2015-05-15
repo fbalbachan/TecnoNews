@@ -114,11 +114,12 @@ class ClauseAnalyzer:
 
     @staticmethod
     def find_time_references(clause):
+        # Time references are parsing-tree-nodes (structures) with expressions about time.
         clause.time_references = DateTimeFinder(clause).find()
-        time_entities_with_references = clause.to_entities_with_node(clause.time_references)
-        time_entities = [entity for (entity, reference) in time_entities_with_references]
-        time_entities = Entity.only_maximal(time_entities)
-        clause.time_entities = time_entities
+
+        # Entities created from nodes referencing time most probably are not proper entities.
+        # So we add them to clause.time_entities, and remove them from clause.entities to avoid its use in SVO slots
+        clause.put_apart_entities_originating_from_time_references()
 
     @staticmethod
     def solve_relative(clause):
@@ -170,7 +171,6 @@ class ClauseAnalyzer:
     @staticmethod
     def entities_of(clause):
         # print "Entering entities_of"
-
         return EntityExtractor(clause).extract()
 
     @staticmethod
