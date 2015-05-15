@@ -13,12 +13,12 @@ class Entity (TacitEntity):
         self.proper_node = None
         self.token = self.build_token()
 
-        lexical_form = self.lexical_form()
-        attributes = {}
-        if lexical_form in ["se", "le", "les"]:
-            attributes["implicit"] = None
+        if self.lexical_form().lower() in ["se", "le", "les"]:
+            attributes = {"useless": None}
+        else:
+            attributes = {}
 
-        TacitEntity.__init__(self, lexical_form, {}, attributes)
+        TacitEntity.__init__(self, self.lexical_form(), {}, attributes)
 
     def is_subordinated_with_preposition(self, preposition):
         father = self.node.father

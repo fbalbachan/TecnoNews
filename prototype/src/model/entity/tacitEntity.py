@@ -13,7 +13,7 @@ class TacitEntity:
         self.children = []
         self.owner = None
 
-        if not attributes:
+        if attributes is None:
             attributes = {"tacit": None}
         self.attributes = attributes
         self.sentimental_value = EntitySentimentalValue(self)
@@ -116,6 +116,9 @@ class TacitEntity:
     def is_impersonal(self):
         return self.has_attr("impersonal")
 
+    def is_useless(self):
+        return self.has_attr("useless")
+
     def is_explicit(self):
         explicit = not self.is_implicit() and \
                    not self.is_tacit() and \
@@ -123,7 +126,7 @@ class TacitEntity:
         return explicit
 
     def is_trace(self):
-        return self.is_implicit() or self.is_impersonal()
+        return self.is_implicit() or self.is_impersonal() or self.is_useless()
 
     def is_coordinated(self):
         return self.has_attr("coordinated")
