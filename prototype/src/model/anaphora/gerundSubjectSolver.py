@@ -1,11 +1,13 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 from src.ling.tacit_subjects import somebody
+
 
 class GerundSubjectSolver:
     def __init__(self, clause):
         self.clause = clause
 
     def solve(self):
+        # print "Entering GerundSubjectSolver.solve()"
         clause = self.clause
         subject = clause.structure("subject")
 
@@ -19,5 +21,5 @@ class GerundSubjectSolver:
             entity = father_subject.entity()
             if father_subject.is_tacit():
                 subject.tacit_entities = [entity]
-            else:
+            elif not entity.is_trace():
                 subject.entities = [entity]
