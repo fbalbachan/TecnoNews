@@ -169,16 +169,15 @@ class SyntacticAnalyzer(object):
     def only_valid_subject_entities_of(self, entities):
         is_valid_pronoun = lambda entity: entity.category() == "pronoun" \
                                           and entity.msi["case"] in [None, "personal", "demonstrative", "nominative"]
-
-        valid_subject_entities = filter(lambda entity: not entity.node.label == "patons"
-                                                       and (entity.category() in ["noun", "determinant"]
-                                                            or is_valid_pronoun(entity)),
-                                        entities)
+        valid_subject_entities = \
+            filter(lambda entity: not entity.node.label == "patons"
+                                  and (entity.category() in ["noun", "determinant"] or is_valid_pronoun(entity)),
+                   entities)
         return valid_subject_entities
 
     def only_nominal_of(self, entities):
-        nominals = filter(lambda entity: entity.category() == "noun", entities)
-        return nominals
+        nominal_entities = filter(lambda entity: entity.category() == "noun", entities)
+        return nominal_entities
 
     instrument_goal_preps = ["sin", "con", "contra", "en_favor_de", "a_favor_de", "en_defensa_de",
                              "en_contra_de", "en_pos_de", "mediante", "a_través_de", "por_medio_de",
