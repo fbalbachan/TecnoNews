@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
+
 class Referent:
     def __init__(self, entity):
-        self.references = set([ entity ])
+        self.references = set([entity])
         self.extra_words = []
 
     def add_reference(self, entity):
@@ -12,13 +13,16 @@ class Referent:
         return self.designated_ref().classification()
 
     def designated_ref(self):
-        if all([ not entity.classification() for entity in self.references ]): return next(iter(self.references))
+        if all([not ref_entity.classification() for ref_entity in self.references]):
+            return next(iter(self.references))
         classified = filter(lambda entity: entity.classification(), self.references)
-        named = filter(lambda entity: entity.has_attr("names") or entity.has_attr("surnames"), classified)
-        fully_named = filter(lambda entity: entity.has_attr("names") and entity.has_attr("surnames"), named)
+        named = filter(lambda c_entity: c_entity.has_attr("names") or c_entity.has_attr("surnames"), classified)
+        fully_named = filter(lambda named_entity: named_entity.has_attr("names")and named_entity.has_attr("surnames"),
+                             named)
 
-        for _list in [ fully_named, named, classified ]:
-            if _list: return _list[0]
+        for _list in [fully_named, named, classified]:
+            if _list:
+                return _list[0]
 
     def names(self):
         return set(self.name_list())
