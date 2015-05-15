@@ -99,7 +99,6 @@ class HyperlinkProcessor(object):
                     search_string = " ".join(entity.attributes['names'])
                 self.links_by_entity[entity]['lucky'] = self._get_first_gresult(search_string)
 
-
     def _get_other_links(self):
         for entity in self.entities:
             if entity.classification() == 'other':

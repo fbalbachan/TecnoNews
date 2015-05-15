@@ -1,5 +1,6 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 from collections import Counter
+
 
 class ReferentInformationExtractor:
     def __init__(self, referent):
@@ -9,8 +10,9 @@ class ReferentInformationExtractor:
         words = []
 
         for reference in self.referent.explicit_references():
-            if reference.father: reference = reference.father
-            words.extend([ leaf.lexical_form for leaf in reference.node.leaves_of_category("noun") ])
+            if reference.father:
+                reference = reference.father
+            words.extend([leaf.lexical_form for leaf in reference.node.leaves_of_category("noun")])
 
         return [ word for word, freq in Counter(words).most_common(3) ]  # @UnusedVariable
 
