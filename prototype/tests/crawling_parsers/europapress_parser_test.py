@@ -2,10 +2,10 @@ import unittest
 import feedparser
 from src.sentinews.parsers.europapress_parser import EuropaPressParser
 
-feed_url = 'http://www.europapress.es/rss/rss.aspx?ch=69'  #internacional
-feed_url = 'http://www.europapress.es/rss/rss.aspx?ch=66'  #nacional (espa~na)
-feed_url = 'http://www.europapress.es/rss/rss.aspx?ch=136' #economia
-# feed_url = 'http://www.europapress.es/rss/rss.aspx?ch=67'  #deportes
+feed_url = 'http://www.europapress.es/rss/rss.aspx?ch=69'  # internacional
+feed_url = 'http://www.europapress.es/rss/rss.aspx?ch=66'  # nacional (espa~na)
+feed_url = 'http://www.europapress.es/rss/rss.aspx?ch=136' # economia
+# feed_url = 'http://www.europapress.es/rss/rss.aspx?ch=67'  # deportes
 
 
 class EuropaPressParserTest(unittest.TestCase):

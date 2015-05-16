@@ -33,6 +33,7 @@ class NewsRewriter(object):
                                          versions=original_entry.versions)
         self.injected_count = 0
         self.to_insert_canonical = []
+        self.config = ConfigProvider()
 
     def _get_alt_text(self, im, h):
         im2 = [(x.split('/')[-1].split('.')[0], x) for x in im]
@@ -127,11 +128,11 @@ class NewsRewriter(object):
         analysis = self._analyze(self.original_entry.title)
         rewriter = Rewriter(analysis['paragraph'])
         self.rewritten_entry.title = rewriter.rewrite()
-        self.rewritten_entry.title = self.original_entry.title
+        # self.rewritten_entry.title = self.original_entry.title
 
     def rewrite_content(self):
         # TODO: Check every step catch exceptions and return OK|Fail
-        # FIXME: analysis.text is str insted of unicode!!
+        # FIXME: analysis.text is str instead of unicode!!
         analysis = self._analyze(self.original_entry.content)
         analysis["referent_ranking"] = ReferentRanker(analysis["paragraph"]).rank()
 
@@ -139,7 +140,9 @@ class NewsRewriter(object):
         analysis["generated_content_wiki"] = WikipediaContentGenerator(analysis).generate()
         sp = SimilarParagraph(analysis=analysis, other_versions=self.rewritten_entry.other_versions)
         analysis["generated_content_other_sources"] = sp.get_generated_content()
-        self.to_insert_canonical = self.rewritten_entry.other_versions[:2]
+
+        if not self.config.get('instance', 'id') == 'Test':
+            self.to_insert_canonical = self.rewritten_entry.other_versions[:2]
 
         wikiinfo = analysis["generated_content_wiki"]
         paragraph_from_other_cover = analysis["generated_content_other_sources"]
@@ -167,7 +170,8 @@ class NewsRewriter(object):
         if wikiinfo and filter(lambda (referent, score): referent == wikiinfo[0][0] and score > 1., ranking):
             # logger.info("WIKIINFO: %s", str(wikiinfo))
             # logger.info("Searching for %s " % wikiinfo[0][2])
-            entry_image = self.get_main_image_url(wikiinfo[0][2])
+            wikipedia_page = wikiinfo[0][2]
+            entry_image = self.get_main_image_url(wikipedia_page)
             if entry_image:
                 self.rewritten_entry.image = entry_image
                 logger.info("Url selected %s" % self.rewritten_entry.image['url'])
@@ -175,6 +179,27 @@ class NewsRewriter(object):
                 logger.info("None image selected")
         else:
             logger.info("NO REFERENT SCORE > 1")
+
+        # Re try to find an image with entity from title
+        if not self.rewritten_entry.image['url']:
+            logger.info("trying from title")
+            # If we fail to select an image from text try with title entities
+            analysis = self._analyze(self.original_entry.title)
+            analysis["referent_ranking"] = ReferentRanker(analysis["paragraph"]).rank()
+            analysis["generated_content_wiki"] = WikipediaContentGenerator(analysis).generate()
+            ranking = analysis["referent_ranking"]
+            wikiinfo = analysis["generated_content_wiki"]
+
+            if wikiinfo and filter(lambda (referent, score): referent == wikiinfo[0][0] and score > 1., ranking):
+                # logger.info("WIKIINFO: %s", str(wikiinfo))
+                # logger.info("Searching for %s " % wikiinfo[0][2])
+                wikipedia_page = wikiinfo[0][2]
+                entry_image = self.get_main_image_url(wikipedia_page)
+                if entry_image:
+                    self.rewritten_entry.image = entry_image
+                    logger.info("From title Url selected %s" % self.rewritten_entry.image['url'])
+                else:
+                    logger.info("None image selected from title")
 
         self.post_process()
 
@@ -192,7 +217,7 @@ class NewsRewriter(object):
         new_tags_list = [r[0].name() for r in ranking]
         logger.info("Tags in Ranking %s" % new_tags_list)
         if not new_tags_list:
-            print "Empte tags to add"
+            print "Empty tags to add"
 
         base_tags = self.rewritten_entry.tags
         if not base_tags:
