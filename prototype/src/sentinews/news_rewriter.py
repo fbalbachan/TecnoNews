@@ -181,7 +181,7 @@ class NewsRewriter(object):
             logger.info("NO REFERENT SCORE > 1")
 
         # Re try to find an image with entity from title
-        if not self.rewritten_entry.image['url']:
+        if not self.rewritten_entry.image or not self.rewritten_entry.image['url']:
             logger.info("trying from title")
             # If we fail to select an image from text try with title entities
             analysis = self._analyze(self.original_entry.title)

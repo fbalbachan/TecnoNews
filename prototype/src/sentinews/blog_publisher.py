@@ -104,7 +104,15 @@ class BlogPublisher(object):
         post.title = entry.title
         post.content = entry.content
 
-        host = self.select_category_to_publish(entry)
+        unique_host = self.config.get('publishing', 'unique_host')
+        if unique_host == 'False':
+            host = self.select_category_to_publish(entry)
+        elif unique_host == 'True':
+            host = self.get_unique_host_to_publish()
+
+        else:
+            logger.error("No unique host set True/False")
+
         logger.info("publishing into host %s" % host['url'])
 
         client = Client(host['url'], host['username'], host['password'])
@@ -164,6 +172,14 @@ class BlogPublisher(object):
         with open(categories_priority_file) as f:
             categories_priority = json.loads(f.read())
         return categories_priority
+
+    def get_unique_host_to_publish(self):
+        import json
+        user_per_categories_file = self.config.get('publishing', 'unique_host_data')
+
+        with open(user_per_categories_file) as f:
+            unique_host = json.loads(f.read())
+        return unique_host
 
     def select_category_to_publish(self, entry):
         assert entry.categories

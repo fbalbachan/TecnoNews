@@ -70,9 +70,13 @@ class NewsCrawler(object):
                                         'europapress_parser.EuropaPressParser', datetime.utcnow()))
             self.feed_service.save(Feed('europa_press_deporte', 'http://www.europapress.es/rss/rss.aspx?ch=67',
                                         'europapress_parser.EuropaPressParser', datetime.utcnow()))
-
+            self.feed_service.save(Feed('clarin_extrashow', 'http://www.clarin.com/rss/extrashow/',
+                                        'clarin_extrashow_parser.ClarinExtrashowParser', datetime.utcnow()))
+            self.feed_service.save(Feed('telam_espectaculos', 'http://www.telam.com.ar/rss2/espectaculos.xml',
+                                        'telam_espectaculos_parser.TelamEspectaculosParser', datetime.utcnow()))
 
     def crawl_all(self):
+        crawler_logger.info("START crawl_all")
         entries = []
         crawler = Crawler()
         feeds_to_process = self.feed_service.get_feeds_to_process(self.feeds_to_process)
@@ -82,9 +86,11 @@ class NewsCrawler(object):
             entries.extend(news_entries)
 
         entries = self.discard_already_processed(entries)
+        crawler_logger.info("END crawl_all")
         return self.__clean_duplicated(entries)
 
     def discard_already_processed(self, entries):
+        crawler_logger.info("START Discarding already_processed urls")
         ns = NewsEntriesService()
         new_entries = []
 
@@ -92,9 +98,11 @@ class NewsCrawler(object):
             if not ns.already_in_db(entry.url):
                 new_entries.append(entry)
 
+        crawler_logger.info("END Discarding already_processed urls")
         return new_entries
 
     def __clean_duplicated(self, entries):
+        crawler_logger.info("START Discarding duplicated urls urls")
         cleaned_entries = []
         cleaned_entries_urls = []
 
@@ -102,5 +110,5 @@ class NewsCrawler(object):
             if entry.url not in cleaned_entries_urls:
                 cleaned_entries.append(entry)
                 cleaned_entries_urls.append(entry.url)
-
+        crawler_logger.info("END Discarding duplicated urls urls")
         return cleaned_entries
