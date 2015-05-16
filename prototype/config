@@ -6,7 +6,7 @@ raise_exception = False
 id = Test
 
 [news_sources]
-feeds_to_process = europa_press_internacional,europa_press_nacional,europa_press_economia,europa_press_deporte
+feeds_to_process = euronews
 
 [freeling]
 
@@ -32,6 +32,7 @@ db_test = sentinews_test
 status = ON
 
 [publishing]
+unique_host = False
 category_host_to_publish = publishing/wordpress_category_host_to_publish_test.json
 categories_priority = publishing/categories_priority.json
 

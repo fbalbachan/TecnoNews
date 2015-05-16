@@ -123,6 +123,15 @@ if __name__ == '__main__':
     import sys
 
     image_path = sys.argv[1]
+    if len(sys.argv) > 2:
+        test = sys.argv[2]
+        print test
+        if test == 'False':
+            test = False
+        if test == 'True':
+            test = True
+    else:
+        test = True
 
-    find_faces(image_path, test=True)
-    to_desired_size(image_path,test=True)
+    find_faces(image_path, test=test)
+    to_desired_size(image_path, test=test)
