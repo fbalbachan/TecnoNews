@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from src.utils.factNormalizer import FactNormalizer
 
+
 class WebOutputUtils:
 
     def structure(self, clause, name):
@@ -9,7 +10,9 @@ class WebOutputUtils:
             if name == "verb":
                 return structure.entity().lemma()
             else:
-                return ", ".join([ str(entity) for entity in structure.all_entities() ])
+                entities = structure.all_entities()
+                # entities.sort(key=lambda p_entity: p_entity.token.start())
+                return ", ".join([str(entity) for entity in entities])
         else:
             return ""
 

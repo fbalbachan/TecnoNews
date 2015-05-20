@@ -21,3 +21,15 @@ class LabelNode(ParseNode):
             return self.label == other.label and ParseNode.is_equivalent_to(self, other)
         except AttributeError:
             return False
+
+    def label_lemma_matches(self, label, lemmas):
+        matches = True
+        if label:
+            matches = matches and self.label == label
+
+        matches = matches \
+                  and len(self.children) == 1 \
+                  and self.children[0].is_leaf() \
+                  and self.children[0].lemma_matches(lemmas)
+
+        return matches

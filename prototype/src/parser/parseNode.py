@@ -48,3 +48,9 @@ class ParseNode(TreeNode):
 
     def label_node_children(self):
         return filter(lambda child: not child.is_leaf(), self.children)
+
+    def label_lemma_matches(self, label, lemmas):
+        if self.is_leaf():
+            return self.lemma_matches(lemmas)
+        else:
+            return self.label_lemma_matches(label, lemmas)

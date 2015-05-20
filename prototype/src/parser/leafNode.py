@@ -19,6 +19,9 @@ class LeafNode(ParseNode):
     def joined_text(self):
         return " ".join(self.original_components())
 
+    def lemma_matches(self, lemmas):
+        return self.lemma in lemmas
+
     def size(self):
         return len(self.components())
 
@@ -28,7 +31,7 @@ class LeafNode(ParseNode):
     def is_equivalent_to(self, other):
         try:
             attributes = ["lexical_form", "lemma", "msi"]
-            return all( self.__dict__[attribute] == other.__dict__[attribute] for attribute in attributes) and \
-                ParseNode.is_equivalent_to(self, other)
+            return all(self.__dict__[attribute] == other.__dict__[attribute] for attribute in attributes) \
+                   and ParseNode.is_equivalent_to(self, other)
         except KeyError:
             return False
