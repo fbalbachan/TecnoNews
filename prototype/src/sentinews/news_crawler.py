@@ -74,6 +74,9 @@ class NewsCrawler(object):
                                         'clarin_extrashow_parser.ClarinExtrashowParser', datetime.utcnow()))
             self.feed_service.save(Feed('telam_espectaculos', 'http://www.telam.com.ar/rss2/espectaculos.xml',
                                         'telam_espectaculos_parser.TelamEspectaculosParser', datetime.utcnow()))
+            self.feed_service.save(Feed('lanacion_espectaculos',
+                                        'http://servicios.lanacion.com.ar/herramientas/rss/categoria_id=120',
+                                        'lanacion_espectaculos_parser.LaNacionEspectaculosParser', datetime.utcnow()))
 
     def crawl_all(self):
         crawler_logger.info("START crawl_all")
