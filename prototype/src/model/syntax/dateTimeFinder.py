@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from re import match
+
 from src.utils.resources import instance as resources
 
 
@@ -39,8 +40,7 @@ class DateTimeFinder:
 
     def has_data(self, node):
         first_leaf = node.leaves()[0]
-        return first_leaf.msi["category"] == "adposition" \
-               and first_leaf.lexical_form not in self.non_temporal_adpositions \
+        return first_leaf.lexical_form not in self.non_temporal_adpositions \
                and "data" in [each.label for each in node if not each.is_leaf()]
 
     def has_time_word(self, node):
