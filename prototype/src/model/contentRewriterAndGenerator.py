@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from src.extension.textInserter import TextInserter
 from src.extension.wikipediaContentGenerator import WikipediaContentGenerator
 from src.model.referent.referentRanker import ReferentRanker
 from src.model.sentilecto import Sentilecto
@@ -15,10 +14,6 @@ class ContentRewriterAndGenerator:
 
         analysis["generated_content_wiki"] = WikipediaContentGenerator(analysis).generate()
 
-        # TODO: Modifications to adapt Sentilecto's Demo to changes in code introduced for tecnonews
-        # text_inserter = TextInserter(analysis)
-        # changed = text_inserter.get()
-
         for referent, content, page in analysis["generated_content_wiki"]:
             if not isinstance(content, unicode):
                 content = unicode(content, 'utf-8')
@@ -28,7 +23,7 @@ class ContentRewriterAndGenerator:
         rewriter = Rewriter(analysis['paragraph'])
         changed = rewriter.rewrite()
 
-        return { "source" : text, "changed" : changed }
+        return {"source": text, "changed": changed}
 
     def _analyze(self, text):
         return Sentilecto().analyze(text)

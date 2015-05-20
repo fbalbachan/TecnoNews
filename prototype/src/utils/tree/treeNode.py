@@ -1,4 +1,4 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 from copy import copy
 
 from src.utils.tree.inDepthNodeIterator import InDepthNodeIterator
@@ -43,13 +43,22 @@ class TreeNode:
         return self.level() == 0
 
     def tree_representation(self):
-        return self.tree_representation_for("", "")
+        return self.tree_representation_for(self, "", "")
 
-    def tree_representation_for(self, pad, representation):
-        representation = representation + pad + repr(self) + "\n"
-        pad += "  "
+    def tree_representation_for(self, root, pad, representation):
+        index = list(root).index(self)
+        level = self.level()
+        str_idx = repr(index).rjust(3) + "," + repr(level).rjust(3) + "  "
+
+        if self.is_leaf():
+            representation += str_idx + pad + "[ " + repr(self) + " ]\n"
+        else:
+            representation += str_idx + pad + repr(self) + "\n"
+
+        pad += "    "
         for child in self.children:
-            representation = child.tree_representation_for(pad, representation)
+            representation = child.tree_representation_for(root, pad, representation)
+
         return representation
 
     # El padre no es comparado pues debería complejizarse el método. Sólo el subárbol descendente.

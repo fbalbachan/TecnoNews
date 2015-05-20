@@ -56,10 +56,15 @@ class SentenceAnalyzer:
         node = self.tree_parser.from_text(sentence.text)
         sentence.parse_node = node
 
-        print "TEXT", sentence.text
-        print "LEAVES", node.leaves()
-
+        print "-------------------------------------------------------"
+        print "TEXT".ljust(8), sentence.text
+        print "-------------------------------------------------------"
+        print "LEAVES".ljust(8), node.leaves()
+        print "-------------------------------------------------------"
         print node.tree_representation()
+        print "-------------------------------------------------------"
         for leaf in node.leaves():
-            print leaf.original_lexical_form, leaf.lemma, leaf.msi
-        print "--------------"
+            lex_entry = leaf.original_lexical_form + " " + leaf.lemma
+            print lex_entry.ljust(18), leaf.msi
+            print ""
+        print "-------------------------------------------------------------------------------------------------------"
