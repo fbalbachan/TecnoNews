@@ -22,10 +22,10 @@ class LabelNode(ParseNode):
         except AttributeError:
             return False
 
-    def label_lemma_matches(self, label, lemmas):
+    def label_lemma_matches(self, labels, lemmas):
         matches = True
-        if label:
-            matches = matches and self.label == label
+        if labels is not None:
+            matches = matches and self.label in labels
 
         matches = matches \
                   and len(self.children) == 1 \

@@ -2,7 +2,9 @@
 from collections import deque
 
 from src.model.entity.tacitEntity import TacitEntity
+
 from src.model.tokenization.token import Token
+from src.model.entity.animityEnum import AnimityEnum
 
 
 class Entity (TacitEntity):
@@ -68,9 +70,13 @@ class Entity (TacitEntity):
         return " ".join([str(leaf) for leaf in self.node.leaves() if leaf.msi["category"] != "punctuation"])
 
     @staticmethod
-    def link_in_apposition(reference_entity, entities_in_apposition):
+    def link_in_apposition(head_entity, entities_in_apposition):
+        if head_entity.msi["animity"] == AnimityEnum.inanimate \
+           and [entity.msi["animity"] == AnimityEnum.animated for entity in entities_in_apposition]:
+            head_entity.msi["animity"] = AnimityEnum.animated
+
         for entity in entities_in_apposition:
-            reference_entity.appositions.append(entity)
+            head_entity.appositions.append(entity)
 
     def build_token(self):
         token = Token()
