@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from src.model.entity.entity import Entity
 from src.model.entity.animityEnum import AnimityEnum
 
 class SyntacticAnalyzer(object):
@@ -41,10 +40,14 @@ class SyntacticAnalyzer(object):
         def which(node):
             return self.starts_with_accepted_preposition(node, *self.instrument_goal_preps)
         entities = self.clause.subord_entities(which)
-        return Entity.only_maximal(sum(entities, []))
+        entities = sum(entities, [])
+        instrument_goal = filter(lambda p_entity: p_entity.is_maximal_regarding(entities), entities)
+        return instrument_goal
 
     def adjuncts(self):
-        return Entity.only_maximal(self.clause.lonely_entities())
+        lonely = self.clause.lonely_entities()
+        adjuncts = filter(lambda p_entity: p_entity.is_maximal_regarding(lonely), lonely)
+        return adjuncts
 
     def search_instrument_goal_at(self, side, distance):
         return SyntacticAnalyzer.filter_infinitives(self.search_subords_with_prep_at(side, distance, ))

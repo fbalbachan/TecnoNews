@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 from collections import deque
 
-from src.model.entity.entity import Entity
-
 
 class ParagraphEntityTagger:
     def tag_with_main_entities(self, text, entities, tag_name, attrib_by_entity=None):
@@ -13,8 +11,8 @@ class ParagraphEntityTagger:
 
         text = text.decode("utf-8")
         entities = [entity for entity in set(entities) if not entity.is_tacit()]
-        entities = Entity.only_maximal(entities)
-        entities.sort(key=lambda entity: entity.token.start())
+        entities = filter(lambda p_entity: p_entity.is_maximal_regarding(entities), entities)
+        entities.sort(key=lambda p_entity: p_entity.token.start())
 
         tag_mapping = {}
         tagged_text = ""
@@ -45,8 +43,8 @@ class ParagraphEntityTagger:
 
         text = text.decode("utf-8")
         entities = [entity for entity in set(entities) if not entity.is_tacit()]
-        entities = Entity.only_maximal(entities)
-        entities.sort(key=lambda entity: entity.token.start())
+        entities = filter(lambda p_entity: p_entity.is_maximal_regarding(entities), entities)
+        entities.sort(key=lambda p_entity: p_entity.token.start())
 
         tag_mapping = {}
         entities = deque(entities)

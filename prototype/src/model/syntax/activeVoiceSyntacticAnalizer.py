@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from src.ling.tacit_subjects import this, get_entity_some, impersonal_somebody
+from src.ling.tacit_subjects import this, get_entity_some
 from src.model.entity.tacitEntity import TacitEntity
 from src.model.syntax.syntacticAnalyzer import SyntacticAnalyzer
-from src.model.entity.entity import Entity
 from src.model.entity.animityEnum import AnimityEnum
 
 
@@ -310,7 +309,7 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
     def search_nominal_oi_at(self, side, distance, animity=AnimityEnum.bianimate):
         # print "Entering ActiveVoiceSyntacticAnalyzer.search_nominal_oi_at()"
         entities = self.search_subords_with_prep_at(side, distance, "a", "para")
-        entities = Entity.only_maximal(entities)
+        entities = filter(lambda p_entity: p_entity.is_maximal_regarding(entities), entities)
         entities = SyntacticAnalyzer.filter_infinitives(entities)
         entities = SyntacticAnalyzer.filter_by_animity(entities, animity)
         return entities
@@ -323,7 +322,7 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
 
     def search_nominal_od_under_prep_a(self, side, distance, verbal_animity=AnimityEnum.bianimate):
         entities = self.search_subords_with_prep_at(side, distance, "a")
-        entities = Entity.only_maximal(entities)
+        entities = filter(lambda p_entity: p_entity.is_maximal_regarding(entities), entities)
         entities = SyntacticAnalyzer.filter_infinitives(entities)
         entities = SyntacticAnalyzer.filter_by_animity(entities, verbal_animity)
         return entities
