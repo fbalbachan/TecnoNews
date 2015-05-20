@@ -58,6 +58,10 @@ class Crawler(object):
         for idx, feedParserDict in enumerate(filtered_entries):
             crawler_logger.info("processing %s of %s" % (idx, len(filtered_entries)))
             crawler_logger.info("entry url: %s" % feedParserDict["link"])
+            #Hack FIXME: TODO: Becouse la nacion rss is broken
+            if cls_parser in 'lanacion_espectaculos_parser.LaNacionEspectaculosParser':
+                feedParserDict["link"] = feedParserDict["id"]
+                crawler_logger.info("entry hacked url: %s" % feedParserDict["link"])
             try:
                 # TODO: simplify this making parse.parse accept degault_tags as None
                 if default_tags:
