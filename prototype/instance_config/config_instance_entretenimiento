@@ -6,7 +6,7 @@ raise_exception = False
 id = 5
 
 [news_sources]
-feeds_to_process = telam_espectaculos,clarin_extrashow
+feeds_to_process = telam_espectaculos,clarin_extrashow,lanacion_espectaculos
 
 [freeling]
 
