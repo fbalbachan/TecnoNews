@@ -13,6 +13,7 @@ from src.model.syntax.passiveVoiceSyntacticAnalyzer import PassiveVoiceSyntactic
 from src.model.syntax.syntacticAnalyzer import SyntacticAnalyzer
 from src.model.syntax.syntacticStructure import SyntacticStructure
 from src.model.syntax.valuatedAdverbFinder import ValuatedAdverbFinder
+from src.model.syntax.appositionFinder import AppositionFinder
 
 
 class ClauseAnalyzer:
@@ -29,11 +30,13 @@ class ClauseAnalyzer:
 
         clause.entities = ClauseAnalyzer.entities_of(clause)
 
+        ClauseAnalyzer.find_time_references(clause)
+
+        self.link_appositions(clause)
+
         ClauseAnalyzer.create_empty_syntactic_structures_for(clause)
 
         ClauseAnalyzer.perform_prior_relative_analysis_of(clause)
-
-        ClauseAnalyzer.find_time_references(clause)
 
         analyze_methods = self.get_analyzer_solver_and_finder_methods_in_order(clause)
         for method in analyze_methods:
@@ -42,17 +45,18 @@ class ClauseAnalyzer:
         ClauseAnalyzer.analyze_kind_of_cataphoric_structure_of(clause)
 
     def get_analyzer_solver_and_finder_methods_in_order(self, clause):
-
-        syntactic_relative_methods_in_order = [ClauseAnalyzer.analyze_syntactically,
-                                               ClauseAnalyzer.solve_relative]
+        # print "Entering ClauseAnalyzer.get_analyzer_solver_and_finder_methods_in_order()"
 
         if ClauseAnalyzer.relative_needs_to_be_solved_first(clause):
-            syntactic_relative_methods_in_order.reverse()
+            methods = [ClauseAnalyzer.solve_relative, ClauseAnalyzer.analyze_syntactically]
+        else:
+            methods = [ClauseAnalyzer.analyze_syntactically, ClauseAnalyzer.solve_relative]
 
-        methods = syntactic_relative_methods_in_order + [ClauseAnalyzer.solve_gerund,
-                                                         self.solve_personal_pronouns,
-                                                         ClauseAnalyzer.find_adverbs,
-                                                         ClauseAnalyzer.find_unassigned_adjectives]
+        methods += [ClauseAnalyzer.solve_gerund,
+                    self.solve_personal_pronouns,
+                    ClauseAnalyzer.find_adverbs,
+                    ClauseAnalyzer.find_unassigned_adjectives]
+
         return methods
 
     @staticmethod
@@ -70,11 +74,8 @@ class ClauseAnalyzer:
                                       ["cuyo"], ["cuya"], ["cuyos"], ["cuyas"],
                                       ["lo", "cual"]]
 
-        if clause.relative_linker_words() in unique_destination_linkers \
-           or is_equative_que(clause):
-            return True
-
-        return False
+        return clause.relative_linker_words() in unique_destination_linkers \
+               or is_equative_que(clause)
 
     @staticmethod
     def analyze_kind_of_cataphoric_structure_of(clause):
@@ -103,10 +104,25 @@ class ClauseAnalyzer:
         all_assigned_leaves = sum([entity.leaves() for entity in entities_and_verb if not entity.father], [])
 
         adjectives_and_participles = clause.proper_tree().leaves_of_category("adjective") \
-                                     + clause.proper_tree().leaves_of_msi({"category": "verb","mode": "participio"})
+                                    + clause.proper_tree().leaves_of_msi({"category": "verb", "mode": "participio"})
 
         clause.isolated_adjectives = filter(lambda leaf: leaf not in all_assigned_leaves,
                                             adjectives_and_participles)
+
+    @staticmethod
+    def link_appositions(clause):
+        # print "Entering ClauseAnalyzer.link_appositions(clause)"
+        if not clause.voice:
+            return
+
+        finder = AppositionFinder(clause)
+        appositions = finder.retrieve_appositions()
+        for (head, rest) in appositions:
+            print head, " --> ", rest
+            Entity.link_in_apposition(head, rest)
+            for entity in rest:
+                for nested_entity in entity.get_nested_entities(True):
+                    clause.entities.remove(nested_entity)
 
     @staticmethod
     def find_adverbs(clause):
@@ -166,6 +182,7 @@ class ClauseAnalyzer:
 
     @staticmethod
     def verb_of(clause):
+        # print "Entering ClauseAnalyzer.verb_of(clause: ", clause, ")"
         return VerbExtractor(clause).extract()
 
     @staticmethod
@@ -183,7 +200,7 @@ class ClauseAnalyzer:
 
         if root.subordinates_others():
             verbal_node = set([child.label for child in root if not child.is_leaf()]) \
-                        & set(voice_by_label.keys())
+                          & set(voice_by_label.keys())
 
             if len(verbal_node) > 1:
                 raise Exception("Se encontró más de un verbo subordinado")
