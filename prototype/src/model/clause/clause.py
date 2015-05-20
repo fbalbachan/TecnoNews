@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from src.utils.tree.treeNode import TreeNode
-from src.model.entity.entity import Entity
+
 
 class Clause(TreeNode):
     def __init__(self, node):
@@ -87,7 +87,7 @@ class Clause(TreeNode):
         is_cuyo_vector = map(lambda word: word in ["cuyo", "cuya", "cuyos", "cuyas"], self.relative_linker_words())
         return any(is_cuyo_vector)
 
-    def try_to_get_number_from_relative_linker(self):
+    def get_number_from_relative_linker(self):
         """
 
         :rtype : basestring or None
@@ -114,8 +114,8 @@ class Clause(TreeNode):
 
         return number
 
-    def try_to_get_gender_from_relative_linker(self):
-        # print "Entering clause.try_to_get_gender_from_relative_linker()"
+    def get_gender_from_relative_linker(self):
+        # print "Entering clause.get_gender_from_relative_linker()"
 
         if not self.is_relative():
             raise Exception("La cláusula no es una relativa (", str(self), ").")
@@ -183,6 +183,10 @@ class Clause(TreeNode):
         contained_vector = [assigned.contains(entity) for assigned in assigned_entities]
         assigned_indirectly = any(contained_vector)
         return assigned_directly or assigned_indirectly
+
+    def same_hemiclause(self, node1, node2):
+        return self.verb.node.position_of(node1) == self.verb.node.position_of(node2)
+
 
     #
     # Methods for accessing ENTITIES
@@ -304,7 +308,8 @@ class Clause(TreeNode):
 
         time_entities_with_references = self.to_entities_with_node(time_references_with_sub_nodes)
         time_entities = [entity for (entity, reference) in time_entities_with_references]
-        time_entities = Entity.only_maximal(time_entities)
+        time_entities = filter(lambda p_entity: p_entity.is_maximal_regarding(time_entities),
+                               time_entities)
         self.time_entities = time_entities
 
         for time_entity in time_entities:

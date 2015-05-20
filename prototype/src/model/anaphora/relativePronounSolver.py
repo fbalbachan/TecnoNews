@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-from src.model.entity.tacitEntity import TacitEntity
 from src.model.entity.animityEnum import AnimityEnum
-from src.ling.genderEnum import GenderEnum
 from src.ling.numberEnum import NumberEnum
 from src.model.syntax.syntacticAnalyzer import SyntacticAnalyzer
 from src.model.entity.verb import Verb
@@ -80,8 +78,8 @@ class RelativePronounSolver:
 
     def solve_active_voice(self):
         clause = self.clause
-        req_gender = clause.try_to_get_gender_from_relative_linker()
-        req_number = clause.try_to_get_number_from_relative_linker()
+        req_gender = clause.get_gender_from_relative_linker()
+        req_number = clause.get_number_from_relative_linker()
         is_quien_relative = clause.is_quien_relative()
 
         found = False
@@ -154,7 +152,7 @@ class RelativePronounSolver:
                     if clause.is_quien_relative():
                         entity = structure.entity()
                         entity.msi["animity"] = AnimityEnum.animated
-                        number = clause.try_to_get_number_from_relative_linker()
+                        number = clause.get_number_from_relative_linker()
                         if number:
                             entity.msi["number"] = NumberEnum.most_specific(number, entity.msi["number"])
                     break
@@ -181,8 +179,6 @@ class RelativePronounSolver:
 
         clause = self.clause
         is_quien = clause.is_quien_relative()
-        gender = clause.try_to_get_gender_from_relative_linker()
-        number = clause.try_to_get_number_from_relative_linker()
 
         destination_by_preposition = {"por": "subject",
                                       "con": "instrument_goal"}
@@ -200,6 +196,8 @@ class RelativePronounSolver:
         verb_animity = clause.verb.get_script_animity_for(destination)
 
         for nested_relative_entity in nested_entities:
+            gender = clause.get_gender_from_relative_linker()
+            number = clause.get_number_from_relative_linker()
             if gender and not nested_relative_entity.gender_matches(gender) \
                     or number and not nested_relative_entity.number_matches(number) \
                     or is_quien and not nested_relative_entity.animity_matches(AnimityEnum.animated) \

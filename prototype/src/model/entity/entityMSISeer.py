@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
+import ConfigParser
+
 from src.model.entity.entitySemanticAnalyzer import EntitySemanticAnalyzer
 from src.model.entity.animityEnum import AnimityEnum
-
-import ConfigParser
 
 
 class EntityMSISeer:
@@ -79,8 +79,8 @@ class EntityMSISeer:
         pronouns = sorted(entity.children_of_category("pronoun"), key=lambda pronoun: pronoun.msi["person"])
         msi["person"] = pronouns[0].msi["person"] if pronouns else 3
 
-        genders = [child.msi["gender"] for child in
-                   entity.children_of_category("noun") + entity.children_of_category("pronoun")]
+        genders = [child.msi["gender"]
+                   for child in entity.children_of_category("noun") + entity.children_of_category("pronoun")]
         if "masculine" in genders:
             gender = "masculine"
         elif all(map(lambda p_gender: p_gender == "feminine", genders)):
