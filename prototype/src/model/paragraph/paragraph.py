@@ -1,30 +1,30 @@
 # -*- coding: utf-8 -*-
-from src.model.sentence.sentenceSplitter import SentenceSplitter
-import src.model.entity
 import re
+
+from src.model.sentence.sentenceSplitter import SentenceSplitter
 
 
 class Paragraph:
-    def __init__(self, sentences=[], text=""):
-        self.sentences = sentences
+    def __init__(self, sentences=None, text=""):
+        self.sentences = sentences if sentences else []
         self.original_text = text
         self.parenthesis_positions_in_original_text = []
         self.text = text
 
     def clauses(self):
-        return sum([ sentence.clauses for sentence in self.sentences ], [])
+        return sum([sentence.clauses for sentence in self.sentences], [])
 
     def entities(self):
-        return sum([ clause.all_entities() for clause in self.clauses() ], [])
+        return sum([clause.all_entities() for clause in self.clauses()], [])
 
     def referents(self):
-        return set([ entity.referent for entity in self.entities() ])
+        return set([entity.referent for entity in self.entities()])
 
     def named_referents(self):
-        return { referent for referent in self.referents() if referent.semantic_classification() }
+        return {referent for referent in self.referents() if referent.semantic_classification()}
 
     def clauses_for(self, referent):
-        return filter(lambda clause: any( ( referent == entity.referent for entity in clause.all_entities()) ), \
+        return filter(lambda clause: any( ( referent == entity.referent for entity in clause.all_entities()) ),
                       self.clauses())
 
     def facts_for(self, referent):
@@ -57,7 +57,3 @@ class Paragraph:
             self.parenthesis_positions_in_original_text.append(parenthesis_data)
 
         self.text = re.sub(parenthesis_re, '', self.original_text)
-
-        # TODO: Remove extra white spaces?
-        #       Using the RE saved in parenthesis_positions_in_original_text?
-        # self.text = re.sub(r'  ', r' ', self.text)

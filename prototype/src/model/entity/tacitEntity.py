@@ -91,8 +91,13 @@ class TacitEntity:
             if key not in self.msi:
                 return False
 
-            if self.msi[key] != value:      #TODO: add here specialized comparisons instead of "=="
-                return False                #      such as matches_gender_of, matches_number_of, etc
+            if key == "gender" and not self.gender_matches(value) \
+               or key == "number" and not self.number_matches(value) \
+               or key == "animity" and not self.animity_matches(value):
+                return False
+
+            if self.msi[key] != value:
+                return False
         return True
 
     def animity_matches(self, animity):

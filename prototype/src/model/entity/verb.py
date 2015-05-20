@@ -2,7 +2,6 @@
 from src.ling.tacit_subjects import tacit_subjects
 from src.ling.verb_info import get_sentimental_script_of, get_transitivity, get_script_animity_for
 from src.model.entity.entity import Entity
-from src.model.entity.animityEnum import AnimityEnum
 
 
 # The verb being an entity is a license, same as the existence of a superior syntactic function "Verb".

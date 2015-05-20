@@ -7,6 +7,7 @@ class VerbExtractor:
         self.clause = clause
 
     def extract(self):
+        # print "Entering VerbExtractor.extract()"
         node = self._verb_node()
         leaves = self._verb_leaves_of(node)
         return Verb(node, self.clause.voice, leaves)
