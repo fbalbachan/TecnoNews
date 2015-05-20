@@ -171,15 +171,16 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
                              + nominal_entities_under_prep_a \
                              + pronominal_entities
 
-        candidate_entities_matching_anim = nominal_entities_at_same_level_nodes \
-                                  + SyntacticAnalyzer.filter_by_animity(nominal_entities_under_prep_a, verbal_animity) \
-                                  + pronominal_entities
+        animated_candidate_entities = \
+                        nominal_entities_at_same_level_nodes \
+                        + SyntacticAnalyzer.filter_by_animity(nominal_entities_under_prep_a, AnimityEnum.animated) \
+                        + pronominal_entities
 
-        od = self.search_od(candidate_entities, candidate_entities_matching_anim, verbal_animity)
+        od = self.search_od(candidate_entities, animated_candidate_entities, verbal_animity)
 
         return od
 
-    def search_od(self, candidate_entities, candidate_entities_matching_anim, verbal_animity=AnimityEnum.bianimate):
+    def search_od(self, candidate_entities, animated_candidate_entities, verbal_animity=AnimityEnum.bianimate):
         # print "Entering ActiveVoiceSyntacticAnalyzer.search_od()"
         if not candidate_entities:
             is_implicit = True
@@ -192,11 +193,11 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         if linked:
             return [candidate_entities[0], linked]
 
-        if not candidate_entities_matching_anim:
+        if not animated_candidate_entities:
             is_implicit = True
             return [get_entity_some(verbal_animity, is_implicit)]
 
-        return [candidate_entities_matching_anim[0]]
+        return [animated_candidate_entities[0]]
 
     def get_od_candidate_entities(self, verbal_animity=AnimityEnum.bianimate):
         # print "Entering ActiveVoiceSyntacticAnalyzer.get_od_candidate_entities()"
