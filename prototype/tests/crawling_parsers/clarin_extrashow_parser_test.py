@@ -1,3 +1,4 @@
+import traceback
 import unittest
 import feedparser
 from src.sentinews.parsers.clarin_extrashow_parser import ClarinExtrashowParser
@@ -45,6 +46,7 @@ class ClarinExtrashowParserTest(unittest.TestCase):
                 error_urls.append(entry['link'])
                 print "Error parsing"
                 print e.message
+                print traceback.format_exc()
 
         print "Total cases: ", len(entries)
         print "Errors", len(error_urls)

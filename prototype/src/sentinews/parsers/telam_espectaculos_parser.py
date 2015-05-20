@@ -103,8 +103,7 @@ class TelamEspectaculosParser(GenericParser):
                                       tags=tags,
                                       source=self.source,
                                       url=url,
-                                      original_categories=categories,
-                                      categories=categories,
+                                      original_categories=None,
                                       image_search_string=image_search_string)
 
             except Exception as e:

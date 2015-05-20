@@ -34,7 +34,7 @@ status = ON
 [publishing]
 unique_host = True
 unique_host_data = publishing/wordpress_entretenimiento_unique_host_to_publish.json
-
+default_category = u'espectaculos'
 #category_host_to_publish = publishing/wordpress_category_host_to_publish_entretenimiento.json
 #categories_priority = publishing/categories_priority.json
 
@@ -60,8 +60,9 @@ locucions = %(resources_dir)s/locucions_extended.dat
 adverb_forms = %(resources_dir)s/adverb_forms.csv
 freeling_dict = %(resources_dir)s/freeling_es.dic
 verbs_que = %(resources_dir)s/verbs-que-es.dat
-categories = %(resources_dir)s/categories.csv
-countries = %(resources_dir)s/countries_name_es.csv
+categories = %(resources_dir)s/categories-entretenimientobit.csv
+#hack TODO: FixME
+countries = %(resources_dir)s/empty.csv
 persons = %(resources_dir)s/person.cls
 demonym = %(resources_dir)s/twGENT.dat
 marks_to_avoid_paragraphs = %(resources_dir)s/paragraph_to_avoid

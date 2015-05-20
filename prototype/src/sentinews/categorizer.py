@@ -16,6 +16,9 @@ class Categorizer(object):
 
         categories_reader = unicode_csv_reader(open(categories_file, 'r'), first_line_is_header=False, delimiter=',')
 
+        self.default_cat = self.config.get('publishing', 'default_category')
+        assert self.default_cat
+
         self.categories_dict = {}
         for row in categories_reader:
             if not isinstance(row[0], unicode):
@@ -49,7 +52,7 @@ class Categorizer(object):
 
         if not categories:
             # If fails to categorize set default category
-            categories = {u'interés general'}
+            categories = {self.default_cat}
 
         assert categories
         return categories
