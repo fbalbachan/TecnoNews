@@ -11,7 +11,8 @@ class WebOutputUtils:
                 return structure.entity().lemma()
             else:
                 entities = structure.all_entities()
-                # entities.sort(key=lambda p_entity: p_entity.token.start())
+                infinity = 10000
+                entities.sort(key=lambda p_entity: p_entity.token.start() if p_entity.is_explicit() else infinity)
                 return ", ".join([str(entity) for entity in entities])
         else:
             return ""
