@@ -958,3 +958,5 @@ gente
 humanidad
 personal
 estudiante
+compañía
+empresa
