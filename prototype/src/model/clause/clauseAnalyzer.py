@@ -19,10 +19,13 @@ from src.model.syntax.appositionFinder import AppositionFinder
 class ClauseAnalyzer:
 
     def __init__(self):
+        global debug_mode
+        debug_mode = False
+
         self.context = {}
 
     def analyze(self, clause):
-        # print "Entering Clause.Analyze (clause: ", clause, ")"
+        if debug_mode: print "Entering Clause.Analyze (clause: ", clause, ")"
 
         clause.voice = ClauseAnalyzer.voice_of(clause)
         if clause.voice:
@@ -45,7 +48,7 @@ class ClauseAnalyzer:
         ClauseAnalyzer.analyze_kind_of_cataphoric_structure_of(clause)
 
     def get_analyzer_solver_and_finder_methods_in_order(self, clause):
-        # print "Entering ClauseAnalyzer.get_analyzer_solver_and_finder_methods_in_order()"
+        if debug_mode: print "Entering ClauseAnalyzer.get_analyzer_solver_and_finder_methods_in_order()"
 
         if ClauseAnalyzer.relative_needs_to_be_solved_first(clause):
             methods = [ClauseAnalyzer.solve_relative, ClauseAnalyzer.analyze_syntactically]
@@ -61,7 +64,7 @@ class ClauseAnalyzer:
 
     @staticmethod
     def relative_needs_to_be_solved_first(clause):
-        # print "Entering ClauseAnalyzer.relative_needs_to_be_solved_first()"
+        if debug_mode: print "Entering ClauseAnalyzer.relative_needs_to_be_solved_first()"
 
         if not clause.is_relative():
             return False
@@ -111,7 +114,7 @@ class ClauseAnalyzer:
 
     @staticmethod
     def link_appositions(clause):
-        # print "Entering ClauseAnalyzer.link_appositions(clause)"
+        if debug_mode: print "Entering ClauseAnalyzer.link_appositions(clause)"
         if not clause.voice:
             return
 
@@ -139,26 +142,26 @@ class ClauseAnalyzer:
 
     @staticmethod
     def solve_relative(clause):
-        # print "Entering solve_relative ( relative entity: ", clause.relative_entity, ")"
+        if debug_mode: print "Entering solve_relative ( relative entity: ", clause.relative_entity, ")"
 
         if clause.is_relative() and clause.relative_entity:
             RelativePronounSolver(clause).solve()
 
     @staticmethod
     def solve_gerund(clause):
-        # print "Entering solve_gerund (voice, ", clause.voice, " - is gerund: ", str(clause.is_gerund()), ")"
+        if debug_mode: print "Entering solve_gerund (voice, ", clause.voice, " - is gerund: ", str(clause.is_gerund()), ")"
 
         if clause.voice and clause.is_gerund():
             GerundSubjectSolver(clause).solve()
 
     def solve_personal_pronouns(self, clause):
-        # print "Entering solve_personal_pronouns"
+        if debug_mode: print "Entering solve_personal_pronouns"
 
         PersonalPronounSolver(clause, self.context).solve()
 
     @staticmethod
     def analyze_syntactically(clause):
-        # print "Entering analyze_syntactically"
+        if debug_mode: print "Entering analyze_syntactically"
 
         syntactic_analyzer_by_voice = {"active":  ActiveVoiceSyntacticAnalyzer,
                                        "passive": PassiveVoiceSyntacticAnalyzer,
@@ -182,12 +185,12 @@ class ClauseAnalyzer:
 
     @staticmethod
     def verb_of(clause):
-        # print "Entering ClauseAnalyzer.verb_of(clause: ", clause, ")"
+        if debug_mode: print "Entering ClauseAnalyzer.verb_of(clause: ", clause, ")"
         return VerbExtractor(clause).extract()
 
     @staticmethod
     def entities_of(clause):
-        # print "Entering entities_of"
+        if debug_mode: print "Entering entities_of"
         return EntityExtractor(clause).extract()
 
     @staticmethod

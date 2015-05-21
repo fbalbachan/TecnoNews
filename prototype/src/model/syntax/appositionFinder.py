@@ -5,43 +5,80 @@ __author__ = 'Martin Caramés Abente'
 class AppositionFinder:
 
     def __init__(self, clause):
+        global debug_mode
         debug_mode = False
+
         self.clause = clause
 
     def retrieve_appositions(self):
-        # print "Entering ClauseAnalyzer.retrieve_appositions(clause: ", self.clause, ")"
+        if debug_mode: print "Entering ClauseAnalyzer.retrieve_appositions(clause: ", self.clause, ")"
 
         candidate_entities = filter(lambda entity: entity.is_explicit()
                                                    and entity.category() == "noun"
                                                    and entity.node.label == "sn"
-                                                   and self.is_close_to_lexical_form(entity, [","], 1),
+                                                   and self.entity_is_next_or_close_to(entity, [","], 1),
                                     self.clause.entities)
 
         candidate_entities = filter(lambda entity: entity.is_maximal_regarding(candidate_entities), candidate_entities)
-        # if self.debug_mode: print "2: ", candidate_entities
+        if debug_mode: print "Entities after first_filter: ", candidate_entities
 
         candidate_chains = self.group_entities_in_chains(candidate_entities)
 
         candidate_chains = filter(lambda chain: not self.is_enumeration(chain), candidate_chains)
+        if debug_mode: print "Chains after second filter: ", candidate_chains
 
         appositions = []
         for candidate_chain in candidate_chains:
-            if len(candidate_chain) > 1:
-                candidate_chain.sort(key=lambda p_entity: p_entity.token.start())
-                named_candidates = filter(lambda entity: "semantic_classification" in entity.msi
-                                                         and entity.msi["semantic_classification"] is not None,
-                                          candidate_chain)
-                reference_entity = named_candidates[0] if named_candidates else candidate_chain[0]
-                if all(entity.node.father == reference_entity.node.father for entity in candidate_chain) \
-                   and all(e.matches(reference_entity) for e in candidate_chain):
+            candidate_chain.sort(key=lambda p_entity: p_entity.token.start())
 
-                    entities_in_apposition = filter(lambda p_entity: p_entity is not reference_entity, candidate_chain)
-                    apposition = (reference_entity, entities_in_apposition)
-                    appositions.append(apposition)
+            if self.meets_chain_criteria_for_apposition(candidate_chain):
+                final_chain = candidate_chain
+            else:
+                final_chain = self.find_maximal_sub_chain_meeting_criteria(self.meets_chain_criteria_for_apposition,
+                                                                           candidate_chain)
+            if final_chain:
+                apposition = self.build_apposition(final_chain)
+                appositions.append(apposition)
 
         return appositions
 
-    def is_close_to_lexical_form(self, entity, lemmas, distance):
+    def build_apposition(self, entity_chain):
+        reference_entity = self.get_reference_entity(entity_chain)
+        entities_in_apposition = filter(lambda p_entity: p_entity is not reference_entity, entity_chain)
+        apposition = (reference_entity, entities_in_apposition)
+        return apposition
+
+    def find_maximal_sub_chain_meeting_criteria(self, criteria, chain):
+        for i in range(len(chain)-1):
+            for j in range(i+1, len(chain)):
+                candidate = chain[i:j+1]
+                if criteria(candidate):
+                    return candidate
+
+        return None
+
+    def are_almost_siblings(self, entity_chain):
+        levels = [entity.level() for entity in entity_chain]
+        levels_set = set(levels)
+        chain_in_right_hemiclause = self.clause.verb.node.position_of(entity_chain[0].node) == "right"
+        return chain_in_right_hemiclause and len(levels_set) == 2 and levels[0] == levels[1]+1
+
+    def meets_chain_criteria_for_apposition(self, candidate_chain):
+        if len(candidate_chain) <= 1:
+            return False
+
+        are_siblings = all(entity.node.father == candidate_chain[0].node.father for entity in candidate_chain)
+        entity_levels_are_ok = are_siblings or self.are_almost_siblings(candidate_chain)
+        agree_in_per_gen_num = all(e.matches(candidate_chain[0]) for e in candidate_chain)
+
+        return entity_levels_are_ok and agree_in_per_gen_num
+
+    def get_reference_entity(self, chain):
+        named = filter(lambda entity: "semantic_classification" in entity.msi
+                                      and entity.msi["semantic_classification"], chain)
+        return named[0] if named else chain[0]
+
+    def entity_is_next_or_close_to(self, entity, lemmas, distance):
         """Checks the presence of a lemma (from lemmas) within distance from entity.
 
         :param lemmas: list of lemmas to look for.
@@ -49,7 +86,24 @@ class AppositionFinder:
         :return: bool
         """
 
-        # print "Entering ClauseAnalyzer.is_close_to_lexical_form(entity: ", entity, ", lemmas: ", lemmas, ")"
+        if debug_mode: print "Entering ClauseAnalyzer.entity_is_next_or_close_to(entity: ", entity, ", lemmas: ", lemmas, ")"
+
+        is_next_to_lemma = self.entity_is_next_to(entity, lemmas)
+
+        if is_next_to_lemma:
+            return is_next_to_lemma
+
+        is_close_but_not_next_to = self.entity_is_close_but_not_next_to(entity, lemmas, distance)
+        return is_close_but_not_next_to
+
+    def entity_is_next_to(self, entity, lemmas):
+        """Checks the presence of a lemma (from lemmas) right next to the entity.
+
+        :param lemmas: list of lemmas to look for.
+        :return: bool
+        """
+
+        # print "Entering ClauseAnalyzer.is_next_to_lexical_form(entity: ", entity, ", lemmas: ", lemmas, ")"
 
         clause_leaves = self.clause.proper_leaves()
         leaf_positions = {leaf: index for (index, leaf) in enumerate(clause_leaves)}
@@ -57,29 +111,41 @@ class AppositionFinder:
         last_leaf = entity.leaves()[-1]
         idx_last_leaf = leaf_positions[last_leaf]
 
-        is_close = last_leaf.lemma in lemmas \
-                   or len(clause_leaves) > idx_last_leaf+1 and clause_leaves[idx_last_leaf+1].lemma in lemmas
+        is_next_to_lemma = last_leaf.lemma in lemmas \
+                           or len(clause_leaves) > idx_last_leaf+1 and clause_leaves[idx_last_leaf+1].lemma in lemmas
 
+        return is_next_to_lemma
+
+    def entity_is_close_but_not_next_to(self, entity, lemmas, distance):
+        """Checks the presence of a lemma (from lemmas) within distance from entity.
+
+        :param lemmas: list of lemmas to look for.
+        :param distance: (in terms of the parse tree) Number of (same level) nodes between entity and the first lemma
+        :return: bool
+        """
         same_level_nodes = entity.node.father.children
         e_idx = same_level_nodes.index(entity.node)
-        if not is_close and distance > 0 \
-                        and len(same_level_nodes) > e_idx+distance+1:
-            middle_are_ok = True
-            for idx in range(1, distance):
-                middle_node = same_level_nodes[e_idx+idx]
-                middle_are_ok = middle_are_ok \
-                                and self.clause.same_hemiclause(middle_node, entity.node) \
-                                and not middle_node.label_lemma_matches([], ["y"])
-            if middle_are_ok:
-                candidate1 = same_level_nodes[e_idx+distance+1]
-                prev_node = same_level_nodes[e_idx+distance]
-                candidate2 = prev_node.children[-1] if prev_node.children else None
 
-                is_close = self.clause.same_hemiclause(candidate1, entity.node) \
-                           and candidate1.label_lemma_matches(None, lemmas) \
-                           or \
-                           candidate2 and self.clause.same_hemiclause(candidate2, entity.node)\
-                                      and candidate2.label_lemma_matches(None, lemmas)
+        if distance <= 0 or len(same_level_nodes) <= e_idx+distance+1:
+            return False
+
+        middle_are_ok = True
+        for idx in range(1, distance):
+            middle_node = same_level_nodes[e_idx+idx]
+            middle_are_ok = middle_are_ok and self.clause.same_hemiclause(middle_node, entity.node) \
+                                          and not middle_node.label_lemma_matches([], ["y"])
+        if not middle_are_ok:
+            return False
+
+        candidate1 = same_level_nodes[e_idx+distance+1]
+        prev_node = same_level_nodes[e_idx+distance]
+        candidate2 = prev_node.children[-1] if prev_node.children else None
+
+        is_close = self.clause.same_hemiclause(candidate1, entity.node) \
+                   and candidate1.label_lemma_matches(None, lemmas) \
+                   or \
+                   candidate2 and self.clause.same_hemiclause(candidate2, entity.node)\
+                              and candidate2.label_lemma_matches(None, lemmas)
         return is_close
 
     def group_entities_in_chains(self, entities):
