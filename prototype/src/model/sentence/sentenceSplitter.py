@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
+import re
+
 from src.model.sentence.sentence import Sentence
 from src.model.tokenization.token import Token
 from src.utils.textCleaner import TextCleaner
-import re
 
 
 class SentenceSplitter:
@@ -18,8 +19,9 @@ class SentenceSplitter:
         return self.to_sentences(non_empty_texts, text, paragraph)
 
     def replace_strange_chars(self, text):
-        text = text.replace(u'\xab', u'"').text.replace(u'\xbb', u'"')
-        return text.replace(u"“", u'"').replace(u"”", u'"')
+        text = text.replace(u'\xab', u'"').replace(u'\xbb', u'"')
+        text = text.replace(u'«', '"').replace(u'»', u'"').replace(u'/', '-')
+        return text.replace(u'“', u'"').replace(u'”', u'"')
 
     # Dirty
     def split(self, text):
