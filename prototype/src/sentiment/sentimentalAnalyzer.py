@@ -13,7 +13,8 @@ class SentimentalAnalyzer:
         self.analyze_instrument_goal(clause)
 
         needs_to_be_verbally_analyzed = self.needs_to_be_verbally_analyzed(clause)
-        if needs_to_be_verbally_analyzed: self.analyze_verbal(clause)
+        if needs_to_be_verbally_analyzed:
+            self.analyze_verbal(clause)
 
         self.analyze_isolated_adjectives(clause, needs_to_be_verbally_analyzed)
 
@@ -26,7 +27,8 @@ class SentimentalAnalyzer:
         IsolatedAdjectiveAnalyzer(clause, needs_to_be_verbally_analyzed).analyze()
 
     def analyze_verbal(self, clause):
-        if clause.voice: VerbalSentimentAnalyzer(clause).analyze()
+        if clause.voice:
+            VerbalSentimentAnalyzer(clause).analyze()
 
     def analyze_instrument_goal(self, clause):
         name = "instrument_goal"

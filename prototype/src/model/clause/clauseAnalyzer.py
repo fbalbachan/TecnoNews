@@ -173,6 +173,7 @@ class ClauseAnalyzer:
 
     @staticmethod
     def allowed_syntactic_structures_for(clause):
+        if debug_mode: print "Entering ClauseAnalyzer.allowed_syntactic_structures_for(clause: ", clause, ")"
         active_voice_structures = lambda clause_var: allowed_boxes(clause_var.verb.transitivity)
         passive_voice_structures = lambda clause_var: allowed_boxes_for_passive_verbs
         none_voice_structures = lambda clause_var: allowed_boxes_for_minor_sentences
@@ -186,7 +187,8 @@ class ClauseAnalyzer:
     @staticmethod
     def verb_of(clause):
         if debug_mode: print "Entering ClauseAnalyzer.verb_of(clause: ", clause, ")"
-        return VerbExtractor(clause).extract()
+        verb = VerbExtractor(clause).extract()
+        return verb
 
     @staticmethod
     def entities_of(clause):

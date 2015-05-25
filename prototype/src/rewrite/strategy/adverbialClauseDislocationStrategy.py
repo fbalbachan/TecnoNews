@@ -98,8 +98,8 @@ class AdverbialClauseDislocationStrategy:
         first_part = text[node.token.start():subord_node.token.end()].strip()
         second_part = text[subord_node.token.end():node.token.end()].strip()
 
-        final_punctuation = "" # TODO: Tomar toda la puntuación del final de second_part
-        if len(second_part) > 0 and second_part[-1] == ".": # TODO: Hacerlo bien: Si soy esto, soy esto!. (múltiples puntuaciones)
+        final_punctuation = ""  # TODO: Tomar toda la puntuación del final de second_part
+        if len(second_part) > 0 and second_part[-1] == ".":  # TODO: Hacerlo bien: Si soy esto, soy esto!. (múlts punts)
             final_punctuation = "."
             second_part = second_part[:-1]
 
@@ -179,7 +179,7 @@ class AdverbialClauseDislocationStrategy:
         second_part = text[token.end():clause.node.token.end()].strip()
 
         final_punctuation = "" # TODO: Tomar toda la puntuación del final de second_part
-        if len(second_part) > 0 and second_part[-1] == ".": # TODO: Hacerlo bien: Si soy esto, soy esto!. (múltiples puntuaciones)
+        if len(second_part) > 0 and second_part[-1] == ".":  # TODO: Hacerlo bien: Si soy esto, soy esto!. (múlts punts)
             final_punctuation = "."
             second_part = second_part[:-1]
 
