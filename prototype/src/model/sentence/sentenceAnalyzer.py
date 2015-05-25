@@ -11,12 +11,16 @@ from src.utils.invoker import Invoker
 
 class SentenceAnalyzer:
     def __init__(self, tree_parser=FreelingTreeParser()):
+        global debug_mode
+        debug_mode = True
+
         self.tree_parser = tree_parser
         self.context = {"sentences": []}
         self.invoker = Invoker()
 
     def analyze(self, sentence):
-        # print "Entering SentenceAnalyzer.analyze()"
+        if debug_mode: print "Entering SentenceAnalyzer.analyze()"
+
         self.set_parse_tree_to(sentence)
         TokenizationGuesser(sentence).guess()
 
@@ -41,13 +45,12 @@ class SentenceAnalyzer:
         GlobalOperatorAnalyzer(sentence).analyze()
 
     def analyze_clauses_of(self, sentence):
-        # print "Entering SentenceAnalyzer.analyze_clauses_of"
+        if debug_mode: print "Entering SentenceAnalyzer.analyze_clauses_of()"
 
         self.context["clauses"] = []
         clause_analyzer = ClauseAnalyzer()
         clause_analyzer.context = self.context
 
-        # print "Clauses: ", sentence.clauses
         for clause in sentence.clauses:
             clause_analyzer.analyze(clause)
             self.context["clauses"].append(clause)

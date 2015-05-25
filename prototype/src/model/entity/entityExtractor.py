@@ -7,10 +7,14 @@ from src.parser.parseNode import ParseNode
 class EntityExtractor:
 
     def __init__(self, clause):
+        global debug_mode
+        debug_mode = True
+
         self.clause = clause
 
     def extract(self):
-        # print "Entering EntityExtractor.extract()"
+        if debug_mode: print "Entering EntityExtractor.extract()"
+
         root = self.clause.proper_tree()
         entity_nodes = self.nodes_from_entity_labels(root) + \
                        self.infinitive_structures() + \
@@ -35,6 +39,7 @@ class EntityExtractor:
 
     @staticmethod
     def compute_proper_tree_for(entities):
+        if debug_mode: print "Entering EntityExtractor.compute_proper_tree_for(entities): ", entities
         for entity in entities:
             original = entity.node
             foreign_nodes = [child.node for child in entity.children]
@@ -71,7 +76,7 @@ class EntityExtractor:
         return entities_by_node.values()
 
     def assign_msi(self, entities):
-        # print "Entering assign_msi"
+        if debug_mode: print "Entering EntityExtractor.Entering assign_msi(entities): ", entities
         entity_msi_seer = EntityMSISeer()
         for entity in entities:
             entity.msi = entity_msi_seer.msi_of(entity)
