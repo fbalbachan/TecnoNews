@@ -1,23 +1,23 @@
 # -*- coding: utf-8 -*-
 
-import ConfigParser
-
 from src.model.entity.entitySemanticAnalyzer import EntitySemanticAnalyzer
 from src.model.entity.animityEnum import AnimityEnum
+from src.utils.resources import instance as resources
 
 
 class EntityMSISeer:
 
     def __init__(self):
-        # TODO: Warning this would be accessing the config file each time an entity is instantiated
-        config = ConfigParser.ConfigParser()
-        config.read("config")
-        self.persons = self._get_items(config, "persons")
-        self.demonyms = self._get_items(config, "demonyms")
-        self.animals = self._get_items(config, "animals")
+        global debug_mode
+        debug_mode = True
+
+        self.persons = resources.get_wordlist_safe("resources", "persons")
+        self.demonyms = resources.get_wordlist_safe("resources", "demonyms")
+        self.animals = resources.get_wordlist_safe("resources", "animals")
 
     def msi_of(self, entity):
-        # print "Entering msi_of"
+        if debug_mode: print "Entering EntityMSISeer.msi_of(entity:", entity, ")"
+
         label = entity.node.label
         entity.msi = self.msi_seer_by_label[label](self, entity) if label in self.msi_seer_by_label else {}
         semantic_analyzer = EntitySemanticAnalyzer()
@@ -26,6 +26,7 @@ class EntityMSISeer:
         return entity.msi
 
     def msi_of_single(self, entity):
+        if debug_mode: print "Entering EntityMSISeer.msi_of_single(entity:", entity, ")"
         node = entity.node
 
         banned_labels = ["grup-sp", "sp-de"]
@@ -63,15 +64,19 @@ class EntityMSISeer:
         return [ noun.msi["type"] if "type" in noun.msi else None for noun in kernel_nouns ] == [ "common", "proper" ]
 
     def disambiguate_if_necessary(self, msi, leaves):
-        if not leaves: return
+        if debug_mode: print "Entering EntityMSISeer.disambiguate_if_necessary(msi, leaves)", msi
+        if not leaves:
+            return
         leaves = leaves[::-1]
 
-        non_neutral_attribute_values = {"gender": ["masculine", "feminine"], "number": ["singular", "plural"]}
+        non_neutral_attribute_values = {"gender": ["masculine", "feminine"],
+                                        "number": ["singular", "plural"]}
 
         for attribute, non_neutral_values in non_neutral_attribute_values.items():
             if msi[attribute] not in non_neutral_values:
                 for leaf in leaves:
-                    if leaf.msi[attribute] in non_neutral_values: msi[attribute] = leaf.msi[attribute]
+                    if attribute in leaf.msi and leaf.msi[attribute] in non_neutral_values:
+                        msi[attribute] = leaf.msi[attribute]
 
     def msi_of_coordinated(self, entity):
         msi = {"category": "noun", "number": "plural", "type": None, "semantic_classification": None}
@@ -171,25 +176,6 @@ class EntityMSISeer:
             animity = default_animity_value
 
         return animity
-
-    def _get_items(self, config, resource):
-        """
-        load resource list of items
-
-        :return: list of unicode words as list
-        """
-        items = []
-        items_filename = config.get("resources", resource)
-
-        for line in open(items_filename, 'r'):
-            if line[0] not in ['<', '%', '\n']:
-                item = (line.rstrip('\n')).rstrip('\r')
-                if not isinstance(item, unicode):
-                    item = unicode(item, 'utf-8')
-
-                items.append(item)
-
-        return items
 
     # Module Globals
     msi_seer_by_label = {"sn": msi_of_single,
