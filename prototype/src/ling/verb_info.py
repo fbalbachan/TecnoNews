@@ -21,31 +21,25 @@ allowed_boxes_for_passive_verbs = ['verb', 'subject', 'od', 'instrument_goal', '
 
 allowed_boxes_for_minor_sentences = ['instrument_goal', 'subject', 'adjuncts']
 
-transitivity_values = {
-    'T': 'TRANSITIVE',
-    'I': 'INTRANSITIVE',
-    'R': 'REGIMEN',
-    'E': 'EQUATIVE',
-    'X': 'INTRANSITIVE',
-    'H': 'EXISTENTIAL',
-    'M': 'IMPERSONAL',
-}
+transitivity_values = {'T': 'TRANSITIVE',
+                       'I': 'INTRANSITIVE',
+                       'R': 'REGIMEN',
+                       'E': 'EQUATIVE',
+                       'X': 'INTRANSITIVE',
+                       'H': 'EXISTENTIAL',
+                       'M': 'IMPERSONAL', }
 
-animity_values = {
-    'Anim': AnimityEnum.animated,
-    'Bi': AnimityEnum.bianimate,
-    'No': AnimityEnum.inanimate
-}
+animity_values = {'Anim': AnimityEnum.animated,
+                  'Bi': AnimityEnum.bianimate,
+                  'No': AnimityEnum.inanimate}
 
 
-scripts = {
-    'A': 'AGENTIVE',
-    'E': 'EQUATIVE',
-    'D': 'DOSAGUAS',
-    'O': 'OBJECTIVE',
-    'N': 'NEUTRAL',
-    'S': 'SWITCH',
-}
+scripts = {'A': 'AGENTIVE',
+           'E': 'EQUATIVE',
+           'D': 'DOSAGUAS',
+           'O': 'OBJECTIVE',
+           'N': 'NEUTRAL',
+           'S': 'SWITCH', }
 
 
 def get_sentimental_script_of(verb_lemma):
@@ -123,6 +117,3 @@ for lemma, script_class, transitivity_code, agentive_coef, \
     verbs[lemma]['boxes'] = allowed_boxes_according_to_verb_transitivity[transitivity_values[transitivity_code]]
     verbs[lemma]['animity'] = {'subject': get_animity_value(subjAnimity_code),
                                'oaf': get_animity_value(odAnimity_code)}
-
-
-
