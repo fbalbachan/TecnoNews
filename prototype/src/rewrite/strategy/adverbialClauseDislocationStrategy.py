@@ -5,7 +5,7 @@ from src.parser.leafNode import LeafNode
 from src.parser.labelNode import LabelNode
 from src.rewrite.strategy.siAEncasodequeStrategySubjunctivePart import SiAEncasodequeStrategySubjunctivePart
 
-import src.rewrite.rewriter
+from src.rewrite.rewriter import Rewriter
 from src.model.paragraph.paragraph import Paragraph
 from src.model.paragraph.paragraphAnalyzer import ParagraphAnalyzer
 from src.model.sentence.sentenceAnalyzer import SentenceAnalyzer
@@ -13,9 +13,9 @@ from tests.freelingTreeRepository import FreelingTreeRepository
 
 
 class AdverbialClauseDislocationStrategy:
-    def __init__(self, ontology, changeHeaderIfPossible = True):
+    def __init__(self, ontology, change_header_if_possible=True):
         self.ontology = ontology
-        self.changeHeaderIfPossible = changeHeaderIfPossible
+        self.change_header_if_possible = change_header_if_possible
 
     def applies_to(self, sentence, node):
         en_caso_de_que = (
@@ -28,7 +28,7 @@ class AdverbialClauseDislocationStrategy:
         )
         return self.is_subord_to_apply(node) or en_caso_de_que
 
-    def is_subord_to_apply(self, node, subordinate_headers = None):
+    def is_subord_to_apply(self, node, subordinate_headers=None):
         return isinstance(node, LabelNode) and node.label == 'grup-verb' and self.subord_node(node, subordinate_headers)
         # TODO: Revisar este comentario
         """
@@ -51,8 +51,8 @@ class AdverbialClauseDislocationStrategy:
         )
         """
 
-    def subord_node(self, node, subordinate_headers = None):
-        if subordinate_headers == None: subordinate_headers = self.subordinate_headers
+    def subord_node(self, node, subordinate_headers=None):
+        if subordinate_headers is None: subordinate_headers = self.subordinate_headers
         for i in xrange(len(node.children)):
             child = node.children[i]
             if isinstance(child, LabelNode) and child.label == 'subord':
@@ -112,9 +112,9 @@ class AdverbialClauseDislocationStrategy:
         # first_part[0] nunca debe ser mayúscula ya que comienza con condicionales
         first_part = first_part[0].lower() + first_part[1:]
 
-        if self.changeHeaderIfPossible:
+        if self.change_header_if_possible:
             if subord_node.leaves()[0].lemma == 'si':
-                first_part = self.rewrite_si_a_encasode(first_part)
+                first_part = self.rewrite_si_a_en_caso_de(first_part)
             elif first_part[:7] == "apenas ":
                 first_part = "cuando " + first_part[7:]
 
@@ -122,15 +122,14 @@ class AdverbialClauseDislocationStrategy:
         return Rewrite(node, rewritten_sentence.encode('utf-8'))
 
     # Si p => En caso de que subjuntivo(p)
-    def rewrite_si_a_encasode(self, first_part):
-        siAEncasodeque = [ SiAEncasodequeStrategySubjunctivePart(self.ontology) ]
+    def rewrite_si_a_en_caso_de(self, first_part):
+        si_a_en_caso_de_que = [SiAEncasodequeStrategySubjunctivePart(self.ontology)]
         paragraph = Paragraph.from_text(first_part.encode('utf-8'))
         self.analyzer.analyze(paragraph)
 
-        not_subord_rel = [ c for c in paragraph.clauses() if not self.clause_is_or_inherits_from(c, 'subord-rel') ]
-        subjunctive_first_part = src.rewrite.rewriter.Rewriter(
-            paragraph, self.ontology, siAEncasodeque, not_subord_rel
-        ).rewrite().decode('utf-8')
+        not_subord_rel = [c for c in paragraph.clauses() if not self.clause_is_or_inherits_from(c, 'subord-rel')]
+        subjunctive_first_part = Rewriter(paragraph, self.ontology, si_a_en_caso_de_que, not_subord_rel).rewrite()
+        subjunctive_first_part = subjunctive_first_part.decode('utf-8')
 
         if first_part != subjunctive_first_part and subjunctive_first_part[:3].lower() == 'si ':
             return set_first_letter_case(subjunctive_first_part, "en caso de que ") + subjunctive_first_part[3:]
@@ -142,7 +141,7 @@ class AdverbialClauseDislocationStrategy:
         second_part = text[subord_node.token.start():subord_node.token.end()].strip()
         third_part = text[subord_node.token.end():node.token.end()].strip()
 
-        final_punctuation = "" # TODO: Tomar toda la puntuación del final de third_part
+        final_punctuation = ""  # TODO: Tomar toda la puntuación del final de third_part
         if len(third_part) > 0 and third_part[-1] == ".": # TODO: Hacerlo bien: Si soy esto, soy esto!. (múltiples puntuaciones)
             final_punctuation = "."
             third_part = third_part[:-1]
@@ -154,9 +153,9 @@ class AdverbialClauseDislocationStrategy:
             second_part += ","
         second_part = set_first_letter_case(first_part, second_part)
 
-        if self.changeHeaderIfPossible:
+        if self.change_header_if_possible:
             if subord_node.leaves()[0].lemma == 'si':
-                second_part = self.rewrite_si_a_encasode(second_part)
+                second_part = self.rewrite_si_a_en_caso_de(second_part)
             elif second_part[:7].lower() == "apenas ":
                 second_part = set_first_letter_case(first_part, "cuando ") + second_part[7:]
 
