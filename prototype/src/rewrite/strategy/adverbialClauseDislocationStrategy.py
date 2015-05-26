@@ -5,7 +5,7 @@ from src.parser.leafNode import LeafNode
 from src.parser.labelNode import LabelNode
 from src.rewrite.strategy.siAEncasodequeStrategySubjunctivePart import SiAEncasodequeStrategySubjunctivePart
 
-from src.rewrite.rewriter import Rewriter
+import src.rewrite.rewriter
 from src.model.paragraph.paragraph import Paragraph
 from src.model.paragraph.paragraphAnalyzer import ParagraphAnalyzer
 from src.model.sentence.sentenceAnalyzer import SentenceAnalyzer
@@ -128,8 +128,8 @@ class AdverbialClauseDislocationStrategy:
         self.analyzer.analyze(paragraph)
 
         not_subord_rel = [c for c in paragraph.clauses() if not self.clause_is_or_inherits_from(c, 'subord-rel')]
-        subjunctive_first_part = Rewriter(paragraph, self.ontology, si_a_en_caso_de_que, not_subord_rel).rewrite()
-        subjunctive_first_part = subjunctive_first_part.decode('utf-8')
+        rewriter = src.rewrite.rewriter.Rewriter(paragraph, self.ontology, si_a_en_caso_de_que, not_subord_rel)
+        subjunctive_first_part = rewriter.rewrite().decode('utf-8')
 
         if first_part != subjunctive_first_part and subjunctive_first_part[:3].lower() == 'si ':
             return set_first_letter_case(subjunctive_first_part, "en caso de que ") + subjunctive_first_part[3:]
