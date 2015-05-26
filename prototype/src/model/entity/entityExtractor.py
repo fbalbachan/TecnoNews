@@ -8,7 +8,7 @@ class EntityExtractor:
 
     def __init__(self, clause):
         global debug_mode
-        debug_mode = True
+        debug_mode = False
 
         self.clause = clause
 

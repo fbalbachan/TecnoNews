@@ -9,7 +9,7 @@ class EntityMSISeer:
 
     def __init__(self):
         global debug_mode
-        debug_mode = True
+        debug_mode = False
 
         self.persons = resources.get_wordlist_safe("resources", "persons")
         self.demonyms = resources.get_wordlist_safe("resources", "demonyms")

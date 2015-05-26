@@ -12,7 +12,7 @@ from src.utils.invoker import Invoker
 class SentenceAnalyzer:
     def __init__(self, tree_parser=FreelingTreeParser()):
         global debug_mode
-        debug_mode = True
+        debug_mode = False
 
         self.tree_parser = tree_parser
         self.context = {"sentences": []}

@@ -6,7 +6,7 @@ from src.utils.invoker import Invoker
 class ParagraphAnalyzer:
     def __init__(self, sentence_analyzer=SentenceAnalyzer()):
         global debug_mode
-        debug_mode = True
+        debug_mode = False
 
         self.sentenceAnalyzer = sentence_analyzer
         self.context = sentence_analyzer.context
