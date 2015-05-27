@@ -7,15 +7,14 @@ from src.model.entity.animity import Animity
 from src.utils.configProvider import ConfigProvider
 
 
-allowed_boxes_according_to_verb_transitivity = {
-    # verb_category : available_boxes
-    'TRANSITIVE'   : ['verb', 'subject', 'od', 'oi', 'instrument_goal', 'adjuncts'],
-    'INTRANSITIVE' : ['verb', 'subject', 'oi', 'instrument_goal', 'adjuncts'],
-    'REGIMEN'      : ['verb', 'subject', 'regimen', 'instrument_goal', 'adjuncts'],
-    'EQUATIVE'     : ['verb', 'subject', 'oi', 'equative', 'instrument_goal', 'adjuncts'],
-    'EXISTENTIAL'  : ['verb', 'od', 'instrument_goal', 'adjuncts'],
-    'IMPERSONAL'   : ['verb', 'instrument_goal', 'adjuncts'],
-}
+allowed_boxes_according_to_verb_transitivity = \
+    {  # verb_category : available_boxes
+       'TRANSITIVE':    ['verb', 'subject', 'od', 'oi', 'instrument_goal', 'adjuncts'],
+       'INTRANSITIVE':  ['verb', 'subject', 'oi', 'instrument_goal', 'adjuncts'],
+       'REGIMEN':       ['verb', 'subject', 'regimen', 'instrument_goal', 'adjuncts'],
+       'EQUATIVE':      ['verb', 'subject', 'oi', 'equative', 'instrument_goal', 'adjuncts'],
+       'EXISTENTIAL':   ['verb', 'od', 'instrument_goal', 'adjuncts'],
+       'IMPERSONAL':    ['verb', 'instrument_goal', 'adjuncts'], }
 
 allowed_boxes_for_passive_verbs = ['verb', 'subject', 'od', 'instrument_goal', 'adjuncts']
 
@@ -95,7 +94,8 @@ def get_transitivity_value(p_transitivity_code):
 
 
 # Load verb resources from file
-Config = ConfigProvider()
+Config = ConfigParser.ConfigParser()
+Config.read("config")
 
 verb_file = Config.get("resources", "verbal_scripts")
 verb_file_reader = unicode_csv_reader(open(verb_file, 'r'), first_line_is_header=False, delimiter=',')
