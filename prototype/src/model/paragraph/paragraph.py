@@ -6,6 +6,9 @@ from src.model.sentence.sentenceSplitter import SentenceSplitter
 
 class Paragraph:
     def __init__(self, sentences=None, text=""):
+        global debug_mode
+        debug_mode = True
+        if debug_mode: print "Entering Paragraph.init()"
         self.sentences = sentences if sentences else []
         self.original_text = text
         self.parenthesis_positions_in_original_text = []
@@ -32,6 +35,9 @@ class Paragraph:
 
     @staticmethod
     def from_text(text):
+        global debug_mode
+        debug_mode = True
+        if debug_mode: print "Entering Paragraph.from_text()"
         # TODO: Repensar desde la arquitectura si las sentences son de text o del párrafo,
         #       ya que Paragraph(sentences, text) puede ser redundante.
         #       Meanwhile, paragraph is a parameter (possibly redundant) of SentenceSplitter.sentences_in()
