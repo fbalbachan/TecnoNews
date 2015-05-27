@@ -7,7 +7,7 @@ from src.model.sentence.sentenceSplitter import SentenceSplitter
 class Paragraph:
     def __init__(self, sentences=None, text=""):
         global debug_mode
-        debug_mode = True
+        debug_mode = False
         if debug_mode: print "Entering Paragraph.init()"
         self.sentences = sentences if sentences else []
         self.original_text = text
@@ -36,7 +36,7 @@ class Paragraph:
     @staticmethod
     def from_text(text):
         global debug_mode
-        debug_mode = True
+        debug_mode = False
         if debug_mode: print "Entering Paragraph.from_text()"
         # TODO: Repensar desde la arquitectura si las sentences son de text o del párrafo,
         #       ya que Paragraph(sentences, text) puede ser redundante.

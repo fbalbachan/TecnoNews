@@ -6,7 +6,7 @@ from src.utils.configProvider import ConfigProvider
 class TextualCite:
     def __init__(self, dislocation=None, changes=None):
         global debug_mode
-        debug_mode = True
+        debug_mode = False
         if debug_mode: print "Entering TextualCite.init()"
 
         if dislocation is None:

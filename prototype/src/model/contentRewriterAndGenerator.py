@@ -9,7 +9,7 @@ class ContentRewriterAndGenerator:
 
     def __init__(self):
         global debug_mode
-        debug_mode = True
+        debug_mode = False
 
     def run(self, text):
         if debug_mode: print "Entering ContentRewriterAndGenerator.run()"
