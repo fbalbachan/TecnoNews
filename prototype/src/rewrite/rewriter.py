@@ -75,8 +75,8 @@ class Rewriter:
         text = self.compose_text_with(replacements)
         for strategy in self.dislocationStrategies:
             self.paragraph = Paragraph.from_text(text)
-            self.analyzer.analyze(self.paragraph) # TODO: This seems to be called over and over (calling freeling)
-            dislocations = self.dislocations_from(strategy)
+            self.analyzer.analyze(self.paragraph)  # TODO: This seems to be called over and over (calling freeling)
+            dislocations = self._dislocations_from(strategy, self.paragraph.sentences)
             text = self.compose_text_with(dislocations)
 
         return text
@@ -100,40 +100,46 @@ class Rewriter:
 
         source_text += text[index:]
 
-        print "Leaving compose_text_with() - source_text: ", source_text, "\n\n"
+        if debug_mode: print "Leaving compose_text_with() - source_text: ", source_text, "\n\n"
         return source_text.encode("utf-8")
 
-    def dislocations_from(self, strategy):
-        if debug_mode: print "Entering Rewriter.dislocations_from(strategy: ", strategy.__class__.__name__, ")"
-        # TODO: Remove this exception handler when the problem is solved
+    def _dislocations_from(self, strategy, sentences):
+        if debug_mode: print "Entering Rewriter._dislocations_from(strategy: ", strategy.__class__.__name__, ")"
+
         dislocations = []
-        for sentence in self.paragraph.sentences:
+        for sentence in sentences:
             try:
-                print "sentence: ", sentence, "\n"
-                dislocations.extend(self.dislocations_from_node(strategy, sentence, sentence.parse_node))
+                dislocation_rewrite_rules = self._dislocations_from_node(strategy, sentence, sentence.parse_node)
+                dislocations.extend(dislocation_rewrite_rules)
+
             except:
-                pass
+                pass  # TODO: Remove this exception handler when the problem is solved
 
-        print "Leaving dislocations_from() - dislocations: ", dislocations, "\n\n"
+        if debug_mode: print "Leaving _dislocations_from() - dislocations: ", dislocations, "\n\n"
         return dislocations
-        # TODO: Use the line below again after removing the handler above
-        # return [strategy.rewrite(sentence) for sentence in self.paragraph.sentences if strategy.applies_to(sentence)]
 
-    def dislocations_from_node(self, strategy, sentence, node):
-        strategy_name = strategy.__class__.__name__
-        if debug_mode: print "Entering Rewriter.dislocations_from_node(strategy: ", strategy_name, ", node: ", node, ")"
+        # TODO: Use the line below again after removing the handler above
+        # return [strategy.rewrite(sentence) for sentence in sentences if strategy.applies_to(sentence)]
+
+    def _dislocations_from_node(self, strategy, sentence, node):
+        if debug_mode:
+            strategy_name = strategy.__class__.__name__
+            print "Entering Rewriter._dislocations_from_node(strategy: ", strategy_name, ", node: ", node, ")"
+
         dislocations = []
         enter = True
         try:
             if strategy.applies_to(sentence, node):
-                dislocations.append(strategy.rewrite(sentence, node))
+                dislocation_rewrite_rule = strategy.rewrite(sentence, node)
+                dislocations.append(dislocation_rewrite_rule)
                 enter = False
         except:
             pass
 
         if enter:
             for child in node.children:
-                dislocations.extend(self.dislocations_from_node(strategy, sentence, child))
+                dislocation_rewrite_rules = self._dislocations_from_node(strategy, sentence, child)
+                dislocations.extend(dislocation_rewrite_rules)
 
         return dislocations
 
@@ -152,7 +158,7 @@ class Rewriter:
             except:
                 print format_exc()
 
-        print "Leaving replacements_for() - replacements: ", replacements, "\n\n"
+        if debug_mode: print "Leaving replacements_for() - replacements: ", replacements, "\n\n"
         return replacements
 
     def append_if_not_overlaps(self, rewrite, rewrites):

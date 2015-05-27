@@ -27,7 +27,7 @@ class ContentRewriterAndGenerator:
         rewriter = Rewriter(analysis['paragraph'])
         changed = rewriter.rewrite()
 
-        print "Leaving ContentRewriterAndGenerator.run() - changed: ", changed, "\n\n"
+        if debug_mode: print "Leaving ContentRewriterAndGenerator.run() - changed: ", changed, "\n\n"
         return {"source": text, "changed": changed}
 
     def _analyze(self, text):
