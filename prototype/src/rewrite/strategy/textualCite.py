@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 from src.rewrite.rewrite import Rewrite
-from src.utils.stringUtils import set_first_letter_case
-from src.parser.leafNode import LeafNode
 from src.parser.labelNode import LabelNode
 from src.utils.configProvider import ConfigProvider
 
 class TextualCite:
     def __init__(self, dislocation=None, changes=None):
+        global debug_mode
+        debug_mode = True
+        if debug_mode: print "Entering TextualCite.init()"
+
         if dislocation is None:
             self.dislocation = [True, False]
 
@@ -19,13 +21,15 @@ class TextualCite:
         self.head_nodes = ["grup-verb", "subord-rel", "subord", "subord-ger", "verb-pass"]
 
     def applies_to(self, sentence, node):
+        if debug_mode: print "Entering TextualCite.applies_to(node:", node, ")"
         return self.applies_quote(sentence, node)
 
     def applies_quote(self, sentence, node):
+        if debug_mode: print "Entering TextualCite.applies_quote(node:", node, ")"
         verb_que_idx = None
         group_verb_que_idx = None
         closing_quote_idx = None
-        is_verb_sun_of_verb_root = None
+        is_verb_son_of_verb_root = None
 
         cite_indexes = self.find_children_cite_indexes(node)
         if isinstance(node, LabelNode):
@@ -35,6 +39,7 @@ class TextualCite:
 
                 if len(verbs_que_idx) > 0:
                     verb_que_idx = verbs_que_idx[0]
+
             if node.label == "F-no-c":
                 closing_quote_idx = self.find_quote_comma(node)
 
@@ -42,7 +47,7 @@ class TextualCite:
 
                 if len(closing_quote_idx) > 0:
                     group_verb_que_idx = self.get_verbs_que_idx_using_verbs(node, verb_list, closing_quote_idx[0]+1)
-                    # is_verb_sun_of_verb_root = self.get_verbs_que_idx_list(node.children[group_verb_que_idx[0]+1])
+                    # is_verb_son_of_verb_root = self.get_verbs_que_idx_list(node.children[group_verb_que_idx[0]+1])
 
         applies_normal = isinstance(node, LabelNode) and node.label in self.head_nodes \
             and (
@@ -59,13 +64,15 @@ class TextualCite:
                 (abs(verb_que_idx - cite_indexes[0]) < 3 or
                  abs(verb_que_idx - cite_indexes[0]) < 3)
             )
+
         applies_quote_root = isinstance(node, LabelNode) and \
                              node.label == "F-no-c" and \
                              group_verb_que_idx is not None and \
                              closing_quote_idx is not None
-        # and \
-                             # is_verb_sun_of_verb_root != []
+                             # and \
+                             # is_verb_son_of_verb_root != []
 
+        print "Leaving applies_quote(): ", str(applies_normal or applies_quote_root)
         return applies_normal or applies_quote_root
 
     @property
@@ -217,7 +224,7 @@ class TextualCite:
     def rewrite_quote(self, sentence, node):
         text = sentence.paragraph.text.decode("utf-8")
 
-        #Case root is '"'
+        # Case root is '"'
         if node.label == "F-no-c":
 
             closing_quote_idxs = self.find_quote_comma(node)
