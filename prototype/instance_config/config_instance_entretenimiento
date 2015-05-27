@@ -34,7 +34,7 @@ status = ON
 [publishing]
 unique_host = True
 unique_host_data = publishing/wordpress_entretenimiento_unique_host_to_publish.json
-default_category = u'espectaculos'
+default_category = espectaculos
 #category_host_to_publish = publishing/wordpress_category_host_to_publish_entretenimiento.json
 #categories_priority = publishing/categories_priority.json
 

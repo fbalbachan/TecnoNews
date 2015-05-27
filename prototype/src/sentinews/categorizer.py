@@ -18,6 +18,8 @@ class Categorizer(object):
 
         self.default_cat = self.config.get('publishing', 'default_category')
         assert self.default_cat
+        if not isinstance(self.default_cat, unicode):
+            self.default_cat = self.default_cat.decode('utf-8')
 
         self.categories_dict = {}
         for row in categories_reader:
