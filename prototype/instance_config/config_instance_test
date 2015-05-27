@@ -35,7 +35,7 @@ status = ON
 unique_host = False
 category_host_to_publish = publishing/wordpress_category_host_to_publish_test.json
 categories_priority = publishing/categories_priority.json
-
+default_category = interés general
 
 [resources]
 
