@@ -3,6 +3,7 @@ from collections import deque
 from traceback import format_exc
 
 from src.ling.freelingDictionaryParser import FreelingDictionaryParser
+from src.model.paragraph.paragraphAnalyzer import ParagraphAnalyzer
 from src.model.paragraph.paragraph import Paragraph
 from src.model.sentence.sentenceAnalyzer import SentenceAnalyzer
 from src.rewrite.strategy.adverbialClauseDislocationStrategy import AdverbialClauseDislocationStrategy
@@ -26,6 +27,7 @@ class Rewriter:
     def __init__(self, paragraph, ontology=None, strategies=None, clauses_for_replacements=None):
         global debug_mode
         debug_mode = False
+        if debug_mode: print "Entering Rewriter.init()"
 
         if ontology is None:
             ontology = self.ontology
@@ -63,6 +65,7 @@ class Rewriter:
         self.clauses_for_replacements = clauses_for_replacements
 
     def rewrite(self):
+        if debug_mode: print "Entering Rewriter.rewrite()"
         replacements = []
 
         clauses = self.clauses_for_replacements if self.clauses_for_replacements else self.paragraph.clauses()
@@ -72,12 +75,14 @@ class Rewriter:
         text = self.compose_text_with(replacements)
         for strategy in self.dislocationStrategies:
             self.paragraph = Paragraph.from_text(text)
+            self.analyzer.analyze(self.paragraph) # TODO: This seems to be called over and over (calling freeling)
             dislocations = self.dislocations_from(strategy)
             text = self.compose_text_with(dislocations)
 
         return text
 
     def compose_text_with(self, rewrites):
+        if debug_mode: print "Entering Rewriter.compose_text_with(rewrites: ", rewrites, ")"
         rewrites.sort(key=lambda rewrite_rule: rewrite_rule.token().start())
         rewrites = deque(rewrites)
 
@@ -94,9 +99,29 @@ class Rewriter:
             index = end
 
         source_text += text[index:]
+
+        print "Leaving compose_text_with() - source_text: ", source_text, "\n\n"
         return source_text.encode("utf-8")
 
+    def dislocations_from(self, strategy):
+        if debug_mode: print "Entering Rewriter.dislocations_from(strategy: ", strategy.__class__.__name__, ")"
+        # TODO: Remove this exception handler when the problem is solved
+        dislocations = []
+        for sentence in self.paragraph.sentences:
+            try:
+                print "sentence: ", sentence, "\n"
+                dislocations.extend(self.dislocations_from_node(strategy, sentence, sentence.parse_node))
+            except:
+                pass
+
+        print "Leaving dislocations_from() - dislocations: ", dislocations, "\n\n"
+        return dislocations
+        # TODO: Use the line below again after removing the handler above
+        # return [strategy.rewrite(sentence) for sentence in self.paragraph.sentences if strategy.applies_to(sentence)]
+
     def dislocations_from_node(self, strategy, sentence, node):
+        strategy_name = strategy.__class__.__name__
+        if debug_mode: print "Entering Rewriter.dislocations_from_node(strategy: ", strategy_name, ", node: ", node, ")"
         dislocations = []
         enter = True
         try:
@@ -112,19 +137,8 @@ class Rewriter:
 
         return dislocations
 
-    def dislocations_from(self, strategy):
-        # TODO: Remove this exception handler when the problem is solved
-        dislocations = []
-        for sentence in self.paragraph.sentences:
-            try:
-                dislocations.extend(self.dislocations_from_node(strategy, sentence, sentence.parse_node))
-            except:
-                pass
-        return dislocations
-        # TODO: Use the line below again after removing the handler above
-        # return [strategy.rewrite(sentence) for sentence in self.paragraph.sentences if strategy.applies_to(sentence)]
-
     def replacements_for(self, clause):
+        if debug_mode: print "Entering Rewriter.replacements_for()"
         replacements = []
         for strategy in self.replacementStrategies:
             try:
@@ -138,9 +152,11 @@ class Rewriter:
             except:
                 print format_exc()
 
+        print "Leaving replacements_for() - replacements: ", replacements, "\n\n"
         return replacements
 
     def append_if_not_overlaps(self, rewrite, rewrites):
+        if debug_mode: print "Entering Rewriter.append_if_not_overlaps()"
         overlaps_rewrite_with_some_in_rewrites = any((each.overlaps(rewrite) for each in rewrites))
         if not overlaps_rewrite_with_some_in_rewrites:
             rewrites.append(rewrite)
@@ -148,6 +164,7 @@ class Rewriter:
             if debug_mode: print "Hay OVERLAP"
 
     sentenceAnalyzer = SentenceAnalyzer()  # Check if this is necessary
+    analyzer = ParagraphAnalyzer(sentenceAnalyzer)
 
     ontology = FreelingDictionaryParser.from_resource()
     # ontology = Ontology("Test")
