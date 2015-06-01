@@ -8,20 +8,20 @@ from src.parser.freelingTreeParser import FreelingTreeParser
 from src.sentiment.sentimentalAnalyzer import SentimentalAnalyzer
 from src.utils.invoker import Invoker
 
+debug_mode = False
+
 
 class SentenceAnalyzer:
     def __init__(self, tree_parser=FreelingTreeParser()):
-        global debug_mode
-        debug_mode = False
-
         self.tree_parser = tree_parser
         self.context = {"sentences": []}
         self.invoker = Invoker()
 
     def analyze(self, sentence):
-        if debug_mode: print "Entering SentenceAnalyzer.analyze()"
+        if debug_mode: print "--> SentenceAnalyzer.analyze()"
 
         self.set_parse_tree_to(sentence)
+
         TokenizationGuesser(sentence).guess()
 
         sentence.clauses = ClauseExtractor.extract_from(sentence)
@@ -45,7 +45,7 @@ class SentenceAnalyzer:
         GlobalOperatorAnalyzer(sentence).analyze()
 
     def analyze_clauses_of(self, sentence):
-        if debug_mode: print "Entering SentenceAnalyzer.analyze_clauses_of()"
+        if debug_mode: print "--> SentenceAnalyzer.analyze_clauses_of()"
 
         self.context["clauses"] = []
         clause_analyzer = ClauseAnalyzer()
@@ -56,18 +56,25 @@ class SentenceAnalyzer:
             self.context["clauses"].append(clause)
 
     def set_parse_tree_to(self, sentence):
-        node = self.tree_parser.from_text(sentence.text)
-        sentence.parse_node = node
+        try:
+            node = self.tree_parser.from_text(sentence.text)
+            sentence.parse_node = node
 
-        print "-------------------------------------------------------"
-        print "TEXT".ljust(8), sentence.text
-        print "-------------------------------------------------------"
-        print "LEAVES".ljust(8), node.leaves()
-        print "-------------------------------------------------------"
-        print node.tree_representation()
-        print "-------------------------------------------------------"
-        for leaf in node.leaves():
-            lex_entry = leaf.original_lexical_form + " " + leaf.lemma
-            print lex_entry.ljust(18), leaf.msi
-            print ""
-        print "-------------------------------------------------------------------------------------------------------"
+            print "-------------------------------------------------------"
+            print "TEXT".ljust(8), sentence.text
+            print "-------------------------------------------------------"
+            print "LEAVES".ljust(8), node.leaves()
+            print "-------------------------------------------------------"
+            print node.tree_representation()
+            print "-------------------------------------------------------"
+            for leaf in node.leaves():
+                lex_entry = leaf.original_lexical_form + " " + leaf.lemma
+                print lex_entry.ljust(18), leaf.msi
+                print ""
+            print "----------------------------------------------------------------------------------------------------"
+
+        except Exception as e:
+            error_sentence = sentence.text[:]
+            error_sentence = error_sentence.replace(" ", "_")
+            print "EB_FP_EXCEPTION_in_sentence: [", error_sentence, "]"
+            raise
