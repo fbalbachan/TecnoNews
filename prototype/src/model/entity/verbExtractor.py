@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 from src.model.entity.verb import Verb
 
+debug_mode = False
+
 
 class VerbExtractor:
     def __init__(self, clause):
         self.clause = clause
 
     def extract(self):
-        # print "Entering VerbExtractor.extract()"
+        if debug_mode: print "--> VerbExtractor.extract()"
         node = self._verb_node()
         leaves = self._verb_leaves_of(node)
         return Verb(node, self.clause.voice, leaves)

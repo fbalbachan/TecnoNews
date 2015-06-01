@@ -16,7 +16,7 @@ class EntityMSISeer:
         self.animals = resources.get_wordlist_safe("resources", "animals")
 
     def msi_of(self, entity):
-        if debug_mode: print "Entering EntityMSISeer.msi_of(entity:", entity, ")"
+        if debug_mode: print "--> EntityMSISeer.msi_of(entity:", entity, ")"
 
         label = entity.node.label
         entity.msi = self.msi_seer_by_label[label](self, entity) if label in self.msi_seer_by_label else {}
@@ -26,7 +26,7 @@ class EntityMSISeer:
         return entity.msi
 
     def msi_of_single(self, entity):
-        if debug_mode: print "Entering EntityMSISeer.msi_of_single(entity:", entity, ")"
+        if debug_mode: print "--> EntityMSISeer.msi_of_single(entity:", entity, ")"
         node = entity.node
 
         banned_labels = ["grup-sp", "sp-de"]
@@ -64,7 +64,7 @@ class EntityMSISeer:
         return [ noun.msi["type"] if "type" in noun.msi else None for noun in kernel_nouns ] == [ "common", "proper" ]
 
     def disambiguate_if_necessary(self, msi, leaves):
-        if debug_mode: print "Entering EntityMSISeer.disambiguate_if_necessary(msi, leaves)", msi
+        if debug_mode: print "--> EntityMSISeer.disambiguate_if_necessary(msi, leaves)", msi
         if not leaves:
             return
         leaves = leaves[::-1]
