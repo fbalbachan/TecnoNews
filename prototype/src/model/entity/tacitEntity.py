@@ -3,9 +3,12 @@ from src.model.referent.referent import Referent
 from src.sentiment.entitySentimentalValue import EntitySentimentalValue
 from src.model.entity.animityEnum import AnimityEnum
 
+debug_mode = False
+
 
 class TacitEntity:
     def __init__(self, lexical_form, msi, attributes=None):
+        if debug_mode: print "--> TacitEntity.init(lexical_form:", lexical_form, ")"
         self.lexical_form = lexical_form
         if 'animity' not in msi:
             msi["animity"] = AnimityEnum.inanimate

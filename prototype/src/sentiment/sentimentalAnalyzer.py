@@ -5,6 +5,8 @@ from src.sentiment.sentiWordNet import SentiWordNet
 from src.sentiment.sentimentalValuedObject import SentimentalValuedObject
 from src.sentiment.verbalSentimentAnalyzer import VerbalSentimentAnalyzer
 
+debug_mode = False
+
 
 class SentimentalAnalyzer:
     def analyze(self, clause):
@@ -88,12 +90,14 @@ class SentimentalAnalyzer:
             for method in [ self.analyze_adjectival, self.analyze_nominal ]: method(entity)
 
     def analyze_adjectival(self, entity):
+        if debug_mode: print "--> SentimentalAnalyzer.analyze_adjectival(entity)"
         node = entity.proper_node
         hints = node.leaves_of_category("adjective") + node.leaves_of_msi({ "category": "verb", "mode" : "participio"})
         evidence = self.only_valuated_of(hints)
         entity.sentimental_value.add_evidence(*evidence)
 
     def analyze_nominal(self, entity):
+        if debug_mode: print "--> SentimentalAnalyzer.analyze_nominal(entity)"
         node = entity.proper_node
         hints = node.leaves_of_category("noun") + node.leaves_of_msi({ "category": "verb", "mode" : "infinitive"})
         evidence = self.only_valuated_of(hints)

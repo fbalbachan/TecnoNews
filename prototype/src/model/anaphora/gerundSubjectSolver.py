@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 from src.ling.tacit_subjects import somebody
 
+debug_mode = False
+
 
 class GerundSubjectSolver:
     def __init__(self, clause):
-        global debug_mode
-        debug_mode = False
         self.clause = clause
 
     def solve(self):

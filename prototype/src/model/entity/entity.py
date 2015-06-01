@@ -4,11 +4,15 @@ from collections import deque
 from src.model.entity.tacitEntity import TacitEntity
 from src.model.tokenization.token import Token
 from src.model.entity.animityEnum import AnimityEnum
+from src.parser.parseNode import ParseNode
+
+debug_mode = False
 
 
 class Entity (TacitEntity):
 
     def __init__(self, node):
+        if debug_mode: print "--> Entity.init(node: ", node, ")"
         self.node = node
         self.kernel = None
         self.father = None
@@ -16,7 +20,8 @@ class Entity (TacitEntity):
         self.token = self.build_token()
         self.appositions = []
 
-        if self.lexical_form().lower() in ["se", "le", "les"]:
+        llf = self.lexical_form().lower()
+        if llf in ["se", "le", "les"]:
             attributes = {"useless": None}
         else:
             attributes = {}
@@ -66,7 +71,9 @@ class Entity (TacitEntity):
                       path_to_root)
 
     def lexical_form(self):
-        return self.node.lexical_form()
+        if debug_mode: print "Entity.lexical_form()"
+        lf = ParseNode.lexical_form(self.node)
+        return lf
 
     def original_lexical_form(self):
         return self.node.original_lexical_form()

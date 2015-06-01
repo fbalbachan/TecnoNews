@@ -15,7 +15,7 @@ class SyntacticAnalyzer(object):
         for structure in clause.syntactic_structures:
             if debug_mode:
                 assigned = filter(lambda p_ent: clause.is_assigned(p_ent), clause.all_entities())
-                unassigned = filter(lambda p_ent: not clause.is_assigned(p_ent), clause.all_entities())
+                unassigned = filter(lambda p_ent: p_ent not in assigned, clause.all_entities())
                 print "--------------"
                 print "Assigned entities for clause: ", assigned, "\nUnassigned entities for clause: ", unassigned, "\n"
 

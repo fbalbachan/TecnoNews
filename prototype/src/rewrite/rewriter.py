@@ -74,12 +74,14 @@ class Rewriter:
             replacements.extend(replacement_rules)
 
         text = self.compose_text_with(replacements)
+        if debug_mode: print "\nTEXT AFTER APPLYING EVERY REPLACEMENT STRATEGY:\n[", text, "]\n"
+
         for strategy in self.dislocationStrategies:
             self.paragraph = Paragraph.from_text(text)
             self.analyzer.analyze(self.paragraph)  # TODO: This seems to be called over and over (calling freeling)
             dislocations = self._dislocations_from(strategy, self.paragraph.sentences)
             text = self.compose_text_with(dislocations)
-            if debug_mode: print "\nTEXT AFTER APPLYING STRATEGY: ", strategy.__class__.__name__, ":\n[", text, "]\n"
+            if debug_mode: print "\nTEXT AFTER APPLYING DISLOCATION STRATEGY: ", strategy.__class__.__name__, ":\n[", text, "]\n"
 
         return text
 

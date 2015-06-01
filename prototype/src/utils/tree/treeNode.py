@@ -4,6 +4,8 @@ from copy import copy
 from src.utils.tree.inDepthNodeIterator import InDepthNodeIterator
 from src.utils.collectionUtils import dict_by
 
+debug_mode = False
+
 
 class TreeNode:
 
@@ -15,6 +17,7 @@ class TreeNode:
         return InDepthNodeIterator(self)
 
     def leaves(self, iterator=InDepthNodeIterator):
+        if debug_mode: print "--> TreeNode.leaves()"
         return filter(lambda node: node.is_leaf(), iterator(self))
 
     def is_subordinated(self):
