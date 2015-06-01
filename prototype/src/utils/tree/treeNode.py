@@ -7,7 +7,7 @@ from src.utils.collectionUtils import dict_by
 debug_mode = False
 
 
-class TreeNode:
+class TreeNode(object):
 
     def __init__(self):
         self.father = None

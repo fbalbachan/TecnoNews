@@ -13,3 +13,4 @@ source $HOME/NaturalEnv/bin/activate
 export PYTHONPATH=$PYTHONPATH:$HOME/NaturalEnv/NaturalNews/prototype/:$HOME/NaturalEnv/NaturalNews/prototype/webapp
 
 python2.7 service.py 8321
+
