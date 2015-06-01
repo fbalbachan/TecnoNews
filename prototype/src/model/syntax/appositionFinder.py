@@ -1,17 +1,16 @@
 # -*- coding: utf-8 -*-
 __author__ = 'Martin Caramés Abente'
 
+debug_mode = False
+
 
 class AppositionFinder:
 
     def __init__(self, clause):
-        global debug_mode
-        debug_mode = False
-
         self.clause = clause
 
     def retrieve_appositions(self):
-        if debug_mode: print "Entering ClauseAnalyzer.retrieve_appositions(clause: ", self.clause, ")"
+        if debug_mode: print "--> ClauseAnalyzer.retrieve_appositions(clause: ", self.clause, ")"
 
         candidate_entities = filter(lambda entity: entity.is_explicit()
                                                    and entity.category() == "noun"
@@ -71,7 +70,10 @@ class AppositionFinder:
         entity_levels_are_ok = are_siblings or self.are_almost_siblings(candidate_chain)
         agree_in_per_gen_num = all(e.matches(candidate_chain[0]) for e in candidate_chain)
 
-        return entity_levels_are_ok and agree_in_per_gen_num
+        there_is_place = any("semantic_classification" in e.msi
+                             and e.msi["semantic_classification"] == "place" for e in candidate_chain)
+
+        return entity_levels_are_ok and agree_in_per_gen_num and not there_is_place
 
     def get_reference_entity(self, chain):
         named = filter(lambda entity: "semantic_classification" in entity.msi
@@ -86,7 +88,7 @@ class AppositionFinder:
         :return: bool
         """
 
-        if debug_mode: print "Entering ClauseAnalyzer.entity_is_next_or_close_to(entity: ", entity, ", lemmas: ", lemmas, ")"
+        if debug_mode: print "--> ClauseAnalyzer.entity_is_next_or_close_to(entity: ", entity, ", lemmas: ", lemmas, ")"
 
         is_next_to_lemma = self.entity_is_next_to(entity, lemmas)
 
@@ -103,7 +105,7 @@ class AppositionFinder:
         :return: bool
         """
 
-        # print "Entering ClauseAnalyzer.is_next_to_lexical_form(entity: ", entity, ", lemmas: ", lemmas, ")"
+        if debug_mode: print "--> ClauseAnalyzer.is_next_to_lexical_form(entity: ", entity, ", lemmas: ", lemmas, ")"
 
         clause_leaves = self.clause.proper_leaves()
         leaf_positions = {leaf: index for (index, leaf) in enumerate(clause_leaves)}
