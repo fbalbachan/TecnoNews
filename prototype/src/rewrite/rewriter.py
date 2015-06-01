@@ -6,7 +6,7 @@ from src.ling.freelingDictionaryParser import FreelingDictionaryParser
 from src.model.paragraph.paragraphAnalyzer import ParagraphAnalyzer
 from src.model.paragraph.paragraph import Paragraph
 from src.model.sentence.sentenceAnalyzer import SentenceAnalyzer
-from src.rewrite.strategy.AppositionDislocationStrategy import AppositionDislocationStrategy
+from src.rewrite.strategy.appositionDislocationStrategy import AppositionDislocationStrategy
 from src.rewrite.strategy.adverbialClauseDislocationStrategy import AdverbialClauseDislocationStrategy
 from src.rewrite.strategy.althoughClauseDislocationStrategy import AlthoughClauseDislocationStrategy
 from src.rewrite.strategy.dateTimeStrategy import DateTimeStrategy
