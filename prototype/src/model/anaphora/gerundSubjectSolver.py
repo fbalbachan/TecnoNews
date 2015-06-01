@@ -4,10 +4,12 @@ from src.ling.tacit_subjects import somebody
 
 class GerundSubjectSolver:
     def __init__(self, clause):
+        global debug_mode
+        debug_mode = False
         self.clause = clause
 
     def solve(self):
-        # print "Entering GerundSubjectSolver.solve()"
+        if debug_mode: print "--> GerundSubjectSolver.solve()"
         clause = self.clause
         subject = clause.structure("subject")
 

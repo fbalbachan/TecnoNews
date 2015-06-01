@@ -5,6 +5,8 @@ from src.model.syntax.syntacticAnalyzer import SyntacticAnalyzer
 from src.model.entity.verb import Verb
 from src.ling.tacit_subjects import this
 
+debug_mode = False
+
 
 class RelativePronounSolver:
     def __init__(self, clause):
@@ -12,7 +14,7 @@ class RelativePronounSolver:
         self.linker = clause.relative_linker
 
     def solve(self):
-        # print "Entering RelativePronounSolver.solve()"
+        if debug_mode: print "--> RelativePronounSolver.solve()"
         clause = self.clause
 
         if self.is_possessive_relative():
@@ -70,7 +72,7 @@ class RelativePronounSolver:
             slot.append(possessed_entity)
 
     def is_valid_linker(self):
-        # print "Entering RelativePronounSolver.is_valid_linker()"
+        if debug_mode: print "--> RelativePronounSolver.is_valid_linker()"
 
         word = self.linker[0].lexical_form
         is_valid = word not in ["donde", "adonde"]
@@ -135,8 +137,8 @@ class RelativePronounSolver:
 
     @staticmethod
     def relative_entity_matches_msi(relative_entity, is_quien_relative, gender, number, verb_animity):
-        # print "Entering RelativePronounSolver.relative_entity_matches_msi - Rel entity: ", relative_entity, \
-        #    " - Verb_animity", str(verb_animity), " - gender ", str(gender), " - number ", str(number)
+        if debug_mode: print "--> RelativePronounSolver.relative_entity_matches_msi - Rel entity: ", relative_entity, \
+                             " - Verb_animity", str(verb_animity), " - gender ", str(gender), " - number ", str(number)
         matches_animity = (not is_quien_relative or relative_entity.animity_matches(AnimityEnum.animated)) \
                           and relative_entity.animity_matches(verb_animity)
         matches_gender = not gender or relative_entity.gender_matches(gender)

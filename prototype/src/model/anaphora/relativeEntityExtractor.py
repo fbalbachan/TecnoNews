@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+debug_mode = False
+
 
 class RelativeEntityExtractor:
 
@@ -7,7 +9,7 @@ class RelativeEntityExtractor:
         self.clause = clause
 
     def extract(self):
-        # print "Entering RelativeEntityExtractor.extract()"
+        if debug_mode: print "--> RelativeEntityExtractor.extract()"
         extract_methods_by_label = {"subord":     self.extract_from_non_relative,
                                     "subord-rel": self.extract_from_relative}
 
@@ -16,7 +18,7 @@ class RelativeEntityExtractor:
         return extract_method()
 
     def extract_from_non_relative(self):
-        # print "Entering RelativeEntityExtractor.extract_from_non_relative()"
+        if debug_mode: print "--> RelativeEntityExtractor.extract_from_non_relative()"
         clause = self.clause
         father = clause.father
 
@@ -34,7 +36,7 @@ class RelativeEntityExtractor:
         return entity
 
     def extract_from_relative(self):
-        # print "Entering RelativeEntityExtractor.extract_from_relative()"
+        if debug_mode: print "--> RelativeEntityExtractor.extract_from_relative()"
         clause = self.clause
         if not clause.is_root():
             father = clause.father
