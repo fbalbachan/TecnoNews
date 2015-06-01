@@ -5,13 +5,15 @@ from src.model.entity.tacitEntity import TacitEntity
 from src.model.syntax.syntacticAnalyzer import SyntacticAnalyzer
 from src.model.entity.animityEnum import AnimityEnum
 
+debug_mode = False
+
 
 class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
     def __init__(self, clause):
         SyntacticAnalyzer.__init__(self, clause)
 
     def analyze(self, clause):
-        # print "Entering ActiveVoiceSyntacticAnalyzer.analyze(). Clause: ", clause
+        if debug_mode: print "--> ActiveVoiceSyntacticAnalyzer.analyze(). Clause: ", clause
 
         if self.there_is_an_impersonal_se():
             pre_subject = self.subject_without_animity_restrictions()
@@ -24,24 +26,24 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
                 self.analyze_impersonal_se(is_impersonal_passive, pre_subject, pre_od)
                 return
 
-        # print "Not a case for an impersonal 'se':  going to SyntacticAnalyzer.analyze()"
         super(ActiveVoiceSyntacticAnalyzer, self).analyze(clause)
 
     def there_is_an_impersonal_se(self):
-        # print "Entering ActiveVoiceSyntacticAnalyzer.there_is_an_impersonal_se()"
+        if debug_mode: print "--> ActiveVoiceSyntacticAnalyzer.there_is_an_impersonal_se()"
         is_transitive = self.clause.verb.transitivity is "TRANSITIVE"
         se_before_verbal_tree = self.there_is_se_before_verbal_tree()
         return is_transitive and se_before_verbal_tree
 
     def analyze_impersonal_se(self, is_impersonal_passive, pre_subject, pre_od):
-        # print "Entering ActiveVoiceSyntacticAnalyzer.analyze_impersonal_se()"
+        if debug_mode: print "--> ActiveVoiceSyntacticAnalyzer.analyze_impersonal_se()"
         clause = self.clause
         for structure in clause.syntactic_structures:
-            # assigned = filter(lambda entity: clause.is_assigned(entity), clause.all_entities())
-            # unassigned = filter(lambda entity: not clause.is_assigned(entity), clause.all_entities())
-            # print "--------------"
-            # print "Assigned entities for clause: ", assigned
-            # print "Unassigned entities for clause: ", unassigned, "\n"
+            if debug_mode:
+                assigned = filter(lambda entity: clause.is_assigned(entity), clause.all_entities())
+                unassigned = filter(lambda entity: entity not in assigned, clause.all_entities())
+                print "--------------"
+                print "Assigned entities for clause: ", assigned
+                print "Unassigned entities for clause: ", unassigned, "\n"
 
             slot_name = structure.name
             if structure.is_empty():
@@ -58,11 +60,11 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
 
                 structure.append_all(entities)
 
-            # print "\nFINAL Entities for ", structure.name, ": ", structure.all_entities()
-            # print "--------------"
+            if debug_mode: print "\nFINAL Entities for ", structure.name, ": ", structure.all_entities()
+            if debug_mode: print "--------------"
 
     def there_is_se_before_verbal_tree(self):
-        # print "Entering ActiveVoiceSyntacticAnalyzer.there_is_se_before_verbal_tree()"
+        if debug_mode: print "--> ActiveVoiceSyntacticAnalyzer.there_is_se_before_verbal_tree()"
         verb_node = self.clause.verb.node
         brothers = verb_node.father.children
         while brothers and not self.is_node_for_morfema_verbal_se(brothers[0]):
@@ -98,7 +100,7 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         return still_not_passive
 
     def subject(self):
-        # print "Entering ActiveVoiceSyntacticAnalyzer.subject()"
+        if debug_mode: print "--> ActiveVoiceSyntacticAnalyzer.subject()"
 
         clause = self.clause
         if clause.is_gerund():
@@ -118,7 +120,7 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         return subject
 
     def subject_without_animity_restrictions(self):
-        # print "Entering ActiveVoiceSyntacticAnalyzer.subject_without_animity_restrictions()"
+        if debug_mode: print "--> ActiveVoiceSyntacticAnalyzer.subject_without_animity_restrictions()"
 
         clause = self.clause
         if clause.is_gerund():
@@ -136,7 +138,7 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         return subject
 
     def tacit_or_implicit_subject(self, verbal_animity=AnimityEnum.bianimate):
-        # print "Subject is tacit or implicit"
+        if debug_mode: print "Subject is tacit or implicit"
 
         if self.is_root_relative_clause():
             is_implicit = True
@@ -161,7 +163,7 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         return TacitEntity(pronoun, pronoun_msi)
 
     def od(self):
-        # print "Entering ActiveVoiceSyntacticAnalyzer.od()"
+        if debug_mode: print "--> ActiveVoiceSyntacticAnalyzer.od()"
         verbal_animity = self.clause.verb.affected_object_animity
 
         [nominal_entities_at_same_level_nodes,
@@ -181,7 +183,7 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         return od
 
     def search_od(self, candidate_entities, animated_candidate_entities, verbal_animity=AnimityEnum.bianimate):
-        # print "Entering ActiveVoiceSyntacticAnalyzer.search_od()"
+        if debug_mode: print "--> ActiveVoiceSyntacticAnalyzer.search_od()"
         if not candidate_entities:
             is_implicit = True
             return [get_entity_some(verbal_animity, is_implicit)]
@@ -200,7 +202,7 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         return [animated_candidate_entities[0]]
 
     def get_od_candidate_entities(self, verbal_animity=AnimityEnum.bianimate):
-        # print "Entering ActiveVoiceSyntacticAnalyzer.get_od_candidate_entities()"
+        if debug_mode: print "--> ActiveVoiceSyntacticAnalyzer.get_od_candidate_entities()"
         nominal_entities_at_same_level_nodes = \
             self.find_entities_by(lambda: self.search_nominal_od_at_same_level_nodes("right", 4, verbal_animity),
                                   lambda: self.search_nominal_od_at_same_level_nodes("left", 3, verbal_animity))
@@ -217,7 +219,7 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
                 pronominal_entities]
 
     def link_duplicated_od_for(self, od_candidates):
-        # print "Entering ActiveVoiceSyntacticAnalyzer.link_duplicated_od_for()"
+        if debug_mode: print "--> ActiveVoiceSyntacticAnalyzer.link_duplicated_od_for()"
         accusative_pronoun = self.search_duplicated_od_for(od_candidates[0])
         if accusative_pronoun is not None:
             accusative_pronoun.add_coreference(od_candidates[0])
@@ -231,7 +233,7 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         :rtype: TacitEntity
         """
 
-        # print "Entering ActiveVoiceSyntacticAnalyzer.search_duplicated_od_for()"
+        if debug_mode: print "--> ActiveVoiceSyntacticAnalyzer.search_duplicated_od_for()"
         closest_entities = self.clause.entities_closest_to_verb(("left", 3), ("right", 2))
         matching_pronouns = self.only_accusative_pronouns_of(closest_entities)
         matching_pronouns = filter(lambda pronoun: source_od.matches(pronoun), matching_pronouns)
@@ -247,7 +249,7 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         return result
 
     def od_without_animity_restrictions(self):
-        # print "Entering ActiveVoiceSyntacticAnalyzer.od_without_animity_restrictions()"
+        if debug_mode: print "--> ActiveVoiceSyntacticAnalyzer.od_without_animity_restrictions()"
         [nominal_entities_at_same_level_nodes,
          nominal_entities_under_prep_a, pronominal_entities] = self.get_od_candidate_entities()
 
@@ -260,7 +262,7 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         return od
 
     def oi(self):
-        # print "Entering ActiveVoiceSyntacticAnalyzer.oi()"
+        if debug_mode: print "--> ActiveVoiceSyntacticAnalyzer.oi()"
         entities = self.find_entities_by(lambda: self.search_nominal_oi_at("right", 3, AnimityEnum.animated),
                                          lambda: self.search_nominal_oi_at("left", 3, AnimityEnum.animated),
                                          lambda: self.search_pronoun_at("left", 2, AnimityEnum.animated),
@@ -272,7 +274,7 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         return candidates
 
     def regimen(self):
-        # print "Entering ActiveVoiceSyntacticAnalyzer.regimen()"
+        if debug_mode: print "--> ActiveVoiceSyntacticAnalyzer.regimen()"
         verbal_animity = self.clause.verb.affected_object_animity
         entities = self.get_regimen_candidate_entities(verbal_animity)
         if entities:
@@ -293,7 +295,7 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         return candidates
 
     def equative(self):
-        # print "Entering ActiveVoiceSyntacticAnalyzer.equative()"
+        if debug_mode: print "--> ActiveVoiceSyntacticAnalyzer.equative()"
         verbal_animity = self.clause.verb.affected_object_animity
         entities = self.get_equative_candidate_entities(verbal_animity)
         if entities:
@@ -308,7 +310,7 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         return entities
 
     def search_nominal_oi_at(self, side, distance, animity=AnimityEnum.bianimate):
-        # print "Entering ActiveVoiceSyntacticAnalyzer.search_nominal_oi_at()"
+        if debug_mode: print "--> ActiveVoiceSyntacticAnalyzer.search_nominal_oi_at()"
         entities = self.search_subords_with_prep_at(side, distance, "a", "para")
         entities = filter(lambda p_entity: p_entity.is_maximal_regarding(entities), entities)
         entities = SyntacticAnalyzer.filter_infinitives(entities)

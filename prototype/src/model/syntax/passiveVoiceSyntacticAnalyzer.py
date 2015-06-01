@@ -4,13 +4,15 @@ from src.model.entity.tacitEntity import TacitEntity
 from src.model.syntax.syntacticAnalyzer import SyntacticAnalyzer
 from src.model.entity.animityEnum import AnimityEnum
 
+debug_mode = False
+
 
 class PassiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
     def __init__(self, clause):
         SyntacticAnalyzer.__init__(self, clause)
 
     def subject(self):
-        # print "Entering PassiveVoiceSyntacticAnalyzer.subject()"
+        if debug_mode: print "--> PassiveVoiceSyntacticAnalyzer.subject()"
         at_right = lambda: self.search_subject_at("right", 4)
         at_left = lambda: self.search_subject_at("left", 4)
 
@@ -40,7 +42,7 @@ class PassiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         # From domain knowledge we know that entities must be at: max distance left 6, max distance right 5
         # (insight come from oracle Fernando)
 
-        # print "Entering PassiveVoiceSyntacticAnalyzer.od()"
+        if debug_mode: print "--> PassiveVoiceSyntacticAnalyzer.od()"
         verbal_animity = self.clause.verb.affected_object_animity
         entities = self.verb_matching_subject_entities(6, 5)
         entities = filter(lambda entity: entity.animity_matches(verbal_animity)
@@ -55,7 +57,7 @@ class PassiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         return [od_entity]
 
     def tacit_od(self):
-        # print "Entering PassiveVoiceSyntacticAnalyzer.tacit_od()"
+        if debug_mode: print "--> PassiveVoiceSyntacticAnalyzer.tacit_od()"
         verb = self.clause.verb
         pronoun = verb.matching_pronoun()
         pronoun_msi = verb.matching_pronoun_msi()

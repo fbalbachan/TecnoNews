@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from src.model.syntax.syntacticStructureEntityValidator import SyntacticStructureEntityValidator
 
+debug_mode = False
+
 
 class SyntacticStructure:
     def __init__(self, name, clause):
@@ -10,7 +12,7 @@ class SyntacticStructure:
         self.tacit_entities = []
 
     def accept(self, entity):
-        # print "Entering SyntacticStructure.accept()"
+        # print "--> SyntacticStructure.accept()"
         is_accepted = SyntacticStructureEntityValidator(self).accept(entity)
         return is_accepted
 
@@ -25,12 +27,12 @@ class SyntacticStructure:
                 break
 
     def append_all(self, entities):
-        # print "Entering SyntacticStructure.append_all()"
+        if debug_mode: print "--> SyntacticStructure.append_all()"
         for entity in entities:
             self.append(entity)
 
     def append(self, entity):
-        # print "Entering SyntacticStructure.append()"
+        if debug_mode: print "--> SyntacticStructure.append()"
         if not self.accept(entity):
             raise Exception(self.name + " no acepta la entidad " + str(entity))
 
