@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from collections import deque
-from re import match, compile, IGNORECASE, UNICODE
+from re import compile, IGNORECASE, UNICODE
 
 from src.model.tokenization.token import Token
 from src.utils.stringUtils import remove_accents
@@ -34,7 +34,8 @@ class TokenizationGuesser:
 
             word = words.pop()
 
-            if not following_contraction: following_contraction = self.get_following_contraction(text)
+            if not following_contraction:
+                following_contraction = self.get_following_contraction(text)
 
             if following_contraction:
                 component = following_contraction.popleft()
@@ -108,9 +109,10 @@ class TokenizationGuesser:
         words.reverse()
         return [ word.decode("utf-8") for word in words ]
 
-    contractions = { "al" : [("a", "a"), ("el", "l")], "del" : [("de", "de"), ("el", "l")] }
+    contractions = {"al": [("a", "a"), ("el", "l")],
+                    "del": [("de", "de"), ("el", "l")]}
     contraction_pattern = compile("al|del", IGNORECASE)
 
-    #mismatch_pattern = compile("\w+|[,]", UNICODE)
+    # mismatch_pattern = compile("\w+|[,]", UNICODE)
     mismatch_pattern = compile('[",]', UNICODE)
     whitespace_pattern = compile("\s+")

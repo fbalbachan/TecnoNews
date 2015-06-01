@@ -131,7 +131,9 @@ class TacitEntity:
         return explicit
 
     def is_trace(self):
-        return self.is_implicit() or self.is_impersonal() or self.is_useless()
+        return self.is_implicit() \
+            or self.is_impersonal() \
+            or self.is_useless()
 
     def is_coordinated(self):
         return self.has_attr("coordinated")
