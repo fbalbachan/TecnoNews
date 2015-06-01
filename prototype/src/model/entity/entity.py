@@ -2,7 +2,6 @@
 from collections import deque
 
 from src.model.entity.tacitEntity import TacitEntity
-
 from src.model.tokenization.token import Token
 from src.model.entity.animityEnum import AnimityEnum
 
@@ -67,7 +66,16 @@ class Entity (TacitEntity):
                       path_to_root)
 
     def lexical_form(self):
-        return " ".join([str(leaf) for leaf in self.node.leaves() if leaf.msi["category"] != "punctuation"])
+        return self.node.lexical_form()
+
+    def original_lexical_form(self):
+        return self.node.original_lexical_form()
+
+    def components(self):
+        return self.node.lexical_form().split("_")
+
+    def original_components(self):
+        return self.node.original_lexical_form().split("_")
 
     @staticmethod
     def link_in_apposition(head_entity, entities_in_apposition):

@@ -4,24 +4,34 @@ from src.utils.tree.treeNode import TreeNode
 
 class ParseNode(TreeNode):
 
+    def __init__(self):
+        TreeNode.__init__(self)
+        self.token = None
+
     def set_father(self, father):
         self.father = father
         if father and not self in father.children:
             father.add_child(self)
 
-    def __init__(self):
-        TreeNode.__init__(self)
-        self.token = None
-
     def leaves_of_msi(self, msi):
-        return filter(lambda leaf: all([ attribute in leaf.msi and leaf.msi[attribute] == value
-                                       for attribute, value in msi.items() ]), self.leaves())
+        return filter(lambda leaf: all([attribute in leaf.msi and leaf.msi[attribute] == value
+                                       for attribute, value in msi.items()]), self.leaves())
 
     def leaves_of_category(self, *categories):
         return sum([self.leaves_of_msi({"category": category}) for category in categories], [])
 
     def leaves_string(self):
         return " ".join([str(leaf) for leaf in self.leaves()])
+
+    def lexical_form(self):
+        leaves = self.leaves()
+        forms = [str(leaf) for leaf in leaves if leaf.msi["category"] != "punctuation"]
+        return " ".join(forms)
+
+    def original_lexical_form(self):
+        leaves = self.leaves()
+        orig_forms = [str(leaf.original_lexical_form) for leaf in leaves if leaf.msi["category"] != "punctuation"]
+        return " ".join(orig_forms)
 
     def nodes_with_labels(self, labels):
         nodes = []
