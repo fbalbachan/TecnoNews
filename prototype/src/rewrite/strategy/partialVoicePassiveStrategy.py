@@ -1,15 +1,12 @@
 #-*- coding: utf-8 -*-
+import re
+import sys
+import traceback
+
 from src.rewrite.rewrite import Rewrite
 from src.utils.configProvider import ConfigProvider
-from src.utils.collectionUtils import dict_by
-from src.utils.stringUtils import set_first_letter_case
-from src.model.entity.tacitEntity import TacitEntity
-from src.utils.logger_utils import *
 
 
-import ConfigParser
-import re
-import sys, traceback
 
 # TODO: in the child of the node of the closure check if the vser sabd
 
@@ -184,12 +181,10 @@ class PartialVoicePassiveStrategy:
 
         return Rewrite(clause.node, ntext.replace('_', ' ').strip())
 
-
     def is_proper_name(self, msi):
         return not (msi['category'] != 'noun' or (
                 msi['category'] == 'noun' and
                             msi['semantic_classification'] is None))
-
 
     def multiple_replacer(self, *key_values):
         replace_dict = dict(key_values)

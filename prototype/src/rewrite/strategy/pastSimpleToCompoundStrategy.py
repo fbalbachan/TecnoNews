@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from src.rewrite.rewrite import Rewrite
-from src.utils.stringUtils import set_first_letter_case
 
 
 class PastSimpleToCompoundStrategy:
@@ -24,7 +23,8 @@ class PastSimpleToCompoundStrategy:
         participle_lf = ontology.get_lexical_form(inflected_leaf.lemma, self.participle_msi)
 
         rewritten_verb = haber_lf.text + " " + participle_lf.text
-        if verb.has_modal(): rewritten_verb += " " + verb.leaf().lexical_form
+        if verb.has_modal():
+            rewritten_verb += " " + verb.leaf().lexical_form
 
         return Rewrite.preserving_case(verb.node, rewritten_verb)
 
@@ -37,6 +37,6 @@ class PastSimpleToCompoundStrategy:
 
     participle_msi = {"mode": "participio",
                       "gender": "masculine",
-                      "number": "singular" }
+                      "number": "singular"}
 
     type = "replacement"
