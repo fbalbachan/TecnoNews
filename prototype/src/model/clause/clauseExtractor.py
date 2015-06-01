@@ -3,15 +3,17 @@
 from src.model.clause.clause import Clause
 from src.parser.parseNode import ParseNode
 
+debug_mode = False
+
 
 class ClauseExtractor:
 
     def __init__(self):
-        return
+        pass
 
     @staticmethod
     def extract_from(sentence):
-        # print "Entering ClauseExtractor. extract_from(sentence) - sentence: ", sentence
+        if debug_mode: print "--> ClauseExtractor. extract_from(sentence) - sentence: ", sentence.text
 
         clause_separators = ["grup-verb", "subord-rel", "subord", "subord-ger", "verb-pass"]
         root = sentence.parse_node

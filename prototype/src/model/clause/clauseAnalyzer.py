@@ -15,17 +15,18 @@ from src.model.syntax.syntacticStructure import SyntacticStructure
 from src.model.syntax.valuatedAdverbFinder import ValuatedAdverbFinder
 from src.model.syntax.appositionFinder import AppositionFinder
 
+debug_mode = False
+
 
 class ClauseAnalyzer:
 
     def __init__(self):
-        global debug_mode
-        debug_mode = False
+        if debug_mode: print "--> ClauseAnalyzer.init()"
 
         self.context = {}
 
     def analyze(self, clause):
-        if debug_mode: print "Entering Clause.Analyze (clause: ", clause, ")"
+        if debug_mode: print "-->  Clause.Analyze (clause: ", clause, ")"
 
         clause.voice = ClauseAnalyzer.voice_of(clause)
         if clause.voice:
@@ -48,7 +49,7 @@ class ClauseAnalyzer:
         ClauseAnalyzer.analyze_kind_of_cataphoric_structure_of(clause)
 
     def get_analyzer_solver_and_finder_methods_in_order(self, clause):
-        if debug_mode: print "Entering ClauseAnalyzer.get_analyzer_solver_and_finder_methods_in_order()"
+        if debug_mode: print "-->  ClauseAnalyzer.get_analyzer_solver_and_finder_methods_in_order()"
 
         if ClauseAnalyzer.relative_needs_to_be_solved_first(clause):
             methods = [ClauseAnalyzer.solve_relative, ClauseAnalyzer.analyze_syntactically]
@@ -64,7 +65,7 @@ class ClauseAnalyzer:
 
     @staticmethod
     def relative_needs_to_be_solved_first(clause):
-        if debug_mode: print "Entering ClauseAnalyzer.relative_needs_to_be_solved_first()"
+        if debug_mode: print "-->  ClauseAnalyzer.relative_needs_to_be_solved_first()"
 
         if not clause.is_relative():
             return False
@@ -114,14 +115,14 @@ class ClauseAnalyzer:
 
     @staticmethod
     def link_appositions(clause):
-        if debug_mode: print "Entering ClauseAnalyzer.link_appositions(clause)"
+        if debug_mode: print "-->  ClauseAnalyzer.link_appositions(clause)"
         if not clause.voice:
             return
 
         finder = AppositionFinder(clause)
         appositions = finder.retrieve_appositions()
         for (head, rest) in appositions:
-            print head, " --> ", rest
+            if debug_mode: print "Linking Apposition: ", head, " --> ", rest
             Entity.link_in_apposition(head, rest)
             for entity in rest:
                 for nested_entity in entity.get_nested_entities(True):
@@ -142,26 +143,26 @@ class ClauseAnalyzer:
 
     @staticmethod
     def solve_relative(clause):
-        if debug_mode: print "Entering solve_relative ( relative entity: ", clause.relative_entity, ")"
+        if debug_mode: print "-->  solve_relative ( relative entity: ", clause.relative_entity, ")"
 
         if clause.is_relative() and clause.relative_entity:
             RelativePronounSolver(clause).solve()
 
     @staticmethod
     def solve_gerund(clause):
-        if debug_mode: print "Entering solve_gerund (voice, ", clause.voice, " - is gerund: ", str(clause.is_gerund()), ")"
+        if debug_mode: print "-->  solve_gerund (voice, ", clause.voice, " - is gerund: ", str(clause.is_gerund()), ")"
 
         if clause.voice and clause.is_gerund():
             GerundSubjectSolver(clause).solve()
 
     def solve_personal_pronouns(self, clause):
-        if debug_mode: print "Entering solve_personal_pronouns"
+        if debug_mode: print "-->  solve_personal_pronouns"
 
         PersonalPronounSolver(clause, self.context).solve()
 
     @staticmethod
     def analyze_syntactically(clause):
-        if debug_mode: print "Entering analyze_syntactically"
+        if debug_mode: print "-->  analyze_syntactically"
 
         syntactic_analyzer_by_voice = {"active":  ActiveVoiceSyntacticAnalyzer,
                                        "passive": PassiveVoiceSyntacticAnalyzer,
@@ -173,7 +174,7 @@ class ClauseAnalyzer:
 
     @staticmethod
     def allowed_syntactic_structures_for(clause):
-        if debug_mode: print "Entering ClauseAnalyzer.allowed_syntactic_structures_for(clause: ", clause, ")"
+        if debug_mode: print "-->  ClauseAnalyzer.allowed_syntactic_structures_for(clause: ", clause, ")"
         active_voice_structures = lambda clause_var: allowed_boxes(clause_var.verb.transitivity)
         passive_voice_structures = lambda clause_var: allowed_boxes_for_passive_verbs
         none_voice_structures = lambda clause_var: allowed_boxes_for_minor_sentences
@@ -186,13 +187,13 @@ class ClauseAnalyzer:
 
     @staticmethod
     def verb_of(clause):
-        if debug_mode: print "Entering ClauseAnalyzer.verb_of(clause: ", clause, ")"
+        if debug_mode: print "--> ClauseAnalyzer.verb_of(clause: ", clause, ")"
         verb = VerbExtractor(clause).extract()
         return verb
 
     @staticmethod
     def entities_of(clause):
-        if debug_mode: print "Entering entities_of"
+        if debug_mode: print "--> ClauseAnalyzer.entities_of"
         return EntityExtractor(clause).extract()
 
     @staticmethod
