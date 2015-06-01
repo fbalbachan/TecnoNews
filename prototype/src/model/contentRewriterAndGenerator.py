@@ -4,15 +4,16 @@ from src.model.referent.referentRanker import ReferentRanker
 from src.model.sentilecto import Sentilecto
 from src.rewrite.rewriter import Rewriter
 
+debug_mode = False
+
 
 class ContentRewriterAndGenerator:
 
     def __init__(self):
-        global debug_mode
-        debug_mode = False
+        pass
 
     def run(self, text):
-        if debug_mode: print "Entering ContentRewriterAndGenerator.run()"
+        if debug_mode: print "--> ContentRewriterAndGenerator.run()"
         changed = text
         analysis = self._analyze(changed)
         analysis["referent_ranking"] = ReferentRanker(analysis["paragraph"]).rank()
@@ -27,9 +28,9 @@ class ContentRewriterAndGenerator:
         rewriter = Rewriter(analysis['paragraph'])
         changed = rewriter.rewrite()
 
-        if debug_mode: print "Leaving ContentRewriterAndGenerator.run() - changed: ", changed, "\n\n"
+        if debug_mode: print "<-- ContentRewriterAndGenerator.run() - changed: ", changed, "\n\n"
         return {"source": text, "changed": changed}
 
     def _analyze(self, text):
-        if debug_mode: print "Entering ContentRewriterAndGenerator._analyze()"
+        if debug_mode: print "--> ContentRewriterAndGenerator._analyze()"
         return Sentilecto().analyze(text)
