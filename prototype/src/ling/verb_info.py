@@ -7,6 +7,14 @@ from src.model.entity.animity import Animity
 from src.utils.configProvider import ConfigProvider
 
 
+transitivity_values = {'T': 'TRANSITIVE',
+                       'I': 'INTRANSITIVE',
+                       'R': 'REGIMEN',
+                       'E': 'EQUATIVE',
+                       'X': 'INTRANSITIVE',
+                       'H': 'EXISTENTIAL',
+                       'M': 'IMPERSONAL', }
+
 allowed_boxes_according_to_verb_transitivity = \
     {  # verb_category : available_boxes
        'TRANSITIVE':    ['verb', 'subject', 'od', 'oi', 'instrument_goal', 'adjuncts'],
@@ -16,22 +24,16 @@ allowed_boxes_according_to_verb_transitivity = \
        'EXISTENTIAL':   ['verb', 'od', 'instrument_goal', 'adjuncts'],
        'IMPERSONAL':    ['verb', 'instrument_goal', 'adjuncts'], }
 
+existing_boxes = set(sum([allowed_boxes_according_to_verb_transitivity[value]
+                          for key, value in transitivity_values.iteritems()], []))
+
 allowed_boxes_for_passive_verbs = ['verb', 'subject', 'od', 'instrument_goal', 'adjuncts']
 
 allowed_boxes_for_minor_sentences = ['instrument_goal', 'subject', 'adjuncts']
 
-transitivity_values = {'T': 'TRANSITIVE',
-                       'I': 'INTRANSITIVE',
-                       'R': 'REGIMEN',
-                       'E': 'EQUATIVE',
-                       'X': 'INTRANSITIVE',
-                       'H': 'EXISTENTIAL',
-                       'M': 'IMPERSONAL', }
-
 animity_values = {'Anim': AnimityEnum.animated,
                   'Bi': AnimityEnum.bianimate,
                   'No': AnimityEnum.inanimate}
-
 
 scripts = {'A': 'AGENTIVE',
            'E': 'EQUATIVE',
