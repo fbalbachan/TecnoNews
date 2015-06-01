@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from src.utils.tree.treeNode import TreeNode
 
+debug_mode = False
+
 
 class Clause(TreeNode):
     def __init__(self, node):
@@ -115,7 +117,7 @@ class Clause(TreeNode):
         return number
 
     def get_gender_from_relative_linker(self):
-        # print "Entering clause.get_gender_from_relative_linker()"
+        if debug_mode: print "--> clause.get_gender_from_relative_linker()"
 
         if not self.is_relative():
             raise Exception("La cláusula no es una relativa (", str(self), ").")
@@ -154,6 +156,15 @@ class Clause(TreeNode):
     def is_gerund(self):
         return self.verb.msi["mode"] == "gerundio"
 
+    def is_or_inherits_from(self, label):
+        if debug_mode: print "--> Clause.is_or_inherits_from(label: ", label, ")"
+        node = self.node
+        while node:
+            if node.label == label:
+                return True
+            node = node.father
+        return False
+
     def has_structure(self, name):
         return name in [structure.name for structure in self.syntactic_structures]
 
@@ -177,7 +188,7 @@ class Clause(TreeNode):
         return sorted(entities, key=lambda entity: self.index_of(entity, tacit_first))
 
     def is_assigned(self, entity):
-        # print "Entering is_assigned(entity) - ", entity
+        if debug_mode: print "--> is_assigned(entity) - ", entity
         assigned_entities = self.assigned_entities()
         assigned_directly = entity in assigned_entities
         contained_vector = [assigned.contains(entity) for assigned in assigned_entities]
@@ -192,7 +203,7 @@ class Clause(TreeNode):
     # Methods for accessing ENTITIES
     #
     def subord_entities_closest_to_verb_at(self, side, allowed_distance, which_node=lambda node: True):
-        # print "Entering Clause.subord_entities_closest_to_verb_at() - side ", side, " - distance ", allowed_distance
+        if debug_mode: print "--> Clause.subord_entities_closest_to_verb_at() - side ", side, " - distance ", allowed_distance
         which = lambda entity, node: entity.is_subordinated() \
                                      and entity.highest_subordinating_node() == node \
                                      and which_node(node)
@@ -216,7 +227,7 @@ class Clause(TreeNode):
         return entities
 
     def entities_closest_to_verb_at(self, side, allowed_distance=float("inf")):
-        # print "Entering Clause.entities_closest_to_verb_at(side, dist) - side: ", side, " - dist: ", allowed_distance
+        if debug_mode: print "--> Clause.entities_closest_to_verb_at(side, dist) - side: ", side, " - dist: ", allowed_distance
         closest_to_verb = self.nodes_closest_to_verb_at(side, allowed_distance)
         entities_with_node = self.to_entities_with_node(closest_to_verb)
         by_component = zip(*entities_with_node)
@@ -224,7 +235,7 @@ class Clause(TreeNode):
         return entities
 
     def lonely_entities(self):
-        # print "Entering lonely_entities()"
+        if debug_mode: print "--> Clause.lonely_entities()"
         lonely = [entity for entity in self.entities if not self.is_assigned(entity)]
         return lonely
 
@@ -260,7 +271,7 @@ class Clause(TreeNode):
         return entities
 
     def to_entities_with_node(self, nodes, which=lambda entity, node: entity.node == node, entities=None):
-        # print "Entering clause.to_entities_with_node()"
+        if debug_mode: print "--> Clause.to_entities_with_node()"
         if not entities:
             entities = self.lonely_entities()
 
@@ -275,7 +286,7 @@ class Clause(TreeNode):
         return verb_node.father.children
 
     def nodes_closest_to_verb_at(self, side, allowed_distance=float("inf")):
-        # print "Entering Clause.nodes_closest_to_verb_at()"
+        if debug_mode: print "--> Clause.nodes_closest_to_verb_at()"
         verb = self.verb.node
         nodes_with_position = [(verb.absolute_distance_to(node), node) for node in self.verb_level_nodes()
                                if verb.position_of(node) == side]
