@@ -143,7 +143,7 @@ class EntiNews_request:
 
 
 def setup_loggers():
-    logger_names = ["requests", "exceptions"]
+    logger_names = ["requests", "exceptions", "tecnonews"]
     for name in logger_names:
         logger = logging.getLogger(name)
         logger.addHandler(logging.FileHandler(name + ".log"))
