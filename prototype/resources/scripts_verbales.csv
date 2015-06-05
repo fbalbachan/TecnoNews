@@ -2025,7 +2025,7 @@ constipar,N,X,,,Bi,Bi
 constitucionalizar,N,X,,,Bi,Bi
 constituir,N,T,,,Bi,Bi
 constreñir,N,X,,,Bi,Bi
-construir,N,T,,,Bi,Bi
+construir,N,T,,,Anim,No
 consuegrar,N,X,,,Bi,Bi
 consultar,N,T,,,Anim,Bi
 consumar,N,T,,,Bi,No
@@ -3409,7 +3409,7 @@ ejemplarizar,N,X,,,Bi,Bi
 ejemplificar,N,I,,,Bi,Bi
 ejercer,N,T,,,Bi,Bi
 ejercitar,N,T,,,Bi,Bi
-elaborar,N,T,,,Bi,Bi
+elaborar,N,T,,,Anim,No
 electrificar,N,T,,,Bi,Bi
 electrizar,N,T,,,Bi,Bi
 electrocutar,N,T,,,Bi,Bi
@@ -4503,7 +4503,7 @@ exudar,N,X,,,Bi,Bi
 exulcerar,N,X,,,Bi,Bi
 exultar,N,X,,,Anim,Bi
 eyacular,N,I,,,Bi,Bi
-fabricar,N,T,,,Bi,No
+fabricar,N,T,,,Anim,No
 fachear,A,I,,,Bi,No
 fachendear,N,I,,,Anim,Bi
 facilitar,A,T,,,Bi,Bi
