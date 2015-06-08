@@ -32,12 +32,12 @@ class SyntacticAnalyzer(object):
                 print "--------------"
 
     def subject(self):
-        # print "--> SyntacticAnalyzer.subject()"
+        if debug_mode: print "--> SyntacticAnalyzer.subject()"
         entities = self.clause.lonely_entities()
         return [entities[0]] if entities else []
 
     def verb(self):
-        # print "--> SyntacticAnalyzer.verb()"
+        if debug_mode: print "--> SyntacticAnalyzer.verb()"
 
         return [self.clause.verb]
 
@@ -58,7 +58,7 @@ class SyntacticAnalyzer(object):
         return SyntacticAnalyzer.filter_infinitives(self.search_subords_with_prep_at(side, distance, ))
 
     def find_entities_by(self, *methods):
-        # print "--> find_entities_by"
+        if debug_mode: print "--> find_entities_by"
         for method in methods:
             entities = method()
             if entities:
@@ -67,7 +67,7 @@ class SyntacticAnalyzer(object):
         return []
 
     def verb_matching_subject_entities(self, distance_at_left, distance_at_right, left_to_right=True):
-        # print "--> SyntacticAnalyzer.verb_matching_subject_entities()"
+        if debug_mode: print "--> SyntacticAnalyzer.verb_matching_subject_entities()"
 
         valid_subject_entities = self.valid_subject_entities(distance_at_left, distance_at_right, left_to_right)
         verb_matching_entities = filter(lambda entity: self.clause.verb.matches(entity),
@@ -75,7 +75,7 @@ class SyntacticAnalyzer(object):
         return verb_matching_entities
 
     def valid_subject_entities(self, distance_at_left, distance_at_right, left_to_right=True):
-        # print "--> SyntacticAnalyzer.valid_subject_entities()"
+        if debug_mode: print "--> SyntacticAnalyzer.valid_subject_entities()"
         clause = self.clause
 
         entities_l = clause.entities_closest_to_verb_at("left", distance_at_left)
@@ -116,7 +116,7 @@ class SyntacticAnalyzer(object):
         return entities
 
     def search_subords_with_prep_at(self, side, distance, *accepted_prepositions):
-        # print "--> SyntacticAnalyzer.search_subords_with_prep_at()"
+        if debug_mode: print "--> SyntacticAnalyzer.search_subords_with_prep_at()"
 
         def which(node):
             return self.starts_with_accepted_preposition(node, *accepted_prepositions)
@@ -144,7 +144,7 @@ class SyntacticAnalyzer(object):
         return all_subord_entities[0] if all_subord_entities else []
 
     def search_subords_at(self, side, distance, which=lambda node: True):
-        # print "--> SyntacticAnalyzer.search_subords_at() - side ", str(side), " - distance ", str(distance)
+        if debug_mode: print "--> SyntacticAnalyzer.search_subords_at() - side ", str(side), " - distance ", str(distance)
         all_subord_entities = self.clause.subord_entities_closest_to_verb_at(side, distance, which)
         all_subord_entities = [sorted(entities, key=lambda entity: entity.level())
                                for entities in all_subord_entities]

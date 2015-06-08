@@ -5,10 +5,13 @@ import traceback
 
 from src.rewrite.rewrite import Rewrite
 from src.utils.configProvider import ConfigProvider
+from src.utils.logger_utils import get_logger
+
 
 
 
 # TODO: in the child of the node of the closure check if the vser sabd
+debug_mode = False
 
 
 class PartialVoicePassiveStrategy:
@@ -18,9 +21,14 @@ class PartialVoicePassiveStrategy:
         self.demonyms = self._get_demonyms()
 
     def applies_to(self, sentence, node):
-        return any(( self.applies_to_clause(clause) for clause in sentence.clauses))
+        if debug_mode: print "--> PartialVoicePassiveStrategy.applies_to(sentence: ", sentence, ")"
+        applies = any((self.applies_to_clause(clause) for clause in sentence.clauses))
+        if debug_mode: print "<-- applies_to: applies = ", str(applies)
+        return applies
 
     def rewrite(self, sentence, node):
+        if debug_mode: print "--> PartialVoicePassiveStrategy.rewrite(sentence: ", sentence, ")"
+
         try:
             clauses = [[clause, sentence.clauses[idx+1]] for idx, clause in enumerate(sentence.clauses)
                        if self.applies_to_clause(clause) and idx+1 < len(sentence.clauses)]
@@ -38,9 +46,14 @@ class PartialVoicePassiveStrategy:
         return self.rewrite_clause(node, sentence, clauses)
 
     def applies_to_clause(self, clause):
-        return self.is_partial(clause) and clause.voice == 'passive' and \
-               clause.verb and clause.verb.transitivity == 'TRANSITIVE' and\
-               clause.node.label == "verb-pass"
+        if debug_mode: print "--> PartialVoicePassiveStrategy.applies_to_clause(clause: ", clause, ")"
+
+        applies = self.is_partial(clause) and clause.voice == 'passive' and \
+                  clause.verb and clause.verb.transitivity == 'TRANSITIVE' and\
+                  clause.node.label == "verb-pass"
+        if debug_mode: print "<-- applies_to_clause: applies = ", str(applies)
+
+        return applies
 
     def is_partial(self, clause):
         return clause.has_structure('od') and not clause.structure('od').is_tacit() and \
@@ -117,6 +130,7 @@ class PartialVoicePassiveStrategy:
             or msi['semantic_classification'] == 'person'
 
     def rewrite_clause(self, node, sentence, clauses):
+        if debug_mode: print "--> PartialVoicePassiveStrategy.rewrite_clause(clauses: )"
 
         clause = clauses[0][0]
         ntext = ""
