@@ -3,8 +3,7 @@ import ConfigParser
 
 from src.sentiment.verbalScript import VerbalScript
 from src.utils.csvwrapper import unicode_csv_reader
-from src.model.entity.animity import Animity
-from src.utils.configProvider import ConfigProvider
+from src.model.entity.animityEnum import AnimityEnum
 
 
 transitivity_values = {'T': 'TRANSITIVE',
