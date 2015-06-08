@@ -9,7 +9,7 @@ class SyntacticAnalyzer(object):
         self.clause = clause
 
     def analyze(self, clause):
-        if debug_mode: print "SyntacticAnalyzer.analyze(clause: ", clause, ")"
+        if debug_mode: print "--> SyntacticAnalyzer.analyze(clause: ", clause, ")"
 
         # The order in which the FSynStr are extracted matters.
         for structure in clause.syntactic_structures:

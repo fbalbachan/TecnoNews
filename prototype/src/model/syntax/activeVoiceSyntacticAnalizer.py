@@ -138,7 +138,7 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         return subject
 
     def tacit_or_implicit_subject(self, verbal_animity=AnimityEnum.bianimate):
-        if debug_mode: print "Subject is tacit or implicit"
+        if debug_mode: print "--> ActiveVoiceSyntacticAnalyzer.tacit_or_implicit_subject()"
 
         if self.is_root_relative_clause():
             is_implicit = True

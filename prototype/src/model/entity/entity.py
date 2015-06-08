@@ -71,7 +71,7 @@ class Entity (TacitEntity):
                       path_to_root)
 
     def lexical_form(self):
-        if debug_mode: print "Entity.lexical_form()"
+        if debug_mode: print "--> Entity.lexical_form()"
         lf = ParseNode.lexical_form(self.node)
         return lf
 

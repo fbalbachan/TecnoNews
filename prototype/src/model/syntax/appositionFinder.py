@@ -19,12 +19,10 @@ class AppositionFinder:
                                     self.clause.entities)
 
         candidate_entities = filter(lambda entity: entity.is_maximal_regarding(candidate_entities), candidate_entities)
-        if debug_mode: print "Entities after first_filter: ", candidate_entities
 
         candidate_chains = self.group_entities_in_chains(candidate_entities)
 
         candidate_chains = filter(lambda chain: not self.is_enumeration(chain), candidate_chains)
-        if debug_mode: print "Chains after second filter: ", candidate_chains
 
         appositions = []
         for candidate_chain in candidate_chains:
