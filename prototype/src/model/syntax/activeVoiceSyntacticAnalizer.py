@@ -304,7 +304,8 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         return candidates
 
     def get_equative_candidate_entities(self, verbal_animity):
-        entities = self.valid_subject_entities(2, 3) \
+        left_to_right = False
+        entities = self.valid_subject_entities(2, 3, left_to_right) \
                   + self.search_subords_with_prep_at("right", 3, "de", "para")
         entities = SyntacticAnalyzer.filter_by_animity(entities, verbal_animity)
         return entities
