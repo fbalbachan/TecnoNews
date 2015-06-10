@@ -1,4 +1,4 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 import re
 import sys
 import traceback
@@ -6,6 +6,8 @@ import traceback
 from src.rewrite.rewrite import Rewrite
 from src.utils.configProvider import ConfigProvider
 from src.utils.logger_utils import get_logger
+
+
 
 
 
@@ -22,7 +24,9 @@ class PartialVoicePassiveStrategy:
 
     def applies_to(self, sentence, node):
         if debug_mode: print "--> PartialVoicePassiveStrategy.applies_to(sentence: ", sentence, ")"
+
         applies = any((self.applies_to_clause(clause) for clause in sentence.clauses))
+
         if debug_mode: print "<-- applies_to: applies = ", str(applies)
         return applies
 
@@ -37,12 +41,14 @@ class PartialVoicePassiveStrategy:
             last_clause = sentence.clauses[-1]
             if self.applies_to_clause(last_clause):
                 clauses.append([last_clause, None])
+
         except Exception as e:
             logger = get_logger('tecnonews')
-            logger.info("VoicePassiveStrategy Rewriting:")
+            logger.info("PartialVoicePassiveStrategy Rewriting exception:")
             logger.info(e.message)
             ex_type, ex, tb = sys.exc_info()
             logger.info(traceback.format_tb(tb))
+
         return self.rewrite_clause(node, sentence, clauses)
 
     def applies_to_clause(self, clause):
@@ -51,14 +57,20 @@ class PartialVoicePassiveStrategy:
         applies = self.is_partial(clause) and clause.voice == 'passive' and \
                   clause.verb and clause.verb.transitivity == 'TRANSITIVE' and\
                   clause.node.label == "verb-pass"
-        if debug_mode: print "<-- applies_to_clause: applies = ", str(applies)
 
+        if debug_mode: print "<-- applies_to_clause: applies = ", str(applies)
         return applies
 
     def is_partial(self, clause):
-        return clause.has_structure('od') and not clause.structure('od').is_tacit() and \
-               clause.has_structure('subject') and clause.structure('subject').entity().has_attr("implicit") and\
-               not self.is_animated(clause.structure('od').entity())
+        if debug_mode: print "--> PartialVoicePassiveStrategy.is_partial(clause: ", clause, ")"
+        is_partial = clause.has_structure('od') \
+                     and not clause.structure('od').is_tacit() \
+                     and clause.has_structure('subject') \
+                     and clause.structure('subject').entity().has_attr("implicit") \
+                     and not self.is_animated(clause.structure('od').entity())
+
+        if debug_mode: print "<-- PartialVoicePassiveStrategy.is_partial = ", str(is_partial)
+        return is_partial
 
     def _get_persons(self):
         """
@@ -189,7 +201,7 @@ class PartialVoicePassiveStrategy:
             traceback.print_tb(tb)
             ex_type, ex, tb = sys.exc_info()
             logger = get_logger('tecnonews')
-            logger.info("VoicePassiveStrategy Rewriting:")
+            logger.info("PartialVoicePassiveStrategy Rewrite_clause exception:")
             logger.info(e.message)
             logger.info(traceback.print_tb(tb))
 

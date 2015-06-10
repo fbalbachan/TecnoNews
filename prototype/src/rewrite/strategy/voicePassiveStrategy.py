@@ -7,6 +7,10 @@ from src.rewrite.rewrite import Rewrite
 from src.utils.configProvider import ConfigProvider
 
 
+
+
+
+
 # TODO: in the child of the node of the closure check if the vser sabd
 
 debug_mode = False
@@ -21,8 +25,12 @@ class VoicePassiveStrategy:
         self.demonyms = self._get_demonyms()
 
     def applies_to(self, sentence, node):
+        if debug_mode: print "--> VoicePassiveStrategy.applies_to(sentence: ", sentence, ")"
         appliance_vector = (self.applies_to_clause(clause) for clause in sentence.clauses)
-        return any(appliance_vector)
+        applies = any(appliance_vector)
+
+        if debug_mode: print "<-- VoicePassiveStrategy.applies_to = ", str(applies)
+        return applies
 
     def rewrite(self, sentence, node):
         if debug_mode: print "--> VoicePassiveStrategy.rewrite(sentence: ", sentence, ", node: ", node, ")"
@@ -39,7 +47,7 @@ class VoicePassiveStrategy:
 
         except Exception as e:
             logger = get_logger('tecnonews')
-            logger.info("VoicePassiveStrategy Rewriting:")
+            logger.info("VoicePassiveStrategy Rewriting exception:")
             logger.info(e.message)
             ex_type, ex, tb = sys.exc_info()
             logger.info(traceback.format_tb(tb))
@@ -47,15 +55,28 @@ class VoicePassiveStrategy:
         return self.rewrite_clause(node, sentence, clauses)
 
     def applies_to_clause(self, clause):
-        return self.is_complete(clause) and clause.voice == 'passive' and \
-               clause.verb and clause.verb.transitivity == 'TRANSITIVE' and\
-               clause.node.label == "verb-pass"
+        if debug_mode: print "--> VoicePassiveStrategy.applies_to_clause(clause: ", clause, ")"
+        applies = self.is_complete(clause) \
+                  and clause.voice == 'passive' \
+                  and clause.verb \
+                  and clause.verb.transitivity == 'TRANSITIVE' \
+                  and clause.node.label == "verb-pass"
+
+        if debug_mode: print "<-- VoicePassiveStrategy.applies_to_clause = ", str(applies)
+        return applies
 
     def is_complete(self, clause):
-        return clause.has_structure('subject') and not clause.structure('subject').is_tacit() and \
-               clause.has_structure('od') and (not clause.structure('od').is_tacit() or
-                                               (clause.structure('od').is_tacit() and
-                                                clause.structure('od').entity().coref_chain != []))
+        if debug_mode: print "--> VoicePassiveStrategy.is_complete(clause: ", clause, ")"
+
+        is_complete = clause.has_structure('subject') \
+                      and not clause.structure('subject').is_tacit() \
+                      and clause.has_structure('od') \
+                      and (not clause.structure('od').is_tacit()
+                           or (clause.structure('od').is_tacit()
+                               and clause.structure('od').entity().coref_chain != []))
+
+        if debug_mode: print "<-- is_complete? ", str(is_complete)
+        return is_complete
 
     def _get_persons(self):
         """
@@ -92,7 +113,7 @@ class VoicePassiveStrategy:
     def is_animated(self, entity):
         """
 
-        :type od: Entity
+        :type entity: Entity
         """
 
         try:
