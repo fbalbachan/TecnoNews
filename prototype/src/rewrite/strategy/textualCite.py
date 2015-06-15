@@ -1,17 +1,22 @@
 # -*- coding: utf-8 -*-
+import sys
+import traceback
+
 from src.rewrite.rewrite import Rewrite
-from src.utils.stringUtils import set_first_letter_case
-from src.parser.leafNode import LeafNode
 from src.parser.labelNode import LabelNode
 from src.utils.configProvider import ConfigProvider
 
+debug_mode = False
+
+
 class TextualCite:
     def __init__(self, dislocation=None, changes=None):
+        if debug_mode: print "--> TextualCite.init()"
+
         if dislocation is None:
             self.dislocation = [True, False]
 
-        # TODO: fixme why we use this value on changes?
-        # which value should we use?
+        # TODO: fixme why we use this value on changes? which value should we use?
         # if changes is None:
         #     self.changes = ["de_acuerdo_con", ""]
 
@@ -19,13 +24,15 @@ class TextualCite:
         self.head_nodes = ["grup-verb", "subord-rel", "subord", "subord-ger", "verb-pass"]
 
     def applies_to(self, sentence, node):
+        if debug_mode: print "--> TextualCite.applies_to(node:", node, ")"
         return self.applies_quote(sentence, node)
 
     def applies_quote(self, sentence, node):
+        if debug_mode: print "--> TextualCite.applies_quote(node:", node, ")"
         verb_que_idx = None
         group_verb_que_idx = None
         closing_quote_idx = None
-        is_verb_sun_of_verb_root = None
+        is_verb_son_of_verb_root = None
 
         cite_indexes = self.find_children_cite_indexes(node)
         if isinstance(node, LabelNode):
@@ -35,6 +42,7 @@ class TextualCite:
 
                 if len(verbs_que_idx) > 0:
                     verb_que_idx = verbs_que_idx[0]
+
             if node.label == "F-no-c":
                 closing_quote_idx = self.find_quote_comma(node)
 
@@ -42,30 +50,28 @@ class TextualCite:
 
                 if len(closing_quote_idx) > 0:
                     group_verb_que_idx = self.get_verbs_que_idx_using_verbs(node, verb_list, closing_quote_idx[0]+1)
-                    # is_verb_sun_of_verb_root = self.get_verbs_que_idx_list(node.children[group_verb_que_idx[0]+1])
+                    # is_verb_son_of_verb_root = self.get_verbs_que_idx_list(node.children[group_verb_que_idx[0]+1])
 
-        applies_normal = isinstance(node, LabelNode) and node.label in self.head_nodes \
-            and (
+        applies_normal = isinstance(node, LabelNode) \
+                         and node.label in self.head_nodes \
+                         and verb_que_idx \
+                         and len(cite_indexes) == 2 \
+                         and isinstance(node.children[cite_indexes[0]], LabelNode) \
+                         and cite_indexes[0] > 1 \
+                         and (node.children[cite_indexes[0]-1].label == 'Fc'
+                              or node.children[cite_indexes[0]-1].label == 'F-no-c'
+                                 # and node.children[cite_indexes[0]-1].children[0].lemma == ':'))
+                                 and self.is_comma_or_two_points_last_leave(node.children[cite_indexes[0]-1])) \
+                         and (abs(verb_que_idx - cite_indexes[0]) < 3
+                              or abs(verb_que_idx - cite_indexes[0]) < 3)  # TODO: Are identical, it can't be right!
 
-                verb_que_idx and
+        applies_quote_root = isinstance(node, LabelNode) \
+                             and node.label == "F-no-c" \
+                             and group_verb_que_idx is not None \
+                             and closing_quote_idx is not None
+                             # and is_verb_son_of_verb_root != []
 
-                len(cite_indexes) == 2 and
-                isinstance(node.children[cite_indexes[0]], LabelNode) and
-                cite_indexes[0] > 1 and
-                (node.children[cite_indexes[0]-1].label == 'Fc' or
-                 (node.children[cite_indexes[0]-1].label == 'F-no-c' and
-                  # node.children[cite_indexes[0]-1].children[0].lemma == ':')) and
-                self.is_comma_or_two_points_last_leave(node.children[cite_indexes[0]-1]))) and
-                (abs(verb_que_idx - cite_indexes[0]) < 3 or
-                 abs(verb_que_idx - cite_indexes[0]) < 3)
-            )
-        applies_quote_root = isinstance(node, LabelNode) and \
-                             node.label == "F-no-c" and \
-                             group_verb_que_idx is not None and \
-                             closing_quote_idx is not None
-        # and \
-                             # is_verb_sun_of_verb_root != []
-
+        if debug_mode: print "<-- applies_quote(): ", str(applies_normal or applies_quote_root)
         return applies_normal or applies_quote_root
 
     @property
@@ -127,8 +133,7 @@ class TextualCite:
                 isinstance(child, LabelNode) and
                 child.label == 'verb' and child.leaves()[-1].lemma in self.verbs_que]
 
-    # search in the childs of group_verb_node and the one
-    #  which has the verb node
+    # search in the children of group_verb_node and the one which has the verb node
     # TODO: implement
     def child_with_verb(self, node, idx=None):
         try:
@@ -157,7 +162,6 @@ class TextualCite:
                     return idx
                 else:
                     self.child_with_verb(child, idx)
-
 
     def get_verbs_que_idx_using_verbs(self, node, verb_list, start_child=0, end_child=None):
 
@@ -191,7 +195,6 @@ class TextualCite:
 
         return verbs_que
 
-
     def get_verb_citing(self, node):
         # Maybe we have more than one verb we are returning the first
         # we find
@@ -217,7 +220,7 @@ class TextualCite:
     def rewrite_quote(self, sentence, node):
         text = sentence.paragraph.text.decode("utf-8")
 
-        #Case root is '"'
+        # Case root is '"'
         if node.label == "F-no-c":
 
             closing_quote_idxs = self.find_quote_comma(node)

@@ -17,7 +17,8 @@ class VerbalSentimentAnalyzer:
 
     def analyze_equative(self):
         clause = self.clause
-        if clause.structure("equative").is_empty() or clause.structure("subject").is_empty(): return
+        if clause.structure("equative").is_empty() or clause.structure("subject").is_empty():
+            return
 
         destination = clause.structure("subject").entity()
         source = clause.structure("equative").entity()

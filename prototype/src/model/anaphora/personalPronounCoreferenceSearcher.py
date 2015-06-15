@@ -1,8 +1,10 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 from itertools import chain
 from src.utils.tree.treeNode import TreeNode
 
+
 class PersonalPronounCoreferenceSearcher:
+
     def __init__(self, clause, context, pronoun):
         self.clause = clause
         self.context = context
@@ -11,12 +13,15 @@ class PersonalPronounCoreferenceSearcher:
         self.pronoun_index = self.compute_pronoun_index()
 
     def search(self):
-        methods = [ self.search_in_parent_clauses, self.search_in_previous_clauses, self.search_in_previous_sentences ]
-        return self.first_non_none(( method() for method in methods ))
+        methods = [self.search_in_parent_clauses,
+                   self.search_in_previous_clauses,
+                   self.search_in_previous_sentences]
+
+        return self.first_non_none((method() for method in methods))
 
     def search_in_parent_clauses(self):
         if not self.clause.is_root():
-            return self.first_non_none( ( self.search_in(parent) for parent in self.clause.path_to_root() ) )
+            return self.first_non_none((self.search_in(parent) for parent in self.clause.path_to_root()))
 
     def search_in_previous_clauses(self):
         current_clause_root = self.clause.root()
@@ -24,46 +29,57 @@ class PersonalPronounCoreferenceSearcher:
                                        self.context["clauses"][::-1])
 
         search_in_main_clause = lambda clause: self.search_in_clauses(self.sorted(list(clause)))
-        return self.first_non_none( ( search_in_main_clause(clause) for clause in previous_main_clauses ) )
+        return self.first_non_none((search_in_main_clause(clause) for clause in previous_main_clauses))
 
     def search_in_previous_sentences(self):
         previous_sentences = self.context["sentences"]
-        if not previous_sentences: return None
+        if not previous_sentences:
+            return None
         selected_sentences = previous_sentences[::-1][0:1]
-        clauses = sum([ self.sorted(sentence.clauses) for sentence in selected_sentences], [])
+        clauses = sum([self.sorted(sentence.clauses) for sentence in selected_sentences], [])
         return self.search_in_clauses(clauses)
 
     def search_in_clauses(self, clauses):
-        return self.first_non_none( ( self.search_in(clause) for clause in clauses ) )
+        return self.first_non_none((self.search_in(clause) for clause in clauses))
 
     def search_in(self, clause):
-        if not self.is_already_read(clause): return
+        if not self.is_already_read(clause):
+            return
 
         for structure_name in self.search_order_for(clause):
-            if not clause.has_structure(structure_name): continue
+            if not clause.has_structure(structure_name):
+                continue
 
             structure = clause.structure(structure_name)
             entities = self.entities_to_be_searched_in(structure)
+            entities = self.only_matching_entities(entities, clause)
+            entities = filter(lambda entity: entity.matches_animity_of(self.pronoun),
+                              entities)
 
-            matching_entities = self.only_matching_entities(entities, clause)
             already_placed_entities = self.clause.assigned_entities_with_referenced_ones()
-
-            non_linked_entities = filter(lambda entity: entity not in already_placed_entities, matching_entities)
-
-            if non_linked_entities: return non_linked_entities[0]
+            non_linked_entities = filter(lambda entity: entity not in already_placed_entities,
+                                         entities)
+            if non_linked_entities:
+                return non_linked_entities[0]
 
     def is_already_read(self, clause):
         return self.clause.root() != clause.root() or clause in self.context["clauses"]
 
     def entities_to_be_searched_in(self, structure):
         entities = []
-        for entity in filter(lambda entity: not entity.has_attr("implicit"), structure.all_entities()):
-            if not entity.has_attr("infinitive"): entities.append(entity)
-            if entity.is_coordinated() or entity.has_attr("infinitive"): entities.extend(entity.children)
+        non_trace_entities = filter(lambda p_entity: not p_entity.is_trace(), structure.all_entities())
+        for entity in non_trace_entities:
+            if not entity.has_attr("infinitive"):
+                entities.append(entity)
+
+            if entity.is_coordinated() or entity.has_attr("infinitive"):
+                entities.extend(entity.children)
+
         return entities
 
     def only_matching_entities(self, entities, entities_clause):
-        matching_entities = filter(lambda entity: entity.matches(self.pronoun), entities)
+        matching_entities = filter(lambda entity: entity.matches(self.pronoun),
+                                   entities)
         if entities_clause.root() == self.clause.root():
             matching_entities = self.only_already_read_entities(matching_entities, entities_clause)
         return matching_entities
@@ -90,11 +106,15 @@ class PersonalPronounCoreferenceSearcher:
         pronoun_case = self.pronoun.msi["case"]
         return PersonalPronounCoreferenceSearcher.search_order_by_voice[clause.voice][pronoun_case]
 
-    search_order_by_voice = { "active" : { None         : [ "subject", "od", "oi", "regimen", "equative",
-                                                           "instrument_goal", "adjuncts" ],
-                                          "acusative"   : ["od", "subject", "regimen", "oi", "equative",
-                                                           "instrument_goal", "adjuncts" ]},
-                             "passive" : { None         : [ "od", "subject", "instrument_goal", "adjuncts" ],
-                                          "acusative"   : ["subject", "od", "instrument_goal", "adjuncts"] },
-                             None      : { None         : [ "subject", "instrument_goal" ],
-                                          "acusative"   : [ "subject", "instrument_goal" ] } }
+    search_order_by_voice = {"active":  {None:         ["subject", "od", "oi", "regimen", "equative",
+                                                        "instrument_goal", "adjuncts"],
+                                         "accusative": ["od", "subject", "regimen", "oi", "equative",
+                                                        "instrument_goal", "adjuncts"]
+                                         },
+                             "passive": {None:         ["od", "subject", "instrument_goal", "adjuncts"],
+                                         "accusative": ["subject", "od", "instrument_goal", "adjuncts"]
+                                         },
+                             None:      {None:         ["subject", "instrument_goal"],
+                                         "accusative": ["subject", "instrument_goal"]
+                                         }
+                             }

@@ -14,7 +14,7 @@ from src.rewrite.strategy.dateTimeStrategy import DateTimeStrategy
 from src.rewrite.strategy.futureToGoConstructionStrategy import FutureToGoConstructionStrategy
 from src.rewrite.strategy.modalDeberToTieneQue import ModalDeberToTieneQue
 from src.rewrite.strategy.pastSimpleToCompoundStrategy import PastSimpleToCompoundStrategy
-from src.rewrite.strategy.subjuntiveImperfectStrategy import SubjuntiveImperfectStrategy
+from src.rewrite.strategy.subjunctiveImperfectStrategy import SubjunctiveImperfectStrategy
 from src.rewrite.strategy.synonymsStrategy import SynonymsStrategy
 from src.rewrite.strategy.tieneQueToModalDeber import TieneQueToModalDeber
 from tests.freelingTreeRepository import FreelingTreeRepository
@@ -275,8 +275,8 @@ class TestRewriter(unittest.TestCase):
         self.kase("Tendré que buscar agua", "Deberé buscar agua")
         self.kase("Tendría que buscar agua", "Debería buscar agua")
 
-    def test_subjuntive_imperfect(self):
-        self.strategies = [SubjuntiveImperfectStrategy(self.ontology)]
+    def test_subjunctive_imperfect(self):
+        self.strategies = [SubjunctiveImperfectStrategy(self.ontology)]
         self.kase("Si yo muriese sería feliz", "Si yo muriera sería feliz")
         self.kase("Si muriéramos estaría bien", "Si muriésemos estaría bien")
 
@@ -304,7 +304,7 @@ class TestRewriter(unittest.TestCase):
                   "Quizás parta primero a pesar de esperar de vez en cuando")
 
     def test_combined(self):
-        self.strategies = [SynonymsStrategy(self.ontology), PastSimpleToCompoundStrategy(self.ontology), SubjuntiveImperfectStrategy(self.ontology), \
+        self.strategies = [SynonymsStrategy(self.ontology), PastSimpleToCompoundStrategy(self.ontology), SubjunctiveImperfectStrategy(self.ontology), \
                            FutureToGoConstructionStrategy(self.ontology) ]
         self.kase("Si yo amara a quien odió sería libre", "Si yo amase a quien ha odiado sería libre")
         self.kase("Amaré si odiase a quien pudo ver la luz", "Voy a amar si odiara a quien pudo observar la luz")

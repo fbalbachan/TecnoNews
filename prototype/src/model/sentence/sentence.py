@@ -4,12 +4,10 @@ from src.model.tokenization.token import Token
 
 class Sentence(object):
     # TODO: Repensar parámetros: text o paragraph? o ambos?
-    def __init__(self, text, paragraph = None):
+    def __init__(self, text, paragraph=None):
         self.text = text
         self.paragraph = paragraph
-
         self.token = self.build_token()
-
         self.parse_node = None
         self.clauses = []
 

@@ -1,4 +1,5 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
+
 
 class InDepthNodeIterator:
     def __init__(self, node, banned_nodes=[]):
@@ -17,7 +18,7 @@ class InDepthNodeIterator:
             return node
 
     def non_banned_nodes(self, nodes):
-        return filter(lambda node : not self.is_banned(node), nodes)
+        return filter(lambda node: not self.is_banned(node), nodes)
 
     def is_banned(self, node):
         return node in self.banned_nodes

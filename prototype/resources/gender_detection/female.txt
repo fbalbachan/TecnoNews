@@ -115,7 +115,6 @@ RAFAELA,spanish
 CHUS,spanish
 DORITA,spanish
 MERCEDES,spanish
-,spanish
 TEÓFILA,spanish
 EDELMIRA,spanish
 FIDELIA,spanish
@@ -726,7 +725,6 @@ CHRIS,english
 ROSHEEN,english
 CHASTITY,english
 KRISTIE,english
-,english
 ALYS,english
 KARYNA,english
 EDYTHE,english
@@ -3145,7 +3143,6 @@ ELDA,italian
 LORENZA,italian
 GENOVEFFA,italian
 SIMONETTA,italian
-,italian
 ROMOLA,italian
 AGOSTINA,italian
 OLYMPE,french
@@ -3576,7 +3573,6 @@ ELÉONORE,french
 CATHERINE,french
 CAROLINE,french
 OUIDA,french
-,french
 LÉONTINE,french
 HENRIETTE,french
 MADDIE,french
@@ -3713,7 +3709,6 @@ IRENA,polish
 PATRYCJA,polish
 KLEMENTYNA,polish
 GERTRUDA,polish
-,polish
 JULITTA,polish
 LONGINA,polish
 ŁUCJA,polish
@@ -4012,7 +4007,6 @@ HELLA,german
 LOTTE,german
 ALKE,german
 KATRINA,german
-,german
 HELMINE,german
 BERLIN,german
 KÄTHE,german
@@ -4094,7 +4088,6 @@ TOVA,hebrew
 RINNAH,hebrew
 MAQQEDAH,hebrew
 DODIE,hebrew
-,hebrew
 DANIAH,hebrew
 ABIYHAYIL,hebrew
 BITHYAH,hebrew
@@ -4721,7 +4714,6 @@ DISDEMONA,greek
 HŌSANNA,greek
 TIMO,greek
 THYONE,greek
-,greek
 ZENIA,greek
 THEODOSIA,greek
 RHEIA,greek
@@ -4904,7 +4896,6 @@ ATSUKO,japanese
 HISOKA,japanese
 SUZUME,japanese
 JUNKO,japanese
-,japanese
 SHIG,japanese
 SANGO,japanese
 AYAME,japanese
@@ -5100,7 +5091,6 @@ BRANWENN,welsh
 CEINWEN,welsh
 ENFYS,welsh
 LUNED,welsh
-,welsh
 MODRON,welsh
 EIRA,welsh
 ANGHARAT,welsh
@@ -5322,7 +5312,6 @@ BRONTE,irish
 CAOIMHE,irish
 BREANN,irish
 BRIANNA,irish
-,irish
 AURNIA,irish
 BAIBIN,irish
 FIONNUALA,irish
@@ -5573,7 +5562,6 @@ JINJING,chinese
 MEILI,chinese
 JIA,chinese
 JINGHUA,chinese
-,chinese
 LING,chinese
 MINGXIA,chinese
 HUILING,chinese
@@ -5662,7 +5650,6 @@ AWITI,african
 BOITUMELO,african
 AFFRICA,african
 DIKELEDI,african
-,african
 ACHIENG,african
 DAYO,african
 EKUNDAYO,african

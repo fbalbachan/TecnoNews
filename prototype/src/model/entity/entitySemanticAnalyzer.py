@@ -4,8 +4,12 @@ from src.utils.resources import instance as resources
 
 class EntitySemanticAnalyzer:
     def analyze(self, entity):
-        for method in [self.detect_gender_if_necessary, self.fix_semantic_classification, self.fix_invalid_ne,
-                       self.fix_org_classification, self.fix_person_classification, self.set_names_for_person,
+        for method in [self.detect_gender_if_necessary,
+                       self.fix_semantic_classification,
+                       self.fix_invalid_ne,
+                       self.fix_org_classification,
+                       self.fix_person_classification,
+                       self.set_names_for_person,
                        self.set_attrs_for_org ]:
             method(entity)
 
@@ -49,7 +53,7 @@ class EntitySemanticAnalyzer:
         if msi["semantic_classification"] == "organization" and entity.kernel:
             words = entity.kernel.components()
 
-            if any(( word.lower() in self.place_classes for word in words)):
+            if any((word.lower() in self.place_classes for word in words)):
                 msi["semantic_classification"] = "place"
             elif any(( word.lower() in self.person_classes for word in words)):
                 msi["semantic_classification"] = "person"
@@ -78,4 +82,4 @@ class EntitySemanticAnalyzer:
     place_classes = resources.get_wordlist("resources", "place_classes")
     person_classes = resources.get_wordlist("resources", "person_classes")
 
-    invalid_name_entities = { name.lower() for name in resources.parse_csv_in("nec", "invalid_ne") }
+    invalid_name_entities = {name.lower() for name in resources.parse_csv_in("nec", "invalid_ne") }

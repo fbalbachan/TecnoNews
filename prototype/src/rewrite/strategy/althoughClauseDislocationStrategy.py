@@ -8,16 +8,26 @@ from src.parser.labelNode import LabelNode
 class AlthoughClauseDislocationStrategy:
     def applies_to(self, sentence, node):
         node = sentence.parse_node
-        if node.label != 'coor-vb': return False
+        if node.label != 'coor-vb':
+            return False
+
         aunque = False
+        i = 0
         for i in xrange(len(node.children)):
             child = node.children[i]
             if isinstance(child, LeafNode) and child.lemma == 'aunque':
                 aunque = True
                 break
-        if not aunque or i == len(node.children) - 1: return False
-        if isinstance(node.children[i+1], LabelNode) and node.children[i+1].label != 'grup-verb': return False
-        if len([ c for c in node.children if isinstance(c, LabelNode) and c.label == 'grup-verb' ]) < 2: return False
+
+        if not aunque or i == len(node.children) - 1:
+            return False
+
+        if isinstance(node.children[i+1], LabelNode) and node.children[i+1].label != 'grup-verb':
+            return False
+
+        if len([ c for c in node.children if isinstance(c, LabelNode) and c.label == 'grup-verb' ]) < 2:
+            return False
+
         return True
 
     def rewrite(self, sentence, node):
@@ -40,8 +50,8 @@ class AlthoughClauseDislocationStrategy:
             second_part = second_part[1:]
         second_part = second_part.strip()
 
-        final_punctuation = "" # TODO: Tomar toda la puntuación del final de second_part
-        if len(second_part) > 0 and second_part[-1] == ".": # TODO: Hacerlo bien: Si soy esto, soy esto!. (múltiples puntuaciones)
+        final_punctuation = ""  # TODO: Tomar toda la puntuación del final de second_part
+        if len(second_part) > 0 and second_part[-1] == ".":  # TODO: Hacerlo bien: Si soy ésto, soy ésto! (múlts punts)
             final_punctuation = "."
             second_part = second_part[:-1]
 
@@ -60,6 +70,7 @@ class AlthoughClauseDislocationStrategy:
     def rewrite_q_although_p(self, sentence):
         node = sentence.parse_node
 
+        iaunque = 0
         for iaunque in xrange(len(node.children)):
             child = node.children[iaunque]
             if isinstance(child, LeafNode) and child.lemma == 'aunque':

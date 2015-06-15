@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 
+
 class Token:
     def __init__(self):
         self.components = []
 
     def append(self, start, end):
         self.components.append((start, end))
-        self.components.sort(key = lambda (start, end): start)
+        self.components.sort(key=lambda (p_start, p_end): p_start)
 
     def start(self):
         return self.components[0][0]

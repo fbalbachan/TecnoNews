@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-from src.utils.configProvider import ConfigProvider
 import csv
 import re
 
+from src.utils.configProvider import ConfigProvider
 from src.rewrite.rewrite import Rewrite
+
 # from src.utils.stringUtils import set_first_letter_case
 
 
@@ -12,7 +13,7 @@ class SynonymsStrategy:
         self.ontology = ontology
         self.synonyms = self._get_synonyms()
         self.adverbs = self._get_adverbs()
-        self.locucions = self._get_locucions()
+        self.locutions = self._get_locutions()
 
     def applies_to(self, clause):
         for leaf in clause.proper_leaves():
@@ -30,7 +31,7 @@ class SynonymsStrategy:
             if leaf.lemma in self.synonyms.keys():
                 synonym = self.synonyms[leaf.lemma]
                 if '_' in synonym or synonym not in ontology.concepts:
-                    if synonym in self.locucions and self.locucions[synonym]:
+                    if synonym in self.locutions and self.locutions[synonym]:
                         pass
                     replacement = synonym.replace('_', ' ')
                 else:
@@ -67,27 +68,33 @@ class SynonymsStrategy:
             replacements[line[1]] = line[0]
         return replacements
 
-    def _get_locucions(self):
-        locucions = {}
+    def _get_locutions(self):
+        locutions = {}
         config = ConfigProvider()
-        locucions_filename = config.get("resources", "locucions")
+        locutions_filename = config.get("resources", "locutions")
         regex = re.compile('<.[^_]+>')
-        for line in open(locucions_filename, 'r'):
+        for line in open(locutions_filename, 'r'):
             line = line.strip().split()
-            locucions[line[1]] = [y[1:-1] for y in regex.findall(line[0])]
-        return locucions
+            locutions[line[1]] = [y[1:-1] for y in regex.findall(line[0])]
+        return locutions
 
     def _msi_transform(self, msi):
         result_msi = {}
-        if 'number' in msi: result_msi['number'] = msi['number']
-        if 'gender' in msi: result_msi['gender'] = msi['gender']
+        if 'number' in msi:
+            result_msi['number'] = msi['number']
+        if 'gender' in msi:
+            result_msi['gender'] = msi['gender']
 
         if msi['category'] == 'adjective':
-            if 'grade' in msi: result_msi['grade'] = msi['grade']
+            if 'grade' in msi:
+                result_msi['grade'] = msi['grade']
         elif msi['category'] == 'verb':
-            if 'mode' in msi: result_msi['mode'] = msi['mode']
-            if 'person' in msi: result_msi['person'] = msi['person']
-            if 'time' in msi: result_msi['time'] = msi['time']
+            if 'mode' in msi:
+                result_msi['mode'] = msi['mode']
+            if 'person' in msi:
+                result_msi['person'] = msi['person']
+            if 'time' in msi:
+                result_msi['time'] = msi['time']
         result_msi['category'] = msi['category']
         return result_msi
 

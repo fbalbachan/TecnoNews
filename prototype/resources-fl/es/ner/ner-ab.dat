@@ -1,0 +1,237 @@
+## Type of NE recognizer (basic/BIO). Changing this value will require
+## changing some sections in the rest of the file
+<Type>
+basic
+</Type>
+
+<Lexicon>
+ner.lex
+</Lexicon>
+<ModelFile>
+ner.abm
+</ModelFile>
+<RGF>
+ner.rgf
+</RGF>
+<NE_Tag>
+NP00000
+</NE_Tag>
+<TitleLimit>
+0
+</TitleLimit>
+<Classifier>
+AdaBoost
+</Classifier>
+<Classes>
+0 B 1 I 2 O
+</Classes>
+<UseSoftMax>
+yes
+</UseSoftMax>
+<InitialProb>
+B 0.199543
+I 0.000120135
+O 0.800216
+</InitialProb>
+<TransitionProb>
+B B 0.00754797
+B I 0.393239
+B O 0.599213
+I B 0.00475779
+I I 0.46684
+I O 0.528403
+O B 0.0758919
+O I 0
+O O 0.924108
+</TransitionProb>
+<FunctionWords>
+van
+von
+&
+d'
+de
+del
+della
+dello
+delle
+la
+las
+los
+'s
+do
+da
+di
+</FunctionWords>
+<Affixes>
+Don PRE
+don PRE
+Doña PRE
+doña PRE
+Jr. SUF
+jr. SUF
+Jr SUF
+jr  SUF
+Mr. PRE
+Mr PRE
+mr. PRE
+mr PRE
+Inc. SUF
+Inc SUF
+inc. SUF
+inc SUF
+Ltd. SUF
+ltd. SUF
+Ltd SUF
+ltd SUF
+co. SUF
+co SUF
+Co SUF
+Co. SUF
+Ing. PRE
+ing. PRE
+Ing PRE
+ing PRE
+lic. PRE
+Lic PRE
+Lic. PRE
+dr. PRE
+Dr PRE
+Dr. PRE
+Dra. PRE
+Dra PRE
+Arq. PRE
+Arq PRE
+arq. PRE
+Mag. PRE
+Mag PRE
+mag. PRE
+phd. PRE
+Ph.D. PRE
+phd. PRE
+Phd. PRE
+Phd PRE
+ing PRE
+lic PRE
+dra PRE
+dra. PRE
+dr PRE
+arq PRE
+mag PRE
+phd PRE
+phd PRE
+Prof. PRE
+prof. PRE
+prof PRE
+Prof PRE
+Excmo. PRE
+Excmo PRE
+Excma PRE
+Excma. PRE
+excmo. PRE
+excmo PRE
+excma. PRE
+excma PRE
+h. PRE
+Mrs. PRE
+Mrs PRE
+mrs. PRE
+mrs PRE
+Miss PRE
+miss PRE
+gmbh. SUF
+Gmbh SUF
+Gmbh. SUF
+Ms. PRE
+Ms PRE
+gmbh SUF
+S.A. SUF
+sa. SUF
+PH.D. PRE
+s.a. SUF
+s.r.l. SUF
+S.R.L. SUF
+Srl. SUF
+Srl SUF
+sa SUF
+srl SUF
+md. SUF
+Md. SUF
+Md SUF
+md SUF
+mons. PRE
+Mons. PRE
+Mons PRE
+Cap. PRE
+Cap PRE
+cap. PRE
+tte. PRE
+Tte. PRE
+Tte PRE
+col. PRE
+Col. PRE
+Col PRE
+lt. PRE
+Lt. PRE
+Lt PRE
+sgt. PRE
+Sgt. PRE
+Sgt PRE
+cnel. PRE
+Cnel PRE
+Cnel PRE
+Gral. PRE
+Gral PRE
+gral. PRE
+Brig. PRE
+Brig PRE
+brig. PRE
+pref. PRE
+Pref PRE
+Pref PRE
+mons PRE
+cap PRE
+tte PRE
+col PRE
+lt PRE
+sgt PRE
+cnel PRE
+gral PRE
+brig PRE
+pref PRE
+Sr. PRE
+Sr PRE
+sr. PRE
+sr PRE
+sra. PRE
+Sra. PRE
+Sra PRE
+sra PRE
+srta PRE
+Srta. PRE
+Srta PRE
+Dir. PRE
+Dire PRE
+srta. PRE
+dir. PRE
+dir PRE
+S.A SUF
+s.a SUF
+S.R.L SUF
+s.r.l SUF
+Ph.D PRE
+ph.d PRE
+</Affixes>
+<SpecialPunct>
+Fz
+Fg
+Fs
+Fd
+Fia
+Faa
+Fc
+Fra
+Fpa
+Fg
+Fca
+Fe
+<SpecialPunct>

@@ -1,23 +1,33 @@
 # -*- coding: utf-8 -*-
 
+
 class SyntacticStructureEntityValidator:
     def __init__(self, structure):
         self.structure = structure
         self.clause = structure.clause
 
     def accept(self, entity):
-        rule_by_structure_name = { "subject" : SyntacticStructureEntityValidator.subject_accept,
-                                   "od" : SyntacticStructureEntityValidator.od_accept }
         name = self.structure.name
-        if not name in rule_by_structure_name:
+        # print "--> SyntacticStructureEntityValidator.accept(entity) - entity: ", entity, " - structure: ", name
+        rule_by_structure_name = {"subject": SyntacticStructureEntityValidator.subject_accept,
+                                  "od": SyntacticStructureEntityValidator.od_accept}
+        if name not in rule_by_structure_name:
             return True
-        rule = rule_by_structure_name[name]
-        return rule(entity, self.clause)
+        accepting_rule = rule_by_structure_name[name]
+        result = accepting_rule(entity, self.clause)
+        return result
 
     @staticmethod
     def subject_accept(entity, clause):
-        return clause.verb.matches(entity) if clause.voice == "active" else True
+        # print "--> SyntacticStructureEntityValidator.subject_accept(entity) - entity: ", entity
+        if clause.voice == "active":
+            result = entity.is_impersonal() or clause.verb.matches(entity)
+        else:
+            result = True
+
+        return result
 
     @staticmethod
     def od_accept(entity, clause):
-        return clause.verb.matches(entity) if clause.voice == "passive" else True
+        result = clause.verb.matches(entity) if clause.voice == "passive" else True
+        return result

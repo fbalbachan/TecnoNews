@@ -1,29 +1,40 @@
 # -*- coding: utf-8 -*-
 from src.model.referent.referent import Referent
 from src.sentiment.entitySentimentalValue import EntitySentimentalValue
+from src.model.entity.animityEnum import AnimityEnum
+
+debug_mode = False
 
 
 class TacitEntity:
-
-    # Cuidado! El diccionario attributes se instancia siempre con una referencia al mismo diccionario default!
-    def __init__(self, lexical_form, msi, attributes = { "tacit" : None }):
+    def __init__(self, lexical_form, msi, attributes=None):
+        if debug_mode: print "--> TacitEntity.init(lexical_form:", lexical_form, ")"
         self.lexical_form = lexical_form
+        if 'animity' not in msi:
+            msi["animity"] = AnimityEnum.inanimate
         self.msi = msi
         self.children = []
         self.owner = None
+
+        if attributes is None:
+            attributes = {"tacit": None}
         self.attributes = attributes
         self.sentimental_value = EntitySentimentalValue(self)
         self.coref_chain = []
         self.referent = Referent(self)
 
+    def contains(self, other):
+        is_contained = other in self.children
+        return is_contained
+
     def referenced(self):
         return self.coref_chain[-1]
 
     def add_coreference(self, referenced):
-        if not referenced.is_linked():
-            self.coref_chain.append(referenced)
-        else:
+        if referenced.is_linked():
             self.coref_chain.extend(referenced.coref_chain)
+        else:
+            self.coref_chain.append(referenced)
 
         self.update_referent(self.referenced().referent)
         self.update_msi()
@@ -31,7 +42,9 @@ class TacitEntity:
     def update_msi(self):
         msi = self.msi
         referenced_msi = self.referenced().msi
-        if msi["gender"] == "neutral": msi["gender"] = referenced_msi["gender"]
+        if msi["gender"] == "neutral":
+            msi["gender"] = referenced_msi["gender"]
+        msi["animity"] = referenced_msi["animity"]
 
     def update_referent(self, referent):
         self.referent = referent
@@ -43,6 +56,9 @@ class TacitEntity:
     def children_of_category(self, category):
         return filter(lambda entity: entity.category() == category, self.children)
 
+    #
+    # Methods related to MSI (morfo-syntatic-information)
+    #
     def classification(self):
         return self.msi["semantic_classification"]
 
@@ -51,30 +67,76 @@ class TacitEntity:
 
     def matches(self, entity):
         matches = self.msi["person"] == entity.msi["person"] \
-            and self.matches_number_of(entity) and self.matches_gender_of(entity)
+                  and self.matches_number_of(entity) \
+                  and self.matches_gender_of(entity)
         return matches
 
-    def matches_number_of(self, entity):
+    def number_matches(self, number):
         msi = self.msi
-        return msi["number"] == "invariable" or entity.msi["number"] == "invariable" \
-            or msi["number"] == entity.msi["number"]
+        return msi["number"] == "invariable" \
+               or number == "invariable" \
+               or msi["number"] == number
+
+    def matches_number_of(self, entity):
+        return self.number_matches(entity.msi["number"])
+
+    def gender_matches(self, gender):
+        neutral_genders = ["neutral", "common"]
+        return self.msi["gender"] in neutral_genders \
+               or gender in neutral_genders \
+               or self.msi["gender"] == gender
 
     def matches_gender_of(self, entity):
-        neutral_genders = [ "neutral", "common" ]
-        msi = self.msi
-        return msi["gender"] in neutral_genders or entity.msi["gender"] in neutral_genders \
-            or msi["gender"] == entity.msi["gender"]
+        return self.gender_matches(entity.msi["gender"])
 
     def matches_msi(self, msi):
         for key, value in msi.items():
-            if not key in self.msi or self.msi[key] != value: return False
+            if key not in self.msi:
+                return False
+
+            if key == "gender" and not self.gender_matches(value) \
+               or key == "number" and not self.number_matches(value) \
+               or key == "animity" and not self.animity_matches(value):
+                return False
+
+            if self.msi[key] != value:
+                return False
         return True
 
+    def animity_matches(self, animity):
+        return AnimityEnum.animities_match(self.msi["animity"], animity)
+
+    def matches_animity_of(self, entity):
+        return AnimityEnum.animities_match(self.msi["animity"], entity.msi["animity"])
+
+    #
+    # Methods to classify th entity
+    #
     def is_linked(self):
         return bool(self.coref_chain)
 
     def is_tacit(self):
         return self.has_attr("tacit")
+
+    def is_implicit(self):
+        return self.has_attr("implicit")
+
+    def is_impersonal(self):
+        return self.has_attr("impersonal")
+
+    def is_useless(self):
+        return self.has_attr("useless")
+
+    def is_explicit(self):
+        explicit = not self.is_implicit() and \
+                   not self.is_tacit() and \
+                   not self.is_impersonal()
+        return explicit
+
+    def is_trace(self):
+        return self.is_implicit() \
+            or self.is_impersonal() \
+            or self.is_useless()
 
     def is_coordinated(self):
         return self.has_attr("coordinated")
@@ -86,8 +148,10 @@ class TacitEntity:
         return bool(self.owner)
 
     def __repr__(self):
-        _repr = ("(implicit)" if self.has_attr("implicit") else "(tacit)") + " " + self.lexical_form
-        if self.is_linked(): _repr = _repr + " (" + self.referenced().lexical_form + ")"
+        flag = "(implicit)" if self.has_attr("implicit") else "(impersonal)" if self.has_attr("impersonal") else "(tacit)"
+        _repr = flag + " " + self.lexical_form
+        if self.is_linked():
+            _repr = _repr + " (" + self.referenced().lexical_form + ")"
         return _repr
 
     def name(self):

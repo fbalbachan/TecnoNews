@@ -6,48 +6,78 @@ from src.model.go.globalOperatorAnalyzer import GlobalOperatorAnalyzer
 from src.model.sentence.tokenizationGuesser import TokenizationGuesser
 from src.parser.freelingTreeParser import FreelingTreeParser
 from src.sentiment.sentimentalAnalyzer import SentimentalAnalyzer
-from src.sentiment.sentimentalSummarizer import SentimentalSummarizer
 from src.utils.invoker import Invoker
+
+debug_mode = True
 
 
 class SentenceAnalyzer:
-    def __init__(self, tree_parser = FreelingTreeParser()):
+    def __init__(self, tree_parser=FreelingTreeParser()):
         self.tree_parser = tree_parser
-        self.context = { "sentences" : [] }
+        self.context = {"sentences": []}
         self.invoker = Invoker()
 
     def analyze(self, sentence):
+        if debug_mode: print "--> SentenceAnalyzer.analyze()"
+
         self.set_parse_tree_to(sentence)
+
         TokenizationGuesser(sentence).guess()
 
-        sentence.clauses = ClauseExtractor().extract_from(sentence)
-        for method in [ self.analyze_clauses_of, self.analyze_global_operators_of, self.analyze_sentimentally ]:
+        sentence.clauses = ClauseExtractor.extract_from(sentence)
+
+        analyze_methods = [self.analyze_clauses_of,
+                           SentenceAnalyzer.analyze_global_operators_of,
+                           SentenceAnalyzer.analyze_sentimentally]
+
+        for method in analyze_methods:
             self.invoker.invoke(method, sentence)
 
-    def analyze_sentimentally(self, sentence):
-        sentimentalAnalyzer =  SentimentalAnalyzer()
+    @staticmethod
+    def analyze_sentimentally(sentence):
+        sentimental_analyzer = SentimentalAnalyzer()
 
         for clause in sentence.clauses:
-            sentimentalAnalyzer.analyze(clause)
+            sentimental_analyzer.analyze(clause)
 
-    def analyze_global_operators_of(self, sentence):
+    @staticmethod
+    def analyze_global_operators_of(sentence):
         GlobalOperatorAnalyzer(sentence).analyze()
 
     def analyze_clauses_of(self, sentence):
+        if debug_mode: print "--> SentenceAnalyzer.analyze_clauses_of(sentence: ", sentence, ")"
+
         self.context["clauses"] = []
-        clauseAnalyzer = ClauseAnalyzer()
-        clauseAnalyzer.context = self.context
+        clause_analyzer = ClauseAnalyzer()
+        clause_analyzer.context = self.context
+
         for clause in sentence.clauses:
-            clauseAnalyzer.analyze(clause)
+            clause_analyzer.analyze(clause)
             self.context["clauses"].append(clause)
 
     def set_parse_tree_to(self, sentence):
-        node = self.tree_parser.from_text(sentence.text)
-        sentence.parse_node = node
+        try:
+            node = self.tree_parser.from_text(sentence.text)
+            sentence.parse_node = node
 
-        #print "TEXT", sentence.text
-        #print "LEAVES", node.leaves()
+            if debug_mode:
+                print "-------------------------------------------------------"
+                print "TEXT".ljust(8), sentence.text
+                print "-------------------------------------------------------"
+                print "LEAVES".ljust(8), node.leaves()
+                print "-------------------------------------------------------"
+                print node.tree_representation()
+                print "-------------------------------------------------------"
 
-        print node.tree_representation()
-        for leaf in node.leaves():  print leaf.original_lexical_form, leaf.lemma, leaf.msi
-        print "--"
+                for leaf in node.leaves():
+                    lex_entry = leaf.original_lexical_form + " " + leaf.lemma
+                    print lex_entry.ljust(18), leaf.msi
+                    print ""
+
+                print "----------------------------------------------------------------------------------------------------"
+
+        except Exception as e:
+            error_sentence = sentence.text[:]
+            error_sentence = error_sentence.replace(" ", "_")
+            print "EB_FP_EXCEPTION_in_sentence: [", error_sentence, "]"
+            raise

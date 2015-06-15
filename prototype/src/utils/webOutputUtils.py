@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from src.utils.factNormalizer import FactNormalizer
 
+
 class WebOutputUtils:
 
     def structure(self, clause, name):
@@ -9,7 +10,10 @@ class WebOutputUtils:
             if name == "verb":
                 return structure.entity().lemma()
             else:
-                return ", ".join([ str(entity) for entity in structure.all_entities() ])
+                entities = structure.all_entities()
+                infinity = 10000
+                entities.sort(key=lambda p_entity: p_entity.token.start() if p_entity.is_explicit() else infinity)
+                return ", ".join([str(entity) for entity in entities])
         else:
             return ""
 
@@ -29,12 +33,17 @@ class WebOutputUtils:
     def entity_tooltip(self, entity):
         tooltip = self.msi_string(entity.msi)
 
+        if (entity.category() == "noun" or entity.category() == "pronoun") \
+           and "animity" in entity.msi:
+            tooltip = tooltip + " " + entity.msi["animity"]
+
         if entity.category() == "noun" and entity.msi["type"] == "proper":
             tooltip = tooltip + " " + str(entity.msi["semantic_classification"]).upper()
 
         if entity.category() == "verb":
             tooltip = tooltip + " - Transitivity " + entity.transitivity + " - Sentiment script " + \
                 entity.sentimental_script.klass
+
         return tooltip
 
     def e_sv_neg_ev(self, entity):

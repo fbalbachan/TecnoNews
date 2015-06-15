@@ -13,10 +13,8 @@ class TestVerbs(unittest.TestCase):
         self.analyzer = SentenceAnalyzer(FreelingTreeRepository("tests/input/trees"))
 
     def test_verb_msi_for_modal_verbs(self):
-        examples = [
-            ('puedes comprar',             {'person': 2, 'number': 'singular', 'gender': 'neutral'}, 'comprar'),
-            ('has podido comprar',         {'person': 2, 'number': 'singular', 'gender': 'neutral'}, 'comprar'),
-        ]
+        examples = [('puedes comprar',     {'person': 2, 'number': 'singular', 'gender': 'neutral'}, 'comprar'),
+                    ('has podido comprar', {'person': 2, 'number': 'singular', 'gender': 'neutral'}, 'comprar'),]
 
         for (input_text, expected_verb_msi, expected_verb_lemma) in examples:
             print "trying: %s .. " % input_text,

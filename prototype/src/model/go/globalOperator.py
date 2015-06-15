@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
+
 class GlobalOperator:
-    def __init__(self, klass, object = None):  # @ReservedAssignment
+    def __init__(self, klass, object=None):  # @ReservedAssignment
         self.klass = klass
         self.object = object
 
@@ -15,10 +16,10 @@ class GlobalOperator:
         return hash(tuple(self.__dict__.values()))
 
     @staticmethod
-    def For(object = None, *classes):  # @ReservedAssignment
+    def For(object=None, *classes):  # @ReservedAssignment
         operators = []
         for klass in classes:
             operators.append(GlobalOperator(klass, object))
         return operators
 
-    classes = [ "negation", "volitive", "question", "possibility", "imperative", "condition", "future"]
+    classes = ["negation", "volitive", "question", "possibility", "imperative", "condition", "future"]

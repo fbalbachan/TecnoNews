@@ -1,4 +1,4 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 from re import search
 
@@ -9,9 +9,10 @@ from src.utils.freelingClientParser import *
 
 
 class FreelingTreeParser:
+
     def from_text(self, text):
         freeling_client = FreelingClientParser()
-        output= freeling_client.parse(text)
+        output = freeling_client.parse(text)
         return self.parse(output)
 
     def from_file(self, path):
@@ -24,7 +25,9 @@ class FreelingTreeParser:
         father = None
 
         for line in output:
-            if not line: continue
+            if not line:
+                continue
+
             if node_stack:
                 father = node_stack[-1]
 
@@ -51,10 +54,10 @@ class FreelingTreeParser:
 
     def leaf_node_for(self, line):
         regex_match = self.leaf_node_match_for(line)
-        lexicalForm = regex_match.group(1)
+        lexical_form = regex_match.group(1)
         lemma = regex_match.group(2)
-        msi = tag2fullmsi(regex_match.group(3))
-        return LeafNode(lexicalForm, lemma, msi)
+        leaf_msi = tag2fullmsi(regex_match.group(3))
+        return LeafNode(lexical_form, lemma, leaf_msi)
 
     def middle_node_label_of(self, line):
         return search("\+?([-a-zA-Z]+)_\[", line.strip()).group(1)

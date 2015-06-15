@@ -11,6 +11,7 @@ def default_raise_exception():
     string = dict(Config.items("debug"))["raise_exception"]
     return literal_eval(string)
 
+
 class Invoker:
     def __init__(self, raise_exception = default_raise_exception()):
         self.raise_exception = raise_exception
