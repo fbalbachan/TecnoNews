@@ -15,7 +15,7 @@ class BBCParser(GenericParser):
 
         content = None
         title = None
-        soup = BeautifulSoup(self.opener(url))
+        soup = BeautifulSoup(self.opener.read(url))
         # rip out script and style elements
         for script in soup(["script", "style"]):
             script.extract()

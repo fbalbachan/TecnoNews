@@ -63,5 +63,6 @@ countries = %(resources_dir)s/nombre_pais_ESP.csv
 persons = %(resources_dir)s/person.cls
 animals = %(resources_dir)s/animal.csv
 demonyms = %(resources_dir)s/twGENT.dat
+marks_to_avoid_paragraphs = %(resources_dir)s/paragraph_to_avoid
 
 frontal_face: %(resources_dir)s/haarcascade_frontalface_default.xml

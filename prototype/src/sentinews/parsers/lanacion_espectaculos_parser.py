@@ -23,7 +23,7 @@ class LaNacionEspectaculosParser(GenericParser):
     def is_parseable_case(self, url, soup=None):
         allowed = True
         if not soup:
-            soup = BeautifulSoup(self.opener(url).read())
+            soup = BeautifulSoup(self.opener.read(url))
 
 
         tema_nota = soup.find('span', {"class": "tema-nota"})
@@ -40,7 +40,7 @@ class LaNacionEspectaculosParser(GenericParser):
         return allowed
 
     def parse(self, url):
-        soup = BeautifulSoup(self.opener(url).read())
+        soup = BeautifulSoup(self.opener.read(url))
 
         if not self.is_parseable_case(url=url, soup=soup):
             return None

@@ -21,7 +21,7 @@ class EuroNewsParser(GenericParser):
     source = u'Euronews'
 
     def parse(self, url):
-        soup = BeautifulSoup(self.opener(url).read())
+        soup = BeautifulSoup(self.opener.read(url))
         # rip out script and style elements
         for script in soup(["script", "style"]):
             script.extract()
