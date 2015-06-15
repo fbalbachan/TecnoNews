@@ -36,7 +36,7 @@ class TelamEspectaculosParser(GenericParser):
 
     def is_parseable_case(self, url):
 
-        soup = BeautifulSoup(self.opener(url).read())
+        soup = BeautifulSoup(self.opener.read(url))
         categories = self.get_categories(soup)
         fobiden_sections = [u'televisi\xf3n']
         if any(k for k in fobiden_sections if k in categories):
@@ -48,7 +48,7 @@ class TelamEspectaculosParser(GenericParser):
         if not self.is_parseable_case(url):
             return None
 
-        soup = BeautifulSoup(self.opener(url).read())
+        soup = BeautifulSoup(self.opener.read(url))
         categories = self.get_categories(soup)
 
         image_search_string = None

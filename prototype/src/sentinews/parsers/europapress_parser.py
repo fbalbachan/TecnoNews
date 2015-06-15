@@ -24,7 +24,7 @@ class EuropaPressParser(GenericParser):
         # if u'/silencio-por-favor/' in url:
         #     return None
 
-        soup = BeautifulSoup(self.opener(url).read())
+        soup = BeautifulSoup(self.opener.read(url))
 
         image_search_string = None
 

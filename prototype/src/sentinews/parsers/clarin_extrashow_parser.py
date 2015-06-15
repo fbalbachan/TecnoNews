@@ -32,7 +32,7 @@ class ClarinExtrashowParser(GenericParser):
     def parse(self, url):
         if not self.is_parseable_case(url):
             return None
-        soup = BeautifulSoup(self.opener(url).read())
+        soup = BeautifulSoup(self.opener.read(url))
 
         image_search_string = None
 

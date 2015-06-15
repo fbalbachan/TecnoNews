@@ -24,7 +24,7 @@ class ABCParser(GenericParser):
         if u'/silencio-por-favor/' in url:
             return None
 
-        soup = BeautifulSoup(self.opener(url).read(),
+        soup = BeautifulSoup(self.opener.read(url),
                              from_encoding='iso-8859-15')
 
         image_search_string = None
