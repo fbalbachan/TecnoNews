@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
 import unittest
+import traceback
 
 from src.ling.freelingDictionaryParser import FreelingDictionaryParser
 from src.model.paragraph.paragraph import Paragraph
@@ -9,6 +10,9 @@ from src.model.sentence.sentenceAnalyzer import SentenceAnalyzer
 from src.rewrite.rewriter import Rewriter
 from src.rewrite.strategy.partialVoicePassiveStrategy import PartialVoicePassiveStrategy
 from tests.freelingTreeRepository import FreelingTreeRepository
+from src.utils.logger_utils import get_logger
+
+logger = get_logger('tecnonews')
 
 
 class TestRewriter(unittest.TestCase):
@@ -42,20 +46,25 @@ class TestRewriter(unittest.TestCase):
     def kase(self, source, edited):
         print "Case:", source
         analyzer = self.analyzer
+        text = None
+        try:
+            paragraph = Paragraph.from_text(source)
+            analyzer.analyze(paragraph)
+            text = Rewriter(paragraph, self.ontology, self.strategies).rewrite()
+            print "\t[SOURCE]", paragraph.text
+            print "\t[EDITED]", text
 
-        paragraph = Paragraph.from_text(source)
-        analyzer.analyze(paragraph)
+        except Exception as e:
+            logger.error(e.message)
+            logger.error(traceback.format_exc())
 
-        text = Rewriter(paragraph, self.ontology, self.strategies).rewrite()
-        print "\t[SOURCE]", paragraph.text
-        print "\t[EDITED]", text
-
+        self.assertEqual(text, edited)
         # if not text == edited:
         #     import difflib
         #     diff = difflib.ndiff(None, text, edited)
         #
 
-        self.assertEqual(text, edited)
+
 
     ontology = Rewriter.ontology
 
