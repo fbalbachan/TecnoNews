@@ -9,7 +9,7 @@ class GenericParser(object):
     def __init__(self):
         self.language_filter = LanguageFilter()
         self.sanitizer = Sanitizer()
-        self.opener = BitOpener().open
+        self.opener = BitOpener()
 
     def sanitize(self, content):
         return self.sanitizer.process_content(content=content)
