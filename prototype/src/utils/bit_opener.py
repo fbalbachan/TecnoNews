@@ -1,8 +1,8 @@
-from urllib import FancyURLopener
+import urllib2
 from random import choice
 
 
-class BitOpener(FancyURLopener, object):
+class BitOpener(object):
 
     def __init__(self):
         user_agents = [
@@ -15,4 +15,9 @@ class BitOpener(FancyURLopener, object):
         ]
 
         super(BitOpener, self).__init__()
-        self.version = choice(user_agents)
+        self.user_agent = choice(user_agents)
+
+    def read(self, url):
+        req = urllib2.Request(url, headers={'User-Agent': self.user_agent})
+        html = urllib2.urlopen(req).read()
+        return html
