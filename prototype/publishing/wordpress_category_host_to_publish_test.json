@@ -1,87 +1,87 @@
 {
     "salud":
     {
-        "url": "http://tecnonews.comule.com/xmlrpc.php",
+        "url": "http://artesbit.com/xmlrpc.php",
         "username": "tecnonews",
         "password": "tecnonews1"
 
     },
     "economía":
     {
-        "url": "http://tecnonews.comule.com/xmlrpc.php",
+        "url": "http://artesbit.com/xmlrpc.php",
         "username": "tecnonews",
         "password": "tecnonews1"
     },
     "política":
     {
-        "url": "http://tecnonews.comule.com/xmlrpc.php",
+        "url": "http://artesbit.com/xmlrpc.php",
         "username": "tecnonews",
         "password": "tecnonews1"
     },
     "entretenimiento":
     {
-        "url": "http://tecnonews.comule.com/xmlrpc.php",
+        "url": "http://artesbit.com/xmlrpc.php",
         "username": "tecnonews",
         "password": "tecnonews1"
     },
     "turismo":
     {
-        "url": "http://tecnonews.comule.com/xmlrpc.php",
+        "url": "http://artesbit.com/xmlrpc.php",
         "username": "tecnonews",
         "password": "tecnonews1"
     },
     "tecnología":
     {
-        "url": "http://tecnonews.comule.com/xmlrpc.php",
+        "url": "http://artesbit.com/xmlrpc.php",
         "username": "tecnonews",
         "password": "tecnonews1"
     },
 
     "cultura":
     {
-        "url": "http://tecnonews.comule.com/xmlrpc.php",
+        "url": "http://artesbit.com/xmlrpc.php",
         "username": "tecnonews",
         "password": "tecnonews1"
     },
     "ciencia":
     {
-        "url": "http://tecnonews.comule.com/xmlrpc.php",
+        "url": "http://artesbit.com/xmlrpc.php",
         "username": "tecnonews",
         "password": "tecnonews1"
     },
     "deporte":
     {
-        "url": "http://tecnonews.comule.com/xmlrpc.php",
+        "url": "http://artesbit.com/xmlrpc.php",
         "username": "tecnonews",
         "password": "tecnonews1"
     },
     "interés general":
     {
-        "url": "http://tecnonews.comule.com/xmlrpc.php",
+        "url": "http://artesbit.com/xmlrpc.php",
         "username": "tecnonews",
         "password": "tecnonews1"
     },
     "internacionales":
     {
-        "url": "http://tecnonews.comule.com/xmlrpc.php",
+        "url": "http://artesbit.com/xmlrpc.php",
         "username": "tecnonews",
         "password": "tecnonews1"
     },
     "policiales":
     {
-        "url": "http://tecnonews.comule.com/xmlrpc.php",
+        "url": "http://artesbit.com/xmlrpc.php",
         "username": "tecnonews",
         "password": "tecnonews1"
     },
     "clima":
     {
-        "url": "http://tecnonews.comule.com/xmlrpc.php",
+        "url": "http://artesbit.com/xmlrpc.php",
         "username": "tecnonews",
         "password": "tecnonews1"
     },
     "mujer":
     {
-        "url": "http://tecnonews.comule.com/xmlrpc.php",
+        "url": "http://artesbit.com/xmlrpc.php",
         "username": "tecnonews",
         "password": "tecnonews1"
     }
