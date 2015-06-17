@@ -263,6 +263,12 @@ class BlogPublisher(object):
         user = 'emmettbrown'
         password = '6503b89221548c7cde2128570003d410'
         for entry in entries:
+            if not entry.wp_url:
+                logger.error(entry.title)
+                logger.error(entry.wp_url)
+                logger.error(entry.wp_id)
+                logger.error("not inserting canonical")
+
             url = entry.wp_url.split('.com')[0] + '.com/xmlrpc.php'
             client = Client(url, user, password)
             try:
