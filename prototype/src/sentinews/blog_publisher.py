@@ -290,6 +290,13 @@ class BlogPublisher(object):
 
         for entry in entries:
             try:
+                if not entry.wp_url:
+                    logger.error(entry.title)
+                    logger.error(entry.wp_url)
+                    logger.error(entry.wp_id)
+                    logger.error("not inserting canonical")
+                    continue
+
                 url = entry.wp_url.split('.com')[0] + '.com/xmlrpc.php'
                 client = Client(url, user, password)
                 wpost = client.call(posts.GetPost(entry.wp_id))
