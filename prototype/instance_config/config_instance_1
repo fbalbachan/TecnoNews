@@ -19,7 +19,7 @@ tagger_port = 9999
 
 host        = 85.10.210.172
 client      = ../externals/freeling/analyzer_client_lang_ident
-language_port = 10103
+language_port = 10101
 
 [mongodb]
 
