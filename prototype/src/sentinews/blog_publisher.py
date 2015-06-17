@@ -268,6 +268,7 @@ class BlogPublisher(object):
                 logger.error(entry.wp_url)
                 logger.error(entry.wp_id)
                 logger.error("not inserting canonical")
+                continue
 
             url = entry.wp_url.split('.com')[0] + '.com/xmlrpc.php'
             client = Client(url, user, password)
