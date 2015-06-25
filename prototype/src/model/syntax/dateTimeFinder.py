@@ -11,17 +11,19 @@ class DateTimeFinder:
     def find(self):
         clause = self.clause
         useful_nodes = clause.verb_level_nodes() if clause.voice else clause.proper_tree().children
-        nodes = filter(lambda node: not node.is_leaf() and (self.has_data(node)
-                                                            or self.is_valid_subord(node)
-                                                            or self.is_valid_sadv(node)),
-                       useful_nodes)
-        return nodes
+        time_nodes = filter(lambda node: not node.is_leaf() and (self.has_data(node)
+                                                                 or self.is_valid_subord(node)
+                                                                 or self.is_valid_sadv(node)),
+                            useful_nodes)
+        return time_nodes
 
     def is_valid_sadv(self, node):
         return node.label == "sadv" and node.nodes_with_labels("sn-tmp")
 
     def is_valid_subord(self, node):
-        time_reference_checks = (check(node) for check in [self.has_year, self.is_en_plus_num, self.has_time_word])
+        time_reference_checks = (check(node) for check in [self.has_year,
+                                                           self.is_en_plus_num,
+                                                           DateTimeFinder.has_time_word])
         return any(time_reference_checks)
 
     def has_year(self, node):
@@ -36,15 +38,23 @@ class DateTimeFinder:
 
     def is_en_plus_num(self, node):
         leaves = node.leaves()
-        return len(leaves) == 2 and leaves[0].lemma == "en" and leaves[1].msi["category"] == "number"
+
+        return len(leaves) == 2 \
+               and leaves[0].lemma == "en" \
+               and leaves[1].msi["category"] == "number"
 
     def has_data(self, node):
         first_leaf = node.leaves()[0]
-        return first_leaf.lexical_form not in self.non_temporal_adpositions \
-               and "data" in [each.label for each in node if not each.is_leaf()]
+        node_labels = [each.label for each in node if not each.is_leaf()]
+        is_temporal_adposition = first_leaf.lexical_form not in self.non_temporal_adpositions
 
-    def has_time_word(self, node):
-        return bool({leaf.lemma for leaf in node.leaves()} & self.time_words)
+        return is_temporal_adposition and "data" in node_labels
+
+    @staticmethod
+    def has_time_word(node):
+        lemmas_in_leaves = {leaf.lemma for leaf in node.leaves()}
+        time_lemmas_in_leaves = lemmas_in_leaves & DateTimeFinder.time_words
+        return bool(time_lemmas_in_leaves)
 
     time_words = {word.lower() for word in resources.parse_csv_in("syntax", "time_words")}
 

@@ -12,6 +12,7 @@ class Paragraph:
         self.sentences = sentences if sentences else []
         self.original_text = text
         self.parenthesis_positions_in_original_text = []
+        self.parenthetic_dash_positions_in_original_text = []
         self.text = text
 
     def clauses(self):
@@ -43,6 +44,7 @@ class Paragraph:
 
         paragraph = Paragraph([], text)
         paragraph._process_parenthesis()
+        paragraph._process_parenthetic_dashes()
 
         sentences = SentenceSplitter().sentences_in(paragraph.text, paragraph)
         paragraph.sentences = sentences
@@ -64,4 +66,36 @@ class Paragraph:
             parenthesis_data = (parenthesis.group(), parenthesis.span())
             self.parenthesis_positions_in_original_text.append(parenthesis_data)
 
-        self.text = re.sub(parenthesis_re, '', self.original_text)
+        self.text = re.sub(parenthesis_re, '', self.text)
+
+    def _process_parenthetic_dashes(self):
+
+        text = self.text
+
+        # This regexp matches text between dashes (opening with ' -' and closing with '- ').
+        # The text between dashes has to meet the following condition:  does not have: ['–']
+        dash_enclosed_re = r' –(\S[^–]*\S|\S)– '
+        iter_parenthetic_dash = re.finditer(dash_enclosed_re, self.original_text)
+        for parenthetic_dash in iter_parenthetic_dash:
+            span = parenthetic_dash.span()
+            if span[1] > 0:
+                span = (span[0], span[1]-1)
+            parenthetic_dash_data = (parenthetic_dash.group()[0:-2], span)
+            self.parenthetic_dash_positions_in_original_text.append(parenthetic_dash_data)
+
+        text = re.sub(dash_enclosed_re, ' ', text)
+
+        # This regexp matches text between an opening dash (' –') and a '.'.
+        # The text in between has to meet the following condition:  does not have: ['–', '.']
+        dash_period_enclosed_re = r' –(\S[^–.]*\S|\S)\.'
+        iter_parenthetic_dash = re.finditer(dash_period_enclosed_re, self.original_text)
+        for parenthetic_dash in iter_parenthetic_dash:
+            span = parenthetic_dash.span()
+            if span[1] > 0:
+                span = (span[0], span[1]-1)
+            parenthetic_dash_data = (parenthetic_dash.group()[0:-2], span)
+            self.parenthetic_dash_positions_in_original_text.append(parenthetic_dash_data)
+
+        text = re.sub(dash_period_enclosed_re, '.', text)
+
+        self.text = text

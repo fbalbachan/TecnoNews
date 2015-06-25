@@ -6,6 +6,7 @@ import traceback
 from src.rewrite.rewrite import Rewrite
 from src.utils.configProvider import ConfigProvider
 from src.utils.logger_utils import get_logger
+from src.model.entity.animityEnum import AnimityEnum
 
 
 
@@ -19,8 +20,6 @@ class VoicePassiveStrategy:
     def __init__(self, ontology):
         if debug_mode: print "--> VoicePassiveStrategy.init()"
         self.ontology = ontology
-        self.persons = self._get_persons()
-        self.demonyms = self._get_demonyms()
 
     def applies_to(self, sentence, node):
         if debug_mode: print "--> VoicePassiveStrategy.applies_to(sentence: ", sentence, ")"
@@ -45,7 +44,7 @@ class VoicePassiveStrategy:
 
         except Exception as e:
             logger = get_logger('tecnonews')
-            logger.info("VoicePassiveStrategy Rewriting exception:")
+            logger.info("VoicePassiveStrategy Rewrite exception:")
             logger.info(e.message)
             ex_type, ex, tb = sys.exc_info()
             logger.info(traceback.format_tb(tb))
@@ -54,10 +53,10 @@ class VoicePassiveStrategy:
 
     def applies_to_clause(self, clause):
         if debug_mode: print "--> VoicePassiveStrategy.applies_to_clause(clause: ", clause, ")"
+
         applies = self.is_complete(clause) \
                   and clause.voice == 'passive' \
-                  and clause.verb \
-                  and clause.verb.transitivity == 'TRANSITIVE' \
+                  and clause.verb and clause.verb.transitivity == 'TRANSITIVE' \
                   and clause.node.label == "verb-pass"
 
         if debug_mode: print "<-- VoicePassiveStrategy.applies_to_clause = ", str(applies)
@@ -75,75 +74,6 @@ class VoicePassiveStrategy:
 
         if debug_mode: print "<-- is_complete? ", str(is_complete)
         return is_complete
-
-    def _get_persons(self):
-        """
-        load resource list of animated persons
-
-        :return: list of words as list
-        """
-        persons = []
-        config = ConfigProvider()
-        persons_filename = config.get("resources", "persons")
-
-        for line in open(persons_filename, 'r'):
-            if line[0] not in ['<', '%', '\n']:
-                persons.append(line.rstrip('\n'))
-
-        return persons
-
-    def _get_demonyms(self):
-        """
-        load resource list of animated persons
-
-        :return: list of words as list
-        """
-        demonyms = []
-        config = ConfigProvider()
-        demonyms_filename = config.get("resources", "demonyms")
-
-        for line in open(demonyms_filename, 'r'):
-            if line[0] not in ['<', '%', '\n']:
-                demonyms.append(line.rstrip('\n'))
-
-        return demonyms
-
-    def is_animated(self, entity):
-        """
-
-        :type entity: Entity
-        """
-
-        try:
-            # if the entity has kernel
-            if entity.kernel:
-                # return if the kernel is animated or not
-                return self._is_animated_single_entity(entity.kernel.lemma, entity.msi)
-
-            # if there isn't a kernel check if there is a list of entities
-            elif entity.node == 'coor-n':
-                # check all the child entities
-                for child in entity.children:
-                    # if some of the entities are animated then return True
-                    if self._is_animated_single_entity(child.kernel.lemma, child.msi):
-                        return True
-            else:
-                child = entity.children[0]
-                return self._is_animated_single_entity(child.kernel.lemma, child.msi)
-
-        except Exception as e:
-            print e.message
-            ex_type, ex, tb = sys.exc_info()
-            traceback.print_tb(tb)
-            raise
-
-        # other cases return False
-        return False
-
-    def _is_animated_single_entity(self, lemma, msi):
-        return lemma in self.persons \
-            or lemma in self.demonyms\
-            or msi['semantic_classification'] == 'person'
 
     def rewrite_clause(self, node, sentence, clauses):
         clause = None
@@ -188,8 +118,12 @@ class VoicePassiveStrategy:
             if clause.structure('od').entity() and not clause.structure('od').is_tacit():
                 od_msi = clause.structure('od').all_entities()[0].leaves()[0].msi
 
-            if clause.structure('od').entity().is_tacit() or self.is_animated(clause.structure('od').entity()) or\
-            (od_msi['category'] == 'pronoun' and od_msi['type'] == 'personal'):
+            od_entity = clause.structure('od').entity()
+            od_matches_animated = AnimityEnum.animities_match(od_entity.msi["animity"], AnimityEnum.animated)
+            if clause.structure('od').entity().is_tacit() \
+               or od_matches_animated \
+               or (od_msi['category'] == 'pronoun' and od_msi['type'] == 'personal'):
+
                 if od_rewritten[0:3] == 'el ':
                     od_rewritten = 'al ' + od_rewritten[3:]
                 elif od_rewritten[0:3] == 'yo ' or od_rewritten[0:3] == 'yo':

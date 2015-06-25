@@ -76,7 +76,7 @@ class TestHyperLinkProcessor(unittest.TestCase):
                 " de Cine Internacional de Toronto, Liptak habló sobre el rumor de una nueva"
                 " película de la saga con mujeres como estelares, que el estudio Sony"
                 " está considerando.")
-        processor = HyperlinkProcessor(Sentilecto().analyze(text))
+        processor = HyperlinkProcessor(Sentilecto.analyze(text))
         self.assertIn('Leandro_Liptak', [str(e) for e in processor.entities])
         test_entity = [e for e in processor.entities if e.name() == 'Leandro_Liptak'][0]
         processor.links_by_entity[test_entity]['linkedin'] = 'http://www.google.com'

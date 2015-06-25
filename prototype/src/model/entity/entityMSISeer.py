@@ -4,13 +4,11 @@ from src.model.entity.entitySemanticAnalyzer import EntitySemanticAnalyzer
 from src.model.entity.animityEnum import AnimityEnum
 from src.utils.resources import instance as resources
 
+debug_mode = False
 
 class EntityMSISeer:
 
     def __init__(self):
-        global debug_mode
-        debug_mode = False
-
         self.persons = resources.get_wordlist_safe("resources", "persons")
         self.demonyms = resources.get_wordlist_safe("resources", "demonyms")
         self.animals = resources.get_wordlist_safe("resources", "animals")
@@ -27,21 +25,11 @@ class EntityMSISeer:
 
     def msi_of_single(self, entity):
         if debug_mode: print "--> EntityMSISeer.msi_of_single(entity:", entity, ")"
-        node = entity.node
 
-        banned_labels = ["grup-sp", "sp-de"]
-        banned_nodes = set(filter(lambda child: not child.is_leaf() and child.label in banned_labels, node.children))
+        useful_leaves = self.get_useful_leaves(entity)
 
-        nouns = self.filter_banned(node.leaves_of_category("noun") + node.leaves_of_category("number"), banned_nodes)
-        if self.has_unexchangeable_appositional_relationship(nouns):
-            entity.attributes["class"] = [nouns[0].lexical_form]
-            nouns = [nouns[1]]
-
-        other_leaves = node.leaves_of_category("pronoun", "determinant", "adjective")
-        useful_leaves = nouns + self.filter_banned(other_leaves, banned_nodes)
-
-        useful_leaves.reverse()
         entity.kernel = useful_leaves.pop()
+
         msi = entity.kernel.msi
 
         if msi["category"] == "number":
@@ -57,11 +45,29 @@ class EntityMSISeer:
 
         return msi
 
+    def get_useful_leaves(self, entity):
+        node = entity.node
+
+        banned_labels = ["grup-sp", "sp-de"]
+        banned_nodes = set(filter(lambda child: not child.is_leaf() and child.label in banned_labels, node.children))
+
+        nouns = self.filter_banned(node.leaves_of_category("noun") + node.leaves_of_category("number"), banned_nodes)
+        if self.has_unexchangeable_appositional_relationship(nouns):
+            entity.attributes["class"] = [nouns[0].lexical_form]
+            nouns = [nouns[1]]
+
+        other_leaves = node.leaves_of_category("pronoun", "determinant", "adjective")
+        useful_leaves = nouns + self.filter_banned(other_leaves, banned_nodes)
+
+        useful_leaves.reverse()
+        return useful_leaves
+
+
     def filter_banned(self, leaves, banned_nodes):
         return filter(lambda leaf: not banned_nodes & set(leaf.path_to_root()), leaves)
 
     def has_unexchangeable_appositional_relationship(self, kernel_nouns):
-        return [ noun.msi["type"] if "type" in noun.msi else None for noun in kernel_nouns ] == [ "common", "proper" ]
+        return [noun.msi["type"] if "type" in noun.msi else None for noun in kernel_nouns] == ["common", "proper"]
 
     def disambiguate_if_necessary(self, msi, leaves):
         if debug_mode: print "--> EntityMSISeer.disambiguate_if_necessary(msi, leaves)", msi
@@ -111,6 +117,12 @@ class EntityMSISeer:
         # If entity has an animity value, other than the default, then return it (assuming it was previously calculated)
         if "animity" in entity.msi and entity.msi["animity"] is not default_animity_value:
             return entity.msi["animity"]
+
+        elif len(entity.token.components) is 1 \
+             and entity.msi['category'] == "pronoun" \
+             and entity.msi['type'] == "indefinite" \
+             and entity.node.lexical_form().lower() in ["ambos", "ambas"]:
+            return AnimityEnum.bianimate
 
         # Entities with 1 token being a "paton" or "ptonic"
         elif len(entity.token.components) is 1 and entity.node.label in ["patons", "ptonic"]:

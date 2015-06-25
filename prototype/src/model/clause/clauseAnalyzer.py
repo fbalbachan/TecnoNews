@@ -139,7 +139,7 @@ class ClauseAnalyzer:
 
         # Entities created from nodes referencing time most probably are not proper entities.
         # So we add them to clause.time_entities, and remove them from clause.entities to avoid its use in SVO slots
-        clause.put_apart_entities_originating_from_time_references()
+        clause.put_apart_time_entities()
 
     @staticmethod
     def solve_relative(clause):

@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from src.extension.wikipediaContentGenerator import WikipediaContentGenerator
 from src.model.output.paragraphEntityTagger import ParagraphEntityTagger
 from src.model.paragraph.paragraph import Paragraph
 from src.model.paragraph.paragraphAnalyzer import ParagraphAnalyzer
@@ -11,9 +10,13 @@ from src.sentiment.sentimentalSummarizer import SentimentalSummarizer
 
 
 class Sentilecto:
-    def analyze(self, text):
+    def __init__(self):
+        pass
+
+    @staticmethod
+    def analyze(text):
         if type(text) == unicode:
-            text = text.encode("utf-8")  # unicode -> str (encoded)
+            text = text.encode("utf-8")  # unicode -> str (utf8-encoded)
 
         analysis = {}
 

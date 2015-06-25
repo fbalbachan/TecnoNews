@@ -8,6 +8,9 @@ from src.utils.textCleaner import TextCleaner
 
 
 class SentenceSplitter:
+    def __init__(self):
+        pass
+
     # TODO: Repensar parámetros: text o paragraph? o ambos?
     def sentences_in(self, text, paragraph=None):
         text = text.decode("utf-8")
@@ -20,8 +23,11 @@ class SentenceSplitter:
 
     def replace_strange_chars(self, text):
         text = text.replace(u'\xab', u'"').replace(u'\xbb', u'"')
-        text = text.replace(u'«', '"').replace(u'»', u'"').replace(u'/', '-')
-        return text.replace(u'“', u'"').replace(u'”', u'"')
+        text = text.replace(u'«', u'"').replace(u'»', u'"').replace(u'/', u'-')
+        text = text.replace(u'“', u'"').replace(u'”', u'"')
+        text = text.replace(u'‘', u'"').replace(u'’', u'"')
+
+        return text
 
     # Dirty
     def split(self, text):
@@ -96,7 +102,6 @@ class SentenceSplitter:
                             ur"""|(?=\.$)"""
                             ur"""|\n"""
                             ur"""|, ?pero\b"""
-                            ur"""|, ?y\b"""
                             ur"""|, ?entonces"""
                             ur"""|, ?sin embargo\b"""
                             ur"""|, ?no obstante"""

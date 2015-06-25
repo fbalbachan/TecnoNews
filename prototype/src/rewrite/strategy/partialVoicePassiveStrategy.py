@@ -6,9 +6,8 @@ import traceback
 from src.rewrite.rewrite import Rewrite
 from src.utils.configProvider import ConfigProvider
 from src.utils.logger_utils import get_logger
-
-
-
+from src.model.entity.animityEnum import AnimityEnum
+from src.ling.numberEnum import NumberEnum
 
 
 
@@ -19,8 +18,6 @@ debug_mode = False
 class PartialVoicePassiveStrategy:
     def __init__(self, ontology):
         self.ontology = ontology
-        self.persons = self._get_persons()
-        self.demonyms = self._get_demonyms()
 
     def applies_to(self, sentence, node):
         if debug_mode: print "--> PartialVoicePassiveStrategy.applies_to(sentence: ", sentence, ")"
@@ -63,83 +60,15 @@ class PartialVoicePassiveStrategy:
 
     def is_partial(self, clause):
         if debug_mode: print "--> PartialVoicePassiveStrategy.is_partial(clause: ", clause, ")"
-        is_partial = clause.has_structure('od') \
-                     and not clause.structure('od').is_tacit() \
-                     and clause.has_structure('subject') \
-                     and clause.structure('subject').entity().has_attr("implicit") \
-                     and not self.is_animated(clause.structure('od').entity())
+
+	has_od_and_subject = clause.has_structure('od') and clause.has_structure('subject')
+
+        is_partial = has_od_and_subject \
+               	     and clause.structure('subject').entity().has_attr("implicit") \
+	             and (not clause.structure('od').is_tacit() or clause.structure('od').entity().coref_chain != [])
 
         if debug_mode: print "<-- PartialVoicePassiveStrategy.is_partial = ", str(is_partial)
         return is_partial
-
-    def _get_persons(self):
-        """
-        load resource list of animated persons
-
-        :return: list of words as list
-        """
-        persons = []
-        config = ConfigProvider()
-        persons_filename = config.get("resources", "persons")
-
-        for line in open(persons_filename, 'r'):
-            if line[0] not in ['<', '%', '\n']:
-                persons.append(line.rstrip('\n'))
-
-        return persons
-
-    def _get_demonyms(self):
-        """
-        load resource list of animated persons
-
-        :return: list of words as list
-        """
-        demonyms = []
-        config = ConfigProvider()
-        demonyms_filename = config.get("resources", "demonyms")
-
-        for line in open(demonyms_filename, 'r'):
-            if line[0] not in ['<', '%', '\n']:
-                demonyms.append(line.rstrip('\n'))
-
-        return demonyms
-
-    def is_animated(self, entity):
-        """
-
-        :type od: Entity
-        """
-
-        try:
-            # if the entity has kernel
-            if entity.kernel:
-                # return if the kernel is animated or not
-                return self._is_animated_single_entity(entity.kernel.lemma, entity.msi)
-
-            # if there isn't a kernel check if there is a list of entities
-            elif entity.node == 'coor-n':
-                # check all the child entities
-                for child in entity.children:
-                    # if some of the entities are animated then return True
-                    if self._is_animated_single_entity(child.kernel.lemma, child.msi):
-                        return True
-            else:
-                child = entity.children[0]
-                return self._is_animated_single_entity(child.kernel.lemma, child.msi)
-
-        except Exception as e:
-            print e.message
-            ex_type, ex, tb = sys.exc_info()
-            traceback.print_tb(tb)
-            raise
-
-        # other cases return False
-        return False
-
-    def _is_animated_single_entity(self, lemma, msi):
-        return lemma in self.persons \
-            or lemma in self.demonyms\
-            or msi['semantic_classification'] == 'person'
 
     def rewrite_clause(self, node, sentence, clauses):
         if debug_mode: print "--> PartialVoicePassiveStrategy.rewrite_clause(clauses: )"
@@ -149,68 +78,144 @@ class PartialVoicePassiveStrategy:
 
         try:
             next_clause = clauses[0][1]
+            od_entity = clause.structure('od').entity()
 
-            # get the first leaf to extract the msi
-            leaf = clause.verb.leaves()[0]
-
-            msi = {"mode": leaf.msi["mode"], "time": leaf.msi["time"], "person": 3,
-                   "number": clause.structure('od').msi()['number']}
-
-            # transform the last leaf of verb (ie clause.verb) to the msi of the first leaf of verb
-            lexical_forms = self.ontology.get_lexical_forms(clause.verb.lemma(), msi)
-            rewritten_verb = filter(lambda lf: lf.text != leaf.lexical_form, lexical_forms)[0].text
-
-            text = clause.node.leaves_string()
-            verb = clause.structure('verb').lexical_form()
-
-            od = clause.structure('od').lexical_form()
-            od_rewritten = od
-
-            # lower case od if is not a proper name
-            od_msi = clause.structure('od').entity().msi
-            if not self.is_proper_name(od_msi):
-                od_rewritten = od[0].lower() + od[1:]
-
-            if next_clause and next_clause.relative_entity == clause.structure('od').entity():
-                od_rewritten = od_rewritten + " " + next_clause.__repr__().strip()
-                repls = (verb, ''), (od, ''), (" " + next_clause.__repr__(), '')
+            if od_entity.msi["animity"] == AnimityEnum.inanimate:
+                ntext = self.rewrite_clause_od_inanimate(node, sentence, clause, next_clause)
             else:
-                repls = (verb, ''), (od, '')
-
-            ntext = self.multiple_replace(text, *repls).strip(' ')
-            ntext = ntext[0].lower() + ntext[1:]
-
-            ntext = "se " + rewritten_verb + " " + od_rewritten + " " + ntext
-            ntext = ntext.replace(' ,', ',')
-            # Fix space with point at the end
-            if ntext[-2:] == ' .':
-                ntext = ntext[:-2] + '.'
-
-            paragraph = sentence.paragraph.text.decode("utf-8")
-            start = clause.proper_leaves()[0].token.start()
-
-            if start > 0:
-                if start > 2:
-                    if paragraph[start-2:start].strip(' ') in ['"', ':', '.', '-']:
-                        ntext = ntext[0].upper() + ntext[1:]
-            elif start == 0:
-                ntext = ntext[0].upper() + ntext[1:]
+                ntext = self.rewrite_clause_od_animated(node, sentence, clause, next_clause)
 
         except Exception as e:
             ex_type, ex, tb = sys.exc_info()
             traceback.print_tb(tb)
             ex_type, ex, tb = sys.exc_info()
             logger = get_logger('tecnonews')
-            logger.info("PartialVoicePassiveStrategy Rewrite_clause exception:")
+            logger.info("PartialVoicePassiveStrategy Rewrite_clause exception")
             logger.info(e.message)
             logger.info(traceback.print_tb(tb))
 
-        return Rewrite(clause.node, ntext.replace('_', ' ').strip())
+        rewrite_rule = Rewrite(clause.node, ntext)
+        return rewrite_rule
+
+    def rewrite_clause_od_inanimate(self, node, sentence, clause, next_clause):
+        # get the first leaf to extract the msi
+        leaf = clause.verb.leaves()[0]
+
+        msi = {"mode": leaf.msi["mode"],
+               "time": leaf.msi["time"],
+               "person": 3,
+               "number": clause.structure('od').msi()['number']}
+
+        # transform the last leaf of verb (ie clause.verb) to the msi of the first leaf of verb
+        lexical_forms = self.ontology.get_lexical_forms(clause.verb.lemma(), msi)
+
+        rewritten_verb = filter(lambda lf: lf.text != leaf.lexical_form, lexical_forms)[0].text
+
+        text = clause.node.leaves_string()
+        verb = clause.structure('verb').lexical_form()
+
+        od = clause.structure('od').lexical_form()
+        od_rewritten = od
+
+        # lower case od if is not a proper name
+        od_msi = clause.structure('od').entity().msi
+        if not self.is_proper_name(od_msi):
+            od_rewritten = od[0].lower() + od[1:]
+
+        if next_clause and next_clause.relative_entity == clause.structure('od').entity():
+            od_rewritten = od_rewritten + " " + next_clause.__repr__().strip()
+            repls = (verb, ''), (od, ''), (" " + next_clause.__repr__(), '')
+        else:
+            repls = (verb, ''), (od, '')
+
+        ntext = self.multiple_replace(text, *repls).strip(' ')
+        ntext = ntext[0].lower() + ntext[1:]
+
+        ntext = "se " + rewritten_verb + " " + od_rewritten + " " + ntext
+        ntext = ntext.replace(' ,', ',')
+        # Fix space with point at the end
+        if ntext[-2:] == ' .':
+            ntext = ntext[:-2] + '.'
+
+        paragraph = sentence.paragraph.text.decode("utf-8")
+        start = clause.proper_leaves()[0].token.start()
+
+        if start > 0:
+            if start > 2:
+                if paragraph[start-2:start].strip(' ') in ['"', ':', '.', '-']:
+                    ntext = ntext[0].upper() + ntext[1:]
+        elif start == 0:
+            ntext = ntext[0].upper() + ntext[1:]
+
+        ntext = ntext.replace('_', ' ').strip()
+        return ntext
+
+    def rewrite_clause_od_animated(self, node, sentence, clause, next_clause):
+
+        # get the first leaf to extract the msi
+        leaf = clause.verb.leaves()[0]
+
+        msi = {"mode": leaf.msi["mode"],
+               "time": leaf.msi["time"],
+               "person": 3,
+               "number": NumberEnum.singular}
+
+        # transform the last leaf of verb (ie clause.verb) to the msi of the first leaf of verb
+        lexical_forms = self.ontology.get_lexical_forms(clause.verb.lemma(), msi)
+
+        rewritten_verb = filter(lambda lf: lf.text != leaf.lexical_form, lexical_forms)[0].text
+
+        text = clause.node.leaves_string()
+        verb = clause.structure('verb').lexical_form()
+
+        od = clause.structure('od').lexical_form()
+        od_rewritten = od
+
+        # lower case od if is not a proper name
+        od_msi = clause.structure('od').entity().msi
+        if not self.is_proper_name(od_msi):
+            od_rewritten = od[0].lower() + od[1:]
+
+        if next_clause and next_clause.relative_entity == clause.structure('od').entity():
+            od_rewritten = od_rewritten + " " + next_clause.__repr__().strip()
+            repls = (verb, ''), (od, ''), (" " + next_clause.__repr__(), '')
+        else:
+            repls = (verb, ''), (od, '')
+
+        ntext = self.multiple_replace(text, *repls).strip(' ')
+        ntext = ntext[0].lower() + ntext[1:]
+
+        if od_rewritten[0:3] == 'el ':
+            od_rewritten = 'al ' + od_rewritten[3:]
+        elif od_rewritten[0:3] == 'yo ' or od_rewritten[0:3] == 'yo':
+            od_rewritten = 'a mí'
+        else:
+            od_rewritten = 'a ' + od_rewritten
+
+        ntext = "se " + rewritten_verb + " " + od_rewritten + " " + ntext
+
+        ntext = ntext.replace(' ,', ',')
+        # Fix space with point at the end
+        if ntext[-2:] == ' .':
+            ntext = ntext[:-2] + '.'
+
+        paragraph = sentence.paragraph.text.decode("utf-8")
+        start = clause.proper_leaves()[0].token.start()
+
+        if start > 0:
+            if start > 2:
+                if paragraph[start-2:start].strip(' ') in ['"', ':', '.', '-']:
+                    ntext = ntext[0].upper() + ntext[1:]
+        elif start == 0:
+            ntext = ntext[0].upper() + ntext[1:]
+
+        ntext = ntext.replace('_', ' ').strip()
+        return ntext
 
     def is_proper_name(self, msi):
-        return not (msi['category'] != 'noun' or (
-                msi['category'] == 'noun' and
-                            msi['semantic_classification'] is None))
+        is_not_proper_name = (msi['category'] != 'noun'
+                              or (msi['category'] == 'noun' and msi['semantic_classification'] is None))
+        return not is_not_proper_name
 
     def multiple_replacer(self, *key_values):
         replace_dict = dict(key_values)
