@@ -81,7 +81,7 @@ class TecnoNews(object):
 
             logger.info('<Tecnonews> <_process> rewriting note: ' + entry.title)
             try:
-                # rewriter.rewrite_title()
+                rewriter.rewrite_title()
                 rewriter.rewrite_content()
 
                 logger_similarity.info("\n--------\n")
