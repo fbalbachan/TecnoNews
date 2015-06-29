@@ -77,6 +77,14 @@ class NewsCrawler(object):
             self.feed_service.save(Feed('lanacion_espectaculos',
                                         'http://servicios.lanacion.com.ar/herramientas/rss/categoria_id=120',
                                         'lanacion_espectaculos_parser.LaNacionEspectaculosParser', datetime.utcnow()))
+            self.feed_service.save(Feed('cnet_esp', 'http://www.cnet.com/es/rss/',
+                                        'cnet_esp_parser.CNetEspParserTest', datetime.utcnow()))
+            self.feed_service.save(Feed('diario_america', 'http://www.diariolasamericas.com/rss/1_portada/index.rss',
+                                        'diario_americas_parser.DiarioAmericasParser', datetime.utcnow()))
+            self.feed_service.save(Feed('forbes_mexico', 'http://feeds.feedburner.com/ForbesMexico',
+                                        'forbes_mexico_parser.ForbesMexicoParser', datetime.utcnow()))
+            self.feed_service.save(Feed('informador_mexico', 'http://feeds.informador.com.mx/359/estados-unidos.rss',
+                                        'informador_parser.InformadorParser', datetime.utcnow()))
 
     def crawl_all(self):
         crawler_logger.info("START crawl_all")
