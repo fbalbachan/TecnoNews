@@ -48,7 +48,7 @@ def write_pidfile():
 def analyze():
     try:
         web_input = web.input()
-        return Sentilecto().analyze(web_input.text)
+        return Sentilecto.analyze(web_input.text)
     except Exception:
         print format_exc()
         return None

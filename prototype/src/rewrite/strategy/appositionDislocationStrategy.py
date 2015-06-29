@@ -1,16 +1,13 @@
 # -*- coding: utf-8 -*-
-from collections import deque
-
-from src.ling.numberEnum import NumberEnum
-from src.rewrite.sentenceRewrite import SentenceRewrite
-
-
 __author__ = 'Martín Caramés Abente'
 
 import traceback
 import sys
+from collections import deque
 
 from src.rewrite.rewrite import Rewrite
+from src.rewrite.sentenceRewrite import SentenceRewrite
+from src.ling.numberEnum import NumberEnum
 from src.utils.logger_utils import *
 from src.model.tokenization.token import Token
 
@@ -214,5 +211,3 @@ class AppositionDislocationStrategy:
         return sentence_text
 
     type = "dislocation"
-
-

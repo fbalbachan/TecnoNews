@@ -125,6 +125,10 @@ class TreeNode(object):
         brothers = self.father.children
         return brothers.index(node) - brothers.index(self)
 
+    def is_maximal_regarding(self, nodes):
+        is_maximal = not any([other.contains(self) for other in nodes])
+        return is_maximal
+
     def contains(self, node):
         for each in self:
             if each is node:

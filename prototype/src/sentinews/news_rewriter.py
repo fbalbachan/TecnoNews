@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
+import re
+
 from src.model.sentilecto import Sentilecto
-from src.sentinews.hyperlink_processor import HyperlinkProcessor
 from src.sentinews.blog_publisher import BlogPublisher
 from src.sentinews.news_entry import NewsEntry
 from src.extension.textInserter import TextInserter
@@ -10,7 +11,6 @@ from src.model.referent.referentRanker import ReferentRanker
 from src.extension.wikipediaContentGenerator import WikipediaContentGenerator
 from src.utils.similarParagraph import SimilarParagraph
 from src.utils.logger_utils import *
-import re
 
 logger = get_logger('tecnonews')
 
@@ -211,7 +211,7 @@ class NewsRewriter(object):
         return wp_id, wp_url
 
     def _analyze(self, text):
-        return Sentilecto().analyze(text)
+        return Sentilecto.analyze(text)
 
     def add_tags_from_ranking(self, ranking):
         new_tags_list = [r[0].name() for r in ranking]

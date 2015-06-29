@@ -33,4 +33,4 @@ class ContentRewriterAndGenerator:
 
     def _analyze(self, text):
         if debug_mode: print "--> ContentRewriterAndGenerator._analyze()"
-        return Sentilecto().analyze(text)
+        return Sentilecto.analyze(text)

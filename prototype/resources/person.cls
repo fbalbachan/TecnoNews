@@ -1,3 +1,10 @@
+sobrino
+sobrina
+ejecutivo
+ejecutiva
+varón
+mamá
+papá
 hombre
 mujer
 abad

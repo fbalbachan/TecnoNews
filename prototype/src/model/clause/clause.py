@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from src.model.syntax.dateTimeFinder import DateTimeFinder
 from src.utils.tree.treeNode import TreeNode
 
 debug_mode = False
@@ -198,7 +199,6 @@ class Clause(TreeNode):
     def same_hemiclause(self, node1, node2):
         return self.verb.node.position_of(node1) == self.verb.node.position_of(node2)
 
-
     #
     # Methods for accessing ENTITIES
     #
@@ -308,9 +308,10 @@ class Clause(TreeNode):
     def proper_leaves(self):
         return self.proper_tree().leaves()
 
-    def put_apart_entities_originating_from_time_references(self):
+    def put_apart_time_entities(self):
         # Entities created from nodes referencing time most probably are not proper entities.
         # So we add them to clause.time_entities, and remove them from clause.entities to avoid its use in SVO slots
+
         time_references_with_sub_nodes = []
         for time_reference in self.time_references:
             time_references_with_sub_nodes.append(time_reference)
@@ -318,12 +319,26 @@ class Clause(TreeNode):
                 time_references_with_sub_nodes.append(node)
 
         time_entities_with_references = self.to_entities_with_node(time_references_with_sub_nodes)
-        time_entities = [entity for (entity, reference) in time_entities_with_references]
+
+        time_references = self.time_references[:]
+        time_entities = []
+        for (time_entity, time_reference) in time_entities_with_references:
+            has_time_word = DateTimeFinder.has_time_word(time_reference)
+            kernel_in_time_words = time_entity.kernel and time_entity.kernel.lemma in DateTimeFinder.time_words
+            if not has_time_word or kernel_in_time_words:
+                time_entities.append(time_entity)
+            else:
+                if time_reference in time_references:
+                    time_references.remove(time_reference)
+                    # TODO: also remove sub-nodes from this time_reference
+
         time_entities = filter(lambda p_entity: p_entity.is_maximal_regarding(time_entities),
                                time_entities)
-        self.time_entities = time_entities
 
-        for time_entity in time_entities:
+        self.time_entities = time_entities
+        self.time_references = [time_references[0]] if time_references else []
+
+        for time_entity in self.time_entities:
             if time_entity in self.entities:
                 self.entities.remove(time_entity)
 
