@@ -4,7 +4,6 @@
 import re
 
 from bs4 import BeautifulSoup
-from bit_opener import BitOpener
 from news_entry import NewsEntry
 from src.sentinews.parsers.generic_parser import GenericParser
 
@@ -12,7 +11,6 @@ from src.sentinews.parsers.generic_parser import GenericParser
 class CNetEspParser(GenericParser):
     def __init__(self):
         super(CNetEspParser, self).__init__()
-        self.opener = BitOpener()
 
     source = u"CNet Español"
 
