@@ -3,7 +3,7 @@
 raise_exception = False
 
 [instance]
-id = 4
+id = 6
 
 [news_sources]
 feeds_to_process = cnet_esp,diario_america,forbes_mexico,informador_mexico
