@@ -6,9 +6,10 @@ import re
 from bs4 import BeautifulSoup
 from bit_opener import BitOpener
 from news_entry import NewsEntry
+from src.sentinews.parsers.generic_parser import GenericParser
 
 
-class CNetEspParser(object):
+class CNetEspParser(GenericParser):
     def __init__(self):
         super(CNetEspParser, self).__init__()
         self.opener = BitOpener()
@@ -61,7 +62,7 @@ class CNetEspParser(object):
 
 
         content = content.text
-        #gb: lo dejo por las dudas pero no encontre ejemplos con js
+        content = self.sanitize(content)
         assert content.find('function()') == -1
 
 
