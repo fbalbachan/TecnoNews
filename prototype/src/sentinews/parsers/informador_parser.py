@@ -1,14 +1,14 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import re
-
 from bs4 import BeautifulSoup
 from bit_opener import BitOpener
 from news_entry import NewsEntry
 from urlparse import urlparse
+from src.sentinews.parsers.generic_parser import GenericParser
 
-class InformadorParser(object):
+
+class InformadorParser(GenericParser):
     def __init__(self):
         super(InformadorParser, self).__init__()
         self.opener = BitOpener()
@@ -45,7 +45,6 @@ class InformadorParser(object):
         # if (u"FOTOGALERÍA" in title):
         #     allowed = False
 
-
         return allowed
 
 
@@ -65,14 +64,13 @@ class InformadorParser(object):
         title = soup.find('div', {"class": "tituloInt"})
         title = title.h1.text
 
-        
-        categories=[urlparse(url).path.split("/")[1]]
+        categories = [urlparse(url).path.split('/')[1]]
 
-        content = soup.find('div', {"id" : "HOTWordsTxt"})
+        content = soup.find('div', {"id": "HOTWordsTxt"})
 
         #arranco el lugar y fecha del texto
         place_date = content.find('strong')
-        place_date.extract()        
+        place_date.extract()
         # unwanted_titles = set([u"También te puede interesar:",
         #                     u"También le puede interesar leer:",
         #                     u"Quizás le interese leer:",
@@ -91,27 +89,21 @@ class InformadorParser(object):
         # for links in unwanted_links:
         #     links.extract()
 
-        tag_list = soup.find('div',{"id":"temasNoticia"})
+        tag_list = soup.find('div', {"id": "temasNoticia"})
         tags = []
         for tag in tag_list.findAll('a'):
             tags.append(tag.text)
 
-
         content = content.text
-
-        #gb: lo dejo por las dudas pero no encontre ejemplos con js
+        content = self.sanitize(content)
         assert content.find('function()') == -1
 
-        
-
-        
-
         new_entry = NewsEntry(title=title, content=content,
-                                    tags=tags,
-                                    source=self.source,
-                                    url=url,
-                                    original_categories=categories,
-                                    image_search_string=image_search_string)
+                              tags=tags,
+                              source=self.source,
+                              url=url,
+                              original_categories=categories,
+                              image_search_string=image_search_string)
 
         if not new_entry:
             print(u"Couldn't parse news in CNet Español ")
