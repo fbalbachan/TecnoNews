@@ -4,7 +4,6 @@
 import re
 
 from bs4 import BeautifulSoup
-from bit_opener import BitOpener
 from news_entry import NewsEntry
 from src.sentinews.parsers.generic_parser import GenericParser
 
@@ -12,7 +11,6 @@ from src.sentinews.parsers.generic_parser import GenericParser
 class ForbesMexicoParser(GenericParser):
     def __init__(self):
         super(ForbesMexicoParser, self).__init__()
-        self.opener = BitOpener()
 
     source = u"Forbes Mexico"
 
