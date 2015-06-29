@@ -78,7 +78,7 @@ class NewsCrawler(object):
                                         'http://servicios.lanacion.com.ar/herramientas/rss/categoria_id=120',
                                         'lanacion_espectaculos_parser.LaNacionEspectaculosParser', datetime.utcnow()))
             self.feed_service.save(Feed('cnet_esp', 'http://www.cnet.com/es/rss/',
-                                        'cnet_esp_parser.CNetEspParserTest', datetime.utcnow()))
+                                        'cnet_esp_parser.CNetEspParser', datetime.utcnow()))
             self.feed_service.save(Feed('diario_america', 'http://www.diariolasamericas.com/rss/1_portada/index.rss',
                                         'diario_americas_parser.DiarioAmericasParser', datetime.utcnow()))
             self.feed_service.save(Feed('forbes_mexico', 'http://feeds.feedburner.com/ForbesMexico',
