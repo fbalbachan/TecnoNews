@@ -1,15 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import traceback
-
-from src.sentinews.news_entry import NewsEntry
 from bs4 import BeautifulSoup
-from src.utils.logger_utils import get_crawler_logger
-from src.utils.configProvider import ConfigProvider
 from src.sentinews.parsers.generic_parser import GenericParser
-from urlparse import urlparse
-
-logger = get_crawler_logger()
 
 
 class TelamEspectaculosParser(GenericParser):
@@ -67,8 +59,6 @@ class TelamEspectaculosParser(GenericParser):
             tweets.append(tweet)
             tweet.extract()
 
-        new_entry = None
-
         news_container = soup.find('div', {"class": "news-container"})
         col_1 = news_container.find('div', {"class": "col-1"})
         col_2 = news_container.find('div', {"class": "col-2"})
@@ -90,29 +80,9 @@ class TelamEspectaculosParser(GenericParser):
                     tags.add(l.text)
 
         content = col_2.find('div', {"class": 'news-head clearfix'}).text
-        content = self.sanitize(content)
-        manual_test_js = content.find('function()') == -1
-        if not manual_test_js:
-            logger.error("Has JS!! %s")
-            return None
 
-        if (len(tags) or categories) and not u'video' in categories:
-            tags = list(tags)
-            try:
-                new_entry = NewsEntry(title=title, content=content,
-                                      tags=tags,
-                                      source=self.source,
-                                      url=url,
-                                      original_categories=None,
-                                      image_search_string=image_search_string)
-
-            except Exception as e:
-                logger.error("%s" % e.message)
-                logger.error(traceback.format_exc())
-
-        if not new_entry:
-            logger.error(u"Couldn't parse news in elmundo ")
-            logger.error(u"Url: %s " % url)
+        new_entry = self.create_news_entry(title, content, tags, self.source, url, categories,
+                                           image_search_string)
 
         return new_entry
 

@@ -1,22 +1,14 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from re import sub
-from urllib import urlopen
-from src.sentinews.news_entry import NewsEntry
+
 from bs4 import BeautifulSoup
 from src.sentinews.parsers.generic_parser import GenericParser
-from src.utils.logger_utils import *
-from src.utils.languageFilter import LanguageFilter
-from src.utils.configProvider import ConfigProvider
 
 
 class ElPaisParser(GenericParser):
 
     def __init__(self):
         super(ElPaisParser, self).__init__()
-        self.language_filter = LanguageFilter()
-        config = ConfigProvider()
-        self.language_filter_status = config.get('language_filter', 'status')
 
     source = u'El País'
 
@@ -28,7 +20,6 @@ class ElPaisParser(GenericParser):
 
         paragraphs = ''
         tags = []
-        new_entries = []
         title = ''
         if soup is not None:
             news_body = soup.find('div', {'id': 'cuerpo_noticia'})
@@ -49,11 +40,8 @@ class ElPaisParser(GenericParser):
             title = None
 
         content = ' '.join(paragraphs)
-        content = self.sanitize(content)
 
-        news_parsed = None
+        new_entry = self.create_news_entry(title, content, tags, self.source, url, categories=None,
+                                           image_search_string=None)
 
-        if len(content) > 1 and len(tags) > 0 and title and len(title) > 0:
-            news_parsed = NewsEntry(title, content, tags, self.source, url=url)
-
-        return news_parsed
+        return new_entry

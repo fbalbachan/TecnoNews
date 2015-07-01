@@ -85,6 +85,8 @@ class NewsCrawler(object):
                                         'forbes_mexico_parser.ForbesMexicoParser', datetime.utcnow()))
             self.feed_service.save(Feed('informador_mexico', 'http://feeds.informador.com.mx/359/estados-unidos.rss',
                                         'informador_parser.InformadorParser', datetime.utcnow()))
+            self.feed_service.save(Feed('miami_diario', 'http://www.miamidiario.com/rss/',
+                                        'miamidiario_parser.MiamiDiarioParser', datetime.utcnow()))
 
     def crawl_all(self):
         crawler_logger.info("START crawl_all")

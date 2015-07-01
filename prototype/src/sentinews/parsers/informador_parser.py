@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 from bs4 import BeautifulSoup
-from news_entry import NewsEntry
 from urlparse import urlparse
 from src.sentinews.parsers.generic_parser import GenericParser
 
@@ -17,31 +16,6 @@ class InformadorParser(GenericParser):
         allowed = True
         if not soup:
             soup = BeautifulSoup(self.opener.read(url))
-
-
-        # category = soup.find('div', {"class" : "nombre_seccion"})
-        # print "Categoria es %s" % category.text
-        # categories_not_wanted = set([u'Guia fin de semana',
-        #                         u'Eventos',
-        #                         u'Farándula',
-        #                         u'Rostro y cuerpo',
-        #                         u'Trucos de cocina',
-        #                         u'Curiosidades'])
-
-        # if category.text in categories_not_wanted:
-        #     allowed = False
-
-        # #extract video
-        # tag_list = soup.find('div',{"class":"tags"})
-        # for tag in tag_list.findAll('a'):
-        #     if tag.text in u'Video':
-        #         allowed = False
-
-        # title = soup.find('div', {"class": "detailbox"})
-        # title = title.h1.text
-
-        # if (u"FOTOGALERÍA" in title):
-        #     allowed = False
 
         return allowed
 
@@ -62,50 +36,23 @@ class InformadorParser(GenericParser):
         title = soup.find('div', {"class": "tituloInt"})
         title = title.h1.text
 
-        categories = [urlparse(url).path.split('/')[1]]
+        categories=[urlparse(url).path.split("/")[1]]
 
-        content = soup.find('div', {"id": "HOTWordsTxt"})
+        content = soup.find('div', {"id" : "HOTWordsTxt"})
 
         #arranco el lugar y fecha del texto
         place_date = content.find('strong')
-        place_date.extract()
-        # unwanted_titles = set([u"También te puede interesar:",
-        #                     u"También le puede interesar leer:",
-        #                     u"Quizás le interese leer:",
-        #                     u"Le puede interesar también:"])
+        place_date.extract()        
 
-        # #clean unwanted links
-        # for tambien in content.findAll('strong'):
-        #     if tambien.text in unwanted_titles:
-        #         tambien.extract()
-
-        # for tambien in content.findAll('b'):
-        #     if tambien.text in unwanted_titles:
-        #         tambien.extract()
-
-        # unwanted_links = content.findAll('a',{"href":re.compile(".+")})
-        # for links in unwanted_links:
-        #     links.extract()
-
-        tag_list = soup.find('div', {"id": "temasNoticia"})
+        tag_list = soup.find('div',{"id":"temasNoticia"})
         tags = []
         for tag in tag_list.findAll('a'):
             tags.append(tag.text)
 
         content = content.text
-        content = self.sanitize(content)
-        assert content.find('function()') == -1
 
-        new_entry = NewsEntry(title=title, content=content,
-                              tags=tags,
-                              source=self.source,
-                              url=url,
-                              original_categories=categories,
-                              image_search_string=image_search_string)
-
-        if not new_entry:
-            print(u"Couldn't parse news in CNet Español ")
-            print(u"Url: %s " % url)
+        new_entry = self.create_news_entry(title, content, tags, self.source, url, categories,
+                                           image_search_string)
 
         return new_entry
 

@@ -1,22 +1,13 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import traceback
 
-from urllib import urlopen
-from src.sentinews.news_entry import NewsEntry
 from bs4 import BeautifulSoup
-from src.utils.logger_utils import get_crawler_logger
-from src.utils.configProvider import ConfigProvider
 from src.sentinews.parsers.generic_parser import GenericParser
-
-logger = get_crawler_logger()
 
 
 class CNNParser(GenericParser):
     def __init__(self):
         super(CNNParser, self).__init__()
-        config = ConfigProvider()
-        self.language_filter_status = config.get('language_filter', 'status')
 
     source = u"CNN en español"
 
@@ -53,27 +44,9 @@ class CNNParser(GenericParser):
                 if not 'CNN' in l.text:  #avoid CNN tags
                     tags.add(l.text)
 
-        manual_test_js = content.find('function()') == -1
-        if not manual_test_js:
-            logger.error("Has JS!! %s")
-            return None
-
-        if len(tags) and not u'video' in categories:
-            tags = list(tags)
-            try:
-                new_entry = NewsEntry(title=title, content=content,
-                                  tags=tags,
-                                  source=self.source,
-                                  url=url,
-                                  original_categories=categories)
-
-            except Exception as e:
-                logger.error("%s" % e.message)
-                logger.error(traceback.format_exc())
-
-        if not new_entry:
-            logger.error("Couldn't parse news in CNN ")
-            logger.error("Url: %s " % url)
+        image_search_string = None
+        new_entry = self.create_news_entry(title, content, tags, self.source, url, categories,
+                                           image_search_string)
 
         return new_entry
 
