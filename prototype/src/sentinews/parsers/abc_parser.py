@@ -52,11 +52,6 @@ class ABCParser(GenericParser):
         tags = set()
 
         content = soup.find('div', {"itemprop": 'articleBody'}).text
-        manual_test_js = content.find('function()') == -1
-
-        if not manual_test_js:
-            logger.error("Has JS!! %s")
-            return None
 
         new_entry = self.create_news_entry(title, content, tags, self.source, url, categories,
                                            image_search_string)

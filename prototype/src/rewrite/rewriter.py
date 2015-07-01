@@ -17,6 +17,7 @@ from src.rewrite.strategy.pastSimpleToCompoundStrategy import PastSimpleToCompou
 from src.rewrite.strategy.segunToDijoDislocationStrategy import SegunToDijoDislocationStrategy
 from src.rewrite.strategy.subjunctiveImperfectStrategy import SubjunctiveImperfectStrategy
 from src.rewrite.strategy.synonymsStrategy import SynonymsStrategy
+from src.rewrite.strategy.dateTimeStrategy import DateTimeStrategy
 from src.rewrite.strategy.tieneQueToModalDeber import TieneQueToModalDeber
 from src.rewrite.strategy.textualCite import TextualCite
 from src.rewrite.strategy.voicePassiveStrategy import VoicePassiveStrategy
@@ -49,7 +50,8 @@ class Rewriter:
                                           TextualCite(),
                                           AdverbialClauseDislocationStrategy(ontology),
                                           AlthoughClauseDislocationStrategy(),
-                                          SegunToDijoDislocationStrategy()]
+                                          SegunToDijoDislocationStrategy(),
+                                          DateTimeStrategy(ontology)]
         else:
             self.replacementStrategies = []
             self.dislocationStrategies = []

@@ -20,7 +20,6 @@ class ElPaisParser(GenericParser):
 
         paragraphs = ''
         tags = []
-        new_entries = []
         title = ''
         if soup is not None:
             news_body = soup.find('div', {'id': 'cuerpo_noticia'})
@@ -42,7 +41,7 @@ class ElPaisParser(GenericParser):
 
         content = ' '.join(paragraphs)
 
-        new_entry = self.create_news_entry(title, content, tags, self.source, url, categories,
-                                           image_search_string)
+        new_entry = self.create_news_entry(title, content, tags, self.source, url, categories=None,
+                                           image_search_string=None)
 
         return new_entry

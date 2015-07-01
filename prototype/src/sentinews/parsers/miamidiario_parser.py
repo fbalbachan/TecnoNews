@@ -19,7 +19,6 @@ class MiamiDiarioParser(GenericParser):
             soup = BeautifulSoup(self.opener.read(url))
 
         category = soup.find('div', {"class": "nombre_seccion"})
-        print "Categoria es %s" % category.text
         categories_not_wanted = {u'Guia fin de semana', u'Eventos', u'Farándula', u'Rostro y cuerpo',
                                  u'Trucos de cocina', u'Curiosidades', u'Comunitaria', u'Tránsito', u'Música'}
 

@@ -57,7 +57,7 @@ class EuroNewsParser(GenericParser):
         title = re.sub(u'Fotos:( )*', u'', title)
         title = title[0].upper() + title[1:]
 
-        new_entry = self.create_news_entry(title, content, tags, self.source, url, categories,
-                                           image_search_string)
+        new_entry = self.create_news_entry(title, content, tags, self.source, url, categories=None,
+                                           image_search_string=None)
 
         return new_entry
