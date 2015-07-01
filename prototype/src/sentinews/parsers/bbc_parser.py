@@ -1,5 +1,7 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 from bs4 import BeautifulSoup
-from src.sentinews.news_entry import NewsEntry
 from src.sentinews.parsers.generic_parser import GenericParser
 
 
@@ -34,9 +36,9 @@ class BBCParser(GenericParser):
                 content = ' '.join([paragraph.text + '\n' for paragraph in paragraphs])
                 # content = self.sanitize(content)
 
-        news_parsed = None
+        categories = None
+        image_search_string = None
 
-        if content and len(content) > 1 and tags and len(tags) > 0:
-            news_parsed = NewsEntry(title, content, tags, self.source, url=url)
-
-        return news_parsed
+        new_entry = self.create_news_entry(title, content, tags, self.source, url, categories,
+                                           image_search_string)
+        return new_entry

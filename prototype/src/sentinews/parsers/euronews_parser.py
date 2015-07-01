@@ -1,21 +1,13 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from re import sub
-from urllib import urlopen
-from src.sentinews.news_entry import NewsEntry
+
 from bs4 import BeautifulSoup
 from src.sentinews.parsers.generic_parser import GenericParser
-from src.utils.logger_utils import *
-from src.utils.languageFilter import LanguageFilter
-from src.utils.configProvider import ConfigProvider
 
 
 class EuroNewsParser(GenericParser):
     def __init__(self):
         super(EuroNewsParser, self).__init__()
-        self.language_filter = LanguageFilter()
-        config = ConfigProvider()
-        self.language_filter_status = config.get('language_filter', 'status')
 
     base_path = 'http://es.euronews.com'
     source = u'Euronews'
@@ -65,8 +57,7 @@ class EuroNewsParser(GenericParser):
         title = re.sub(u'Fotos:( )*', u'', title)
         title = title[0].upper() + title[1:]
 
-        news_parsed = None
-        if len(content) > 1 and len(tags) > 0 and len(title) > 0:
-            news_parsed = NewsEntry(title, content, tags, self.source, url=url)
+        new_entry = self.create_news_entry(title, content, tags, self.source, url, categories,
+                                           image_search_string)
 
-        return news_parsed
+        return new_entry

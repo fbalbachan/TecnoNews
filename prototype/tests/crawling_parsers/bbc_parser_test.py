@@ -1,6 +1,7 @@
 import unittest
 import feedparser
 from src.sentinews.parsers.bbc_parser import BBCParser
+import traceback
 
 feed_url = 'http://www.bbc.co.uk/mundo/temas/america_latina/index.xml'
 
@@ -60,6 +61,7 @@ class BBCParserTest(unittest.TestCase):
 
                 print "Error parsing"
                 print e.message
+                print traceback.format_exc()
 
         print "Total cases: ", len(entries)
         print "Errors", len(error_urls)
