@@ -31,7 +31,6 @@ class ViveloHoyParser(GenericParser):
 
         return allowed
 
-
     def parse(self, url):
 
         soup = BeautifulSoup(self.opener.read(url))
@@ -73,13 +72,14 @@ class ViveloHoyParser(GenericParser):
         for tag in tag_list:
             tags.append(tag['content'])
 
-
         content = content.text
         #remove certain strings
         content = re.sub(u'-Con servicios de w+',u'',content)
         content = re.sub(ur'– ?Con información .+', u'', content)
         content = re.sub(u'EFE[USA]*', u'',content)
         #take out first line
+        first_line_regex = re.compile(ur'( ?\S)+? ?[-|—|–]')
+        content = first_line_regex.sub(u'', content, 1)
 
         new_entry = self.create_news_entry(title=title, content=content,
                                            tags=tags,

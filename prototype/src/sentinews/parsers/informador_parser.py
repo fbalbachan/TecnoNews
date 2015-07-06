@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+import re
 from bs4 import BeautifulSoup
 from urlparse import urlparse
 from src.sentinews.parsers.generic_parser import GenericParser
@@ -20,8 +21,9 @@ class InformadorParser(GenericParser):
         return allowed
 
     def parse(self, url):
-
-        soup = BeautifulSoup(self.opener.read(url))
+        html_string = self.opener.read(url)
+        html_string_with_newlines = re.sub(r'<br>(&nbsp;)?<br>', '\n', html_string)
+        soup = BeautifulSoup(html_string_with_newlines)
 
         if not self.is_parseable(url=url, soup=soup):
             return None
@@ -49,7 +51,6 @@ class InformadorParser(GenericParser):
             tags.append(tag.text)
 
         content = content.text
-
         new_entry = self.create_news_entry(title=title, content=content,
                                            tags=tags,
                                            source=self.source,
@@ -59,4 +60,3 @@ class InformadorParser(GenericParser):
                                            keywords=None)
 
         return new_entry
-

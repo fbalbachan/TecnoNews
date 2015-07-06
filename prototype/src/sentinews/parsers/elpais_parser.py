@@ -45,8 +45,8 @@ class ElPaisParser(GenericParser):
                                            tags=tags,
                                            source=self.source,
                                            url=url,
-                                           original_categories=categories,
-                                           image_search_string=image_search_string,
+                                           original_categories=None,
+                                           image_search_string=None,
                                            keywords=None)
 
         return new_entry
