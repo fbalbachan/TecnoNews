@@ -39,6 +39,11 @@ class BBCParser(GenericParser):
         categories = None
         image_search_string = None
 
-        new_entry = self.create_news_entry(title, content, tags, self.source, url, categories,
-                                           image_search_string)
+        new_entry = self.create_news_entry(title=title, content=content,
+                                           tags=tags,
+                                           source=self.source,
+                                           url=url,
+                                           original_categories=categories,
+                                           image_search_string=image_search_string,
+                                           keywords=None)
         return new_entry

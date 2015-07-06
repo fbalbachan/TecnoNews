@@ -19,7 +19,6 @@ class InformadorParser(GenericParser):
 
         return allowed
 
-
     def parse(self, url):
 
         soup = BeautifulSoup(self.opener.read(url))
@@ -36,23 +35,28 @@ class InformadorParser(GenericParser):
         title = soup.find('div', {"class": "tituloInt"})
         title = title.h1.text
 
-        categories=[urlparse(url).path.split("/")[1]]
+        categories = [urlparse(url).path.split("/")[1]]
 
-        content = soup.find('div', {"id" : "HOTWordsTxt"})
+        content = soup.find('div', {"id": "HOTWordsTxt"})
 
-        #arranco el lugar y fecha del texto
+        #Remove place and date
         place_date = content.find('strong')
-        place_date.extract()        
+        place_date.extract()
 
-        tag_list = soup.find('div',{"id":"temasNoticia"})
+        tag_list = soup.find('div', {"id": "temasNoticia"})
         tags = []
         for tag in tag_list.findAll('a'):
             tags.append(tag.text)
 
         content = content.text
 
-        new_entry = self.create_news_entry(title, content, tags, self.source, url, categories,
-                                           image_search_string)
+        new_entry = self.create_news_entry(title=title, content=content,
+                                           tags=tags,
+                                           source=self.source,
+                                           url=url,
+                                           original_categories=categories,
+                                           image_search_string=image_search_string,
+                                           keywords=None)
 
         return new_entry
 
