@@ -23,7 +23,9 @@ class InformadorParserTest(unittest.TestCase):
             self.assertIsNone(entry)
         else:
             self.assertIsNotNone(entry)
-            print "Content:", entry.content, '\n'
+            print "Content:"
+            for paragraph in entry.content.split('\n'):
+                print paragraph + '\n'
             print "Tags:", entry.tags, '\n'
             print "Title:", entry.title, '\n'
             print "Source:", entry.source, '\n'
@@ -63,7 +65,9 @@ class InformadorParserTest(unittest.TestCase):
             self.assertIsNone(entry)
         else:
             self.assertIsNotNone(entry)
-            print "Content:", entry.content, '\n'
+            print "Content:"
+            for paragraph in entry.content.split('\n'):
+                print paragraph + '\n'
             print "Tags:", entry.tags, '\n'
             print "Title:", entry.title, '\n'
             print "Source:", entry.source, '\n'
