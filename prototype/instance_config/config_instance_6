@@ -6,7 +6,7 @@ raise_exception = False
 id = 6
 
 [news_sources]
-feeds_to_process = cnet_esp,diario_america,forbes_mexico,informador_mexico
+feeds_to_process = cnet_esp,diario_america,forbes_mexico,informador_mexico,miami_diario,nuevoherald,vivelo_hoy
 
 [freeling]
 
