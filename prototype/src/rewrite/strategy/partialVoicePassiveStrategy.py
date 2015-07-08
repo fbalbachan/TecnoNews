@@ -4,10 +4,10 @@ import sys
 import traceback
 
 from src.rewrite.rewrite import Rewrite
-from src.utils.configProvider import ConfigProvider
 from src.utils.logger_utils import get_logger
 from src.model.entity.animityEnum import AnimityEnum
 from src.ling.numberEnum import NumberEnum
+
 
 
 
@@ -30,11 +30,12 @@ class PartialVoicePassiveStrategy:
     def rewrite(self, sentence, node):
         if debug_mode: print "--> PartialVoicePassiveStrategy.rewrite(sentence: ", sentence, ")"
 
+        clauses = []
         try:
             clauses = [[clause, sentence.clauses[idx+1]] for idx, clause in enumerate(sentence.clauses)
                        if self.applies_to_clause(clause) and idx+1 < len(sentence.clauses)]
 
-            #check the last clause
+            # Check the last clause
             last_clause = sentence.clauses[-1]
             if self.applies_to_clause(last_clause):
                 clauses.append([last_clause, None])
@@ -61,11 +62,11 @@ class PartialVoicePassiveStrategy:
     def is_partial(self, clause):
         if debug_mode: print "--> PartialVoicePassiveStrategy.is_partial(clause: ", clause, ")"
 
-	has_od_and_subject = clause.has_structure('od') and clause.has_structure('subject')
+        has_od_and_subject = clause.has_structure('od') and clause.has_structure('subject')
 
         is_partial = has_od_and_subject \
                	     and clause.structure('subject').entity().has_attr("implicit") \
-	             and (not clause.structure('od').is_tacit() or clause.structure('od').entity().coref_chain != [])
+                     and (not clause.structure('od').is_tacit() or clause.structure('od').entity().coref_chain != [])
 
         if debug_mode: print "<-- PartialVoicePassiveStrategy.is_partial = ", str(is_partial)
         return is_partial
@@ -74,7 +75,6 @@ class PartialVoicePassiveStrategy:
         if debug_mode: print "--> PartialVoicePassiveStrategy.rewrite_clause(clauses: )"
 
         clause = clauses[0][0]
-        ntext = ""
 
         try:
             next_clause = clauses[0][1]
@@ -85,7 +85,11 @@ class PartialVoicePassiveStrategy:
             else:
                 ntext = self.rewrite_clause_od_animated(node, sentence, clause, next_clause)
 
+            rewrite_rule = Rewrite(clause.node, ntext)
+
         except Exception as e:
+            rewrite_rule = Rewrite(clause.node)
+
             ex_type, ex, tb = sys.exc_info()
             traceback.print_tb(tb)
             ex_type, ex, tb = sys.exc_info()
@@ -94,41 +98,40 @@ class PartialVoicePassiveStrategy:
             logger.info(e.message)
             logger.info(traceback.print_tb(tb))
 
-        rewrite_rule = Rewrite(clause.node, ntext)
         return rewrite_rule
 
     def rewrite_clause_od_inanimate(self, node, sentence, clause, next_clause):
         # get the first leaf to extract the msi
         leaf = clause.verb.leaves()[0]
+        od_structure = clause.structure('od')
 
         msi = {"mode": leaf.msi["mode"],
                "time": leaf.msi["time"],
                "person": 3,
-               "number": clause.structure('od').msi()['number']}
+               "number": od_structure.msi()['number']}
 
         # transform the last leaf of verb (ie clause.verb) to the msi of the first leaf of verb
         lexical_forms = self.ontology.get_lexical_forms(clause.verb.lemma(), msi)
-
-        rewritten_verb = filter(lambda lf: lf.text != leaf.lexical_form, lexical_forms)[0].text
+        rewritten_verb = lexical_forms[0].text
 
         text = clause.node.leaves_string()
         verb = clause.structure('verb').lexical_form()
 
-        od = clause.structure('od').lexical_form()
+        od = od_structure.lexical_form()
         od_rewritten = od
 
         # lower case od if is not a proper name
-        od_msi = clause.structure('od').entity().msi
+        od_msi = od_structure.entity().msi
         if not self.is_proper_name(od_msi):
             od_rewritten = od[0].lower() + od[1:]
 
-        if next_clause and next_clause.relative_entity == clause.structure('od').entity():
+        if next_clause and next_clause.relative_entity == od_structure.entity():
             od_rewritten = od_rewritten + " " + next_clause.__repr__().strip()
-            repls = (verb, ''), (od, ''), (" " + next_clause.__repr__(), '')
+            replacements = (verb, ''), (od, ''), (" " + next_clause.__repr__(), '')
         else:
-            repls = (verb, ''), (od, '')
+            replacements = (verb, ''), (od, '')
 
-        ntext = self.multiple_replace(text, *repls).strip(' ')
+        ntext = self.multiple_replace(text, *replacements).strip(' ')
         ntext = ntext[0].lower() + ntext[1:]
 
         ntext = "se " + rewritten_verb + " " + od_rewritten + " " + ntext
@@ -162,8 +165,7 @@ class PartialVoicePassiveStrategy:
 
         # transform the last leaf of verb (ie clause.verb) to the msi of the first leaf of verb
         lexical_forms = self.ontology.get_lexical_forms(clause.verb.lemma(), msi)
-
-        rewritten_verb = filter(lambda lf: lf.text != leaf.lexical_form, lexical_forms)[0].text
+        rewritten_verb = lexical_forms[0].text
 
         text = clause.node.leaves_string()
         verb = clause.structure('verb').lexical_form()

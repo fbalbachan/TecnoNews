@@ -5,11 +5,15 @@ import re
 from src.utils.configProvider import ConfigProvider
 from src.rewrite.rewrite import Rewrite
 
+
 # from src.utils.stringUtils import set_first_letter_case
 
 
+debug_mode = False
+
 class SynonymsStrategy:
     def __init__(self, ontology):
+        if debug_mode: print "--> SynonymsStrategy.__init__()"
         self.ontology = ontology
         self.synonyms = self._get_synonyms()
         self.adverbs = self._get_adverbs()
@@ -23,6 +27,7 @@ class SynonymsStrategy:
         return False
 
     def rewrite(self, clause):
+        if debug_mode: print "--> SynonymsStrategy.rewrite(clause: ", clause, ")"
         ontology = self.ontology
 
         rewrites = []
@@ -37,10 +42,10 @@ class SynonymsStrategy:
                 else:
                     concept = ontology.concept(synonym)
                     leaf_msi = self._msi_transform(leaf.msi)
-                    lexical_forms = [form for form in concept.lexical_forms if
-                                     leaf_msi == self._msi_transform(form.msi)]
+                    lexical_forms = [form for form in concept.lexical_forms if leaf_msi == self._msi_transform(form.msi)]
                     if lexical_forms:
                         replacement = lexical_forms[0].text
+
                 if replacement:
                     rewrites.append(Rewrite.preserving_case(leaf, replacement))
 
@@ -51,12 +56,14 @@ class SynonymsStrategy:
         return rewrites
 
     def _get_synonyms(self):
+        if debug_mode: print "--> SynonymsStrategy._get_synonyms()"
         return self._get_replacements_from_csv("synonyms")
 
     def _get_adverbs(self):
         return self._get_replacements_from_csv("adverb_forms")
 
     def _get_replacements_from_csv(self, resource):
+        if debug_mode: print "--> SynonymsStrategy._get_replacements_from_csv()"
         # Warning, it is a dict, it doesn't work for multiple
         # replacements for the same word.
 
@@ -79,6 +86,8 @@ class SynonymsStrategy:
         return locutions
 
     def _msi_transform(self, msi):
+        if debug_mode: print "--> SynonymsStrategy._msi_transform(msi: ", msi, ")"
+
         result_msi = {}
         if 'number' in msi:
             result_msi['number'] = msi['number']

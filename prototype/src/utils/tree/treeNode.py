@@ -64,7 +64,7 @@ class TreeNode(object):
 
         return representation
 
-    # El padre no es comparado pues debería complejizarse el método. Sólo el subárbol descendente.
+    # The father does not get compared because the method would get more complex. Jus the descendant subtree.
     def is_equivalent_to(self, other):
         if len(self.children) != len(other.children):
             return False
@@ -72,7 +72,7 @@ class TreeNode(object):
         is_equivalent = all(this.is_equivalent_to(that) for this, that in zip(self.children, other.children))
         return is_equivalent
 
-    # El subárbol devuelto es independiente y copia profunda del original.
+    # The subtree returned is a deep copy (independent) of the original.
     def cloned_by_original(self, without_nodes):
         iterator = InDepthNodeIterator(self, without_nodes)
 
@@ -112,6 +112,18 @@ class TreeNode(object):
 
         if proper_positions[-1] > other_positions[-1]:
             return "left"
+
+        return "inside"
+
+    def position_of_leaf(self, leaf):
+        proper_positions = self.leaf_positions()
+        leaf_position = leaf.leaf_positions()[0]
+
+        if leaf_position < proper_positions[0]:
+            return "left"
+
+        if leaf_position > proper_positions[-1]:
+            return "right"
 
         return "inside"
 

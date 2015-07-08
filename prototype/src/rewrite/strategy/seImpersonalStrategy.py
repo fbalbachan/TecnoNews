@@ -3,131 +3,237 @@
 __author__ = 'Martín Caramés Abente'
 
 import traceback
-import sys
+import re
 
 from src.rewrite.rewrite import Rewrite
-from src.rewrite.sentenceRewrite import SentenceRewrite
-from collections import deque
 from src.utils.logger_utils import *
-from src.model.tokenization.token import Token
+from src.utils.stringUtils import *
 
 debug_mode = False
 
 
 class SeImpersonalStrategy:
-    def __init__(self):
+    def __init__(self, ontology):
         if debug_mode: print "--> SeImpersonalStrategy.init()"
+        self.ontology = ontology
 
     def applies_to(self, sentence, node):
         if debug_mode: print "--> SeImpersonalStrategy.applies_to(sentence:", sentence.text, ")"
+
         result = False
-        for clause in sentence.clauses:
-            if self.applies_to_clause(clause):
-                result = True
+        for sentence_clause in sentence.clauses:
+            if sentence_clause.node == node:
+                result = self.applies_to_clause(sentence_clause)
+                break
 
         return result
 
     def applies_to_clause(self, clause):
         if debug_mode: print "--> SeImpersonalStrategy.applies_to_clause(", clause.node, ")"
-        result = False
-        for structure in clause.syntactic_structures:
-            for entity in structure.all_entities():
-                if hasattr(entity, 'appositions') and entity.appositions:
-                    result = True
 
+        subject_entity = clause.structure('subject').entity()
+        result = not clause.is_relative() and "impersonal" in subject_entity.attributes.keys()
         return result
 
     def rewrite(self, sentence, node):
         if debug_mode: print "--> SeImpersonalStrategy.rewrite(sentence:", sentence, ", node:", node, ")"
 
-        new_text = sentence.text
-        new_sentence_texts = []
-        replacements = []
-
+        rewrite = Rewrite(node)
         try:
-            for clause in sentence.clauses:
-                if self.applies_to_clause(clause):
-                    [replacements, new_sentence_texts] = self.rewrite_clause(sentence,
-                                                                             clause,
-                                                                             replacements,
-                                                                             new_sentence_texts)
-            new_text = self.compose_text(replacements, new_text)
-
-            for new_sentence_text in new_sentence_texts:
-                new_text += u" " + new_sentence_text
+            for sentence_clause in sentence.clauses:
+                if sentence_clause.node == node:
+                    rewrite = self.rewrite_clause(sentence, sentence_clause)
+                    break
 
         except Exception as e:
-            msg = (": " + e.message) if e and hasattr(e, "message") else ""
             logger = get_logger('tecnonews')
-            logger.info("SeImpersonalStrategy Rewriting:")
-            logger.info(msg)
+            logger.info("SeImpersonalStrategy Rewrite exception: ")
+            logger.info((": " + e.message) if e and hasattr(e, "message") else "")
             ex_type, ex, tb = sys.exc_info()
             logger.info(traceback.format_tb(tb))
-
-        rewrite = Rewrite(sentence.parse_node, new_text.encode("utf-8"))
 
         if debug_mode: print "<-- SeImpersonalStrategy.rewrite()"
         return rewrite
 
-    def compose_text(self, rewrites, text):
-        rewrites.sort(key=lambda rewrite_rule: rewrite_rule.token.start())
-        rewrites_queue = deque(rewrites)
+    def rewrite_clause(self, sentence, clause):
+        if debug_mode: print "--> SeImpersonalStrategy.rewrite_clause(clause:", clause, ")\n"
 
-        if type(text) != unicode:
-            text = text.decode("utf-8")
+        replacement_string = self.get_clause_replacement_string(sentence, clause)
+        rewrite_rule = Rewrite.preserving_case(clause.node, replacement_string)
 
-        offset = 0
-        while rewrites_queue:
-            rewrite = rewrites_queue.popleft()
-            new_token = Token()
-            new_token.append(rewrite.token.start()+offset, rewrite.token.end()+offset)
-            new_rewrite = SentenceRewrite(text, new_token, rewrite.token_replacement[:])
-            local_offset = len(rewrite.replacement) - len(rewrite.sentence_text)
-            text = new_rewrite.replacement
-            offset += local_offset
+        if debug_mode: print "<-- SeImpersonalStrategy.rewrite_clause()\n"
+        return rewrite_rule
 
-        if debug_mode: print "\n<-- compose_text()\n"
-        return text
+    def get_clause_replacement_string(self, sentence, clause):
+        if debug_mode: print "--> SeImpersonalStrategy.get_clause_replacement_string(clause:", clause, ")\n"
 
-    def rewrite_clause(self, sentence, clause, replacements, sentence_texts):
-        """
-        """
-        for elem in []:
-            replacement = elem
-            replacements.append(replacement)
+        rewritten_verb = self.flex_verb(clause)
 
-            new_sentence_text = self.get_new_sentence_text(sentence)
-            sentence_texts.append(new_sentence_text)
+        beginning_text, ending_text = self.trim_known_elements(clause)
 
-        if debug_mode: print "\n<-- rewrite_clause()\n"
-        return [replacements, sentence_texts]
+        od_string = str(clause.structure('od'))
 
-    def get_replace_string_for(self, sentence, entity):
+        new_clause_text = od_string + " " + rewritten_verb
+        header = clause.is_subordinated_clause()
+        if header:
+            new_clause_text = header.lexical_form + " " + new_clause_text
 
-        origin = sentence.token.start()
-        start_idx = entity.node.token.start() - origin
-
-        # This takes into account a possible leapfrogged node (based on apposition def.)
-        last_leaf = entity.node.leaves()[-1]
-        if last_leaf.lexical_form in [u","]:
-            end_idx = last_leaf.token.start() - origin                          # Index points to the comma
+        if len(beginning_text) > 0:
+            beginning_text = set_first_letter_case(clause.node.leaves()[0].lexical_form, beginning_text)
+            new_clause_text = (beginning_text + " " + new_clause_text).rstrip()
         else:
-            end_idx = entity.node.token.end() - origin
-            end_idx = sentence.text.decode("utf-8").find(u",", end_idx, -1)     # Index points to the comma
+            new_clause_text = set_first_letter_case(od_string if not header else header.lexical_form, new_clause_text)
 
-        result = sentence.text.decode("utf8")[start_idx:end_idx].replace('_', ' ')
-        return result
+        if len(ending_text) > 1:
+            new_clause_text = (new_clause_text + " " + ending_text).rstrip()
+        if len(ending_text) > 0:
+            new_clause_text = (new_clause_text + ending_text).rstrip()
 
-    def get_new_sentence_text(self, sentence):
-        if debug_mode: print "--> SeImpersonalStrategy.get_new_sentence_text()"
+        if debug_mode: print "<-- SeImpersonalStrategy.get_clause_replacement_string() --> new_clause_text: ", new_clause_text, "\n"
+        return new_clause_text.replace('_', ' ')
 
-        head = u"HEAD"
-        verb = u"VERB"
-        tail = u"TAIL"
-        sentence_text = head + u" " + verb + u" " + tail + u"."
+    def trim_known_elements(self, clause):
+        if debug_mode: print "--> SeImpersonalStrategy.trim_known_elements(clause:", clause, ")"
 
-        return sentence_text
+        od_string = clause.structure('od').lexical_form()
+        replacements = [("A " + od_string, ""), ("a " + od_string, ""), (od_string, "")]
+
+        left_hemiclause_leaves, right_hemiclause_leaves = clause.get_hemiclauses()
+        if debug_mode:
+            print "left_hemiclause_leaves: ", left_hemiclause_leaves
+            print "right_hemiclause_leaves: ", right_hemiclause_leaves
+
+        header = clause.is_subordinated_clause()
+        if header:
+            header_orig_node = clause.original_by_proper(header)
+            if header_orig_node in left_hemiclause_leaves:
+                left_hemiclause_leaves.remove(header_orig_node)
+            if header_orig_node in right_hemiclause_leaves:
+                right_hemiclause_leaves.remove(header_orig_node)
+
+        beginning = ""
+        for leaf in left_hemiclause_leaves:
+            if leaf.msi["category"] != "punctuation":
+                beginning += " "
+            beginning += leaf.joined_text()
+
+        beginning = self.multiple_replace(beginning, *replacements).strip()
+        if len(beginning) >= 2 and beginning[-2:].lower() == "se":
+            beginning = beginning[:-3].strip()
+        if clause.is_negated():
+            if len(beginning) >= 2 and beginning[-2:].lower() == "no":
+                beginning = beginning[:-3].strip()
+
+        ending = ""
+        for leaf in right_hemiclause_leaves:
+            if leaf.msi["category"] != "punctuation":
+                ending += " "
+            ending += leaf.joined_text()
+        ending = self.multiple_replace(ending, *replacements).strip()
+
+        if debug_mode: print "<-- trim_known_elements() --> beginning: ", beginning, " - ending: ", ending
+        return beginning, ending
+
+    def flex_verb(self, clause):
+        if debug_mode: print "--> SeImpersonalStrategy.flex_verb(clause:", clause, ")\n"
+
+        od_entity = clause.structure('od')
+        verb = clause.verb
+        has_compound_time = verb.has_compound_time()
+        leaves = verb.node.leaves()
+        nr_leaves = len(leaves)
+
+        if leaves[-1].msi["mode"] != "infinitive":
+            flexed_aux_verb = self.flex_auxiliary_verb(verb, od_entity)
+            flexed_participle = self.flex_verb_participle(verb, od_entity)
+            flexed_verb = flexed_aux_verb + " " + flexed_participle
+
+        # 2) verb + infinitive  --  List of verbs: intentar, deber, poder, soler
+        elif (not has_compound_time and nr_leaves == 2 or has_compound_time and nr_leaves == 3) \
+              and leaves[-2].lemma in ["intentar", "deber", "poder", "soler"]:
+
+            flexed_participle = self.flex_verb_participle(verb, od_entity)
+            flexed_modal_verb = self.flex_modal_verb(verb, od_entity)
+            flexed_verb = flexed_modal_verb + " " + "ser" + " " + flexed_participle
+
+        elif (not has_compound_time and nr_leaves == 3 or has_compound_time and nr_leaves == 4) \
+              and self.is_verb_from_third_group(verb):
+            flexed_participle = self.flex_verb_participle(verb, od_entity)
+            flexed_modal_verb = self.flex_modal_verb(verb, od_entity)
+            flexed_verb = flexed_modal_verb + " " + leaves[-2].lexical_form + " " + "ser" + " " + flexed_participle
+
+        else:
+            raise Exception("Invalid verb found: " + str(clause.verb))
+
+        if clause.is_negated():
+            flexed_verb = "no " + flexed_verb
+
+        if debug_mode: print "<-- SeImpersonalStrategy.flex_verb() --> flexed_verb: ", flexed_verb, "\n"
+        return flexed_verb
+
+    def flex_auxiliary_verb(self, verb, od_entity):
+        leaf = verb.node.leaves()[0]
+        aux_msi = {"mode": leaf.msi["mode"],
+                   "time": leaf.msi["time"],
+                   "person": leaf.msi["person"],
+                   "number": od_entity.msi()['number']}
+
+        lexical_forms = self.ontology.get_lexical_forms("ser", aux_msi)
+        aux_verb_flexed = lexical_forms[0].text
+        return aux_verb_flexed
+
+    def flex_modal_verb(self, verb, od_entity):
+        msi = verb.node.leaves()[0].msi
+        modal_msi = {"mode": msi["mode"],
+                     "time": msi["time"],
+                     "person": msi["person"],
+                     "number": od_entity.msi()['number']}
+
+        if not verb.has_compound_time():
+            lemma = verb.node.leaves()[0].lemma
+        else:
+            lemma = verb.node.leaves()[1].lemma
+        lexical_forms = self.ontology.get_lexical_forms(lemma, modal_msi)
+
+        modal_verb_flexed = lexical_forms[0].text
+        return modal_verb_flexed
+
+    def flex_verb_participle(self, verb, od_entity):
+        participle_msi = {"mode":   "participio",
+                          "gender": od_entity.msi()["gender"],
+                          "number": od_entity.msi()['number']}
+
+        lexical_forms = self.ontology.get_lexical_forms(verb.lemma(), participle_msi)
+        clause_verb_participle = lexical_forms[0].text
+        return clause_verb_participle
+
+    def is_verb_from_third_group(self, verb):
+        # 3) example: tener   + que + infinitive  -- List: ,,,,
+        #    example: empezar + a   + infinitive  -- List: ,,,
+        #    example: acabar  + de  + infinitive  -- List: ,,,
+        #    example: tardar  + en  + infinitive  -- List: ,,,,
+        leaves = verb.node.leaves()
+
+        it_is_from_group_a = leaves[-2].lemma == "que" and leaves[-3].lemma == "tener"
+
+        it_is_from_group_b = leaves[-2].lemma == "a" \
+                             and leaves[-3].lemma in ["ir", "venir", "empezar", "comenzar", "echarse", "acertar",
+                                                      "volver", "echar", "llegar", "romper", "acostumbrar", "alcanzar"]
+
+        it_is_from_group_c = leaves[-2].lemma == "de" \
+                             and leaves[-3].lemma in ["haber", "deber", "acabar", "terminar", "dejar"]
+
+        it_is_from_group_d = leaves[-2].lemma == "en" and leaves[-3].lemma == "tardar"
+
+        return it_is_from_group_a or it_is_from_group_b or it_is_from_group_c or it_is_from_group_d
+
+    def multiple_replacer(self, *key_values):
+        replace_dict = dict(key_values)
+        replacement_function = lambda match: replace_dict[match.group(0)]
+        pattern = re.compile("|".join([re.escape(k) for k, v in key_values]), re.M)
+        return lambda string: pattern.sub(replacement_function, string)
+
+    def multiple_replace(self, string, *key_values):
+        return self.multiple_replacer(*key_values)(string)
 
     type = "dislocation"
-
-

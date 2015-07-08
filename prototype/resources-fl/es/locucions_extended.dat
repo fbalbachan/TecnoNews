@@ -1,3 +1,5 @@
+<persona>_no_<grata> persona_no_grata $1:NC I
+<persona>_non_<grata> persona_non_grata $1:NC I
 me_<haber>_<tratar>_de tratarse_de $2:VM I
 te_<haber>_<tratar>_de tratarse_de $2:VM I
 se_<haber>_<tratar>_de tratarse_de $2:VM I
@@ -49,6 +51,7 @@ martín_pescador martín_pescador NCMN000 I
 <rata>_de_laboratorio rata_de_laboratorio $1:NC I
 <ratón>_de_laboratorio ratón_de_laboratorio $1:NC I
 <viuda>_negra viuda_negra $1:NC I
+<fin>_de_semana fin_de_semana $1:NC I
 como_si como_si CS I
 luego_de_que luego_de_que CS I
 después_de_que después_de_que CS I
@@ -249,8 +252,8 @@ se_<rendir> rendirse $2:VM I
 nos_<rendir> rendirse $2:VM I
 os_<rendir> rendirse $2:VM I
 <rendir>_tributo rendir_tributo $1:VM I
-<rendir>_examen rendir_examen $1:VM I 
-<rendir>_cuentas rendir_cuentas $1:VM I 
+<rendir>_examen rendir_examen $1:VM I
+<rendir>_cuentas rendir_cuentas $1:VM I
 rendirme rendirse $1:VM I
 rendirte rendirse $1:VM I
 rendirnos rendirse $1:VM I
@@ -3617,4 +3620,3 @@ zona_horaria zona_horaria NCFS000 I
 <zona>_<residencial> zona_residencial $1:NC I
 <zona>_<restringir> zona_restringida $1:NC I
 <zona>_<turístico> zona_turística $1:NC I
-

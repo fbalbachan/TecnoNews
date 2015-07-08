@@ -1,3 +1,21 @@
+<persona>_no_<grata> persona_no_grata $1:NC I
+<persona>_non_<grata> persona_non_grata $1:NC I
+me_<haber>_<tratar>_de tratarse_de $2:VM I
+te_<haber>_<tratar>_de tratarse_de $2:VM I
+se_<haber>_<tratar>_de tratarse_de $2:VM I
+nos_<haber>_<tratar>_de tratarse_de $2:VM I
+os_<haber>_<tratar>_de tratarse_de $2:VM I
+me_<tratar>_de tratarse_de $2:VM I
+te_<tratar>_de tratarse_de $2:VM I
+se_<tratar>_de tratarse_de $2:VM I
+nos_<tratar>_de tratarse_de $2:VM I
+os_<tratar>_de tratarse_de $2:VM I
+tratarme_de tratarse_de $1:VM I
+tratarte_de tratarse_de $1:VM I
+tratarnos_de tratarse_de $1:VM I
+trataros_de tratarse_de $1:VM
+mundo_entero mundo_entero NCMS000 I
+a_conciencia a_conciencia RG I
 aguará_guazú aguará_guazú NCMN000 I
 aguaré_guasú aguaré_guasú NCMN000 I
 <anémona>_de_mar anémona_de_mar $1:NC I
@@ -33,10 +51,14 @@ martín_pescador martín_pescador NCMN000 I
 <rata>_de_laboratorio rata_de_laboratorio $1:NC I
 <ratón>_de_laboratorio ratón_de_laboratorio $1:NC I
 <viuda>_negra viuda_negra $1:NC I
+<fin>_de_semana fin_de_semana $1:NC I
 como_si como_si CS I
 luego_de_que luego_de_que CS I
 después_de_que después_de_que CS I
 después_que después_que CS I
+en_caso_de_que en_caso_de_que CS I
+en_caso_que en_caso_que CS I
+desde_que desde_que CS I
 antes_que antes_que CS I
 antes_de_que antes_de_que CS I
 a_cara_descubierta a_cara_descubierta RG I
@@ -230,8 +252,8 @@ se_<rendir> rendirse $2:VM I
 nos_<rendir> rendirse $2:VM I
 os_<rendir> rendirse $2:VM I
 <rendir>_tributo rendir_tributo $1:VM I
-<rendir>_examen rendir_examen $1:VM I 
-<rendir>_cuentas rendir_cuentas $1:VM I 
+<rendir>_examen rendir_examen $1:VM I
+<rendir>_cuentas rendir_cuentas $1:VM I
 rendirme rendirse $1:VM I
 rendirte rendirse $1:VM I
 rendirnos rendirse $1:VM I
@@ -3310,6 +3332,7 @@ servicios_urbanos servicios_urbanos NCMP000 I
 <sesión>_<continuo> sesión_continua $1:NC I
 <sesión>_<plenario> sesión_plenaria $1:NC I
 si_acaso si_acaso RG I
+si_bien si_bien CS I
 si_bien_se_mira si_bien_se_mira RG I
 siempre_y_cuando siempre_y_cuando RG I
 siendo_así siendo_así RG I
@@ -3597,4 +3620,3 @@ zona_horaria zona_horaria NCFS000 I
 <zona>_<residencial> zona_residencial $1:NC I
 <zona>_<restringir> zona_restringida $1:NC I
 <zona>_<turístico> zona_turística $1:NC I
-chachi_wuay NCMS000 I

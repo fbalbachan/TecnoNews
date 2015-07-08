@@ -19,14 +19,15 @@ class SentenceSplitter:
         split_text = self.split(text)
         texts = [each.strip().encode("utf-8") for each in split_text]
         non_empty_texts = filter(lambda p_text: p_text != '' and text is not None, texts)
-        return self.to_sentences(non_empty_texts, text, paragraph)
+        sentences = self.to_sentences(non_empty_texts, text, paragraph)
+        return sentences
 
     def replace_strange_chars(self, text):
         text = text.replace(u'\xab', u'"').replace(u'\xbb', u'"')
         text = text.replace(u'«', u'"').replace(u'»', u'"').replace(u'/', u'-')
         text = text.replace(u'“', u'"').replace(u'”', u'"')
         text = text.replace(u'‘', u'"').replace(u'’', u'"')
-
+        text = text.replace(u'“', u'"').replace(u'”', u'"')
         return text
 
     # Dirty

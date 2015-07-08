@@ -36,7 +36,10 @@ class ClauseExtractor:
                     father_clause.add_child(clause)
 
         clauses = clauses_by_node.values()
-        ClauseExtractor.compute_proper_tree_for(clauses)
+
+        for clause in clauses:
+            clause.proper_by_original = ClauseExtractor.compute_proper_tree_for(clause)
+
         clauses = ClauseExtractor.without_invalid_clauses(clauses)
         ClauseExtractor.sort_children_of(clauses, sentence)
         clauses = ClauseExtractor.sorted(clauses, sentence)
@@ -67,13 +70,13 @@ class ClauseExtractor:
         return clauses
 
     @staticmethod
-    def compute_proper_tree_for(clauses):
-        for clause in clauses:
-            original = clause.node
-            foreign_nodes = [child.node for child in clause.children]
-            clause.proper_by_original = original.cloned_by_original(foreign_nodes)
+    def compute_proper_tree_for(clause):
+        original = clause.node
+        foreign_nodes = [child.node for child in clause.children]
+        proper_by_original = original.cloned_by_original(foreign_nodes)
+        return proper_by_original
 
     @staticmethod
     def filter_invalid_subordinated_clauses(nodes):
-        return filter(lambda node: not node.is_subordinate()
-                      or (node.is_subordinate() and node.label not in ["grup-verb", "verb-pass"]), nodes)
+        return filter(lambda node: not node.is_subordinate() or node.label not in ["grup-verb", "verb-pass"],
+                      nodes)
