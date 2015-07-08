@@ -84,10 +84,8 @@ class SeImpersonalStrategy:
         else:
             new_clause_text = set_first_letter_case(od_string if not header else header.lexical_form, new_clause_text)
 
-        if len(ending_text) > 1:
-            new_clause_text = (new_clause_text + " ").rstrip()
         if len(ending_text) > 0:
-            new_clause_text = (new_clause_text + ending_text).rstrip()
+            new_clause_text = (new_clause_text + " " if len(ending_text) > 1 else "" + ending_text).rstrip()
 
         if debug_mode: print "<-- SeImpersonalStrategy.get_clause_replacement_string() --> new_clause_text: ", new_clause_text, "\n"
         return new_clause_text.replace('_', ' ')
