@@ -85,7 +85,7 @@ class SeImpersonalStrategy:
             new_clause_text = set_first_letter_case(od_string if not header else header.lexical_form, new_clause_text)
 
         if len(ending_text) > 1:
-            new_clause_text = (new_clause_text + " " + ending_text).rstrip()
+            new_clause_text = (new_clause_text + " ").rstrip()
         if len(ending_text) > 0:
             new_clause_text = (new_clause_text + ending_text).rstrip()
 
