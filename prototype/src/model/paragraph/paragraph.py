@@ -36,11 +36,11 @@ class Paragraph:
 
     @staticmethod
     def from_text(text):
+        if debug_mode: print "--> Paragraph.from_text()"
+
         # TODO: Repensar desde la arquitectura si las sentences son de text o del párrafo,
         #       ya que Paragraph(sentences, text) puede ser redundante.
         #       Meanwhile, paragraph is a parameter (possibly redundant) of SentenceSplitter.sentences_in()
-
-        if debug_mode: print "--> Paragraph.from_text()"
 
         paragraph = Paragraph([], text)
         paragraph._process_parenthesis()

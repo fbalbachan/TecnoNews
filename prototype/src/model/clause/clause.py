@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from src.model.syntax.dateTimeFinder import DateTimeFinder
+from src.parser.leafNode import LeafNode
 from src.utils.tree.treeNode import TreeNode
 
 debug_mode = False
@@ -14,9 +15,8 @@ class Clause(TreeNode):
 
         self.voice = None
 
-        self.time_references = []
-
         self.entities = []
+        self.time_references = []
         self.time_entities = []
 
         self.relative_entity = None
@@ -32,6 +32,9 @@ class Clause(TreeNode):
 
         self.attributes = []
 
+    #
+    # Questions to the Clause object
+    #
     def has_attr(self, attribute):
         return attribute in self.attributes
 
@@ -48,21 +51,6 @@ class Clause(TreeNode):
 
     def has_global_operator_of(self, *classes):
         return bool(filter(lambda operator: operator.klass in classes, self.global_operators))
-
-    def relative_linker_words(self):
-        return [leaf.lexical_form for leaf in self.relative_linker]
-
-    def original_by_proper(self, proper):
-        original_by_proper = {v: k for k, v in self.proper_by_original.items()}
-        return original_by_proper[proper]
-
-    def entity_by_original(self, node):
-        proper_node = self.proper_by_original[node]
-        entities = filter(lambda entity: entity.node == proper_node, self.entities)
-        return entities[0] if entities else None
-
-    def proper_tree(self):
-        return self.proper_by_original[self.node]
 
     def is_relative(self):
         root = self.proper_tree()
@@ -90,69 +78,21 @@ class Clause(TreeNode):
         is_cuyo_vector = map(lambda word: word in ["cuyo", "cuya", "cuyos", "cuyas"], self.relative_linker_words())
         return any(is_cuyo_vector)
 
-    def get_number_from_relative_linker(self):
-        """
-
-        :rtype : basestring or None
-        """
-        if not self.is_relative():
-            raise Exception("La cláusula no es una relativa (", str(self), ").")
-
-        # ["los cuales", "las cuales", "quienes"],
-        is_plural_vector = map(lambda leaf: leaf.msi["number"] is "plural", self.relative_linker)
-
-        # ["el cual", "la cual", "quien"]
-        is_singular_vector = map(lambda leaf: leaf.msi["number"] is "singular", self.relative_linker)
-
-        is_invariable_vector = map(lambda leaf: leaf.msi["number"] is "invariable", self.relative_linker)
-
-        if any(is_singular_vector):
-            number = "singular"
-        elif any(is_plural_vector):
-            number = "plural"
-        elif any(is_invariable_vector):
-            number = "invariable"
-        else:
-            number = None
-
-        return number
-
-    def get_gender_from_relative_linker(self):
-        if debug_mode: print "--> clause.get_gender_from_relative_linker()"
-
-        if not self.is_relative():
-            raise Exception("La cláusula no es una relativa (", str(self), ").")
-
-        # "el cual", "los cuales"
-        is_masculine_vector = map(lambda leaf: leaf.msi["gender"] is "masculine", self.relative_linker)
-
-        # "la cual", "las cuales"
-        is_feminine_vector = map(lambda leaf: leaf.msi["gender"] is "feminine", self.relative_linker)
-
-        is_neutral_vector = map(lambda leaf: leaf.msi["gender"] is "neutral", self.relative_linker)
-
-        if any(is_masculine_vector):
-            gender = "masculine"
-        elif any(is_feminine_vector):
-            gender = "feminine"
-        elif any(is_neutral_vector):
-            gender = "neutral"
-        else:
-            gender = None
-
-        return gender
-
     def is_subordinated_with(self, header_lexical_form):
         return self.is_subordinated_with_any([header_lexical_form])
 
     def is_subordinated_with_any(self, header_lexical_forms):
+        header = self.is_subordinated_clause()
+        it_is = header and header.lexical_form in header_lexical_forms
+        return it_is
+
+    def is_subordinated_clause(self):
         if self.is_subordinated() and not self.is_relative():
             header = self.proper_leaves()[0]
-            return header.msi["category"] == "conjunction" \
-                   and header.msi["type"] == "subordinated" \
-                   and header.lexical_form in header_lexical_forms
+            if header.msi["category"] == "conjunction" and header.msi["type"] == "subordinated":
+                return header
 
-        return False
+        return None
 
     def is_gerund(self):
         return self.verb.msi["mode"] == "gerundio"
@@ -169,22 +109,6 @@ class Clause(TreeNode):
     def has_structure(self, name):
         return name in [structure.name for structure in self.syntactic_structures]
 
-    def structure(self, name):
-        return filter(lambda structure: structure.name == name,
-                      self.syntactic_structures)[0]
-
-    def leaves_at_left(self):
-        root_leaves = self.root().node.leaves()
-        first_leaf = self.proper_leaves()[0]
-        return root_leaves[:self.index_in_root_of(first_leaf)]
-
-    def index_in_root_of(self, node):
-        return self.root().node.leaves().index(self.original_by_proper(node.leaves()[0]))
-
-    def index_of(self, entity, tacit_first):
-        tacit_value = float("-inf") if tacit_first else float("inf")
-        return tacit_value if entity.is_tacit() else self.proper_leaves().index(entity.leaves()[0])
-
     def sorted(self, entities, tacit_first):
         return sorted(entities, key=lambda entity: self.index_of(entity, tacit_first))
 
@@ -197,7 +121,8 @@ class Clause(TreeNode):
         return assigned_directly or assigned_indirectly
 
     def same_hemiclause(self, node1, node2):
-        return self.verb.node.position_of(node1) == self.verb.node.position_of(node2)
+        orig_verb_node = self.original_by_proper(self.verb.node)
+        return orig_verb_node.position_of_leaf(node1) == orig_verb_node.position_of_leaf(node2)
 
     #
     # Methods for accessing ENTITIES
@@ -341,6 +266,106 @@ class Clause(TreeNode):
         for time_entity in self.time_entities:
             if time_entity in self.entities:
                 self.entities.remove(time_entity)
+
+    def get_hemiclauses(self):
+        if debug_mode: print "--> Clause.get_hemiclauses()"
+        left_hemiclause_nodes = []
+        right_hemiclause_nodes = []
+
+        for orig_node in self.node:
+            if type(orig_node) == LeafNode:
+                orig_verb_node = self.original_by_proper(self.verb.node)
+                if orig_verb_node.position_of_leaf(orig_node) == "left":
+                    left_hemiclause_nodes.append(orig_node)
+
+                elif orig_verb_node.position_of_leaf(orig_node) == "right":
+                    right_hemiclause_nodes.append(orig_node)
+
+        if debug_mode: print "<-- Clause.get_hemiclauses()"
+        return left_hemiclause_nodes, right_hemiclause_nodes
+
+    def relative_linker_words(self):
+        return [leaf.lexical_form for leaf in self.relative_linker]
+
+    def original_by_proper(self, proper):
+        original_by_proper = {v: k for k, v in self.proper_by_original.items()}
+        return original_by_proper[proper]
+
+    def entity_by_original(self, node):
+        proper_node = self.proper_by_original[node]
+        entities = filter(lambda entity: entity.node == proper_node, self.entities)
+        return entities[0] if entities else None
+
+    def proper_tree(self):
+        return self.proper_by_original[self.node]
+
+    def get_number_from_relative_linker(self):
+        """
+
+        :rtype : basestring or None
+        """
+        if not self.is_relative():
+            raise Exception("La cláusula no es una relativa (", str(self), ").")
+
+        # ["los cuales", "las cuales", "quienes"],
+        is_plural_vector = map(lambda leaf: leaf.msi["number"] is "plural", self.relative_linker)
+
+        # ["el cual", "la cual", "quien"]
+        is_singular_vector = map(lambda leaf: leaf.msi["number"] is "singular", self.relative_linker)
+
+        is_invariable_vector = map(lambda leaf: leaf.msi["number"] is "invariable", self.relative_linker)
+
+        if any(is_singular_vector):
+            number = "singular"
+        elif any(is_plural_vector):
+            number = "plural"
+        elif any(is_invariable_vector):
+            number = "invariable"
+        else:
+            number = None
+
+        return number
+
+    def get_gender_from_relative_linker(self):
+        if debug_mode: print "--> clause.get_gender_from_relative_linker()"
+
+        if not self.is_relative():
+            raise Exception("La cláusula no es una relativa (", str(self), ").")
+
+        # "el cual", "los cuales"
+        is_masculine_vector = map(lambda leaf: leaf.msi["gender"] is "masculine", self.relative_linker)
+
+        # "la cual", "las cuales"
+        is_feminine_vector = map(lambda leaf: leaf.msi["gender"] is "feminine", self.relative_linker)
+
+        is_neutral_vector = map(lambda leaf: leaf.msi["gender"] is "neutral", self.relative_linker)
+
+        if any(is_masculine_vector):
+            gender = "masculine"
+        elif any(is_feminine_vector):
+            gender = "feminine"
+        elif any(is_neutral_vector):
+            gender = "neutral"
+        else:
+            gender = None
+
+        return gender
+
+    def structure(self, name):
+        return filter(lambda structure: structure.name == name,
+                      self.syntactic_structures)[0]
+
+    def leaves_at_left(self):
+        root_leaves = self.root().node.leaves()
+        first_leaf = self.proper_leaves()[0]
+        return root_leaves[:self.index_in_root_of(first_leaf)]
+
+    def index_in_root_of(self, node):
+        return self.root().node.leaves().index(self.original_by_proper(node.leaves()[0]))
+
+    def index_of(self, entity, tacit_first):
+        tacit_value = float("-inf") if tacit_first else float("inf")
+        return tacit_value if entity.is_tacit() else self.proper_leaves().index(entity.leaves()[0])
 
     def __repr__(self):
         return " ".join([str(leaf) for leaf in self.proper_leaves()])

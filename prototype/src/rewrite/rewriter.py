@@ -14,6 +14,7 @@ from src.rewrite.strategy.goConstructionToFutureStrategy import GoConstructionTo
 from src.rewrite.strategy.modalDeberToTieneQue import ModalDeberToTieneQue
 from src.rewrite.strategy.pastCompoundToSimpleStrategy import PastCompoundToSimpleStrategy
 from src.rewrite.strategy.pastSimpleToCompoundStrategy import PastSimpleToCompoundStrategy
+from src.rewrite.strategy.seImpersonalStrategy import SeImpersonalStrategy
 from src.rewrite.strategy.segunToDijoDislocationStrategy import SegunToDijoDislocationStrategy
 from src.rewrite.strategy.subjunctiveImperfectStrategy import SubjunctiveImperfectStrategy
 from src.rewrite.strategy.synonymsStrategy import SynonymsStrategy
@@ -22,7 +23,6 @@ from src.rewrite.strategy.tieneQueToModalDeber import TieneQueToModalDeber
 from src.rewrite.strategy.textualCite import TextualCite
 from src.rewrite.strategy.voicePassiveStrategy import VoicePassiveStrategy
 from src.rewrite.strategy.partialVoicePassiveStrategy import PartialVoicePassiveStrategy
-
 
 debug_mode = False
 
@@ -47,11 +47,13 @@ class Rewriter:
             self.dislocationStrategies = [AppositionDislocationStrategy(),
                                           VoicePassiveStrategy(ontology),
                                           PartialVoicePassiveStrategy(ontology),
+                                          SeImpersonalStrategy(ontology),
                                           TextualCite(),
                                           AdverbialClauseDislocationStrategy(ontology),
                                           AlthoughClauseDislocationStrategy(),
-                                          SegunToDijoDislocationStrategy(),
-                                          DateTimeStrategy(ontology)]
+                                          SegunToDijoDislocationStrategy()
+                                          # DateTimeStrategy(ontology)
+                                          ]
         else:
             self.replacementStrategies = []
             self.dislocationStrategies = []
@@ -66,8 +68,21 @@ class Rewriter:
 
     def rewrite(self):
         if debug_mode: print "--> Rewriter.rewrite()"
+
+        text = self.paragraph.text
+        for strategy in self.dislocationStrategies:
+            if debug_mode: print "\nTEXT BEFORE APPLYING DISLOCATION STRATEGY: ", strategy.__class__.__name__, ":\n[", text, "]\n"
+            self.paragraph = Paragraph.from_text(text)
+            self.analyzer.analyze(self.paragraph)
+            dislocations = self._dislocations_from(strategy, self.paragraph.sentences)
+            text = self.compose_text_with(dislocations)
+            if debug_mode: print "\nTEXT AFTER APPLYING DISLOCATION STRATEGY: ", strategy.__class__.__name__, ":\n[", text, "]\n"
+
         replacements = []
 
+        if debug_mode: print "\nTEXT BEFORE APPLYING REPLACEMENT STRATEGIES: \n[", text, "]\n"
+        self.paragraph = Paragraph.from_text(text)
+        self.analyzer.analyze(self.paragraph)
         clauses = self.clauses_for_replacements if self.clauses_for_replacements else self.paragraph.clauses()
         for clause in clauses:
             replacement_rules = self.replacements_for(clause)
@@ -76,26 +91,19 @@ class Rewriter:
         text = self.compose_text_with(replacements)
         if debug_mode: print "\nTEXT AFTER APPLYING EVERY REPLACEMENT STRATEGY:\n[", text, "]\n"
 
-        for strategy in self.dislocationStrategies:
-            self.paragraph = Paragraph.from_text(text)
-            self.analyzer.analyze(self.paragraph)  # TODO: This seems to be called over and over (calling freeling)
-            dislocations = self._dislocations_from(strategy, self.paragraph.sentences)
-            text = self.compose_text_with(dislocations)
-            if debug_mode: print "\nTEXT AFTER APPLYING DISLOCATION STRATEGY: ", strategy.__class__.__name__, ":\n[", text, "]\n"
-
         return text
 
     def compose_text_with(self, rewrites):
         if debug_mode: print "--> Rewriter.compose_text_with(rewrites: ", rewrites, ")"
         rewrites.sort(key=lambda rewrite_rule: rewrite_rule.token().start())
-        rewrites = deque(rewrites)
+        rewrites_deque = deque(rewrites)
 
         source_text = self.paragraph.text.decode("utf-8")
 
         new_text = ""
         index = 0
-        while rewrites:
-            rewrite = rewrites.popleft()
+        while rewrites_deque:
+            rewrite = rewrites_deque.popleft()
             start, end = rewrite.token().start(), rewrite.token().end()
             new_text += source_text[index:start] + rewrite.replacement.decode("utf-8")
             index = end
@@ -124,22 +132,21 @@ class Rewriter:
         # return [strategy.rewrite(sentence) for sentence in sentences if strategy.applies_to(sentence)]
 
     def _dislocations_from_node(self, strategy, sentence, node):
-        if debug_mode:
-            strategy_name = strategy.__class__.__name__
-            print "--> Rewriter._dislocations_from_node(strategy: ", strategy_name, ", node: ", node, ")"
+        if debug_mode: print "--> Rewriter._dislocations_from_node(strategy: ", strategy.__class__.__name__, ", node: ", node, ")"
 
         dislocations = []
-        enter = True
+        applied_before = False
         try:
             if strategy.applies_to(sentence, node):
                 dislocation_rewrite_rule = strategy.rewrite(sentence, node)
                 dislocations.append(dislocation_rewrite_rule)
-                enter = False
+                applied_before = True
+
         except:
             if debug_mode: print "\n\nException in _dislocations_from_node!!\n\n\n"
             pass
 
-        if enter:
+        if not applied_before:
             for child in node.children:
                 dislocation_rewrite_rules = self._dislocations_from_node(strategy, sentence, child)
                 dislocations.extend(dislocation_rewrite_rules)

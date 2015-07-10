@@ -173,16 +173,16 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
                              + nominal_entities_under_prep_a \
                              + pronominal_entities
 
-        animated_candidate_entities = \
+        animity_filtered_candidate_entities = \
                         nominal_entities_at_same_level_nodes \
                         + SyntacticAnalyzer.filter_by_animity(nominal_entities_under_prep_a, AnimityEnum.animated) \
                         + pronominal_entities
 
-        od = self.search_od(candidate_entities, animated_candidate_entities, verbal_animity)
+        od = self.search_od(candidate_entities, animity_filtered_candidate_entities, verbal_animity)
 
         return od
 
-    def search_od(self, candidate_entities, animated_candidate_entities, verbal_animity=AnimityEnum.bianimate):
+    def search_od(self, candidate_entities, animity_filtered_candidate_entities, verbal_animity=AnimityEnum.bianimate):
         if debug_mode: print "--> ActiveVoiceSyntacticAnalyzer.search_od()"
         if not candidate_entities:
             is_implicit = True
@@ -195,11 +195,17 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         if linked:
             return [candidate_entities[0], linked]
 
-        if not animated_candidate_entities:
+        if not animity_filtered_candidate_entities:
             is_implicit = True
             return [get_entity_some(verbal_animity, is_implicit)]
 
-        return [animated_candidate_entities[0]]
+        animity_filtered_candidate_entities = SyntacticAnalyzer.filter_by_animity(animity_filtered_candidate_entities,
+                                                                                  verbal_animity)
+        if not animity_filtered_candidate_entities:
+            is_implicit = True
+            return [get_entity_some(verbal_animity, is_implicit)]
+
+        return [animity_filtered_candidate_entities[0]]
 
     def get_od_candidate_entities(self, verbal_animity=AnimityEnum.bianimate):
         if debug_mode: print "--> ActiveVoiceSyntacticAnalyzer.get_od_candidate_entities()"

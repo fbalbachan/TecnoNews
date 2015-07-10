@@ -1,3 +1,87 @@
+abejarruco abejarruco NCMS000
+abejarrucos abejarruco NCMP000
+abichón abichón NCMS000
+abichones abichón NCMP000
+abulón abulón NCMS000
+abulones abulón NCMP000
+acevia acevia NCFS000
+acevias acevia NCFP000
+aguililla aguililla NCFS000
+aguilillas aguililla NCFP000
+ajolote ajolote NCMS000
+ajolotes ajolote NCMP000
+alcélafo alcélafo NCMS000
+alcélafos alcélafo NCMP000
+aligator aligator NCMS000
+anoa anoa NCFS000
+anoas anoa NCFP000
+araguato araguato NCMS000
+araguatos araguato NCMP000
+asnillo asnillo NCMS000
+asnillos asnillo NCMP000
+axolotl axolotl NCMS000
+axolotes axolotl NCMP000
+azno azno NCMS000
+aznos azno NCMP000
+bandicoot bandicoot NCMS000
+beluga beluga NCFS000
+beluga beluga NCFP000
+capibara capibara NCFS000
+celacanto celacanto NCMS000
+celacantos celacanto NCMP000
+chacalin chacalin NCMS000
+cobayo cobayo NCMS000
+cobayos cobayo NCMP000
+coendú coendú NCMS000
+coipú coipú NCMS000
+cornalito cornalito NCMS000
+cornalitos cornalito NCMP000
+corsito corsito NCMS000
+corsitos corsito NCMP000
+cotuza cotuza NCFS000
+cuy cuy NCMS000
+dik-dik dik-dik NCMS000
+dodo dodo NCMS000
+gecko gecko NCMS000
+guatin guatin NCMS000
+guatuza guatuza NCFS000
+guama guama NCFS000
+guamara guamara NCFS000
+guirre guirre NCMS000
+guya guya NCFS000
+hamster hamster NCMS000
+hamsters hamster NCMP000
+holotiura holotiura NCMS000
+huemul huemul NCMS000
+huemules huemul NCMP000
+jabirú jabirú NCMS000
+kangaroo kangaroo NCMS000
+krill krill NCMS000
+lemur lemur NCMS000
+lemures lemur NCMP000
+lenguadillo languadillo NCMS000
+lenguadillos languadillo NCMP000
+peuco peuco NCMS000
+peucos peuco NCMP000
+picapinos picapinos NCMS000
+picapuercos picapuercos NCMS000
+picofeo picofeo NCMS000
+poni poni NCMS000
+ponis poni NCMP000
+surubí surubí NCMS000
+surubíes surubí NCMP000
+vinchuca vinchuca NCFS000
+vinchucas vinchuca NCFP000
+walabi walabi NCMS000
+wombat wombat NCMS000
+yacaré yacaré NCMS000
+yacarés yacaré NCMP000
+yaguareté yaguareté NCMS000
+yaguaretés yaguareté NCMP000
+zorrillo zorrillo NCMS000
+zorrillos zorrillo NCMP000
+tropilla tropilla NCFS000
+tropillas tropilla NCFP000
 b b NCFS000
 c c NCFS000
 d d NCFS000
@@ -3329,10 +3413,10 @@ abogabas abogar VMII2S0
 abogacía abogacía NCFS000
 abogacías abogacía NCFP000
 abogad abogar VMM02P0
-abogada abogado NCFS000 abogar VMP00SF
-abogadas abogado NCFP000 abogar VMP00PF
-abogado abogado NCMS000 abogar VMP00SM
-abogados abogado NCMP000 abogar VMP00PM
+abogada abogado NCFS000
+abogadas abogado NCFP000
+abogado abogado NCMS000
+abogados abogado NCMP000
 abogamos abogar VMIP1P0 abogar VMIS1P0
 abogan abogar VMIP3P0
 abogando abogar VMG0000
@@ -339089,7 +339173,6 @@ indistinta indistinto AQ0FS0
 indistintas indistinto AQ0FP0
 indistinto indistinto AQ0MS0
 indistintos indistinto AQ0MP0
-individua individuo AQ0FS0 individuo NCFS000
 individuaba individuar VMII1S0 individuar VMII3S0
 individuabais individuar VMII2P0
 individuaban individuar VMII3P0
@@ -339190,7 +339273,6 @@ individuaríais individuar VMIC2P0
 individuaríamos individuar VMIC1P0
 individuarían individuar VMIC3P0
 individuarías individuar VMIC2S0
-individuas individuo AQ0FP0 individuo NCFP000
 individuase individuar VMSI1S0 individuar VMSI3S0
 individuaseis individuar VMSI2P0
 individuasen individuar VMSI3P0
@@ -492312,7 +492394,7 @@ scriptgirls scriptgirl NCFP000
 scripts script NCFP000
 scull scull NCMS000
 sculls scull NCMP000
-se se P00CN000 se P03CN000 se PP3CN000
+se se P00CN000 se P03CN000 se PP3CND00
 sea sea CC sea CS ser VSM03S0 ser VSSP3S0
 seamos ser VSM01P0 ser VSSP1P0
 sean ser VSM03P0 ser VSSP3P0
@@ -493552,7 +493634,7 @@ segáramos segar VMSI1P0
 segáremos segar VMSF1P0
 segásemos segar VMSI1P0
 segó segar VMIS3S0
-según según CS según RG según SPS00
+según según CS
 seisava 6 AO0FS0 seisavo NCFS000
 seisavas 6 AO0FP0 seisavo NCFP000
 seisavo 6 AO0MS0 seisavo NCMS000

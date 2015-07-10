@@ -6,6 +6,9 @@ from src.utils.resources import instance as resources
 
 
 class FreelingDictionaryParser:
+    def __init__(self):
+        pass
+
     def parse_ontology(self, _file, ontology_name):
         ontology = Ontology(ontology_name)
         for line in open(_file):

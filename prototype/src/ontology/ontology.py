@@ -9,8 +9,8 @@ class Ontology:
     def add(self, concept):
         self.concept[concept.name] = concept
 
-    def concept(self, name, create_if_neccesary = False):
-        if not name in self.concepts and create_if_neccesary:
+    def concept(self, name, create_if_necessary = False):
+        if name not in self.concepts and create_if_necessary:
             self.concepts[name] = Concept(name)
         return self.concepts[name]
 
