@@ -73,22 +73,30 @@ class SeImpersonalStrategy:
 
         od_string = str(clause.structure('od'))
 
-        new_clause_text = od_string + " " + rewritten_verb
         header = clause.is_subordinated_clause()
-        if header:
-            new_clause_text = header.lexical_form + " " + new_clause_text
 
+        new_clause_text = ""
         if len(beginning_text) > 0:
-            beginning_text = set_first_letter_case(clause.node.leaves()[0].lexical_form, beginning_text)
-            new_clause_text = (beginning_text + " " + new_clause_text).rstrip()
-        else:
-            new_clause_text = set_first_letter_case(od_string if not header else header.lexical_form, new_clause_text)
+            new_clause_text = (header.lexical_form + " " if header else "") + beginning_text
+            new_clause_text = set_first_letter_case(clause.node.leaves()[0].lexical_form, new_clause_text).rstrip()
+
+        elif header:
+            new_clause_text = header.lexical_form
+
+        new_clause_text += " " if len(new_clause_text) > 0 else ""
+        new_clause_text += od_string + " " + rewritten_verb
+
+        if len(beginning_text) == 0 and not header and od_string[0].islower():
+            new_clause_text = set_first_letter_case(clause.node.leaves()[0].lexical_form, new_clause_text).rstrip()
 
         if len(ending_text) > 0:
-            new_clause_text = (new_clause_text + " " if len(ending_text) > 1 else "" + ending_text).rstrip()
+            new_clause_text += (" " if len(ending_text) > 1 else "")
+            new_clause_text += ending_text
+
+        new_clause_text = new_clause_text.replace('_', ' ').rstrip()
 
         if debug_mode: print "<-- SeImpersonalStrategy.get_clause_replacement_string() --> new_clause_text: ", new_clause_text, "\n"
-        return new_clause_text.replace('_', ' ')
+        return new_clause_text
 
     def trim_known_elements(self, clause):
         if debug_mode: print "--> SeImpersonalStrategy.trim_known_elements(clause:", clause, ")"
@@ -101,6 +109,8 @@ class SeImpersonalStrategy:
             print "left_hemiclause_leaves: ", left_hemiclause_leaves
             print "right_hemiclause_leaves: ", right_hemiclause_leaves
 
+        # The method get_hemiclauses() will NOT ALWAYS return the header,
+        # so we remove it here and add it later, by hand
         header = clause.is_subordinated_clause()
         if header:
             header_orig_node = clause.original_by_proper(header)
