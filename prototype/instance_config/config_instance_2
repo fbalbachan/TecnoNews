@@ -32,9 +32,10 @@ db_test = sentinews_test
 status = ON
 
 [publishing]
-unique_host = False
-category_host_to_publish = publishing/wordpress_category_host_to_publish.json
-categories_priority = publishing/categories_priority.json
+unique_host = True
+unique_host_data = publishing/wordpress_entretenimiento_unique_host_to_publish.json
+#category_host_to_publish = publishing/wordpress_category_host_to_publish.json
+#categories_priority = publishing/categories_priority.json
 default_category = interés general
 
 [resources]
