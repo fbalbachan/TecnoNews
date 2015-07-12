@@ -18,7 +18,7 @@ class TextInserter:
         generated = u""
 
         injected_count = 0  # keep the count of how many paragraph we add to the news
-        wiki_inyected = False
+        wiki_injected = False
 
         for idx, paragraph in enumerate(self.paragraphs):
             if not isinstance(paragraph, unicode):
@@ -36,7 +36,7 @@ class TextInserter:
                 #              + u'<p><strong> Ends paragraph from other coverage<strong></p>[/eyesonly]'
 
             if idx in injections_wiki.keys():
-                wiki_inyected = True
+                wiki_injected = True
                 for content in injections_wiki[idx]:
                     # generated += u'[eyesonly logged="in"]' \
                     #              + u'<p><strong>Starts paragraph from wiki</strong></p> [/eyesonly]\n'
@@ -44,8 +44,9 @@ class TextInserter:
                     # generated += u'[eyesonly logged="in"]' \
                     #              + u'<p><strong>Ends paragraph from wiki</strong></p>[/eyesonly]'
 
-        if wiki_inyected:
-            injected_count += 1
+        if wiki_injected:        # TODO: validate experiment and remove code
+            injected_count += 0  # EXPERIMENT: We didn't take in count wiki as injected paragraph
+                                 # it affects the number of news we publish.
 
         return injected_count, generated.strip()
 
