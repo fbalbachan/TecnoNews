@@ -220,12 +220,12 @@ class NewsRewriter(object):
             print "Empty tags to add"
 
         base_tags = self.rewritten_entry.tags
+        if not base_tags:
+            base_tags = []
         # avoid error if is a set insted of a list
         # TODO: put asserts in news entry to make this an assert
         if not isinstance(base_tags, list):
-            list(base_tags)
-        if not base_tags:
-            base_tags = []
+            base_tags = list(base_tags)
 
         logger.info("base tags %s " % base_tags)
 
