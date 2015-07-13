@@ -2,8 +2,10 @@
 __author__ = 'Pablo Perez De Angelis'
 from src.utils.textDistance import TextDistance
 from src.utils.configProvider import ConfigProvider
+from src.utils.logger_utils import *
 
-related_logger = None
+# related_logger = None
+related_logger = get_logger('tecnonews')
 
 class RelatedNewsEntries(object):
 
@@ -23,7 +25,7 @@ class RelatedNewsEntries(object):
         for news in self.news_to_compare:
             self.pre_process(news)
 
-        self.get_logger()
+        # self.get_logger()
 
     @staticmethod
     def get_logger():
