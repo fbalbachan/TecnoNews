@@ -90,7 +90,7 @@ class NewsCrawler(object):
             self.feed_service.save(Feed('nuevoherald', 'http://www.elnuevoherald.com/?widgetName=rssfeed&widgetContentId=710494&getXmlFeed=true',
                                         'nuevoherald_parser.NuevoHeraldParser', datetime.utcnow()))
             self.feed_service.save(Feed('vivelo_hoy', 'http://www.vivelohoy.com/feed',
-                                        'vivelo_hoy_parser import ViveloHoyParser', datetime.utcnow()))
+                                        'vivelo_hoy_parser.ViveloHoyParser', datetime.utcnow()))
 
     def crawl_all(self):
         crawler_logger.info("START crawl_all")
