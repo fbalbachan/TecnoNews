@@ -56,7 +56,7 @@ class NewsEntriesService(object):
         to: date
             date to finish
         """
-        return self.get_list({'wp_id': {'$ne': None}, 'published_date': {'$gte': start, '$lte': to}}, limit)
+        return self.get_list({'published_date': {'$gte': start, '$lte': to}}, limit)
 
     def get_by_categories(self, categories, limit=None):
         """ Retrieve a list of news_entries by a given categories array, at least one element would match
@@ -65,7 +65,7 @@ class NewsEntriesService(object):
         categories: list
             list of searched categories
         """
-        return self.get_list({'wp_id': {'$ne': None}, 'categories': {'$in': categories}}, limit)
+        return self.get_list({'categories': {'$in': categories}}, limit)
 
     def get_by_categories_date_range(self, fromDate, toDate, categories, limit=None):
         """Retrieve a list of news entries by a given categories array and date range
@@ -78,7 +78,10 @@ class NewsEntriesService(object):
         categories: list
             list of searched categories
         """
-        return self.get_list({'wp_id': {'$ne': None},
-                              'categories': {'$in': categories},
-                              'published_date': {'$gte': fromDate, '$lte': toDate}},
+        from bson.objectid import ObjectId
+        dummy_id_from = ObjectId.from_datetime(fromDate)
+        dummy_id_to = ObjectId.from_datetime(toDate)
+        # TODO: use dummy_id_to
+        return self.get_list({"_id": {"$gt": dummy_id_from},
+                              'categories': {'$in': categories}},
                              limit)

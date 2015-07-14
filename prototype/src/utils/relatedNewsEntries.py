@@ -4,7 +4,6 @@ from src.utils.textDistance import TextDistance
 from src.utils.configProvider import ConfigProvider
 from src.utils.logger_utils import *
 
-# related_logger = None
 related_logger = get_logger('tecnonews')
 
 class RelatedNewsEntries(object):
@@ -76,9 +75,6 @@ class RelatedNewsEntries(object):
 
         fromDate = datetime.utcnow() - timedelta(days=days)
         toDate = datetime.utcnow()
-        related_logger("fromDate %s" % fromDate)
-        related_logger("toDate" % toDate)
-        related_logger("Categories" % self.news_original.categories)
         news_to_compare = nes.get_by_categories_date_range(fromDate=fromDate, toDate=toDate,
                                                            categories=self.news_original.categories)
 
