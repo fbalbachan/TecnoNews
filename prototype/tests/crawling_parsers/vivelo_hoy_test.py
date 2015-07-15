@@ -57,7 +57,7 @@ class ViveloHoyParserTest(unittest.TestCase):
         print "Urls:", error_urls
 
     def _test_parse_single_url(self):
-        # TODO: url = ''
+        url = 'http://www.vivelohoy.com/entretenimiento/8454891/hace-lupillo-rivera-corrido-a-el-chapo'
         entry = ViveloHoyParser().parse(url=url)
 
         if u'/silencio-por-favor/' in url:
