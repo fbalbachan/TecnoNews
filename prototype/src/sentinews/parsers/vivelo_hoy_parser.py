@@ -19,6 +19,12 @@ class ViveloHoyParser(GenericParser):
         if not soup:
             soup = BeautifulSoup(self.opener.read(url))
 
+        if u"/video/" in url:
+            allowed = False
+        #lso post de opinion no van
+        category = soup.find('meta',{"property":"article:section"})
+        if (u'Opinión' in category['content']) or ('Entretenimiento' in category['content']):
+            allowed = False
         #los post sin tags son solo video
         tag_list = soup.findAll('meta',{"property":"article:tag"})
         if not tag_list:
@@ -72,11 +78,18 @@ class ViveloHoyParser(GenericParser):
         for tag in tag_list:
             tags.append(tag['content'])
 
+        paragraphs =  content.findAll('p')
+        if paragraphs:
+            last_paragraph = paragraphs.pop()
+            if re.match(u'[_|-| ]?Por .+',last_paragraph.text):
+                last_paragraph.extract()
+
         content = content.text
         #remove certain strings
         content = re.sub(u'-Con servicios de w+',u'',content)
         content = re.sub(ur'– ?Con información .+', u'', content)
         content = re.sub(u'EFE[USA]*', u'',content)
+        content = re.sub(u'—Agencias', u'',content)
         #take out first line
         first_line_regex = re.compile(ur'( ?\S)+? ?[-|—|–]')
         content = first_line_regex.sub(u'', content, 1)

@@ -57,7 +57,21 @@ class EuropaPressParser(GenericParser):
         for l in links:
             tags.add(l.text)
 
-        content = soup.find('div', {"itemprop": 'articleBody'}).text
+        content = soup.find('div', {"itemprop": 'articleBody'})
+        date_div = content.findAll('div', {'class': 'FechaPublicacionNoticia'})
+        for dd in date_div:
+            dd.extract()
+
+        p_content = u''
+        all_p_in_content = content.findAll('p')
+        if 'EUROPA PRESS' in all_p_in_content[0].text:
+            all_p_in_content.pop(0)
+
+        for p in all_p_in_content:
+            p_content += p.text + u'\n'
+
+        content = p_content
+
         # TODO make a cleanning method in each parser and leave only common in
         # the sanitize process
         import re
