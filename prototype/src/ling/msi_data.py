@@ -65,7 +65,7 @@ attribute_map = {"A": {1: ("type",     {"Q": "calificative",
                  "N": {1:  ("type",   {"C": "common", "P": "proper"}),
 
                        2:  ("gender", {"M": "masculine", "F": "feminine",
-                                       "C": "common",    "0": "neutral"}),  # <- 0: es NP
+                                       "C": "neutral",    "0": "neutral"}),  # <- 0: es NP
 
                        3:  ("number", {"S": "singular",   "P": "plural",
                                        "N": "invariable", "0": "singular"}),

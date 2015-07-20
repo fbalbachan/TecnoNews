@@ -32,7 +32,8 @@ class VoicePassiveStrategy:
     def rewrite(self, sentence, node):
         if debug_mode: print "--> VoicePassiveStrategy.rewrite(sentence: ", sentence, ", node: ", node, ")"
 
-        clauses = []
+        rewrite_rule = None
+
         try:
             clauses = [[clause, sentence.clauses[idx+1]] for idx, clause in enumerate(sentence.clauses)
                        if self.applies_to_clause(clause) and idx+1 < len(sentence.clauses)]
@@ -42,6 +43,8 @@ class VoicePassiveStrategy:
             if self.applies_to_clause(last_clause):
                 clauses.append([last_clause, None])
 
+            rewrite_rule = self.rewrite_clause(node, sentence, clauses)
+
         except Exception as e:
             logger = get_logger('tecnonews')
             logger.info("VoicePassiveStrategy Rewrite exception:")
@@ -49,7 +52,7 @@ class VoicePassiveStrategy:
             ex_type, ex, tb = sys.exc_info()
             logger.info(traceback.format_tb(tb))
 
-        return self.rewrite_clause(node, sentence, clauses)
+        return rewrite_rule
 
     def applies_to_clause(self, clause):
         if debug_mode: print "--> VoicePassiveStrategy.applies_to_clause(clause: ", clause, ")"

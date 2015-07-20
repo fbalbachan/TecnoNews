@@ -74,6 +74,7 @@ class PartialVoicePassiveStrategy:
     def rewrite_clause(self, node, sentence, clauses):
         if debug_mode: print "--> PartialVoicePassiveStrategy.rewrite_clause(clauses: )"
 
+        rewrite_rule = None
         clause = clauses[0][0]
 
         try:
@@ -88,8 +89,6 @@ class PartialVoicePassiveStrategy:
             rewrite_rule = Rewrite(clause.node, ntext)
 
         except Exception as e:
-            rewrite_rule = Rewrite(clause.node)
-
             ex_type, ex, tb = sys.exc_info()
             traceback.print_tb(tb)
             ex_type, ex, tb = sys.exc_info()
