@@ -2,8 +2,9 @@
 __author__ = 'Pablo Perez De Angelis'
 from src.utils.textDistance import TextDistance
 from src.utils.configProvider import ConfigProvider
+from src.utils.logger_utils import *
 
-related_logger = None
+related_logger = get_logger('tecnonews')
 
 class RelatedNewsEntries(object):
 
@@ -23,7 +24,7 @@ class RelatedNewsEntries(object):
         for news in self.news_to_compare:
             self.pre_process(news)
 
-        self.get_logger()
+        # self.get_logger()
 
     @staticmethod
     def get_logger():
@@ -74,7 +75,6 @@ class RelatedNewsEntries(object):
 
         fromDate = datetime.utcnow() - timedelta(days=days)
         toDate = datetime.utcnow()
-
         news_to_compare = nes.get_by_categories_date_range(fromDate=fromDate, toDate=toDate,
                                                            categories=self.news_original.categories)
 

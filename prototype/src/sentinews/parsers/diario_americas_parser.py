@@ -90,8 +90,16 @@ class DiarioAmericasParser(GenericParser):
         for video in content.findAll(src=re.compile("editor.wouzee")):
             video.parent.extract()
 
+        #take out first paragraph that contais date, author, city
+        first_paragraph = content.find('p')
+        first_paragraph.extract()
+
         tags = []
-        content = content.text
+        p_content = u''
+        for p in content.findAll('p'):
+            p_content += p.text + u'\n'
+
+        content = p_content
         new_entry = self.create_news_entry(title=title, content=content,
                                            tags=tags,
                                            source=self.source,

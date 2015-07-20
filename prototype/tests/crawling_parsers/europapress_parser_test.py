@@ -25,7 +25,9 @@ class EuropaPressParserTest(unittest.TestCase):
             self.assertIsNone(entry)
         else:
             self.assertIsNotNone(entry)
-            print "Content:", entry.content, '\n'
+            print "Content:"
+            for paragraph in entry.content.split('\n'):
+                print paragraph + '\n'
             print "Tags:", entry.tags, '\n'
             print "Title:", entry.title, '\n'
             print "Source:", entry.source, '\n'
@@ -53,8 +55,8 @@ class EuropaPressParserTest(unittest.TestCase):
         print "Urls:", error_urls
 
     def _test_parse_single_url(self):
-        url = 'http://www.europapress.es/internacional/noticia-bachelet-ratifica-cargo-canciller-relevar-todo-gabinete-20150507144619.html'
-
+        url = 'http://www.europapress.es/internacional/noticia-claves-acuerdo-iran-51-20150714125146.html'
+        url = 'http://www.europapress.es/comunitat-valenciana/noticia-margallo-avanza-va-ofrecer-espana-puesto-tan-importante-mas-presidencia-eurogrupo-20150714122112.html'
         entry = EuropaPressParser().parse(url=url)
 
         if u'/silencio-por-favor/' in url:
@@ -62,7 +64,9 @@ class EuropaPressParserTest(unittest.TestCase):
             self.assertIsNone(entry)
         else:
             self.assertIsNotNone(entry)
-            print "Content:", entry.content, '\n'
+            print "Content:"
+            for paragraph in entry.content.split('\n'):
+                print paragraph + '\n'
             print "Tags:", entry.tags, '\n'
             print "Title:", entry.title, '\n'
             print "Source:", entry.source, '\n'
