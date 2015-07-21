@@ -37,9 +37,17 @@ class ParseNode(TreeNode):
 
     def original_lexical_form(self):
         if debug_mode: print "--> ParseNode.original_lexical_form()"
-        leaves = self.leaves()
-        orig_forms = [str(leaf.original_lexical_form) for leaf in leaves if leaf.msi["category"] != "punctuation"]
-        return " ".join(orig_forms)
+
+        result = ""
+        for leaf in self.leaves():
+            orig_form = str(leaf.original_lexical_form)
+
+            between = " " if (len(result) > 0 and leaf.msi["category"] != "punctuation") \
+                      else ""
+
+            result = result + between + orig_form
+
+        return result.replace("_", " ")
 
     def nodes_with_labels(self, labels):
         nodes = []
