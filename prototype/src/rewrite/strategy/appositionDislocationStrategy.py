@@ -41,7 +41,7 @@ class AppositionDislocationStrategy:
     def rewrite(self, sentence, node):
         if debug_mode: print "--> AppositionDislocationStrategy.rewrite(sentence:", sentence, ", node:", node, ")"
 
-        rewrite = Rewrite(sentence.parse_node, sentence.text)
+        rewrite = None
 
         try:
             new_sentence_texts = []

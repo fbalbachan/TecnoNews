@@ -7,6 +7,8 @@ class ValuatedAdverbFinder:
 
     def find(self):
         clause = self.clause
-        valuated_adverbs = filter(lambda leaf: leaf.msi["category"] == "adverb" and leaf.msi["type"] == "general" and \
-                                  not SentiWordNet.get(leaf.lemma).is_neutral(), clause.proper_leaves())
+        valuated_adverbs = filter(lambda leaf: leaf.msi["category"] == "adverb"
+                                               and leaf.msi["type"] == "general"
+                                               and not SentiWordNet.get(leaf.lemma).is_neutral(),
+                                  clause.proper_leaves())
         return valuated_adverbs

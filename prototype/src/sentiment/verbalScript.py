@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 class VerbalScript:
-    def __init__(self, lemma, klass = "NEUTRAL", agentive_coef = 0, objective_coef = 0):
+    def __init__(self, lemma, klass="NEUTRAL", agentive_coef=0, objective_coef=0):
         self.lemma = lemma
         self.klass = klass
         self.agentive_coef = agentive_coef

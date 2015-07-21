@@ -139,8 +139,9 @@ class Rewriter:
         try:
             if strategy.applies_to(sentence, node):
                 dislocation_rewrite_rule = strategy.rewrite(sentence, node)
-                dislocations.append(dislocation_rewrite_rule)
-                applied_before = True
+                if dislocation_rewrite_rule:
+                    dislocations.append(dislocation_rewrite_rule)
+                    applied_before = True
 
         except:
             if debug_mode: print "\n\nException in _dislocations_from_node!!\n\n\n"

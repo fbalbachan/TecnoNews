@@ -5,10 +5,10 @@ debug_mode = False
 
 
 class Rewrite:
-    def __init__(self, node, replacement=None):
-        if debug_mode: print "--> Rewrite.init(node:", node, ", repl:", replacement if replacement else "None", ")"
+    def __init__(self, node, replacement):
+        if debug_mode: print "--> Rewrite.init(node:", node, ", replacement:", replacement, ")"
         self.node = node
-        self.replacement = replacement if replacement is not None else node.original_lexical_form()
+        self.replacement = replacement
 
         if has_type_encoding(self.replacement, unicode):
             self.replacement = self.replacement.encode("utf-8")
