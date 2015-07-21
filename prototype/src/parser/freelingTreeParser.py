@@ -56,7 +56,7 @@ class FreelingTreeParser:
         regex_match = self.leaf_node_match_for(line)
         lexical_form = regex_match.group(1)
         lemma = regex_match.group(2)
-        leaf_msi = tag2fullmsi(regex_match.group(3))
+        leaf_msi = tag_to_full_msi(regex_match.group(3))
         return LeafNode(lexical_form, lemma, leaf_msi)
 
     def middle_node_label_of(self, line):

@@ -32,17 +32,29 @@ class WebOutputUtils:
 
     def entity_tooltip(self, entity):
         tooltip = self.msi_string(entity.msi)
+        tooltip = tooltip if not isinstance(tooltip, unicode) \
+                  else tooltip.encode("utf-8")
 
         if (entity.category() == "noun" or entity.category() == "pronoun") \
            and "animity" in entity.msi:
-            tooltip = tooltip + " " + entity.msi["animity"]
+            animity = entity.msi["animity"]
+            animity = animity if not isinstance(animity, unicode) \
+                      else animity.encode("utf-8")
+            tooltip = tooltip + " " + animity
 
         if entity.category() == "noun" and entity.msi["type"] == "proper":
-            tooltip = tooltip + " " + str(entity.msi["semantic_classification"]).upper()
+            semantic_classification = str(entity.msi["semantic_classification"]).upper()
+            semantic_classification = semantic_classification if not isinstance(semantic_classification, unicode) \
+                                      else semantic_classification.encode("utf-8")
+            tooltip = tooltip + " " + semantic_classification
 
         if entity.category() == "verb":
-            tooltip = tooltip + " - Transitivity " + entity.transitivity + " - Sentiment script " + \
-                entity.sentimental_script.klass
+            transitivity = entity.transitivity if not isinstance(entity.transitivity, unicode) \
+                           else entity.transitivity.encode("utf-8")
+            klass = entity.sentimental_script.klass if not isinstance(entity.sentimental_script.klass, unicode) \
+                    else entity.sentimental_script.klass.encode("utf-8")
+
+            tooltip = tooltip + " - Transitivity " + transitivity + " - Sentiment script " + klass
 
         return tooltip
 

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from src.ling.msi_mapper import tag2fullmsi
+from src.ling.msi_mapper import tag_to_full_msi
 from src.ontology.lexicalForm import LexicalForm
 from src.ontology.ontology import Ontology
 from src.utils.resources import instance as resources
@@ -21,7 +21,7 @@ class FreelingDictionaryParser:
 
             for lemma, tag in zip(lemmas, tags):
                 if "+" in lemma: continue
-                ontology.concept(lemma, True).add(LexicalForm(lexical_form, tag2fullmsi(tag), lemma, None))
+                ontology.concept(lemma, True).add(LexicalForm(lexical_form, tag_to_full_msi(tag), lemma, None))
 
         return ontology
 

@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from src.ling.genderEnum import GenderEnum
+from src.ling.numberEnum import NumberEnum
 from src.model.referent.referent import Referent
 from src.sentiment.entitySentimentalValue import EntitySentimentalValue
 from src.model.entity.animityEnum import AnimityEnum
@@ -42,7 +44,7 @@ class TacitEntity:
     def update_msi(self):
         msi = self.msi
         referenced_msi = self.referenced().msi
-        if msi["gender"] == "neutral":
+        if msi["gender"] == GenderEnum.neutral:
             msi["gender"] = referenced_msi["gender"]
         msi["animity"] = referenced_msi["animity"]
 
@@ -67,27 +69,20 @@ class TacitEntity:
 
     def matches(self, entity):
         matches = self.msi["person"] == entity.msi["person"] \
-                  and self.matches_number_of(entity) \
-                  and self.matches_gender_of(entity)
+                  and self.number_matches(entity.msi["number"]) \
+                  and self.gender_matches(entity.msi["gender"])
         return matches
 
     def number_matches(self, number):
         msi = self.msi
-        return msi["number"] == "invariable" \
-               or number == "invariable" \
+        return msi["number"] == NumberEnum.invariable \
+               or number == NumberEnum.invariable \
                or msi["number"] == number
 
-    def matches_number_of(self, entity):
-        return self.number_matches(entity.msi["number"])
-
     def gender_matches(self, gender):
-        neutral_genders = ["neutral", "common"]
-        return self.msi["gender"] in neutral_genders \
-               or gender in neutral_genders \
+        return self.msi["gender"] == GenderEnum.neutral \
+               or gender == GenderEnum.neutral \
                or self.msi["gender"] == gender
-
-    def matches_gender_of(self, entity):
-        return self.gender_matches(entity.msi["gender"])
 
     def matches_msi(self, msi):
         for key, value in msi.items():

@@ -5,9 +5,9 @@ from enum import Enum
 
 
 class NumberEnum(Enum):
-    singular = "singular"
-    plural = "plural"
-    invariable = "invariable"
+    singular = u"singular"
+    plural = u"plural"
+    invariable = u"invariable"
 
     @classmethod
     def most_specific(cls, number1, number2):

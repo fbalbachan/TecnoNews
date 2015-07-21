@@ -1,8 +1,9 @@
 #!/usr/bin/env python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 import unittest
 
 from src.ling.freelingDictionaryParser import FreelingDictionaryParser
+from src.ling.numberEnum import NumberEnum
 from src.model.paragraph.paragraph import Paragraph
 from src.model.paragraph.paragraphAnalyzer import ParagraphAnalyzer
 from src.model.sentence.sentenceAnalyzer import SentenceAnalyzer
@@ -31,7 +32,8 @@ class TestRewriter(unittest.TestCase):
 
     def __(self):
         ontology = FreelingDictionaryParser.from_resource()
-        print ontology.get_lexical_form("haber", { "mode" : "indicative", "time" : "presente", "person" : 2, "number" : "singular"})
+        msi = {"mode": "indicative", "time": "presente", "person": 2, "number": NumberEnum.singular}
+        print ontology.get_lexical_form("haber", msi)
 
     def test_segun_to_dijo_dislocation(self):
         self.strategies = [SegunToDijoDislocationStrategy([True], [""])]

@@ -1,8 +1,9 @@
 #!/usr/bin/env python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 import unittest
 
 from src.ling.freelingDictionaryParser import FreelingDictionaryParser
+from src.ling.numberEnum import NumberEnum
 from src.model.paragraph.paragraph import Paragraph
 from src.model.paragraph.paragraphAnalyzer import ParagraphAnalyzer
 from src.model.sentence.sentenceAnalyzer import SentenceAnalyzer
@@ -23,7 +24,11 @@ class TestRewriter(unittest.TestCase):
     def __(self):
         print "___________----____--_"
         ontology = FreelingDictionaryParser.from_resource()
-        print ontology.get_lexical_form("haber", { "mode" : "indicative", "time" : "presente", "person" : 2, "number" : "singular"})
+        msi = {"mode": "indicative",
+               "time": "presente",
+               "person": 2,
+               "number": NumberEnum.singular}
+        print ontology.get_lexical_form("haber", msi)
 
     def test_dislocate_cite(self):
         self.strategies = [TextualCite([True], [""])]
@@ -69,7 +74,6 @@ class TestRewriter(unittest.TestCase):
 
         #TODO: case with distance 3
 
-
         # avoid false positives
         self.kase('Entretanto, el gobierno federal anunció que presentará una "Comisión de Estado" que dictará los lineamientos para enfrentar la inseguridad en el país.',
                   'Entretanto, el gobierno federal anunció que presentará una "Comisión de Estado" que dictará los lineamientos para enfrentar la inseguridad en el país.')
@@ -77,7 +81,6 @@ class TestRewriter(unittest.TestCase):
         #Fixme: case long cite
         # self.kase('“Es bastante extraordinario que podamos hacer esto; rastrear un cometa y mirar la evolución de un cometa. Tenemos un asiento en primera fila”, afirmó el ingeniero de sistemas de aterrizaje de la ESA',
         #           'Afirmó el ingeniero de sistemas de aterrizaje de la ESA: “Es bastante extraordinario que podamos hacer esto; rastrear un cometa y mirar la evolución de un cometa. Tenemos un asiento en primera fila”')
-
 
     def kase(self, source, edited):
         print "Case:", source

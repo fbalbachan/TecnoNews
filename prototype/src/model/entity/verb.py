@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from src.ling.genderEnum import GenderEnum
+from src.ling.numberEnum import NumberEnum
 from src.ling.tacit_subjects import tacit_subjects
 from src.ling.verb_info import get_sentimental_script_of, get_transitivity, get_script_animity_for
 from src.model.entity.entity import Entity
@@ -63,7 +65,12 @@ class Verb(Entity):
         first_leaf = self._leaves[0]
 
         person = first_leaf.msi["person"]
-        gender = "neutral" if self.voice == "active" else (self.leaf().msi["gender"] or "neutral")
+
+        if self.voice == "active":
+            gender = GenderEnum.neutral
+        else:
+            gender = (self.leaf().msi["gender"] or GenderEnum.neutral)
+
         number = first_leaf.msi["number"]
         mode = first_leaf.msi["mode"]
         time = first_leaf.msi["time"]
@@ -72,12 +79,13 @@ class Verb(Entity):
                 "person": person, "mode": mode, "time": time}
 
     def matching_pronoun(self):
-        neutral_pronouns = {(1, "singular"), (2, "singular"), (2, "plural")}
-
+        neutral_pronouns = {(1, NumberEnum.singular),
+                            (2, NumberEnum.singular),
+                            (2, NumberEnum.plural)}
         msi = self.msi
         person = msi["person"]
         number = msi["number"]
-        gender = "neutral" if (person, number) in neutral_pronouns else msi["gender"]
+        gender = GenderEnum.neutral if (person, number) in neutral_pronouns else msi["gender"]
         return tacit_subjects[(person, number, gender)]
 
     def matching_pronoun_msi(self):

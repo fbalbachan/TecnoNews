@@ -1,10 +1,13 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 from src.ling.msi_data import *
+from src.ling.genderEnum import GenderEnum
+from src.ling.numberEnum import NumberEnum
 
-default_msi = {"person": 3, "number": u"singular", "gender": u"neutral"}
+default_msi = {"person": 3, "number": NumberEnum.singular, "gender": GenderEnum.neutral}
+
 empty_msi = {"person": None, "number": None, "gender": None}
 
-def tag2fullmsi(tag):
+def tag_to_full_msi(tag):
     category = tag[0]
     result = {"category": word_category[category]}
     attributes = attribute_map[category]
@@ -14,8 +17,10 @@ def tag2fullmsi(tag):
         for (position, letter) in zip([1,2,3,45,6], [tag[1], tag[2], tag[3], tag[4:6], tag[6]]):
             attribute, values = attributes[position]
             result[attribute] = values[letter]
+
     elif category == "F":
         result["type"] = attributes[tag[1:]]
+
     else:
         for (position, letter) in enumerate(tag[1:], 1):
             attribute, values = attributes[position]     # ("function", {"0": None, "P": u"participio"})
@@ -25,14 +30,20 @@ def tag2fullmsi(tag):
 
 def msi(a_msi):
 
-    try: gender = a_msi["gender"] if a_msi["gender"] else u"neutral"
-    except KeyError: gender = u"neutral"
+    try:
+        gender = (a_msi["gender"] or default_msi["gender"])
+    except KeyError:
+        gender = default_msi["gender"]
 
-    try: number = a_msi["number"] if a_msi["number"] else u"singular"
-    except KeyError: number = u"singular"
+    try:
+        number = (a_msi["number"] or default_msi["number"])
+    except KeyError:
+        number = default_msi["number"]
 
-    try: person = a_msi["person"] if a_msi["person"] else 3
-    except KeyError: person = 3
+    try:
+        person = (a_msi["person"] or default_msi["person"])
+    except KeyError:
+        person = default_msi["person"]
 
     result = {"person": person, "gender": gender, "number": number}
     return result
@@ -40,4 +51,5 @@ def msi(a_msi):
 def msi_concordance(subject, verb):
     """Structure -> boolean"""
     # print "msi_concordance", subject, subject.label, subject.position, subject.msi, verb, verb.position, verb.msi
-    return (subject.msi['person'] == verb.msi['person']) and (subject.msi['number'] == verb.msi['number'])
+    return (subject.msi['person'] == verb.msi['person']) \
+            and (subject.msi['number'] == verb.msi['number'])

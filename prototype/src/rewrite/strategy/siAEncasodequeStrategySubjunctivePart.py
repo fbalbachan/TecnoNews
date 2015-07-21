@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from src.ling.genderEnum import GenderEnum
+from src.ling.numberEnum import NumberEnum
 from src.rewrite.rewrite import Rewrite
 from src.utils.stringUtils import set_first_letter_case
 
@@ -70,6 +72,6 @@ class SiAEncasodequeStrategySubjunctivePart:
                 "number": msi["number"]}
 
     participle_msi = {"mode": "participio",
-                      "gender": "masculine",
-                      "number": "singular"}
+                      "gender": GenderEnum.masculine,
+                      "number": NumberEnum.singular}
     type = "replacement"

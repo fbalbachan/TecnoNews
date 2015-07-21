@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from src.ling.genderEnum import GenderEnum
+from src.ling.numberEnum import NumberEnum
 from src.model.syntax.dateTimeFinder import DateTimeFinder
 from src.parser.leafNode import LeafNode
 from src.utils.tree.treeNode import TreeNode
@@ -159,6 +161,11 @@ class Clause(TreeNode):
         entities = list(by_component[0]) if by_component else []
         return entities
 
+    def entity_by_original(self, node):
+        proper_node = self.proper_by_original[node]
+        entities = filter(lambda entity: entity.node == proper_node, self.entities)
+        return entities[0] if entities else None
+
     def lonely_entities(self):
         if debug_mode: print "--> Clause.lonely_entities()"
         lonely = [entity for entity in self.entities if not self.is_assigned(entity)]
@@ -291,11 +298,6 @@ class Clause(TreeNode):
         original_by_proper = {v: k for k, v in self.proper_by_original.items()}
         return original_by_proper[proper]
 
-    def entity_by_original(self, node):
-        proper_node = self.proper_by_original[node]
-        entities = filter(lambda entity: entity.node == proper_node, self.entities)
-        return entities[0] if entities else None
-
     def proper_tree(self):
         return self.proper_by_original[self.node]
 
@@ -308,19 +310,19 @@ class Clause(TreeNode):
             raise Exception("La cláusula no es una relativa (", str(self), ").")
 
         # ["los cuales", "las cuales", "quienes"],
-        is_plural_vector = map(lambda leaf: leaf.msi["number"] is "plural", self.relative_linker)
+        is_plural_vector = map(lambda leaf: leaf.msi["number"] is NumberEnum.plural, self.relative_linker)
 
         # ["el cual", "la cual", "quien"]
-        is_singular_vector = map(lambda leaf: leaf.msi["number"] is "singular", self.relative_linker)
+        is_singular_vector = map(lambda leaf: leaf.msi["number"] is NumberEnum.singular, self.relative_linker)
 
-        is_invariable_vector = map(lambda leaf: leaf.msi["number"] is "invariable", self.relative_linker)
+        is_invariable_vector = map(lambda leaf: leaf.msi["number"] is NumberEnum.invariable, self.relative_linker)
 
         if any(is_singular_vector):
-            number = "singular"
+            number = NumberEnum.singular
         elif any(is_plural_vector):
-            number = "plural"
+            number = NumberEnum.plural
         elif any(is_invariable_vector):
-            number = "invariable"
+            number = NumberEnum.invariable
         else:
             number = None
 
@@ -333,19 +335,19 @@ class Clause(TreeNode):
             raise Exception("La cláusula no es una relativa (", str(self), ").")
 
         # "el cual", "los cuales"
-        is_masculine_vector = map(lambda leaf: leaf.msi["gender"] is "masculine", self.relative_linker)
+        is_masculine_vector = map(lambda leaf: leaf.msi["gender"] is GenderEnum.masculine, self.relative_linker)
 
         # "la cual", "las cuales"
-        is_feminine_vector = map(lambda leaf: leaf.msi["gender"] is "feminine", self.relative_linker)
+        is_feminine_vector = map(lambda leaf: leaf.msi["gender"] is GenderEnum.feminine, self.relative_linker)
 
-        is_neutral_vector = map(lambda leaf: leaf.msi["gender"] is "neutral", self.relative_linker)
+        is_neutral_vector = map(lambda leaf: leaf.msi["gender"] is GenderEnum.neutral, self.relative_linker)
 
         if any(is_masculine_vector):
-            gender = "masculine"
+            gender = GenderEnum.masculine
         elif any(is_feminine_vector):
-            gender = "feminine"
+            gender = GenderEnum.feminine
         elif any(is_neutral_vector):
-            gender = "neutral"
+            gender = GenderEnum.neutral
         else:
             gender = None
 
@@ -367,5 +369,8 @@ class Clause(TreeNode):
         tacit_value = float("-inf") if tacit_first else float("inf")
         return tacit_value if entity.is_tacit() else self.proper_leaves().index(entity.leaves()[0])
 
+    #
+    # Textual representation
+    #
     def __repr__(self):
         return " ".join([str(leaf) for leaf in self.proper_leaves()])

@@ -4,9 +4,9 @@ from enum import Enum
 
 
 class AnimityEnum(Enum):
-    animated = "animated"
-    bianimate = "bianimate"
-    inanimate = "inanimate"
+    animated = u"animated"
+    bianimate = u"bianimate"
+    inanimate = u"inanimate"
 
     @classmethod
     def most_specific(cls, animity1, animity2):

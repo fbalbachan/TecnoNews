@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from src.ling.genderEnum import GenderEnum
+from src.ling.numberEnum import NumberEnum
 
 from src.model.entity.entitySemanticAnalyzer import EntitySemanticAnalyzer
 from src.model.entity.animityEnum import AnimityEnum
@@ -33,8 +35,8 @@ class EntityMSISeer:
         msi = entity.kernel.msi
 
         if msi["category"] == "number":
-            msi["gender"] = "neutral"
-            msi["number"] = "invariable"
+            msi["gender"] = GenderEnum.neutral
+            msi["number"] = NumberEnum.invariable
             msi["type"] = "common"
             msi["category"] = "noun"
 
@@ -75,8 +77,8 @@ class EntityMSISeer:
             return
         leaves = leaves[::-1]
 
-        non_neutral_attribute_values = {"gender": ["masculine", "feminine"],
-                                        "number": ["singular", "plural"]}
+        non_neutral_attribute_values = {"gender": [GenderEnum.masculine, GenderEnum.feminine],
+                                        "number": [NumberEnum.singular, NumberEnum.plural]}
 
         for attribute, non_neutral_values in non_neutral_attribute_values.items():
             if msi[attribute] not in non_neutral_values:
@@ -85,19 +87,19 @@ class EntityMSISeer:
                         msi[attribute] = leaf.msi[attribute]
 
     def msi_of_coordinated(self, entity):
-        msi = {"category": "noun", "number": "plural", "type": None, "semantic_classification": None}
+        msi = {"category": "noun", "number": NumberEnum.plural, "type": None, "semantic_classification": None}
 
         pronouns = sorted(entity.children_of_category("pronoun"), key=lambda pronoun: pronoun.msi["person"])
         msi["person"] = pronouns[0].msi["person"] if pronouns else 3
 
         genders = [child.msi["gender"]
                    for child in entity.children_of_category("noun") + entity.children_of_category("pronoun")]
-        if "masculine" in genders:
-            gender = "masculine"
-        elif all(map(lambda p_gender: p_gender == "feminine", genders)):
-            gender = "feminine"
+        if GenderEnum.masculine in genders:
+            gender = GenderEnum.masculine
+        elif all(map(lambda p_gender: p_gender == GenderEnum.feminine, genders)):
+            gender = GenderEnum.feminine
         else:
-            gender = "neutral"
+            gender = GenderEnum.neutral
 
         msi["gender"] = gender
 
@@ -109,7 +111,7 @@ class EntityMSISeer:
 
     def msi_of_infinity(self, entity):
         return {"category": "noun", "gender": None, "person": 3,
-                "number": "singular", "type": None, "semantic_classification": None}
+                "number": NumberEnum.singular, "type": None, "semantic_classification": None}
 
     def calculate_animity_for(self, entity):
         default_animity_value = AnimityEnum.inanimate
