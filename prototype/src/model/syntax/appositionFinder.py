@@ -133,7 +133,8 @@ class AppositionFinder:
         for idx in range(1, distance):
             middle_node = same_level_nodes[e_idx+idx]
             middle_are_ok = middle_are_ok and self.clause.same_hemiclause(middle_node, entity.node) \
-                                          and not middle_node.label_lemma_matches([], ["y"])
+                                          and not middle_node.label_lemma_matches([], ["y"]) \
+                                          and not middle_node.label_lemma_matches([], ["incluso"])
         if not middle_are_ok:
             return False
 
