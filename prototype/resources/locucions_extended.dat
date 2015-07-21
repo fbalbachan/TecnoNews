@@ -4,13 +4,6 @@ por_fin por_fin RG I
 de_acuerdo_con según SPS00 I
 crimen_organizado crimen_organizado $1:NC I
 community_manager community_manager $2:NC I
-<persona>_no_<grata> persona_no_grata $1:NC I
-<persona>_non_<grata> persona_non_grata $1:NC I
-de_acuerdo_con según SPS00 I
-crimen_organizado crimen_organizado $1:NC I
-community_manager community_manager $2:NC I
-<persona>_no_<grata> persona_no_grata $1:NC I
-<persona>_non_<grata> persona_non_grata $1:NC I
 me_<haber>_<tratar>_de tratarse_de $2:VM I
 te_<haber>_<tratar>_de tratarse_de $2:VM I
 se_<haber>_<tratar>_de tratarse_de $2:VM I
