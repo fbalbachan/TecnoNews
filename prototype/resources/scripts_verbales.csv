@@ -559,7 +559,7 @@ grabar,N,T,,,Bi,Bi
 grabarse,N,I,,,Anim,Bi
 hacer_cargo,O,T,,,Anim,Anim
 hacer_ver,N,T,,,Anim,Bi
-hacerse_cargo,A,I,,,Anim,Bi
+hacerse_cargo,A,R,,,Anim,Bi
 hacerse_ver,A,I,,,Anim,Bi
 hartar,A,T,,,Bi,Bi
 hartarse,N,R,,,Anim,Bi

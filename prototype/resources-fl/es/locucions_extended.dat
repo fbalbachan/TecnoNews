@@ -5858,12 +5858,10 @@ hacernos hacerse $1:VM I
 haceros hacerse $1:VM I
 me_<haber>_<reprochar> reprocharse $2:VM I
 te_<haber>_<reprochar> reprocharse $2:VM I
-se_<haber>_<reprochar> reprocharse $2:VM I
 nos_<haber>_<reprochar> reprocharse $2:VM I
 os_<haber>_<reprochar> reprocharse $2:VM I
 me_<reprochar> reprocharse $2:VM I
 te_<reprochar> reprocharse $2:VM I
-se_<reprochar> reprocharse $2:VM I
 nos_<reprochar> reprocharse $2:VM I
 os_<reprochar> reprocharse $2:VM I
 reprocharme reprocharse $1:VM I
@@ -5872,12 +5870,10 @@ reprocharnos reprocharse $1:VM I
 reprocharos reprocharse $1:VM I
 me_<haber>_<mostrar> mostrarse $2:VM I
 te_<haber>_<mostrar> mostrarse $2:VM I
-se_<haber>_<mostrar> mostrarse $2:VM I
 nos_<haber>_<mostrar> mostrarse $2:VM I
 os_<haber>_<mostrar> mostrarse $2:VM I
 me_<mostrar> mostrarse $2:VM I
 te_<mostrar> mostrarse $2:VM I
-se_<mostrar> mostrarse $2:VM I
 nos_<mostrar> mostrarse $2:VM I
 os_<mostrar> mostrarse $2:VM I
 mostrarme mostrarse $1:VM I
