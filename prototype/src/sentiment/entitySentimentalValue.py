@@ -10,7 +10,8 @@ class EntitySentimentalValue(SentimentalValuedObject):
 
     def add_evidence(self, *evidence):
         self.children.extend(evidence)
-        if self.evidence(): self.compute_value()
+        if self.evidence():
+            self.compute_value()
 
     def compute_value(self):
         arrenged = zip(*[ each.value for each in self.evidence() ])

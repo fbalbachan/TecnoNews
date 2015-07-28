@@ -99,10 +99,6 @@ class Entity (TacitEntity):
                             if leaf.lexical_form not in [","]]
         return token
 
-    def is_maximal_regarding(self, entities):
-        is_maximal = not any([other.contains(self) for other in entities])
-        return is_maximal
-
     def is_subordinated(self):
         return bool(self.subordinating_nodes())
 

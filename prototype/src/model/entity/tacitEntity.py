@@ -142,6 +142,10 @@ class TacitEntity:
     def is_possessed(self):
         return bool(self.owner)
 
+    def is_maximal_regarding(self, entities):
+        is_maximal = not any([other.contains(self) for other in entities])
+        return is_maximal
+
     def __repr__(self):
         flag = "(implicit)" if self.has_attr("implicit") else "(impersonal)" if self.has_attr("impersonal") else "(tacit)"
         _repr = flag + " " + self.lexical_form

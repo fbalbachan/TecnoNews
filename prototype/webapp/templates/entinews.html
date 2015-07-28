@@ -10,6 +10,10 @@ $def with (analysis, printer)
     <center><h2><font color="black">Overall text score (+$printer.score_of(analysis,analysis["paragraph"]).split(",")[0]% , $printer.score_of(analysis,analysis["paragraph"]).split(",")[1]%)</font></h2></center>
 
     $ sentences = analysis["paragraph"].sentences
+    $ text_only_tacit_entities = []
+    $ text_entities = []
+    $ text_relative_entities = []
+
     $for sentence in sentences:
 	<hr size=5 noshade>
 
@@ -22,11 +26,21 @@ $def with (analysis, printer)
             <p class="grande">$clause <font size=3>(clause score $printer.score_of(analysis,clause))</font></p>
 
             $code:
-                entities_data = [
-                    (clause.entities + clause.tacit_entities(), "Opinionated Entities (sentiment scores)", "")
-                ]
+                clause_entities = clause.entities + clause.tacit_entities()
+
+                clause_entities = filter(lambda entity: not entity.has_attr("implicit")
+                                                        and not entity.has_attr("impersonal"),
+                                         clause_entities)
+
+                clause_entities = filter(lambda entity: entity.is_maximal_regarding(clause_entities),
+                                         clause_entities)
+
+                text_entities.extend(clause_entities)
+                text_only_tacit_entities.extend(clause.tacit_entities())
+                entities_data = [(clause_entities, "Opinionated Entities (sentiment scores)", "")]
 
                 if clause.relative_entity:
+                    text_relative_entities.append(clause.relative_entity)
                     entities_data.append(
                         ([clause.relative_entity], "Relative entities", "(anaphora resolution in relative pronouns)"))
 
@@ -95,6 +109,28 @@ $def with (analysis, printer)
             </p>
             <p class="normal">
             <br><b><u>Normalized fact:</u></b> $printer.fact(clause) &nbsp<font color="#8A0808">$printer.fact_real_or_not(clause)</font><br>
+
+
+	<hr size=5 noshade>
+    $code:
+        entities_data = [(text_entities, "Overall report of opinionated entities (sentiment scores)", "")]
+
+    $for list, title, subtitle in entities_data:
+        $if list:
+            <p class="normal">
+            <br><b><u><font size=5 color="#8A0808">$title</font></u></b> $subtitle
+            <table id="global_entities">
+                <tr><th/><th>Positive</th><th>Negative</th><th>Named-Entity</th></tr>
+            $for entity in list:
+                $ entity_name = str(entity) if (entity.has_attr("referent") and entity.referent is not None) else entity.referent.name()
+                <tr>
+                    <td title="$printer.entity_tooltip(entity)">$entity_name</td>
+                    <td title="$printer.e_sv_pos_ev(entity)" align="center" width=100>$entity.sentimental_value.value[0]</td>
+                    <td title="$printer.e_sv_neg_ev(entity)" align="center" width=100>$entity.sentimental_value.value[1]</td>
+                    <td title="$printer.entity_tooltip(entity)" align="center" width=100>$printer.semmantic_clasif(entity)</td>
+                </tr>
+            </table>
+            </p>
 
   </body>
 </html>
