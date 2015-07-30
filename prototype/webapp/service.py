@@ -23,7 +23,15 @@ captchas_by_request = {}
 cleanup_timer = None
 
 config = ConfigProvider()
-debug_mode = bool(config.get("debug", "debug"))
+debug_mode = (config.get("debug", "debug") == "True")
+
+def generate_captcha(req_id):
+    captcha_key = os.urandom(2).encode("hex")
+    request_data[req_id] = {"captcha": captcha_key,
+                            "start": time.time()}
+
+    generator = skimpyAPI.Png(captcha_key)
+    generator.data(captcha_filename_for(req_id))
 
 
 def captcha_filename_for(req_id):
@@ -73,14 +81,7 @@ class Index_request:
     def GET(self):
         global request_id
         request_id += 1
-
-        captcha_key = os.urandom(2).encode("hex")
-        request_data[request_id] = {"captcha": captcha_key,
-                                    "start": time.time()}
-
-        generator = skimpyAPI.Png(captcha_key)
-        generator.data(captcha_filename_for(request_id))
-
+        generate_captcha(request_id)
         index = web.template.frender('templates/index.html')
         return index(str(request_id))
 
@@ -150,7 +151,6 @@ class EntiNews_request:
                 return action_by_method[method]()
 
         web.redirect("/sentilecto")
-
 
 # # # MAIN # # #
 
