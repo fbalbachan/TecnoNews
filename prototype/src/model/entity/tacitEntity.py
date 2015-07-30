@@ -147,7 +147,9 @@ class TacitEntity:
         return is_maximal
 
     def __repr__(self):
-        flag = "(implicit)" if self.has_attr("implicit") else "(impersonal)" if self.has_attr("impersonal") else "(tacit)"
+        flag = "(implicit)" if self.has_attr("implicit") \
+                else "(impersonal)" if self.has_attr("impersonal") \
+                else "(tacit)"
         _repr = flag + " " + self.lexical_form
         if self.is_linked():
             _repr = _repr + " (" + self.referenced().lexical_form + ")"

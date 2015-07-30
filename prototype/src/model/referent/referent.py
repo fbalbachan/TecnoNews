@@ -3,7 +3,7 @@
 
 class Referent:
     def __init__(self, entity):
-        self.references = set([entity])
+        self.references = {entity}
         self.extra_words = []
 
     def add_reference(self, entity):
@@ -22,6 +22,7 @@ class Referent:
 
         for _list in [fully_named, named, classified]:
             if _list:
+                _list = [x for x in _list]
                 return _list[0]
 
     def names(self):
@@ -58,4 +59,4 @@ class Referent:
 
     def __repr__(self):
         return self.name() + " [" + str(self.ref_count()) + "] (" + \
-            ", ".join([ str(ref) for ref in self.references ]) + ")"
+            ", ".join([str(ref) for ref in self.references]) + ")"

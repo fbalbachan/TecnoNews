@@ -15,13 +15,15 @@ from skimpyGimpy import skimpyAPI
 from src.model.contentRewriterAndGenerator import ContentRewriterAndGenerator
 from src.model.sentilecto import Sentilecto
 from src.utils.webOutputUtils import WebOutputUtils
-
+from src.utils.configProvider import ConfigProvider
 
 request_id = 0
 request_data = {}
 captchas_by_request = {}
-
 cleanup_timer = None
+
+config = ConfigProvider()
+debug_mode = bool(config.get("debug", "debug"))
 
 
 def captcha_filename_for(req_id):
@@ -48,8 +50,6 @@ def cleanup_session(p_request_id):
 
 
 def analyze():
-
-    debug_mode = False      # TODO: (define in/fetch from) config file
 
     try:
         web_input = web.input()
@@ -127,12 +127,9 @@ class EntiNews_request:
 
     def GET(self):
 
-        debug_mode = False      # TODO: (define in/fetch from) config file
-
         web_input = web.input()
         incoming_request_id = int(web_input.request)
         request_captcha = web_input.captcha
-        right_captcha = None
 
         if incoming_request_id in request_data:
             right_captcha = request_data[incoming_request_id]["captcha"]

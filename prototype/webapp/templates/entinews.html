@@ -8,11 +8,10 @@ $def with (analysis, printer)
   <body>
 
     <center><h2><font color="black">Overall text score (+$printer.score_of(analysis,analysis["paragraph"]).split(",")[0]% , $printer.score_of(analysis,analysis["paragraph"]).split(",")[1]%)</font></h2></center>
+    <center><h3><font color="black">Check Entity-based Sentiment Overall Report at the bottom of this page</font></h3></center>
 
     $ sentences = analysis["paragraph"].sentences
-    $ text_only_tacit_entities = []
     $ text_entities = []
-    $ text_relative_entities = []
 
     $for sentence in sentences:
 	<hr size=5 noshade>
@@ -36,11 +35,9 @@ $def with (analysis, printer)
                                          clause_entities)
 
                 text_entities.extend(clause_entities)
-                text_only_tacit_entities.extend(clause.tacit_entities())
                 entities_data = [(clause_entities, "Opinionated Entities (sentiment scores)", "")]
 
                 if clause.relative_entity:
-                    text_relative_entities.append(clause.relative_entity)
                     entities_data.append(
                         ([clause.relative_entity], "Relative entities", "(anaphora resolution in relative pronouns)"))
 
@@ -55,10 +52,9 @@ $def with (analysis, printer)
                             <td title="$printer.entity_tooltip(entity)">$entity</td>
                             <td title="$printer.e_sv_pos_ev(entity)" align="center" width=100>$entity.sentimental_value.value[0]</td>
                             <td title="$printer.e_sv_neg_ev(entity)" align="center" width=100>$entity.sentimental_value.value[1]</td>
-                            <td title="$printer.entity_tooltip(entity)" align="center" width=100>$printer.semmantic_clasif(entity)</td>
+                            <td title="$printer.entity_tooltip(entity)" align="center" width=100>$printer.semantic_classification(entity)</td>
                         </tr>
                     </table>
-                    </p>
 
             <p class="normal">
             <br><b><u>Global operators</u></b> <font size=2>(any checked flag indicates the utterance mapped onto the following SVO slots is not a real fact but an hypothetical situation that didn't happen)</font><br>
@@ -66,7 +62,6 @@ $def with (analysis, printer)
             $for klass, name in [("negation", "Negation"), ("question", "Yes/No Question"), ("possibility", "Possibility"), ("condition", "Condition"), ("imperative", "Imperative"), ("future", "Future"), ("volitive", "Volitive")]:
                 $printer.global_operator_bullet_for(clause, klass) $name &nbsp &nbsp &nbsp
             </div>
-            </p>
             <p class="normal">
             <b><u>Syntactic Structures</u></b> (SVO slots) <br>
 
@@ -106,30 +101,38 @@ $def with (analysis, printer)
                 </td>
             </tr>
             </table>
-            </p>
             <p class="normal">
             <br><b><u>Normalized fact:</u></b> $printer.fact(clause) &nbsp<font color="#8A0808">$printer.fact_real_or_not(clause)</font><br>
 
 
 	<hr size=5 noshade>
     $code:
-        entities_data = [(text_entities, "Overall report of opinionated entities (sentiment scores)", "")]
+        entities_data = [(text_entities, "Entity-based Sentiment Overall Report", "")]
 
-    $for list, title, subtitle in entities_data:
-        $if list:
+    $for entities, title, subtitle in entities_data:
+        $if entities:
+            $ referents = printer.filter_by_referent(entities)
             <p class="normal">
-            <br><b><u><font size=5 color="#8A0808">$title</font></u></b> $subtitle
-            <table id="global_entities">
-                <tr><th/><th>Positive</th><th>Negative</th><th>Named-Entity</th></tr>
-            $for entity in list:
-                $ entity_name = str(entity) if (entity.has_attr("referent") and entity.referent is not None) else entity.referent.name()
+            <br><center><b><u><font size=5 color="#8A0808">$title</font></u></b></center>
+            <center><font size=3 color="black">(normalized scores)</font></center>
+            <br>
+            <center><table id="global_entities" border="1">
+                <tr><th/><th>Entity</th><th>Positive</th><th>Negative</th><th>Named-Entity</th><th>Occurrences</th></tr>
+
+            $ i=0
+            $for referent in referents:
+                $ i+=1
+                $ positive = "{:.2f}".format(referent[2]) if referent[2] > 0.01 else "0"
+                $ negative = "{:.2f}".format(referent[3]) if referent[3] > 0.01 else "0"
                 <tr>
-                    <td title="$printer.entity_tooltip(entity)">$entity_name</td>
-                    <td title="$printer.e_sv_pos_ev(entity)" align="center" width=100>$entity.sentimental_value.value[0]</td>
-                    <td title="$printer.e_sv_neg_ev(entity)" align="center" width=100>$entity.sentimental_value.value[1]</td>
-                    <td title="$printer.entity_tooltip(entity)" align="center" width=100>$printer.semmantic_clasif(entity)</td>
+                    <td align="center" width=30>$i</td>
+                    <td align="center" title="$printer.entity_tooltip(referent[0])">$referent[1]</td>
+                    <td align="center" width=100>$positive</td>
+                    <td align="center" width=100>$negative</td>
+                    <td title="$printer.entity_tooltip(referent[0])" align="center" width=100>$referent[4]</td>
+                    <td align="center" width=100>$referent[5]</td>
                 </tr>
-            </table>
+            </table></center>
             </p>
 
   </body>

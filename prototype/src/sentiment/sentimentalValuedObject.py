@@ -3,7 +3,7 @@ from src.utils.tree.treeNode import TreeNode
 
 
 class SentimentalValuedObject(TreeNode):
-    def __init__(self, object, value = (0,0)):  # @ReservedAssignment
+    def __init__(self, object, value=(0,0)):  # @ReservedAssignment
         TreeNode.__init__(self)
         self.object = object
         self.value = value
