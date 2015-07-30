@@ -115,10 +115,9 @@ $def with (analysis, printer)
             $ referents_data = printer.get_referents_data(entities)
             <p class="normal">
             <br><center><b><u><font size=5 color="#8A0808">$title</font></u></b></center>
-            <center><font size=3 color="black">(normalized scores)</font></center>
             <br>
             <center><table id="global_entities" border="1">
-                <tr><th/><th>Entity</th><th>Positive</th><th>Negative</th><th>Named-Entity</th><th>Occurrences</th></tr>
+                <tr><th>Id<th/><th>Entity</th><th>Positive</th><th>Negative</th><th>Named-Entity</th><th>Occurrences</th></tr>
 
             $ i=0
             $for referent_data in referents_data:
@@ -133,6 +132,8 @@ $def with (analysis, printer)
                 </tr>
             </table></center>
             </p>
+
+            <center><h2><font color="black">Overall text score (+$printer.score_of(analysis,analysis["paragraph"]).split(",")[0]% , $printer.score_of(analysis,analysis["paragraph"]).split(",")[1]%)</font></h2></center>
 
   </body>
 </html>

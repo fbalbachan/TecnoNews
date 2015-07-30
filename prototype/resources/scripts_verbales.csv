@@ -882,8 +882,8 @@ resguardar,O,T,,,Bi,Bi
 resguardarse,A,I,,,Anim,Bi
 resignar,A,T,,,Anim,Bi
 resignarse,A,R,,,Anim,Bi
-resistir,S,T,60,-80,Anim,Bi
-resistirse,S,R,60,-80,Anim,Bi
+resistir,S,T,100,-60,Anim,Bi
+resistirse,S,R,60,-100,Anim,Bi
 respaldar,O,T,,,Anim,Bi
 respaldarse,N,R,,,Anim,Bi
 responsabilizar,O,T,,,Anim,Anim

@@ -5292,10 +5292,12 @@ resignarme resignarse $1:VM I
 resignarte resignarse $1:VM I
 resignarnos resignarse $1:VM I
 resignaros resignarse $1:VM I
+se_<haber>_<resistir> resistirse $2:VM I
 me_<haber>_<resistir> resistirse $2:VM I
 te_<haber>_<resistir> resistirse $2:VM I
 nos_<haber>_<resistir> resistirse $2:VM I
 os_<haber>_<resistir> resistirse $2:VM I
+se_<resistir> resistirse $2:VM I
 me_<resistir> resistirse $2:VM I
 te_<resistir> resistirse $2:VM I
 nos_<resistir> resistirse $2:VM I
