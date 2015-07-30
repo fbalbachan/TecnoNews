@@ -32,6 +32,20 @@ class TacitEntity:
     def referenced(self):
         return self.coref_chain[-1]
 
+    def referenced_entity(self):
+        if self.is_linked():
+            referenced_entity = self.referenced()
+            if "referent" in dir(referenced_entity) and referenced_entity.referent is not None:
+                referenced_entity = referenced_entity.referent.designated_ref()
+
+        elif "referent" in dir(self) and self.referent is not None:
+            referenced_entity = self.referent.designated_ref()
+
+        else:
+            referenced_entity = self
+
+        return referenced_entity
+
     def add_coreference(self, referenced):
         if referenced.is_linked():
             self.coref_chain.extend(referenced.coref_chain)
@@ -61,8 +75,14 @@ class TacitEntity:
     #
     # Methods related to MSI (morfo-syntatic-information)
     #
-    def classification(self):
-        return self.msi["semantic_classification"]
+    def classification(self, is_light_classification=True):
+        entity = self if is_light_classification else self.referenced_entity()
+        if entity.category() == "noun" \
+           and entity.msi["type"] == "proper" \
+           and "semantic_classification" in entity.msi:
+            return entity.msi["semantic_classification"]
+        else:
+            return None
 
     def category(self):
         return self.msi["category"]
@@ -146,6 +166,10 @@ class TacitEntity:
         is_maximal = not any([other.contains(self) for other in entities])
         return is_maximal
 
+    def is_named_entity(self):
+        return self.category() == "noun" and self.msi["type"] == "proper"\
+               and self.classification() is not None
+
     def __repr__(self):
         flag = "(implicit)" if self.has_attr("implicit") \
                 else "(impersonal)" if self.has_attr("impersonal") \
@@ -157,3 +181,22 @@ class TacitEntity:
 
     def name(self):
         return repr(self)
+
+    def real_name(self):
+        if self.is_linked():
+            real_name = self.referenced().lexical_form
+            referent_entity = self.referenced()
+
+            if "referent" in dir(referent_entity) and referent_entity.referent is not None:
+                real_name = referent_entity.referent.name()
+                referent_entity = referent_entity.referent.designated_ref()
+
+        elif "referent" in dir(self) and self.referent is not None:
+            real_name = self.referent.name()
+            referent_entity = self.referent.designated_ref()
+
+        else:
+            referent_entity = self
+            real_name = referent_entity.lexical_form
+
+        return real_name

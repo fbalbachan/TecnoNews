@@ -48,11 +48,12 @@ $def with (analysis, printer)
                     <table id="entities">
                         <tr><th/><th>Positive</th><th>Negative</th><th>Named-Entity</th></tr>
                     $for entity in list:
+                        $ classification = "NONE" if not entity.classification() else entity.classification().upper()
                         <tr>
                             <td title="$printer.entity_tooltip(entity)">$entity</td>
-                            <td title="$printer.e_sv_pos_ev(entity)" align="center" width=100>$entity.sentimental_value.value[0]</td>
-                            <td title="$printer.e_sv_neg_ev(entity)" align="center" width=100>$entity.sentimental_value.value[1]</td>
-                            <td title="$printer.entity_tooltip(entity)" align="center" width=100>$printer.semantic_classification(entity)</td>
+                            <td title="$printer.e_sv_pos_ev([entity])" align="center" width=100>$entity.sentimental_value.value[0]</td>
+                            <td title="$printer.e_sv_neg_ev([entity])" align="center" width=100>$entity.sentimental_value.value[1]</td>
+                            <td title="$printer.entity_tooltip(entity)" align="center" width=100>$classification</td>
                         </tr>
                     </table>
 
@@ -111,7 +112,7 @@ $def with (analysis, printer)
 
     $for entities, title, subtitle in entities_data:
         $if entities:
-            $ referents = printer.filter_by_referent(entities)
+            $ referents_data = printer.get_referents_data(entities)
             <p class="normal">
             <br><center><b><u><font size=5 color="#8A0808">$title</font></u></b></center>
             <center><font size=3 color="black">(normalized scores)</font></center>
@@ -120,17 +121,15 @@ $def with (analysis, printer)
                 <tr><th/><th>Entity</th><th>Positive</th><th>Negative</th><th>Named-Entity</th><th>Occurrences</th></tr>
 
             $ i=0
-            $for referent in referents:
+            $for referent_data in referents_data:
                 $ i+=1
-                $ positive = "{:.2f}".format(referent[2]) if referent[2] > 0.01 else "0"
-                $ negative = "{:.2f}".format(referent[3]) if referent[3] > 0.01 else "0"
                 <tr>
                     <td align="center" width=30>$i</td>
-                    <td align="center" title="$printer.entity_tooltip(referent[0])">$referent[1]</td>
-                    <td align="center" width=100>$positive</td>
-                    <td align="center" width=100>$negative</td>
-                    <td title="$printer.entity_tooltip(referent[0])" align="center" width=100>$referent[4]</td>
-                    <td align="center" width=100>$referent[5]</td>
+                    <td align="center" title="$printer.entity_tooltip(referent_data['re'])">$referent_data['rn']</td>
+                    <td align="center" title="$printer.e_sv_pos_ev(referent_data['refs'])" width=100>$referent_data['pos']</td>
+                    <td align="center" title="$printer.e_sv_neg_ev(referent_data['refs'])" width=100>$referent_data['neg']</td>
+                    <td align="center" width=100>$referent_data['sc']</td>
+                    <td align="center" width=100>$referent_data['cnt']</td>
                 </tr>
             </table></center>
             </p>

@@ -68,14 +68,12 @@ class AppositionFinder:
         entity_levels_are_ok = are_siblings or self.are_almost_siblings(candidate_chain)
         agree_in_per_gen_num = all(e.matches(candidate_chain[0]) for e in candidate_chain)
 
-        there_is_place = any("semantic_classification" in e.msi
-                             and e.msi["semantic_classification"] == "place" for e in candidate_chain)
+        there_is_place = any(e.classification() == "place" for e in candidate_chain)
 
         return entity_levels_are_ok and agree_in_per_gen_num and not there_is_place
 
     def get_reference_entity(self, chain):
-        named = filter(lambda entity: "semantic_classification" in entity.msi
-                                      and entity.msi["semantic_classification"], chain)
+        named = filter(lambda entity: entity.classification(), chain)
         return named[0] if named else chain[0]
 
     def entity_is_next_or_close_to(self, entity, lemmas, distance):

@@ -155,9 +155,9 @@ class EntiNews_request:
 # # # MAIN # # #
 
 
-def write_pidfile():
+def write_pid_file():
     pid = str(os.getpid())
-    pid_file = '/tmp/entinews.pid'
+    pid_file = './sentilecto.pid'
     file(pid_file, 'w').write(pid)
 
 
@@ -178,7 +178,7 @@ if __name__ == '__main__':
             '/debug',       'Debug_request',
             '/favicon.ico', 'Favicon_request')
 
-    write_pidfile()
+    write_pid_file()
     setup_loggers()
 
     cleanup_timer = Timer(30, cleanup_sessions)
