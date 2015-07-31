@@ -66,7 +66,7 @@ $ captcha_src = "sentilecto/static/captcha/captcha_" + request_id + ".png"
                 <div class="control-group">
                     <label class="control-label" for="text">Input Text (only Spanish):</label>
                     <div class="controls">
-			<textarea class="input-xlarge" id="textarea" rows="26" style="width: 950px;" name="text">Nos mostramos satisfechos porque se mostraron grandes avances en el reconocimiento público de personalidades. Se distinguió como ciudadano ilustre a Martín Caramés, quien no se especializa en ciencias, a diferencia de Fernando Balbachan. Yo me distingo en filosofía, pero mi novia se especializa en biología. Caramés se hizo cargo del gobierno, aunque hizo algunas cosas vergonzosas. Él se hizo el tonto, pero se hizo ver mucho.
+			<textarea class="input-xlarge" id="textarea" rows="26" style="width: 950px;" name="text">Nos mostramos satisfechos porque se mostraron grandes avances en el reconocimiento público de personalidades. Tales avances consistieron en fortalecer los débiles lazos con la comunidad científica. Se distinguió como ciudadano ilustre a Martín Caramés, quien no se especializa en ciencias, a diferencia de Fernando Balbachan. Yo me distingo en filosofía, pero mi novia se especializa en biología, mostrando que podemos mejorar. Caramés se hizo cargo del gobierno, aunque hizo algunas cosas vergonzosas. Él se hizo el tonto, pero se hizo ver mucho.
 
 separadores de textos. dejar un texto y borrar los otros. separadores de textos.
 
@@ -108,7 +108,7 @@ Me alegra que el servicio de Telefónica haya mejorado. Me preocupa que el servi
 '<i>Mary hates John</i>' (2 entities but only the object has a negative presentation) vs. '<i>Mary defames John</i>' (the same 2 entities but only the subject has negative presentation).
 	</p>
       <p>
-        SentiLecto leans on outstanding linguistic features such as: passive/active voice transformation, negation scope, anaphora resolution and co-reference chains, modality treatment and accurate verb scripts for all verbs in Spanish, even with subtle semantic differences (for example, 'resistir' '<i>to fight against (something bad) with emphasis over the agent</i>' vs. 'resistirSE a' '<i>to fight against (something bad) with emphasis over the event (object)</i> ').</p>
+        SentiLecto leans on outstanding linguistic features such as: passive/active voice transformation, negation scope, anaphora resolution and co-reference chains, modality treatment, semantic features (animity and others) and accurate verbal frames for all Spanish verbs, even with 'se-impersonal' usages  (for example, 'mostrar' '<i>to show something</i>' vs. 'mostrarSE' '<i>to show yourself, namely to feel some way before a situation</i>').</p>
 <p>Also, SentiLecto can flawlessly identify whether or not an utterance is a real fact (fact mining) over which an opinion could span, and it can recognize & classify named-entities (NERC).
       </p>
       <p>Try this our demo challenging input text, or you can enter any complex large text, such as news. Copy & paste the entire body text from any recent news into SentiLecto's input text box and behold the results! While there might be some occasional misinterpretations in sparse utterances, after processing large data sets of converging texts in a few seconds -for example, all news about the same topic-, the most important facts and opinionated entities will certainly emerge through an accurate and exhaustive linguistic representation.</p>

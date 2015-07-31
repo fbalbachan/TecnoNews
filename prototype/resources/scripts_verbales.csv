@@ -1,4 +1,3 @@
-especializarse,A,I,,,Bi,Bi
 abrigar,N,T,,,Bi,Anim
 abrigarse,N,I,,,Anim,Bi
 abrumar,A,T,,,Bi,Anim
@@ -504,6 +503,8 @@ escudar,N,T,,,Anim,Bi
 escudarse,N,R,,,Anim,Bi
 espantar,A,T,,,Bi,Anim
 espantarse,N,I,,,Anim,Bi
+especializar,A,I,,,Bi,Bi
+especializarse,A,I,,,Bi,Bi
 estirar,N,T,,,Bi,Bi
 estirarse,N,I,,,Anim,Bi
 estrellar,N,T,,,Anim,Bi
@@ -5015,7 +5016,6 @@ españolizar,N,X,,,Bi,Bi
 esparcir,N,T,,,Bi,Bi
 esparrancar,N,X,,,Bi,Bi
 espatarrar,N,X,,,Bi,Bi
-especializar,A,I,,,Bi,Bi
 especificar,N,T,,,Bi,No
 especular,N,I,,,Bi,Bi
 espejar,N,T,,,Bi,Bi
