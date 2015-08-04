@@ -105,7 +105,7 @@ class WebOutputUtils:
 
     def get_referents_data(self, entities):
         chosen_classifications = self.choose_classifications_to_unify_with(entities)
-        referents_dict = dict()
+        referents_dict = {}
         for entity in entities:
             referenced_entity = entity.referenced_entity()
             references = [entity]
@@ -124,20 +124,23 @@ class WebOutputUtils:
 
             real_name = real_name if key[1] else real_name.lower()
 
-            referents_dict[key] = {"re":   referenced_entity,
-                                   "refs": references,
-                                   "rn":   real_name,
-                                   "pos":  positive,
-                                   "neg":  negative,
-                                   "sc":   str(key[1]).upper(),
-                                   "cnt":  count}
+            referent_data = {"re":   referenced_entity,
+                             "refs": references,
+                             "rn":   real_name,
+                             "pos":  positive,
+                             "neg":  negative,
+                             "sc":   str(key[1]).upper(),
+                             "cnt":  count}
+
+            referents_dict[key] = referent_data
+
 
         compare = lambda x, y: \
-                           1 if (x["neg"] < y["neg"] and y["neg"] - x["neg"] > 0)\
-                     else -1 if (x["neg"] > y["neg"] and x["neg"] - y["neg"] > 0)\
-                     else  1 if (x["pos"] < y["pos"] and y["pos"] - x["pos"] > 0)\
-                     else -1 if (x["pos"] > y["pos"] and x["pos"] - y["pos"] > 0)\
-                     else  0
+                          1 if x["cnt"] < y["cnt"] else -1 if x["cnt"] > y["cnt"]\
+                     else 1 if x["neg"] < y["neg"] else -1 if x["neg"] > y["neg"]\
+                     else 1 if x["pos"] < y["pos"] else -1 if x["pos"] > y["pos"]\
+                     else 1 if x["rn"] < y["rn"]   else -1 if x["rn"] > y["rn"]\
+                     else 0
 
         referents_data = sorted(referents_dict.values(), cmp=compare)
         return referents_data
