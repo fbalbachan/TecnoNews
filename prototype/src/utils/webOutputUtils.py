@@ -139,7 +139,7 @@ class WebOutputUtils:
                           1 if x["cnt"] < y["cnt"] else -1 if x["cnt"] > y["cnt"]\
                      else 1 if x["neg"] < y["neg"] else -1 if x["neg"] > y["neg"]\
                      else 1 if x["pos"] < y["pos"] else -1 if x["pos"] > y["pos"]\
-                     else 1 if x["rn"] < y["rn"]   else -1 if x["rn"] > y["rn"]\
+                     else 1 if x["rn"] > y["rn"]   else -1 if x["rn"] < y["rn"]\
                      else 0
 
         referents_data = sorted(referents_dict.values(), cmp=compare)
