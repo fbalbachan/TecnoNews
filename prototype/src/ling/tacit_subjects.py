@@ -95,6 +95,5 @@ def implicit_bianimate_something():
 def tacit_subject_for(verb):
     tacit_subject = tacit_subjects[(verb.msi['person'],
                                     verb.msi['number'],
-                                    (verb.msi['gender'] or GenderEnum.neutral)
-                                    )]
+                                    (verb.msi['gender'] or GenderEnum.neutral))]
     return tacit_subject

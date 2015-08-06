@@ -187,16 +187,13 @@ class TacitEntity:
             real_name = self.referenced().lexical_form
             referent_entity = self.referenced()
 
-            if "referent" in dir(referent_entity) and referent_entity.referent is not None:
+            if "referent" in dir(referent_entity) and referent_entity.referent:
                 real_name = referent_entity.referent.name()
-                referent_entity = referent_entity.referent.designated_ref()
 
         elif "referent" in dir(self) and self.referent is not None:
             real_name = self.referent.name()
-            referent_entity = self.referent.designated_ref()
 
         else:
-            referent_entity = self
-            real_name = referent_entity.lexical_form
+            real_name = self.lexical_form
 
         return real_name

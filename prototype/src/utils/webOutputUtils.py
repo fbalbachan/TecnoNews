@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
+from src.ling.genderEnum import GenderEnum
+from src.ling.numberEnum import NumberEnum
 from src.utils.factNormalizer import FactNormalizer
-
+from src.ling.tacit_subjects import tacit_subjects
 
 class WebOutputUtils:
 
@@ -87,13 +89,23 @@ class WebOutputUtils:
     def fact_real_or_not(self, clause):
         return "(Not a real fact. See checked flags in global operators.)" if not clause.is_fact() else ""
 
-    def choose_classifications_to_unify_with(self, entities):
-        chosen_classifications = {}
+    def preferred_gender_number_to_unify_with(self, entities):
+        preferred_genders_numbers = {}
         for entity in entities:
-            real_name = entity.real_name()
+            (gender, number) = (entity.msi["gender"], entity.msi["number"])
+            if gender == GenderEnum.neutral or number == NumberEnum.invariable:
+                (gender, number) = self.choose_gender_number(real_name, entities)
+
+            preferred_genders_numbers[entity] = (gender, number)
+
+        return preferred_genders_numbers
+
+    def preferred_classifications_to_unify_with(self, entities):
+        preferred_classifications = {}
+        for entity in entities:
             if entity.classification(False) is None:
-                chosen_classifications[entity] = self.choose_classification(real_name, entities)
-        return chosen_classifications
+                preferred_classifications[entity] = self.choose_classification(entity.real_name(), entities)
+        return preferred_classifications
 
     def choose_classification(self, real_name, entities):
         same_name_entities = filter(lambda p_entity: p_entity.real_name() == real_name, entities)
@@ -104,8 +116,19 @@ class WebOutputUtils:
             return None
 
     def get_referents_data(self, entities):
-        chosen_classifications = self.choose_classifications_to_unify_with(entities)
-        referents_dict = {}
+
+        referents_data = self.unify_by_name_classification(entities)
+
+        unified_referents_data = filter(lambda ref_data: len(ref_data["refs"]) > 1, referents_data)
+        single_referents_data = filter(lambda ref_data: len(ref_data["refs"]) == 1, referents_data)
+
+        referents_data = self.unify_pronouns(entities, single_referents_data)
+
+        unified_referents_data += filter(lambda ref_data: len(ref_data["refs"]) > 1, referents_data)
+        single_referents_data = filter(lambda ref_data: len(ref_data["refs"]) == 1, referents_data)
+
+        referents_data = self.unify_plain_entities(single_referents_data)
+
         for entity in entities:
             referenced_entity = entity.referenced_entity()
             references = [entity]
@@ -113,27 +136,38 @@ class WebOutputUtils:
             positive = entity.sentimental_value.value[0]
             negative = entity.sentimental_value.value[1]
             classification = entity.classification(False)
+            classification = classification if classification else preferred_classifications[entity]
             count = 1
 
-            key = (real_name, classification if classification else chosen_classifications[entity])
-            if key in referents_dict.keys():
-                positive += referents_dict[key]["pos"]
-                negative += referents_dict[key]["neg"]
-                count += referents_dict[key]["cnt"]
-                references = referents_dict[key]["refs"] + references
 
-            real_name = real_name if key[1] else real_name.lower()
+            if nc_key in referents_dict.keys():
+                positive += referents_dict[nc_key]["pos"]
+                negative += referents_dict[nc_key]["neg"]
+                count = referents_dict[nc_key]["cnt"] + 1
+                references = referents_dict[nc_key]["refs"] + references
+
+            elif gn_key in pronouns_dict.keys() \
+                 and entity.msi["category"] == "pronoun" \
+                 and entity.msi["type"] == "personal" \
+                 and entity.msi["person"] in [1, 2]:
+
+                real_name = tacit_subjects[(gn_key[0], gender, number)]
+                positive += referents_dict[nc_key]["pos"]
+                negative += referents_dict[nc_key]["neg"]
+                count = referents_dict[nc_key]["cnt"] + 1
+                references = referents_dict[nc_key]["refs"] + references
+
+            real_name = real_name if classification else real_name.lower()
 
             referent_data = {"re":   referenced_entity,
                              "refs": references,
                              "rn":   real_name,
                              "pos":  positive,
                              "neg":  negative,
-                             "sc":   str(key[1]).upper(),
+                             "sc":   str(classification).upper(),
                              "cnt":  count}
 
-            referents_dict[key] = referent_data
-
+            referents_dict[nc_key] = pronouns_dict[gn_key] = referent_data
 
         compare = lambda x, y: \
                           1 if x["cnt"] < y["cnt"] else -1 if x["cnt"] > y["cnt"]\
@@ -142,8 +176,109 @@ class WebOutputUtils:
                      else 1 if x["rn"] > y["rn"]   else -1 if x["rn"] < y["rn"]\
                      else 0
 
-        referents_data = sorted(referents_dict.values(), cmp=compare)
+        referents_data = list(set(referents_dict.values() + pronouns_dict.values()))
+
+        referents_data = sorted(referents_data, cmp=compare)
         return referents_data
+
+    def unify_by_name_classification(self, entities):
+
+        preferred_classifications = self.preferred_classifications_to_unify_with(entities)
+        referents_dict = {}
+
+        for entity in entities:
+            real_name = entity.real_name()
+            classification = entity.classification(False)
+            classification = classification if classification else preferred_classifications[entity]
+
+            nc_key = (real_name, classification)
+            if nc_key not in referents_dict.keys():
+                positive = entity.sentimental_value.value[0]
+                negative = entity.sentimental_value.value[1]
+                references = [entity]
+                count = 1
+            else:
+                positive = referents_dict[nc_key]["pos"] + entity.sentimental_value.value[0]
+                negative = referents_dict[nc_key]["neg"] + entity.sentimental_value.value[1]
+                references = referents_dict[nc_key]["refs"] + [entity]
+                count = referents_dict[nc_key]["cnt"] + 1
+
+            real_name = real_name if classification else real_name.lower()
+            referenced_entity = entity.referenced_entity()
+
+            referent_data = {"re":   referenced_entity,
+                             "refs": references,
+                             "rn":   real_name,
+                             "pos":  positive,
+                             "neg":  negative,
+                             "sc":   str(classification).upper(),
+                             "cnt":  count}
+
+            referents_dict[nc_key] = referent_data
+
+        return referents_dict.values()
+
+    def unify_pronouns(self, entities, referents_data):
+        preferred_genders_numbers = self.preferred_genders_numbers_to_unify_with(entities)
+        pronouns_dict = {}
+        for referent_data in referents_data:
+            entity = referent_data["refs"][0]
+            preferred_gn = preferred_genders_numbers[entity]
+            gender = entity.msi["gender"] if entity.msi["gender"] is not GenderEnum.neutral else preferred_gn[0]
+            number = entity.msi["number"] if entity.msi["number"] is not NumberEnum.invariable else preferred_gn[1]
+
+            pgn_key = (entity.msi["person"], gender, number)
+            if pgn_key in pronouns_dict.keys() \
+                 and entity.msi["category"] == "pronoun" \
+                 and entity.msi["type"] == "personal" \
+                 and entity.msi["person"] in [1, 2]:
+
+                real_name = tacit_subjects[pgn_key]
+                positive = pronouns_dict[pgn_key]["pos"] + referent_data["pos"]
+                negative = pronouns_dict[pgn_key]["neg"] + referent_data["neg"]
+                references = pronouns_dict[pgn_key]["refs"] + referent_data["refs"]
+                count = pronouns_dict[pgn_key]["cnt"] + 1
+
+            else:
+                positive = referent_data["pos"]
+                negative = referent_data["neg"]
+                references = referent_data["refs"]
+                count = referent_data["cnt"]
+
+            real_name = real_name if classification else real_name.lower()
+            referenced_entity = entity.referenced_entity()
+
+            referent_data = {"re":   referenced_entity,
+                             "refs": references,
+                             "rn":   real_name,
+                             "pos":  positive,
+                             "neg":  negative,
+                             "sc":   str(classification).upper(),
+                             "cnt":  count}
+
+            referents_dict[nc_key] = referent_data
+
+        return referents_dict.values()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     def score_of(self, analysis, object):
         try:

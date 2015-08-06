@@ -117,18 +117,18 @@ $def with (analysis, printer)
             <br><center><b><u><font size=5 color="#8A0808">$title</font></u></b></center>
             <br>
             <center><table id="global_entities" border="1">
-                <tr><th>Id</th><th>Occurrences</th><th>Entity</th><th>Negative</th><th>Positive</th><th>Named-Entity</th></tr>
+                <tr><th>Id</th><th>Entity</th><th>Positive</th><th>Negative</th><th>Named-Entity</th><th>Occurrences</th></tr>
 
             $ i=0
             $for referent_data in referents_data:
                 $ i+=1
                 <tr>
                     <td align="center" width=30>$i</td>
-                    <td align="center" width=100>$referent_data['cnt']</td>
                     <td align="center" title="$printer.entity_tooltip(referent_data['re'])">$referent_data['rn']</td>
-                    <td align="center" title="$printer.e_sv_pos_ev(referent_data['refs'])" width=100>$referent_data['neg']</td>
-                    <td align="center" title="$printer.e_sv_neg_ev(referent_data['refs'])" width=100>$referent_data['pos']</td>
+                    <td align="center" title="$printer.e_sv_pos_ev(referent_data['refs'])" width=100>$referent_data['pos']</td>
+                    <td align="center" title="$printer.e_sv_neg_ev(referent_data['refs'])" width=100>$referent_data['neg']</td>
                     <td align="center" width=100>$referent_data['sc']</td>
+                    <td align="center" width=100>$referent_data['cnt']</td>
                 </tr>
             </table></center>
             </p>
