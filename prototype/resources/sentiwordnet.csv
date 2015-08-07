@@ -780,7 +780,6 @@ avaro,,0,50
 avasallar,VERBO,0,70
 avejentar,VERBO,0,15
 avenencia,,20,0
-aventurado,,,20
 aventurero,,30,0
 avergonzado,,0,30
 avergonzante,,0,50
@@ -5705,7 +5704,7 @@ sobresaturar,VERBO,0,15
 sobreseer,VERBO,20,0
 sobreseído,,20,0
 sobrestimar,VERBO,0,15
-sobrevalorado,,,30
+sobrevalorado,,0,30
 sobrevaluado,,0,30
 sobrevalorar,VERBO,0,15
 sobrio,,15,0
