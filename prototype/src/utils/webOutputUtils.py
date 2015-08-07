@@ -147,7 +147,7 @@ class WebOutputUtils:
 
         single_referents_data = filter(lambda ref_data: len(ref_data["refs"]) == 1, referents_data)
         # referents_data = unified_referents_data + self.unify_plain_entities(entities, single_referents_data)
-        #referents_data = unified_referents_data + single_referents_data
+        referents_data = unified_referents_data + single_referents_data
 
         compare = lambda x, y: \
                            1 if x["cnt"] < y["cnt"] else -1 if x["cnt"] > y["cnt"]\
