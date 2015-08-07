@@ -1,3 +1,9 @@
+traumar,A,T,,,Bi,Anim
+traumarse,A,I,,,Anim,Bi
+banalizar,A,T,,,Anim,Bi
+boludear,A,I,,,Anim,Bi
+pelotudear,A,I,,,Anim,Bi
+desmotivar,A,T,,,Bi,Anim
 abrigar,N,T,,,Bi,Anim
 abrigarse,N,I,,,Anim,Bi
 abrumar,A,T,,,Bi,Anim
@@ -54,7 +60,7 @@ ahogar,A,T,,,Anim,Anim
 ahogarse,N,I,,,Anim,Bi
 ahorcar,A,T,,,Anim,Anim
 ahorcarse,N,I,,,Anim,Bi
-aislar,N,T,,,Bi,Bi
+aislar,A,T,,,Bi,Bi
 aislarse,N,I,,,Anim,Bi
 alarmar,A,T,,,Bi,Bi
 alarmarse,N,I,,,Anim,Bi
@@ -358,7 +364,7 @@ desmembrar,N,T,,,Anim,Bi
 desmembrarse,N,I,,,Bi,Bi
 desmoralizar,D,T,100,100,Bi,Bi
 desmoralizarse,A,I,,,Anim,Bi
-desmoronar,N,T,,,Bi,Bi
+desmoronar,O,T,,,Bi,Bi
 desmoronarse,N,I,,,Bi,Bi
 desnudar,N,T,,,Anim,Bi
 desnudarse,N,I,,,Bi,Bi
@@ -589,7 +595,7 @@ iluminar,N,T,,,Bi,Bi
 iluminarse,N,I,,,Bi,Bi
 ilusionar,A,T,,,Bi,Anim
 ilusionarse,N,I,,,Anim,Bi
-impacientar,N,T,,,Bi,Anim
+impacientar,A,T,,,Bi,Anim
 impacientarse,N,I,,,Anim,Bi
 inclinar,N,T,,,Bi,Bi
 inclinarse,N,I,,,Anim,Bi
@@ -1214,7 +1220,7 @@ acordeonar,N,T,,,Bi,Bi
 acordonar,N,T,,,Bi,No
 acornar,N,I,,,Bi,Bi
 acornear,N,I,,,Bi,Bi
-acorralar,N,T,,,Bi,Bi
+acorralar,O,T,,,Bi,Bi
 acorrer,N,X,,,Bi,Bi
 acortar,N,T,,,Bi,No
 acosar,A,T,,,Bi,Anim
@@ -1314,7 +1320,7 @@ adunar,N,X,,,Bi,Bi
 advenir,N,R,,,Bi,No
 adverar,N,X,,,Bi,Bi
 adverbializar,N,T,,,Bi,Bi
-advertir,O,T,,,Anim,Bi
+advertir,N,T,,,Anim,Bi
 afamar,N,I,,,Bi,Bi
 afanar,A,T,,,Anim,No
 afanarse,A,I,,,Bi,Bi
@@ -2136,7 +2142,7 @@ avispar,N,X,,,Bi,Bi
 avistar,N,T,,,Anim,Bi
 avituallar,N,X,,,Bi,Bi
 avizorar,N,T,,,Anim,Bi
-avocar,A,R,,,Bi,Bi
+avocar,N,R,,,Bi,Bi
 ayear,N,X,,,Bi,Bi
 ayudar,A,T,,,Bi,Bi
 ayunar,N,I,,,Anim,Bi
@@ -2208,7 +2214,7 @@ barbear,N,X,,,Bi,Bi
 barbechar,N,X,,,Bi,Bi
 barbotar,N,X,,,Bi,Bi
 barbotear,N,X,,,Bi,Bi
-barbullar,A,I,,,Bi,Bi
+barbullar,N,I,,,Bi,Bi
 barloar,N,X,,,Bi,Bi
 barloventear,N,X,,,Bi,Bi
 barnizar,N,T,,,Anim,No
@@ -2291,7 +2297,7 @@ bocelar,N,X,,,Bi,Bi
 bocezar,N,X,,,Bi,Bi
 bochar,O,T,,,Bi,Bi
 bocinar,N,X,,,Bi,Bi
-bogar,O,R,,,Anim,Bi
+bogar,N,R,,,Anim,Bi
 boicotear,A,T,,,Anim,Bi
 bojar,N,X,,,Bi,Bi
 bojear,N,X,,,Bi,Bi
@@ -2381,7 +2387,7 @@ cacarear,N,I,,,Anim,Bi
 cacear,N,X,,,Bi,Bi
 cachar,N,X,,,Bi,Bi
 cachear,N,X,,,Bi,Bi
-cachetear,N,T,,,Anim,Bi
+cachetear,A,T,,,Anim,Bi
 cachifollar,N,X,,,Bi,Bi
 cachipodar,N,X,,,Bi,Bi
 cachondear,N,X,,,Anim,Bi
@@ -2703,7 +2709,7 @@ codificar,N,T,,,Bi,Bi
 codirigir,N,T,,,Anim,Bi
 coercer,A,T,,,Bi,Bi
 coexistir,N,I,,,Bi,Bi
-coger,O,T,,,Bi,Bi
+coger,N,T,,,Bi,Bi
 cogitar,N,X,,,Bi,Bi
 cogobernar,N,T,,,Anim,Bi
 cohabitar,N,T,,,Bi,Bi
@@ -2825,7 +2831,7 @@ confabular,A,I,,,Anim,Bi
 confeccionar,N,T,,,Bi,No
 confederar,N,I,,,Bi,Bi
 conferenciar,N,I,,,Anim,Bi
-conferir,A,T,,,Bi,Bi
+conferir,O,T,,,Bi,Bi
 confesar,D,T,100,60,Anim,Bi
 confiar,O,R,,,Anim,Bi
 confiarse,A,I,,,Anim,Bi
@@ -3090,7 +3096,7 @@ datar,N,R,,,Bi,Bi
 deambular,N,I,,,Anim,Bi
 debatir,N,R,,,Anim,Bi
 debelar,N,X,,,Bi,Bi
-deber,A,I,,,Bi,Bi
+deber,A,T,,,Anim,No
 debilitar,O,T,,,Bi,Bi
 debitar,N,T,,,Bi,No
 debutar,N,I,,,Anim,Bi
@@ -3126,7 +3132,7 @@ defraudar,A,T,,,Anim,Bi
 degenerar,A,T,,,Bi,Bi
 deglutir,N,T,,,Anim,Bi
 degollar,N,T,,,Anim,Anim
-degustar,A,T,,,Anim,Bi
+degustar,N,T,,,Anim,Bi
 deificar,O,T,,,Bi,Bi
 dejar,N,T,,,Bi,Bi
 delatar,A,T,,,Anim,Anim
@@ -3192,7 +3198,7 @@ desabastecer,A,T,,,Bi,Bi
 desabollar,N,X,,,Bi,Bi
 desabonar,N,X,,,Bi,Bi
 desabotonar,N,T,,,Anim,No
-desabrir,O,T,,,Bi,Bi
+desabrir,A,T,,,Bi,Bi
 desacalorar,N,X,,,Bi,Bi
 desacatar,A,T,,,Anim,No
 desaceitar,N,X,,,Bi,No
@@ -4199,7 +4205,7 @@ eliminar,O,T,,,Bi,Bi
 elogiar,O,T,,,Anim,Bi
 elucidar,A,T,,,Bi,No
 elucubrar,N,T,,,Anim,No
-eludir,A,T,,,Anim,Bi
+eludir,N,T,,,Anim,Bi
 emanar,N,I,,,Bi,Bi
 emancipar,A,T,,,Bi,Bi
 emascular,N,X,,,Bi,Bi
@@ -4541,7 +4547,7 @@ encubrir,A,T,,,Anim,Bi
 encuerar,N,X,,,Bi,Bi
 encuestar,N,T,,,Anim,Bi
 encuitar,N,X,,,Bi,Bi
-encumbrar,A,I,,,Bi,Bi
+encumbrar,O,I,,,Bi,Bi
 encunar,N,X,,,Bi,Bi
 encureñar,N,X,,,Bi,Bi
 encurtir,N,X,,,Bi,Bi
@@ -4675,7 +4681,7 @@ enlejiar,N,X,,,Bi,Bi
 enligar,N,X,,,Bi,Bi
 enlistonar,N,X,,,Bi,Bi
 enllantar,N,X,,,Bi,Bi
-enlobreguecer,A,T,,,Bi,Bi
+enlobreguecer,N,T,,,Bi,Bi
 enlodazar,N,T,,,Bi,Bi
 enlomar,N,X,,,Bi,Bi
 enlosar,N,X,,,Bi,Bi
@@ -4851,7 +4857,7 @@ entruchar,N,X,,,Bi,Bi
 entrujar,N,X,,,Bi,Bi
 entubar,N,T,,,Bi,Bi
 entullecer,N,X,,,Bi,Bi
-entumecer,N,T,,,Bi,Bi
+entumecer,A,T,,,Bi,Bi
 entumir,N,X,,,Bi,Bi
 entunicar,N,X,,,Bi,Bi
 entupir,N,X,,,Bi,Bi
@@ -4989,7 +4995,7 @@ escudriñar,N,T,,,Anim,Bi
 esculcar,N,X,,,Bi,Bi
 esculpir,N,T,,,Anim,Bi
 escupir,N,I,,,Anim,Bi
-escurrir,A,I,,,Bi,Bi
+escurrir,N,I,,,Bi,Bi
 esdrujulizar,N,T,,,Bi,Bi
 esfacelar,N,X,,,Bi,Bi
 esforzar,A,R,,,Anim,Bi
@@ -5188,7 +5194,7 @@ expoliar,A,T,,,Bi,Bi
 exponer,N,T,,,Bi,Bi
 exportar,N,T,,,Bi,Bi
 expresar,N,T,,,Anim,Bi
-exprimir,A,T,,,Bi,Bi
+exprimir,N,T,,,Bi,Bi
 expropiar,N,T,,,Bi,Bi
 expugnar,N,T,,,Bi,No
 expulsar,O,T,,,Bi,Bi
@@ -5216,7 +5222,7 @@ exulcerar,N,X,,,Bi,Bi
 exultar,N,X,,,Anim,Bi
 eyacular,N,I,,,Bi,Bi
 fabricar,N,T,,,Anim,No
-fachear,A,I,,,Bi,No
+fachear,N,I,,,Bi,No
 fachendear,N,I,,,Anim,Bi
 facilitar,A,T,,,Bi,Bi
 facturar,N,T,,,Anim,Bi
@@ -5255,7 +5261,7 @@ feriar,N,X,,,Bi,No
 fermentar,N,T,,,Bi,No
 ferrar,N,X,,,Bi,No
 fertilizar,N,T,,,Bi,No
-fervorizar,A,I,,,Bi,Bi
+fervorizar,N,I,,,Bi,Bi
 festejar,D,T,100,60,Anim,Bi
 festonear,N,X,,,Bi,Bi
 fiar,N,R,,,Anim,Bi
@@ -5365,7 +5371,7 @@ galantear,A,I,,,Anim,Bi
 galardonar,O,T,,,Anim,Bi
 galibar,N,X,,,Bi,Bi
 gallar,N,X,,,Bi,Bi
-gallardear,A,I,,,Anim,Bi
+gallardear,N,I,,,Anim,Bi
 gallear,N,X,,,Bi,Bi
 gallofear,N,X,,,Bi,Bi
 galonear,N,X,,,Bi,Bi
@@ -5412,7 +5418,7 @@ gelatinizar,N,I,,,No,Bi
 gelificar,N,I,,,No,Bi
 geminar,N,X,,,Bi,Bi
 gemiquear,N,X,,,Bi,Bi
-gemir,A,I,,,Anim,Bi
+gemir,N,I,,,Anim,Bi
 generalizar,N,T,,,Bi,Bi
 generar,N,T,,,Bi,Bi
 germanizar,N,X,,,Bi,Bi
@@ -5463,7 +5469,7 @@ gratar,N,X,,,Bi,Bi
 gratificar,D,T,50,80,Bi,Bi
 gratinar,N,T,,,Bi,No
 gravar,N,T,,,Bi,Bi
-gravitar,A,I,,,Bi,Bi
+gravitar,N,I,,,Bi,Bi
 graznar,N,I,,,Anim,Bi
 grecizar,N,X,,,Bi,Bi
 grietar,N,X,,,Bi,Bi
@@ -5614,7 +5620,7 @@ hurguetear,A,I,,,Bi,Bi
 huronear,N,X,,,Bi,Bi
 hurtar,A,T,,,Anim,No
 husmear,A,I,,,Anim,Bi
-idealizar,N,T,,,Bi,Bi
+idealizar,O,T,,,Bi,Bi
 idear,N,T,,,Anim,No
 ideologizar,N,T,,,Bi,Bi
 idiotizar,A,T,,,Bi,Bi
@@ -5647,7 +5653,7 @@ implementar,N,T,,,Bi,No
 implicar,N,T,,,Bi,Bi
 implorar,N,T,,,Anim,Bi
 imponer,A,T,,,Bi,Bi
-importar,A,I,,,Bi,No
+importar,N,I,,,Bi,No
 importunar,A,T,,,Bi,Bi
 imposibilitar,N,T,,,Bi,Bi
 impostar,A,T,,,Bi,Bi
@@ -5937,7 +5943,7 @@ levar,N,I,,,Bi,Bi
 levigar,N,X,,,Bi,Bi
 lexicalizar,N,T,,,Bi,No
 liar,N,X,,,Bi,Bi
-libar,A,I,,,Bi,Bi
+libar,N,I,,,Bi,Bi
 libelar,N,X,,,Bi,Bi
 liberalizar,N,X,,,Bi,Bi
 liberar,A,T,,,Anim,Bi
@@ -6014,7 +6020,7 @@ machetear,N,I,,,Anim,Bi
 machihembrar,N,X,,,Bi,Bi
 macizar,N,X,,,Bi,Bi
 macollar,N,X,,,Bi,Bi
-macular,A,T,,,Bi,Bi
+macular,N,T,,,Bi,Bi
 maderar,N,X,,,Bi,Bi
 madrugar,N,I,,,Anim,Bi
 madurar,A,I,,,Bi,Bi
@@ -6024,7 +6030,7 @@ magnetizar,N,T,,,Bi,Bi
 magnificar,N,X,,,Bi,Bi
 magrear,A,T,,,Bi,Bi
 mahometizar,N,X,,,Bi,Bi
-majadear,A,I,,,Bi,Bi
+majadear,N,I,,,Bi,Bi
 majar,N,X,,,Bi,Bi
 malaxar,N,X,,,Bi,Bi
 malbaratar,N,X,,,Bi,Bi
@@ -6341,7 +6347,7 @@ obstinar,A,I,,,Bi,Bi
 obstruir,A,T,,,Bi,Bi
 obtemperar,N,X,,,Bi,Bi
 obtener,O,T,,,Bi,No
-obturar,A,T,,,Bi,Bi
+obturar,N,T,,,Bi,Bi
 obviar,N,T,,,Anim,Bi
 ocasionar,N,T,,,Bi,Anim
 occidentalizar,N,X,,,Bi,Bi
@@ -6393,7 +6399,7 @@ orificar,N,X,,,Bi,Bi
 originar,N,T,,,Bi,Bi
 orillar,N,X,,,Bi,Bi
 orlar,N,X,,,Bi,Bi
-ornamentar,A,T,,,Bi,Bi
+ornamentar,O,T,,,Bi,Bi
 ornar,N,X,,,Bi,Bi
 orquestar,A,T,,,Anim,Bi
 ortografiar,N,X,,,Bi,Bi
@@ -6504,7 +6510,7 @@ paular,N,X,,,Bi,Bi
 pausar,N,T,,,Bi,Bi
 pautar,N,T,,,Bi,Bi
 pavimentar,N,T,,,Anim,No
-pavonar,A,I,,,Bi,Bi
+pavonar,N,I,,,Bi,Bi
 pavonear,A,I,,,Bi,Bi
 pecar,A,R,,,Anim,Bi
 pechar,N,X,,,Bi,Bi
@@ -6621,7 +6627,7 @@ pirar,N,X,,,Bi,Bi
 piratear,A,T,,,Anim,Bi
 pircar,N,X,,,Bi,Bi
 pirograbar,N,X,,,Bi,Bi
-piropear,N,X,,,Bi,Bi
+piropear,O,X,,,Bi,Bi
 pirrar,N,X,,,Bi,Bi
 piruetear,N,X,,,Bi,Bi
 pisar,N,T,,,Anim,Bi
@@ -7204,7 +7210,7 @@ remullir,N,X,,,Bi,Bi
 remunerar,N,T,,,Anim,Bi
 remusgar,N,X,,,Bi,Bi
 renacer,A,I,,,Bi,Bi
-rendir,A,I, ,,Bi,Bi
+rendir,A,I,,,,Bi
 rendir_cuentas,A,T,,,Anim,Bi
 rendir_examen,A,I,,,Anim,Bi
 rendir_tributo,O,T,,,Bi,Bi
@@ -7596,7 +7602,7 @@ sobreentender,N,I,,,Bi,Bi
 sobreescribir,N,T,,,Bi,Bi
 sobreestimar,A,T,,,Bi,Bi
 sobreexceder,A,T,,,Bi,Bi
-sobreexcitar,A,T,,,Bi,Bi
+sobreexcitar,N,T,,,Bi,Bi
 sobreexponer,A,I,,,Bi,Bi
 sobrehilar,N,X,,,Bi,Bi
 sobrellenar,N,X,,,Bi,Bi
@@ -7677,7 +7683,7 @@ soplonear,A,I,,,Bi,Bi
 soportar,O,T,,,Bi,Bi
 sorber,N,T,,,Bi,No
 sorregar,N,X,,,Bi,Bi
-sortear,S,T,70,-90,Bi,Bi
+sortear,N,T,,,Bi,No
 sosegar,A,I,,,Bi,Bi
 soslayar,O,T,,,Bi,Bi
 sospechar,O,R,,,Anim,Bi
@@ -7707,7 +7713,7 @@ substanciar,N,T,,,Bi,Bi
 substantivar,N,X,,,Bi,Bi
 substituir,N,T,,,Bi,Bi
 substraer,N,T,,,Bi,Bi
-subtender,A,T,,,Bi,Bi
+subtender,N,T,,,Bi,Bi
 subtitular,N,T,,,Bi,No
 subvalorar,A,T,,,Bi,Bi
 subvencionar,O,T,,,Anim,Bi
@@ -7724,7 +7730,7 @@ sufrir,O,T,,,Bi,Bi
 sugerir,N,T,,,Anim,Bi
 sugestionar,N,T,,,Bi,Bi
 sugestionarse,N,I,,,Bi,Bi
-suicidar,N,I,,,Anim,Bi
+suicidar,A,I,,,Anim,Bi
 sujetar,N,T,,,Bi,Bi
 sulfatar,N,T,,,Bi,Bi
 sulfurar,A,T,,,Bi,Bi
@@ -7744,7 +7750,7 @@ supervisar,N,T,,,Anim,Bi
 supervivir,N,X,,,Bi,Bi
 suplantar,N,T,,,Anim,Bi
 suplementar,N,X,,,Bi,Bi
-suplicar,O,T,,,Anim,No
+suplicar,A,T,,,Anim,No
 suplir,N,T,,,Bi,Bi
 suponer,N,T,,,Anim,No
 suprimir,A,T,,,Bi,Bi
@@ -8083,7 +8089,7 @@ ultrapasar,N,X,,,Bi,Bi
 ulular,N,I,,,Bi,Bi
 uncir,N,X,,,Bi,Bi
 undular,N,X,,,Bi,Bi
-ungir,O,T,,,Bi,Bi
+ungir,N,T,,,Bi,Bi
 unificar,N,T,,,Bi,Bi
 uniformar,N,T,,,Bi,Bi
 unisonar,N,I,,,Bi,Bi
@@ -8179,7 +8185,7 @@ virar,N,T,,,Bi,Bi
 visar,N,X,,,Bi,Bi
 visionar,N,X,,,Bi,Bi
 visitar,N,T,,,Anim,Bi
-vislumbrar,O,T,,,Anim,Bi
+vislumbrar,N,T,,,Anim,Bi
 visualizar,N,T,,,Anim,Bi
 vitalizar,O,T,,,Bi,Bi
 vitorear,O,T,,,Anim,Bi

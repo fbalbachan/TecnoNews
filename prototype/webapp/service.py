@@ -79,11 +79,11 @@ class Favicon_request:
 
 class Index_request:
     def GET(self):
-        global request_id
+        global request_id, debug_mode
         request_id += 1
         generate_captcha(request_id)
         index = web.template.frender('templates/index.html')
-        return index(str(request_id))
+        return index(str(request_id), debug_mode)
 
 class Debug_request:
     def GET(self):
@@ -130,10 +130,14 @@ class EntiNews_request:
 
         web_input = web.input()
         incoming_request_id = int(web_input.request)
-        request_captcha = web_input.captcha
+
+        request_captcha = right_captcha = 1
+        if not debug_mode:
+            request_captcha = web_input.captcha
 
         if incoming_request_id in request_data:
-            right_captcha = request_data[incoming_request_id]["captcha"]
+            if not debug_mode:
+                right_captcha = request_data[incoming_request_id]["captcha"]
             cleanup_session(incoming_request_id)
 
             if debug_mode or request_captcha == right_captcha:

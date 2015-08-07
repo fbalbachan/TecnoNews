@@ -108,13 +108,17 @@ $def with (analysis, printer)
 
 	<hr size=5 noshade>
     $code:
-        entities_data = [(text_entities, "Entity-based Sentiment Overall Report", "")]
+        entities_data = [(text_entities,
+                         "Entity-based Sentiment Overall Report",
+                         "(hoover with the mouse over entities and sentiment scores to display specific attributes and evidence supporting them)")]
 
     $for entities, title, subtitle in entities_data:
         $if entities:
             $ referents_data = printer.get_referents_data(entities)
             <p class="normal">
             <br><center><b><u><font size=5 color="#8A0808">$title</font></u></b></center>
+            <br><center><font size=3 color="black">$subtitle</font></center>
+
             <br>
             <center><table id="global_entities" border="1">
                 <tr><th>Id</th><th>Entity</th><th>Positive</th><th>Negative</th><th>Named-Entity</th><th>Occurrences</th></tr>
