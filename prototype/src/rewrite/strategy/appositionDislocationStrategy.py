@@ -7,7 +7,7 @@ from collections import deque
 
 from src.rewrite.rewrite import Rewrite
 from src.rewrite.sentenceRewrite import SentenceRewrite
-from src.ling.numberEnum import NumberEnum
+from src.ling.number import Number
 from src.utils.logger_utils import *
 from src.utils.stringUtils import *
 from src.model.tokenization.token import Token
@@ -210,7 +210,7 @@ class AppositionDislocationStrategy:
         # Uppercase for the beginning of a sentence
         head = head[0].upper() + head[1:]
 
-        verb = u"son" if apposition.msi["number"] == NumberEnum.plural else u"es"
+        verb = u"son" if apposition.number() == Number.plural else u"es"
 
         tail_first = self.get_replace_string_for(sentence, apposition.appositions[0])
 

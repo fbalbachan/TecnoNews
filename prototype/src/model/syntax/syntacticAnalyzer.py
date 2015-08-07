@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from src.model.entity.animityEnum import AnimityEnum
+from src.model.entity.animity import Animity
 
 debug_mode = False
 
@@ -153,7 +153,7 @@ class SyntacticAnalyzer(object):
 
         return subord_entities
 
-    def search_pronoun_at(self, side, distance, animity=AnimityEnum.bianimate):
+    def search_pronoun_at(self, side, distance, animity=Animity.bianimate):
         pronouns = self.only_pronouns_of(self.clause.entities_closest_to_verb_at(side, distance))
         pronouns = SyntacticAnalyzer.filter_by_animity(pronouns, animity)
 

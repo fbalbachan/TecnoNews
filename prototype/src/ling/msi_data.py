@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from src.ling.genderEnum import GenderEnum
-from src.ling.numberEnum import NumberEnum
+from src.ling.gender import Gender
+from src.ling.number import Number
 
 word_category = {"A": "adjective",
                  "R": "adverb",
@@ -26,13 +26,13 @@ attribute_map = {"A": {1: ("type",     {"Q": "calificative",
                                         "C": "diminutive",
                                         "S": "superlative"}),
 
-                       3: ("gender",   {"M": GenderEnum.masculine,
-                                        "F": GenderEnum.feminine,
-                                        "C": GenderEnum.neutral}),   # "common"
+                       3: ("gender",   {"M": Gender.masculine,
+                                        "F": Gender.feminine,
+                                        "C": Gender.neutral}),   # "common"
 
-                       4: ("number",   {"S": NumberEnum.singular,
-                                        "P": NumberEnum.plural,
-                                        "N": NumberEnum.invariable}),
+                       4: ("number",   {"S": Number.singular,
+                                        "P": Number.plural,
+                                        "N": Number.invariable}),
 
                        5: ("function", {"0": None,
                                         "P": "participle"})
@@ -50,12 +50,12 @@ attribute_map = {"A": {1: ("type",     {"Q": "calificative",
 
                        2: ("person", {"1": 1, "2": 2, "3": 3, "0": None}),
 
-                       3: ("gender", {"M": GenderEnum.masculine, "F": GenderEnum.feminine,
-                                      "C": GenderEnum.neutral,   "N": GenderEnum.neutral}),  # "common"
+                       3: ("gender", {"M": Gender.masculine, "F": Gender.feminine,
+                                      "C": Gender.neutral,   "N": Gender.neutral}),  # "common"
 
-                       4: ("number", {"S": NumberEnum.singular,
-                                      "P": NumberEnum.plural,
-                                      "N": NumberEnum.singular}),  # "invariable"
+                       4: ("number", {"S": Number.singular,
+                                      "P": Number.plural,
+                                      "N": Number.singular}),  # "invariable"
 
                        5: ("owner",  {"S": "singular",
                                       "P": "plural",
@@ -65,11 +65,11 @@ attribute_map = {"A": {1: ("type",     {"Q": "calificative",
                  # noun
                  "N": {1:  ("type",   {"C": "common", "P": "proper"}),
 
-                       2:  ("gender", {"M": GenderEnum.masculine, "F": GenderEnum.feminine,
-                                       "C": GenderEnum.neutral,   "0": GenderEnum.neutral}),  # <- 0: es NP
+                       2:  ("gender", {"M": Gender.masculine, "F": Gender.feminine,
+                                       "C": Gender.neutral,   "0": Gender.neutral}),  # <- 0: es NP
 
-                       3:  ("number", {"S": NumberEnum.singular,   "P": NumberEnum.plural,
-                                       "N": NumberEnum.invariable, "0": NumberEnum.singular}),
+                       3:  ("number", {"S": Number.singular,   "P": Number.plural,
+                                       "N": Number.invariable, "0": Number.singular}),
 
                        45: ("semantic_classification", {"SP": "person",       "G0": "place",
                                                         "O0": "organization", "V0": "other",
@@ -95,12 +95,12 @@ attribute_map = {"A": {1: ("type",     {"Q": "calificative",
 
                        4: ("person", {"1": 1, "2": 2, "3": 3, "0": None}),
 
-                       5: ("number", {"S": NumberEnum.singular,
-                                      "P": NumberEnum.plural,
+                       5: ("number", {"S": Number.singular,
+                                      "P": Number.plural,
                                       "0": None}),
 
-                       6: ("gender", {"M": GenderEnum.masculine,
-                                      "F": GenderEnum.feminine,
+                       6: ("gender", {"M": Gender.masculine,
+                                      "F": Gender.feminine,
                                       "0": None})
                        },
 
@@ -112,12 +112,12 @@ attribute_map = {"A": {1: ("type",     {"Q": "calificative",
 
                        2: ("person",     {"1": 1, "2": 2, "3": 3, "0": None}),  # "common"
 
-                       3: ("gender",     {"M": GenderEnum.masculine, "F": GenderEnum.feminine,
-                                          "C": GenderEnum.neutral,   "N": GenderEnum.neutral,
+                       3: ("gender",     {"M": Gender.masculine, "F": Gender.feminine,
+                                          "C": Gender.neutral,   "N": Gender.neutral,
                                           "0": None}),
 
-                       4: ("number",     {"S": NumberEnum.singular,   "P": NumberEnum.plural,
-                                          "N": NumberEnum.invariable, "0": None}),
+                       4: ("number",     {"S": Number.singular,   "P": Number.plural,
+                                          "N": Number.invariable, "0": None}),
 
                        5: ("case",       {"N": "nominative", "A": "accusative",
                                           "D": "dative",     "O": "oblicuo",
@@ -135,11 +135,11 @@ attribute_map = {"A": {1: ("type",     {"Q": "calificative",
 
                        2: ("person", {"1": 1, "2": 2, "3": 3}),
 
-                       3: ("gender", {"M": GenderEnum.masculine, "F": GenderEnum.feminine,
-                                      "C": GenderEnum.neutral,   "N": GenderEnum.neutral}),  # "common"
+                       3: ("gender", {"M": Gender.masculine, "F": Gender.feminine,
+                                      "C": Gender.neutral,   "N": Gender.neutral}),  # "common"
 
-                       4: ("number", {"S": NumberEnum.singular, "P": NumberEnum.plural,
-                                      "N": NumberEnum.invariable}),
+                       4: ("number", {"S": Number.singular, "P": Number.plural,
+                                      "N": Number.invariable}),
 
                        5: ("case",   {"N": "nominative", "A": "accusative",
                                       "D": "dative",     "O": "oblique"}),
@@ -157,10 +157,10 @@ attribute_map = {"A": {1: ("type",     {"Q": "calificative",
 
                        2: ("form",   {"S": "simple", "C": "contracted"}),
 
-                       3: ("gender", {"M": GenderEnum.masculine,
+                       3: ("gender", {"M": Gender.masculine,
                                       "0": None}),
 
-                       4: ("number", {"S": NumberEnum.singular,
+                       4: ("number", {"S": Number.singular,
                                       "0": None})
                        },
 

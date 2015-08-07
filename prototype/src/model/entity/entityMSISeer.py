@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-from src.ling.genderEnum import GenderEnum
-from src.ling.numberEnum import NumberEnum
+from src.ling.gender import Gender
+from src.ling.number import Number
 
 from src.model.entity.entitySemanticAnalyzer import EntitySemanticAnalyzer
-from src.model.entity.animityEnum import AnimityEnum
+from src.model.entity.animity import Animity
 from src.utils.resources import instance as resources
 
 debug_mode = False
@@ -35,8 +35,8 @@ class EntityMSISeer:
         msi = entity.kernel.msi
 
         if msi["category"] == "number":
-            msi["gender"] = GenderEnum.neutral
-            msi["number"] = NumberEnum.invariable
+            msi["gender"] = Gender.neutral
+            msi["number"] = Number.invariable
             msi["type"] = "common"
             msi["category"] = "noun"
 
@@ -77,8 +77,8 @@ class EntityMSISeer:
             return
         leaves = leaves[::-1]
 
-        non_neutral_attribute_values = {"gender": [GenderEnum.masculine, GenderEnum.feminine],
-                                        "number": [NumberEnum.singular, NumberEnum.plural]}
+        non_neutral_attribute_values = {"gender": [Gender.masculine, Gender.feminine],
+                                        "number": [Number.singular, Number.plural]}
 
         for attribute, non_neutral_values in non_neutral_attribute_values.items():
             if msi[attribute] not in non_neutral_values:
@@ -87,19 +87,19 @@ class EntityMSISeer:
                         msi[attribute] = leaf.msi[attribute]
 
     def msi_of_coordinated(self, entity):
-        msi = {"category": "noun", "number": NumberEnum.plural, "type": None, "semantic_classification": None}
+        msi = {"category": "noun", "number": Number.plural, "type": None, "semantic_classification": None}
 
-        pronouns = sorted(entity.children_of_category("pronoun"), key=lambda pronoun: pronoun.msi["person"])
-        msi["person"] = pronouns[0].msi["person"] if pronouns else 3
+        pronouns = sorted(entity.children_of_category("pronoun"), key=lambda pronoun: pronoun.person())
+        msi["person"] = pronouns[0].person() if pronouns else 3
 
-        genders = [child.msi["gender"]
+        genders = [child.gender()
                    for child in entity.children_of_category("noun") + entity.children_of_category("pronoun")]
-        if GenderEnum.masculine in genders:
-            gender = GenderEnum.masculine
-        elif all(map(lambda p_gender: p_gender == GenderEnum.feminine, genders)):
-            gender = GenderEnum.feminine
+        if Gender.masculine in genders:
+            gender = Gender.masculine
+        elif all(map(lambda p_gender: p_gender == Gender.feminine, genders)):
+            gender = Gender.feminine
         else:
-            gender = GenderEnum.neutral
+            gender = Gender.neutral
 
         msi["gender"] = gender
 
@@ -111,10 +111,10 @@ class EntityMSISeer:
 
     def msi_of_infinity(self, entity):
         return {"category": "noun", "gender": None, "person": 3,
-                "number": NumberEnum.singular, "type": None, "semantic_classification": None}
+                "number": Number.singular, "type": None, "semantic_classification": None}
 
     def calculate_animity_for(self, entity):
-        default_animity_value = AnimityEnum.inanimate
+        default_animity_value = Animity.inanimate
 
         # If entity has an animity value, other than the default, then return it (assuming it was previously calculated)
         if "animity" in entity.msi and entity.msi["animity"] is not default_animity_value:
@@ -124,21 +124,21 @@ class EntityMSISeer:
              and entity.msi['category'] == "pronoun" \
              and entity.msi['type'] == "indefinite" \
              and entity.node.lexical_form().lower() in ["ambos", "ambas"]:
-            return AnimityEnum.bianimate
+            return Animity.bianimate
 
         # Entities with 1 token being a "paton" or "ptonic"
         elif len(entity.token.components) is 1 and entity.node.label in ["patons", "ptonic"]:
             if entity.msi['person'] in [1, 2]:
-                return AnimityEnum.animated
+                return Animity.animated
 
             if entity.msi['person'] is 3 and entity.msi['case'] == "dative":
-                return AnimityEnum.animated
+                return Animity.animated
 
             if entity.msi['person'] is 3:
-                return AnimityEnum.bianimate
+                return Animity.bianimate
 
         elif entity.has_attr("implicit") or entity.node.label in ["grup-verb-inf"]:
-            return AnimityEnum.inanimate
+            return Animity.inanimate
 
         elif entity.kernel:
             return self._calculate_animity_single(entity.msi, entity.kernel)
@@ -165,16 +165,16 @@ class EntityMSISeer:
             lemma = unicode(lemma, "utf-8")
 
         if msi['category'] is "pronoun" and msi['type'] is "personal" and msi['person'] in [1, 2]:
-            animity = AnimityEnum.animated
+            animity = Animity.animated
 
         elif msi['category'] is "pronoun" and msi['type'] is "personal" and msi['case'] is "dative":
-            animity = AnimityEnum.animated
+            animity = Animity.animated
 
         elif msi['category'] is "pronoun" and msi['type'] is "personal" and msi['person'] is 3:
-            animity = AnimityEnum.bianimate
+            animity = Animity.bianimate
 
         elif msi['category'] is "pronoun" and msi['type'] is "indefinite" and lemma in ["alguien", "nadie"]:
-            animity = AnimityEnum.animated
+            animity = Animity.animated
 
         # check lemma against resources
         elif lemma in (self.persons + self.demonyms + self.animals) \
@@ -183,10 +183,10 @@ class EntityMSISeer:
                      or msi['semantic_classification'] == 'organization'
                      or msi['semantic_classification'] == 'other'):
 
-            animity = AnimityEnum.animated
+            animity = Animity.animated
 
         else:
-            default_animity_value = AnimityEnum.inanimate
+            default_animity_value = Animity.inanimate
             animity = default_animity_value
 
         return animity

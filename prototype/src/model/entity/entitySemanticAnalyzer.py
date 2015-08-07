@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from src.ling.genderEnum import GenderEnum
+from src.ling.gender import Gender
 from src.utils.genderDetection.genderDetector import GenderDetector
 from src.utils.resources import instance as resources
 
@@ -17,7 +17,7 @@ class EntitySemanticAnalyzer:
     def fix_invalid_ne(self, entity):
         if entity.lexical_form.lower() in self.invalid_name_entities:
             entity.msi["semantic_classification"] = None
-            if entity.msi["category"] == "noun":
+            if entity.category() == "noun":
                 entity.msi["type"] = "common"
 
     def fix_person_classification(self, entity):
@@ -36,7 +36,8 @@ class EntitySemanticAnalyzer:
 
     def fix_semantic_classification(self, entity):
         msi = entity.msi
-        if not "semantic_classification" in msi: msi["semantic_classification"] = None
+        if not "semantic_classification" in msi:
+            msi["semantic_classification"] = None
 
     def set_names_for_person(self, entity):
         msi = entity.msi
@@ -71,14 +72,13 @@ class EntitySemanticAnalyzer:
                 msi["semantic_classification"] = "person"
 
     def detect_gender_if_necessary(self, entity):
-        msi = entity.msi
-        if not (msi["category"] == "noun" and msi["type"] == "proper" and msi["gender"] == GenderEnum.neutral):
+        if not (entity.category() == "noun" and entity.msi["type"] == "proper" and entity.gender() == Gender.neutral):
             return
 
         for word in entity.words():
             gender = self.gender_detector.gender_of(word)
-            if gender in [GenderEnum.masculine, GenderEnum.feminine]:
-                msi["gender"] = gender
+            if gender in [Gender.masculine, Gender.feminine]:
+                entity.msi["gender"] = gender
                 return
 
     gender_detector = GenderDetector()

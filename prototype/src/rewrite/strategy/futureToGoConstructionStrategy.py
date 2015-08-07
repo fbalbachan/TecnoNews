@@ -22,10 +22,9 @@ class FutureToGoConstructionStrategy:
 
         return Rewrite.preserving_case(verb.node, rewritten_verb)
 
-
     @staticmethod
     def msi_for(verb):
-        msi = verb.msi
-        return {"mode": "indicative", "time": "presente", "person": msi["person"], "number": msi["number"]}
+        return {"mode": "indicative", "time": "presente",
+                "person": verb.person(), "number": verb.number()}
 
     type = "replacement"

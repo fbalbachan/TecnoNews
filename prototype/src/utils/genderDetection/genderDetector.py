@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from src.ling.genderEnum import GenderEnum
+from src.ling.gender import Gender
 from src.utils.configProvider import ConfigProvider
 from codecs import open
 from os.path import join
@@ -38,9 +38,9 @@ class GenderDetector:
         gender_preference = ["male", "female", "neutral"]
         for gender in gender_preference:
             if name in GenderDetector.names_by_gender[gender]:
-                gender_map = {"male": GenderEnum.masculine,
-                              "female": GenderEnum.feminine,
-                              "neutral": GenderEnum.neutral}
+                gender_map = {"male": Gender.masculine,
+                              "female": Gender.feminine,
+                              "neutral": Gender.neutral}
                 return gender_map[gender]
         return None
 

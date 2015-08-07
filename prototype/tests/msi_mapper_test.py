@@ -4,8 +4,8 @@ import json
 import unittest
 
 from src.ling.msi_mapper import tag_to_full_msi, msi
-from src.ling.genderEnum import GenderEnum
-from src.ling.numberEnum import NumberEnum
+from src.ling.gender import Gender
+from src.ling.number import Number
 
 
 class TestMSIMapper(unittest.TestCase):
@@ -14,7 +14,7 @@ class TestMSIMapper(unittest.TestCase):
         normal_tag = "AQ0MS0"
 
         expected = {"category": u"adjective", "type": u"calificative", "grade": None,
-                    "gender": GenderEnum.masculine, "number": NumberEnum.singular, "function": None}
+                    "gender": Gender.masculine, "number": Number.singular, "function": None}
 
         expected_json = ('{"category": "adjective", "function": null, "grade": null, '
                          + '"gender": "masculine", "number": "singular", "type": "calificative"}')
@@ -26,9 +26,9 @@ class TestMSIMapper(unittest.TestCase):
 
     def test_msi_normal_case(self):
         a_msi = {"category": u"adjective", "type": u"calificative", "grade": None,
-                 "gender": GenderEnum.masculine, "number": NumberEnum.singular, "function": None}
+                 "gender": Gender.masculine, "number": Number.singular, "function": None}
 
-        expected = {"gender": GenderEnum.masculine, "number": NumberEnum.singular, "person": 3}
+        expected = {"gender": Gender.masculine, "number": Number.singular, "person": 3}
 
         expected_json = '{"person": 3, "number": "singular", "gender": "masculine"}'
 
@@ -41,7 +41,7 @@ class TestMSIMapper(unittest.TestCase):
         self.special_case_tag = "NCMN000"
 
         expected = {'category': u'noun', 'semantic_classification': None,
-                    'grade': None, 'gender': GenderEnum.masculine, 'number': NumberEnum.invariable,
+                    'grade': None, 'gender': Gender.masculine, 'number': Number.invariable,
                     'type': u'common'}
 
         expected_json = (u'{"category": "noun", "semantic_classification": null, "grade": null, '
@@ -54,9 +54,9 @@ class TestMSIMapper(unittest.TestCase):
 
     def test_msi_special_case(self):
         a_msi = {"category": u"adjective",       "type": u"calificative",       "grade": None,
-                 "gender": GenderEnum.masculine, "number": NumberEnum.singular, "function": None}
+                 "gender": Gender.masculine, "number": Number.singular, "function": None}
 
-        expected = {"gender": GenderEnum.masculine, "number": NumberEnum.singular, "person": 3}
+        expected = {"gender": Gender.masculine, "number": Number.singular, "person": 3}
 
         expected_json = '{"person": 3, "number": "singular", "gender": "masculine"}'
 

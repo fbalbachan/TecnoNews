@@ -4,10 +4,10 @@ __author__ = 'Martin Caramés Abente'
 from enum import Enum
 
 
-class GenderEnum(Enum):
-    masculine = "masculine"
-    feminine = "feminine"
-    neutral = "neutral"
+class Gender(Enum):
+    masculine = u"masculine"
+    feminine = u"feminine"
+    neutral = u"neutral"
 
     @classmethod
     def most_specific(cls, gender1, gender2):
@@ -28,6 +28,9 @@ class GenderEnum(Enum):
 
         elif gender1 is cls.neutral and gender2 is cls.feminine:
             return cls.feminine
+
+        elif gender1 is cls.neutral and gender2 is cls.neutral:
+            return cls.neutral
 
         else:
             return None

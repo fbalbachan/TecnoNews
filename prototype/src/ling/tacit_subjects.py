@@ -1,41 +1,41 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from src.model.entity.tacitEntity import TacitEntity
-from src.model.entity.animityEnum import AnimityEnum
-from src.ling.numberEnum import NumberEnum
-from src.ling.genderEnum import GenderEnum
+from src.model.entity.animity import Animity
+from src.ling.number import Number
+from src.ling.gender import Gender
 
-tacit_subjects = {(0, NumberEnum.singular, GenderEnum.neutral): None,
-                  (1, NumberEnum.singular, GenderEnum.neutral): 'yo',
-                  (2, NumberEnum.singular, GenderEnum.neutral): 'tú',
+tacit_subjects = {(0,   Number.singular, Gender.neutral):    None,
+                  (1,   Number.singular, Gender.neutral):    'yo',
+                  (2,   Number.singular, Gender.neutral):    'tú',
 
-                  (3, NumberEnum.invariable, GenderEnum.neutral):   'lo',
-                  (3, NumberEnum.singular,   GenderEnum.neutral):   'él/ella',
-                  (3, NumberEnum.singular,   GenderEnum.masculine): 'él',
-                  (3, NumberEnum.singular,   GenderEnum.feminine):  'ella',
+                  (3,   Number.invariable, Gender.neutral):  'lo',
+                  (3,   Number.singular,  Gender.neutral):   'él/ella',
+                  (3,   Number.singular, Gender.masculine):  'él',
+                  (3,   Number.singular, Gender.feminine):   'ella',
 
-                  (1, NumberEnum.plural, GenderEnum.neutral):   'nosotros/nosotras',
-                  (1, NumberEnum.plural, GenderEnum.masculine): 'nosotros',
-                  (1, NumberEnum.plural, GenderEnum.feminine):  'nosotras',
+                  (1,   Number.plural,   Gender.neutral):    'nosotros/nosotras',
+                  (1,   Number.plural,   Gender.masculine):  'nosotros',
+                  (1,   Number.plural,   Gender.feminine):   'nosotras',
 
-                  (2, NumberEnum.plural, GenderEnum.neutral):   'ustedes',
+                  (2,   Number.plural,   Gender.neutral):    'ustedes',
 
-                  (3, NumberEnum.plural, GenderEnum.neutral):   'ellos/ellas',
-                  (3, NumberEnum.plural, GenderEnum.masculine): 'ellos',
-                  (3, NumberEnum.plural, GenderEnum.feminine):  'ellas', }
+                  (3,   Number.plural,   Gender.neutral):    'ellos/ellas',
+                  (3,   Number.plural,   Gender.masculine):  'ellos',
+                  (3,   Number.plural,   Gender.feminine):   'ellas', }
 
 
 def get_entity_some(animity, is_implicit=False, is_impersonal=False):
-    if animity == AnimityEnum.animated:
+    if animity == Animity.animated:
         entity = somebody()
-    elif animity == AnimityEnum.inanimate:
+    elif animity == Animity.inanimate:
         entity = something()
-    else:  # AnimityEnum.bianimate:
+    else:  # Animity.bianimate:
         entity = bianimate_something()
 
     if is_implicit:
         entity = implicit(entity)
-    elif is_impersonal and animity == AnimityEnum.animated:
+    elif is_impersonal and animity == Animity.animated:
         entity = impersonal(entity)
 
     return entity
@@ -43,7 +43,7 @@ def get_entity_some(animity, is_implicit=False, is_impersonal=False):
 
 def bianimate_something():
     entity = something()
-    entity.msi["animity"] = AnimityEnum.bianimate
+    entity.msi["animity"] = Animity.bianimate
     return entity
 
 
@@ -52,26 +52,26 @@ def impersonal_somebody():
 
 
 def somebody():
-    return TacitEntity("alguien", {"category": "pronoun", "number": NumberEnum.invariable, "gender": GenderEnum.neutral,
-                                   "person": 3, "type": "indefinite", "case": None, "animity": AnimityEnum.animated,
+    return TacitEntity("alguien", {"category": "pronoun", "number": Number.invariable, "gender": Gender.neutral,
+                                   "person": 3, "type": "indefinite", "case": None, "animity": Animity.animated,
                                    "semantic_classification": None})
 
 
 def something():
-    return TacitEntity("algo", {"category": "pronoun", "number": NumberEnum.invariable, "gender": GenderEnum.neutral,
-                                "person": 3, "type": "indefinite", "case": None, "animity": AnimityEnum.inanimate,
+    return TacitEntity("algo", {"category": "pronoun", "number": Number.invariable, "gender": Gender.neutral,
+                                "person": 3, "type": "indefinite", "case": None, "animity": Animity.inanimate,
                                 "semantic_classification": None})
 
 
 def this():
-    return TacitEntity("esto", {"category": "pronoun", "number": NumberEnum.singular, "gender": GenderEnum.neutral,
-                                "person": 3, "type": "demonstrative", "case": None, "animity": AnimityEnum.inanimate,
+    return TacitEntity("esto", {"category": "pronoun", "number": Number.singular, "gender": Gender.neutral,
+                                "person": 3, "type": "demonstrative", "case": None, "animity": Animity.inanimate,
                                 "semantic_classification": None})
 
 
 def impersonal(entity):
     entity.attributes = {"tacit": None, "impersonal": None}
-    entity.msi["number"] = NumberEnum.invariable
+    entity.msi["number"] = Number.invariable
     return entity
 
 
@@ -93,7 +93,7 @@ def implicit_bianimate_something():
 
 
 def tacit_subject_for(verb):
-    tacit_subject = tacit_subjects[(verb.msi['person'],
-                                    verb.msi['number'],
-                                    (verb.msi['gender'] or GenderEnum.neutral))]
+    tacit_subject = tacit_subjects[(verb.person(),
+                                    verb.number(),
+                                    (verb.gender() or Gender.neutral))]
     return tacit_subject

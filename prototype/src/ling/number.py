@@ -4,7 +4,7 @@ __author__ = 'Martin Caramés Abente'
 from enum import Enum
 
 
-class NumberEnum(Enum):
+class Number(Enum):
     singular = u"singular"
     plural = u"plural"
     invariable = u"invariable"

@@ -3,7 +3,7 @@
 import unittest
 
 from src.ling.freelingDictionaryParser import FreelingDictionaryParser
-from src.ling.numberEnum import NumberEnum
+from src.ling.number import Number
 from src.model.paragraph.paragraph import Paragraph
 from src.model.paragraph.paragraphAnalyzer import ParagraphAnalyzer
 from src.model.sentence.sentenceAnalyzer import SentenceAnalyzer
@@ -27,7 +27,7 @@ class TestRewriter(unittest.TestCase):
         msi = {"mode": "indicative",
                "time": "presente",
                "person": 2,
-               "number": NumberEnum.singular}
+               "number": Number.singular}
         print ontology.get_lexical_form("haber", msi)
 
     def test_dislocate_cite(self):

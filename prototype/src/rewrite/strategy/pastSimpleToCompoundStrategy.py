@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from src.ling.genderEnum import GenderEnum
-from src.ling.numberEnum import NumberEnum
+from src.ling.gender import Gender
+from src.ling.number import Number
 from src.rewrite.rewrite import Rewrite
 
 
@@ -30,15 +30,13 @@ class PastSimpleToCompoundStrategy:
 
         return Rewrite.preserving_case(verb.node, rewritten_verb)
 
-
     @staticmethod
     def msi_for(verb):
-        msi = verb.msi
         return {"mode": "indicative",    "time": "presente",
-                "person": msi["person"], "number": msi["number"]}
+                "person": verb.person(), "number": verb.number()}
 
     participle_msi = {"mode": "participio",
-                      "gender": GenderEnum.masculine,
-                      "number": NumberEnum.singular}
+                      "gender": Gender.masculine,
+                      "number": Number.singular}
 
     type = "replacement"

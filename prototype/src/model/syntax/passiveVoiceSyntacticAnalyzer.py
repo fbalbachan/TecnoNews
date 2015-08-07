@@ -2,7 +2,7 @@
 from src.ling.tacit_subjects import get_entity_some
 from src.model.entity.tacitEntity import TacitEntity
 from src.model.syntax.syntacticAnalyzer import SyntacticAnalyzer
-from src.model.entity.animityEnum import AnimityEnum
+from src.model.entity.animity import Animity
 
 debug_mode = False
 
@@ -21,7 +21,7 @@ class PassiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         entities = filter(lambda entity: entity.animity_matches(verbal_animity),
                           entities)
         if entities:
-            entities[0].msi["animity"] = AnimityEnum.most_specific(verbal_animity, entities[0].msi["animity"])
+            entities[0].msi["animity"] = Animity.most_specific(verbal_animity, entities[0].msi["animity"])
             subject = [entities[0]]
         else:
             is_implicit = True
@@ -47,7 +47,7 @@ class PassiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         entities = self.verb_matching_subject_entities(6, 5)
         entities = filter(lambda entity: entity.animity_matches(verbal_animity)
                                          and (not self.starts_with_accepted_preposition(entity.node, "a")
-                                              or AnimityEnum.animities_match(verbal_animity, AnimityEnum.animated)),
+                                              or Animity.animities_match(verbal_animity, Animity.animated)),
                           entities)
         if entities:
             od_entity = entities[0]
@@ -64,9 +64,9 @@ class PassiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         pronoun_person = pronoun_msi['person']
 
         if pronoun_person in [1, 2]:
-            pronoun_msi['animity'] = AnimityEnum.animated
+            pronoun_msi['animity'] = Animity.animated
 
         else:  # pronoun_person is 3:
-            pronoun_msi['animity'] = AnimityEnum.bianimate
+            pronoun_msi['animity'] = Animity.bianimate
 
         return TacitEntity(pronoun, pronoun_msi)

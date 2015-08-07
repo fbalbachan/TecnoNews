@@ -3,7 +3,7 @@ from collections import deque
 
 from src.model.entity.tacitEntity import TacitEntity
 from src.model.tokenization.token import Token
-from src.model.entity.animityEnum import AnimityEnum
+from src.model.entity.animity import Animity
 from src.parser.parseNode import ParseNode
 
 debug_mode = False
@@ -86,9 +86,9 @@ class Entity (TacitEntity):
 
     @staticmethod
     def link_in_apposition(head_entity, entities_in_apposition):
-        if head_entity.msi["animity"] == AnimityEnum.inanimate \
-           and [entity.msi["animity"] == AnimityEnum.animated for entity in entities_in_apposition]:
-            head_entity.msi["animity"] = AnimityEnum.animated
+        if head_entity.msi["animity"] == Animity.inanimate \
+           and [entity.msi["animity"] == Animity.animated for entity in entities_in_apposition]:
+            head_entity.msi["animity"] = Animity.animated
 
         for entity in entities_in_apposition:
             head_entity.appositions.append(entity)

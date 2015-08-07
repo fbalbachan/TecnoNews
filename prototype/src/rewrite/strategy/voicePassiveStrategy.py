@@ -6,7 +6,7 @@ import traceback
 from src.rewrite.rewrite import Rewrite
 from src.utils.configProvider import ConfigProvider
 from src.utils.logger_utils import get_logger
-from src.model.entity.animityEnum import AnimityEnum
+from src.model.entity.animity import Animity
 
 
 
@@ -90,8 +90,8 @@ class VoicePassiveStrategy:
 
             msi = {"mode": leaf.msi["mode"],
                    "time": leaf.msi["time"],
-                   "person": clause.structure('subject').msi()["person"],
-                   "number": clause.structure('subject').msi()['number']}
+                   "person": clause.structure('subject').person(),
+                   "number": clause.structure('subject').number()}
 
             # transform the last leaf of verb (ie clause.verb) to the msi of the first leaf of verb
             lexical_forms = self.ontology.get_lexical_forms(clause.verb.lemma(), msi)
@@ -122,7 +122,7 @@ class VoicePassiveStrategy:
                 od_msi = clause.structure('od').all_entities()[0].leaves()[0].msi
 
             od_entity = clause.structure('od').entity()
-            od_matches_animated = AnimityEnum.animities_match(od_entity.msi["animity"], AnimityEnum.animated)
+            od_matches_animated = Animity.animities_match(od_entity.msi["animity"], Animity.animated)
             if clause.structure('od').entity().is_tacit() \
                or od_matches_animated \
                or (od_msi['category'] == 'pronoun' and od_msi['type'] == 'personal'):

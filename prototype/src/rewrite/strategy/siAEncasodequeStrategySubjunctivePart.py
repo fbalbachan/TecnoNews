@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from src.ling.genderEnum import GenderEnum
-from src.ling.numberEnum import NumberEnum
+from src.ling.gender import Gender
+from src.ling.number import Number
 from src.rewrite.rewrite import Rewrite
 from src.utils.stringUtils import set_first_letter_case
 
@@ -58,20 +58,18 @@ class SiAEncasodequeStrategySubjunctivePart:
 
     @staticmethod
     def msi_for(verb):
-        msi = verb.msi
-        return {'number':  msi['number'],
-                'person': 3 if msi['person'] == 1 and msi['number'] == 'singular' else msi['person'],
-                'time':  msi['time'],
+        return {'number':  verb.number(),
+                'person': 3 if verb.person() == 1 and verb.number() == 'singular' else verb.person(),
+                'time':  verb.msi['time'],
                 'mode': 'subjunctive'}
 
     def haber_subjunctive_msi_for(self, verb):
-        msi = verb.msi
         return {"mode": "subjunctive",
                 "time": "presente",
-                "person": 3 if msi['person'] == 1 and msi['number'] == 'singular' else msi['person'],
-                "number": msi["number"]}
+                "person": 3 if verb.person() == 1 and verb.number() == 'singular' else verb.person(),
+                "number": verb.number()}
 
     participle_msi = {"mode": "participio",
-                      "gender": GenderEnum.masculine,
-                      "number": NumberEnum.singular}
+                      "gender": Gender.masculine,
+                      "number": Number.singular}
     type = "replacement"

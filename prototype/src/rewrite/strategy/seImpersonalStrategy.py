@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from src.ling.genderEnum import GenderEnum
+from src.ling.gender import Gender
 
 __author__ = 'Martín Caramés Abente'
 
@@ -186,7 +186,7 @@ class SeImpersonalStrategy:
         aux_msi = {"mode": leaf.msi["mode"],
                    "time": leaf.msi["time"],
                    "person": leaf.msi["person"],
-                   "number": od_entity.msi()['number']}
+                   "number": od_entity.number()}
 
         lexical_forms = self.ontology.get_lexical_forms("ser", aux_msi)
         aux_verb_flexed = lexical_forms[0].text
@@ -197,7 +197,7 @@ class SeImpersonalStrategy:
         modal_msi = {"mode": msi["mode"],
                      "time": msi["time"],
                      "person": msi["person"],
-                     "number": od_entity.msi()['number']}
+                     "number": od_entity.number()}
 
         if not verb.has_compound_time():
             lemma = verb.node.leaves()[0].lemma
@@ -211,12 +211,12 @@ class SeImpersonalStrategy:
     def flex_verb_participle(self, verb, od_entity):
         if debug_mode: print "--> SeImpersonalStrategy.flex_verb_participle(verb:", verb, " - od_entity: ", od_entity, ")\n"
 
-        gender = od_entity.msi()["gender"]
-        gender = gender if gender is not GenderEnum.neutral else GenderEnum.masculine
+        gender = od_entity.gender()
+        gender = gender if gender is not Gender.neutral else Gender.masculine
 
         participle_msi = {"mode":   "participio",
                           "gender": gender,
-                          "number": od_entity.msi()['number']}
+                          "number": od_entity.number()}
 
         lexical_forms = self.ontology.get_lexical_forms(verb.lemma(), participle_msi)
         clause_verb_participle = lexical_forms[0].text

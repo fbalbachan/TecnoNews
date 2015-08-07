@@ -2,6 +2,8 @@
 from itertools import chain
 from src.utils.tree.treeNode import TreeNode
 
+debug_mode = True
+
 
 class PersonalPronounCoreferenceSearcher:
 
@@ -13,11 +15,14 @@ class PersonalPronounCoreferenceSearcher:
         self.pronoun_index = self.compute_pronoun_index()
 
     def search(self):
+        if debug_mode: print "--> PersonalPronounCoreferenceSearcher.search() - pronoun: ", self.pronoun
         methods = [self.search_in_parent_clauses,
                    self.search_in_previous_clauses,
                    self.search_in_previous_sentences]
 
-        return self.first_non_none((method() for method in methods))
+        entity = self.first_non_none((method() for method in methods))
+        if debug_mode: print "<-- search()  --> entity: ", entity
+        return entity
 
     def search_in_parent_clauses(self):
         if not self.clause.is_root():
@@ -96,7 +101,7 @@ class PersonalPronounCoreferenceSearcher:
         return list(chain(*clauses_lists))
 
     def first_non_none(self, generator):
-        return next( (x for x in generator if x is not None), None)
+        return next((x for x in generator if x is not None), None)
 
     def compute_pronoun_index(self):
         node_for_index = self.pronoun.node if not self.pronoun.is_tacit() else self.clause.proper_tree().leaves()[0]

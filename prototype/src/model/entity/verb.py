@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from src.ling.genderEnum import GenderEnum
-from src.ling.numberEnum import NumberEnum
+from src.ling.gender import Gender
+from src.ling.number import Number
 from src.ling.tacit_subjects import tacit_subjects
 from src.ling.verb_info import get_sentimental_script_of, get_transitivity, get_script_animity_for
 from src.model.entity.entity import Entity
@@ -67,9 +67,9 @@ class Verb(Entity):
         person = first_leaf.msi["person"]
 
         if self.voice == "active":
-            gender = GenderEnum.neutral
+            gender = Gender.neutral
         else:
-            gender = (self.leaf().msi["gender"] or GenderEnum.neutral)
+            gender = (self.leaf().msi["gender"] or Gender.neutral)
 
         number = first_leaf.msi["number"]
         mode = first_leaf.msi["mode"]
@@ -79,19 +79,18 @@ class Verb(Entity):
                 "person": person, "mode": mode, "time": time}
 
     def matching_pronoun(self):
-        neutral_pronouns = {(1, NumberEnum.singular),
-                            (2, NumberEnum.singular),
-                            (2, NumberEnum.plural)}
-        msi = self.msi
-        person = msi["person"]
-        number = msi["number"]
-        gender = GenderEnum.neutral if (person, number) in neutral_pronouns else msi["gender"]
+        neutral_pronouns = {(1, Number.singular),
+                            (2, Number.singular),
+                            (2, Number.plural)}
+        person = self.person()
+        number = self.number()
+        gender = Gender.neutral if (person, number) in neutral_pronouns else self.gender()
         return tacit_subjects[(person, number, gender)]
 
     def matching_pronoun_msi(self):
-        msi = self.msi
-        return {"category": "pronoun", "person": msi["person"], "number": msi["number"],
-                 "gender": msi["gender"], "type": "personal", "case": None, "semantic_classification": None}
+        return {"category": "pronoun", "type": "personal",
+                "person": self.person(), "number": self.number(), "gender": self.gender(),
+                "case": None, "semantic_classification": None}
 
     def get_script_animity_for(self, structure_name):
         if structure_name == "subject":
@@ -106,6 +105,6 @@ class Verb(Entity):
     def __repr__(self):
         return " ".join([str(leaf) for leaf in self._leaves]) + " (" + self.lemma() + ") " + \
                " ".join([self.voice, self.sentimental_script.klass, self.transitivity]) + " " + \
-               str(self.msi["person"]) + "°"
+               str(self.person()) + "°"
 
     slots_with_scripted_animity = ["subject", "od", "regimen", "equative"]

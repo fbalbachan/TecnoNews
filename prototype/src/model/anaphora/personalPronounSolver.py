@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 from src.model.anaphora.personalPronounCoreferenceSearcher import PersonalPronounCoreferenceSearcher
 from src.model.entity.verb import Verb
-from src.model.entity.animityEnum import AnimityEnum
+from src.model.entity.animity import Animity
+
+debug_mode = True
 
 
 class PersonalPronounSolver:
@@ -10,20 +12,24 @@ class PersonalPronounSolver:
         self.context = context
 
     def solve(self):
+        if debug_mode: print "--> PersonalPronounSolver.solve() - clause: ", self.clause
         for pronoun, structure in self.pronouns_in_order():
             self.link(structure, pronoun)
 
     def link(self, structure, pronoun):
+        if debug_mode: print "--> PersonalPronounSolver.link(structure: ", structure.name, ", pronoun: ", pronoun, ")"
         coref_searcher = PersonalPronounCoreferenceSearcher(self.clause, self.context, pronoun)
         referenced_entity = coref_searcher.search()
         if referenced_entity:
             if structure.name in Verb.slots_with_scripted_animity:
                 verbal_animity = self.clause.verb.get_script_animity_for(structure.name)
                 if referenced_entity.animity_matches(verbal_animity):
-                    pronoun.msi["animity"] = AnimityEnum.most_specific(verbal_animity, referenced_entity.msi["animity"])
+                    pronoun.msi["animity"] = Animity.most_specific(verbal_animity, referenced_entity.msi["animity"])
                     pronoun.add_coreference(referenced_entity)
+                    if debug_mode: print "<-- link()  --> referenced_entity: ", referenced_entity
             else:
                 pronoun.add_coreference(referenced_entity)
+                if debug_mode: print "<-- link()  --> referenced_entity: ", referenced_entity
 
     def pronouns_in_order(self):
         clause = self.clause
@@ -40,7 +46,7 @@ class PersonalPronounSolver:
     def only_valid_pronouns(self, entities):
         is_valid_personal_pronoun = lambda entity: entity.category() == "pronoun" \
                                                    and entity.msi["type"] == "personal" \
-                                                   and entity.msi["person"] == 3 \
+                                                   and entity.person() == 3 \
                                                    and entity.msi["case"] in [None, "accusative"]
 
         is_valid_indefinite_pronoun = lambda entity: entity.category() == "pronoun" \

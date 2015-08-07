@@ -14,7 +14,7 @@ class ReferentInformationExtractor:
                 reference = reference.father
             words.extend([leaf.lexical_form for leaf in reference.node.leaves_of_category("noun")])
 
-        return [ word for word, freq in Counter(words).most_common(3) ]  # @UnusedVariable
+        return [word for word, freq in Counter(words).most_common(3)]  # @UnusedVariable
 
     @staticmethod
     def update_named_referents_of(paragraph):

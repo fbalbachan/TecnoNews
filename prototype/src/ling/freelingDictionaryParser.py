@@ -20,8 +20,16 @@ class FreelingDictionaryParser:
             tags = tokens[2::2]
 
             for lemma, tag in zip(lemmas, tags):
-                if "+" in lemma: continue
-                ontology.concept(lemma, True).add(LexicalForm(lexical_form, tag_to_full_msi(tag), lemma, None))
+                try:
+                    if "+" in lemma:
+                        continue
+                    full_msi = tag_to_full_msi(tag)
+                    full_lexical_form =LexicalForm(lexical_form, full_msi, lemma, None)
+                    ontology.concept(lemma, create_if_necessary=True).add(full_lexical_form)
+
+                except Exception:
+                    print "Error parsing ontology. Unrecognized (lemma: ", lemma, ", tag: ", tag, ")"
+                    continue
 
         return ontology
 

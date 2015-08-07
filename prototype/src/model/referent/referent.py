@@ -29,10 +29,10 @@ class Referent:
         return set(self.name_list())
 
     def name_list(self):
-        return [ reference.name() for reference in self.references ]
+        return [reference.name() for reference in self.references]
 
     def references_with(self, name):
-        return [ reference for reference in self.references if reference.name() == name ]
+        return [reference for reference in self.references if reference.name() == name]
 
     def ref_count_of(self, name):
         return self.name_list().count(name)
@@ -41,8 +41,12 @@ class Referent:
         designated = self.designated_ref()
         names = []
         for attr in ["names", "surnames"]:
-            if designated.has_attr(attr): names.extend(designated.attributes[attr])
-        if not names: names.append(designated.lexical_form)
+            if designated.has_attr(attr):
+                names.extend(designated.attributes[attr])
+
+        if not names:
+            names.append(designated.lexical_form)
+
         return " ".join(names)
 
     def ref_count(self):

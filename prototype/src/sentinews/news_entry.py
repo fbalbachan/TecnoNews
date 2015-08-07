@@ -4,7 +4,6 @@ from src.sentinews.categorizer import Categorizer
 from src.utils.logger_utils import *
 from src.utils.configProvider import ConfigProvider
 import traceback
-import ConfigParser
 
 logger = get_logger('tecnonews')
 

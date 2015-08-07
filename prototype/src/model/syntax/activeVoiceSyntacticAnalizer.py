@@ -3,7 +3,7 @@
 from src.ling.tacit_subjects import this, get_entity_some
 from src.model.entity.tacitEntity import TacitEntity
 from src.model.syntax.syntacticAnalyzer import SyntacticAnalyzer
-from src.model.entity.animityEnum import AnimityEnum
+from src.model.entity.animity import Animity
 
 debug_mode = False
 
@@ -49,7 +49,7 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
             if structure.is_empty():
                 if slot_name == 'subject':
                     is_impersonal = True
-                    entities = [get_entity_some(AnimityEnum.animated, False, is_impersonal)]
+                    entities = [get_entity_some(Animity.animated, False, is_impersonal)]
 
                 elif slot_name == 'od':
                     entities = pre_subject if is_impersonal_passive else pre_od
@@ -84,7 +84,7 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
     def is_impersonal_passive(subject):
         is_impersonal_passive = subject \
                                 and subject[0].is_explicit() \
-                                and all([entity.msi["animity"] is AnimityEnum.inanimate for entity in subject])
+                                and all([entity.msi["animity"] is Animity.inanimate for entity in subject])
 
         return is_impersonal_passive
 
@@ -94,7 +94,7 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         still_not_passive = od and implicit_subject
         if still_not_passive:
             od_explicit = od[0].is_explicit()
-            od_animated = od[0].msi["animity"] is AnimityEnum.animated
+            od_animated = od[0].msi["animity"] is Animity.animated
             still_not_passive = od_explicit and od_animated
 
         return still_not_passive
@@ -112,7 +112,7 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         entities = SyntacticAnalyzer.filter_by_animity(entities, verbal_animity)
 
         if entities:
-            entities[0].msi["animity"] = AnimityEnum.most_specific(verbal_animity, entities[0].msi["animity"])
+            entities[0].msi["animity"] = Animity.most_specific(verbal_animity, entities[0].msi["animity"])
             subject = [entities[0]]
         else:
             subject = [self.tacit_or_implicit_subject(verbal_animity)]
@@ -137,7 +137,7 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
 
         return subject
 
-    def tacit_or_implicit_subject(self, verbal_animity=AnimityEnum.bianimate):
+    def tacit_or_implicit_subject(self, verbal_animity=Animity.bianimate):
         if debug_mode: print "--> ActiveVoiceSyntacticAnalyzer.tacit_or_implicit_subject()"
 
         if self.is_root_relative_clause():
@@ -154,11 +154,11 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         clause = self.clause
         return clause.is_relative() and clause.is_root()
 
-    def tacit_subject(self, verbal_animity=AnimityEnum.bianimate):
+    def tacit_subject(self, verbal_animity=Animity.bianimate):
         verb = self.clause.verb
         pronoun = verb.matching_pronoun()
         pronoun_msi = verb.matching_pronoun_msi()
-        pronoun_msi['animity'] = AnimityEnum.animated if pronoun_msi['person'] in [1, 2] else verbal_animity
+        pronoun_msi['animity'] = Animity.animated if pronoun_msi['person'] in [1, 2] else verbal_animity
 
         return TacitEntity(pronoun, pronoun_msi)
 
@@ -175,14 +175,14 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
 
         animity_filtered_candidate_entities = \
                         nominal_entities_at_same_level_nodes \
-                        + SyntacticAnalyzer.filter_by_animity(nominal_entities_under_prep_a, AnimityEnum.animated) \
+                        + SyntacticAnalyzer.filter_by_animity(nominal_entities_under_prep_a, Animity.animated) \
                         + pronominal_entities
 
         od = self.search_od(candidate_entities, animity_filtered_candidate_entities, verbal_animity)
 
         return od
 
-    def search_od(self, candidate_entities, animity_filtered_candidate_entities, verbal_animity=AnimityEnum.bianimate):
+    def search_od(self, candidate_entities, animity_filtered_candidate_entities, verbal_animity=Animity.bianimate):
         if debug_mode: print "--> ActiveVoiceSyntacticAnalyzer.search_od()"
         if not candidate_entities:
             is_implicit = True
@@ -207,7 +207,7 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
 
         return [animity_filtered_candidate_entities[0]]
 
-    def get_od_candidate_entities(self, verbal_animity=AnimityEnum.bianimate):
+    def get_od_candidate_entities(self, verbal_animity=Animity.bianimate):
         if debug_mode: print "--> ActiveVoiceSyntacticAnalyzer.get_od_candidate_entities()"
         nominal_entities_at_same_level_nodes = \
             self.find_entities_by(lambda: self.search_nominal_od_at_same_level_nodes("right", 4, verbal_animity),
@@ -269,12 +269,12 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
 
     def oi(self):
         if debug_mode: print "--> ActiveVoiceSyntacticAnalyzer.oi()"
-        entities = self.find_entities_by(lambda: self.search_nominal_oi_at("right", 3, AnimityEnum.animated),
-                                         lambda: self.search_nominal_oi_at("left", 3, AnimityEnum.animated),
-                                         lambda: self.search_pronoun_at("left", 2, AnimityEnum.animated),
-                                         lambda: self.search_pronoun_at("right", 2, AnimityEnum.animated))
+        entities = self.find_entities_by(lambda: self.search_nominal_oi_at("right", 3, Animity.animated),
+                                         lambda: self.search_nominal_oi_at("left", 3, Animity.animated),
+                                         lambda: self.search_pronoun_at("left", 2, Animity.animated),
+                                         lambda: self.search_pronoun_at("right", 2, Animity.animated))
         if entities:
-            entities[0].msi["animity"] = AnimityEnum.most_specific(entities[0].msi["animity"], AnimityEnum.animated)
+            entities[0].msi["animity"] = Animity.most_specific(entities[0].msi["animity"], Animity.animated)
 
         candidates = [entities[0]] if entities else []
         return candidates
@@ -284,7 +284,7 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         verbal_animity = self.clause.verb.affected_object_animity
         entities = self.get_regimen_candidate_entities(verbal_animity)
         if entities:
-            entities[0].msi["animity"] = AnimityEnum.most_specific(entities[0].msi["animity"], verbal_animity)
+            entities[0].msi["animity"] = Animity.most_specific(entities[0].msi["animity"], verbal_animity)
         candidates = [entities[0]] if entities else []
         return candidates
 
@@ -305,7 +305,7 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         verbal_animity = self.clause.verb.affected_object_animity
         entities = self.get_equative_candidate_entities(verbal_animity)
         if entities:
-            entities[0].msi["animity"] = AnimityEnum.most_specific(entities[0].msi["animity"], verbal_animity)
+            entities[0].msi["animity"] = Animity.most_specific(entities[0].msi["animity"], verbal_animity)
         candidates = [entities[0]] if entities else []
         return candidates
 
@@ -316,7 +316,7 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         entities = SyntacticAnalyzer.filter_by_animity(entities, verbal_animity)
         return entities
 
-    def search_nominal_oi_at(self, side, distance, animity=AnimityEnum.bianimate):
+    def search_nominal_oi_at(self, side, distance, animity=Animity.bianimate):
         if debug_mode: print "--> ActiveVoiceSyntacticAnalyzer.search_nominal_oi_at()"
         entities = self.search_subords_with_prep_at(side, distance, "a", "para")
         entities = filter(lambda p_entity: p_entity.is_maximal_regarding(entities), entities)
@@ -324,13 +324,13 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         entities = SyntacticAnalyzer.filter_by_animity(entities, animity)
         return entities
 
-    def search_nominal_od_at_same_level_nodes(self, side, distance, verbal_animity=AnimityEnum.bianimate):
+    def search_nominal_od_at_same_level_nodes(self, side, distance, verbal_animity=Animity.bianimate):
         entities = self.clause.entities_closest_to_verb_at(side, distance)
         entities = self.only_nominal_of(entities)
         entities = SyntacticAnalyzer.filter_by_animity(entities, verbal_animity)
         return entities
 
-    def search_nominal_od_under_prep_a(self, side, distance, verbal_animity=AnimityEnum.bianimate):
+    def search_nominal_od_under_prep_a(self, side, distance, verbal_animity=Animity.bianimate):
         entities = self.search_subords_with_prep_at(side, distance, "a")
         entities = filter(lambda p_entity: p_entity.is_maximal_regarding(entities), entities)
         entities = SyntacticAnalyzer.filter_infinitives(entities)

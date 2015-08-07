@@ -27,10 +27,8 @@ class PastCompoundToSimpleStrategy:
 
         return Rewrite.preserving_case(verb.node, rewritten_verb)
 
-
     @staticmethod
     def msi_for(verb):
-        msi = verb.msi
-        return { "mode" : "indicative", "time" : "pasado", "person" : msi["person"], "number" : msi["number"]}
+        return {"mode": "indicative", "time": "pasado", "person": verb.person(), "number": verb.number()}
 
     type = "replacement"

@@ -28,7 +28,8 @@ class FactNormalizer():
         return fact
 
     def string_of(self, entity):
-        if entity.is_linked(): entity = entity.referenced()
+        if entity.is_linked():
+            entity = entity.referenced()
 
         if entity.category() == "verb":
             return entity.lemma()
@@ -40,9 +41,8 @@ class FactNormalizer():
         if lemmas == ["quién"]:
             return "alguien"
 
-        if lemmas == ["qué"] \
-                and entity.msi["category"] == "pronoun" \
-                and entity.msi["type"] == "interrogative":
+        if lemmas == ["qué"] and entity.category() == "pronoun" \
+                             and entity.msi["type"] == "interrogative":
             return "algo"
 
         return str(entity)

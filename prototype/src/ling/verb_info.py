@@ -3,7 +3,7 @@ import ConfigParser
 
 from src.sentiment.verbalScript import VerbalScript
 from src.utils.csvwrapper import unicode_csv_reader
-from src.model.entity.animityEnum import AnimityEnum
+from src.model.entity.animity import Animity
 
 
 transitivity_values = {'T': 'TRANSITIVE',
@@ -30,9 +30,9 @@ allowed_boxes_for_passive_verbs = ['verb', 'subject', 'od', 'instrument_goal', '
 
 allowed_boxes_for_minor_sentences = ['instrument_goal', 'subject', 'adjuncts']
 
-animity_values = {'Anim': AnimityEnum.animated,
-                  'Bi': AnimityEnum.bianimate,
-                  'No': AnimityEnum.inanimate}
+animity_values = {'Anim': Animity.animated,
+                  'Bi': Animity.bianimate,
+                  'No': Animity.inanimate}
 
 scripts = {'A': 'AGENTIVE',
            'E': 'EQUATIVE',
@@ -73,7 +73,7 @@ def get_script_animity_for(verb_lemma, role_name):
         result = verbs[verb_lemma]['animity'][role_name]
 
     except KeyError:
-        result = AnimityEnum.bianimate
+        result = Animity.bianimate
 
     return result
 

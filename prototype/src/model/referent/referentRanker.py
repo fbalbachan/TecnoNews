@@ -20,7 +20,7 @@ class ReferentRanker:
             score_by_referent[referent] = score
 
         ranking = sorted(score_by_referent.items(),
-                         key = lambda (referent, score): (score, - referent.first_occurrence().token.start()),
+                         key = lambda (p_referent, p_score): (p_score, - p_referent.first_occurrence().token.start()),
                          reverse = True)
         return ranking
 
@@ -31,13 +31,20 @@ class ReferentRanker:
         for clause in self.paragraph.clauses():
             for structure in clause.syntactic_structures:
                 for entity in structure.all_entities():
-                    if not entity in functions_by_entity: functions_by_entity[entity] = []
+                    if entity not in functions_by_entity:
+                        functions_by_entity[entity] = []
                     functions_by_entity[entity].append(structure.name)
                     for children in entity.children:
-                        if not children in functions_by_entity: functions_by_entity[children] = []
+                        if children not in functions_by_entity:
+                            functions_by_entity[children] = []
                         functions_by_entity[children].append(structure.name)
 
         return functions_by_entity
 
-    score_by_function = {"subject" : 1, "od" : 0.5, "oi" : 0.5, "regimen" : 0.5, "equative" : 0.5,
-                         "adjuncts" : 0.25, "instrument_goal" : 0.25 }
+    score_by_function = {"subject":         1,
+                         "od":              0.5,
+                         "oi":              0.5,
+                         "regimen":         0.5,
+                         "equative":        0.5,
+                         "adjuncts":        0.25,
+                         "instrument_goal": 0.25 }

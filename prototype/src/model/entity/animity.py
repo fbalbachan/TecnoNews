@@ -3,7 +3,7 @@ __author__ = 'Martin Caramés Abente'
 from enum import Enum
 
 
-class AnimityEnum(Enum):
+class Animity(Enum):
     animated = u"animated"
     bianimate = u"bianimate"
     inanimate = u"inanimate"

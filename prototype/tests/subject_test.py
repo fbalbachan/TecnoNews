@@ -59,18 +59,19 @@ class TestSubject(unittest.TestCase):
 
             subject = clause.structure("subject")
 
-            if expected_subject_gender == "None": expected_subject_gender = None
+            if expected_subject_gender == "None":
+                expected_subject_gender = None
 
-            self.assertEqual(int(expected_subject_person), subject.msi()['person'])
-            self.assertEqual(expected_subject_number, subject.msi()['number'])
-            self.assertEqual(expected_subject_gender, subject.msi()['gender'])
+            self.assertEqual(int(expected_subject_person), subject.person())
+            self.assertEqual(expected_subject_number, subject.number())
+            self.assertEqual(expected_subject_gender, subject.gender())
             self.assertEqual(expected_subject, subject.lexical_form())
 
             verb = clause.structure("verb")
 
-            self.assertEqual(int(expected_verb_person), verb.msi()['person'])
-            self.assertEqual(expected_verb_number, verb.msi()['number'])
-            self.assertEqual(expected_verb_gender, verb.msi()['gender'])
+            self.assertEqual(int(expected_verb_person), verb.person())
+            self.assertEqual(expected_verb_number, verb.number())
+            self.assertEqual(expected_verb_gender, verb.gender())
             self.assertEqual(expected_verb, verb.entity().lemma())
 
             print "OK"
