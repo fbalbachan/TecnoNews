@@ -7210,7 +7210,7 @@ remullir,N,X,,,Bi,Bi
 remunerar,N,T,,,Anim,Bi
 remusgar,N,X,,,Bi,Bi
 renacer,A,I,,,Bi,Bi
-rendir,A,I,,,,Bi
+rendir,A,I,,,Anim,Bi
 rendir_cuentas,A,T,,,Anim,Bi
 rendir_examen,A,I,,,Anim,Bi
 rendir_tributo,O,T,,,Bi,Bi
