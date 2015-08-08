@@ -161,11 +161,23 @@ class WebOutputUtils:
         return referents_data
 
     def unify_by_name_classification(self, entities):
-
         preferred_classifications = self.preferred_classifications_to_unify_with(entities)
         referents_dict = {}
 
-        for entity in entities:
+        unclassified_entities = [entity for entity in entities if entity.classification() is None
+                                                                  and preferred_classifications[entity] is None]
+        unc_referents_data = []
+        for entity in unclassified_entities:
+            unclassified_referent_data = {"re":   entity,  "refs": [entity],
+                                          "rn":   entity.real_name(),
+                                          "pos":  entity.sentimental_value.value[0],
+                                          "neg":  entity.sentimental_value.value[1],
+                                          "sc":   "NONE",  "cnt":  1}
+            unc_referents_data += [unclassified_referent_data]
+
+        classified_entities = [entity for entity in entities if entity.classification() is not None]
+
+        for entity in classified_entities:
             real_name = entity.real_name()
             classification = entity.classification(is_deep_classification=True)
             classification = classification if classification else preferred_classifications[entity]
@@ -195,59 +207,93 @@ class WebOutputUtils:
 
             referents_dict[nc_key] = referent_data
 
-        return referents_dict.values()
+        return referents_dict.values() + unc_referents_data
 
     def unify_pronouns(self, entities, referents_data):
+        print "input: ", [ref["re"] for ref in referents_data]
 
         referents_to_unify = [ref for ref in referents_data
-                              if any("person" in entity.msi and entity.person() in [1, 2] for entity in ref["refs"])]
+                              if (ref["re"].category(), ref["re"].msi["type"]) == ("pronoun", "personal")]
+
+        referents_to_unify = [ref for ref in referents_to_unify if ref["re"].person() in [1, 2]]
 
         referents_to_unify = [ref for ref in referents_to_unify
-                              if any((entity.category(), entity.msi["type"]) == ("pronoun", "personal") for entity in ref["refs"])]
-
-        referents_to_unify = [ref for ref in referents_to_unify
-                              if all(not entity.is_linked()
-                                     and (not entity.has_many_referents()
-                                          or self.pronoun_names_match(entity.referent.name(), entity.lexical_form))
-                                     and entity.classification() is None
-                                     for entity in ref["refs"])]
+                              if ref["re"].number() in [Number.singular, Number.plural]]
 
         other_referents_data = [ref for ref in referents_data if ref not in referents_to_unify]
 
-        pronouns_dict = {}
+        pronouns_in_singular = [ref for ref in referents_to_unify if ref["re"].number() == Number.singular]
+        sing_referents_data = self.unify_singular_pronouns(pronouns_in_singular)
+
         preferred_genders_numbers = self.preferred_genders_numbers_to_unify_with(entities)
-        for referent_data in referents_to_unify:
 
+        pronouns_dict = {}
+        plurals = [ref for ref in referents_to_unify if ref["re"].number() == Number.plural]
+        for referent_data in plurals:
             entity = referent_data["re"]
-            gender = Gender.most_specific(entity.gender(), preferred_genders_numbers[entity][0])
-            number = Number.most_specific(entity.number(), preferred_genders_numbers[entity][1])
-            name = tacit_subjects[entity.person(), number, gender]
 
-            pgn_key = (name, entity.person(), gender, number)
-            if pgn_key in pronouns_dict.keys():
-                positive = pronouns_dict[pgn_key]["pos"] + referent_data["pos"]
-                negative = pronouns_dict[pgn_key]["neg"] + referent_data["neg"]
-                references = pronouns_dict[pgn_key]["refs"] + referent_data["refs"]
-                count = pronouns_dict[pgn_key]["cnt"] + referent_data["cnt"]
+            if entity.number() == Number.plural:
+                gender = Gender.most_specific(entity.gender(), preferred_genders_numbers[entity][0])
+                number = Number.most_specific(entity.number(), preferred_genders_numbers[entity][1])
+                name = tacit_subjects[entity.person(), number, gender]
+                pgn_key = (name, entity.person(), gender, number)
+
+                if pgn_key in pronouns_dict.keys():
+                    positive = pronouns_dict[pgn_key]["pos"] + referent_data["pos"]
+                    negative = pronouns_dict[pgn_key]["neg"] + referent_data["neg"]
+                    references = pronouns_dict[pgn_key]["refs"] + referent_data["refs"]
+                    count = pronouns_dict[pgn_key]["cnt"] + referent_data["cnt"]
+                else:
+                    positive = referent_data["pos"]
+                    negative = referent_data["neg"]
+                    references = referent_data["refs"]
+                    count = referent_data["cnt"]
+
+                name = name if referent_data["sc"] else name.lower()
+
+                new_referent_data = {"re":   entity,
+                                     "refs": references,
+                                     "rn":   name,
+                                     "pos":  positive,
+                                     "neg":  negative,
+                                     "sc":   str(referent_data["sc"]).upper(),
+                                     "cnt":  count}
+
+                pronouns_dict[pgn_key] = new_referent_data
+
+        return sing_referents_data + other_referents_data
+
+    def unify_singular_pronouns(self, pronouns_in_singular):
+        sing_pronouns_dict = {}
+        for referent_data in pronouns_in_singular:
+            entity = referent_data["re"]
+            name = "yo" if entity.person() == 1 else "tú"
+
+            p_key = entity.person()
+            if p_key in sing_pronouns_dict.keys():
+                references = sing_pronouns_dict[p_key]["refs"] + [entity]
+                positive = sing_pronouns_dict[p_key]["pos"] + referent_data["pos"]
+                negative = sing_pronouns_dict[p_key]["neg"] + referent_data["neg"]
+                count = sing_pronouns_dict[p_key]["cnt"] + 1
+
             else:
                 positive = referent_data["pos"]
                 negative = referent_data["neg"]
-                references = referent_data["refs"]
-                count = referent_data["cnt"]
+                references = [entity]
+                count = 1
 
-            name = name if referent_data["sc"] else name.lower()
-
+            print "count: ", count, "positive: ", positive, "negative: ", negative
             new_referent_data = {"re":   entity,
                                  "refs": references,
                                  "rn":   name,
                                  "pos":  positive,
                                  "neg":  negative,
-                                 "sc":   str(referent_data["sc"]).upper(),
+                                 "sc":   "NONE",
                                  "cnt":  count}
 
-            pronouns_dict[pgn_key] = new_referent_data
+            sing_pronouns_dict[p_key] = new_referent_data
 
-        return pronouns_dict.values() + other_referents_data
+        return sing_pronouns_dict.values()
 
     def unify_plain_entities(self, entities, referents_data):
         return []
@@ -265,33 +311,3 @@ class WebOutputUtils:
     def e_tag_list(self, referent, name, tag_mapping):
         existing_references = [reference for reference in referent.references_with(name) if reference in tag_mapping]
         return ",".join([tag_mapping[reference] for reference in existing_references])
-
-    def pronoun_names_match(self, name1, name2):
-        n1 = name1.lower()
-        n2 = name2.lower()
-        name = name1
-        match = (n1 == n2)
-
-        if not match:
-            if n1 == "nosotros" or n1 == "nosotras":
-                match = n2 == "nosotros/nosotras" or n2 == "nos"
-                name = name1
-
-            elif n1 == "nosotros/nosotras" or n1 == "nos":
-                match = n2 == "nosotros" or n2 == "nosotras" or n2 == "nosotros/nosotras" or n2 == "nos"
-                name = name2
-
-            elif n1 == "ustedes":
-                match = (n2 == "uds" or n2 == "uds.")
-                name = name1
-
-        return name if match else False
-
-    def pronoun_alternative_names_match(self, entity):
-        if entity.person() == 1 and entity.gender() == Gender.masculine and entity.number() == Number.plural:
-            return ["nos", "nosotros", "nosotros/nosotras"]
-        elif entity.person() == 1 and entity.gender() == Gender.feminine and entity.number() == Number.plural:
-            return ["nos", "nosotras", "nosotros/nosotras"]
-        elif entity.person() == 1 and entity.gender() == Gender.neutral and entity.number() == Number.plural:
-            return ["nos", "nosotros", "nosotras", "nosotros/nosotras"]
-

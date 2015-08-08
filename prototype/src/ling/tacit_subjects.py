@@ -9,7 +9,7 @@ tacit_subjects = {(0,   Number.singular, Gender.neutral):    None,
                   (1,   Number.singular, Gender.neutral):    'yo',
                   (2,   Number.singular, Gender.neutral):    'tú',
 
-                  (3,   Number.invariable, Gender.neutral):  'lo',
+                # (3,   Number.invariable, Gender.neutral):  'lo',
                   (3,   Number.singular,  Gender.neutral):   'él/ella',
                   (3,   Number.singular, Gender.masculine):  'él',
                   (3,   Number.singular, Gender.feminine):   'ella',
@@ -19,6 +19,8 @@ tacit_subjects = {(0,   Number.singular, Gender.neutral):    None,
                   (1,   Number.plural,   Gender.feminine):   'nosotras',
 
                   (2,   Number.plural,   Gender.neutral):    'ustedes',
+                  (2,   Number.plural,   Gender.masculine):  'vosotros',
+                  (2,   Number.plural,   Gender.feminine):   'vosotras',
 
                   (3,   Number.plural,   Gender.neutral):    'ellos/ellas',
                   (3,   Number.plural,   Gender.masculine):  'ellos',
