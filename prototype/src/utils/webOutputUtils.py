@@ -341,7 +341,8 @@ class WebOutputUtils:
 
     def kernels_match(self, entity1, entity2):
 
-        both_have_kernel = hasattr(entity1, "kernel") and hasattr(entity2, "kernel")
+        both_have_kernel = hasattr(entity1, "kernel") and entity1.kernel \
+                           and hasattr(entity2, "kernel") and entity2.kernel
         lexical_match_1 = both_have_kernel and entity1.kernel.lexical_form == entity2.kernel.lexical_form
         lexical_match_2 = not both_have_kernel and entity1.lexical_form == entity2.lexical_form
         lexical_match = lexical_match_1 or lexical_match_2
