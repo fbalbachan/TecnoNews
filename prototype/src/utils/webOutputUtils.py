@@ -249,7 +249,7 @@ class WebOutputUtils:
             pronoun = pronoun_data["re"]
             gender = Gender.most_specific(pronoun.gender(), preferred_genders_numbers[pronoun][0])
             number = Number.most_specific(pronoun.number(), preferred_genders_numbers[pronoun][1])
-            name = pronoun.real_name().lower()
+            name = str(pronoun.referenced()).lower() if pronoun.is_linked() else pronoun.real_name()
 
             key = (gender, number)
             if key in dict_by_gender_number.keys():
@@ -380,7 +380,9 @@ class WebOutputUtils:
         while len(non_atomic_plain_referents) > 0:
             unified = non_atomic_plain_referents.pop(0)
             for plain_referent in non_atomic_plain_referents:
-                if plain_referent["re"].real_name() == unified["re"].real_name():
+                entity1 = plain_referent["re"]
+                entity2 = unified["re"]
+                if entity1.real_name() == entity2.real_name():
                     unified["pos"] += plain_referent["pos"]
                     unified["neg"] += plain_referent["neg"]
                     unified["refs"] += [plain_referent["re"]]
@@ -397,7 +399,10 @@ class WebOutputUtils:
         while len(atomic_plain_referents_data) > 0:
             unified = atomic_plain_referents_data.pop(0)
             for plain_referent in atomic_plain_referents_data:
+                entity = plain_referent["re"]
                 if self.kernels_match(plain_referent["re"], unified["re"]):
+                    has_kernel = hasattr(entity, "kernel") and entity.kernel
+                    unified["rn"] = entity.kernel.lexical_form if has_kernel else entity.real_name()
                     unified["pos"] += plain_referent["pos"]
                     unified["neg"] += plain_referent["neg"]
                     unified["refs"] += [plain_referent["re"]]

@@ -127,14 +127,24 @@ $def with (analysis, printer)
             $for referent_data in referents_data:
                 $ i+=1
                 $ occurrences = len(referent_data['refs'])
-                <tr>
-                    <td align="center" width=30>$i</td>
-                    <td align="center" title="$printer.entity_tooltip(referent_data['re'])">$referent_data['rn']</td>
-                    <td align="center" title="$printer.e_sv_pos_ev(referent_data['refs'])" width=100>$referent_data['pos']</td>
-                    <td align="center" title="$printer.e_sv_neg_ev(referent_data['refs'])" width=100>$referent_data['neg']</td>
-                    <td align="center" width=100>$referent_data['sc']</td>
-                    <td align="center" width=100>$occurrences</td>
-                </tr>
+                $if occurrences == len(referents_data[0]['refs']):
+                    <tr bgcolor="black">
+                        <td align="center" width=30><font size=4 color="white"><b>$i</b></font></td>
+                        <td align="center" title="$printer.entity_tooltip(referent_data['re'])"><font size=4 color="white"><b>$referent_data['rn']</b></font></td>
+                        <td align="center" title="$printer.e_sv_pos_ev(referent_data['refs'])" width=100><font size=4 color="white"><b>$referent_data['pos']</b></font></td>
+                        <td align="center" title="$printer.e_sv_neg_ev(referent_data['refs'])" width=100><font size=4 color="white"><b>$referent_data['neg']</b></font></td>
+                        <td align="center" width=100><font size=4 color="white"><b>$referent_data['sc']</b></font></td>
+                        <td align="center" width=100><font size=4 color="white"><b>$occurrences</b></font></td>
+                    </tr>
+                $else:
+                    <tr>
+                        <td align="center" width=30>$i</td>
+                        <td align="center" title="$printer.entity_tooltip(referent_data['re'])">$referent_data['rn']</td>
+                        <td align="center" title="$printer.e_sv_pos_ev(referent_data['refs'])" width=100>$referent_data['pos']</td>
+                        <td align="center" title="$printer.e_sv_neg_ev(referent_data['refs'])" width=100>$referent_data['neg']</td>
+                        <td align="center" width=100>$referent_data['sc']</td>
+                        <td align="center" width=100>$occurrences</td>
+                    </tr>
             </table></center>
             </p>
 
