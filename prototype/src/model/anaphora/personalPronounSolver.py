@@ -3,7 +3,7 @@ from src.model.anaphora.personalPronounCoreferenceSearcher import PersonalPronou
 from src.model.entity.verb import Verb
 from src.model.entity.animity import Animity
 
-debug_mode = True
+debug_mode = False
 
 
 class PersonalPronounSolver:

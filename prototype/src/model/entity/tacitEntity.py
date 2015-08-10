@@ -64,8 +64,8 @@ class TacitEntity:
     #
     # Methods related to MSI (morfo-syntatic-information)
     #
-    def classification(self, is_deep_classification=False):
-        entity = self.referenced_entity() if is_deep_classification else self
+    def classification(self, look_deep=False):
+        entity = self.referenced_entity() if look_deep else self
         if entity.category() == "noun" \
            and entity.msi["type"] == "proper" \
            and "semantic_classification" in entity.msi:
@@ -86,7 +86,6 @@ class TacitEntity:
         return self.msi["person"]
 
     def matches(self, entity):
-        print "M self: ", self, " - entity: ", entity
         matches = self.person() == entity.person() \
                   and self.number_matches(entity.number()) \
                   and self.gender_matches(entity.gender())

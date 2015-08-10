@@ -126,13 +126,14 @@ $def with (analysis, printer)
             $ i=0
             $for referent_data in referents_data:
                 $ i+=1
+                $ occurrences = len(referent_data['refs'])
                 <tr>
                     <td align="center" width=30>$i</td>
                     <td align="center" title="$printer.entity_tooltip(referent_data['re'])">$referent_data['rn']</td>
                     <td align="center" title="$printer.e_sv_pos_ev(referent_data['refs'])" width=100>$referent_data['pos']</td>
                     <td align="center" title="$printer.e_sv_neg_ev(referent_data['refs'])" width=100>$referent_data['neg']</td>
                     <td align="center" width=100>$referent_data['sc']</td>
-                    <td align="center" width=100>$referent_data['cnt']</td>
+                    <td align="center" width=100>$occurrences</td>
                 </tr>
             </table></center>
             </p>

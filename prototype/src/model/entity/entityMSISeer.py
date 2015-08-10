@@ -64,7 +64,6 @@ class EntityMSISeer:
         useful_leaves.reverse()
         return useful_leaves
 
-
     def filter_banned(self, leaves, banned_nodes):
         return filter(lambda leaf: not banned_nodes & set(leaf.path_to_root()), leaves)
 

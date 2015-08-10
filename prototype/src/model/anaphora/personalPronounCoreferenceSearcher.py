@@ -2,7 +2,7 @@
 from itertools import chain
 from src.utils.tree.treeNode import TreeNode
 
-debug_mode = True
+debug_mode = False
 
 
 class PersonalPronounCoreferenceSearcher:
