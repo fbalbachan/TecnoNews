@@ -150,5 +150,10 @@ $def with (analysis, printer)
 
             <center><h2><font color="black">Overall text score (+$printer.score_of(analysis,analysis["paragraph"]).split(",")[0]% , $printer.score_of(analysis,analysis["paragraph"]).split(",")[1]%)</font></h2></center>
 
+            <center><font size=4 color="black"><u><b>Input text</b></u></font></center>
+
+            $ full_text = analysis["paragraph"].text
+                <br><font size=3 color="black">$full_text</font>
+
   </body>
 </html>
