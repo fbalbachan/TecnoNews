@@ -190,4 +190,15 @@ class TacitEntity:
         return repr(self)
 
     def real_name(self):
-        return self.referenced().referent.name() if self.is_linked() else self.referent.name()
+        if self.is_linked():
+            if self.referenced().is_named_entity():
+                real_name = self.referenced().referent.name()
+            else:
+                real_name = self.referenced().lexical_form
+        else:
+            if self.is_named_entity():
+                real_name = self.referent.name()
+            else:
+                real_name = self.lexical_form
+
+        return real_name

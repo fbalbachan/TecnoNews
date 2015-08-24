@@ -66,16 +66,16 @@ class BlogPublisher(object):
             if cat.name == name:
                 return cat
 
-    def special_catogory_insertion(self, client, entry, post):
+    def special_category_insertion(self, client, entry, post):
         # Portada minimal logic
         logger.info("post.injected_count %s" % entry.injected_count)
-        has_valid_thubmnail_id = False
+        has_valid_thumbnail_id = False
 
         if hasattr(post, 'thumbnail'):
             if post.thumbnail:
-                has_valid_thubmnail_id = True
+                has_valid_thumbnail_id = True
 
-        if has_valid_thubmnail_id:
+        if has_valid_thumbnail_id:
             con_foto_instance = self.get_category_instance(client, "z con foto")
             if not isinstance(con_foto_instance,
                               wordpress_xmlrpc.wordpress.WordPressTerm):
@@ -88,7 +88,7 @@ class BlogPublisher(object):
 
         assert isinstance(entry.injected_count, int)
 
-        if has_valid_thubmnail_id and entry.injected_count >= 2:
+        if has_valid_thumbnail_id and entry.injected_count >= 2:
             destacada_instance = self.get_category_instance(client, "z destacada")
 
             if not isinstance(destacada_instance,
@@ -103,6 +103,18 @@ class BlogPublisher(object):
         post = WordPressPost()
         post.title = entry.title
         post.content = entry.content
+
+        if len(entry.versions) > 0:
+            post.content += "<b><u>Otras fuentes combinadas en esta noticia: </u></b>"
+            post.content += '<ul>'
+            for version_news_id in entry.versions:
+                # post.content += 'id=' + str(version_news_id)
+                unmarshalled_news = news_service.get_list({'_id': version_news_id})
+                if len(unmarshalled_news) == 1:
+                    post.content += '<li>' + unmarshalled_news[0].title # + ' - ' + unmarshalled_news[0].source
+                    # post.content += '<span>&nbsp;' + unmarshalled_news[0].published_date.strftime('%B %d, %Y') + '</span>'
+
+            post.content += '</ul>'
 
         unique_host = self.config.get('publishing', 'unique_host')
         if unique_host == 'False':
@@ -143,7 +155,7 @@ class BlogPublisher(object):
             if thumbnail:
                 post.thumbnail = thumbnail
 
-            self.special_catogory_insertion(client=client,
+            self.special_category_insertion(client=client,
                                             entry=entry,
                                             post=post)
             post.post_status = 'publish'
@@ -261,7 +273,7 @@ class BlogPublisher(object):
 
         # TODO: workaround this hardcoded data
         user = 'emmettbrown'
-        password = '6503b89221548c7cde2128570003d410'
+        password = 'Grup0Tecn0lect0'
         for entry in entries:
             if not entry.wp_url:
                 logger.error(entry.title)
@@ -286,7 +298,7 @@ class BlogPublisher(object):
     def remove_from_portada(self, entries):
         # TODO: workaround this hardcoded data
         user = 'emmettbrown'
-        password = '6503b89221548c7cde2128570003d410'
+        password = 'Grup0Tecn0lect0'
 
         for entry in entries:
             try:

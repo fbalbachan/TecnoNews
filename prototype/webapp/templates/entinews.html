@@ -8,7 +8,7 @@ $def with (analysis, printer)
   <body>
 
     <center><h2><font color="black">Overall text score (+$printer.score_of(analysis,analysis["paragraph"]).split(",")[0]% , $printer.score_of(analysis,analysis["paragraph"]).split(",")[1]%)</font></h2></center>
-    <center><h3><font color="black">Check Entity-based Sentiment Overall Report at the bottom of this page</font></h3></center>
+    <center><h3><font color="black">Check <a href="#overall_score">Entity-based Sentiment Overall Report</a> at the bottom of this page</font></h3></center>
 
     $ sentences = analysis["paragraph"].sentences
     $ text_entities = []
@@ -40,6 +40,7 @@ $def with (analysis, printer)
                 if clause.relative_entity:
                     entities_data.append(
                         ([clause.relative_entity], "Relative entities", "(anaphora resolution in relative pronouns)"))
+                    text_entities += [clause.relative_entity]
 
             $for list, title, subtitle in entities_data:
                 $if list:
@@ -115,6 +116,7 @@ $def with (analysis, printer)
     $for entities, title, subtitle in entities_data:
         $if entities:
             $ referents_data = printer.get_referents_data(entities)
+            <a name="overall_score"></a>
             <p class="normal">
             <br><center><b><u><font size=5 color="#8A0808">$title</font></u></b></center>
             <br><center><font size=3 color="black">$subtitle</font></center>
@@ -149,6 +151,45 @@ $def with (analysis, printer)
             </p>
 
             <center><h2><font color="black">Overall text score (+$printer.score_of(analysis,analysis["paragraph"]).split(",")[0]% , $printer.score_of(analysis,analysis["paragraph"]).split(",")[1]%)</font></h2></center>
+
+            <center><h3><font color="black">Overall text score scale</font></h3></center>
+
+            <center><table id="scale_at_the_bottom" border="1">
+                <tr>
+                    <td>Positive dimension range (in %)</td>
+                    <td align="center" width=100 bgcolor="white">
+                        <font size=2><b>neutral              [0.0/9.9]</b></font>
+                    </td>
+                    <td align="center" width=100 bgcolor=#D6FFAD>
+                        <font size=2><b>slightly positive    [10.0/34.9]</b></font>
+                    </td>
+                    <td align="center" width=80 bgcolor=#00FF00>
+                        <font size=2><b>positive             [35.0/79.9]</b></font>
+                    </td>
+                    <td align="center" width=100 bgcolor=#006600>
+                        <font color="white" size=2><b>very positive        [80.0/100.0]</b></font>
+                    </td>
+                </tr>
+                <tr></tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr>
+                <tr>
+                    <td>Negative dimension range (in %)</td>
+                    <td align="center" width=100 bgcolor="white">
+                        <font size=2><b>neutral             [0.0/-9.9]</b></font>
+                    </td>
+                    <td align="center" width=100 bgcolor=#FFD6CC>
+                        <font size=2><b>slightly negative    [-10.0/-34.9]</b></font>
+                    </td>
+                    <td align="center" width=80 bgcolor=#FF0000>
+                        <font size=2><b>negative             [-35.0/-79.9]</b></font>
+                    </td>
+                    <td align="center" width=100 bgcolor=#990000>
+                        <font color="white" size=2><b>very negative        [-80.0/-100.0]</b></font>
+                    </td>
+                </tr>
+
+            </table></center>
+
+            <hr size=5 noshade>
 
             <center><font size=4 color="black"><u><b>Input text</b></u></font></center>
 
