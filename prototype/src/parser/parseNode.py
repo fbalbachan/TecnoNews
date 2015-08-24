@@ -76,8 +76,21 @@ class ParseNode(TreeNode):
         if debug_mode: print "--> ParseNode.label_node_children()"
         return filter(lambda child: not child.is_leaf(), self.children)
 
-    def label_lemma_matches(self, labels, lemmas):
+    def label_lemma_lf_matches(self, labels, lemmas, lexical_forms):
+        '''Matches a leaf or a label/leaf pair of nodes with the proper label/lemma as described bellow.
+
+        The condition is stated as follows:
+                1) node     is a Leaf or
+                            is a label node with only one leaf child
+                2) labels   is None   --> any label is valid
+                            []        --> only leaf nodes could match
+                            is a list --> any label IN the list is valid
+                3) lemmas   any label IN Lemmas list is valid
+        '''
+
         if self.is_leaf():
-            return self.lemma_matches(lemmas)
+            matches = not lemmas or self.lemma_matches(lemmas)
+            matches = matches and (not lexical_forms or self.lexical_form_matches(lexical_forms))
+            return matches
         else:
-            return self.label_lemma_matches(labels, lemmas)
+            return self.label_lemma_lf_matches(labels, lemmas, lexical_forms)

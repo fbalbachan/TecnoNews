@@ -87,7 +87,8 @@ class SentimentalAnalyzer:
 
     def analyze_entity(self, entity):
         if not entity.is_tacit():
-            for method in [ self.analyze_adjectival, self.analyze_nominal ]: method(entity)
+            for method in [ self.analyze_adjectival, self.analyze_nominal ]:
+                method(entity)
 
     def analyze_adjectival(self, entity):
         if debug_mode: print "--> SentimentalAnalyzer.analyze_adjectival(entity)"
@@ -99,11 +100,16 @@ class SentimentalAnalyzer:
     def analyze_nominal(self, entity):
         if debug_mode: print "--> SentimentalAnalyzer.analyze_nominal(entity)"
         node = entity.proper_node
-        hints = node.leaves_of_category("noun") + node.leaves_of_msi({ "category": "verb", "mode" : "infinitive"})
+        noun_leaves = node.leaves_of_category("noun")
+
+        hints = filter(lambda leaf: leaf.msi["semantic_classification"] is None, noun_leaves) \
+              + node.leaves_of_msi({"category": "verb", "mode": "infinitive"})
+
         evidence = self.only_valuated_of(hints)
         entity_value = entity.sentimental_value
         entity_value.add_evidence(*evidence)
-        if entity.father: entity.father.sentimental_value.add_evidence(entity_value)
+        if entity.father:
+            entity.father.sentimental_value.add_evidence(entity_value)
 
     def only_valuated_of(self, hints):
         valuated = []
@@ -112,5 +118,8 @@ class SentimentalAnalyzer:
             if not word_value.is_neutral(): valuated.append(SentimentalValuedObject(hint, word_value.value))
         return valuated
 
-    method_by_header = {"sin": privative_assignation, "con": instrument_assignation, "mediante": instrument_assignation,
-                        "a_través_de": instrument_assignation, "por_medio_de": instrument_assignation }
+    method_by_header = {"sin": privative_assignation,
+                        "con": instrument_assignation,
+                        "mediante": instrument_assignation,
+                        "a_través_de": instrument_assignation,
+                        "por_medio_de": instrument_assignation }

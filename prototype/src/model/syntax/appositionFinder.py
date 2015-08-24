@@ -131,8 +131,8 @@ class AppositionFinder:
         for idx in range(1, distance):
             middle_node = same_level_nodes[e_idx+idx]
             middle_are_ok = middle_are_ok and self.clause.same_hemiclause(middle_node, entity.node) \
-                                          and not middle_node.label_lemma_matches([], ["y"]) \
-                                          and not middle_node.label_lemma_matches([], ["incluso"])
+                                          and not middle_node.label_lemma_lf_matches([], ["y"], None) \
+                                          and not middle_node.label_lemma_lf_matches([], ["incluso"], None)
         if not middle_are_ok:
             return False
 
@@ -141,10 +141,10 @@ class AppositionFinder:
         candidate2 = prev_node.children[-1] if prev_node.children else None
 
         is_close = self.clause.same_hemiclause(candidate1, entity.node) \
-                   and candidate1.label_lemma_matches(None, lemmas) \
+                   and candidate1.label_lemma_lf_matches(None, lemmas, None) \
                    or \
                    candidate2 and self.clause.same_hemiclause(candidate2, entity.node)\
-                              and candidate2.label_lemma_matches(None, lemmas)
+                              and candidate2.label_lemma_lf_matches(None, lemmas, None)
         return is_close
 
     def group_entities_in_chains(self, entities):
@@ -209,11 +209,11 @@ class AppositionFinder:
         last_entity_idx = brothers.index(last_entity.node)
 
         if len(brothers) > last_entity_idx+1:
-            result = brothers[last_entity_idx+1].label_lemma_matches(None, ["etcétera"])
+            result = brothers[last_entity_idx+1].label_lemma_lf_matches(None, ["etcétera"], None)
 
             if not result and len(brothers) > last_entity_idx+2:
-                result = brothers[last_entity_idx+1].label_lemma_matches(None, [","]) \
-                         and brothers[last_entity_idx+2].label_lemma_matches(None, ["etcétera"])
+                result = brothers[last_entity_idx+1].label_lemma_lf_matches(None, [","], None) \
+                         and brothers[last_entity_idx+2].label_lemma_lf_matches(None, ["etcétera"], None)
 
             return result
 

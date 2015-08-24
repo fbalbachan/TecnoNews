@@ -29,6 +29,10 @@ class LeafNode(ParseNode):
         if debug_mode: print "--> LeafNode.lemma_matches"
         return self.lemma in lemmas
 
+    def lexical_form_matches(self, lexical_forms):
+        if debug_mode: print "--> LeafNode.lexical_form_matches"
+        return self.lexical_form in lexical_forms
+
     def size(self):
         if debug_mode: print "--> LeafNode.size"
         return len(self.components())

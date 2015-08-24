@@ -55,6 +55,9 @@ class EntityExtractor:
 
         for level, nodes in sorted(by_level.items()):  # @UnusedVariable
             for node in nodes:
+                if self.starts_with_lo(node):
+                    continue
+
                 entity = Entity(node)
 
                 label = node.label
@@ -74,6 +77,14 @@ class EntityExtractor:
                         father.children.append(entity)
 
         return entities_by_node.values()
+
+    def starts_with_lo(self, node):
+        first_leaf = node.leaves()[0]
+
+        match = first_leaf.label_lemma_lf_matches(None, ["el"], ["lo", "Lo"]) \
+                and len(node.leaves()) == len(node.children)
+
+        return match
 
     def assign_msi(self, entities):
         if debug_mode: print "--> EntityExtractor.assign_msi(entities): ", entities

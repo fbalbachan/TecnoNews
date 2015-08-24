@@ -22,14 +22,16 @@ class LabelNode(ParseNode):
         except AttributeError:
             return False
 
-    def label_lemma_matches(self, labels, lemmas):
+    def label_lemma_lf_matches(self, labels, lemmas, lexical_forms):
         matches = True
         if labels is not None:
             matches = matches and self.label in labels
 
-        matches = matches \
-                  and len(self.children) == 1 \
-                  and self.children[0].is_leaf() \
-                  and self.children[0].lemma_matches(lemmas)
+        if not (lemmas or lexical_forms) \
+           or len(self.children) != 1 or not self.children[0].is_leaf():
+            return False
+
+        matches = matches and (not lemmas or self.children[0].lemma_matches(lemmas))
+        matches = matches and (not lexical_forms or self.children[0].lexical_form_matches(lexical_forms))
 
         return matches
