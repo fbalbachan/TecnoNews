@@ -28,7 +28,7 @@ class WebOutputUtils:
 
     def tooltip(self, clause, name):
         if clause.has_structure(name):
-            return ", ".join([ self.entity_tooltip(entity) for entity in clause.structure(name).all_entities() ])
+            return ", ".join([self.entity_tooltip(entity) for entity in clause.structure(name).all_entities()])
         else:
             return ""
 

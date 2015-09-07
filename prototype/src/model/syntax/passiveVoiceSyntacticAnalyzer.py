@@ -54,6 +54,9 @@ class PassiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         else:
             od_entity = self.tacit_od()
 
+        if "animity" in od_entity.msi:
+            od_entity.msi["animity"] = Animity.most_specific(verbal_animity, od_entity.msi["animity"])
+
         return [od_entity]
 
     def tacit_od(self):

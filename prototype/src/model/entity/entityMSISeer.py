@@ -8,6 +8,7 @@ from src.utils.resources import instance as resources
 
 debug_mode = False
 
+
 class EntityMSISeer:
 
     def __init__(self):
@@ -43,23 +44,35 @@ class EntityMSISeer:
         if "person" not in msi or not msi["person"]:
             msi["person"] = 3
 
+        if entity.kernel.msi["category"] == "determinant":
+            msi["animity"] = Animity.bianimate
+            msi["category"] = "noun"
+
         self.disambiguate_if_necessary(msi, useful_leaves)
 
         return msi
 
     def get_useful_leaves(self, entity):
+        if debug_mode: print "--> EntityMSISeer.get_useful_leaves(entity:", entity, ")"
         node = entity.node
 
         banned_labels = ["grup-sp", "sp-de"]
-        banned_nodes = set(filter(lambda child: not child.is_leaf() and child.label in banned_labels, node.children))
+        banned_nodes = filter(lambda child:
+                                  not child.is_leaf() and child.label in banned_labels,
+                              node.children)
+        banned_nodes = set(banned_nodes)
 
-        nouns = self.filter_banned(node.leaves_of_category("noun") + node.leaves_of_category("number"), banned_nodes)
+        nouns = self.filter_banned(node.leaves_of_category("noun") + node.leaves_of_category("number"),
+                                   banned_nodes)
+
         if self.has_unexchangeable_appositional_relationship(nouns):
             entity.attributes["class"] = [nouns[0].lexical_form]
             nouns = [nouns[1]]
 
-        other_leaves = node.leaves_of_category("pronoun", "determinant", "adjective")
-        useful_leaves = nouns + self.filter_banned(other_leaves, banned_nodes)
+        other_leaves = self.filter_banned(node.leaves_of_category("pronoun", "determinant", "adjective"),
+                                          banned_nodes)
+
+        useful_leaves = nouns + other_leaves
 
         useful_leaves.reverse()
         return useful_leaves
