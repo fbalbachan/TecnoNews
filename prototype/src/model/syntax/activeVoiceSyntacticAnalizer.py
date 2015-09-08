@@ -180,6 +180,9 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
 
         od = self.search_od(candidate_entities, animity_filtered_candidate_entities, verbal_animity)
 
+        if od and "animity" in od[0].msi:
+            od[0].msi["animity"] = Animity.most_specific(verbal_animity, od[0].msi["animity"])
+
         return od
 
     def search_od(self, candidate_entities, animity_filtered_candidate_entities, verbal_animity=Animity.bianimate):
@@ -286,6 +289,7 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         if entities:
             entities[0].msi["animity"] = Animity.most_specific(entities[0].msi["animity"], verbal_animity)
         candidates = [entities[0]] if entities else []
+
         return candidates
 
     def get_regimen_candidate_entities(self, verbal_animity):
@@ -307,6 +311,10 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         if entities:
             entities[0].msi["animity"] = Animity.most_specific(entities[0].msi["animity"], verbal_animity)
         candidates = [entities[0]] if entities else []
+
+        if candidates and "animity" in candidates[0].msi:
+            candidates[0].msi["animity"] = Animity.most_specific(verbal_animity, candidates[0].msi["animity"])
+
         return candidates
 
     def get_equative_candidate_entities(self, verbal_animity):
