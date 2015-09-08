@@ -176,7 +176,6 @@ class TacitEntity:
         return self.category() == "noun" and self.msi["type"] == "proper"\
                and self.classification() is not None
 
-
     def __repr__(self):
         flag = "(implicit)" if self.has_attr("implicit") \
                 else "(impersonal)" if self.has_attr("impersonal") \

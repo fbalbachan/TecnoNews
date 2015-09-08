@@ -3,8 +3,19 @@ from src.ling.gender import Gender
 from src.ling.number import Number
 from src.utils.factNormalizer import FactNormalizer
 from src.ling.tacit_subjects import tacit_subjects
+from src.utils.configProvider import ConfigProvider
+from _csv import reader
+from src.ling.freelingDictionaryParser import FreelingDictionaryParser
+
+debug_mode = False
+
 
 class WebOutputUtils:
+
+    def __init__(self):
+        if debug_mode: print "--> WebOutputUtils.init()"
+        self.synonyms = self._get_synonyms()
+        self.ontology = FreelingDictionaryParser.from_resource()
 
     def structure(self, clause, name):
         if clause.has_structure(name) and not clause.structure(name).is_empty():
@@ -84,7 +95,8 @@ class WebOutputUtils:
         return number_string
 
     def fact(self, clause):
-        return FactNormalizer(clause).fact()
+        if debug_mode: print "--> WebOutputUtils.fact(clause:", clause, ")"
+        return FactNormalizer(clause, self.ontology, self.synonyms).fact()
 
     def fact_real_or_not(self, clause):
         return "(Not a real fact. See checked flags in global operators.)" if not clause.is_fact() else ""
@@ -138,6 +150,7 @@ class WebOutputUtils:
         return gender, number
 
     def get_referents_data(self, entities):
+        if debug_mode: print "--> WebOutputUtils.get_referents_data(entities:", entities, ")"
         preferred_genders_numbers = self.preferred_genders_numbers_to_unify_with(entities)
         preferred_classifications = self.preferred_classifications_to_unify_with(entities)
 
@@ -174,13 +187,15 @@ class WebOutputUtils:
         return referents_data
 
     def unify_by_name_classification(self, entities, preferred_classifications, preferred_genders_numbers):
+        if debug_mode: print "--> WebOutputUtils.unify_by_name_classification(entities:", entities, ")"
 
         entities_to_unify = [entity for entity in entities if entity.classification(look_deep=True) is not None
                                                               or preferred_classifications[entity] is not None]
         remainder_referents = []
         for entity in [entity for entity in entities if entity not in entities_to_unify]:
+            real_name = entity.real_name()
             referent_data = {"re":   entity,  "refs": [entity],
-                             "rn":   entity.real_name(),
+                             "rn":   real_name.encode("utf-8") if isinstance(real_name, unicode) else real_name,
                              "pos":  entity.sentimental_value.value[0],
                              "neg":  entity.sentimental_value.value[1],
                              "sc":   "NONE"}
@@ -207,7 +222,7 @@ class WebOutputUtils:
 
             referent_data = {"re":   referenced_entity,
                              "refs": references,
-                             "rn":   real_name,
+                             "rn":   real_name.encode("utf-8") if isinstance(real_name, unicode) else real_name,
                              "pos":  positive,
                              "neg":  negative,
                              "sc":   str(classification).upper()}
@@ -220,24 +235,29 @@ class WebOutputUtils:
         return [unified, singles]
 
     def unify_pronouns(self, referents_data, preferred_genders_numbers):
-        referents_to_unify = [ref for ref in referents_data if (ref["re"].category(), ref["re"].msi["type"]) == ("pronoun", "personal")]
-        referents_to_unify = [ref for ref in referents_to_unify if ref["re"].person() in [1, 2]]
-        referents_to_unify = [ref for ref in referents_to_unify if ref["re"].number() in [Number.singular, Number.plural]]
+        if debug_mode: print "--> WebOutputUtils.unify_pronouns(referents_data:", referents_data, ")"
+        referents_to_unify = [ref for ref in referents_data
+                                      if (ref["re"].category(), ref["re"].msi["type"]) == ("pronoun", "personal")]
+        referents_to_unify = [ref for ref in referents_to_unify
+                                      if ref["re"].person() in [1, 2]]
+        referents_to_unify = [ref for ref in referents_to_unify
+                                      if ref["re"].number() in [Number.singular, Number.plural]]
+
+        pronouns_in_singular = [ref for ref in referents_to_unify if ref["re"].number() == Number.singular]
+        [unified_singulars, singles1] = self.unify_singular_pronouns(pronouns_in_singular)
+
+        pronouns_in_plural = [ref for ref in referents_to_unify if ref["re"].number() == Number.plural]
+        [unified_plurals, singles2] = self.unify_plural_pronouns(pronouns_in_plural, preferred_genders_numbers)
 
         other_referents = [ref for ref in referents_data if ref not in referents_to_unify]
 
-        pronouns_in_singular = [ref for ref in referents_to_unify if ref["re"].number() == Number.singular]
-        [sing_referents, singles1] = self.unify_singular_pronouns(pronouns_in_singular)
-
-        pronouns_in_plural = [ref for ref in referents_to_unify if ref["re"].number() == Number.plural]
-        [plural_referents, singles2] = self.unify_plural_pronouns(pronouns_in_plural, preferred_genders_numbers)
-
-        referents = sing_referents + plural_referents + singles1 + singles2 + other_referents
+        referents = unified_singulars + unified_plurals + singles1 + singles2 + other_referents
         unified = filter(lambda ref_data: len(ref_data["refs"]) > 1, referents)
         singles = filter(lambda ref_data: len(ref_data["refs"]) == 1, referents)
         return [unified, singles]
 
     def unify_third_person_pronouns(self, referents_data, preferred_genders_numbers):
+        if debug_mode: print "--> WebOutputUtils.unify_third_person_pronouns(referents_data:", referents_data, ")"
         pronouns_in_third = \
             [ref for ref in referents_data
              if (ref["re"].category(), ref["re"].msi["type"], ref["re"].person()) == ("pronoun", "personal", 3)]
@@ -276,6 +296,7 @@ class WebOutputUtils:
         return [unified, singles]
 
     def unify_singular_pronouns(self, pronouns_in_singular):
+        if debug_mode: print "--> WebOutputUtils.unify_singular_pronouns(prons_in_singular:", pronouns_in_singular, ")"
         sing_pronouns_dict = {}
         for referent_data in pronouns_in_singular:
             entity = referent_data["re"]
@@ -306,6 +327,7 @@ class WebOutputUtils:
         return [unified, singles]
 
     def unify_plural_pronouns(self, pronouns_in_plural, preferred_genders_numbers):
+        if debug_mode: print "--> WebOutputUtils.unify_plural_pronouns(prons_in_plural:", pronouns_in_plural, ")"
         dict_by_person_gender = {}
         for referent_data in pronouns_in_plural:
             entity = referent_data["re"]
@@ -339,54 +361,36 @@ class WebOutputUtils:
         singles = filter(lambda ref_data: len(ref_data["refs"]) == 1, referents)
         return [unified, singles]
 
-    def kernels_match(self, entity1, entity2):
-
-        both_have_kernel = hasattr(entity1, "kernel") and entity1.kernel \
-                           and hasattr(entity2, "kernel") and entity2.kernel
-        lexical_match_1 = both_have_kernel and entity1.kernel.lexical_form == entity2.kernel.lexical_form
-        lexical_match_2 = not both_have_kernel and entity1.lexical_form == entity2.lexical_form
-        lexical_match = lexical_match_1 or lexical_match_2
-
-        msi_match = True
-        if both_have_kernel:
-            for key, value in entity1.kernel.msi.iteritems():
-                msi_match = msi_match and ((key in entity2.kernel.msi.keys() and entity2.kernel.msi[key] == value)
-                                           or (key not in entity2.kernel.msi.keys()))
-        else:
-            for key, value in entity1.msi.iteritems():
-                msi_match = msi_match and ((key in entity2.msi.keys() and entity2.msi[key] == value)
-                                           or (key not in entity2.msi.keys()))
-
-        return msi_match and lexical_match
-
     def unify_plain_entities(self, plain_referents_data):
+        if debug_mode: print "--> WebOutputUtils.unify_plain_entities(plain_referents_data:", plain_referents_data, ")"
         atomic_plain_referents_data = [ref for ref in plain_referents_data if not ref["re"].children]
         non_atomic_plain_referents_data = [ref for ref in plain_referents_data if ref["re"].children]
 
-        [unified_atomic, singles] = \
-            self.unify_atomic_plain_entities(atomic_plain_referents_data)
+        [unified_atomic, singles1] = \
+            self.unify_plain_referents(atomic_plain_referents_data, is_atomic=True)
 
-        [unified_non_atomic, singles] = \
-            self.unify_non_atomic_plain_entities(singles + non_atomic_plain_referents_data)
+        [unified_non_atomic, singles2] = \
+            self.unify_plain_referents(non_atomic_plain_referents_data, is_atomic=False)
 
-        referents_data = unified_atomic + unified_non_atomic + singles
+        referents_data = unified_atomic + unified_non_atomic + singles1 + singles2
 
         unified = filter(lambda ref_data: len(ref_data["refs"]) > 1, referents_data)
         singles = filter(lambda ref_data: len(ref_data["refs"]) == 1, referents_data)
         return [unified, singles]
 
-    def unify_non_atomic_plain_entities(self, non_atomic_plain_referents):
+    def unify_plain_referents(self, plain_refs_data, is_atomic):
+        if debug_mode: print "--> WebOutputUtils.unify_plain_entities(plain_refs_data:", plain_refs_data, ")"
         unified_referents = []
-        while len(non_atomic_plain_referents) > 0:
-            unified = non_atomic_plain_referents.pop(0)
-            for plain_referent in non_atomic_plain_referents:
-                entity1 = plain_referent["re"]
-                entity2 = unified["re"]
-                if entity1.real_name() == entity2.real_name():
-                    unified["pos"] += plain_referent["pos"]
-                    unified["neg"] += plain_referent["neg"]
-                    unified["refs"] += [plain_referent["re"]]
-                    non_atomic_plain_referents.remove(plain_referent)
+        while len(plain_refs_data) > 0:
+            unified = plain_refs_data.pop(0)
+            for plain_referent in plain_refs_data[:]:
+                if self.plain_entities_match(plain_referent["re"], unified["re"]):
+                    unified["rn"] = self.get_real_name_for_plain_entities(plain_referent["re"], unified["re"], is_atomic)
+                    unified["pos"] = unified["pos"] + plain_referent["pos"]
+                    unified["neg"] = unified["neg"] + plain_referent["neg"]
+                    unified["refs"] = unified["refs"] + [plain_referent["re"]]
+                    if plain_referent in plain_refs_data:
+                        plain_refs_data.remove(plain_referent)
 
             unified_referents.append(unified)
 
@@ -394,25 +398,94 @@ class WebOutputUtils:
         singles = filter(lambda ref_data: len(ref_data["refs"]) == 1, unified_referents)
         return [unified, singles]
 
-    def unify_atomic_plain_entities(self, atomic_plain_referents_data):
-        unified_referents = []
-        while len(atomic_plain_referents_data) > 0:
-            unified = atomic_plain_referents_data.pop(0)
-            for plain_referent in atomic_plain_referents_data:
-                entity = plain_referent["re"]
-                if self.kernels_match(plain_referent["re"], unified["re"]):
-                    has_kernel = hasattr(entity, "kernel") and entity.kernel
-                    unified["rn"] = entity.kernel.lexical_form if has_kernel else entity.real_name()
-                    unified["pos"] += plain_referent["pos"]
-                    unified["neg"] += plain_referent["neg"]
-                    unified["refs"] += [plain_referent["re"]]
-                    atomic_plain_referents_data.remove(plain_referent)
+    def get_real_name_for_plain_entities(self, entity1, entity2, is_atomic):
+        if debug_mode: print "--> WebOutputUtils.get_real_name_for_plain_entities(entity1:", entity1, ", entity2:", entity2, ", is_atomic:", str(is_atomic),")"
 
-            unified_referents.append(unified)
+        if self.kernels_are_synonyms(entity1, entity2):
+            object1 = entity1.kernel if is_atomic else entity1
+            object2 = entity2.kernel if is_atomic else entity2
+            real_name = object1.lexical_form if entity1.kernel.lemma <= self.synonyms[entity1.kernel.lemma] \
+                        else object2.lexical_form
 
-        unified = filter(lambda ref_data: len(ref_data["refs"]) > 1, unified_referents)
-        singles = filter(lambda ref_data: len(ref_data["refs"]) == 1, unified_referents)
-        return [unified, singles]
+        else:
+            object = entity1.kernel if (hasattr(entity1, "kernel") and is_atomic) else entity1
+            real_name = object.lexical_form
+
+        real_name = real_name.encode("utf-8") if isinstance(real_name, unicode) else real_name
+
+        if debug_mode: print "<-- get_real_name_for_plain_entities:", real_name
+        return real_name
+
+    def plain_entities_match(self, entity1, entity2):
+        if debug_mode: print "--> WebOutputUtils.plain_entities_match(entity1:", entity1, ", entity2:", entity2, ")"
+
+        both_have_kernel =     hasattr(entity1, "kernel") and entity1.kernel \
+                           and hasattr(entity2, "kernel") and entity2.kernel
+
+        if both_have_kernel and self.are_synonyms(entity1.kernel, entity2.kernel):
+            return True
+
+        msi_match = True
+        if both_have_kernel:
+            for key, value in entity1.kernel.msi.iteritems():
+                key_value_match = key in entity2.kernel.msi.keys() and entity2.kernel.msi[key] == value \
+                                  or key not in entity2.kernel.msi.keys()
+                msi_match = msi_match and key_value_match
+            kernels_match = self.kernels_match(entity1.kernel, entity2.kernel)
+            match = msi_match and kernels_match
+
+        else:
+            for key, value in entity1.msi.iteritems():
+                msi_match = msi_match and ((key in entity2.msi.keys() and entity2.msi[key] == value)
+                                           or (key not in entity2.msi.keys()))
+            same_lexical_form = entity1.lexical_form.lower() == entity2.lexical_form.lower()
+            match = msi_match and same_lexical_form
+
+        if debug_mode: print "<-- plain_entities_match:", str(match)
+        return match
+
+    def kernels_match(self, kernel1, kernel2):
+        if debug_mode: print "--> WebOutputUtils.kernels_match(kernel1:", kernel1, ", kernel2:", kernel2, ")"
+        match = kernel1.lexical_form.lower() == kernel2.lexical_form.lower() \
+                or self.are_synonyms(kernel1, kernel2)
+
+        if debug_mode: print "<-- kernels_match:", str(match)
+        return match
+
+    def kernels_are_synonyms(self, entity1, entity2):
+        if debug_mode: print "--> WebOutputUtils.kernels_are_synonyms(entity1:", entity1, ", entity2:", entity2, ")"
+
+        both_have_kernel =     hasattr(entity1, "kernel") and entity1.kernel is not None \
+                           and hasattr(entity2, "kernel") and entity2.kernel is not None
+
+        are_synonyms = self.are_synonyms(entity1.kernel, entity2.kernel) if both_have_kernel \
+                       else False
+
+        if debug_mode: print "<-- kernels_are_synonyms:", str(are_synonyms)
+        return are_synonyms
+
+    def are_synonyms(self, kernel1, kernel2):
+        if debug_mode: print "--> WebOutputUtils.are_synonyms(lemma1:", kernel1.lemma, ", lemma2:", kernel2.lemma, ")"
+        lemma1 = kernel1.lemma
+        lemma2 = kernel2.lemma
+        are_synonyms = lemma1 in self.synonyms.keys() and self.synonyms[lemma1] == lemma2
+
+        if debug_mode: print "<-- are_synonyms:", str(are_synonyms)
+        return are_synonyms
+
+    def _get_synonyms(self):
+        return self._get_replacements_from_csv("synonyms")
+
+    def _get_replacements_from_csv(self, resource):
+        # Warning, it is a dict, it doesn't work for multiple replacements for the same word.
+
+        replacements = {}
+        config = ConfigProvider()
+        replacements_filename = config.get("resources", resource)
+        for line in reader(open(replacements_filename, 'r')):
+            replacements[line[0]] = line[1]
+            replacements[line[1]] = line[0]
+        return replacements
 
     def score_of(self, analysis, object):
         try:
