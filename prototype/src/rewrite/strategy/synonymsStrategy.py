@@ -11,7 +11,9 @@ from src.rewrite.rewrite import Rewrite
 
 debug_mode = False
 
+
 class SynonymsStrategy:
+
     def __init__(self, ontology):
         if debug_mode: print "--> SynonymsStrategy.__init__()"
         self.ontology = ontology
@@ -21,8 +23,8 @@ class SynonymsStrategy:
 
     def applies_to(self, clause):
         for leaf in clause.proper_leaves():
-            if (leaf.lemma in self.synonyms.keys() or
-                        leaf.lexical_form in self.adverbs.keys()):
+            if (leaf.lemma in self.synonyms.keys()
+               or leaf.lexical_form in self.adverbs.keys()):
                 return True
         return False
 
@@ -64,8 +66,7 @@ class SynonymsStrategy:
 
     def _get_replacements_from_csv(self, resource):
         if debug_mode: print "--> SynonymsStrategy._get_replacements_from_csv()"
-        # Warning, it is a dict, it doesn't work for multiple
-        # replacements for the same word.
+        # Warning, it is a dict, it doesn't work for multiple replacements for the same word.
 
         replacements = {}
         config = ConfigProvider()

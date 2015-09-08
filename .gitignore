@@ -30,3 +30,5 @@ news_crawler.db
 webapp/static/captcha/*
 prototype/news_crawler.db
 db/*
+.idea/workspace.xml
+.idea/workspace.xml
