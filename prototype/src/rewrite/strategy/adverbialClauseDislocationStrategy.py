@@ -100,8 +100,7 @@ class AdverbialClauseDislocationStrategy:
             return self.rewrite_en_caso_de_que_p_q(sentence, node, subord_node)
 
     def rewrite_if_p_q(self, sentence, node, subord_node):
-        if debug_mode:
-            print "--> AdverbialClauseDislocationStrategy.rewrite_if_p_q(node:", node, ", subord:", subord_node, ")"
+        if debug_mode: print "--> AdverbialClauseDislocationStrategy.rewrite_if_p_q(node:", node, ", subord:", subord_node, ")"
         text = sentence.paragraph.text.decode("utf-8")
         first_part = text[node.token.start():subord_node.token.end()].strip()
         second_part = text[subord_node.token.end():node.token.end()].strip()
@@ -145,8 +144,7 @@ class AdverbialClauseDislocationStrategy:
         return first_part
 
     def rewrite_q_if_p(self, sentence, node, subord_node):
-        if debug_mode:
-            print "--> AdverbialClauseDislocationStrategy.rewrite_q_if_p(node:", node, ", subord:", subord_node, ")"
+        if debug_mode: print "--> AdverbialClauseDislocationStrategy.rewrite_q_if_p(node:", node, ", subord:", subord_node, ")"
         text = sentence.paragraph.text.decode("utf-8")
         first_part = text[node.token.start():subord_node.token.start()].strip()
         second_part = text[subord_node.token.start():subord_node.token.end()].strip()
