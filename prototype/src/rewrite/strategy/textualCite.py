@@ -153,9 +153,6 @@ class TextualCite:
             raise
 
     def child_with_verb_recursive(self, node, idx):
-
-        print "case node", node
-        print "case children", node.children
         for child in node.children:
             if isinstance(child, LabelNode):
                 if child.label == 'verb':

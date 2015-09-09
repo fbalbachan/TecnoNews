@@ -59,13 +59,11 @@ class FactNormalizer:
                                     lemma = entity.kernel.lemma
                                     synonym = self.synonyms[lemma]
                                     if '_' in synonym or synonym not in self.ontology.concepts:
-                                        print "not in concepts or with _"
                                         # if synonym in self.locutions and self.locutions[synonym]:
                                         #    pass
                                         replacement = synonym.replace('_', ' ') if synonym <= lemma \
                                                       else lemma.replace('_', ' ')
                                     else:
-                                        print "in concepts and without _"
                                         concept = self.ontology.concept(synonym)
                                         leaf_msi = self._msi_transform(entity.kernel.msi)
 
