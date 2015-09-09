@@ -5,17 +5,16 @@ from src.utils.factNormalizer import FactNormalizer
 from src.ling.tacit_subjects import tacit_subjects
 from src.utils.configProvider import ConfigProvider
 from _csv import reader
-from src.ling.freelingDictionaryParser import FreelingDictionaryParser
 
 debug_mode = False
 
 
 class WebOutputUtils:
 
-    def __init__(self):
+    def __init__(self, ontology):
         if debug_mode: print "--> WebOutputUtils.init()"
         self.synonyms = self._get_synonyms()
-        self.ontology = FreelingDictionaryParser.from_resource()
+        self.ontology = ontology
 
     def structure(self, clause, name):
         if clause.has_structure(name) and not clause.structure(name).is_empty():

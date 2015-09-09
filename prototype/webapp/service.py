@@ -16,6 +16,7 @@ from src.model.contentRewriterAndGenerator import ContentRewriterAndGenerator
 from src.model.sentilecto import Sentilecto
 from src.utils.webOutputUtils import WebOutputUtils
 from src.utils.configProvider import ConfigProvider
+from src.ling.freelingDictionaryParser import FreelingDictionaryParser
 
 request_id = 0
 request_data = {}
@@ -24,6 +25,7 @@ cleanup_timer = None
 
 config = ConfigProvider()
 debug_mode = (config.get("debug", "debug") == "True")
+ontology = FreelingDictionaryParser.from_resource()
 
 def generate_captcha(req_id):
     captcha_key = os.urandom(2).encode("hex")
@@ -77,6 +79,7 @@ class Favicon_request:
         f = open('static/favicon.ico', 'rb')
         return f.read()
 
+
 class Index_request:
     def GET(self):
         global request_id, debug_mode
@@ -84,6 +87,7 @@ class Index_request:
         generate_captcha(request_id)
         index = web.template.frender('templates/index.html')
         return index(str(request_id), debug_mode)
+
 
 class Debug_request:
     def GET(self):
@@ -95,11 +99,13 @@ class Debug_request:
         analyze()
         return web.template.render().debug(output.getvalue())
 
+
 class HiddenEntiNews_request:
     def GET(self):
         analysis = analyze()
 
-        return web.template.render().entinews(analysis, WebOutputUtils())
+        return web.template.render().entinews(analysis, WebOutputUtils(ontology))
+
 
 class EntiNews_request:
     def action_content_rewrite(self):
@@ -117,14 +123,14 @@ class EntiNews_request:
         if not analysis:
             web.redirect("/sentilecto")
 
-        return web.template.render().facts(analysis, WebOutputUtils())
+        return web.template.render().facts(analysis, WebOutputUtils(ontology))
 
     def action_svo_slots(self):
         analysis = analyze()
         if not analysis:
             web.redirect("/sentilecto")
 
-        return web.template.render().entinews(analysis, WebOutputUtils())
+        return web.template.render().entinews(analysis, WebOutputUtils(ontology))
 
     def GET(self):
 
