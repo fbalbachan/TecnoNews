@@ -1,0 +1,76 @@
+@font-face {
+    font-family: meditation;
+    src: url('/static/font/Meditation.ttf');
+}
+
+@font-face {
+    font-family: monofur;
+    src: url('/static/font/monof55.ttf');
+}
+
+h2 {
+    color:#8A0808;
+    font-family: "monofur";
+    font-size: 200%
+}
+
+h3 {
+    color:#8A0808;
+    font-family: "monofur";
+    font-size: 150%
+}
+
+.grande {
+    color: #2E2E2E;
+    font-family: "monofur";
+    font-size: 120%;
+    margin-left: 40px;
+    font-weight:bold
+}
+
+.normal {
+    color: #2E2E2E;
+    font-family: "monofur";
+    font-size: 100%;
+    margin-left: 40px;
+}
+
+li {
+    color: #2E2E2E;
+    font-family: "monofur";
+    font-size: 100%;
+    margin-left: 60px;
+}
+
+.structures {
+    font-family: "monofur";
+    padding: 10px;
+    text-align: center;
+    min-width:100px
+}
+
+.str_table {
+    font-family: "monofur";
+    margin-left: 60px;
+    border: 0;
+}
+
+.operators {
+    font-family: "monofur";
+    margin-left: 60px;
+}
+
+#entities {
+    font-family: "monofur";
+    margin-left: 60px;
+    border-collapse: collapse;
+}
+
+#entities th {
+    border-bottom: 2px solid #848484;
+    padding: 5px;
+}
+
+#entities td {
+    padding: 5px;
+}
