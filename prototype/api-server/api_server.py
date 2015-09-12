@@ -1,14 +1,10 @@
 # -*- coding: utf-8 -*-
-from flask_restful_swagger import swagger
-from src.model.sentilecto import Sentilecto
-from src.utils.stringUtils import has_type_encoding
-from models import TextAnalyze, Analyzer
-import os
-import sys
-import json
 
-from flask import Flask, redirect, abort, request
+import os, sys, json
+
+from flask import Flask, redirect, abort
 from flask_restful import Api
+from flask_restful_swagger import swagger
 from entityExtraction import EntityExtraction
 from structuralUnderstanding import StructuralUnderstanding
 from sentimentAnalysis import SentimentAnalysis
@@ -30,6 +26,7 @@ api = swagger.docs(Api(app),
                    produces=["application/json", "text/html"],
                    api_spec_url='/api/spec',
                    description='SentiLecto\'s API')
+
 
 api.add_resource(SentimentAnalysis, base_path + '/sentiment-analysis/<string:text>/<string:api_key>')
 
@@ -66,4 +63,3 @@ if __name__ == '__main__':
 
     write_pid_file()
     app.run(host='127.0.0.1', port=5000, debug=True)
-
