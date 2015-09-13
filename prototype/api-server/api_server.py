@@ -27,7 +27,6 @@ api = swagger.docs(Api(app),
                    api_spec_url='/api/spec',
                    description='SentiLecto\'s API')
 
-
 api.add_resource(SentimentAnalysis, base_path + '/sentiment-analysis/<string:text>/<string:api_key>')
 
 api.add_resource(StructuralUnderstanding, base_path + '/deep-structure/<string:text>/<string:api_key>')
