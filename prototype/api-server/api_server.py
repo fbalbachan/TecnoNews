@@ -46,7 +46,7 @@ class TextAnalysis(Resource):
 
     @swagger.operation(notes='Analyze the text you get',
                        description='Text Analyze service',
-                       responseClass=Analyzer.__name__,
+                       responseClass=Analyzer,
                        nickname='get analysis',
                        parameters=[{"name":         "text",
                                     "description":  "Text to be Analyzed",
@@ -57,7 +57,7 @@ class TextAnalysis(Resource):
                        responseMessages=[{"code": 200, "message": "Facts extracted properly"},
                                          {"code": 500, "message": "Bad response"}]
                       )
-#    @marshal_with(TextAnalyze.resource_fields)
+    @marshal_with(Analyzer.resource_fields)
     def get(self, text):
         #args = parser.parse_args()
         #print "args text: ", args['text']
@@ -80,26 +80,57 @@ class TextAnalysis(Resource):
             analysis = self.sentilecto.analyze(text)
             print "analysis: ", analysis
 
-            analysis_results = analysis.to_dict()
-            print "analysis_results: ", analysis_results
+            #analysis_results = "{'paragraph': '" + analysis["paragraph"].text + "', " \
+            #                  + "'sentences': " + str([sentence.text for sentence in analysis["paragraph"].sentences]) + ", " \
+            #                    "'tagged_text': '" + analysis["tagged_text"] + "' }"
 
-            analysis_results_unicode = unicode(str(analysis_results))
-            print "analysis_results_unicode: ", analysis_results_unicode
+            analysis_results = {'paragraph': analysis["paragraph"].text,
+                                'sentences': [sentence.text for sentence in analysis["paragraph"].sentences],
+                                'tagged_text': analysis["tagged_text"]}
 
-            return app.make_response((analysis_results_unicode,
-                                      200,
-                                      {'Access-Control-Allow-Origin': '*',
-                                       'Content-Type': 'application/json; '
-                                       'charset=utf-8'}
-                                     ))
+            print "analysis_results: ", str(analysis_results)
+
+            #analysis_results_unicode = unicode(str(analysis_results))
+            #print "analysis_results_unicode: ", analysis_results_unicode
+
+            #results = Analyzer(analysis_results)
+            #print "analysis_results: ", str(results)
+            # response = app.make_response((str(analysis_results),
+            #                               200,
+            #                               {'Access-Control-Allow-Origin': '*',
+            #                                'Content-Type': 'application/json; '
+            #                                'charset=utf-8'}
+            #                              ))
+            response = (
+                            analysis_results,
+                            200,
+                            {
+                                'Access-Control-Allow-Origin': '*',
+                                'Content-Type': 'application/json; '
+                                'charset=utf-8'
+                            }
+                       )
+
         except Exception, e:
             print str(e), " - 'Access-Control-Allow-Origin'"
-            return app.make_response((str({'type': 'ERROR', 'message': str(e)}),
-                                      500,
-                                      {'Access-Control-Allow-Origin': '*',
-                                       'Content-Type': 'application/json; '
-                                       'charset=utf-8'}))
 
+            #response = app.make_response((str({'type': 'ERROR', 'message': str(e)}),
+            #                              500,
+            #                              {'Access-Control-Allow-Origin': '*',
+            #                               'Content-Type': 'application/json; '
+            #                               'charset=utf-8'}
+            #                            ))
+            response = (
+                            {'type': 'ERROR', 'message': str(e)},
+                            500,
+                            {
+                                'Access-Control-Allow-Origin': '*',
+                                'Content-Type': 'application/json; '
+                                'charset=utf-8'
+                            }
+                       )
+
+        return response
 
     def options (self, **args):
         return {'Allow': 'GET,PUT,POST,DELETE'}, 200, \

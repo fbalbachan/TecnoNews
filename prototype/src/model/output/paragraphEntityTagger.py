@@ -90,6 +90,5 @@ class ParagraphEntityTagger:
         tagged_text = tagged_text.replace("\n", "<br>")
         return tagged_text, tag_mapping
 
-
     def tag_all(self, paragraph, tag_name):
         return self.tag_with_entities(paragraph.text, paragraph.entities(), tag_name)
