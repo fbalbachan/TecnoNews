@@ -34,8 +34,8 @@ def BadRequest():
     abort(500, message="An error occurred.")
 
 print "Building req parser."
-#parser = reqparse.RequestParser()
-#parser.add_argument('text', type=str)
+parser = reqparse.RequestParser()
+parser.add_argument('text', type=str)
 
 
 class TextAnalysis(Resource):
@@ -71,7 +71,6 @@ class TextAnalysis(Resource):
                       )
     @marshal_with(Analyzer.resource_fields)
     def post(self):
-
         args = parser.parse_args(request)
         text = args['text']
         print "args text: ", args['text']
@@ -158,7 +157,7 @@ api.add_resource(TextAnalysis, '/api/v1/text/<string:text>')
 @app.route('/docs')
 def docs():
     print "Route docs: redirecting to /static/docs.html"
-    return redirect('/static/docs.html')
+    return redirect('/demo/static/docs.html')
 
 if __name__ == '__main__':
     print "Running on host localhost"
