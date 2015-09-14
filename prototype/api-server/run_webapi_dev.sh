@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 PID_FILE=./sentilecto-api.pid
 
 if [ -f $PID_FILE ]; then
