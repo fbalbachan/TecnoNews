@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import Flask, redirect, abort
+from flask import Flask, redirect, abort, request
 from flask_restful import Api, Resource, reqparse, marshal_with
 from flask_restful_swagger import swagger
 from src.model.sentilecto import Sentilecto
@@ -35,8 +35,6 @@ def BadRequest():
 
 print "Building req parser."
 #parser = reqparse.RequestParser()
-
-print "Adding argument."
 #parser.add_argument('text', type=str)
 
 
@@ -46,25 +44,40 @@ class TextAnalysis(Resource):
 
     @swagger.operation(notes='Analyze the text you get',
                        description='Text Analyze service',
-                       responseClass=Analyzer,
+                       responseClass=Analyzer.__name__,
                        nickname='get analysis',
-                       parameters=[{"name":         "text",
+                       parameters=
+                           [
+                                {
+                                    "name":         "body",
                                     "description":  "Text to be Analyzed",
                                     "required":     True,
                                     "allowMultiple": False,
-                                    "dataType":     "string",
-                                    "paramType":    "path"}],
-                       responseMessages=[{"code": 200, "message": "Facts extracted properly"},
-                                         {"code": 500, "message": "Bad response"}]
+                                    "dataType":     TextAnalyze.__name__,
+                                    "paramType":    "body"
+                                }
+                            ],
+                       responseMessages=
+                            [
+                                {
+                                    "code": 200,
+                                    "message": "Facts extracted properly"
+                                },
+                                {
+                                    "code": 500,
+                                    "message": "Bad response"
+                                }
+                            ]
                       )
     @marshal_with(Analyzer.resource_fields)
-    def get(self, text):
-        #args = parser.parse_args()
-        #print "args text: ", args['text']
+    def post(self):
 
-        print "text: ", text
+        args = parser.parse_args(request)
+        text = args['text']
+        print "args text: ", args['text']
+        print "text: ", str(text)
 
-        if has_type_encoding('text', str, 'UTF-8'):
+        if has_type_encoding(text, str, 'UTF-8'):
             text = text.decode('UTF-8')
             print "str - utf-8 - text: ", text
 
@@ -139,6 +152,7 @@ class TextAnalysis(Resource):
                 'Access-Control-Allow-Headers': 'Content-Type'}
 
 api.add_resource(TextAnalysis, '/api/v1/text/<string:text>')
+#api.add_resource(TextAnalysis, '/api/v1/text')
 
 
 @app.route('/docs')
@@ -147,5 +161,5 @@ def docs():
     return redirect('/static/docs.html')
 
 if __name__ == '__main__':
-    print "Running on host 0.0.0.0"
-    app.run(host='0.0.0.0', debug = True)
+    print "Running on host localhost"
+    app.run(host='localhost', debug = True)
