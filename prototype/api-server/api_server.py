@@ -54,8 +54,8 @@ def bad_request():
 
 @app.route('/docs')
 def docs():
-    print "Route docs: redirecting to /demo/static/docs.html"
-    return redirect('/demo/static/docs.html')
+    print "Route docs: redirecting to /static/docs.html"
+    return redirect('/static/docs.html')
 
 if __name__ == '__main__':
     print "Running on host 127.0.0.1"
