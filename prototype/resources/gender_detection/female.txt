@@ -1121,7 +1121,6 @@ MAHALAH,english
 CLARIBEL,english
 RANDI,english
 KISHA,english
-ALEXIS,english
 POSIE,english
 PERLIE,english
 JOHNNIE,english

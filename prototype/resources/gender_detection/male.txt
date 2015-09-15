@@ -1,3 +1,4 @@
+ALEXIS,english
 BARACK,english
 JOSÉ,spanish
 ESSUA,spanish
