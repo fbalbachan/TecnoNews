@@ -178,6 +178,10 @@ class WebOutputUtils:
                       else 1 if x["rn"] > y["rn"]   else -1 if x["rn"] < y["rn"]\
                       else 0
 
+        print [rd["re"].lexical_form for rd in referents_data]
+        referents_data = filter(lambda rd: rd["re"].lexical_form.lower() not in ["le", "les", "él/ella", "ellos/ellas"],
+                                referents_data)
+
         referents_data = sorted(referents_data, cmp=compare)
 
         for referent_data in referents_data:
