@@ -27,7 +27,6 @@ agricultoras,labradoras
 alabanza,elogio
 alborotador,pendenciero
 alborotadora,pendenciera
-aldea,pueblo
 alivio,tranquilidad
 alivio,sosiego
 almacenaje,almacenamiento
@@ -77,11 +76,9 @@ balón,pelota
 baño_de_sangre,derramamiento_de_sangre
 baños_de_sangre,derramamientos_de_sangre
 bar,taberna
-barbaridad,disparates
-bares,tabernas
+barbaridad,disparate
 barriga,panza
 basura,residuo
-basura,residuos
 beneficio,provecho
 benevolencia,indulgencia
 blasfemia,profanidad
@@ -101,7 +98,7 @@ camaradería,compañerismo
 camino,sendero
 camino,ruta
 can,perro
-cañería ,tubería
+cañería,tubería
 caño,tubo
 captor,raptor
 característica,rasgo
@@ -113,7 +110,6 @@ carencia,escasez
 caricia,mimo
 cariño,ternura
 casa,hogar
-castigo,sanción
 castigo,sanción
 catástrofe,desastre
 causa,porqué
@@ -143,7 +139,6 @@ conferencista,panelista
 confirmación,ratificación
 confrontación,enfrentamiento
 conjunto,grupo
-consecuencia,resultado
 consolación,consuelo
 contemporaneidad,simultaneidad
 contestación,respuesta
@@ -468,7 +463,7 @@ ropa,vestimenta
 rostro,cara
 rutina,hábito
 sala,salón
-salto ,brinco
+salto,brinco
 salto_de_longitud,salto_largo
 secuencia,sucesión
 semejanza,similitud
@@ -489,7 +484,6 @@ suma,totalidad
 suposición,supuesto
 sustancia,materia
 tedio,hastío
-tele,televisión
 tiro,disparo
 tiroteo,balacera
 tonalidad,tono
@@ -835,7 +829,6 @@ trabajo,labor
 transfundir,transvasar
 ubicar,situar
 usar,utilizar
-vacante,disponible
 valioso,preciado
 vaso,taza
 vasto,extenso
@@ -844,8 +837,7 @@ vencer,triunfar
 ver,observar
 vereda,senda
 victoria,triunfo
-zambullir,sumergir
+hundir,sumergir
 zancada,paso
 zarcillo,pendiente
-zurdo,izquierdo
 testificar,testimoniar
