@@ -179,7 +179,11 @@ class WebOutputUtils:
                       else 0
 
         print [rd["re"].lexical_form for rd in referents_data]
-        referents_data = filter(lambda rd: rd["re"].real_name().lower() not in ["le", "les", "él/ella", "ellos/ellas"],
+        referents_data = filter(lambda rd:
+                            rd["re"].real_name().lower() not in ["le", "les",
+                                                                 "lo", "la", "los", "las",
+                                                                 "él", "ella", "él/ella",
+                                                                 "ellos", "ellas", "ellos/ellas"],
                                 referents_data)
 
         referents_data = sorted(referents_data, cmp=compare)
