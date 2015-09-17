@@ -24,9 +24,9 @@ class EntitiesResponse(Flask.response_class):
 @swagger.model
 class DeepStructureResponse(Flask.response_class):
 
-    svo_slot = \
+    svo_slots = \
         {
-            'opinionated-modal-adverb': fields.String(),
+            'opinionated-modal-adverbs': fields.String(),
             'subject': fields.String(),
             'verb': fields.String(),
             'direct-object': fields.String(),
@@ -34,14 +34,14 @@ class DeepStructureResponse(Flask.response_class):
             'phrasal-verb-complement': fields.String(),
             'equative': fields.String(),
             'instrument-company-goal-beneficiary': fields.String(),
-            'adjuncts': fields.List(fields.String()),
+            'adjuncts': fields.String(),
             'time': fields.String()
         }
 
     deep_structure = \
         {
             'global_operators': fields.List(fields.String),
-            'svo_slots': fields.List(fields.Nested(svo_slot))
+            'svo_slots': fields.Nested(svo_slots)
         }
 
     clause = \
