@@ -88,6 +88,7 @@ class StructuralUnderstanding(Resource):
                     print 'Exception while generating sentence information: %s - %s' % (str(index), sentence.text)
                     print traceback.format_exc()
 
+            print "Sentences: ", str(sentences)
             analysis_results = \
                 {
                     '0-Paragraph-Text':       analysis["paragraph"].text,
