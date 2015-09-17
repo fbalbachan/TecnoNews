@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
-from flask_restful_swagger import swagger
+
 import json
 import traceback
 
+from flask_restful import Resource, marshal_with
+from flask_restful_swagger import swagger
 from src.model.sentilecto import Sentilecto
 from src.utils.stringUtils import has_type_encoding
 from models import DeepStructureResponse
-from flask_restful import Resource, marshal_with, request
 from usersStorage import users_storage
 
 __author__ = 'Martín Caramés Abente'
@@ -239,4 +240,3 @@ class StructuralUnderstanding(Resource):
         number_string = str(number) + number_string
 
         return number_string
-

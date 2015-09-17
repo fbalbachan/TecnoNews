@@ -10,6 +10,7 @@ from structuralUnderstanding import StructuralUnderstanding
 from sentimentAnalysis import SentimentAnalysis
 from factMining import FactMining
 
+
 reload(sys)
 sys.setdefaultencoding("utf-8")
 

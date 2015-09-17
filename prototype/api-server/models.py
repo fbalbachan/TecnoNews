@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from flask_restful_swagger import swagger
-from flask_restful import fields
+from flask_restful import fields, marshal
 from flask import Flask
 
 
