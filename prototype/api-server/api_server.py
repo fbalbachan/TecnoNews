@@ -28,6 +28,12 @@ api.add_resource(EntityExtraction, '/api/v1/entity-extraction/<string:text>')
 api.add_resource(StructuralUnderstanding, '/api/v1/deep-structure/<string:text>')
 
 
+def write_pid_file():
+    pid = str(os.getpid())
+    pid_file = './sentilecto-api.pid'
+    file(pid_file, 'w').write(pid)
+
+
 def not_found():
     print "404: Text could not be parsed."
     abort(404, message="Text could not be parsed.")
@@ -45,4 +51,7 @@ def docs():
 
 if __name__ == '__main__':
     print "Running on host 127.0.0.1"
+
+    write_pid_file()
     app.run(host='127.0.0.1', port=5000, debug=True)
+
