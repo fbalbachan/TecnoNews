@@ -5,7 +5,7 @@ from flask_restful_swagger import swagger
 from src.model.sentilecto import Sentilecto
 from src.utils.stringUtils import has_type_encoding
 from models import TextAnalyze, Analyzer
-
+import os
 
 import sys
 import json
@@ -22,6 +22,12 @@ api = swagger.docs(Api(app),
                    produces=["application/json", "text/html"],
                    api_spec_url='/api/spec',
                    description='SentiLite API')
+
+
+def write_pid_file():
+    pid = str(os.getpid())
+    pid_file = './sentilecto-api.pid'
+    file(pid_file, 'w').write(pid)
 
 
 def not_found():
@@ -111,4 +117,7 @@ def docs():
 
 if __name__ == '__main__':
     print "Running on host 127.0.0.1"
+
+    write_pid_file()
     app.run(host='127.0.0.1', port=5000, debug=True)
+
