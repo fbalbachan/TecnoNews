@@ -30,7 +30,7 @@ class WebOutputUtils:
             return ""
 
     def valuated_adverbs(self, clause):
-        return ", ".join([ str(adverb) for adverb in clause.valuated_adverbs ])
+        return ", ".join([str(adverb) for adverb in clause.valuated_adverbs])
 
     def time_references(self, clause):
         time_lexical_forms = [ " ".join([repr(l) for l in reference.leaves()]) for reference in clause.time_references ]
