@@ -41,7 +41,7 @@ class DeepStructureResponse(Flask.response_class):
 
     deep_structure = \
         {
-            '0-Global-Operators': fields.List(fields.String),
+            '0-Global-Operators': fields.List(fields.String()),
             '1-SVO-Slots': fields.Nested(svo_slots)
         }
 
