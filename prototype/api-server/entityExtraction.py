@@ -43,9 +43,9 @@ class EntityExtraction(Resource):
 
             analysis_results = \
                 {
-                    'paragraph':    analysis["paragraph"].text,
-                    'sentences':    [sentence.text for sentence in analysis["paragraph"].sentences],
-                    'tagged_text':  analysis["tagged_text"]
+                    '0-Paragraph-Text':    analysis["paragraph"].text,
+                    '1-Entity-Tagged-Text':  analysis["tagged_text"],
+                    '2-Sentences':    [sentence.text for sentence in analysis["paragraph"].sentences]
                 }
 
             response_value = analysis_results

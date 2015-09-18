@@ -14,11 +14,12 @@ class TextAnalyze(Flask.request_class):
 
 @swagger.model
 class EntitiesResponse(Flask.response_class):
-    resource_fields = {
-        'paragraph': 	fields.String(),
-        'sentences': 	fields.List(fields.String),
-        'entity_tags': 	fields.String()
-    }
+    resource_fields = \
+        {
+            '0-Paragraph-Text':     fields.String(),
+            '1-Entity-Tagged-Text': fields.String(),
+            '2-Sentences':          fields.List(fields.String)
+        }
 
 
 @swagger.model
@@ -26,38 +27,41 @@ class DeepStructureResponse(Flask.response_class):
 
     svo_slots = \
         {
-            'opinionated-modal-adverbs': fields.String(),
-            'subject': fields.String(),
-            'verb': fields.String(),
-            'direct-object': fields.String(),
-            'indirect-object-experimenter': fields.String(),
-            'phrasal-verb-complement': fields.String(),
-            'equative': fields.String(),
-            'instrument-company-goal-beneficiary': fields.String(),
-            'adjuncts': fields.String(),
-            'time': fields.String()
+            '0-Subject': fields.String(),
+            '1-Verb': fields.String(),
+            '2-Direct-Object': fields.String(),
+            '2-Equative': fields.String(),
+            '2-Phrasal-Verb-Complement': fields.String(),
+            '3-Indirect-Object-Experimenter': fields.String(),
+            '4-Instrument-Company-Goal-Beneficiary': fields.String(),
+            '5-Adjuncts': fields.String(),
+            '6-Time': fields.String(),
+            '7-Opinionated-Modal-Adverbs': fields.String()
         }
 
     deep_structure = \
         {
-            'global_operators': fields.List(fields.String),
-            'svo_slots': fields.Nested(svo_slots)
+            '0-Global-Operators': fields.List(fields.String),
+            '1-SVO-Slots': fields.Nested(svo_slots)
         }
 
     clause = \
         {
-            'entity_tagged_text': fields.String(),
-            'deep_structure': fields.Nested(deep_structure)
+            '0-Clause-Text':   fields.String(),
+            '1-Clause-Order':  fields.String(),
+            '2-Deep-Structure': fields.Nested(deep_structure)
         }
 
     sentence = \
         {
-            'text':         fields.String(),
-            'clauses':      fields.List(fields.Nested(clause))
+            '0-Sentence-Text':  fields.String(),
+            '1-Sentence-Order': fields.Integer(),
+            '2-Sentence-Clauses': fields.List(fields.Nested(clause))
         }
 
     resource_fields = \
         {
-            'paragraph':    fields.String(),
-            'sentences':    fields.List(fields.Nested(sentence))
+            '0-Paragraph-Text':            fields.String(),
+            '1-Entity-Tagged-Text':   fields.String(),
+            '2-Sentences':            fields.List(fields.Nested(sentence))
         }
