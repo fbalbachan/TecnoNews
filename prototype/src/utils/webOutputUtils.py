@@ -415,8 +415,13 @@ class WebOutputUtils:
                         else object2.lexical_form
 
         else:
-            object = entity1.kernel if (hasattr(entity1, "kernel") and is_atomic) else entity1
-            real_name = object.lexical_form
+            if hasattr(entity1, "kernel") and entity1.kernel and is_atomic:
+                obj = entity1.kernel
+
+            else:
+                obj = entity1
+
+            real_name = obj.lexical_form
 
         real_name = real_name.encode("utf-8") if isinstance(real_name, unicode) else real_name
 
