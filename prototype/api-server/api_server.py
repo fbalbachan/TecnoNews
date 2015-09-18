@@ -12,21 +12,24 @@ from structuralUnderstanding import StructuralUnderstanding
 reload(sys)
 sys.setdefaultencoding("utf-8")
 
+api_root_path = "/api"
+resource_path = '/v0.1'
+base_path = api_root_path + resource_path
+
 app = Flask(__name__, static_folder='./static')
 
 api = swagger.docs(Api(app),
                    apiVersion='0.1.0',
                    basePath='http://localhost:5000',
-                   resourcePath='/v1',
+                   resourcePath=resource_path,
                    produces=["application/json", "text/html"],
                    api_spec_url='/api/spec',
                    description='SentiLecto\'s API')
 
 
-api.add_resource(EntityExtraction, '/api/v1/entity-extraction/<string:text>')
+api.add_resource(StructuralUnderstanding, base_path + '/deep-structure/<string:text>')
 
-api.add_resource(StructuralUnderstanding, '/api/v1/deep-structure/<string:text>')
-
+api.add_resource(EntityExtraction, base_path + '/entity-extraction/<string:text>')
 
 def write_pid_file():
     pid = str(os.getpid())
