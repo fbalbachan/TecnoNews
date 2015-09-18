@@ -43,7 +43,7 @@ class StructuralUnderstanding(Resource):
         return number_string
 
 
-    @swagger.operation(notes='Analyze the text and return a deep insight into its semantic structure.',
+    @swagger.operation(notes='Analyze the text and return a deep insight into its semantic structure. ---- NOTE: This v0.1 is an early release, expect v1.0 coming very soon. In it you\'ll find new resources and improved functionality.',
                        description='Natural Language Understanding service',
                        responseClass=DeepStructureResponse,
                        nickname='get semantic structure',
