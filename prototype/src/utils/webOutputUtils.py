@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from src.ling.gender import Gender
 from src.ling.number import Number
-from src.parser.labelNode import LabelNode
 from src.utils.factNormalizer import FactNormalizer
 from src.ling.tacit_subjects import tacit_subjects
 from src.utils.configProvider import ConfigProvider
@@ -416,8 +415,8 @@ class WebOutputUtils:
                         else object2.lexical_form
 
         else:
-            if hasattr(entity1, "kernel") and is_atomic:
-                obj = entity1.kernel.leaves()[0]
+            if hasattr(entity1, "kernel") and entity1.kernel and is_atomic:
+                obj = entity1.kernel
 
             else:
                 obj = entity1
