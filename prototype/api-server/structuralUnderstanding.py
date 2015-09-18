@@ -69,6 +69,16 @@ class StructuralUnderstanding(Resource):
 
         users_storage.increase_access_counter(api_key)
 
+        slot_names = {'subject':        '0-Subject',
+                      'verb':           '1-Verb',
+                      'od':             '2-Direct-Object',
+                      'equative':       '2-Equative',
+                      'regimen':        '2-Phrasal-Verb-Complement',
+                      'oi':             '3-Indirect-Object-Experimenter',
+                      'instrument_goal': '4-Instrument-Company-Goal-Beneficiary',
+                      'adjuncts':       '5-Adjuncts',
+                      'time':           '6-Time'}
+
         if has_type_encoding(text, str, 'UTF-8'):
             text = text.decode('UTF-8')
 

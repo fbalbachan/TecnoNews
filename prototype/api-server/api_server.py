@@ -43,12 +43,6 @@ def write_pid_file():
     file(pid_file, 'w').write(pid)
 
 
-def write_pid_file():
-    pid = str(os.getpid())
-    pid_file = './sentilecto-api.pid'
-    file(pid_file, 'w').write(pid)
-
-
 def not_found():
     print "404: Text could not be parsed."
     abort(404, message="Text could not be parsed.")
