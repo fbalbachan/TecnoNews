@@ -57,7 +57,7 @@ class StructuralUnderstanding(Resource):
                                     "dataType":     "string",
                                     "paramType":    "path"
                                 }
-                            ],
+                           ],
                        responseMessages=
                             [
                                 {"code": 200, "message": "Structure insights properly generated."},
@@ -92,8 +92,8 @@ class StructuralUnderstanding(Resource):
                 sentence_data['1-Sentence-Order'] = paragraph_sentences.index(sentence) + 1
 
                 sentence_data['2-Sentence-Clauses'] = []
-                deep_structure = dict()
                 for clause in sentence.clauses:
+                    deep_structure = dict()
                     clause_data = dict()
                     clause_data["0-Clause-Text"] = str(clause)
                     clause_data["1-Clause-Order"] = str(sentence_data['1-Sentence-Order']) + "." + self.clause_number(clause, sentence)
