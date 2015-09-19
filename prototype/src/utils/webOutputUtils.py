@@ -417,7 +417,6 @@ class WebOutputUtils:
         else:
             if hasattr(entity1, "kernel") and entity1.kernel and is_atomic:
                 obj = entity1.kernel
-
             else:
                 obj = entity1
 

@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import traceback
+
 from src.sentinews.news_rewriter import NewsRewriter
 from src.sentinews.news_crawler import NewsCrawler
 from src.utils.freelingLanguageDetectorClient import FreelingLanguageDetectorClient
@@ -9,7 +11,6 @@ from src.utils.relatedNewsEntries import RelatedNewsEntries
 from src.utils.logger_utils import *
 from src.utils.configProvider import ConfigProvider
 from bs4 import BeautifulSoup
-import traceback
 from datetime import datetime
 
 logger = get_logger('tecnonews')
@@ -31,122 +32,136 @@ class TecnoNews(object):
         self.published_in_this_run = 0
         self.not_published_in_this_run = 0
 
-    def enviroment_health(self):
+    def environment_health(self):
         li_health = self.freeling_lang_ident.health_check()
         parse_health = self.freeling_parse.health_check()
-
         return li_health and parse_health
 
     def run(self):
         logger = get_logger('tecnonews')
-        logger.info("<Tecnonews> <run> Running start")
+        logger.info("<Tecnonews> <run> --> STARTED -------------------------------------------------------------------")
+
         self.published_in_this_run = 0
         self.not_published_in_this_run = 0
 
+        logger.info("<Tecnonews> <run> --> STARTING TO CRAWL FEEDS")
         entries = NewsCrawler().crawl_all()
 
-        logger.info("<Tecnonews> <run> Entries to publish: %s" % len(entries))
-
+        logger.info("<Tecnonews> <run> <-- FINISHED CRAWLING - Entries fetched: %s" % len(entries))
         for idx, entry in enumerate(entries):
-            logger.info("<Tecnonews> <run> processing entry %s of %s" % (idx, len(entries)))
+            logger.info("<Tecnonews> <run> Processing entry %s of %s" % (idx, len(entries)))
             self._process(entry)
 
-        logger.info("Freeling ident calls number:%s" % self.freeling_lang_ident.calls_count)
-        logger.info("not published: %s \n Published: %s" % (self.not_published_in_this_run,
-                                                            self.published_in_this_run))
-        logger.info("<Tecnonews> <run> Done.")
+        logger.info("<Tecnonews> <run> ----- BRIEFING ----------------------------------------------------------------")
+        logger.info("<Tecnonews> <run> Number of Freeling_Lang_Identification calls: %s" % self.freeling_lang_ident.calls_count)
+        logger.info("<Tecnonews> <run> Published entries: %s" % self.published_in_this_run)
+        logger.info("<Tecnonews> <run> NOT published entries: %s" % self.not_published_in_this_run)
+        logger.info("<Tecnonews> <run> -------------------------------------------------------------------------------")
+
+        logger.info("<Tecnonews> <run> <-- FINISHED ------------------------------------------------------------------")
+
+    def log_similarity_info(self, rewriter, valid_to_publish):
+        logger_similarity.info("\n\n----- --> SIMILARITY INFO ----------------------------------------------------\n\n")
+        logger_similarity.info("<similarity> url: %s\n" % rewriter.original_entry.url)
+
+        logger_similarity.info("<similarity> Original content: ")
+        logger_similarity.info("--> [%s]" % rewriter.original_entry.content)
+
+        logger_similarity.info("<similarity> Rewritten content: ")
+        clean_rewritten = BeautifulSoup(rewriter.rewritten_entry.content).getText()
+        logger_similarity.info("--> [%s]" % clean_rewritten)
+
+        logger_similarity.info("\n\n<similarity> Valid to publish: %s " % valid_to_publish)
+        logger_similarity.info("\n\n----- <-- SIMILARITY INFO ----------------------------------------------------\n\n")
 
     def _process(self, entry):
-        logger.info("<Tecnonews> <_process> START processing %s" % entry.title)
+        logger.info("<Tecnonews> <_process> --> STARTED _process([%s])" % entry.title)
         other_versions = []
         try:
             entry.set_analisys_info()
             try:
                 tsr = RelatedNewsEntries(entry)
                 other_versions = tsr.get_other_versions_top_ten()
-
                 entry.set_news_versions(other_versions)
+                logger.info("<Tecnonews> <_process> Number of Same_News_Coverages: %s" % len(other_versions))
+
                 related = tsr.get_related_entities_top_5_not_in_list(other_versions)
                 entry.set_related_news(related)
-                logger.info("<Tecnonews> <_process> same news different coverage number %s" % len(other_versions))
-                logger.info("<Tecnonews> <_process> related_news number %s" % len(related))
+                logger.info("<Tecnonews> <_process> Number of Related_news: %s" % len(related))
+
             except Exception as e:
-                logger.error("<Tecnonews> <_process> related_news %s" % entry.title)
-                logger.error("<Tecnonews> <_process> related_news %s" % e.message)
-                logger.error("<Tecnonews> <_process> related_news %s" % traceback.format_exc())
-                logger.info(traceback.format_exc())
+                logger.error("<Tecnonews> <_process> <-- FAILED relating news (Title: %s)" % entry.title)
+                logger.error("<Tecnonews> <_process> Exception: %s" % e.message)
+                logger.error("<Tecnonews> <_process> Traceback: \n%s" % traceback.format_exc())
 
-            rewriter = NewsRewriter(entry)
-            # Add the other_version entries (only ids) to be used in paragraph insertion
-            rewriter.rewritten_entry.other_versions = other_versions
-
-            logger.info('<Tecnonews> <_process> rewriting note: ' + entry.title)
             try:
+                logger.info('<Tecnonews> <_process> --> STARTED Rewriting: ' + entry.title)
+
+                rewriter = NewsRewriter(entry)
+                # Add the other_version entries (only ids) to be used in paragraph insertion
+                rewriter.rewritten_entry.other_versions = other_versions
                 rewriter.rewrite_title()
                 rewriter.rewrite_content()
 
-                logger_similarity.info("\n--------\n")
-                logger_similarity.info("url: %s\n" % rewriter.original_entry.url)
-                logger_similarity.info("Original content")
-                logger_similarity.info("%s" % rewriter.original_entry.content)
-                logger_similarity.info("Rewritten content")
-                clean_rewrited = BeautifulSoup(rewriter.rewritten_entry.content).getText()
-                logger_similarity.info("%s" % clean_rewrited)
+                logger.info('<Tecnonews> <_process> <-- FINISHED Rewriting: ' + entry.title)
+
+                logger.info('<Tecnonews> <_process> --> STARTED Publishing logic')
 
                 valid_to_publish = self.valid_to_publish(rewriter)
-
-                logger_similarity.info("\n\nvalid to publish %s " % valid_to_publish)
-                logger_similarity.info("\n--------\n")
-
+                self.log_similarity_info(rewriter, valid_to_publish)
                 if valid_to_publish:
-                    logger.info('<Tecnonews> <_process> publishing: ' + entry.title)
+                    logger.info('<Tecnonews> <_process> Publishing... (Title: %s)' % entry.title)
                     wp_id, wp_url = rewriter.publish()
                     entry.wp_id = wp_id
                     entry.wp_url = wp_url
-                    if wp_id:
-                        logger.info('<Tecnonews> <_process> published %s' % wp_url)
-                    # TODO: check if we must use datetime from wp
-                    entry.published_date = datetime.utcnow()
+                    entry.published_date = datetime.utcnow()    # TODO: check if we must use datetime from wp
                     self.published_in_this_run += 1
+                    if wp_id:
+                        logger.info('<Tecnonews> <_process> Published!')
+                        logger.info('<Tecnonews> <_process> \tTitle: %s' % entry.title)
+                        logger.info('<Tecnonews> <_process> \tWord_press_url: %s' % wp_url)
                 else:
                     self.not_published_in_this_run += 1
-                    logger.info("Not publishing")
+                    logger.info("<Tecnonews> <_process> NOT Published (Title: %s)" % entry.title)
+
+                logger.info('<Tecnonews> <_process> <-- FINISHED Publishing logic')
 
             except Exception as e:
-                logger.error("<Tecnonews> <_process> rewriting fail: %s " % entry.title)
-                logger.error("%s" % e.message)
-                logger.error(traceback.format_exc())
+                logger.error("<Tecnonews> <_process> <-- FAILED Rewriting/publishing: %s " % entry.title)
+                logger.error("<Tecnonews> <_process> Exception: %s" % e.message)
+                logger.error("<Tecnonews> <_process> Traceback: %s" % traceback.format_exc())
 
         except Exception as e:
-            logger.info(traceback.format_exc())
-            logger.error("%s" % e.message)
+            logger.error("<Tecnonews> <_process> <-- FAILED Processing (Title: [%s])" % entry.title)
+            logger.error("<Tecnonews> <_process> Exception: %s" % e.message)
+            logger.error("<Tecnonews> <_process> Traceback: %s" % traceback.format_exc())
 
-        # Allways save
+        # Always save
         self.service.save(news_entry=entry)
+        logger.info("<Tecnonews> <_process> Saved news entry to DB")
 
-        logger.info("<Tecnonews> <_process> END processing %s" % entry.title)
+        logger.info("<Tecnonews> <_process> <-- FINISHED processing %s" % entry.title)
 
     def valid_to_publish(self, rewriter_instance):
         td = TextDistance()
         td.stopwords = []  #avoid using stopwords filter
-        clean_rewrited = BeautifulSoup(rewriter_instance.rewritten_entry.content).getText()
-        similarity = td.similarity(rewriter_instance.original_entry.content,
-                                   clean_rewrited)
+        clean_rewritten = BeautifulSoup(rewriter_instance.rewritten_entry.content).getText()
+        similarity = td.similarity(rewriter_instance.original_entry.content, clean_rewritten)
 
-        logger.info("\nsimilarity %s" % similarity)
-        logger_similarity.info("\nsimilarity %s" % similarity)
+        logger.info("\nSimilarity %s" % similarity)
+        logger_similarity.info("\nSimilarity %s" % similarity)
 
         # return similarity <= 95
         return rewriter_instance.injected_count > 0
 
 if __name__ == '__main__':
-    # import argparse
+    import argparse
     import time
-    # from shutil import copyfile
-    # TODO: use args and fix syncronization problem when copy config files
+    from shutil import copyfile
+
+    # TODO: use args and fix synchronization problem when copy config files
     # parser = argparse.ArgumentParser(description='Instanciate instance of NaturalNews.')
-    # parser.add_argument('--instance', type=int, nargs=1,
-    #                help='The instance identificator')
+    # parser.add_argument('--instance', type=int, nargs=1, help='The instance identificator')
     # args = parser.parse_args()
     # config_file = u'instance_config/config_instance_' + unicode(args.instance[0])
     # print config_file
@@ -154,14 +169,14 @@ if __name__ == '__main__':
     # copyfile(config_file, 'config')
     # time.sleep(1)
     tn = TecnoNews()
-    print tn.config.get('instance', 'id')
+    print "Instance ID: ", tn.config.get('instance', 'id')
 
     while True:
-        if tn.enviroment_health():
+        if tn.environment_health():
             tn.run()
         else:
-            #TODO: must fix the enviroment somehow
-            logger.error("Not running becouse enviroment is not health")
+            # TODO: must fix the environment somehow
+            logger.error("Environment is not healthy - Can't run - Waiting one minute before retrying.")
 
-        logger.info("Sleeping")
+        logger.info("<Tecnonews> <Main Loop> Sleeping")
         time.sleep(60)
