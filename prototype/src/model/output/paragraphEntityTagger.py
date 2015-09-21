@@ -67,22 +67,22 @@ class ParagraphEntityTagger:
             entity_text = text[start:end]
 
             tagged_text += text[index:start]
-            tagged_text += "<%s id='e_%s'" % (tag_name, str(entity_id))
+            tagged_text += ("<%s id='e_%s'" % tag_name, str(entity_id))
             if entity in attrib_by_entity:
                 for attrib in attrib_by_entity[entity]:
-                    tagged_text += " %s=%s" % (attrib, attrib_by_entity[entity][attrib])
+                    tagged_text += (" %s=%s" % attrib, attrib_by_entity[entity][attrib])
             tagged_text += ">%s" % entity_text
             if not entity.children:
-                tagged_text += "</%s>" % (tag_name)
+                tagged_text += ("</%s>" % tag_name)
 
-            tag_mapping[entity] = "e_%s" % (str(entity_id))
+            tag_mapping[entity] = ("e_%s" % str(entity_id))
 
             index = end
             entity_id += 1
 
             if close_tag_deque and close_tag_deque[0][0] == entity:
                 pending_end = close_tag_deque.popleft()[1]
-                tagged_text += text[index:pending_end] + "</%s>" % (tag_name)
+                tagged_text += text[index:pending_end] + ("</%s>" % tag_name)
                 index = pending_end
 
         tagged_text += text[index:]
