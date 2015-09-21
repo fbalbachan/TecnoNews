@@ -141,8 +141,8 @@ class WebOutputUtils:
         gender = Gender.neutral
         number = Number.invariable
         if same_pgn_entities:
-            with_gender = filter(lambda e: e.gender() != Gender.neutral, same_pgn_entities)
-            with_number = filter(lambda e: e.number() != Number.invariable, same_pgn_entities)
+            with_gender = filter(lambda e: e.gender() != Gender.neutral, same_pgn_entities) + [entity]
+            with_number = filter(lambda e: e.number() != Number.invariable, same_pgn_entities) + [entity]
             gender = with_gender[0].gender()
             number = with_number[0].number()
 
