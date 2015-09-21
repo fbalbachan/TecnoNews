@@ -10,6 +10,17 @@ from flask_restful import Resource, marshal_with
 __author__ = 'Martín Caramés Abente'
 
 
+slot_names = {'subject':        '0-Subject',
+              'verb':           '1-Verb',
+              'od':             '2-Direct-Object',
+              'equative':       '2-Equative',
+              'regimen':        '2-Phrasal-Verb-Complement',
+              'oi':             '3-Indirect-Object-Experimenter',
+              'instrument_goal': '4-Instrument-Company-Goal-Beneficiary',
+              'adjuncts':       '5-Adjuncts',
+              'time':           '6-Time'}
+
+
 class StructuralUnderstanding(Resource):
 
     sentilecto = Sentilecto()
@@ -67,16 +78,6 @@ class StructuralUnderstanding(Resource):
     @marshal_with(DeepStructureResponse.resource_fields)
     def get(self, text):
 
-        slot_names = {'subject':        '0-Subject',
-                      'verb':           '1-Verb',
-                      'od':             '2-Direct-Object',
-                      'equative':       '2-Equative',
-                      'regimen':        '2-Phrasal-Verb-Complement',
-                      'oi':             '3-Indirect-Object-Experimenter',
-                      'instrument_goal': '4-Instrument-Company-Goal-Beneficiary',
-                      'adjuncts':       '5-Adjuncts',
-                      'time':           '6-Time'}
-
         if has_type_encoding(text, str, 'UTF-8'):
             text = text.decode('UTF-8')
 
@@ -86,30 +87,8 @@ class StructuralUnderstanding(Resource):
             sentences = []
             paragraph_sentences = analysis["paragraph"].sentences
             for sentence in paragraph_sentences:
-
-                sentence_data = dict()
-                sentence_data['0-Sentence-Text'] = sentence.text
-                sentence_data['1-Sentence-Order'] = paragraph_sentences.index(sentence) + 1
-
-                sentence_data['2-Sentence-Clauses'] = []
-                for clause in sentence.clauses:
-                    deep_structure = dict()
-                    clause_data = dict()
-                    clause_data["0-Clause-Text"] = str(clause)
-                    clause_data["1-Clause-Order"] = str(sentence_data['1-Sentence-Order']) + "." + self.clause_number(clause, sentence)
-
-                    svo_slots = dict()
-                    svo_slots["7-Opinionated-Modal-Adverbs"] = ", ".join([str(adverb) for adverb in clause.valuated_adverbs])
-                    for structure_name in ['subject', 'verb', 'od', 'equative', 'regimen',
-                                           'oi', 'instrument_goal', 'adjuncts', 'time']:
-                        svo_slots[slot_names[structure_name]] = self.structure(clause, structure_name)
-
-                    deep_structure['0-Global-Operators'] = [go.klass for go in clause.global_operators]
-                    deep_structure['1-SVO-Slots'] = svo_slots
-
-                    clause_data['2-Deep-Structure'] = deep_structure
-                    sentence_data['2-Sentence-Clauses'] = sentence_data['2-Sentence-Clauses'] + [clause_data]
-
+                index = paragraph_sentences.index(sentence) + 1
+                sentence_data = self.get_sentence_data(sentence, index)
                 sentences = sentences + [sentence_data]
 
             analysis_results = \
@@ -139,6 +118,32 @@ class StructuralUnderstanding(Resource):
             )
 
         return response
+
+    def get_sentence_data(self, sentence, index):
+        sentence_data = dict()
+        sentence_data['0-Sentence-Text'] = sentence.text
+        sentence_data['1-Sentence-Order'] = index
+
+        sentence_data['2-Sentence-Clauses'] = []
+        deep_structure = dict()
+        for clause in sentence.clauses:
+            clause_data = dict()
+            clause_data["0-Clause-Text"] = str(clause)
+            clause_data["1-Clause-Order"] = str(sentence_data['1-Sentence-Order']) + "." + self.clause_number(clause, sentence)
+
+            svo_slots = dict()
+            svo_slots["7-Opinionated-Modal-Adverbs"] = ", ".join([str(adverb) for adverb in clause.valuated_adverbs])
+            for structure_name in ['subject', 'verb', 'od', 'equative', 'regimen',
+                                   'oi', 'instrument_goal', 'adjuncts', 'time']:
+                svo_slots[slot_names[structure_name]] = self.structure(clause, structure_name)
+
+            deep_structure['0-Global-Operators'] = [go.klass for go in clause.global_operators]
+            deep_structure['1-SVO-Slots'] = svo_slots
+
+            clause_data['2-Deep-Structure'] = deep_structure
+            sentence_data['2-Sentence-Clauses'] = sentence_data['2-Sentence-Clauses'] + [clause_data]
+
+        return sentence_data
 
     def options (self, **args):
         return {'Allow': 'GET,PUT,POST,DELETE'}, \

@@ -47,16 +47,30 @@ class DeepStructureResponse(Flask.response_class):
 
     clause = \
         {
-            '0-Clause-Text':   fields.String(),
-            '1-Clause-Order':  fields.String(),
-            '2-Deep-Structure': fields.Nested(deep_structure)
+            '0-Clause-Text':        fields.String(),
+            '1-Clause-Order':       fields.String(),
+            '2-Deep-Structure':     fields.Nested(deep_structure)
+        }
+
+    morphosyntactic_info = \
+        {
+            '0-Entity-Name':    fields.String(),
+            '1-Person':         fields.String(),
+            '2-Gender':         fields.String(),
+            '3-Number':         fields.String(),
+            '4-Category':       fields.String(),
+            '5-Animity':        fields.String(),
+            '6-Semantic-Classification':  fields.String(),
+            '7-Transitivity':   fields.String(),
+            '8-Sentimental-Script-Class':  fields.String()
         }
 
     sentence = \
         {
-            '0-Sentence-Text':  fields.String(),
-            '1-Sentence-Order': fields.Integer(),
-            '2-Sentence-Clauses': fields.List(fields.Nested(clause))
+            '0-Sentence-Text':      fields.String(),
+            '1-Sentence-Order':     fields.Integer(),
+            '2-Sentence-Clauses':   fields.List(fields.Nested(clause)),
+            '3-Sentence-Morphosyntactic-Info': fields.List(fields.Nested(morphosyntactic_info))
         }
 
     resource_fields = \
