@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 
 import ConfigParser
+import feedparser
+import traceback
+
 from src.services.mongodb.news_entries_service import NewsEntriesService
 from src.sentinews.parsers import *
 from src.utils.logger_utils import get_crawler_logger
-import feedparser
 from src.utils.sanitizer import Sanitizer
 from src.utils.configProvider import ConfigProvider
-import traceback
 
 crawler_logger = get_crawler_logger()
 

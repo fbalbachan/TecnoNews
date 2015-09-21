@@ -1,11 +1,12 @@
 __author__ = 'Pablo Perez De Angelis'
 
+import traceback
+
 from src.utils.languageFilter import LanguageFilter
 from src.utils.sanitizer import Sanitizer
 from src.utils.bit_opener import BitOpener
 from src.utils.logger_utils import get_crawler_logger
 from src.sentinews.news_entry import NewsEntry
-import traceback
 
 logger = get_crawler_logger()
 
@@ -39,21 +40,19 @@ class GenericParser(object):
         content = self.sanitize(content)
         assert content.find('function()') == -1
 
-        if original_categories and u'video' in original_categories:
-            return None
+        if not original_categories or u'video' not in original_categories:
+            if len(tags) or original_categories:
+                try:
+                    new_entry = NewsEntry(title=title, content=content,
+                                          tags=tags,
+                                          source=source,
+                                          url=url,
+                                          original_categories=original_categories,
+                                          image_search_string=image_search_string)
 
-        if len(tags) or original_categories:
-            try:
-                new_entry = NewsEntry(title=title, content=content,
-                                      tags=tags,
-                                      source=source,
-                                      url=url,
-                                      original_categories=original_categories,
-                                      image_search_string=image_search_string)
-
-            except Exception as e:
-                logger.error("%s" % e.message)
-                logger.error(traceback.format_exc())
+                except Exception as e:
+                    logger.error("%s" % e.message)
+                    logger.error(traceback.format_exc())
 
         if not new_entry:
             logger.error(u"Couldn't parse news %s" % source)
