@@ -20,12 +20,11 @@ class Sentilecto:
 
         analysis = {}
 
-        analyzer = ParagraphAnalyzer()
         paragraph = Paragraph.from_text(text)
-
-        analyzer.analyze(paragraph)
-
+        paragraph_analyzer = ParagraphAnalyzer()
+        paragraph_analyzer.analyze(paragraph)
         analysis["paragraph"] = paragraph
+
         analysis["summary"] = SentimentalSummarizer(paragraph).analyze()
 
         EntityUnifier(paragraph).unify()
