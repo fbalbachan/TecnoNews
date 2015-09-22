@@ -55,7 +55,7 @@ class DeepStructureResponse(Flask.response_class):
     morphosyntactic_info = \
         {
             '0-Entity-Name':    fields.String(),
-            '1-Person':         fields.String(),
+            '1-Person':         fields.Integer(),
             '2-Gender':         fields.String(),
             '3-Number':         fields.String(),
             '4-Category':       fields.String(),
