@@ -109,10 +109,10 @@ class BlogPublisher(object):
             post.content += '<ul>'
             for version_news_id in entry.versions:
                 # post.content += 'id=' + str(version_news_id)
-                unmarshalled_news = news_service.get_list({'_id': version_news_id})
-                if len(unmarshalled_news) == 1:
-                    source = unmarshalled_news[0].source
-                    post.content += '<li>' + unmarshalled_news[0].title + ' - <i>' + source + '</i></li>'
+                news_without_marshalling = news_service.get_list({'_id': version_news_id})
+                if len(news_without_marshalling) == 1:
+                    source = news_without_marshalling[0].source
+                    post.content += '<li>' + news_without_marshalling[0].title + ' - <i>' + source + '</i></li>'
                     # post.content += '<span>&nbsp;' + unmarshalled_news[0].published_date.strftime('%B %d, %Y') + '</span>'
 
             post.content += '</ul>'
