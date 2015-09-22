@@ -194,12 +194,12 @@ class StructuralUnderstanding(Resource):
         for entity in entities:
             entity_morphosyntactic_info = dict()
             entity_morphosyntactic_info['0-Entity-Name'] = str(entity)
-            entity_morphosyntactic_info['1-Person'] = entity["msi"]["person"]
-            entity_morphosyntactic_info['2-Gender'] = str(entity["msi"]["gender"])
-            entity_morphosyntactic_info['3-Number'] = str(entity["msi"]["number"])
-            entity_morphosyntactic_info['4-Category'] = str(entity["msi"]["category"])
-            entity_morphosyntactic_info['5-Animity'] = str(entity["msi"]["animity"])
-            entity_morphosyntactic_info['6-Semantic-Classification'] = str(entity["msi"]["semantic_classification"])
+            entity_morphosyntactic_info['1-Person'] = entity.msi["person"]
+            entity_morphosyntactic_info['2-Gender'] = str(entity.msi["gender"])
+            entity_morphosyntactic_info['3-Number'] = str(entity.msi["number"])
+            entity_morphosyntactic_info['4-Category'] = str(entity.msi["category"])
+            entity_morphosyntactic_info['5-Animity'] = str(entity.msi["animity"])
+            entity_morphosyntactic_info['6-Semantic-Classification'] = str(entity.msi["semantic_classification"])
 
             if entity_morphosyntactic_info['4-Category'] is "verb":
                 entity_morphosyntactic_info['7-Transitivity'] = entity.transitivity.encode("utf-8")
