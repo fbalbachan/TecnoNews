@@ -20,7 +20,7 @@ class SentimentalSummarizer:
         return analysis
 
     def summarize_paragraph(self, paragraph, analysis):
-        self.summarize_clauses(paragraph.clauses(), analysis)
+        analysis[paragraph] = self.summarize_clauses(paragraph.clauses(), analysis)
         new_summary = self.normalize(analysis, paragraph)
         return new_summary
 

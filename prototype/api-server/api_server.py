@@ -11,7 +11,7 @@ from flask import Flask, redirect, abort, request
 from flask_restful import Api
 from entityExtraction import EntityExtraction
 from structuralUnderstanding import StructuralUnderstanding
-
+from sentimentAnalysis import SentimentAnalysis
 
 reload(sys)
 sys.setdefaultencoding("utf-8")
