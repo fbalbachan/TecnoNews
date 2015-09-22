@@ -137,7 +137,6 @@ class StructuralUnderstanding(Resource):
 
         sentence_data['2-Sentence-Clauses'] = []
         for clause in sentence.clauses:
-
             index = str(sentence_data['1-Sentence-Order']) + "." + self.clause_number(clause, sentence)
             clause_data = self.get_clause_data(clause, index)
 
