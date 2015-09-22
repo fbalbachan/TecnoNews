@@ -69,19 +69,15 @@ class StructuralUnderstanding(Resource):
 
         users_storage.increase_access_counter(api_key)
 
-        print "0.0"
 	if has_type_encoding(text, str, 'UTF-8'):
-            print "0.1"
 	    text = text.decode('UTF-8')
 
         try:
-	    print "0.3"
             analysis = self.sentilecto.analyze(text)
-	    print "0.4"
 
             sentences = []
-	    print "0.5"
             paragraph_sentences = analysis["paragraph"].sentences
+
             index = 0
             for sentence in paragraph_sentences:
                 try:
