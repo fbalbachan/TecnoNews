@@ -26,12 +26,12 @@ api = swagger.docs(Api(app),
                    api_spec_url='/api/spec',
                    description='SentiLecto\'s API')
 
+api.add_resource(SentimentAnalysis, base_path + '/sentiment-analysis/<string:text>')
 
 api.add_resource(StructuralUnderstanding, base_path + '/deep-structure/<string:text>')
 
 api.add_resource(EntityExtraction, base_path + '/entity-extraction/<string:text>')
 
-api.add_resource(SentimentAnalysis, base_path + '/sentiment-analysis/<string:text>')
 
 def write_pid_file():
     pid = str(os.getpid())
