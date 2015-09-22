@@ -23,6 +23,43 @@ class EntitiesResponse(Flask.response_class):
 
 
 @swagger.model
+class SentimentAnalysisResponse(Flask.response_class):
+
+    score = \
+        {
+            '0-Positive-Score':     fields.Float(),
+            '1-Negative-Score':     fields.Float()
+        }
+
+    entity = \
+        {
+            '0-Entity-Text':              fields.String(),
+            '1-Entity-Sentiment-Score':   fields.Nested(score)
+        }
+
+    clause = \
+        {
+            '0-Clause-Text':              fields.String(),
+            '1-Clause-Sentiment-Score':   fields.Nested(score),
+            '2-Entities':                 fields.List(fields.Nested(entity))
+        }
+
+    sentence = \
+        {
+            '0-Sentence-Text':              fields.String(),
+            '1-Sentence-Sentiment-Score':   fields.Nested(score),
+            '2-Clauses':                    fields.List(fields.Nested(clause))
+        }
+
+    resource_fields = \
+        {
+            '0-Paragraph-Text':             fields.String(),
+            '1-Paragraph-Sentiment-Score':  fields.Nested(score),
+            '2-Sentences':                  fields.List(fields.Nested(sentence))
+        }
+
+
+@swagger.model
 class DeepStructureResponse(Flask.response_class):
 
     svo_slots = \
