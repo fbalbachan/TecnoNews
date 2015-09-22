@@ -111,7 +111,8 @@ class BlogPublisher(object):
                 # post.content += 'id=' + str(version_news_id)
                 unmarshalled_news = news_service.get_list({'_id': version_news_id})
                 if len(unmarshalled_news) == 1:
-                    post.content += '<li>' + unmarshalled_news[0].title # + ' - ' + unmarshalled_news[0].source
+                    source = unmarshalled_news[0].source
+                    post.content += '<li>' + unmarshalled_news[0].title + ' - <i>' + source + '</i></li>'
                     # post.content += '<span>&nbsp;' + unmarshalled_news[0].published_date.strftime('%B %d, %Y') + '</span>'
 
             post.content += '</ul>'

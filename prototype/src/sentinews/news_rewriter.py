@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import re
+import traceback
+import urllib
+
 
 from src.model.sentilecto import Sentilecto
 from src.sentinews.blog_publisher import BlogPublisher
@@ -45,7 +48,7 @@ class NewsRewriter(object):
                 s = re.search("alt=\".*\" src=", x).group(0)
                 s = s[s.find('"') + 1:]
                 s = s[:s.find('"')]
-                res[url] = s
+                res[url] = s if len(s) > 0 else urllib.unquote(img).decode("utf-8")
             except:
                 res[url] = url
         return res
@@ -113,11 +116,15 @@ class NewsRewriter(object):
     def pre_filter_images_urls(images_urls):
 
         # TODO: make a resource with this info
-        blacklist = ['Commons-', 'Wikispecies-logo', 'Wiktionary-logo-es', 'Wikinews-logo', 'None', 'Spanish_Wikiquote.SVG', 'P_vip.svg', 'Globe-with-clock.svg', 'Yes_check.svg', 'Red_pog',
-                     'Wikisource-logo', 'Falta imagen', 'Estany', 'Flag_of_Egypt',
-                     'Ice_hockey_pictogram', 'Firmado pero no ratificado.', 'Spanish Language Wiki.svg',
-                      'Kit right arm blueshoulders.png', 'Tetragrammaton', 'signature', 'Signature', 'sig.',
-                      'LinkedInLogo', 'culo_bueno', 'Check_mark', 'svg']
+        blacklist = \
+            [
+                'Commons-', 'Wikispecies-logo', 'Wiktionary-logo-es', 'Wikinews-logo', 'None',
+                'Spanish_Wikiquote.SVG', 'P_vip.svg', 'Globe-with-clock.svg', 'Yes_check.svg', 'Red_pog',
+                'Wikisource-logo', 'Falta imagen', 'Estany', 'Flag_of_Egypt', 'Ice_hockey_pictogram',
+                'Firmado pero no ratificado.', 'Spanish Language Wiki.svg', 'Kit right arm blueshoulders.png',
+                'Tetragrammaton', 'signature', 'Signature', 'sig.', 'LinkedInLogo', 'culo_bueno',
+                'Check_mark', 'svg'
+            ]
 
         filtered_urls = [url for url in images_urls
                          if not any(black_string in url for black_string in blacklist)]
@@ -128,7 +135,6 @@ class NewsRewriter(object):
         analysis = self._analyze(self.original_entry.title)
         rewriter = Rewriter(analysis['paragraph'])
         self.rewritten_entry.title = rewriter.rewrite()
-        
 
     def rewrite_content(self):
         # TODO: Check every step catch exceptions and return OK|Fail
@@ -170,13 +176,39 @@ class NewsRewriter(object):
         if wikiinfo and filter(lambda (referent, score): referent == wikiinfo[0][0] and score > 1., ranking):
             # logger.info("WIKIINFO: %s", str(wikiinfo))
             # logger.info("Searching for %s " % wikiinfo[0][2])
-            wikipedia_page = wikiinfo[0][2]
-            entry_image = self.get_main_image_url(wikipedia_page)
-            if entry_image:
-                self.rewritten_entry.image = entry_image
-                logger.info("Url selected %s" % self.rewritten_entry.image['url'])
-            else:
-                logger.info("None image selected")
+
+             wikipedia_page = wikiinfo[0][2]
+             entry_image = self.get_main_image_url(wikipedia_page)
+             if entry_image:
+                 caption = entry_image['description']
+                 try:
+                     if isinstance(self.rewritten_entry.content, unicode):
+                         logger.info("Rewritten entry content is unicode")
+                         if not isinstance(caption, unicode):
+                             logger.info('Caption is UTF-8')
+                             caption = unicode(caption,"utf-8")
+                         logger.info(u'Image Caption: %s' % caption)
+                         self.rewritten_entry.content = u'<p><small>Foto: Wikipedia - %s</small></p> %s' % (caption, self.rewritten_entry.content)
+                     else:
+                         logger.info("Rewritten entry content is UTF-8")
+                         if isinstance(caption, unicode):
+                             logger.info('Caption is UNICODE')
+                             caption = caption.encode("utf-8")
+                         logger.info("Image Caption: %s" % caption)
+                         self.rewritten_entry.content =  '<p><small>Foto: Wikipedia - %s</small></p> %s' % (caption, self.rewritten_entry.content)
+
+                 except Exception as e:
+                     if isinstance(caption, unicode):
+                         logger.info(u'Image Caption error 1! Caption: %s' % caption)
+                     else:
+                         logger.info( 'Image Caption error 1! Caption: %s' % caption)
+
+                     logger.error(traceback.format_exc())
+
+                 self.rewritten_entry.image = entry_image
+                 logger.info("Url selected %s" % self.rewritten_entry.image['url'])
+             else:
+                 logger.info("None image selected")
         else:
             logger.info("NO REFERENT SCORE > 1")
 
@@ -196,7 +228,32 @@ class NewsRewriter(object):
                 wikipedia_page = wikiinfo[0][2]
                 entry_image = self.get_main_image_url(wikipedia_page)
                 if entry_image:
+                    caption = entry_image['description']
+                    try:
+                        if isinstance(self.rewritten_entry.content, unicode):
+                            logger.info("Rewritten entry content is unicode")
+                            if not isinstance(caption, unicode):
+                                logger.info('Caption is UTF8')
+                                caption = unicode(caption,"utf-8")
+                            logger.info(u'Image Caption: %s' % caption)
+                            self.rewritten_entry.content = u'<p><small>Foto: Wikipedia - %s</small></p> %s' % (caption, self.rewritten_entry.content)
+                        else:
+                            logger.info("Rewritten entry content is UTF-8")
+                            if isinstance(caption, unicode):
+                                logger.info('Caption is UNICODE')
+                                caption = caption.encode("utf-8")
+                            logger.info('Image Caption: %s' % caption)
+                            self.rewritten_entry.content = '<p><small>Foto: Wikipedia - %s</small></p> %s' % (caption, self.rewritten_entry.content)
+
+                    except Exception as e:
+                        if isinstance(caption, unicode):
+                            logger.info(u'Image Caption error 1! Caption: %s' % caption)
+                        else:
+                            logger.info('Image Caption error 1! Caption: %s' % caption)
+                        logger.error(traceback.format_exc())
+
                     self.rewritten_entry.image = entry_image
+
                     logger.info("From title Url selected %s" % self.rewritten_entry.image['url'])
                 else:
                     logger.info("None image selected from title")
