@@ -37,6 +37,8 @@ api.add_resource(EntityExtraction, base_path + '/entity-extraction/<string:text>
 api.add_resource(FactMining, base_path + '/fact-mining/<string:text>/<string:api_key>')
 
 
+api.add_resource(SentimentAnalysis, base_path + '/sentiment-analysis/<string:text>')
+
 def write_pid_file():
     pid = str(os.getpid())
     pid_file = './sentilecto-api.pid'
