@@ -79,31 +79,21 @@ class StructuralUnderstanding(Resource):
     @marshal_with(DeepStructureResponse.resource_fields)
     def get(self, text):
 
-        print "0.0"
 	if has_type_encoding(text, str, 'UTF-8'):
-            print "0.1"
 	    text = text.decode('UTF-8')
 
         try:
-	    print "0.3"
             analysis = self.sentilecto.analyze(text)
-	    print "0.4"
 
             sentences = []
-	    print "0.5"
             paragraph_sentences = analysis["paragraph"].sentences
-	    print "0.6"
 	    index = 0
             for sentence in paragraph_sentences:
 
 		try:
-		    print "1"
                     index = paragraph_sentences.index(sentence) + 1
-                    print "2"
 		    sentence_data = self.get_sentence_data(sentence, index)
-                    print "3"
 		    sentences = sentences + [sentence_data]
-		    print "4"
 
 		except Exception as e:
                     print 'Exception while generatin sentence information: %s - %s' % (str(index), sentence.text)
