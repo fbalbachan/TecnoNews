@@ -72,6 +72,9 @@ class StructuralUnderstanding(Resource):
         api_key = request.headers.get('api_key')
         print "api_key: ", api_key
 
+        authorization = request.headers.get('authorization')
+        print "authorization: ", authorization
+
         if has_type_encoding(text, str, 'UTF-8'):
             text = text.decode('UTF-8')
 
