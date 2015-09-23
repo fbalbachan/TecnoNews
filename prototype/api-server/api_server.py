@@ -13,13 +13,21 @@ reload(sys)
 sys.setdefaultencoding("utf-8")
 
 api_root_path = "/api"
-resource_path = '/v0.1'
+resource_path = '/v0.9'
 base_path = api_root_path + resource_path
 
 app = Flask(__name__, static_folder='./static')
 
+authorizations = {
+    'apikey': {
+        'type': 'apiKey',
+        'in': 'header',
+        'name': 'X-API-KEY'
+    }
+}
+
 api = swagger.docs(Api(app),
-                   apiVersion='0.1.0',
+                   apiVersion='0.9.0',
                    basePath='http://localhost:5000',
                    resourcePath=resource_path,
                    produces=["application/json", "text/html"],
@@ -30,6 +38,7 @@ api = swagger.docs(Api(app),
 api.add_resource(StructuralUnderstanding, base_path + '/deep-structure/<string:text>')
 
 api.add_resource(EntityExtraction, base_path + '/entity-extraction/<string:text>')
+
 
 def write_pid_file():
     pid = str(os.getpid())
