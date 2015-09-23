@@ -69,8 +69,11 @@ class StructuralUnderstanding(Resource):
 
         users_storage.increase_access_counter(api_key)
 
-	if has_type_encoding(text, str, 'UTF-8'):
-	    text = text.decode('UTF-8')
+        api_key = request.headers.get('api_key')
+        print "api_key: ", api_key
+
+        if has_type_encoding(text, str, 'UTF-8'):
+            text = text.decode('UTF-8')
 
         try:
             analysis = self.sentilecto.analyze(text)
