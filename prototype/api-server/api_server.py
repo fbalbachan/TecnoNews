@@ -7,7 +7,7 @@ from flask import Flask, redirect, abort, request
 from flask_restful import Api
 from entityExtraction import EntityExtraction
 from structuralUnderstanding import StructuralUnderstanding
-
+from sentimentAnalysis import SentimentAnalysis
 
 reload(sys)
 sys.setdefaultencoding("utf-8")
@@ -34,6 +34,7 @@ api = swagger.docs(Api(app),
                    api_spec_url='/api/spec',
                    description='SentiLecto\'s API')
 
+api.add_resource(SentimentAnalysis, base_path + '/sentiment-analysis/<string:text>')
 
 api.add_resource(StructuralUnderstanding, base_path + '/deep-structure/<string:text>')
 

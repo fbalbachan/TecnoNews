@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask_restful_swagger import swagger
 import json
+import traceback
 
 from src.model.sentilecto import Sentilecto
 from src.utils.stringUtils import has_type_encoding
@@ -8,6 +9,17 @@ from models import DeepStructureResponse
 from flask_restful import Resource, marshal_with
 
 __author__ = 'Martín Caramés Abente'
+
+
+slot_names = {'subject':        '0-Subject',
+              'verb':           '1-Verb',
+              'od':             '2-Direct-Object',
+              'equative':       '2-Equative',
+              'regimen':        '2-Phrasal-Verb-Complement',
+              'oi':             '3-Indirect-Object-Experimenter',
+              'instrument_goal': '4-Instrument-Company-Goal-Beneficiary',
+              'adjuncts':       '5-Adjuncts',
+              'time':           '6-Time'}
 
 
 class StructuralUnderstanding(Resource):
@@ -43,7 +55,7 @@ class StructuralUnderstanding(Resource):
         return number_string
 
 
-    @swagger.operation(notes='Analyze the text and return a deep insight into its semantic structure. ---- NOTE: This v0.1 is an early release, expect v1.0 coming very soon. In it you\'ll find new resources and improved functionality.',
+    @swagger.operation(notes='Analyze the text and return a deep insight into its semantic structure. ---- NOTE: This v0.9 is an early release, expect v1.0 coming very soon. In it you\'ll find new resources and improved functionality.',
                        description='Natural Language Understanding service',
                        responseClass=DeepStructureResponse,
                        nickname='get semantic structure',
@@ -67,50 +79,25 @@ class StructuralUnderstanding(Resource):
     @marshal_with(DeepStructureResponse.resource_fields)
     def get(self, text):
 
-        slot_names = {'subject':        '0-Subject',
-                      'verb':           '1-Verb',
-                      'od':             '2-Direct-Object',
-                      'equative':       '2-Equative',
-                      'regimen':        '2-Phrasal-Verb-Complement',
-                      'oi':             '3-Indirect-Object-Experimenter',
-                      'instrument_goal': '4-Instrument-Company-Goal-Beneficiary',
-                      'adjuncts':       '5-Adjuncts',
-                      'time':           '6-Time'}
-
-        if has_type_encoding(text, str, 'UTF-8'):
-            text = text.decode('UTF-8')
+	if has_type_encoding(text, str, 'UTF-8'):
+	    text = text.decode('UTF-8')
 
         try:
             analysis = self.sentilecto.analyze(text)
 
             sentences = []
             paragraph_sentences = analysis["paragraph"].sentences
+	    index = 0
             for sentence in paragraph_sentences:
 
-                sentence_data = dict()
-                sentence_data['0-Sentence-Text'] = sentence.text
-                sentence_data['1-Sentence-Order'] = paragraph_sentences.index(sentence) + 1
+		try:
+                    index = paragraph_sentences.index(sentence) + 1
+		    sentence_data = self.get_sentence_data(sentence, index)
+		    sentences = sentences + [sentence_data]
 
-                sentence_data['2-Sentence-Clauses'] = []
-                for clause in sentence.clauses:
-                    deep_structure = dict()
-                    clause_data = dict()
-                    clause_data["0-Clause-Text"] = str(clause)
-                    clause_data["1-Clause-Order"] = str(sentence_data['1-Sentence-Order']) + "." + self.clause_number(clause, sentence)
-
-                    svo_slots = dict()
-                    svo_slots["7-Opinionated-Modal-Adverbs"] = ", ".join([str(adverb) for adverb in clause.valuated_adverbs])
-                    for structure_name in ['subject', 'verb', 'od', 'equative', 'regimen',
-                                           'oi', 'instrument_goal', 'adjuncts', 'time']:
-                        svo_slots[slot_names[structure_name]] = self.structure(clause, structure_name)
-
-                    deep_structure['0-Global-Operators'] = [go.klass for go in clause.global_operators]
-                    deep_structure['1-SVO-Slots'] = svo_slots
-
-                    clause_data['2-Deep-Structure'] = deep_structure
-                    sentence_data['2-Sentence-Clauses'] = sentence_data['2-Sentence-Clauses'] + [clause_data]
-
-                sentences = sentences + [sentence_data]
+		except Exception as e:
+                    print 'Exception while generatin sentence information: %s - %s' % (str(index), sentence.text)
+                    print traceback.format_exc()
 
             analysis_results = \
                 {
@@ -123,6 +110,7 @@ class StructuralUnderstanding(Resource):
             response_code = 200
 
         except Exception, e:
+	    print traceback.format_exc()
             response_value = {'type': 'ERROR', 'message': str(e)}
             response_code = 500
 
@@ -139,6 +127,84 @@ class StructuralUnderstanding(Resource):
             )
 
         return response
+
+    def get_sentence_data(self, sentence, index):
+        sentence_data = dict()
+        sentence_data['0-Sentence-Text'] = sentence.text
+        sentence_data['1-Sentence-Order'] = index
+
+        sentence_data['2-Sentence-Clauses'] = []
+        for clause in sentence.clauses:
+
+            index = str(sentence_data['1-Sentence-Order']) + "." + self.clause_number(clause, sentence)
+            clause_data = self.get_clause_data(clause, index)
+
+            sentence_data['2-Sentence-Clauses'] = sentence_data['2-Sentence-Clauses'] + [clause_data]
+
+        sentence_data['3-Sentence-Morphosyntactic-Info'] = self.get_morphosyntactic_info(sentence)
+
+        return sentence_data
+
+    def get_clause_data(self, clause, str_index):
+
+        clause_data = dict()
+        clause_data["0-Clause-Text"] = str(clause)
+        clause_data["1-Clause-Order"] = str_index
+
+        deep_structure = dict()
+        deep_structure['0-Global-Operators'] = [go.klass for go in clause.global_operators]
+        deep_structure['1-SVO-Slots'] = self.get_svo_slots(clause)
+        clause_data['2-Deep-Structure'] = deep_structure
+
+        return clause_data
+
+    def get_svo_slots(self, clause):
+        svo_slots = dict()
+        svo_slots["7-Opinionated-Modal-Adverbs"] = ", ".join([str(adverb) for adverb in clause.valuated_adverbs])
+
+        for structure_name in ['subject', 'verb',
+                               'od', 'equative', 'regimen',
+                               'oi',
+                               'instrument_goal', 'adjuncts', 'time']:
+
+            svo_slots[slot_names[structure_name]] = self.structure(clause, structure_name)
+
+        return svo_slots
+
+    def get_morphosyntactic_info(self, sentence):
+        morphosyntactic_info = []
+
+        entities = []
+        for clause in sentence.clauses:
+            for structure in clause.syntactic_structures:
+                structure_entities = structure.all_entities()
+                if structure_entities:
+                    entities = entities + structure.all_entities()
+
+        for entity in entities:
+
+            entity_morphosyntactic_info = dict()
+            entity_morphosyntactic_info['0-Entity-Name'] = str(entity)
+            entity_morphosyntactic_info['1-Person'] = entity.msi["person"]
+            entity_morphosyntactic_info['2-Gender'] = str(entity.msi["gender"])
+            entity_morphosyntactic_info['3-Number'] = str(entity.msi["number"])
+            entity_morphosyntactic_info['4-Category'] = str(entity.msi["category"])
+
+            if (entity.category() == "noun" or entity.category() == "pronoun") \
+               and "animity" in entity.msi:
+                entity_morphosyntactic_info['5-Animity'] = entity.msi["animity"].encode("utf-8")
+
+            if entity.is_named_entity():
+                classification = str(entity.classification(look_deep=True)).upper()
+                entity_morphosyntactic_info['6-Semantic-Classification'] = classification.encode("utf-8")
+
+            if entity_morphosyntactic_info['4-Category'] is "verb":
+                entity_morphosyntactic_info['7-Transitivity'] = entity.transitivity.encode("utf-8")
+                entity_morphosyntactic_info['8-Sentimental-Script-Class'] = entity.sentimental_script.klass.encode("utf-8")
+
+            morphosyntactic_info = morphosyntactic_info + [entity_morphosyntactic_info]
+
+        return morphosyntactic_info
 
     def options (self, **args):
         return {'Allow': 'GET,PUT,POST,DELETE'}, \
