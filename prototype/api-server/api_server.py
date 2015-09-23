@@ -20,6 +20,14 @@ base_path = api_root_path + resource_path
 
 app = Flask(__name__, static_folder='./static')
 
+authorizations = {
+    'apikey': {
+        'type': 'apiKey',
+        'in': 'header',
+        'name': 'X-API-KEY'
+    }
+}
+
 api = swagger.docs(Api(app),
                    apiVersion='0.9.0',
                    basePath='http://localhost:5000',
