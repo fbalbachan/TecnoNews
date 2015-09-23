@@ -108,12 +108,13 @@ class BlogPublisher(object):
             post.content += "<b><u>Otras fuentes combinadas en esta noticia: </u></b>"
             post.content += '<ul>'
             for version_news_id in entry.versions:
-                # post.content += 'id=' + str(version_news_id)
                 news_without_marshalling = news_service.get_list({'_id': version_news_id})
                 if len(news_without_marshalling) == 1:
                     source = news_without_marshalling[0].source
-                    post.content += '<li>' + news_without_marshalling[0].title + ' - <i>' + source + '</i></li>'
-                    # post.content += '<span>&nbsp;' + unmarshalled_news[0].published_date.strftime('%B %d, %Y') + '</span>'
+                    if isinstance(source, unicode):
+                        source = source.encode("utf-8")
+                    post.content += '<li>' + news_without_marshalling[0].title + ' - ' + source + '</li>'
+                    # post.content += '<span>&nbsp;' + news_without_marshalling[0].published_date.strftime('%B %d, %Y') + '</span>'
 
             post.content += '</ul>'
 
@@ -122,7 +123,6 @@ class BlogPublisher(object):
             host = self.select_category_to_publish(entry)
         elif unique_host == 'True':
             host = self.get_unique_host_to_publish()
-
         else:
             logger.error("No unique host set True/False")
 
