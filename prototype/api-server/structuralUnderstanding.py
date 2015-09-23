@@ -6,7 +6,7 @@ import traceback
 from src.model.sentilecto import Sentilecto
 from src.utils.stringUtils import has_type_encoding
 from models import DeepStructureResponse
-from flask_restful import Resource, marshal_with
+from flask_restful import Resource, marshal_with, request
 
 __author__ = 'Martín Caramés Abente'
 
@@ -79,23 +79,28 @@ class StructuralUnderstanding(Resource):
     @marshal_with(DeepStructureResponse.resource_fields)
     def get(self, text):
 
-	if has_type_encoding(text, str, 'UTF-8'):
-	    text = text.decode('UTF-8')
+        api_key = request.headers.get('api_key')
+        print "api_key: ", api_key
+
+        authorization = request.headers.get('authorization')
+        print "authorization: ", authorization
+
+        if has_type_encoding(text, str, 'UTF-8'):
+            text = text.decode('UTF-8')
 
         try:
             analysis = self.sentilecto.analyze(text)
 
             sentences = []
             paragraph_sentences = analysis["paragraph"].sentences
-	    index = 0
+            index = 0
             for sentence in paragraph_sentences:
-
-		try:
+                try:
                     index = paragraph_sentences.index(sentence) + 1
-		    sentence_data = self.get_sentence_data(sentence, index)
-		    sentences = sentences + [sentence_data]
+                    sentence_data = self.get_sentence_data(sentence, index)
+                    sentences = sentences + [sentence_data]
 
-		except Exception as e:
+                except Exception as e:
                     print 'Exception while generatin sentence information: %s - %s' % (str(index), sentence.text)
                     print traceback.format_exc()
 
@@ -110,7 +115,7 @@ class StructuralUnderstanding(Resource):
             response_code = 200
 
         except Exception, e:
-	    print traceback.format_exc()
+            print traceback.format_exc()
             response_value = {'type': 'ERROR', 'message': str(e)}
             response_code = 500
 
