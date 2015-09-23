@@ -181,7 +181,7 @@ class NewsRewriter(object):
             entry_image = self.get_main_image_url(wikipedia_page)
 
             if entry_image:
-                self.rewritten_entry.content = self.add_image_caption_to_content(entry_image, self.rewritten_entry.content)
+                self.rewritten_entry.content = self.add_image_caption(entry_image, self.rewritten_entry.content)
                 self.rewritten_entry.image = entry_image
                 logger.info("Url selected %s" % self.rewritten_entry.image['url'])
             else:
@@ -205,7 +205,7 @@ class NewsRewriter(object):
                 wikipedia_page = wikiinfo[0][2]
                 entry_image = self.get_main_image_url(wikipedia_page)
                 if entry_image:
-                    self.rewritten_entry.content = self.add_image_caption_to_content(entry_image, self.rewritten_entry.content)
+                    self.rewritten_entry.content = self.add_image_caption(entry_image, self.rewritten_entry.content)
                     self.rewritten_entry.image = entry_image
                     logger.info("From title Url selected %s" % self.rewritten_entry.image['url'])
                 else:
@@ -223,7 +223,7 @@ class NewsRewriter(object):
     def _analyze(self, text):
         return Sentilecto.analyze(text)
 
-    def add_image_caption_to_content(self, image_data, rewritten_content):
+    def add_image_caption(self, image_data, rewritten_content):
         rewritten_content_with_caption = rewritten_content
         try:
             caption = image_data['description']
