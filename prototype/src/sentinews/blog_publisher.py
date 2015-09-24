@@ -110,11 +110,20 @@ class BlogPublisher(object):
             for version_news_id in entry.versions:
                 news_without_marshalling = news_service.get_list({'_id': version_news_id})
                 if len(news_without_marshalling) == 1:
-                    source = news_without_marshalling[0].source
-                    if isinstance(source, unicode):
-                        source = source.encode("utf-8")
-                    post.content += '<li>' + news_without_marshalling[0].title + ' - ' + source + '</li>'
-                    # post.content += '<span>&nbsp;' + news_without_marshalling[0].published_date.strftime('%B %d, %Y') + '</span>'
+                    try:
+                        source = news_without_marshalling[0].source
+                        if isinstance(source, unicode):
+                            source = source.encode("utf-8")
+
+                        post_title = news_without_marshalling[0].title
+                        if isinstance(post_title, unicode):
+                            post_title = post_title.encode("utf-8")
+
+                        post.content += '<li>' + post_title + '</li>' # ' - ' + source + '</li>'
+                        # post.content += '<span>&nbsp;' + news_without_marshalling[0].published_date.strftime('%B %d, %Y') + '</span>'
+
+                    except Exception as e:
+                        pass
 
             post.content += '</ul>'
 
