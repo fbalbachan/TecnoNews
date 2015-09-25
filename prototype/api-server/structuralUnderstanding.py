@@ -3,7 +3,7 @@
 import json
 import traceback
 
-from flask_restful import Resource, marshal_with
+from flask_restful import Resource, marshal_with, request
 from flask_restful_swagger import swagger
 from src.model.sentilecto import Sentilecto
 from src.utils.stringUtils import has_type_encoding
@@ -72,8 +72,14 @@ class StructuralUnderstanding(Resource):
         api_key = request.headers.get('api_key')
         print "api_key: ", api_key
 
-        authorization = request.headers.get('authorization')
-        print "authorization: ", authorization
+        message = self.validate_token(api_key)
+        if len(message) > 0:
+            return self.build_response(403, {'type': 'ERROR', 'message': message})
+
+        print "increase_access_counter..."
+        users_storage.increase_access_counter(api_key)
+
+        print users_storage.get_user(api_key)
 
         if has_type_encoding(text, str, 'UTF-8'):
             text = text.decode('UTF-8')

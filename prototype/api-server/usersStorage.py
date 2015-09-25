@@ -70,6 +70,7 @@ class UsersStorage(object):
 
     def serialize(self):
         if debug_mode: print "--> UsersStorage.serialize"
+
         if not self._users:
             return
 
@@ -112,6 +113,7 @@ class UsersStorage(object):
                 diff = users_on_storage[token]["last_access_date"] - users_on_cache[token]["last_access_date"]
                 new_user["last_access_date"] = users_on_storage[token]["last_access_date"] if diff.seconds > 0 \
                                                else users_on_cache[token]["last_access_date"]
+
             new_users[token] = new_user
 
         for token in users_on_cache.keys():
