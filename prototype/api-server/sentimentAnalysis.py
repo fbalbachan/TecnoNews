@@ -39,7 +39,6 @@ class SentimentAnalysis(Resource):
                       )
     @marshal_with(SentimentAnalysisResponse.resource_fields)
     def get(self, text):
-
         print "1"
         if has_type_encoding(text, str, 'UTF-8'):
             text = text.decode('UTF-8')

@@ -7,6 +7,7 @@ from src.model.sentilecto import Sentilecto
 from src.utils.stringUtils import has_type_encoding
 from models import DeepStructureResponse
 from flask_restful import Resource, marshal_with, request
+from usersStorage import users_storage
 
 __author__ = 'Martín Caramés Abente'
 
@@ -26,35 +27,6 @@ class StructuralUnderstanding(Resource):
 
     sentilecto = Sentilecto()
 
-    def structure(self, clause, name):
-        if clause.has_structure(name) and not clause.structure(name).is_empty():
-            structure = clause.structure(name)
-            if name == "verb":
-                return structure.entity().lemma()
-            else:
-                entities = structure.all_entities()
-                infinity = 10000
-                entities.sort(key=lambda p_entity: p_entity.token.start() if p_entity.is_explicit() else infinity)
-                content = ", ".join([str(entity) for entity in entities])
-                return content
-        else:
-            return ""
-
-
-    def clause_number(self, clause, sentence):
-        number_string = ""
-        while not clause.is_root():
-            father = clause.father
-            number = father.children.index(clause) + 1
-            number_string = "." + str(number) + number_string
-            clause = father
-
-        number = sentence.clauses.index(clause) + 1
-        number_string = str(number) + number_string
-
-        return number_string
-
-
     @swagger.operation(notes='Analyze the text and return a deep insight into its semantic structure. ---- NOTE: This v0.9 is an early release, expect v1.0 coming very soon. In it you\'ll find new resources and improved functionality.',
                        description='Natural Language Understanding service',
                        responseClass=DeepStructureResponse,
@@ -62,28 +34,34 @@ class StructuralUnderstanding(Resource):
                        parameters=
                            [
                                 {
-                                    "name":         "text",
-                                    "description":  "Text to be Analyzed",
-                                    "required":     True,
+                                    "name":          "text",
+                                    "description":   "Text to be Analyzed",
+                                    "required":      True,
                                     "allowMultiple": False,
-                                    "dataType":     "string",
-                                    "paramType":    "path"
+                                    "dataType":      "string",
+                                    "paramType":     "path"
                                 }
                            ],
                        responseMessages=
                             [
                                 {"code": 200, "message": "Structure insights properly generated."},
+                                {"code": 403, "message": "The authentication token provided is invalid."},
                                 {"code": 500, "message": "Bad response."}
                             ]
                       )
     @marshal_with(DeepStructureResponse.resource_fields)
     def get(self, text):
-
         api_key = request.headers.get('api_key')
         print "api_key: ", api_key
 
-        authorization = request.headers.get('authorization')
-        print "authorization: ", authorization
+        message = self.validate_token(api_key)
+        if len(message) > 0:
+            return self.build_response(403, {'type': 'ERROR', 'message': message})
+
+        print "increase_access_counter..."
+        users_storage.increase_access_counter(api_key)
+
+        print users_storage.get_user(api_key)
 
         if has_type_encoding(text, str, 'UTF-8'):
             text = text.decode('UTF-8')
@@ -101,7 +79,7 @@ class StructuralUnderstanding(Resource):
                     sentences = sentences + [sentence_data]
 
                 except Exception as e:
-                    print 'Exception while generatin sentence information: %s - %s' % (str(index), sentence.text)
+                    print 'Exception while generating sentence information: %s - %s' % (str(index), sentence.text)
                     print traceback.format_exc()
 
             analysis_results = \
@@ -120,6 +98,20 @@ class StructuralUnderstanding(Resource):
             response_code = 500
 
         # json.dumps(@marshal_with(response_value, StructureResponse.resource_fields))
+
+        return self.build_response(response_code, response_value)
+
+    def validate_token(self, token):
+        if not users_storage.is_valid_token(token):
+            message = "This token does not belong to a registered user."
+        elif users_storage.is_valid_token(token) and users_storage.has_expired(token):
+            message = "The token expired (30 days or more than 500 calls)."
+        else:
+            message = ""
+
+        return message
+
+    def build_response(self, response_code, response_value):
         response = \
             (
                 response_value,
@@ -217,3 +209,31 @@ class StructuralUnderstanding(Resource):
                {'Access-Control-Allow-Origin':     '*',
                 'Access-Control-Allow-Methods':    'GET,PUT,POST,DELETE',
                 'Access-Control-Allow-Headers':    'Content-Type'}
+
+    def structure(self, clause, name):
+        if clause.has_structure(name) and not clause.structure(name).is_empty():
+            structure = clause.structure(name)
+            if name == "verb":
+                return structure.entity().lemma()
+            else:
+                entities = structure.all_entities()
+                infinity = 10000
+                entities.sort(key=lambda p_entity: p_entity.token.start() if p_entity.is_explicit() else infinity)
+                content = ", ".join([str(entity) for entity in entities])
+                return content
+        else:
+            return ""
+
+    def clause_number(self, clause, sentence):
+        number_string = ""
+        while not clause.is_root():
+            father = clause.father
+            number = father.children.index(clause) + 1
+            number_string = "." + str(number) + number_string
+            clause = father
+
+        number = sentence.clauses.index(clause) + 1
+        number_string = str(number) + number_string
+
+        return number_string
+
