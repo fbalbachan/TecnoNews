@@ -34,6 +34,7 @@ class EntityExtraction(Resource):
                       )
     @marshal_with(EntitiesResponse.resource_fields)
     def get(self, text):
+        print "Hola Extraction"
 
         if has_type_encoding(text, str, 'UTF-8'):
             text = text.decode('UTF-8')
