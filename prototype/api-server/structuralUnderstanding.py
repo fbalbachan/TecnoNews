@@ -70,13 +70,11 @@ class StructuralUnderstanding(Resource):
         users_storage.increase_access_counter(api_key)
 
         api_key = request.headers.get('api_key')
-        print "api_key: ", api_key
 
         message = self.validate_token(api_key)
         if len(message) > 0:
             return self.build_response(403, {'type': 'ERROR', 'message': message})
 
-        print "increase_access_counter..."
         users_storage.increase_access_counter(api_key)
 
         print users_storage.get_user(api_key)
