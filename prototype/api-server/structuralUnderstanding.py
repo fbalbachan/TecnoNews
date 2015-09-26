@@ -52,13 +52,11 @@ class StructuralUnderstanding(Resource):
     @marshal_with(DeepStructureResponse.resource_fields)
     def get(self, text):
         api_key = request.headers.get('api_key')
-        print "api_key: ", api_key
 
         message = self.validate_token(api_key)
         if len(message) > 0:
             return self.build_response(403, {'type': 'ERROR', 'message': message})
 
-        print "increase_access_counter..."
         users_storage.increase_access_counter(api_key)
 
         print users_storage.get_user(api_key)
@@ -96,8 +94,6 @@ class StructuralUnderstanding(Resource):
             print traceback.format_exc()
             response_value = {'type': 'ERROR', 'message': str(e)}
             response_code = 500
-
-        # json.dumps(@marshal_with(response_value, StructureResponse.resource_fields))
 
         return self.build_response(response_code, response_value)
 
