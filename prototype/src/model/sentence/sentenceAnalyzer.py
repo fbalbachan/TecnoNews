@@ -60,7 +60,7 @@ class SentenceAnalyzer:
             node = self.tree_parser.from_text(sentence.text)
             sentence.parse_node = node
 
-            if debug_mode:
+            if False:
                 print "-------------------------------------------------------"
                 print "TEXT".ljust(8), sentence.text
                 print "-------------------------------------------------------"
