@@ -13,5 +13,8 @@ fi
 
 export PYTHONPATH=`pwd`/..
 source ../../../bin/activate 
+
 cp config_instances/config_instance_demo config
-python2.7 api_server.py
+{
+nohup python2.7 api_server.py
+} |> nohup.api.out 2>&1 &

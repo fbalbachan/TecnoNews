@@ -727,12 +727,28 @@ var optionHtml = module.exports.optionHtml = function (label, value) {
 };
 
 var resolveSchema = module.exports.resolveSchema = function (schema) {
+  var resolvedSchema = schema;
+
   if (_.isPlainObject(schema.schema)) {
-    schema = resolveSchema(schema.schema);
+    resolvedSchema = resolveSchema(schema.schema);
+
+    for(var key in schema) {
+      if(key != "schema") {
+        resolvedSchema[key] = schema[key];
+      }
+    }
   }
 
-  return schema;
+  return resolvedSchema;
 };
+
+#var resolveSchema = module.exports.resolveSchema = function (schema) {
+#  if (_.isPlainObject(schema.schema)) {
+#    schema = resolveSchema(schema.schema);
+#  }
+#
+#  return schema;
+#};
 
 var simpleRef = module.exports.simpleRef = function (name) {
   if (typeof name === 'undefined') {
