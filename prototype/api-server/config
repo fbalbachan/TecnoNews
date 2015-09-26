@@ -1,7 +1,7 @@
 [debug]
 
-raise_exception = False
-debug = False
+raise_exception = True
+debug = True
 
 [instance]
 id = Test
