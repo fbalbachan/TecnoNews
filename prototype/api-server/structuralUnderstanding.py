@@ -77,8 +77,6 @@ class StructuralUnderstanding(Resource):
 
         users_storage.increase_access_counter(api_key)
 
-        print users_storage.get_user(api_key)
-
         if has_type_encoding(text, str, 'UTF-8'):
             text = text.decode('UTF-8')
 
