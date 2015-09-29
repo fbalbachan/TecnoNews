@@ -22,7 +22,7 @@
                                                 console.log("Loaded SwaggerUI")
                                             }
                                             $('pre code').each(function(i, e) {hljs.highlightBlock(e)});
-                                            addApiKeyAuthorization();
+                                            // addApiKeyAuthorization();
                                         },
                             onFailure:  function(data)
                                         {
@@ -47,10 +47,15 @@
             }
         }
 
-        $('#input_apiKey').change(addApiKeyAuthorization)
+        // $('#input_apiKey').change(addApiKeyAuthorization)
 
+<<<<<<< HEAD
         var apiKey = "enter-your-token-here"
         $('#input_apiKey').val(apiKey)
+=======
+        // var apiKey = "enter-your-access-token-here"
+        // $('#input_apiKey').val(apiKey)
+>>>>>>> - Removed API-KEY from headers, removed API-KEY top-right box.
 
         window.swaggerUi.load();
     });
@@ -80,7 +85,7 @@
             <a id="logo" href="http://dev.natural.do/sentilecto">SentiLecto</a>
             <form id='api_selector'>
                 <div class='input'><input placeholder="http://dev.natural.do/api" id="input_baseUrl" name="baseUrl" type="text"/></div>
-                <div class='input'><input placeholder="api_key" id="input_apiKey" name="apiKey" type="text"/></div>
+<!--            <div class='input'><input placeholder="api_key" id="input_apiKey" name="apiKey" type="text"/></div>-->
                 <div class='input'><a id="explore" href="#">Explore</a></div>
             </form>
         </div>

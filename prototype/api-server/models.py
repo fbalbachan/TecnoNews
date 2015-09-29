@@ -60,6 +60,30 @@ class SentimentAnalysisResponse(Flask.response_class):
 
 
 @swagger.model
+class FactMiningResponse(Flask.response_class):
+
+    clause = \
+        {
+            '0-Clause-Order':       fields.String(),
+            '1-Clause-Text':        fields.String(),
+            '2-Clause-Normalized-Fact':    fields.String()
+        }
+
+    sentence = \
+        {
+            '0-Sentence-Order':     fields.Integer(),
+            '1-Sentence-Text':      fields.String(),
+            '2-Sentence-Clauses':   fields.List(fields.Nested(clause))
+        }
+
+    resource_fields = \
+        {
+            '0-Paragraph-Text':       fields.String(),
+            '1-Sentences':            fields.List(fields.Nested(sentence))
+        }
+
+
+@swagger.model
 class DeepStructureResponse(Flask.response_class):
 
     svo_slots = \
