@@ -25,7 +25,8 @@ slot_names = {'subject':        '0-Subject',
 
 class StructuralUnderstanding(Resource):
 
-    sentilecto = Sentilecto()
+    def __init__(self):
+        self.sentilecto = Sentilecto()
 
     @swagger.operation(notes='Analyze the text and return a deep insight into its semantic structure. ---- NOTE: This v0.9 is an early release, expect v1.0 coming very soon. In it you\'ll find new resources and improved functionality.',
                        description='Natural Language Understanding service',
@@ -40,6 +41,14 @@ class StructuralUnderstanding(Resource):
                                     "allowMultiple": False,
                                     "dataType":      "string",
                                     "paramType":     "path"
+                                },
+                                {
+                                    "name":          "api_key",
+                                    "description":   "Access token.",
+                                    "required":      True,
+                                    "allowMultiple": False,
+                                    "dataType":      "string",
+                                    "paramType":     "path"
                                 }
                            ],
                        responseMessages=
@@ -50,18 +59,14 @@ class StructuralUnderstanding(Resource):
                             ]
                       )
     @marshal_with(DeepStructureResponse.resource_fields)
-    def get(self, text):
-        api_key = request.headers.get('api_key')
-        print "api_key: ", api_key
+    def get(self, text, api_key):
+        # api_key = request.headers.get('api_key')
 
         message = self.validate_token(api_key)
         if len(message) > 0:
             return self.build_response(403, {'type': 'ERROR', 'message': message})
 
-        print "increase_access_counter..."
         users_storage.increase_access_counter(api_key)
-
-        print users_storage.get_user(api_key)
 
         if has_type_encoding(text, str, 'UTF-8'):
             text = text.decode('UTF-8')
@@ -96,8 +101,6 @@ class StructuralUnderstanding(Resource):
             print traceback.format_exc()
             response_value = {'type': 'ERROR', 'message': str(e)}
             response_code = 500
-
-        # json.dumps(@marshal_with(response_value, StructureResponse.resource_fields))
 
         return self.build_response(response_code, response_value)
 
