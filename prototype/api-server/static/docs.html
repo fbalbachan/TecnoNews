@@ -22,7 +22,7 @@
                                                 console.log("Loaded SwaggerUI")
                                             }
                                             $('pre code').each(function(i, e) {hljs.highlightBlock(e)});
-                                            addApiKeyAuthorization();
+                                            // addApiKeyAuthorization();
                                         },
                             onFailure:  function(data)
                                         {
@@ -47,10 +47,10 @@
             }
         }
 
-        $('#input_apiKey').change(addApiKeyAuthorization)
+        // $('#input_apiKey').change(addApiKeyAuthorization)
 
-        var apiKey = "enter-your-token-here"
-        $('#input_apiKey').val(apiKey)
+        // var apiKey = "enter-your-access-token-here"
+        // $('#input_apiKey').val(apiKey)
 
         window.swaggerUi.load();
     });
@@ -79,8 +79,11 @@
         <div class="swagger-ui-wrap">
             <a id="logo" href="http://dev.natural.do/sentilecto">SentiLecto</a>
             <form id='api_selector'>
+                <div class='input icon-btn'>
+                    <img id="show-wordnik-dev-icon" src="images/wordnik_api.png" title="Show Sentilecto's demo">
+                </div>
                 <div class='input'><input placeholder="http://dev.natural.do/api" id="input_baseUrl" name="baseUrl" type="text"/></div>
-                <div class='input'><input placeholder="api_key" id="input_apiKey" name="apiKey" type="text"/></div>
+<!--            <div class='input'><input placeholder="api_key" id="input_apiKey" name="apiKey" type="text"/></div>-->
                 <div class='input'><a id="explore" href="#">Explore</a></div>
             </form>
         </div>

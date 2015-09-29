@@ -16,5 +16,5 @@ source ../../../bin/activate
 
 cp config_instances/config_instance_dev1 config
 {
-nohup python2.7 api_server.py
+nohup python api_server.py
 } >| nohup.api.out 2>&1 & 
