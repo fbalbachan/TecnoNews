@@ -54,22 +54,26 @@ class FactNormalizer:
                                                        and entity.msi["type"] == "interrogative":
                                     replacement = "algo"
 
-                                elif hasattr(entity, "kernel") and entity.kernel \
-                                     and self.synonyms.get_base_synonym(entity.kernel.lemma):
+                                elif hasattr(entity, "kernel") and entity.kernel:
+                                    base_synonym = self.synonyms.get_base_synonym(entity.kernel.lemma)
 
-                                    lemma = entity.kernel.lemma
-                                    synonym = self.synonyms.get_base_synonym(lemma)
-                                    if '_' in synonym or synonym not in self.ontology.concepts:
-                                        # if synonym in self.locutions and self.locutions[synonym]:
-                                        #    pass
-                                        replacement = synonym.replace('_', ' ')
+                                    if not base_synonym:
+                                        replacement = entity.kernel.lemma
+
                                     else:
-                                        concept = self.ontology.concept(synonym)
-                                        leaf_msi = self._msi_transform(entity.kernel.msi)
+                                        lemma = entity.kernel.lemma
+                                        synonym = self.synonyms.get_base_synonym(lemma)
+                                        if '_' in synonym or synonym not in self.ontology.concepts:
+                                            # if synonym in self.locutions and self.locutions[synonym]:
+                                            #    pass
+                                            replacement = synonym.replace('_', ' ')
+                                        else:
+                                            concept = self.ontology.concept(synonym)
+                                            leaf_msi = self._msi_transform(entity.kernel.msi)
 
-                                        forms = [form for form in concept.lexical_forms if leaf_msi == self._msi_transform(form.msi)]
-                                        if forms:
-                                            replacement = forms[0].text
+                                            forms = [form for form in concept.lexical_forms if leaf_msi == self._msi_transform(form.msi)]
+                                            if forms:
+                                                replacement = forms[0].text
 
                             lexical_forms.append(replacement)
 
