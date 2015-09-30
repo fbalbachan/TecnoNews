@@ -39,10 +39,22 @@ class UsersStorage(object):
         if debug_mode: print "--> UsersStorage.deserialize"
         users_file = "./users.csv"
         users_file_reader = unicode_csv_reader(open(users_file, 'r'), first_line_is_header=False, delimiter=',')
-        users = dict()
 
-        for auth_token, name, mail, organization, access_counter, \
-            max_allowed_accesses, issuing_date,last_access_date in users_file_reader:
+        users = dict()
+        for row in list(users_file_reader):
+            if len(row) < 8:
+                print "This line has a wrong format, ignoring. Line: ", row
+                continue
+
+            auth_token = row[0]
+            name = row[1]
+            mail = row[2]
+            organization = row[3]
+            access_counter = row[4]
+            max_allowed_accesses = row[5]
+            issuing_date = row[6]
+            last_access_date = row[7]
+
             user = dict()
             user["name"] = name
             user["mail"] = mail
