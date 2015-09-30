@@ -98,7 +98,7 @@ class WebOutputUtils:
         return FactNormalizer(clause, self.ontology).fact()
 
     def fact_real_or_not(self, clause):
-        return "(Not a real fact. See checked flags in global operators.)" if not clause.is_fact() else ""
+        return FactNormalizer.fact_real_or_not(clause)
 
     def preferred_genders_numbers_to_unify_with(self, entities):
         preferred = {}

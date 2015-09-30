@@ -81,6 +81,10 @@ class FactNormalizer:
         fact = fact + " --TIME: " + ", ".join(time_lexical_forms)
         return fact
 
+    @staticmethod
+    def fact_real_or_not(clause):
+        return "(Not a real fact. See checked flags in global operators.)" if not clause.is_fact() else ""
+
     def _get_verb_replacement(self, clause):
         lemma = clause.verb.lemma()
         verb_replacement = lemma

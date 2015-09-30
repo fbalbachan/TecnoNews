@@ -50,6 +50,7 @@ tags_to_filter = %(resources_dir)s/tags_to_filter
 
 stopwords_es_clean = %(resources_dir)s/stopwords_es_limpios_sinNO.txt
 synonyms = %(resources_dir)s/synonyms.csv
+synsets = %(resources_dir)s/synsets.csv
 locutions = %(resources_dir)s/locucions_extended.dat
 adverb_forms = %(resources_dir)s/adverb_forms.csv
 freeling_dict = %(resources_dir)s/freeling_es.dic

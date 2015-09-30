@@ -1,5 +1,9 @@
+# -*- coding: utf-8 -*-
+__author__ = 'Alexis Balbachan'
+
 from src.utils.configProvider import ConfigProvider
 from _csv import reader
+
 
 class Synonyms:
     def __init__(self):
@@ -8,7 +12,7 @@ class Synonyms:
 
     def load(self):
         config = ConfigProvider()
-        replacements_filename = config.get("resources", "synonyms_ext")
+        replacements_filename = config.get("resources", "synsets")
         for line in reader(open(replacements_filename, 'r')):
             self.replacements[line[0]] = line[1:len(line)]
 
