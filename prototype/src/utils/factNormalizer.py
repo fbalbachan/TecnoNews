@@ -58,7 +58,7 @@ class FactNormalizer:
                                     base_synonym = self.synonyms.get_base_synonym(entity.kernel.lemma)
 
                                     if not base_synonym:
-                                        replacement = entity.kernel.lemma
+                                        replacement = entity.kernel.lexical_form
 
                                     else:
                                         lemma = entity.kernel.lemma
