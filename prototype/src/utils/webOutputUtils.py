@@ -95,7 +95,7 @@ class WebOutputUtils:
 
     def fact(self, clause):
         if debug_mode: print "--> WebOutputUtils.fact(clause:", clause, ")"
-        return FactNormalizer(clause, self.ontology, self.synonyms).fact()
+        return FactNormalizer(clause, self.ontology).fact()
 
     def fact_real_or_not(self, clause):
         return "(Not a real fact. See checked flags in global operators.)" if not clause.is_fact() else ""
@@ -502,7 +502,7 @@ class WebOutputUtils:
         try:
             summary = analysis["summary"][object]
             return "%.2f,-%.2f" % (summary["positive"], summary["negative"])
-        except Exception:
+        except Exception as e:
             return "--,--"
 
     def tree_icon(self, referent):
