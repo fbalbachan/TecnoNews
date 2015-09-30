@@ -3,6 +3,7 @@
 from src.utils.configProvider import ConfigProvider
 from src.ling.synonyms import Synonyms
 from _csv import reader
+#from src.parser.labelNode import LabelNode
 
 debug_mode = False
 
@@ -53,6 +54,9 @@ class FactNormalizer:
                                 elif lemmas == ["qué"] and entity.category() == "pronoun" \
                                                        and entity.msi["type"] == "interrogative":
                                     replacement = "algo"
+
+                                # elif type(entity.node) is LabelNode and entity.node.label == "grup-verb-inf":
+                                #    replacement = entity.node.leaves()[0].lexical_form
 
                                 elif hasattr(entity, "kernel") and entity.kernel:
                                     base_synonym = self.synonyms.get_base_synonym(entity.kernel.lemma)
