@@ -1,23 +1,24 @@
 # -*- coding: utf-8 -*-
 
 from src.utils.configProvider import ConfigProvider
+from src.ling.synonyms import Synonyms
 from _csv import reader
 
 debug_mode = False
 
 
 class FactNormalizer:
-    def __init__(self, clause, ontology, synonyms):
+    def __init__(self, clause, ontology):
         if debug_mode: print "--> FactNormalizer.init(node: ", clause, ")"
         self.clause = clause
-        self.synonyms = synonyms
+        self.synonyms = Synonyms()
         self.ontology = ontology
 
     def fact(self):
         fact = ""
         clause = self.clause
         # structure_order = ["subject", "verb", "od", "oi", "regimen", "equative", "instrument_goal", "adjuncts"]
-        structure_order = ["subject", "verb", "od", "regimen", "equative", "oi"]
+        structure_order = ["subject", "verb", "od", "regimen", "equative"]
 
         for structure_name in structure_order:
 
@@ -54,22 +55,21 @@ class FactNormalizer:
                                     replacement = "algo"
 
                                 elif hasattr(entity, "kernel") and entity.kernel \
-                                     and entity.kernel.lemma in self.synonyms.keys():
+                                     and self.synonyms.get_base_synonym(entity.kernel.lemma):
 
                                     lemma = entity.kernel.lemma
-                                    synonym = self.synonyms[lemma]
+                                    synonym = self.synonyms.get_base_synonym(lemma)
                                     if '_' in synonym or synonym not in self.ontology.concepts:
                                         # if synonym in self.locutions and self.locutions[synonym]:
                                         #    pass
-                                        replacement = synonym.replace('_', ' ') if synonym <= lemma \
-                                                      else lemma.replace('_', ' ')
+                                        replacement = synonym.replace('_', ' ')
                                     else:
                                         concept = self.ontology.concept(synonym)
                                         leaf_msi = self._msi_transform(entity.kernel.msi)
 
                                         forms = [form for form in concept.lexical_forms if leaf_msi == self._msi_transform(form.msi)]
-                                        if forms and synonym <= lemma:
-                                            replacement = replacement.replace(entity.kernel.lexical_form, forms[0].text)
+                                        if forms:
+                                            replacement = forms[0].text
 
                             lexical_forms.append(replacement)
 
@@ -81,12 +81,16 @@ class FactNormalizer:
         fact = fact + " --TIME: " + ", ".join(time_lexical_forms)
         return fact
 
+    @staticmethod
+    def fact_real_or_not(clause):
+        return "(Not a real fact. See checked flags in global operators.)" if not clause.is_fact() else ""
+
     def _get_verb_replacement(self, clause):
         lemma = clause.verb.lemma()
         verb_replacement = lemma
-        if lemma in self.synonyms.keys():
-            synonym = self.synonyms[lemma]
-            verb_replacement = synonym if synonym <= lemma else lemma
+        if self.synonyms.get_base_synonym(lemma):
+            synonym = self.synonyms.get_base_synonym(lemma)
+            verb_replacement = synonym
 
         return verb_replacement
 
@@ -145,4 +149,3 @@ class FactNormalizer:
                 result_msi['time'] = msi['time']
         result_msi['category'] = msi['category']
         return result_msi
-
