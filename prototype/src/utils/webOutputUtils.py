@@ -415,7 +415,8 @@ class WebOutputUtils:
                         else object2.lexical_form
 
         else:
-            if hasattr(entity1, "kernel") and entity1.kernel and is_atomic:
+            if hasattr(entity1, "kernel") and entity1.kernel and is_atomic \
+               and not (entity1.kernel.msi["category"] == "noun" and entity1.kernel.msi["type"] == "articulo"):
                 obj = entity1.kernel
             else:
                 obj = entity1
@@ -430,8 +431,12 @@ class WebOutputUtils:
     def plain_entities_match(self, entity1, entity2):
         if debug_mode: print "--> WebOutputUtils.plain_entities_match(entity1:", entity1, ", entity2:", entity2, ")"
 
-        both_have_kernel =     hasattr(entity1, "kernel") and entity1.kernel \
+        both_have_kernel = hasattr(entity1, "kernel") and entity1.kernel \
                            and hasattr(entity2, "kernel") and entity2.kernel
+
+        if (entity1.kernel.msi["category"] == "noun" and entity1.kernel.msi["type"] == "articulo") \
+           or (entity2.kernel.msi["category"] == "noun" and entity2.kernel.msi["type"] == "articulo"):
+            return False
 
         if both_have_kernel and self.are_synonyms(entity1.kernel, entity2.kernel):
             return True

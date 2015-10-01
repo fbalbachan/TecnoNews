@@ -13,8 +13,21 @@ class Synonyms:
     def load(self):
         config = ConfigProvider()
         replacements_filename = config.get("resources", "synsets")
+
+        resource_line_index = 0
         for line in reader(open(replacements_filename, 'r')):
-            self.replacements[line[0]] = line[1:len(line)]
+            for index in range(len(line)):
+                if line[index] is None or len(line[index]) == 0:
+                    del line[index]
+                else:
+                    line[index] = line[index].strip(" ")
+
+            if len(line) > 1:
+                self.replacements[line[0]] = line[1:len(line)]
+            else:
+                print "Synsets resource load: Error in line ", resource_line_index, "... skipping."
+
+            resource_line_index += 1
 
 #    def get_synonym(self, word):
 #        synonym = word
