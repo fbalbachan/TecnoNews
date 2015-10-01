@@ -434,9 +434,10 @@ class WebOutputUtils:
         both_have_kernel = hasattr(entity1, "kernel") and entity1.kernel \
                            and hasattr(entity2, "kernel") and entity2.kernel
 
-        if (entity1.kernel.msi["category"] == "noun" and entity1.kernel.msi["type"] == "articulo") \
-           or (entity2.kernel.msi["category"] == "noun" and entity2.kernel.msi["type"] == "articulo"):
-            return False
+        if both_have_kernel:
+            if (entity1.kernel.msi["category"] == "noun" and entity1.kernel.msi["type"] == "articulo") \
+               or (entity2.kernel.msi["category"] == "noun" and entity2.kernel.msi["type"] == "articulo"):
+                return False
 
         if both_have_kernel and self.are_synonyms(entity1.kernel, entity2.kernel):
             return True
