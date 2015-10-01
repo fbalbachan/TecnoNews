@@ -26,8 +26,13 @@ class FactMining(Resource):
         self.synonyms = self._get_synonyms()
         self.sentilecto = Sentilecto()
 
-    @swagger.operation(notes='Analyze the text and extract named & non-named entities. ---- NOTE: This v0.9 is an early release, expect v1.0 coming very soon. In it you\'ll find new resources and improved functionality.',
-                       description='Natural Language Understanding / Sentiment Analysis service',
+    @swagger.operation(notes='Analyze the text extracting named entities and the facts those entities are involved in. '
+                             'Fact: is a triad S.V.O., Subject-Verb-Object, meaning: an agent (syntactic subject), '
+                             'an action (verb) and the object over which rests the action. The results is structured as '
+                             'follows: ---- '
+                             'NOTE: This v0.9 is an early release, expect v1.0 to be here very soon. '
+                             'In it you\'ll find new resources and improved functionality.',
+                       description='Natural Language Understanding / Fact Mining',
                        responseClass=FactMiningResponse,
                        nickname='mine facts',
                        parameters=[
@@ -144,24 +149,23 @@ class FactMining(Resource):
 
         sentence_data['2-Sentence-Clauses'] = []
         for clause in sentence.clauses:
-            print "cl.1"
-            clause_data = dict()
-            print "cl.2"
-            clause_order = str(sentence_data['0-Sentence-Order']) + "." + self.clause_number(clause, sentence)
-            print "cl.3"
-            clause_data["0-Clause-Order"] = clause_order
-            print "cl.4"
-            clause_data["1-Clause-Text"] = str(clause)
-            print "cl.5"
-            fact = FactNormalizer(clause, FactMining._ontology, self.synonyms).fact()
-            print "cl.6"
-            clause_data["2-Clause-Normalized-Fact"] = str(fact)
-            print "cl.7"
+            clause_data = self.get_clause_data(clause, sentence, sentence_data)
             sentence_data['2-Sentence-Clauses'] = sentence_data['2-Sentence-Clauses'] + [clause_data]
-            print "cl.8"
 
-        print "cl.9"
         return sentence_data
+
+    def get_clause_data(self, clause, sentence, sentence_data):
+        clause_data = dict()
+        clause_order = str(sentence_data['0-Sentence-Order']) + "." + self.clause_number(clause, sentence)
+        clause_data["0-Clause-Order"] = clause_order
+        clause_data["1-Clause-Text"] = str(clause)
+        clause_data["2-Clause-Normalized-Fact"] = self.get_normalized_fact(clause)
+        return clause_data
+
+    def get_normalized_fact(self, clause):
+        fact = FactNormalizer(clause, FactMining._ontology, self.synonyms).fact()
+        real_or_not = FactNormalizer.fact_real_or_not(clause)
+        return str(fact) + " " + str(real_or_not)
 
     def clause_number(self, clause, sentence):
         number_string = ""
