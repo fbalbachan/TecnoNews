@@ -178,8 +178,6 @@ class WebOutputUtils:
                       else 1 if x["rn"] > y["rn"]   else -1 if x["rn"] < y["rn"]\
                       else 0
 
-        print [rd["re"].lexical_form for rd in referents_data]
-
         referents_data = filter(lambda rd:
                             rd["re"].real_name().lower() not in ["le", "les",
                                                                  "lo", "la", "los", "las",

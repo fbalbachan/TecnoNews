@@ -59,7 +59,6 @@ class StructuralUnderstanding(Resource):
                             ]
                       )
     @marshal_with(DeepStructureResponse.resource_fields)
-
     def get(self, text, api_key):
         # api_key = request.headers.get('api_key')
 
