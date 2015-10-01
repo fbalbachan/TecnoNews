@@ -2,13 +2,13 @@
 
 ACTION=$1
 
-if [ $ACTION -eq "stop" -or $ACTION -eq "restart" ]; then
+if [ "$ACTION" = "stop" -o "$ACTION" = "restart" ]; then
 
     kill -9 $(cat ./sentilecto.pid)
 
 fi
 
-if [ $ACTION -eq "start" -or $ACTION -eq "restart" ]; then
+if [ "$ACTION" = "start" -o "$ACTION" = "restart" ]; then
 
     cd $HOME/NaturalEnv/TecnoNews/prototype/webapp
 
