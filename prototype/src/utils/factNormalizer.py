@@ -3,6 +3,7 @@
 from src.utils.configProvider import ConfigProvider
 from src.ling.synonyms import Synonyms
 from _csv import reader
+from src.ling.gender import Gender
 #from src.parser.labelNode import LabelNode
 
 debug_mode = False
@@ -54,25 +55,28 @@ class FactNormalizer:
                                 elif lemmas == ["qué"] and entity.category() == "pronoun" \
                                                        and entity.msi["type"] == "interrogative":
                                     replacement = "algo"
-
+                                #
                                 # elif type(entity.node) is LabelNode and entity.node.label == "grup-verb-inf":
                                 #    replacement = entity.node.leaves()[0].lexical_form
-
+                                #
                                 elif hasattr(entity, "kernel") and entity.kernel:
-                                    base_synonym = self.synonyms.get_base_synonym(entity.kernel.lemma)
+                                    lemma = entity.kernel.lemma
+                                    print entity.kernel.msi
+                                    if entity.kernel.msi["category"] == "noun" \
+                                       and entity.kernel.msi["type"] == "articulo":
+                                        replacement = entity.lexical_form
 
-                                    if not base_synonym:
+                                    elif not self.synonyms.get_base_synonym(lemma):
                                         replacement = entity.kernel.lexical_form
 
                                     else:
-                                        lemma = entity.kernel.lemma
-                                        synonym = self.synonyms.get_base_synonym(lemma)
-                                        if '_' in synonym or synonym not in self.ontology.concepts:
+                                        base_synonym = self.synonyms.get_base_synonym(lemma)
+                                        if '_' in base_synonym or base_synonym not in self.ontology.concepts:
                                             # if synonym in self.locutions and self.locutions[synonym]:
                                             #    pass
-                                            replacement = synonym.replace('_', ' ')
+                                            replacement = base_synonym.replace('_', ' ')
                                         else:
-                                            concept = self.ontology.concept(synonym)
+                                            concept = self.ontology.concept(base_synonym)
                                             leaf_msi = self._msi_transform(entity.kernel.msi)
 
                                             forms = [form for form in concept.lexical_forms if leaf_msi == self._msi_transform(form.msi)]
@@ -142,7 +146,7 @@ class FactNormalizer:
         result_msi = {}
         if 'number' in msi:
             result_msi['number'] = msi['number']
-        if 'gender' in msi:
+        if 'gender' in msi and not (msi['category'] is 'noun' and msi['semantic_classification'] is None):
             result_msi['gender'] = msi['gender']
 
         if msi['category'] == 'adjective':
