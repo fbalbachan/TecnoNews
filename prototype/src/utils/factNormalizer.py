@@ -80,7 +80,25 @@ class FactNormalizer:
                                             leaf_msi = self._msi_transform(entity.kernel.msi)
 
                                             forms = [form for form in concept.lexical_forms if leaf_msi == self._msi_transform(form.msi)]
-                                            if forms:
+                                            if not forms:
+                                                try:
+                                                    del leaf_msi["gender"]
+                                                except KeyError:
+                                                    pass
+
+                                                for form in concept.lexical_forms:
+                                                    transformed_msi = self._msi_transform(form.msi)
+                                                    try:
+                                                        del transformed_msi["gender"]
+                                                    except KeyError:
+                                                        pass
+
+                                                    print "modified Leaf MSI:", leaf_msi
+                                                    if transformed_msi == leaf_msi:
+                                                        print "entering"
+                                                        replacement = form.text
+                                                        break
+                                            else:
                                                 replacement = forms[0].text
 
                             lexical_forms.append(replacement)
@@ -146,7 +164,7 @@ class FactNormalizer:
         result_msi = {}
         if 'number' in msi:
             result_msi['number'] = msi['number']
-        if 'gender' in msi and not (msi['category'] is 'noun' and msi['semantic_classification'] is None):
+        if 'gender' in msi:
             result_msi['gender'] = msi['gender']
 
         if msi['category'] == 'adjective':
