@@ -95,10 +95,10 @@ class WebOutputUtils:
 
     def fact(self, clause):
         if debug_mode: print "--> WebOutputUtils.fact(clause:", clause, ")"
-        return FactNormalizer(clause, self.ontology, self.synonyms).fact()
+        return FactNormalizer(clause, self.ontology).fact()
 
     def fact_real_or_not(self, clause):
-        return "(Not a real fact. See checked flags in global operators.)" if not clause.is_fact() else ""
+        return FactNormalizer.fact_real_or_not(clause)
 
     def preferred_genders_numbers_to_unify_with(self, entities):
         preferred = {}
@@ -141,8 +141,8 @@ class WebOutputUtils:
         gender = Gender.neutral
         number = Number.invariable
         if same_pgn_entities:
-            with_gender = filter(lambda e: e.gender() != Gender.neutral, same_pgn_entities)
-            with_number = filter(lambda e: e.number() != Number.invariable, same_pgn_entities)
+            with_gender = filter(lambda e: e.gender() != Gender.neutral, same_pgn_entities) + [entity]
+            with_number = filter(lambda e: e.number() != Number.invariable, same_pgn_entities) + [entity]
             gender = with_gender[0].gender()
             number = with_number[0].number()
 
@@ -178,8 +178,11 @@ class WebOutputUtils:
                       else 1 if x["rn"] > y["rn"]   else -1 if x["rn"] < y["rn"]\
                       else 0
 
-        print [rd["re"].lexical_form for rd in referents_data]
-        referents_data = filter(lambda rd: rd["re"].lexical_form.lower() not in ["le", "les", "él/ella", "ellos/ellas"],
+        referents_data = filter(lambda rd:
+                            rd["re"].real_name().lower() not in ["le", "les",
+                                                                 "lo", "la", "los", "las",
+                                                                 "él", "ella", "él/ella",
+                                                                 "ellos", "ellas", "ellos/ellas"],
                                 referents_data)
 
         referents_data = sorted(referents_data, cmp=compare)
@@ -411,8 +414,13 @@ class WebOutputUtils:
                         else object2.lexical_form
 
         else:
-            object = entity1.kernel if (hasattr(entity1, "kernel") and is_atomic) else entity1
-            real_name = object.lexical_form
+            if hasattr(entity1, "kernel") and entity1.kernel and is_atomic \
+               and not (entity1.kernel.msi["category"] == "noun" and entity1.kernel.msi["type"] == "articulo"):
+                obj = entity1.kernel
+            else:
+                obj = entity1
+
+            real_name = obj.lexical_form
 
         real_name = real_name.encode("utf-8") if isinstance(real_name, unicode) else real_name
 
@@ -422,8 +430,13 @@ class WebOutputUtils:
     def plain_entities_match(self, entity1, entity2):
         if debug_mode: print "--> WebOutputUtils.plain_entities_match(entity1:", entity1, ", entity2:", entity2, ")"
 
-        both_have_kernel =     hasattr(entity1, "kernel") and entity1.kernel \
+        both_have_kernel = hasattr(entity1, "kernel") and entity1.kernel \
                            and hasattr(entity2, "kernel") and entity2.kernel
+
+        if both_have_kernel:
+            if (entity1.kernel.msi["category"] == "noun" and entity1.kernel.msi["type"] == "articulo") \
+               or (entity2.kernel.msi["category"] == "noun" and entity2.kernel.msi["type"] == "articulo"):
+                return False
 
         if both_have_kernel and self.are_synonyms(entity1.kernel, entity2.kernel):
             return True
@@ -494,7 +507,7 @@ class WebOutputUtils:
         try:
             summary = analysis["summary"][object]
             return "%.2f,-%.2f" % (summary["positive"], summary["negative"])
-        except Exception:
+        except Exception as e:
             return "--,--"
 
     def tree_icon(self, referent):

@@ -27,7 +27,8 @@ class TokenizationGuesser:
 
         while text:
             if not words:
-                if leaf: leaf.token = token
+                if leaf:
+                    leaf.token = token
                 leaf = leaves_it.next()
                 token = Token()
                 words = self.words_for(leaf)
@@ -57,7 +58,10 @@ class TokenizationGuesser:
                 if not match:
                     match = self.mismatch_pattern.match(text)
                     if not match:
-                        raise Exception("Tokenization error!")
+                        text = text if not isinstance(text, unicode) else text.encode("utf8")
+                        word = word if not isinstance(word, unicode) else word.encode("utf8")
+                        msg = ("Tokenization error! Text: [%s] - Word: [%s]" % (text, word))
+                        raise Exception(msg)
 
                     mismatchs.append((match.group(0), index))
 
@@ -77,7 +81,8 @@ class TokenizationGuesser:
             leaf = leaves_it.next()
             leaf_word = leaf.original_lexical_form.decode("utf-8")
 
-            if leaf_word != word: raise Exception("Tokenization error!")
+            if leaf_word != word:
+                raise Exception("Tokenization error!")
             leaf.token = token
 
         self.assing_middle_node_tokens()
@@ -89,25 +94,28 @@ class TokenizationGuesser:
             node.token = token
 
     def is_pending_mismatch(self, word, mismatchs):
-        if not mismatchs: return False
+        if not mismatchs:
+            return False
         return mismatchs[0][0] == word
 
     def get_following_contraction(self, text):
         match = self.contraction_pattern.match(text)
-        if not match: return []
+        if not match:
+            return []
 
         word = match.group(0).lower()
         return deque(self.contractions[word])
 
     def starts_with(self, word, text):
-        if len(text) < len(word): return False
+        if len(text) < len(word):
+            return False
         prefix = text[:len(word)]
         return remove_accents(prefix) == remove_accents(word)
 
     def words_for(self, leaf):
         words = list(leaf.original_components())
         words.reverse()
-        return [ word.decode("utf-8") for word in words ]
+        return [word.decode("utf-8") for word in words]
 
     contractions = {"al": [("a", "a"), ("el", "l")],
                     "del": [("de", "de"), ("el", "l")]}

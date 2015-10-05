@@ -62,7 +62,7 @@ class TacitEntity:
         return filter(lambda entity: entity.category() == category, self.children)
 
     #
-    # Methods related to MSI (morfo-syntatic-information)
+    # Methods related to MSI (morphosyntatic-information)
     #
     def classification(self, look_deep=False):
         entity = self.referenced_entity() if look_deep else self

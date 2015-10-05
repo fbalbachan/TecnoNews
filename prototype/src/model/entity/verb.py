@@ -82,7 +82,7 @@ class Verb(Entity):
         neutral_pronouns = {(1, Number.singular),
                             (2, Number.singular),
                             (2, Number.plural)}
-        person = self.person()
+        person = (self.person() or 3)
         number = self.number()
         gender = Gender.neutral if (person, number) in neutral_pronouns else self.gender()
         return tacit_subjects[(person, number, gender)]

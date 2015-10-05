@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 PID_FILE=./sentilecto-api.pid
 
 if [ -f $PID_FILE ]; then
@@ -12,7 +11,7 @@ if [ -f $PID_FILE ]; then
 fi
 
 export PYTHONPATH=`pwd`/..
-source ../../../bin/activate 
+source ../../../bin/activate
 
 cp config_instances/config_instance_demo config
 {

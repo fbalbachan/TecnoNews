@@ -104,5 +104,8 @@ class EntityExtractor:
         root = clause.proper_tree()
         return root.nodes_with_labels(["grup-verb-inf"])
 
-    attributes_by_label = {"grup-verb-inf": [("infinitive", None)],
-                           "coor-n": [("coordinated", None)]}
+    attributes_by_label = \
+        {
+            "grup-verb-inf": [("infinitive", None)],
+            "coor-n": [("coordinated", None)]
+        }

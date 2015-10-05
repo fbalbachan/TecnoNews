@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
-from flask_restful_swagger import swagger
 
 import os, sys, json
 
-from flask import Flask, redirect, abort, request
+from flask import Flask, redirect, abort
 from flask_restful import Api
+from flask_restful_swagger import swagger
 from entityExtraction import EntityExtraction
 from structuralUnderstanding import StructuralUnderstanding
 from sentimentAnalysis import SentimentAnalysis
 from factMining import FactMining
+
 
 reload(sys)
 sys.setdefaultencoding("utf-8")

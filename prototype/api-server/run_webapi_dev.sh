@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 PID_FILE=./sentilecto-api.pid
 
 if [ -f $PID_FILE ]; then
@@ -17,4 +16,4 @@ source ../../../bin/activate
 cp config_instances/config_instance_dev1 config
 {
 nohup python api_server.py
-} >| nohup.api.out 2>&1 & 
+} >| nohup.api.out 2>&1 &

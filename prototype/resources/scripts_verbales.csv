@@ -744,7 +744,7 @@ paralizarse,A,I,,,Anim,Bi
 parar,N,T,,,Bi,Bi
 pararse,N,I,,,Anim,Bi
 parecer,E,E,,,Bi,Bi
-parecerse,N,R,,,Bi,Bi
+parecerse_a,E,E,,,Bi,Bi
 peinar,N,T,,,Bi,Bi
 peinarse,N,I,,,Anim,Bi
 perseguir,N,T,,,Bi,Bi

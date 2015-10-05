@@ -64,7 +64,7 @@ class Crawler(object):
                 feedParserDict["link"] = feedParserDict["id"]
                 crawler_logger.info("entry hacked url: %s" % feedParserDict["link"])
             try:
-                # TODO: simplify this making parse.parse accept degault_tags as None
+                # TODO: simplify this making parse.parse accept default_tags as None
                 if default_tags is not None:
                     news_entry = parser.parse(feedParserDict["link"], default_tags)
                 else:
