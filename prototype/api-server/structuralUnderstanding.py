@@ -69,14 +69,6 @@ class StructuralUnderstanding(Resource):
 
         users_storage.increase_access_counter(api_key)
 
-        api_key = request.headers.get('api_key')
-
-        message = self.validate_token(api_key)
-        if len(message) > 0:
-            return self.build_response(403, {'type': 'ERROR', 'message': message})
-
-        users_storage.increase_access_counter(api_key)
-
         if has_type_encoding(text, str, 'UTF-8'):
             text = text.decode('UTF-8')
 
@@ -97,7 +89,6 @@ class StructuralUnderstanding(Resource):
                     print 'Exception while generating sentence information: %s - %s' % (str(index), sentence.text)
                     print traceback.format_exc()
 
-            print "Sentences: ", str(sentences)
             analysis_results = \
                 {
                     '0-Paragraph-Text':       analysis["paragraph"].text,
@@ -146,6 +137,7 @@ class StructuralUnderstanding(Resource):
 
         sentence_data['2-Sentence-Clauses'] = []
         for clause in sentence.clauses:
+
             index = str(sentence_data['1-Sentence-Order']) + "." + self.clause_number(clause, sentence)
             clause_data = self.get_clause_data(clause, index)
 
