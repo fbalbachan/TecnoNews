@@ -974,16 +974,6 @@ noob noob NCCS000
 noobs noobs NCCP000
 owned owned NCCN000
 cool cool NCCN000
-guau guau UH
-ándale ándale UH
-école école UH
-fuchi fuchi UH
-guácala guácala UH
-bájale bájale UH
-oralé oralé UH
-hostia hostia UH
-conchetumadre conchetumadre UH
-wakatela wakatela UH
 apavura apavurar VMIP3S0 apavurar VMM02S0
 apavuraba apavurar VMII1S0 apavurar VMII3S0
 apavurabais apavurar VMII2P0
@@ -545364,8 +545354,6 @@ ugrofinesa ugrofinés AQ0FS0
 ugrofinesas ugrofinés AQ0FP0
 ugrofineses ugrofinés AQ0MP0 ugrofinés NCMP000
 ugrofinés ugrofinés AQ0MS0 ugrofinés NCMS000
-uh uh I
-ui ui I
 ujier ujier NCMS000
 ujieres ujier NCMP000
 ukelele ukelele NCMS000
@@ -546635,7 +546623,6 @@ unívoca unívoco AQ0FS0
 unívocas unívoco AQ0FP0
 unívoco unívoco AQ0MS0 unívoco NCMS000
 unívocos unívoco AQ0MP0 unívoco NCMP000
-upa upa I upar VMIP3S0 upar VMM02S0
 upaba upar VMII1S0 upar VMII3S0
 upabais upar VMII2P0
 upaban upar VMII3P0
@@ -547112,7 +547099,6 @@ uso usar VMIP1S0 uso NCMS000
 usos uso NCMP000
 ussingita ussingita NCFS000
 ussingitas ussingita NCFP000
-uste uste I
 usted usted PP3MS000
 ustedes usted PP3MP000
 ustible ustible AQ0CS0
@@ -547489,7 +547475,6 @@ uxorilocal uxorilocal AQ0CS0
 uxorilocales uxorilocal AQ0CP0
 uxorilocalidad uxorilocalidad NCFS000
 uxorilocalidades uxorilocalidad NCFP000
-uy uy I
 uzbeca uzbeco AQ0FS0
 uzbecas uzbeco AQ0FP0
 uzbeco uzbeco AQ0MS0
@@ -548770,7 +548755,7 @@ valúe valuar VMM03S0 valuar VMSP3S0 valuar VMSP3S0
 valúen valuar VMM03P0 valuar VMSP3P0
 valúes valuar VMSP2S0
 valúo valuar VMIP1S0
-vamos ir VMIP1P0 ir VMM01P0 vamos I
+vamos ir VMIP1P0 ir VMM01P0
 vamp vamp NCFN000
 vampiresa vampiresa NCFS000
 vampiresas vampiresa NCFP000
@@ -549615,7 +549600,7 @@ vatímetro vatímetro NCMS000
 vatímetros vatímetro NCMP000
 vaudeville vaudeville NCMS000
 vaudevilles vaudeville NCMP000
-vaya ir VMM03S0 ir VMSP3S0 ir VMSP3S0 vaya I
+vaya ir VMM03S0 ir VMSP3S0 ir VMSP3S0
 vayamos ir VMM01P0 ir VMSP1P0
 vayan ir VMM03P0 ir VMSP3P0
 vayas ir VMSP2S0
@@ -550689,7 +550674,7 @@ venezolanismo venezolanismo NCMS000
 venezolanismos venezolanismo NCMP000
 venezolano venezolano AQ0MS0 venezolano NCMS000
 venezolanos venezolano AQ0MP0 venezolano NCMP000
-venga venga I vengar VMIP3S0 vengar VMM02S0 venir VMM03S0 venir VMSP3S0 venir VMSP3S0
+venga vengar VMIP3S0 vengar VMM02S0 venir VMM03S0 venir VMSP3S0 venir VMSP3S0
 vengaba vengar VMII1S0 vengar VMII3S0
 vengabais vengar VMII2P0
 vengaban vengar VMII3P0
@@ -553198,7 +553183,7 @@ victimásemos victimar VMSI1P0
 victimé victimar VMIS1S0
 victiméis victimar VMSP2P0
 victimó victimar VMIS3S0
-victoria victoria I victoria NCFS000
+victoria victoria NCFS000
 victoriana victoriano AQ0FS0
 victorianas victoriano AQ0FP0
 victoriano victoriano AQ0MS0
@@ -555239,7 +555224,7 @@ viudedades viudedad NCFP000
 viudez viudez NCFS000
 viudo viudo AQ0MS0 viudo NCMS000
 viudos viudo AQ0MP0 viudo NCMP000
-viva viva I vivir VMM03S0 vivir VMSP3S0 vivir VMSP3S0 vivo AQ0FS0
+viva vivir VMM03S0 vivir VMSP3S0 vivir VMSP3S0 vivo AQ0FS0
 vivac vivac NCMS000
 vivaces vivaz AQ0CP0
 vivacidad vivacidad NCFS000
@@ -556981,7 +556966,7 @@ víscera víscera NCFS000
 vísceras víscera NCFP000
 víspera víspera NCFS000
 vísperas víspera NCFP000
-vítor vítor I vítor NCMS000
+vítor vítor NCMS000
 vítores vítor NCMP000
 vítrea vítreo AQ0FS0
 vítreas vítreo AQ0FP0
@@ -558018,7 +558003,6 @@ yódicas yódico AQ0FP0
 yódico yódico AQ0MS0
 yódicos yódico AQ0MP0
 yóquey yóquey NCMS000
-za za I
 zabazala zabazala NCMS000
 zabazalas zabazala NCMP000
 zabida zabida NCFS000
@@ -558504,7 +558488,7 @@ zambarco zambarco NCMS000
 zambarcos zambarco NCMP000
 zambas zamba NCFP000 zambo AQ0FP0 zambo NCFP000
 zambo zambo AQ0MS0 zambo NCMS000
-zambomba zambomba I zambomba NCFS000
+zambomba zambomba NCFS000
 zambombas zambomba NCFP000
 zambombazo zambombazo NCMS000
 zambombazos zambombazo NCMP000
