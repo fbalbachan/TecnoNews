@@ -25,7 +25,8 @@ class GlobalOperatorAnalyzer:
     def analyze_clause(self, clause):
         for finder in self.finders:
             found = finder(clause)
-            if found: clause.global_operators.update(found)
+            if found:
+                clause.global_operators.update(found)
 
     def setup_finders(self):
         self.finders = [ self.negation_finder, self.conditional_verb_finder, self.imperative_finder,

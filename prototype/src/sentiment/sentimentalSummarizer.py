@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from math import log
 
+
 class SentimentalSummarizer:
     def __init__(self, paragraph):
         self.paragraph = paragraph
@@ -8,23 +9,33 @@ class SentimentalSummarizer:
     def analyze(self):
         paragraph = self.paragraph
         analysis = {}
-        for clause in self.paragraph.clauses(): self.analyze_clause(clause, analysis)
+        for clause in self.paragraph.clauses():
+            analysis[clause] = self.analyze_clause(clause)
 
-        for sentence in paragraph.sentences: analysis[sentence] = self.summarize_clauses(sentence.clauses, analysis)
+        for sentence in paragraph.sentences:
+            analysis[sentence] = self.summarize_clauses(sentence.clauses, analysis)
 
-        analysis[paragraph] = self.summarize_clauses(paragraph.clauses(), analysis)
-        self.normalize(analysis[paragraph])
+        analysis[paragraph] = self.summarize_paragraph(paragraph, analysis)
 
         return analysis
 
-    def normalize(self, summary):
+    def summarize_paragraph(self, paragraph, analysis):
+        analysis[paragraph] = self.summarize_clauses(paragraph.clauses(), analysis)
+        new_summary = self.normalize(analysis, paragraph)
+        return new_summary
+
+    def normalize(self, analysis, paragraph):
+        normalized_summary = analysis[paragraph]
         for dimension in ["positive", "negative"]:
-            if not dimension in summary:
-                summary[dimension] = 0
-            value = summary[dimension]
+            if dimension not in normalized_summary:
+                normalized_summary[dimension] = 0
+
+            value = normalized_summary[dimension]
             if value >= 80:
                 value = 80 + ((value - 80) / 20)
-                summary[dimension] = value
+                normalized_summary[dimension] = value
+
+        return normalized_summary
 
     def summarize_clauses(self, clauses, analysis):
         summary = {}
@@ -37,13 +48,18 @@ class SentimentalSummarizer:
         n = float(len(clauses))
         for dimension, value in summary.items():
             summary[dimension] = summary[dimension] / n
+
         return summary
 
-    def analyze_clause(self, clause, analysis):
-        evidences = sum([ entity.sentimental_value.leaves() for entity in clause.all_entities() ], [])
+    def analyze_clause(self, clause):
+
+        evidences = sum([entity.sentimental_value.leaves() for entity in clause.all_entities()],
+                        [])
 
         positive_dim = lambda ev: ev.joined_value() > 0
-        dimensions = [ ("positive", positive_dim), ("negative", lambda ev: not positive_dim(ev)) ]
+        negative_dim = lambda ev: not positive_dim(ev)
+        dimensions = [("positive", positive_dim),
+                      ("negative", negative_dim)]
 
         summary = {}
         for dimension, belongs in dimensions:
@@ -57,8 +73,9 @@ class SentimentalSummarizer:
             n = len(evidences_set)
             value = 0
 
-            if n > 0: value = _sum* (1 / log(1 + n))
+            if n > 0:
+                value = _sum * (1 / log(1 + n))
 
             summary[dimension] = value
 
-        analysis[clause] = summary
+        return summary

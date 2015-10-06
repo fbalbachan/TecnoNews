@@ -7220,7 +7220,7 @@ templates['resource'] = template(function (Handlebars,depth0,helpers,partials,da
   stack1 = foundHelper || depth0.name;
   if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, { hash: {} }); }
   else if(stack1=== undef) { stack1 = helperMissing.call(depth0, "name", { hash: {} }); }
-  buffer += escapeExpression(stack1) + "'); return false;\">\n        List Operations\n      </a>\n    </li>\n    <li>\n      <a href='#' onclick=\"Docs.expandOperationsForResource('";
+  buffer += escapeExpression(stack1) + "'); return true;\">\n        List Operations\n      </a>\n    </li>\n    <li>\n    <a href='#' onclick=\"Docs.expandOperationsForResource('";
   foundHelper = helpers.name;
   stack1 = foundHelper || depth0.name;
   if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, { hash: {} }); }
@@ -7489,26 +7489,12 @@ templates['status_code'] = template(function (Handlebars,depth0,helpers,partials
     }
 
     HeaderView.prototype.events = {
-      'click #show-pet-store-icon': 'showPetStore',
-      'click #show-wordnik-dev-icon': 'showWordnikDev',
       'click #explore': 'showCustom',
       'keyup #input_baseUrl': 'showCustomOnKeyup',
       'keyup #input_apiKey': 'showCustomOnKeyup'
     };
 
     HeaderView.prototype.initialize = function() {};
-
-    HeaderView.prototype.showPetStore = function(e) {
-      return this.trigger('update-swagger-ui', {
-        url: "http://petstore.swagger.wordnik.com/api/api-docs.json"
-      });
-    };
-
-    HeaderView.prototype.showWordnikDev = function(e) {
-      return this.trigger('update-swagger-ui', {
-        url: "http://api.wordnik.com/v4/resources.json"
-      });
-    };
 
     HeaderView.prototype.showCustomOnKeyup = function(e) {
       if (e.keyCode === 13) {
@@ -7520,6 +7506,7 @@ templates['status_code'] = template(function (Handlebars,depth0,helpers,partials
       if (e != null) {
         e.preventDefault();
       }
+
       return this.trigger('update-swagger-ui', {
         url: $('#input_baseUrl').val(),
         apiKey: $('#input_apiKey').val()

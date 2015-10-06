@@ -30,7 +30,7 @@ class WebOutputUtils:
             return ""
 
     def valuated_adverbs(self, clause):
-        return ", ".join([ str(adverb) for adverb in clause.valuated_adverbs ])
+        return ", ".join([str(adverb) for adverb in clause.valuated_adverbs])
 
     def time_references(self, clause):
         time_lexical_forms = [ " ".join([repr(l) for l in reference.leaves()]) for reference in clause.time_references ]
@@ -178,7 +178,6 @@ class WebOutputUtils:
                       else 1 if x["rn"] > y["rn"]   else -1 if x["rn"] < y["rn"]\
                       else 0
 
-        print [rd["re"].lexical_form for rd in referents_data]
         referents_data = filter(lambda rd:
                             rd["re"].real_name().lower() not in ["le", "les",
                                                                  "lo", "la", "los", "las",
