@@ -1,20 +1,20 @@
 [debug]
 
-raise_exception = True
-debug = True
+raise_exception = False
+debug = False
 
 [instance]
 id = Test
 
 [freeling]
 host        = 85.10.210.172
-client      = /home/martin/NaturalEnv/NaturalNews/externals/freeling/analyzer_client
+client      = /home/natural_demo/NaturalEnv/TecnoNews/externals/freeling/analyzer_client
 parser_port = 10999
 tagger_port = 9999
 
 [freeling_language]
 host        = 85.10.210.172
-client      = /home/martin/NaturalEnv/NaturalNews/externals/freeling/analyzer_client_lang_ident
+client      = /home/natural_demo/NaturalEnv/TecnoNews/externals/freeling/analyzer_client_lang_ident
 language_port = 10998
 
 [mongodb]
@@ -24,7 +24,7 @@ db = sentinews_test
 db_test = sentinews_test
 
 [resources]
-resources_dir = /home/martin/NaturalEnv/NaturalNews/prototype/resources
+resources_dir = /home/natural_demo/NaturalEnv/TecnoNews/prototype/resources
 verbal_scripts = %(resources_dir)s/scripts_verbales.csv
 sentiwordnet = %(resources_dir)s/sentiwordnet.csv
 general_resources = %(resources_dir)s/general_resources

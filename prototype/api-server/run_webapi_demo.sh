@@ -11,5 +11,5 @@ if [ -f $PID_FILE ]; then
 	fi
 fi
 
-cp config_instances/config_instance_demo config
+cp instances_config/config_instance_demo config
 python2.7 api_server.py
