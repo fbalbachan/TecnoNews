@@ -49,4 +49,3 @@ animals = %(resources_dir)s/animal.csv
 demonyms = %(resources_dir)s/twGENT.dat
 marks_to_avoid_paragraphs = %(resources_dir)s/paragraph_to_avoid
 user_per_categories = %(resources_dir)s/wordpress_users_categories.csv
-
