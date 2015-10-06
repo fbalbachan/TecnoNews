@@ -9,10 +9,11 @@ from src.utils.logger_utils import get_logger
 from src.model.entity.animity import Animity
 
 
-
 # TODO: in the child of the node of the closure check if the vser sabd
 
+
 debug_mode = False
+logger = get_logger('tecnonews')
 
 
 class VoicePassiveStrategy:
@@ -177,11 +178,7 @@ class VoicePassiveStrategy:
             ntext = ntext.replace('_', ' ').strip()
 
         except Exception as e:
-            print e.message
             ex_type, ex, tb = sys.exc_info()
-            traceback.print_tb(tb)
-            ex_type, ex, tb = sys.exc_info()
-            logger = get_logger('tecnonews')
             logger.info("VoicePassiveStrategy Rewriting:")
             logger.info(e.message)
             logger.info(traceback.print_tb(tb))

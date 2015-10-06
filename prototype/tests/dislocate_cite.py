@@ -23,9 +23,9 @@ class TestRewriter(unittest.TestCase):
 
     def __(self):
         print "___________----____--_"
-        ontology = FreelingDictionaryParser.from_resource()
-        msi = {"mode": "indicative",
-               "time": "presente",
+        ontology = FreelingDictionaryParser.get_ontology()
+        msi = {"mode":   "indicative",
+               "time":   "presente",
                "person": 2,
                "number": Number.singular}
         print ontology.get_lexical_form("haber", msi)

@@ -16,7 +16,6 @@ def set_first_letter_case(source, destination):
 
 
 def has_type_encoding(obj, obj_type=str, encoding='UTF-8'):
-    print "has_type_encoding - Obj: ", str(obj), " - type:", obj_type
     if sys.version_info >= (3,0,0):
         # for Python 3
         if isinstance(obj, bytes):

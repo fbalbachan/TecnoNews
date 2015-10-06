@@ -21,7 +21,7 @@ class TestRewriter(unittest.TestCase):
         self.analyzer = ParagraphAnalyzer(self.sentenceAnalyzer)
 
     def __(self):
-        self.ontology = FreelingDictionaryParser.from_resource()
+        self.ontology = FreelingDictionaryParser.get_ontology()
 
     def test_dislocate_cite(self):
         self.strategies = [VoicePassiveStrategy(self.ontology)]

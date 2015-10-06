@@ -25,7 +25,7 @@ class TestRewriter(unittest.TestCase):
         self.analyzer = ParagraphAnalyzer(self.sentenceAnalyzer)
 
     def __(self):
-        self.ontology = FreelingDictionaryParser.from_resource()
+        self.ontology = FreelingDictionaryParser.get_ontology()
 
     def test_dislocate_cite(self):
         self.strategies = [PartialVoicePassiveStrategy(self.ontology)]
@@ -63,8 +63,6 @@ class TestRewriter(unittest.TestCase):
         #     import difflib
         #     diff = difflib.ndiff(None, text, edited)
         #
-
-
 
     ontology = Rewriter.ontology
 

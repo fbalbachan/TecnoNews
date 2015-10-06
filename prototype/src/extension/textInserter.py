@@ -13,7 +13,7 @@ class TextInserter:
 
     def get(self):
         injections_wiki = self.get_injections_wiki_idx()
-        print "injections_wiki", injections_wiki, "\n"
+        print "TextInserter: Injections_wiki", injections_wiki, "\n"
         injections_paragraphs = self.get_injection_paragraphs_other_sources()
         generated = u""
 
@@ -55,6 +55,7 @@ class TextInserter:
 
         contents = self.analysis["generated_content_wiki"]
 
+        print "TextInserter: Generated Wikipedia contents"
         for c in contents:
             print c
         print "--------"

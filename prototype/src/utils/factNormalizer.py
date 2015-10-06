@@ -61,7 +61,6 @@ class FactNormalizer:
                                 #
                                 elif hasattr(entity, "kernel") and entity.kernel:
                                     lemma = entity.kernel.lemma
-                                    print entity.kernel.msi
                                     if entity.kernel.msi["category"] == "noun" \
                                        and entity.kernel.msi["type"] == "articulo":
                                         replacement = entity.lexical_form
@@ -81,21 +80,15 @@ class FactNormalizer:
 
                                             forms = [form for form in concept.lexical_forms if leaf_msi == self._msi_transform(form.msi)]
                                             if not forms:
-                                                try:
+                                                if "gender" in leaf_msi:
                                                     del leaf_msi["gender"]
-                                                except KeyError:
-                                                    pass
 
                                                 for form in concept.lexical_forms:
                                                     transformed_msi = self._msi_transform(form.msi)
-                                                    try:
+                                                    if "gender" in transformed_msi:
                                                         del transformed_msi["gender"]
-                                                    except KeyError:
-                                                        pass
 
-                                                    print "modified Leaf MSI:", leaf_msi
                                                     if transformed_msi == leaf_msi:
-                                                        print "entering"
                                                         replacement = form.text
                                                         break
                                             else:

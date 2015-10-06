@@ -9,10 +9,11 @@ from src.model.entity.animity import Animity
 from src.ling.number import Number
 
 
-
-
 # TODO: in the child of the node of the closure check if the vser sabd
 debug_mode = False
+
+
+logger = get_logger('tecnonews')
 
 
 class PartialVoicePassiveStrategy:
@@ -90,9 +91,6 @@ class PartialVoicePassiveStrategy:
 
         except Exception as e:
             ex_type, ex, tb = sys.exc_info()
-            traceback.print_tb(tb)
-            ex_type, ex, tb = sys.exc_info()
-            logger = get_logger('tecnonews')
             logger.info("PartialVoicePassiveStrategy Rewrite_clause exception")
             logger.info(e.message)
             logger.info(traceback.print_tb(tb))

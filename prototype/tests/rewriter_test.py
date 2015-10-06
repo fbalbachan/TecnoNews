@@ -31,8 +31,11 @@ class TestRewriter(unittest.TestCase):
         self.analyzer = ParagraphAnalyzer(self.sentenceAnalyzer)
 
     def __(self):
-        ontology = FreelingDictionaryParser.from_resource()
-        msi = {"mode": "indicative", "time": "presente", "person": 2, "number": Number.singular}
+        ontology = FreelingDictionaryParser.get_ontology()
+        msi = {"mode":   "indicative",
+               "time":   "presente",
+               "person": 2,
+               "number": Number.singular}
         print ontology.get_lexical_form("haber", msi)
 
     def test_segun_to_dijo_dislocation(self):

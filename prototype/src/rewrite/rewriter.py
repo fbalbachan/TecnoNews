@@ -183,5 +183,5 @@ class Rewriter:
     sentenceAnalyzer = SentenceAnalyzer()
     analyzer = ParagraphAnalyzer(sentenceAnalyzer)
 
-    ontology = FreelingDictionaryParser.from_resource()
+    ontology = FreelingDictionaryParser.get_ontology()
     # ontology = Ontology("Test")

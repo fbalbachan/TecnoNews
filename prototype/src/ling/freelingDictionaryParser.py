@@ -4,6 +4,7 @@ from src.ontology.lexicalForm import LexicalForm
 from src.ontology.ontology import Ontology
 from src.utils.resources import instance as resources
 
+
 class FreelingDictionaryParser:
 
     _ontology = None
@@ -11,14 +12,15 @@ class FreelingDictionaryParser:
     def __init__(self):
         pass
 
-    def get_ontology(self):
-
+    @classmethod
+    def get_ontology(cls):
         if not FreelingDictionaryParser._ontology:
-            FreelingDictionaryParser._ontology = FreelingDictionaryParser.from_resource()
+            FreelingDictionaryParser._ontology = FreelingDictionaryParser._from_resource()
 
         return FreelingDictionaryParser._ontology
 
-    def parse_ontology(self, _file, ontology_name):
+    @classmethod
+    def parse_ontology(cls, _file, ontology_name):
         ontology = Ontology(ontology_name)
         for line in open(_file):
             tokens = line.strip().split()
@@ -43,8 +45,7 @@ class FreelingDictionaryParser:
         return ontology
 
     @classmethod
-    def from_resource(cls):
+    def _from_resource(cls):
         _file = resources.get_config("resources", "freeling_dict")
-        return FreelingDictionaryParser().parse_ontology(_file, "Freeling")
-
-
+        ontology = FreelingDictionaryParser().parse_ontology(_file, "Freeling")
+        return ontology

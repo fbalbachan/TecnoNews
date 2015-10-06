@@ -163,7 +163,7 @@ class FactMining(Resource):
         return clause_data
 
     def get_normalized_fact(self, clause):
-        fact = FactNormalizer(clause, FactMining._ontology, self.synonyms).fact()
+        fact = FactNormalizer(clause, FactMining._ontology).fact()
         real_or_not = FactNormalizer.fact_real_or_not(clause)
         return str(fact) + " " + str(real_or_not)
 

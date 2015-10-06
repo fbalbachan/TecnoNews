@@ -25,7 +25,8 @@ cleanup_timer = None
 
 config = ConfigProvider()
 debug_mode = (config.get("debug", "debug") == "True")
-ontology = FreelingDictionaryParser.from_resource()
+ontology = FreelingDictionaryParser.get_ontology()
+
 
 def generate_captcha(req_id):
     captcha_key = os.urandom(2).encode("hex")

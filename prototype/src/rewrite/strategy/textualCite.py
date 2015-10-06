@@ -150,7 +150,7 @@ class TextualCite:
             print e.message
             ex_type, ex, tb = sys.exc_info()
             traceback.print_tb(tb)
-            raise
+            raise e
 
     def child_with_verb_recursive(self, node, idx):
         for child in node.children:
