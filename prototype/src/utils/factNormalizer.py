@@ -3,7 +3,6 @@
 from src.utils.configProvider import ConfigProvider
 from src.ling.synonyms import Synonyms
 from _csv import reader
-from src.ling.gender import Gender
 #from src.parser.labelNode import LabelNode
 
 debug_mode = False
@@ -28,81 +27,102 @@ class FactNormalizer:
 
                 if fact:
                     fact += " + "
-                structure = clause.structure(structure_name)
 
-                if structure.is_empty():
-                    fact += "∅"
-
-                else:
-
-                    if structure_name == "verb":
-                        replacement = self._get_verb_replacement(clause)
-
-                    else:
-                        lexical_forms = []
-                        for entity in structure.all_entities():
-
-                            if entity.is_linked():
-                                entity = entity.referenced()
-
-                            replacement = entity.lexical_form
-
-                            if not (entity.is_tacit() or entity.is_impersonal()):
-                                lemmas = [leaf.lemma for leaf in entity.leaves()]
-                                if lemmas == ["quién"]:
-                                    replacement = "alguien"
-
-                                elif lemmas == ["qué"] and entity.category() == "pronoun" \
-                                                       and entity.msi["type"] == "interrogative":
-                                    replacement = "algo"
-                                #
-                                # elif type(entity.node) is LabelNode and entity.node.label == "grup-verb-inf":
-                                #    replacement = entity.node.leaves()[0].lexical_form
-                                #
-                                elif hasattr(entity, "kernel") and entity.kernel:
-                                    lemma = entity.kernel.lemma
-                                    if entity.kernel.msi["category"] == "noun" \
-                                       and entity.kernel.msi["type"] == "articulo":
-                                        replacement = entity.lexical_form
-
-                                    elif not self.synonyms.get_base_synonym(lemma):
-                                        replacement = entity.kernel.lexical_form
-
-                                    else:
-                                        base_synonym = self.synonyms.get_base_synonym(lemma)
-                                        if '_' in base_synonym or base_synonym not in self.ontology.concepts:
-                                            # if synonym in self.locutions and self.locutions[synonym]:
-                                            #    pass
-                                            replacement = base_synonym.replace('_', ' ')
-                                        else:
-                                            concept = self.ontology.concept(base_synonym)
-                                            leaf_msi = self._msi_transform(entity.kernel.msi)
-
-                                            forms = [form for form in concept.lexical_forms if leaf_msi == self._msi_transform(form.msi)]
-                                            if not forms:
-                                                if "gender" in leaf_msi:
-                                                    del leaf_msi["gender"]
-
-                                                for form in concept.lexical_forms:
-                                                    transformed_msi = self._msi_transform(form.msi)
-                                                    if "gender" in transformed_msi:
-                                                        del transformed_msi["gender"]
-
-                                                    if transformed_msi == leaf_msi:
-                                                        replacement = form.text
-                                                        break
-                                            else:
-                                                replacement = forms[0].text
-
-                            lexical_forms.append(replacement)
-
-                        replacement = ", ".join(lexical_forms)
-
-                    fact += replacement
+                fact += self.get_normalized_string(structure_name, clause)
 
         time_lexical_forms = [" ".join([repr(l) for l in reference.leaves()]) for reference in clause.time_references]
         fact = fact + " --TIME: " + ", ".join(time_lexical_forms)
         return fact
+
+    def get_normalized_string(self, structure_name, clause):
+        structure = clause.structure(structure_name)
+
+        if structure.is_empty():
+            normalization = "∅"
+
+        elif structure_name == "verb":
+            normalization = self._get_verb_replacement(clause)
+
+        else:
+            lexical_forms = []
+            for entity in structure.all_entities():
+
+                if entity.is_linked():
+                    entity = entity.referenced()
+
+                entity_normalization = self._get_entity_normalization(entity)
+
+                lexical_forms.append(entity_normalization)
+
+            normalization = ", ".join(lexical_forms)
+
+        return normalization
+
+    def _get_entity_normalization(self, entity):
+
+        if entity.is_tacit() or entity.is_impersonal():
+            normalization = entity.lexical_form
+
+        else:
+            lemmas = [leaf.lemma for leaf in entity.leaves()]
+            if lemmas == ["quién"]:
+                normalization = "alguien"
+
+            elif lemmas == ["qué"] and entity.category() == "pronoun" \
+                                   and entity.msi["type"] == "interrogative":
+                normalization = "algo"
+
+            # elif type(entity.node) is LabelNode and entity.node.label == "grup-verb-inf":
+            #    normalization = entity.node.leaves()[0].lexical_form
+
+            elif hasattr(entity, "kernel") and entity.kernel:
+                normalization = self._get_normalization_for_entity_with_kernel(entity, entity.lexical_form)
+
+            else:
+                normalization = entity.lexical_form
+
+        return normalization
+
+    def _get_normalization_for_entity_with_kernel(self, entity, default):
+        normalization = default
+
+        lemma = entity.kernel.lemma
+        if entity.kernel.msi["category"] == "noun" and entity.kernel.msi["type"] == "articulo":
+            # Kernels formed by only 1 non-"noun" token are modified during entity extraction: msi["category"]
+            # is set to "noun", ie: "La de la casa amarilla" --> kernel: "La" - Msi= category:"noun" - type:"articulo"
+            normalization = entity.lexical_form
+
+        elif not self.synonyms.get_base_synonym(lemma):
+            normalization = entity.kernel.lexical_form
+
+        else:
+            base_synonym = self.synonyms.get_base_synonym(lemma)
+            if '_' in base_synonym or base_synonym not in self.ontology.concepts:
+                # if synonym in self.locutions and self.locutions[synonym]:
+                #    pass
+                normalization = base_synonym.replace('_', ' ')
+
+            else:
+                concept = self.ontology.concept(base_synonym)
+                leaf_msi = self._msi_transform(entity.kernel.msi)
+
+                forms = [form for form in concept.lexical_forms if leaf_msi == self._msi_transform(form.msi)]
+                if not forms:
+                    if "gender" in leaf_msi:
+                        del leaf_msi["gender"]
+
+                    for form in concept.lexical_forms:
+                        transformed_msi = self._msi_transform(form.msi)
+                        if "gender" in transformed_msi:
+                            del transformed_msi["gender"]
+
+                        if transformed_msi == leaf_msi:
+                            normalization = form.text
+                            break
+                else:
+                    normalization = forms[0].text
+
+        return normalization
 
     @staticmethod
     def fact_real_or_not(clause):
