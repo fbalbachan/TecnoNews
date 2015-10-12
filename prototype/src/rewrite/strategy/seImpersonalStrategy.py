@@ -72,7 +72,7 @@ class SeImpersonalStrategy:
 
         beginning_text, ending_text = self.trim_known_elements(clause)
 
-        od_string = str(clause.structure('od'))
+        od_string = str(clause.structure('od').entity())
 
         header = clause.is_subordinated_clause()
 

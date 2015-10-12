@@ -1,28 +1,31 @@
-[debug]
+[DEFAULT]
+project_root = /home/nlt-runner/NaturalNews
 
+[debug]
 raise_exception = False
+debug = False
+
+[demo]
+service_port = 8321
+demo_uri = sentilecto
 
 [instance]
-id = 5
+id = 6
 
 [news_sources]
 feeds_to_process = telam_espectaculos,clarin_extrashow,lanacion_espectaculos
 
 [freeling]
-
 host        = 85.10.210.172
-client      = ../externals/freeling/analyzer_client
-parser_port = 10005
-tagger_port = 9999
+client      = %(project_root)s/externals/freeling/analyzer_client
+parser_port = 10006
 
 [freeling_language]
-
 host        = 85.10.210.172
-client      = ../externals/freeling/analyzer_client_lang_ident
-language_port = 10105
+client      = %(project_root)s/externals/freeling/analyzer_client_lang_ident
+language_port = 10106
 
 [mongodb]
-
 host = 85.10.210.172
 port = 27017
 db = entretenimientobit
@@ -40,8 +43,7 @@ default_category = espectaculos
 
 
 [resources]
-
-resources_dir = resources
+resources_dir = %(project_root)s/prototype/resources
 verbal_scripts = %(resources_dir)s/scripts_verbales.csv
 sentiwordnet = %(resources_dir)s/sentiwordnet.csv
 general_resources = %(resources_dir)s/general_resources
