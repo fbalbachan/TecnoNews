@@ -18,6 +18,39 @@ from src.utils.webOutputUtils import WebOutputUtils
 from src.utils.configProvider import ConfigProvider
 from src.ling.freelingDictionaryParser import FreelingDictionaryParser
 
+from BeautifulSoup import BeautifulSoup
+import urllib2
+import re
+
+def parse_url(url):
+    try:
+        page=urllib2.urlopen(url)
+
+        soup = BeautifulSoup(page.read())
+        texts = soup.findAll(text=True)
+    except Exception:
+        texts = []
+
+
+    def visible(element):
+        if element.parent.name in ['style', 'script', '[document]', 'head', 'title']:
+            return False
+        elif re.match('<!--.*-->', str(element)):
+            return False
+        return True
+
+    def invalid(element):
+        if element == "\n":
+            return False
+        elif len(element) < 20:
+            return False
+        return True
+        
+    visible_texts = filter(visible, texts)
+    visible_texts = filter(invalid, visible_texts)
+    return "".join(visible_texts)
+    
+
 request_id = 0
 request_data = {}
 captchas_by_request = {}
@@ -64,7 +97,11 @@ def analyze():
 
     try:
         web_input = web.input()
-        return Sentilecto.analyze(web_input.text)
+	if "url-input" in web_input and web_input["url-input"] != "":
+	    print web_input["url-input"]
+	    return Sentilecto.analyze(parse_url(web_input["url-input"]))
+	else:
+            return Sentilecto.analyze(web_input.text)
 
     except Exception:
         print format_exc()
