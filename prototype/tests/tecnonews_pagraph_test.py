@@ -20,7 +20,7 @@ class TecnonewsTest(unittest.TestCase):
         nes = NewsEntriesService()
         # entry = nes.get_list({'title': 'Fiscalía pide el internamiento de cuatro menores detenidos en Lleida'})[0]
         entry = nes.get_list({'title': 'Unión Europea estudia nuevas sanciones contra Rusia'})[0]
-        entry.set_analisys_info()
+        entry.set_analysis_info()
 
         try:
             tsr = RelatedNewsEntries(entry)

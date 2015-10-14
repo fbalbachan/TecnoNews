@@ -12,10 +12,11 @@ debug_mode = True
 
 
 class SentenceAnalyzer:
-    def __init__(self, tree_parser=FreelingTreeParser()):
+    def __init__(self, tree_parser=FreelingTreeParser(), output_demo_debug=False):
         self.tree_parser = tree_parser
         self.context = {"sentences": []}
         self.invoker = Invoker()
+        self.output_demo_debug = output_demo_debug
 
     def analyze(self, sentence):
         if debug_mode: print "--> SentenceAnalyzer.analyze()"
@@ -60,7 +61,7 @@ class SentenceAnalyzer:
             node = self.tree_parser.from_text(sentence.text)
             sentence.parse_node = node
 
-            if False:
+            if self.output_demo_debug:
                 print "-------------------------------------------------------"
                 print "TEXT".ljust(8), sentence.text
                 print "-------------------------------------------------------"

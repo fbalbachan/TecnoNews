@@ -66,7 +66,7 @@ class NewsEntry(object):
             logger.info("tags %s" % self.tags)
             logger.info("url  %s" % self.url)
 
-    def set_analisys_info(self):
+    def set_analysis_info(self):
         if not self.clean_text:
             self.clean_text = self.get_clean_text()
         if not self.entities:

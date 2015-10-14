@@ -1,33 +1,31 @@
 [DEFAULT]
-project_root = /home/alexis/NaturalEnv/TecnoNews/
-
+project_root = /home/natural_demo/NaturalEnv/TecnoNews
 
 [debug]
+raise_exception = False
+debug = False
 
-raise_exception = True
-debug = True
+[demo]
+service_port = 8321
+demo_uri = sentilecto
 
 [instance]
-id = dev2
+id = blog-dev2
 
 [news_sources]
 feeds_to_process = euronews
 
 [freeling]
-
 host        = 85.10.210.172
 client      = %(project_root)s/externals/freeling/analyzer_client
 parser_port = 10999
-tagger_port = 9999
 
 [freeling_language]
-
 host        = 85.10.210.172
 client      = %(project_root)s/externals/freeling/analyzer_client_lang_ident
 language_port = 10998
 
 [mongodb]
-
 host = 85.10.210.172
 port = 27017
 db = sentinews_test

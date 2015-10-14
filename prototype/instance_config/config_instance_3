@@ -1,28 +1,31 @@
-[debug]
+[DEFAULT]
+project_root = /home/nlt-runner/NaturalNews
 
+[debug]
 raise_exception = False
+debug = False
+
+[demo]
+service_port = 8321
+demo_uri = sentilecto
 
 [instance]
 id = 3
 
 [news_sources]
-feeds_to_process = bbc_economia,bbc_tecnologia,bbc_ciencia,bbc_salud,bbc_cultura,bbc_deportes,abc
+feeds_to_process = bbc_economia,bbc_tecnologia,bbc_ciencia,bbc_salud,bbc_cultura,bbc_deportes
 
 [freeling]
-
 host        = 85.10.210.172
-client      = ../externals/freeling/analyzer_client
+client      = %(project_root)s/externals/freeling/analyzer_client
 parser_port = 10003
-tagger_port = 9999
 
 [freeling_language]
-
 host        = 85.10.210.172
-client      = ../externals/freeling/analyzer_client_lang_ident
+client      = %(project_root)s/externals/freeling/analyzer_client_lang_ident
 language_port = 10103
 
 [mongodb]
-
 host = 85.10.210.172
 port = 27017
 db = sentinews_entrebit
@@ -40,7 +43,7 @@ default_category = interés general
 
 [resources]
 
-resources_dir = resources
+resources_dir = %(project_root)s/prototype/resources
 verbal_scripts = %(resources_dir)s/scripts_verbales.csv
 sentiwordnet = %(resources_dir)s/sentiwordnet.csv
 general_resources = %(resources_dir)s/general_resources
