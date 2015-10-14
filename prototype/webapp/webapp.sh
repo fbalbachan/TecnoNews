@@ -2,7 +2,7 @@
 
 ACTION=$1
 
-OLDPWD = `pwd`
+OLDPWD=`pwd`
 
 DEMOROOT="$HOME/NaturalEnv/TecnoNews/prototype/webapp"
 cd "$DEMOROOT"
