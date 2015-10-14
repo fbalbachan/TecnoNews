@@ -27,29 +27,18 @@ def parse_url(url):
         page=urllib2.urlopen(url)
 
         soup = BeautifulSoup(page.read())
-        texts = soup.findAll(text=True)
+        texts = soup.findAll("p")
     except Exception:
         texts = []
 
+    textParagraphs = []
+    for node in texts:
+        temp = ''.join(node.findAll(text=True))
+        if re.match(".*[.]$",temp):
+        	textParagraphs.append(temp)
 
-    def visible(element):
-        if element.parent.name in ['style', 'script', '[document]', 'head', 'title']:
-            return False
-        elif re.match('<!--.*-->', str(element)):
-            return False
-        return True
+    return "\n".join(textParagraphs)
 
-    def invalid(element):
-        if element == "\n":
-            return False
-        elif len(element) < 20:
-            return False
-        return True
-        
-    visible_texts = filter(visible, texts)
-    visible_texts = filter(invalid, visible_texts)
-    return "".join(visible_texts)
-    
 
 request_id = 0
 request_data = {}
