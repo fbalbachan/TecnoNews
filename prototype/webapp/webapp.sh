@@ -4,7 +4,7 @@ ACTION=$1
 
 OLDPWD = `pwd`
 
-DEMOROOT="$HOME/NaturalEnv/tecnonews/prototype/webapp"
+DEMOROOT="$HOME/NaturalEnv/TecnoNews/prototype/webapp"
 cd "$DEMOROOT"
 
 PID_FILE="./sentilecto.pid"
@@ -28,7 +28,7 @@ if [ "$ACTION" = "start" -o "$ACTION" = "restart" ]; then
     source $HOME/NaturalEnv/bin/activate
     export PYTHONPATH="$PYTHONPATH:..:."
 
-    cp ../instance_config/config_instance_local ../config
+    cp ../instance_config/config_instance_demo_dev ../config
 
     {
         nohup python service.py 8321
