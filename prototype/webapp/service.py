@@ -117,19 +117,19 @@ class EntiNews_request:
 
         except Exception:
             print format_exc()
-            web.redirect("/sentilecto")
+            web.redirect("/sentialexis")
 
     def action_fact_extraction(self):
         analysis = analyze()
         if not analysis:
-            web.redirect("/sentilecto")
+            web.redirect("/sentialexis")
 
         return web.template.render().facts(analysis, WebOutputUtils(ontology))
 
     def action_svo_slots(self):
         analysis = analyze()
         if not analysis:
-            web.redirect("/sentilecto")
+            web.redirect("/sentialexis")
 
         return web.template.render().entinews(analysis, WebOutputUtils(ontology))
 
@@ -161,14 +161,14 @@ class EntiNews_request:
                 method = web_input["method"]
                 return action_by_method[method]()
 
-        web.redirect("/sentilecto")
+        web.redirect("/sentialexis")
 
 # # # MAIN # # #
 
 
 def write_pid_file():
     pid = str(os.getpid())
-    pid_file = './sentilecto.pid'
+    pid_file = './sentialexis.pid'
     file(pid_file, 'w').write(pid)
 
 

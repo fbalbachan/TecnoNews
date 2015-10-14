@@ -1,12 +1,12 @@
 $def with (request_id, debug_mode)
-$ captcha_src = "sentilecto/static/captcha/captcha_" + request_id + ".png"
+$ captcha_src = "sentialexis/static/captcha/captcha_" + request_id + ".png"
 <!DOCTYPE html>
 <html lang="es">
   <head>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.css">
     <script src="static/jquery-1.6.2.min.js"></script>
-    <title>SentiLecto</title>
+    <title>sentialexis</title>
     <script>
       $$(document).ready(function(){
       $$('#language .es').click(function(){
@@ -59,9 +59,9 @@ $ captcha_src = "sentilecto/static/captcha/captcha_" + request_id + ".png"
     <div class="container" style="width: 1000px">
 
       <h2 style="padding-top:60px;padding-bottom:10px;"></h2>
-      
+
       <div>
-        <form class="well form-search" action="sentilecto/result" method="GET">
+        <form class="well form-search" action="sentialexis/result" method="GET">
             <fieldset>
                 <div class="control-group">
                     <label class="control-label" for="text">Input Text (only Spanish):</label>
