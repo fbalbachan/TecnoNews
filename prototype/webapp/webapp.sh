@@ -4,7 +4,7 @@ ACTION=$1
 
 if [ "$ACTION" = "stop" -o "$ACTION" = "restart" ]; then
 
-    kill -9 $(cat ./sentilecto.pid)
+    kill -9 $(cat ./sentialexis.pid)
 
 fi
 
@@ -12,7 +12,7 @@ if [ "$ACTION" = "start" -o "$ACTION" = "restart" ]; then
 
     cd $HOME/NaturalEnv/TecnoNews/prototype/webapp
 
-    PID_FILE=./sentilecto.pid
+    PID_FILE=./sentialexis.pid
     if [ -f $PID_FILE ]; then
         PID_TO_KILL=$(cat $PID_FILE)
         if [ -d /proc/$PID_TO_KILL ]; then
@@ -24,10 +24,10 @@ if [ "$ACTION" = "start" -o "$ACTION" = "restart" ]; then
     source $HOME/NaturalEnv/bin/activate
     export PYTHONPATH=$PYTHONPATH:..:.
 
-    cp ../instance_config/config_instance_dev ../config
+    cp ../instance_config/config_instance_dev2 ../config
 
     {
-        nohup python2.7 service.py 8321
+        nohup python service.py 8323
     } >| nohup.demo.out &
 
 fi
