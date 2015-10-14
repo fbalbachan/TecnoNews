@@ -1,12 +1,12 @@
 $def with (request_id, debug_mode)
-$ captcha_src = "sentialexis/static/captcha/captcha_" + request_id + ".png"
+$ captcha_src = "sentilecto/static/captcha/captcha_" + request_id + ".png"
 <!DOCTYPE html>
 <html lang="es">
   <head>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.css">
     <script src="static/jquery-1.6.2.min.js"></script>
-    <title>sentialexis</title>
+    <title>Sentilecto</title>
     <script>
       $$(document).ready(function(){
       $$('#language .es').click(function(){
@@ -61,13 +61,15 @@ $ captcha_src = "sentialexis/static/captcha/captcha_" + request_id + ".png"
       <h2 style="padding-top:60px;padding-bottom:10px;"></h2>
 
       <div>
-        <form class="well form-search" enctype="multipart/form-data" action="sentialexis/result" method="GET">
+        <form class="well form-search" enctype="multipart/form-data" action="sentilecto/result" method="GET">
             <fieldset>
                 <div class="control-group">
+<!--
                         <label class="control-label" for="text">Input File:</label>
                         <br>
                         <input type="file" name="datafile" accept=".txt" multiple="" size="40">
                         <br><br>
+-->
                         <label class="control-label" for="text">Input URL:</label>
                         <input class="input-url" type="text" style="width: 950px;" name="url-input"/>
                     <br><br>

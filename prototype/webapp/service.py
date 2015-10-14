@@ -22,6 +22,17 @@ from BeautifulSoup import BeautifulSoup
 import urllib2
 import re
 
+
+request_id = 0
+request_data = {}
+captchas_by_request = {}
+cleanup_timer = None
+
+config = ConfigProvider()
+debug_mode = (config.get("debug", "debug") == "True")
+ontology = FreelingDictionaryParser.get_ontology()
+
+
 def parse_url(url):
     try:
         page=urllib2.urlopen(url)
@@ -35,19 +46,9 @@ def parse_url(url):
     for node in texts:
         temp = ''.join(node.findAll(text=True))
         if re.match(".*[.]$",temp):
-        	textParagraphs.append(temp)
+            textParagraphs.append(temp)
 
     return "\n".join(textParagraphs)
-
-
-request_id = 0
-request_data = {}
-captchas_by_request = {}
-cleanup_timer = None
-
-config = ConfigProvider()
-debug_mode = (config.get("debug", "debug") == "True")
-ontology = FreelingDictionaryParser.get_ontology()
 
 
 def generate_captcha(req_id):
@@ -82,17 +83,16 @@ def cleanup_session(p_request_id):
     os.remove(captcha_filename_for(p_request_id))
 
 
-def analyze(debug=False):
+def analyze(debug_output=False):
 
     try:
         web_input = web.input()
-        x = web.input(datafile={})
-        print x
-    	if "url-input" in web_input and web_input["url-input"] != "":
-    	    print web_input["url-input"]
-    	    return Sentilecto.analyze(parse_url(web_input["url-input"]), output_demo_debug=debug)
-    	else:
-                return Sentilecto.analyze(web_input.text, output_demo_debug=debug)
+        # x = web.input(datafile={})
+
+        text = web_input.text if ("url-input" not in web_input or web_input["url-input"] == "") \
+               else parse_url(web_input["url-input"])
+
+        return Sentilecto.analyze(text, output_demo_debug=debug_output)
 
     except Exception:
         print format_exc()
@@ -125,7 +125,7 @@ class Debug_request:
         sys.stderr = output
 
         print web.ctx
-        analyze(debug=True)
+        analyze(debug_output=True)
         return web.template.render().debug(output.getvalue())
 
 
@@ -145,19 +145,19 @@ class EntiNews_request:
 
         except Exception:
             print format_exc()
-            web.redirect("/sentialexis")
+            web.redirect("/sentilecto")
 
     def action_fact_extraction(self):
         analysis = analyze()
         if not analysis:
-            web.redirect("/sentialexis")
+            web.redirect("/sentilecto")
 
         return web.template.render().facts(analysis, WebOutputUtils(ontology))
 
     def action_svo_slots(self):
         analysis = analyze()
         if not analysis:
-            web.redirect("/sentialexis")
+            web.redirect("/sentilecto")
 
         return web.template.render().entinews(analysis, WebOutputUtils(ontology))
 
@@ -189,14 +189,14 @@ class EntiNews_request:
                 method = web_input["method"]
                 return action_by_method[method]()
 
-        web.redirect("/sentialexis")
+        web.redirect("/sentilecto")
 
 # # # MAIN # # #
 
 
 def write_pid_file():
     pid = str(os.getpid())
-    pid_file = './sentialexis.pid'
+    pid_file = './sentilecto.pid'
     file(pid_file, 'w').write(pid)
 
 
