@@ -86,11 +86,13 @@ def analyze():
 
     try:
         web_input = web.input()
-	if "url-input" in web_input and web_input["url-input"] != "":
-	    print web_input["url-input"]
-	    return Sentilecto.analyze(parse_url(web_input["url-input"]))
-	else:
-            return Sentilecto.analyze(web_input.text)
+        x = web.input(datafile={})
+        print x
+    	if "url-input" in web_input and web_input["url-input"] != "":
+    	    print web_input["url-input"]
+    	    return Sentilecto.analyze(parse_url(web_input["url-input"]))
+    	else:
+                return Sentilecto.analyze(web_input.text)
 
     except Exception:
         print format_exc()

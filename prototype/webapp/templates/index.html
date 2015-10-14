@@ -61,9 +61,13 @@ $ captcha_src = "sentialexis/static/captcha/captcha_" + request_id + ".png"
       <h2 style="padding-top:60px;padding-bottom:10px;"></h2>
 
       <div>
-        <form class="well form-search" action="sentialexis/result" method="GET">
+        <form class="well form-search" enctype="multipart/form-data" action="sentialexis/result" method="GET">
             <fieldset>
                 <div class="control-group">
+                        <label class="control-label" for="text">Input File:</label>
+                        <br>
+                        <input type="file" name="datafile" accept=".txt" multiple="" size="40">
+                        <br><br>
                         <label class="control-label" for="text">Input URL:</label>
                         <input class="input-url" type="text" style="width: 950px;" name="url-input"/>
                     <br><br>
