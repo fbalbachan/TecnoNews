@@ -18,6 +18,28 @@ from src.utils.webOutputUtils import WebOutputUtils
 from src.utils.configProvider import ConfigProvider
 from src.ling.freelingDictionaryParser import FreelingDictionaryParser
 
+from BeautifulSoup import BeautifulSoup
+import urllib2
+import re
+
+def parse_url(url):
+    try:
+        page=urllib2.urlopen(url)
+
+        soup = BeautifulSoup(page.read())
+        texts = soup.findAll("p")
+    except Exception:
+        texts = []
+
+    textParagraphs = []
+    for node in texts:
+        temp = ''.join(node.findAll(text=True))
+        if re.match(".*[.]$",temp):
+        	textParagraphs.append(temp)
+
+    return "\n".join(textParagraphs)
+
+
 request_id = 0
 request_data = {}
 captchas_by_request = {}
@@ -64,7 +86,13 @@ def analyze(debug=False):
 
     try:
         web_input = web.input()
-        return Sentilecto.analyze(web_input.text, output_demo_debug=debug)
+        x = web.input(datafile={})
+        print x
+    	if "url-input" in web_input and web_input["url-input"] != "":
+    	    print web_input["url-input"]
+    	    return Sentilecto.analyze(parse_url(web_input["url-input"]), output_demo_debug=debug)
+    	else:
+                return Sentilecto.analyze(web_input.text, output_demo_debug=debug)
 
     except Exception:
         print format_exc()
@@ -117,19 +145,19 @@ class EntiNews_request:
 
         except Exception:
             print format_exc()
-            web.redirect("/sentilecto")
+            web.redirect("/sentialexis")
 
     def action_fact_extraction(self):
         analysis = analyze()
         if not analysis:
-            web.redirect("/sentilecto")
+            web.redirect("/sentialexis")
 
         return web.template.render().facts(analysis, WebOutputUtils(ontology))
 
     def action_svo_slots(self):
         analysis = analyze()
         if not analysis:
-            web.redirect("/sentilecto")
+            web.redirect("/sentialexis")
 
         return web.template.render().entinews(analysis, WebOutputUtils(ontology))
 
@@ -161,14 +189,14 @@ class EntiNews_request:
                 method = web_input["method"]
                 return action_by_method[method]()
 
-        web.redirect("/sentilecto")
+        web.redirect("/sentialexis")
 
 # # # MAIN # # #
 
 
 def write_pid_file():
     pid = str(os.getpid())
-    pid_file = './sentilecto.pid'
+    pid_file = './sentialexis.pid'
     file(pid_file, 'w').write(pid)
 
 

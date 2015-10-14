@@ -1,12 +1,12 @@
 $def with (request_id, debug_mode)
-$ captcha_src = "sentilecto/static/captcha/captcha_" + request_id + ".png"
+$ captcha_src = "sentialexis/static/captcha/captcha_" + request_id + ".png"
 <!DOCTYPE html>
 <html lang="es">
   <head>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.css">
     <script src="static/jquery-1.6.2.min.js"></script>
-    <title>SentiLecto</title>
+    <title>sentialexis</title>
     <script>
       $$(document).ready(function(){
       $$('#language .es').click(function(){
@@ -59,11 +59,18 @@ $ captcha_src = "sentilecto/static/captcha/captcha_" + request_id + ".png"
     <div class="container" style="width: 1000px">
 
       <h2 style="padding-top:60px;padding-bottom:10px;"></h2>
-      
+
       <div>
-        <form class="well form-search" action="sentilecto/result" method="GET">
+        <form class="well form-search" enctype="multipart/form-data" action="sentialexis/result" method="GET">
             <fieldset>
                 <div class="control-group">
+                        <label class="control-label" for="text">Input File:</label>
+                        <br>
+                        <input type="file" name="datafile" accept=".txt" multiple="" size="40">
+                        <br><br>
+                        <label class="control-label" for="text">Input URL:</label>
+                        <input class="input-url" type="text" style="width: 950px;" name="url-input"/>
+                    <br><br>
                     <label class="control-label" for="text">Input Text (only Spanish):</label>
                     <div class="controls">
             		<textarea class="input-xlarge" id="textarea" rows="26" style="width: 950px;" name="text">
@@ -93,6 +100,7 @@ separadores de textos. dejar este texto y borrar los otros para probar ellipsis 
 
 Yo me casé con la de Diseño Gráfico. He presenciado muchas tragedias, pero la del hotel Savoy ocurrió en marzo. La de Diseño Gráfico fue acortada por los burocráticos. La carrera de María, que fue asesinada por los abogados, era extraordinaria. La carrera de María, que fue acortada por los abogados, era extraordinaria. Los letrados han matado a María.
 </textarea>
+
                         $if not debug_mode:
                             <br><br>
                             Are you a robot? (enter the numbers & letters you see) <input class="input" type="text" style="width: 50px;" maxlength=4 name="captcha"/>&nbsp;
