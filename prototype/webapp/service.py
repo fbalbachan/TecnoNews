@@ -60,11 +60,11 @@ def cleanup_session(p_request_id):
     os.remove(captcha_filename_for(p_request_id))
 
 
-def analyze():
+def analyze(debug=False):
 
     try:
         web_input = web.input()
-        return Sentilecto.analyze(web_input.text)
+        return Sentilecto.analyze(web_input.text, output_demo_debug=debug)
 
     except Exception:
         print format_exc()
@@ -97,7 +97,7 @@ class Debug_request:
         sys.stderr = output
 
         print web.ctx
-        analyze()
+        analyze(debug=True)
         return web.template.render().debug(output.getvalue())
 
 
