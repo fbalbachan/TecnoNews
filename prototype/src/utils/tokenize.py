@@ -84,9 +84,7 @@ def limpieza_inicial(s):
     s = re.sub(r'\bd\b', 'de', s)
     s = re.sub(r'\?+', '?', s)
     s = re.sub(r'\!+', '!', s)
-    s = re.sub(r'\b(http|HTTP)\://\S*\b', '', s)
-
-
+    s = re.sub(r'\b(http|HTTP)\:--\S*\b', '', s)
     # s = re.sub(r"\n+(\w)", '.\1', s, re.U)
     return s
 
