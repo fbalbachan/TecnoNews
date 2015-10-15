@@ -390,7 +390,7 @@ class WebOutputUtils:
         while len(plain_refs_data) > 0:
             unified = plain_refs_data.pop(0)
             for plain_referent in plain_refs_data[:]:
-                if self.plain_entities_match(plain_referent["re"], unified["re"]):
+                if self.plain_entities_match(plain_referent["re"], unified["re"], is_atomic):
                     unified["rn"] = self.get_real_name_for_plain_entities(plain_referent["re"], unified["re"], is_atomic)
                     unified["pos"] = unified["pos"] + plain_referent["pos"]
                     unified["neg"] = unified["neg"] + plain_referent["neg"]
@@ -427,8 +427,11 @@ class WebOutputUtils:
         if debug_mode: print "<-- get_real_name_for_plain_entities:", real_name
         return real_name
 
-    def plain_entities_match(self, entity1, entity2):
+    def plain_entities_match(self, entity1, entity2, is_atomic):
         if debug_mode: print "--> WebOutputUtils.plain_entities_match(entity1:", entity1, ", entity2:", entity2, ")"
+
+        if not is_atomic:
+            return entity1.lexical_form == entity2.lexical_form
 
         both_have_kernel = hasattr(entity1, "kernel") and entity1.kernel \
                            and hasattr(entity2, "kernel") and entity2.kernel
