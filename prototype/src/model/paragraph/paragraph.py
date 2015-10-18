@@ -2,6 +2,7 @@
 import re
 
 from src.model.sentence.sentenceSplitter import SentenceSplitter
+from src.utils.textCleaner import TextCleaner
 
 debug_mode = False
 
@@ -47,6 +48,9 @@ class Paragraph:
         paragraph._process_parenthetic_dashes()
 
         sentences = SentenceSplitter().sentences_in(paragraph.text, paragraph)
+
+        for sentence in sentences:
+            sentence.text = Paragraph._preprocess_text(sentence.text)
         paragraph.sentences = sentences
 
         if debug_mode: print "<-- Paragraph.from_text() - Sentences retrieved: ", paragraph.sentences
@@ -99,3 +103,10 @@ class Paragraph:
         text = re.sub(dash_period_enclosed_re, '.', text)
 
         self.text = text
+
+    @staticmethod
+    def _preprocess_text(text):
+
+        tc = TextCleaner()
+        preprocessed_text = tc.clean(text)
+        return preprocessed_text

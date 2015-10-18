@@ -6,6 +6,7 @@ from src.model.paragraph.paragraphAnalyzer import ParagraphAnalyzer
 from src.model.referent.entityUnifier import EntityUnifier
 from src.model.referent.referentInformationExtractor import ReferentInformationExtractor
 from src.model.referent.referentSentimentalScorer import ReferentSentimentalScorer
+from src.model.sentence.sentenceAnalyzer import SentenceAnalyzer
 from src.sentiment.sentimentalSummarizer import SentimentalSummarizer
 
 
@@ -14,14 +15,16 @@ class Sentilecto:
         pass
 
     @staticmethod
-    def analyze(text):
+    def analyze(text, output_demo_debug=False):
         if type(text) == unicode:
             text = text.encode("utf-8")  # unicode -> str (utf8-encoded)
 
         analysis = {}
 
         paragraph = Paragraph.from_text(text)
-        paragraph_analyzer = ParagraphAnalyzer()
+        sentence_analyzer = SentenceAnalyzer()
+        paragraph_analyzer = ParagraphAnalyzer(sentence_analyzer, output_demo_debug)
+
         paragraph_analyzer.analyze(paragraph)
         analysis["paragraph"] = paragraph
 

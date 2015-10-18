@@ -78,7 +78,7 @@ class TecnoNews(object):
         logger.info("<Tecnonews> <_process> --> STARTED _process([%s])" % entry.title)
         other_versions = []
         try:
-            entry.set_analisys_info()
+            entry.set_analysis_info()
             try:
                 tsr = RelatedNewsEntries(entry)
                 other_versions = tsr.get_other_versions_top_ten()
@@ -160,8 +160,8 @@ if __name__ == '__main__':
     from shutil import copyfile
 
     # TODO: use args and fix synchronization problem when copy config files
-    # parser = argparse.ArgumentParser(description='Instanciate instance of NaturalNews.')
-    # parser.add_argument('--instance', type=int, nargs=1, help='The instance identificator')
+    # parser = argparse.ArgumentParser(description='Instantiate NaturalNews.')
+    # parser.add_argument('--instance', type=int, nargs=1, help='The instance identification')
     # args = parser.parse_args()
     # config_file = u'instance_config/config_instance_' + unicode(args.instance[0])
     # print config_file

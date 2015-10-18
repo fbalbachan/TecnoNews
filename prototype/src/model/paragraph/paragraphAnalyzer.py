@@ -6,10 +6,11 @@ debug_mode = False
 
 
 class ParagraphAnalyzer:
-    def __init__(self, sentence_analyzer=SentenceAnalyzer()):
+    def __init__(self, sentence_analyzer=SentenceAnalyzer(), output_demo_debug=False):
         self.sentenceAnalyzer = sentence_analyzer
         self.context = sentence_analyzer.context
         self.invoker = Invoker()
+        self.sentenceAnalyzer.output_demo_debug = output_demo_debug
 
     def analyze(self, paragraph):
         if debug_mode: print "--> ParagraphAnalyzer.analyze()"

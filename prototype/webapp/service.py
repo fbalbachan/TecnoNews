@@ -18,6 +18,11 @@ from src.utils.webOutputUtils import WebOutputUtils
 from src.utils.configProvider import ConfigProvider
 from src.ling.freelingDictionaryParser import FreelingDictionaryParser
 
+from BeautifulSoup import BeautifulSoup
+import urllib2
+import re
+
+
 request_id = 0
 request_data = {}
 captchas_by_request = {}
@@ -26,6 +31,24 @@ cleanup_timer = None
 config = ConfigProvider()
 debug_mode = (config.get("debug", "debug") == "True")
 ontology = FreelingDictionaryParser.get_ontology()
+
+
+def parse_url(url):
+    try:
+        page=urllib2.urlopen(url)
+
+        soup = BeautifulSoup(page.read())
+        texts = soup.findAll("p")
+    except Exception:
+        texts = []
+
+    textParagraphs = []
+    for node in texts:
+        temp = ''.join(node.findAll(text=True))
+        if re.match(".*[.]$",temp):
+            textParagraphs.append(temp)
+
+    return "\n".join(textParagraphs)
 
 
 def generate_captcha(req_id):
@@ -60,11 +83,16 @@ def cleanup_session(p_request_id):
     os.remove(captcha_filename_for(p_request_id))
 
 
-def analyze():
+def analyze(debug_output=False):
 
     try:
         web_input = web.input()
-        return Sentilecto.analyze(web_input.text)
+        # x = web.input(datafile={})
+
+        text = web_input.text if ("url-input" not in web_input or web_input["url-input"] == "") \
+               else parse_url(web_input["url-input"])
+
+        return Sentilecto.analyze(text, output_demo_debug=debug_output)
 
     except Exception:
         print format_exc()
@@ -97,7 +125,7 @@ class Debug_request:
         sys.stderr = output
 
         print web.ctx
-        analyze()
+        analyze(debug_output=True)
         return web.template.render().debug(output.getvalue())
 
 
