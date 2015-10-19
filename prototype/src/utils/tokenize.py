@@ -10,8 +10,6 @@ repeat_regex = re.compile(r'([abdefghijkmnñopqstuvwxyzABDEFGHIJKMNÑOPQSTUVWXYZ
 #replacement = r'\1\1'
 replacement = r'\1'
 
-re.sub(r'([a-z])\1+', r'\1', 'ffffffbbbbbbbqqq')
-
 
 def detroll(text):
 
@@ -22,8 +20,8 @@ def detroll(text):
             p_token = p_token.lower()
         return p_token.encode("utf-8")
 
-    output_tokens = [por_token(token) for token in text.split()]
-
+    #output_tokens = [por_token(token) for token in text.split()]
+    output_tokens = text.split()
     for index, token in enumerate(output_tokens):
         there_is_next_token = index < len(output_tokens)-1
         if there_is_next_token:
@@ -33,6 +31,7 @@ def detroll(text):
                 return text.lower()
 
     return ' '.join(output_tokens)
+
 
 def first_in_upper_case(token):
     return token[0].upper() == token[0]
