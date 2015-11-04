@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import re #, unidecode
 
-token_regex = re.compile(r'\w+|\w+\'\w+|[\w$]+', re.U|re.I)
+token_regex = re.compile(r'(\w|[áéíóú])+|\w+\'\w+|[\w$]+', re.U|re.I)
 question_regex = re.compile(ur"""[.,¿]?([_\-$\w\s]+)\?+""", re.U|re.I)
 
 #repeat_regex = re.compile(r'([abdefghijkmnñopqstuvwxyzABDEFGHIJKMNÑOPQSTUVWXYZáéíóúÁÉÍÓÚ])\1+')
@@ -78,9 +78,9 @@ def limpieza_inicial(s):
     s = re.sub(r'\bxq\b', 'porque', s)
     s = re.sub(r'\bXQ\b', 'porque', s)
     s = re.sub(r'\bRT\b', ':', s)
-    s = re.sub(r'\bx\b', 'por', s)
-    s = re.sub(r'\bX\b', 'por', s)
-    s = re.sub(r'\bd\b', 'de', s)
+    #s = re.sub(r'\bx\b', 'por', s)
+    #s = re.sub(r'\bX\b', 'por', s)
+    #s = re.sub(r'\bd\b', 'de', s)
     s = re.sub(r'\?+', '?', s)
     s = re.sub(r'\!+', '!', s)
     s = re.sub(r'\b(http|HTTP)\:--\S*\b', '', s)
