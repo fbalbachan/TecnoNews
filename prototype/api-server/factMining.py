@@ -14,7 +14,7 @@ from src.utils.configProvider import ConfigProvider
 from src.utils.factNormalizer import FactNormalizer
 from src.ling.freelingDictionaryParser import FreelingDictionaryParser
 
-__author__ = 'Martín Caramés Abente'
+__author__ = 'Alexis Balbachan'
 
 
 class FactMining(Resource):
@@ -29,9 +29,7 @@ class FactMining(Resource):
     @swagger.operation(notes='Analyze the text extracting named entities and the facts those entities are involved in. '
                              'Fact: is a triad S.V.O., Subject-Verb-Object, meaning: an agent (syntactic subject), '
                              'an action (verb) and the object over which rests the action. The results is structured as '
-                             'follows: ---- '
-                             'NOTE: This v0.9 is an early release, expect v1.0 to be here very soon. '
-                             'In it you\'ll find new resources and improved functionality.',
+                             'follows: ---- NOTE: This v0.9 is an early release, please expect v1.0 to be released soon. You will find new resources and improved functionality. ',
                        description='Natural Language Understanding / Fact Mining',
                        responseClass=FactMiningResponse,
                        nickname='mine facts',

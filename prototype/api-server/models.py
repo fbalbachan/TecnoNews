@@ -6,6 +6,15 @@ from flask import Flask
 
 
 @swagger.model
+class EntitySentimentReportResponse(Flask.response_class):
+    resource_fields = \
+        {
+            '0-Paragraph-Text':     fields.String(),
+            '1-Entities-Report':    fields.List(fields.String)        
+        }
+
+
+@swagger.model
 class TextAnalyze(Flask.request_class):
     resource_fields = {
         'text': fields.String()
@@ -54,7 +63,7 @@ class SentimentAnalysisResponse(Flask.response_class):
     resource_fields = \
         {
             '0-Paragraph-Text':             fields.String(),
-            '1-Paragraph-Sentiment-Score':  fields.Nested(score),
+            '1-Overall-Sentiment-Score':  fields.Nested(score),
             '2-Sentences':                  fields.List(fields.Nested(sentence))
         }
 

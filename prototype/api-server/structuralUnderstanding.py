@@ -10,7 +10,7 @@ from src.utils.stringUtils import has_type_encoding
 from models import DeepStructureResponse
 from usersStorage import users_storage
 
-__author__ = 'Martín Caramés Abente'
+__author__ = 'Alexis Balbachan'
 
 
 slot_names = {'subject':        '0-Subject',
@@ -29,7 +29,7 @@ class StructuralUnderstanding(Resource):
     def __init__(self):
         self.sentilecto = Sentilecto()
 
-    @swagger.operation(notes='Analyze the text and return a deep insight into its semantic structure. ---- NOTE: This v0.9 is an early release, expect v1.0 coming very soon. In it you\'ll find new resources and improved functionality.',
+    @swagger.operation(notes='Analyze the text and return a deep insight into its semantic structure. ---- NOTE: This v0.9 is an early release, expect v1.0 coming very soon.  ---- NOTE: This v0.9 is an early release, please expect v1.0 to be released soon. You will find new resources and improved functionality.',
                        description='Natural Language Understanding service',
                        responseClass=DeepStructureResponse,
                        nickname='get semantic structure',

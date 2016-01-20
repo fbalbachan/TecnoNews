@@ -106,6 +106,7 @@ class SentenceSplitter:
     delimiters = re.compile(ur"""[!\?]\s+"""
                             ur"""|(?=\.$)"""
                             ur"""|\n"""
+                            ur"""|, ?y\b"""
                             ur"""|, ?pero\b"""
                             ur"""|, ?entonces"""
                             ur"""|, ?sin embargo\b"""

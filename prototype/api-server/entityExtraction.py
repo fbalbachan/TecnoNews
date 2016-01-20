@@ -7,7 +7,7 @@ from models import EntitiesResponse
 from flask_restful import Resource, marshal_with
 from usersStorage import users_storage
 
-__author__ = 'Martín Caramés Abente'
+__author__ = 'Alexis Balbachan'
 
 
 class EntityExtraction(Resource):
@@ -15,7 +15,7 @@ class EntityExtraction(Resource):
     def __init__(self):
         self.sentilecto = Sentilecto()
 
-    @swagger.operation(notes='Analyze the text and extract named & non-named entities. ---- NOTE: This v0.9 is an early release, expect v1.0 coming very soon. In it you\'ll find new resources and improved functionality.',
+    @swagger.operation(notes='Analyze the text and extract named & non-named entities.  ---- NOTE: This v0.9 is an early release, please expect v1.0 to be released soon. You will find new resources and improved functionality.',
                        description='Natural Language Understanding / Sentiment Analysis service',
                        responseClass=EntitiesResponse,
                        nickname='get entities',

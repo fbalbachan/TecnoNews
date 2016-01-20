@@ -14,6 +14,7 @@ class WebOutputUtils:
     def __init__(self, ontology):
         if debug_mode: print "--> WebOutputUtils.init()"
         self.synonyms = self._get_synonyms()
+        #self.synonyms.update(self._get_unidirectional_synonyms())
         self.ontology = ontology
 
     def structure(self, clause, name):
@@ -60,6 +61,9 @@ class WebOutputUtils:
             tooltip = tooltip + " - Transitivity " + transitivity + " - Sentiment script " + klass
 
         return tooltip
+    
+    def e_name(self, entity):
+        return str(entity)
 
     def e_sv_pos_ev(self, entities):
         return ", ".join([self.evidence_string(entity, 0, entity.sentimental_value.positive_evidence())
@@ -431,7 +435,7 @@ class WebOutputUtils:
         if debug_mode: print "--> WebOutputUtils.plain_entities_match(entity1:", entity1, ", entity2:", entity2, ")"
 
         if not is_atomic:
-            return entity1.lexical_form == entity2.lexical_form
+            return entity1.lexical_form.lower() == entity2.lexical_form.lower()
 
         both_have_kernel = hasattr(entity1, "kernel") and entity1.kernel \
                            and hasattr(entity2, "kernel") and entity2.kernel
@@ -495,7 +499,12 @@ class WebOutputUtils:
     def _get_synonyms(self):
         return self._get_replacements_from_csv("synonyms")
 
-    def _get_replacements_from_csv(self, resource):
+
+    def _get_unidirectional_synonyms(self):
+        return self._get_replacements_from_csv("unidirectional_synonyms", bidirectional=False)
+
+
+    def _get_replacements_from_csv(self, resource, bidirectional=True):
         # Warning, it is a dict, it doesn't work for multiple replacements for the same word.
 
         replacements = {}
@@ -503,7 +512,8 @@ class WebOutputUtils:
         replacements_filename = config.get("resources", resource)
         for line in reader(open(replacements_filename, 'r')):
             replacements[line[0]] = line[1]
-            replacements[line[1]] = line[0]
+            if bidirectional:
+                replacements[line[1]] = line[0]
         return replacements
 
     def score_of(self, analysis, object):

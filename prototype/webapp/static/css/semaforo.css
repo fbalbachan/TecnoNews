@@ -1,0 +1,137 @@
+.very-positive {
+    background-color: rgba(0,255,0,1);
+}
+
+.positive {
+    background-color: rgba(0,255,0,0.5);
+}
+
+.slightly-positive {
+    background-color: rgba(0,255,0,0.15);
+}
+
+.neutral {
+    background-color: rgba(255,255,255,1);
+}
+
+.slightly-negative {
+    background-color: rgba(255,0,0,0.15);
+}
+
+.negative {
+    background-color: rgba(255,0,0,0.5);
+}
+
+.very-negative {
+    background-color: rgba(255,0,0,1);
+}
+
+.sentimaforo {
+    display   : block;
+    color     : rgba(128,128,128, 0.5);
+    font-size : 15px;
+    font-family : Ubuntu, tahoma, Arial;
+    position  : relative;
+    text-align: center;
+}
+
+.sentimaforo span {
+    position  : relative;
+    display: inline-block;
+    border    : gray thin solid;
+    width     : 12%;
+    height    : 100%;
+    overflow  : hidden;
+    text-align: center;
+    padding   : 5px;
+}
+
+.sentimaforo .selected {
+    color           : black;
+    text-decoration : underline;
+}
+
+.glow-rojo{
+    animation-duration: 2s;
+    animation-name: glow-rojo;
+    animation-iteration-count: infinite;
+    -o-animation-iteration-count: infinite;
+    -webkit-animation-iteration-count: infinite;
+    box-shadow: 0px 0px 15px white;
+    -webkit-box-shadow: 0px 0px 15px white;
+    -o-box-shadow: 0px 0px 15px white;
+    -webkit-animation-duration: 2s;
+    -webkit-animation-name: glow-rojo;
+    -o-animation-duration: 2s;
+    -o-animation-name: glow-rojo;
+}
+
+@keyframes glow-rojo {
+    from {
+        box-shadow: 0px 0px 15px white;
+    }
+    50%{
+        box-shadow: 0px 0px 30px red;
+    }
+    to {
+        box-shadow: 0px 0px 15px white;
+    }
+}
+
+
+
+.glow-verde{
+    animation-duration: 2s;
+    animation-name: glow-verde;
+    animation-iteration-count: infinite;
+    -o-animation-iteration-count: infinite;
+    -webkit-animation-iteration-count: infinite;
+    box-shadow: 0px 0px 15px white;
+    -webkit-box-shadow: 0px 0px 15px white;
+    -o-box-shadow: 0px 0px 15px white;
+    -webkit-animation-duration: 2s;
+    -webkit-animation-name: glow-verde;
+    -o-animation-duration: 2s;
+    -o-animation-name: glow-verde;
+}
+
+@keyframes glow-verde {
+    from {
+        box-shadow: 0px 0px 15px white;
+    }
+    50%{
+        box-shadow: 0px 0px 30px green;
+    }
+    to {
+        box-shadow: 0px 0px 15px white;
+    }
+}
+
+
+.glow-blue{
+    animation-duration: 2s;
+    animation-name: glow-blue;
+    animation-iteration-count: infinite;
+    -o-animation-iteration-count: infinite;
+    -webkit-animation-iteration-count: infinite;
+    box-shadow: 0px 0px 15px white;
+    -webkit-box-shadow: 0px 0px 15px white;
+    -o-box-shadow: 0px 0px 15px white;
+    -webkit-animation-duration: 2s;
+    -webkit-animation-name: glow-blue;
+    -o-animation-duration: 2s;
+    -o-animation-name: glow-blue;
+}
+
+@keyframes glow-blue {
+    from {
+        box-shadow: 0px 0px 15px white;
+    }
+    50%{
+        box-shadow: 0px 0px 30px blue;
+    }
+    to {
+        box-shadow: 0px 0px 15px white;
+    }
+}
+

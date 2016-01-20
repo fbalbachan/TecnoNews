@@ -31,7 +31,7 @@ if [ "$ACTION" = "start" -o "$ACTION" = "restart" ]; then
     cp ../instance_config/config_instance_demo_dev ../config
 
     {
-        nohup python service.py 8321
+        nohup python -u service.py 8321
     } >| nohup.demo.out &
 
 fi

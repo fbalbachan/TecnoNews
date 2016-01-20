@@ -21,9 +21,23 @@ class SentenceAnalyzer:
     def analyze(self, sentence):
         if debug_mode: print "--> SentenceAnalyzer.analyze()"
 
+        #TODO make it more readable!
+       # done = False
+        #count = 0
+        #while done != True and count == 0:
+        #    count = count +1
         self.set_parse_tree_to(sentence)
-
+        #    try:
+                #If guess ends normally => end while
         TokenizationGuesser(sentence).guess()
+        #        done = True
+        #    except Exception, e:
+                #Tokenization error! => exception comes with a fixed version of the text
+        #        if len(e.args) > 1:
+        #            sentence.text = e.args[1]
+        #            print sentence.text
+        #        else: #Fixed text is missing => nothing else to do
+        #            done = True
 
         sentence.clauses = ClauseExtractor.extract_from(sentence)
 

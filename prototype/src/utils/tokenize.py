@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import re #, unidecode
 
-token_regex = re.compile(r'(\w|[áéíóú])+|\w+\'\w+|[\w$]+', re.U|re.I)
+token_regex = re.compile(r'\w+|\w+\'\w+|[\w$]+', re.U|re.I)
 question_regex = re.compile(ur"""[.,¿]?([_\-$\w\s]+)\?+""", re.U|re.I)
 
 #repeat_regex = re.compile(r'([abdefghijkmnñopqstuvwxyzABDEFGHIJKMNÑOPQSTUVWXYZáéíóúÁÉÍÓÚ])\1+')
@@ -87,8 +87,10 @@ def limpieza_inicial(s):
     # s = re.sub(r"\n+(\w)", '.\1', s, re.U)
     return s
 
+
 def replace_repeated_letters(token):
     return re.sub(repeat_regex, replacement, token)
+
 
 def normalize_and_tokenize(text, regex=r'\w+'):
     return [w.lower() for w in re.findall(regex, text)]

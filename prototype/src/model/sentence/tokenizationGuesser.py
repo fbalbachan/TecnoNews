@@ -12,15 +12,15 @@ class TokenizationGuesser:
 
     def guess(self):
         text = self.sentence.text.decode("utf-8")
-
         leaves = self.sentence.parse_node.leaves()
-
+      
         leaves_it = iter(leaves)
         leaf = None
         token = None
         words = []
 
         index = self.sentence.token.start()
+
 
         following_contraction = []
         mismatchs = deque()
@@ -29,12 +29,13 @@ class TokenizationGuesser:
             if not words:
                 if leaf:
                     leaf.token = token
+                
                 leaf = leaves_it.next()
                 token = Token()
                 words = self.words_for(leaf)
 
-            word = words.pop()
 
+            word = words.pop()
             if not following_contraction:
                 following_contraction = self.get_following_contraction(text)
 
@@ -60,9 +61,19 @@ class TokenizationGuesser:
                     if not match:
                         text = text if not isinstance(text, unicode) else text.encode("utf8")
                         word = word if not isinstance(word, unicode) else word.encode("utf8")
-                        msg = ("Tokenization error! Text: [%s] - Word: [%s]" % (text, word))
-                        raise Exception(msg)
-
+                        
+                        bad_word_index = self.sentence.text.find(word,index)
+                        sentence_start = self.sentence.text[:bad_word_index]
+                        sentence_end = self.sentence.text[bad_word_index+len(word):]
+                        
+                        fixed_text = sentence_start + sentence_end
+                        #print "AAAAAAAAAAAAAAAAAAAAA"
+                        #print fixed_text.encode("utf-8")
+                        #print "BBBBBBBBBBBBBBBBBBBB"
+                        break 
+                        #msg = ("Tokenization error! Text: [%s] - Word: [%s]" % (text, word))
+                        #raise Exception(msg, fixed_text)
+                        
                     mismatchs.append((match.group(0), index))
 
                 words.append(word)
@@ -71,7 +82,6 @@ class TokenizationGuesser:
                 text = text[length:]
 
             index += length
-
         leaf.token = token
 
         for word, index in mismatchs:
@@ -88,10 +98,13 @@ class TokenizationGuesser:
         self.assing_middle_node_tokens()
 
     def assing_middle_node_tokens(self):
-        for node in [ node for node in self.sentence.parse_node if not node.is_leaf() ]:
-            token = Token()
-            token.components = [ (leaf.token.start(), leaf.token.end()) for leaf in node.leaves() ]
-            node.token = token
+        try:
+            for node in [ node for node in self.sentence.parse_node if not node.is_leaf() ]:
+                token = Token()
+                token.components = [ (leaf.token.start(), leaf.token.end()) for leaf in node.leaves() ]
+                node.token = token
+        except:
+            print "A"
 
     def is_pending_mismatch(self, word, mismatchs):
         if not mismatchs:

@@ -20,6 +20,7 @@ class SynonymsStrategy:
         self.synonyms = self._get_synonyms()
         self.adverbs = self._get_adverbs()
         self.locutions = self._get_locutions()
+        self.unidirectional_synonyms = self._get_unidirectional_synonyms()
 
     def applies_to(self, clause):
         for leaf in clause.proper_leaves():
@@ -31,10 +32,16 @@ class SynonymsStrategy:
     def rewrite(self, clause):
         if debug_mode: print "--> SynonymsStrategy.rewrite(clause: ", clause, ")"
         ontology = self.ontology
-
+        
         rewrites = []
         for leaf in clause.proper_leaves():
             replacement = None
+
+            if 'semantic_classification' in leaf.msi and leaf.msi['semantic_classification'] != None:
+                continue
+            
+            self.synonyms.update(self.unidirectional_synonyms)
+
             if leaf.lemma in self.synonyms.keys():
                 synonym = self.synonyms[leaf.lemma]
                 if '_' in synonym or synonym not in ontology.concepts:
@@ -46,7 +53,15 @@ class SynonymsStrategy:
                     leaf_msi = self._msi_transform(leaf.msi)
                     lexical_forms = [form for form in concept.lexical_forms if leaf_msi == self._msi_transform(form.msi)]
                     if lexical_forms:
-                        replacement = lexical_forms[0].text
+                        if leaf.msi['category'] == 'noun' and 'gender' in leaf.msi and leaf.msi['gender'] != 'neutral':
+                            if len(lexical_forms) > 1 and 'gender' in lexical_forms[0].msi and leaf.msi['gender'] != lexical_forms[0].msi['gender']:
+                                rewrites += self.rewrite_entity(clause, leaf, lexical_forms[1], ontology)
+                            else:
+                                rewrites += self.rewrite_entity(clause, leaf, lexical_forms[0], ontology)
+                        #if leaf.msi['category'] == 'noun' and 'gender' in leaf.msi and 'gender' in lexical_forms[0].msi and leaf.msi['gender'] != 'neutral' and leaf.msi['gender'] != lexical_forms[0].msi['gender']:
+                        #    rewrites += self.rewrite_entity(clause, leaf, lexical_forms[0], ontology)
+                        else:
+                            replacement = lexical_forms[0].text
 
                 if replacement:
                     rewrites.append(Rewrite.preserving_case(leaf, replacement))
@@ -57,12 +72,58 @@ class SynonymsStrategy:
 
         return rewrites
 
+
+    def rewrite_entity(self, clause, leaf, target_synonym, ontology):
+        target_gender = target_synonym.msi['gender']
+        #print "SINONIMO"
+        #print target_synonym
+        found_entity = None
+        for an_entity in clause.entities:
+            #print "COMPARAR"
+            #print an_entity.kernel
+            #print leaf.lexical_form
+            if str(an_entity.kernel) == str(leaf.lexical_form):
+                #print "ENCONTRO"
+                found_entity = an_entity
+                break
+        
+        #print "ENTIDAD A CAMBIAR"
+        #print found_entity
+
+        #leaf_msi = self._msi_transform(leaf.msi)
+        #leaf_msi['gender'] = target_gender
+
+        rewrites = [Rewrite.preserving_case(leaf, target_synonym.text)]
+        if found_entity != None:
+            for a_leaf in found_entity.leaves():
+                leaf_msi = self._msi_transform(a_leaf.msi)
+                leaf_msi['gender'] = target_gender
+                if a_leaf != leaf and 'gender' in a_leaf.msi and a_leaf.msi['gender'] != target_gender and a_leaf.msi['gender'] != 'neutral':
+                    lexical_forms = ontology.concept(a_leaf.lemma).lexical_forms
+                    for a_form in lexical_forms:
+                        form_msi = self._msi_transform(a_form.msi)
+                        form_msi['gender'] = a_form.msi['gender']
+                        #print "MSI COMPARE"
+                        #print form_msi
+                        #print leaf_msi
+                        if form_msi == leaf_msi:
+                        #if 'gender' in a_form.msi and a_form.msi['gender'] == target_gender:
+                            rewrites.append(Rewrite.preserving_case(a_leaf, a_form.text))
+                            
+        return rewrites
+
+
+
     def _get_synonyms(self):
         if debug_mode: print "--> SynonymsStrategy._get_synonyms()"
         return self._get_replacements_from_csv("synonyms")
 
     def _get_adverbs(self):
         return self._get_replacements_from_csv("adverb_forms")
+
+    def _get_unidirectional_synonyms(self):
+        if debug_mode: print "--> SynonymsStrategy,_get_unidirectional_synonyms()"
+        return self._get_single_replacements_from_csv("unidirectional_synonyms")
 
     def _get_replacements_from_csv(self, resource):
         if debug_mode: print "--> SynonymsStrategy._get_replacements_from_csv()"
@@ -74,6 +135,15 @@ class SynonymsStrategy:
         for line in csv.reader(open(replacements_filename, 'r')):
             replacements[line[0]] = line[1]
             replacements[line[1]] = line[0]
+        return replacements
+
+
+    def _get_single_replacements_from_csv(self, resource):
+        replacements = {}
+        config = ConfigProvider()
+        replacements_filename = config.get("resources", resource)
+        for line in csv.reader(open(replacements_filename, 'r')):
+            replacements[line[0]] = line[1]
         return replacements
 
     def _get_locutions(self):
@@ -92,8 +162,9 @@ class SynonymsStrategy:
         result_msi = {}
         if 'number' in msi:
             result_msi['number'] = msi['number']
-        if 'gender' in msi:
-            result_msi['gender'] = msi['gender']
+        if msi['category'] != 'noun':
+            if 'gender' in msi:
+                result_msi['gender'] = msi['gender']
 
         if msi['category'] == 'adjective':
             if 'grade' in msi:

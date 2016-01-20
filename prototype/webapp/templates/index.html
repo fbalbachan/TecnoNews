@@ -7,41 +7,16 @@ $ captcha_src = "sentilecto/static/captcha/captcha_" + request_id + ".png"
     <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.css">
     <script src="static/jquery-1.6.2.min.js"></script>
     <title>Sentilecto</title>
-    <script>
-      $$(document).ready(function(){
-      $$('#language .es').click(function(){
-      $$('.about.en').hide();
-      $$('.about.es').show();
-      $$(this).addClass('selected');
-      $$('#language .en').removeClass('selected');
-      });
-      $$('#language .en').click(function(){
-      $$('.about.es').hide();
-      $$('.about.en').show();
-      $$(this).addClass('selected');
-      $$('#language .es').removeClass('selected');
-      });
-      });
-    </script>
-
-    <input type="hidden" id="refreshed" value="no">
-    <script type="text/javascript">
-        onload=function(){
-            var e = document.getElementById("refreshed");
-            if (e.value == "no") e.value="yes";
-            else { e.value="no"; location.reload(); }
-        }
-    </script>
   </head>
 
   <body>
   <!-- <div lang="es-AR"> -->
-    <div class="container" style="width: 1000px">
+    <div class="container" style="width: 1200px">
 
-      <h2 style="padding-top:60px;padding-bottom:10px;"></h2>
+      <h2 style="padding-top:10px;padding-bottom:10px;"></h2>
 
       <div>
-        <form class="well form-search" enctype="multipart/form-data" action="sentilecto/result" method="GET">
+        <form class="well form-search" enctype="multipart/form-data" action="sentilecto/result" method="POST">
             <fieldset>
                 <div class="control-group">
 <!--
@@ -50,17 +25,22 @@ $ captcha_src = "sentilecto/static/captcha/captcha_" + request_id + ".png"
                         <input type="file" name="datafile" accept=".txt" multiple="" size="40">
                         <br><br>
 -->
-                        <label class="control-label" for="text">Enter URL (only Spanish)</label>
-                        <input class="input-url" type="text" style="width: 950px;" name="url-input"/>
+                        <label class="control-label" for="text">Enter URL or select a .txt or .csv file (only Spanish, UTF-8 encoded)</label>
+                        <input class="input-url" type="text" style="width: 1150px;" name="url-input"/>
+                        <input type="file" name="myfile" />
                     <br><br>or...<br><br>
                     <label class="control-label" for="text">Enter Text (only Spanish)</label>
                     <div class="controls">
-                    <textarea class="input-xlarge" id="textarea" rows="26" style="width: 950px;" name="text">
-Los abogados mataron a María. María fue asesinada por algunos letrados.
+                    <textarea class="input-xlarge" id="textarea" rows="26" style="width: 1150px;" name="text">
+Recientemente, los mercados financieros de Argentina se tranquilizaron cuando una disminución en la cotización del dólar paralelo fue vaticinada por Mauricio Macri.
+
+Apenas el Presidente Macri pronosticó una apreciable reducción en la cotización del dólar paralelo, se aplacaron los mercados financieros de Argentina.
+
+Macri predijo el decrecimiento en la cotización del dólar paralelo, a la vez que calmaba los mercados financieros de Argentina.
 
 separadores de textos. dejar este texto y borrar los otros. separadores de textos.
 
-Me alegra que el servicio de Telefónica haya mejorado. Me preocupa que el servicio de Telefónica no haya mejorado. No me preocupa que el servicio de Telefónica haya mejorado. No es verdad que Telefónica haya mejorado. Exijo que el servicio de Telefónica mejore. Esperamos que el servicio de Telefónica mejore. Ella preguntó si el servicio de Telefónica mejoró. Desmintieron el rumor que había sido difundido por el diario Clarín acerca de que Telefónica ha mejorado el servicio de la empresa Movistar.
+Me gusta que el servicio de Telefónica haya mejorado. Me gusta que el servicio de Telefónica no haya mejorado. No me gusta que el servicio de Telefónica haya mejorado. No es verdad que Telefónica haya mejorado. Exijo que el servicio de Telefónica mejore. Esperamos que el servicio de Telefónica mejore. Ella preguntó si el servicio de Telefónica mejoró. Desmintieron el rumor que había sido difundido por el diario Clarín acerca de que Telefónica ha mejorado el servicio de la empresa Movistar.
 
 separadores de textos. dejar este texto y borrar los otros. separadores de textos.
 
@@ -76,7 +56,7 @@ El estudiante había rendido examen en la facultad ese lunes, pero igual en el t
 
 separadores de textos. dejar este texto y borrar los otros. separadores de textos.
 
-Nos mostramos satisfechos porque se mostraron destacados avances en el reconocimiento público de personalidades. Tales avances consistieron en fortalecer los débiles lazos con la comunidad científica. Se distinguió como ciudadano ilustre a Martín Caramés, quien no se especializa en ciencias, a diferencia de Fernando Balbachan. Yo me distingo en filosofía, pero mi novia se especializa en biología, mostrando que nosotros podemos ser muy diferentes. Caramés se hizo cargo del gobierno, aunque hizo algunas cosas vergonzosas. Él se hizo el tonto, pero se hizo ver lo suficiente.
+Nos mostramos satisfechos porque se mostraron destacados avances en el reconocimiento público de personalidades. Tales avances consistieron en fortalecer los débiles lazos con la comunidad científica. Se distinguió como ciudadano ilustre a Martín Pérez, quien no se especializa en ciencias, a diferencia de Fernando Balbachan. Yo me distingo en filosofía, pero mi novia se especializa en biología, mostrando que nosotros podemos ser muy diferentes. Pérez se hizo cargo del gobierno, aunque hizo algunas cosas vergonzosas. Él se hizo el tonto, pero se hizo ver lo suficiente.
 
 separadores de textos. dejar este texto y borrar los otros. separadores de textos.
 

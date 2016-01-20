@@ -9,7 +9,7 @@ from entityExtraction import EntityExtraction
 from structuralUnderstanding import StructuralUnderstanding
 from sentimentAnalysis import SentimentAnalysis
 from factMining import FactMining
-
+from entitySentimentReport import EntitySentimentReport
 
 reload(sys)
 sys.setdefaultencoding("utf-8")
@@ -36,6 +36,7 @@ api.add_resource(EntityExtraction, base_path + '/entity-extraction/<string:text>
 
 api.add_resource(FactMining, base_path + '/fact-mining/<string:text>/<string:api_key>')
 
+api.add_resource(EntitySentimentReport, base_path + '/entity-sentiment-report/<string:text>/<string:api_key>')
 
 def write_pid_file():
     pid = str(os.getpid())

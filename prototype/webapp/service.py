@@ -88,57 +88,18 @@ def analyze(debug_output=False):
     try:
         web_input = web.input()
         # x = web.input(datafile={})
+        x = web.input(myfile={})
+        try:
+            file_contents = x['myfile'].file.read() # Or use a file(-like) object
+        except:
+            file_contents = ""
 
-        text = web_input.text if ("url-input" not in web_input or web_input["url-input"] == "") \
-               else parse_url(web_input["url-input"])
-	#file = open('/home/alexis/NaturalEnv/TecnoNews/prototype/newfile.txt', 'r')
-	#text = file.read()
+        if file_contents != "":
+            text = file_contents
+        else:
+            text = web_input.text if ("url-input" not in web_input or web_input["url-input"] == "") else parse_url(web_input["url-input"])
 
-
-	#output_file = open('/home/alexis/NaturalEnv/TecnoNews/prototype/output.txt', 'w')
-
-	text_analysis = Sentilecto.analyze(text, output_demo_debug=debug_output)
-	#sentences = text_analysis["paragraph"].sentences
-	#text_entities = []
-	#for sentence in sentences:
-	#    for clause in sentence.clauses:
-	#        clause_entities = clause.entities + clause.tacit_entities()
-
-    #            clause_entities = filter(lambda entity: not entity.has_attr("implicit") and not entity.has_attr("impersonal"), clause_entities)
-
-    #            clause_entities = filter(lambda entity: entity.is_maximal_regarding(clause_entities), clause_entities)
-
-	#        text_entities.extend(clause_entities)
-	#        if clause.relative_entity:
-	#            text_entities += [clause.relative_entity]
-
-	#output_utils = WebOutputUtils(ontology)
-	#if text_entities:
-	#    referents_data = output_utils.get_referents_data(text_entities)
-	#    i=0
-	#    for referent_data in referents_data:
-	#        i+=1
-	#        occurrences = len(referent_data['refs'])
-	#        a_line = str(i) + ", " + referent_data['rn']+ ", " + str(referent_data['pos']) + ", " + str(referent_data['neg']) + ", " + referent_data['sc'] + ", " + str(occurrences) + "\n"
-	        #"NAME: ", referent_data['rn'],
-	        #"POS: ", referent_data['pos'],
-	        #"NEG: ",  referent_data['neg'],
-	        #"TYPE: ", referent_data['sc'],
-	        #"OCURR: ", occurrences
-	        #print a_line
-	        #print "ID %s." % i
-	        #print "NAME %s." % referent_data['rn']
-	        #print "POS %s." % referent_data['pos']
-	        #print "NEG %s." % referent_data['neg']
-	        #print "TYPE %s." % referent_data['sc']
-	        #print "OCUR %s." % occurrences
-	#        output_file.write(a_line)
-	        #output_file.write("\n")
-
-
-	#output_file.close()
-        #return Sentilecto.analyze(text, output_demo_debug=debug_output)
-        return text_analysis
+        return Sentilecto.analyze(text, output_demo_debug=debug_output)
 
     except Exception:
         print format_exc()
@@ -207,7 +168,7 @@ class EntiNews_request:
 
         return web.template.render().entinews(analysis, WebOutputUtils(ontology))
 
-    def GET(self):
+    def POST(self):
 
         web_input = web.input()
         incoming_request_id = int(web_input.request)

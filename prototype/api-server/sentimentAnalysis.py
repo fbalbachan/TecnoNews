@@ -9,7 +9,7 @@ from models import SentimentAnalysisResponse
 from flask_restful import Resource, marshal_with
 from usersStorage import users_storage
 
-__author__ = 'Martín Caramés Abente'
+__author__ = 'Alexis Balbachan'
 
 
 class SentimentAnalysis(Resource):
@@ -17,7 +17,7 @@ class SentimentAnalysis(Resource):
     def __init__(self):
         self.sentilecto = Sentilecto()
 
-    @swagger.operation(notes='Analyze the text and return extensive and fine-grained sentiment scores for every structure. ---- NOTE: This v0.9 is an early release, expect v1.0 coming very soon. In it you\'ll find new resources and improved functionality.',
+    @swagger.operation(notes='Analyzes input utf-8 encoded text and returns extensive and fine-grained sentiment scores for each entity. ---- NOTE: This v0.9 is an early release, please expect v1.0 to be released soon. You will find new resources and improved functionality.',
                        description='Natural Language Understanding service',
                        responseClass=SentimentAnalysisResponse,
                        nickname='get sentiment analysis',
@@ -112,7 +112,7 @@ class SentimentAnalysis(Resource):
             analysis_results = \
                 {
                     '0-Paragraph-Text':             analysis["paragraph"].text,
-                    '1-Paragraph-Sentiment-Score':  score,
+                    '1-Overall-Sentiment-Score':  score,
                     '2-Sentences':                  sentences_data
                 }
 

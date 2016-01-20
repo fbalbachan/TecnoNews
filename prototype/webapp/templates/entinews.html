@@ -4,10 +4,19 @@ $def with (analysis, printer)
   <head>
     <meta charset="utf-8" />
     <link rel="stylesheet" type="text/css" href="static/css/sentilecto.css">
+    <link rel="stylesheet" type="text/css" href="static/css/semaforo.css">
+    <script type="text/javascript" src="static/jquery-1.6.2.min.js" ></script>
+    <script type="text/javascript" src="static/html2CSV.js" ></script>
+    <script type="text/javascript" src="static/js/semaforo.js" ></script>
+
   </head>
   <body>
 
-    <center><h2><font color="black">Overall text score (+$printer.score_of(analysis,analysis["paragraph"]).split(",")[0]% , $printer.score_of(analysis,analysis["paragraph"]).split(",")[1]%)</font></h2></center>
+    <center><h2><font color="black">Overall text score (+<span class="score-positivo">$printer.score_of(analysis,analysis["paragraph"]).split(",")[0]</span>% , <span class="score-negativo">$printer.score_of(analysis,analysis["paragraph"]).split(",")[1]</span>%)</font></h2></center>
+
+<div class="sentimaforo">    <span class="very-positive">very_positive</span>    <span class="positive">positive</span>    <span class="slightly-positive">slightly_positive</span>    <span class="neutral">neutral</span>    <span class="slightly-negative">slightly_negative</span>    <span class="negative">negative</span>    <span class="very-negative">very_negative</span>    </div>
+
+
     <center><h3><font color="black">Check <a href="#overall_score">Entity-based Sentiment Overall Report</a> at the bottom of this page</font></h3></center>
 
     $ sentences = analysis["paragraph"].sentences
@@ -120,13 +129,28 @@ $def with (analysis, printer)
             <p class="normal">
             <br><center><b><u><font size=5 color="#8A0808">$title</font></u></b></center>
             <br><center><font size=3 color="black">$subtitle</font></center>
-
             <br>
+            <center><a href="#" class="export">Export table as .csv (text delimiter ")</a></center>
+            <br>
+            <div id="dvData">
             <center><table id="global_entities" border="1">
-                <tr><th>Id</th><th>Entity</th><th>Positive</th><th>Negative</th><th>Named-Entity</th><th>Occurrences</th></tr>
+                <tr><th>Id</th><th>Entity</th><th>Positive</th><th>Negative</th><th>Named-Entity</th><th>Total occurrences</th><th>Occurrences (appearances)</th></tr>
 
             $ i=0
             $for referent_data in referents_data:
+                $ appearing = {}
+                $for a_reference in referent_data['refs']:
+                    $ a_reference = printer.e_name(a_reference)
+                    $if a_reference in appearing:
+                        $ appearing[a_reference]+=1
+                    $else:
+                        $ appearing[a_reference]=1
+                
+                $ unique_str = ""    
+                $for unique_elem in appearing.iterkeys():
+                    $ unique_str+=' ' + unique_elem+': '+printer.e_name(appearing[unique_elem])+','
+                
+                $ unique_str = unique_str[:-1]
                 $ i+=1
                 $ occurrences = len(referent_data['refs'])
                 $if occurrences == len(referents_data[0]['refs']):
@@ -137,6 +161,7 @@ $def with (analysis, printer)
                         <td align="center" title="$printer.e_sv_neg_ev(referent_data['refs'])" width=100><font size=4 color="white"><b>$referent_data['neg']</b></font></td>
                         <td align="center" width=100><font size=4 color="white"><b>$referent_data['sc']</b></font></td>
                         <td align="center" width=100><font size=4 color="white"><b>$occurrences</b></font></td>
+                        <td align="center" width=100><font size=4 color="white"><b>$unique_str</b></font></td>
                     </tr>
                 $else:
                     <tr>
@@ -146,11 +171,16 @@ $def with (analysis, printer)
                         <td align="center" title="$printer.e_sv_neg_ev(referent_data['refs'])" width=100>$referent_data['neg']</td>
                         <td align="center" width=100>$referent_data['sc']</td>
                         <td align="center" width=100>$occurrences</td>
+                        <td align="center" width=100>$unique_str</td>
                     </tr>
             </table></center>
+            </div>
             </p>
 
             <center><h2><font color="black">Overall text score (+$printer.score_of(analysis,analysis["paragraph"]).split(",")[0]% , $printer.score_of(analysis,analysis["paragraph"]).split(",")[1]%)</font></h2></center>
+
+
+            <div class="sentimaforo">    <span class="very-positive">very_positive</span>    <span class="positive">positive</span>    <span class="slightly-positive">slightly_positive</span>    <span class="neutral">neutral</span>    <span class="slightly-negative">slightly_negative</span>    <span class="negative">negative</span>    <span class="very-negative">very_negative</span>    </div>
 
             <center><h3><font color="black">Overall text score scale</font></h3></center>
 
@@ -195,6 +225,9 @@ $def with (analysis, printer)
 
             $ full_text = analysis["paragraph"].text
                 <br><font size=3 color="black">$full_text</font>
+
+
+<script type="text/javascript">set_sentimaforo();</script>
 
   </body>
 </html>
