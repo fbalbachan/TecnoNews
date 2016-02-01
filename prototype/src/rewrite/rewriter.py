@@ -70,12 +70,25 @@ class Rewriter:
         if debug_mode: print "--> Rewriter.rewrite()"
 
         text = self.paragraph.text
+
+        successful_strategies = []
         for strategy in self.dislocationStrategies:
+            pre_text = text #Save text before strategy changes
+
+            #Don't apply partial voice if seImpersonal was applied
+            if strategy.__class__.__name__ == "SeImpersonalStrategy" and  "PartialVoicePassiveStrategy" in successful_strategies:
+                continue 
+
+
             if debug_mode: print "\nTEXT BEFORE APPLYING DISLOCATION STRATEGY: ", strategy.__class__.__name__, ":\n[", text, "]\n"
             self.paragraph = Paragraph.from_text(text)
             self.analyzer.analyze(self.paragraph)
             dislocations = self._dislocations_from(strategy, self.paragraph.sentences)
             text = self.compose_text_with(dislocations)
+
+            if pre_text != text: #Text changed!
+                successful_strategies.append(strategy.__class__.__name__)
+
             if debug_mode: print "\nTEXT AFTER APPLYING DISLOCATION STRATEGY: ", strategy.__class__.__name__, ":\n[", text, "]\n"
 
         replacements = []

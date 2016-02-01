@@ -2,6 +2,8 @@
 from src.rewrite.rewrite import Rewrite
 from src.utils.stringUtils import set_first_letter_case
 
+# Ejemplo de acción de la estrategia:
+# "Ellos van a condenar al preso." -> "Ellos condenarán al detenido."
 
 class GoConstructionToFutureStrategy:
     def __init__(self, ontology):
@@ -23,7 +25,10 @@ class GoConstructionToFutureStrategy:
 
     @staticmethod
     def msi_for(verb):
+        #return {"mode": "indicative", "time": "futuro",
+        #        "person": verb.person(), "number": verb.number()}
         return {"mode": "indicative", "time": "futuro",
-                "person": verb.person(), "number": verb.number()}
+                "person": verb.msi['person'], "number": verb.msi['number']}
+
 
     type = "replacement"

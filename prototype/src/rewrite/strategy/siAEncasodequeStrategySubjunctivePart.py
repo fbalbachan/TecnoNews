@@ -59,15 +59,15 @@ class SiAEncasodequeStrategySubjunctivePart:
     @staticmethod
     def msi_for(verb):
         return {'number':  verb.number(),
-                'person': 3 if verb.person() == 1 and verb.number() == 'singular' else verb.person(),
+                'person': 3 if verb.msi['person'] == 1 and verb.msi['number'] == 'singular' else verb.msi['person'],
                 'time':  verb.msi['time'],
                 'mode': 'subjunctive'}
 
     def haber_subjunctive_msi_for(self, verb):
         return {"mode": "subjunctive",
                 "time": "presente",
-                "person": 3 if verb.person() == 1 and verb.number() == 'singular' else verb.person(),
-                "number": verb.number()}
+                "person": 3 if verb.msi['person'] == 1 and verb.msi['number'] == 'singular' else verb.msi['person'],
+                "number": verb.msi['number']}
 
     participle_msi = {"mode": "participio",
                       "gender": Gender.masculine,

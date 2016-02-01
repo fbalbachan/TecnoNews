@@ -86,7 +86,6 @@ class PartialVoicePassiveStrategy:
                 ntext = self.rewrite_clause_od_inanimate(node, sentence, clause, next_clause)
             else:
                 ntext = self.rewrite_clause_od_animated(node, sentence, clause, next_clause)
-
             rewrite_rule = Rewrite(clause.node, ntext)
 
         except Exception as e:
@@ -105,7 +104,8 @@ class PartialVoicePassiveStrategy:
         msi = {"mode": leaf.msi["mode"],
                "time": leaf.msi["time"],
                "person": 3,
-               "number": od_structure.number()}
+               #"number": od_structure.number()
+               "number": od_structure.msi()['number']}
 
         # transform the last leaf of verb (ie clause.verb) to the msi of the first leaf of verb
         lexical_forms = self.ontology.get_lexical_forms(clause.verb.lemma(), msi)

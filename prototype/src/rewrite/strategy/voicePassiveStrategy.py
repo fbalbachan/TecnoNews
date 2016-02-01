@@ -89,10 +89,13 @@ class VoicePassiveStrategy:
             # get the first leaf to extract the msi
             leaf = clause.verb.leaves()[0]
 
+            #print clause.structure('subject')
+            #print clause.structure('subject').msi()
+
             msi = {"mode": leaf.msi["mode"],
                    "time": leaf.msi["time"],
-                   "person": clause.structure('subject').person(),
-                   "number": clause.structure('subject').number()}
+                   "person": clause.structure('subject').msi()['person'],
+                   "number": clause.structure('subject').msi()['number']}
 
             # transform the last leaf of verb (ie clause.verb) to the msi of the first leaf of verb
             lexical_forms = self.ontology.get_lexical_forms(clause.verb.lemma(), msi)

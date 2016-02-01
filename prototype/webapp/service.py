@@ -17,6 +17,7 @@ from src.model.sentilecto import Sentilecto
 from src.utils.webOutputUtils import WebOutputUtils
 from src.utils.configProvider import ConfigProvider
 from src.ling.freelingDictionaryParser import FreelingDictionaryParser
+from src.utils.freelingLanguageDetectorClient import FreelingLanguageDetectorClient
 
 from BeautifulSoup import BeautifulSoup
 import urllib2
@@ -31,7 +32,7 @@ cleanup_timer = None
 config = ConfigProvider()
 debug_mode = (config.get("debug", "debug") == "True")
 ontology = FreelingDictionaryParser.get_ontology()
-
+freeling_language_detector = FreelingLanguageDetectorClient()
 
 def parse_url(url):
     try:
@@ -83,8 +84,14 @@ def cleanup_session(p_request_id):
     os.remove(captcha_filename_for(p_request_id))
 
 
-def analyze(debug_output=False):
+def detect_language(input_text):
+    result = freeling_language_detector.parse(input_text.replace('\n', ' '))
+    if result[0] == u'':
+        return None
+    else:
+        return result[0]
 
+def get_input_text():
     try:
         web_input = web.input()
         # x = web.input(datafile={})
@@ -99,7 +106,36 @@ def analyze(debug_output=False):
         else:
             text = web_input.text if ("url-input" not in web_input or web_input["url-input"] == "") else parse_url(web_input["url-input"])
 
-        return Sentilecto.analyze(text, output_demo_debug=debug_output)
+        return text
+
+    except Exception:
+        print format_exc()
+
+        if debug_mode:
+            web.template.render().exception(format_exc(), "")
+
+        return ""
+
+
+
+
+def analyze(debug_output=False):
+
+    try:
+        #web_input = web.input()
+        ## x = web.input(datafile={})
+        #x = web.input(myfile={})
+        #try:
+        #    file_contents = x['myfile'].file.read() # Or use a file(-like) object
+        #except:
+        #    file_contents = ""
+
+        #if file_contents != "":
+        #    text = file_contents
+        #else:
+        #    text = web_input.text if ("url-input" not in web_input or web_input["url-input"] == "") else parse_url(web_input["url-input"])
+
+        return Sentilecto.analyze(get_input_text(), output_demo_debug=debug_output)
 
     except Exception:
         print format_exc()
@@ -132,15 +168,38 @@ class Debug_request:
         sys.stderr = output
 
         print web.ctx
-        analyze(debug_output=True)
-        return web.template.render().debug(output.getvalue())
+
+        input_text = get_input_text()
+        language = detect_language(input_text)
+        if language == u'es' or language == u'it' or language == u'fr' or language == u'ca' or language == u'as' or language == u'gl':
+            analysis = analyze(debug_output=True)
+            return web.template.render().debug(output.getvalue())
+        elif language == u'pt':
+            return web.template.render().ptresult()
+        else:
+            return web.template.render().unsupported()
+
+
+        #analyze(debug_output=True)
+        #return web.template.render().debug(output.getvalue())
 
 
 class HiddenEntiNews_request:
     def GET(self):
-        analysis = analyze()
 
-        return web.template.render().entinews(analysis, WebOutputUtils(ontology))
+        input_text = get_input_text()
+        language = detect_language(input_text)
+        if language == u'es' or language == u'it' or language == u'fr' or language == u'ca' or language == u'as' or language == u'gl':
+            analysis = analyze()
+            return web.template.render().entinews(analysis, WebOutputUtils(ontology))
+        elif language == u'pt':
+            return web.template.render().ptresult()
+        else:
+            return web.template.render().unsupported()
+
+        #analysis = analyze()
+
+        #return web.template.render().entinews(analysis, WebOutputUtils(ontology))
 
 
 class EntiNews_request:
@@ -194,7 +253,19 @@ class EntiNews_request:
                                     "content_rewrite"	: self.action_content_rewrite }
 
                 method = web_input["method"]
-                return action_by_method[method]()
+
+                logger.info("Detecting language:")
+
+                input_text = get_input_text()
+                language = detect_language(input_text)
+                logger.info("Language is: " + language)
+
+                if language == u'es' or language == u'it' or language == u'fr' or language == u'ca' or language == u'as' or language == u'gl':
+                    return action_by_method[method]()
+                elif language == u'pt':
+                    return web.template.render().ptresult()
+                else:
+                    return web.template.render().unsupported()
 
         web.redirect("/sentilecto")
 

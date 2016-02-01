@@ -33,7 +33,7 @@ class PastSimpleToCompoundStrategy:
     @staticmethod
     def msi_for(verb):
         return {"mode": "indicative",    "time": "presente",
-                "person": verb.person(), "number": verb.number()}
+                "person": verb.msi['person'], "number": verb.msi['number']}
 
     participle_msi = {"mode": "participio",
                       "gender": Gender.masculine,

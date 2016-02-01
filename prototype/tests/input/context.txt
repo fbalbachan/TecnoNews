@@ -44,7 +44,7 @@ Odiamos comer en un bar
 Toda la noche el cartero llegó con novedades
     subject: el cartero
     instrument_goal: novedades
-    adjuncts: Toda la noche
+    time: Toda la noche
 
 Las manzanas comió Leandro
     subject: Leandro
