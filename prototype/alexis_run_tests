@@ -1,0 +1,11 @@
+#!/bin/bash
+export PYTHONPATH=$PYTHONPATH:`pwd`/src
+#set -e
+for test in tests/*.py; do echo
+    echo "[$(date)] - EJECUTANDO $test"
+    python -u $test;
+    echo "------------------------------------"
+    echo "------------------------------------"
+    echo "------------------------------------"
+    #echo "$test"
+done
