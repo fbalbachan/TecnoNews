@@ -31,3 +31,11 @@ webapp/static/captcha/*
 prototype/news_crawler.db
 db/*
 .idea/*
+prototype/webapp/static/captcha/captcha*.png
+prototype/api-server/nohup.api.out
+prototype/api-server/nohup.out
+prototype/api-server/sentilecto-api.pid
+prototype/webapp/freelings.txt
+prototype/webapp/nohup.demo.out
+prototype/webapp/sentilecto.pid
+
