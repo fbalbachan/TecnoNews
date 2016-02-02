@@ -43,23 +43,21 @@ Si lo mata, será una tragedia
         count: go = 1
         go: future
 
-#-----------ARREGLAR EL CODIGO (Antes considerabamos "en caso de", ahora considerar "en caso de que"------------
-#En caso de que sea rico, me compro un yate
-#    clause: En_caso_de
-#        count: go = 0
-#    clause: que sea rico ,
-#        count: go = 1
-#        go: condition
-#    clause: me compro un yate
-#        count: go = 0
+#[ARREGLADO go->conditionFinder->find en caso..]-----------ARREGLAR EL CODIGO (Antes considerabamos "en caso de", ahora considerar "en caso de que"------------
+En caso de que sea rico, me compro un yate
+    clause: En_caso_de_que sea rico ,
+        count: go = 1
+        go: condition
+    clause: me compro un yate
+        count: go = 0
 
 En caso de incendio, use el ascensor
     count: go = 0
 
-Lo mato siempre y cuando sea correcto
-    clause: Lo mato siempre_y_cuando
+Lo mato, siempre y cuando sea correcto
+    clause: Lo mato ,
         count: go = 0
-    clause: sea correcto
+    clause: siempre_y_cuando sea correcto
         count: go = 1
         go: condition
 
