@@ -27,6 +27,8 @@ class TestOD(unittest.TestCase):
 
             self.assertEquals("active", clause.voice)
 
+            #if clause.has_structure("od"):
+            #    print "OD: " + str(clause.structure("od").lexical_form())
             if expected_od == "None":
                 self.assertTrue(not clause.has_structure("od") or clause.structure("od").is_empty())
             else:
