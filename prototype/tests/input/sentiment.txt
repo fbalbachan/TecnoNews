@@ -4,9 +4,9 @@ El buen hombre murió
         sent_ev: buen
 
 El hombre de mierda murió
-    subject: El hombre de mierda
+    subject: El hombre de_mierda
         count: sent_ev = 1
-        sent_ev: mierda
+        sent_ev: de_mierda
 
 # Faltaría poder testear la entidad subordinada "mala mierda" con dos evidencias, una adjetival y otra nominal
 El hombre de mala mierda murió
@@ -15,10 +15,10 @@ El hombre de mala mierda murió
         sent_ev: mala mierda
 
 El buen hombre de mierda murió
-    subject: El buen hombre de mierda
+    subject: El buen hombre de_mierda
         count: sent_ev = 2
         sent_ev: buen
-        sent_ev: mierda
+        sent_ev: de_mierda
 
 # Nominal con infinitivos
 Olvido agradecer así
@@ -182,16 +182,19 @@ Leandro debe parecer bueno
     subject: Leandro
         count: sent_ev = 0
 
+#TENER CUIDADO CON MATE (Ya no es matar en dicc.src de freeling)
 # Estructuras catafóricas muy frecuentes
-Es malo que Leandro mate
+Es malo que Leandro asesine
 	clause: Es malo
 		subject: esto
 			count: sent_ev = 0
-	clause: que Leandro mate
+	clause: que Leandro asesine
 		subject: Leandro
-			count: sent_ev = 1
-			sent_ev: malo
-				value: (0, 100)
+			count: sent_ev = 2
+			sent_ev: asesine
+				value: (0, 40)
+                        sent_ev: malo
+                                value: (0, 100)
 
 # Asignación sentimental frente a possibility y volitive
 Leandro quiere arreglar eso
