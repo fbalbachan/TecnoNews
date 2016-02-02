@@ -94,9 +94,9 @@ Muy bueno el libro que fue comprado
             msi: { "person" : 3, "gender" : "masculine" }
 
 # Construcciones de gerundio
-Los charrúas comieron a Solís buscando satisfacer su hambre
-    clause: Los charrúas comieron a Solís
-        subject: Los charrúas
+Los indios comieron a Solís buscando satisfacer su hambre
+    clause: Los indios comieron a Solís
+        subject: Los indios
         verb: comieron
             lemma: comer
         od: Solís
@@ -122,7 +122,7 @@ Buscando ver a su padre, Leandro peleó sin pausa
 # Prioridad de asignación de MSI a entidades con subordinación interna
 La del albergue dijo eso
     subject: La de el albergue
-        msi: { "category": "determinant", "number" : "singular", "gender" : "feminine", "person" : 3 }
+        msi: { "category": "noun", "number" : "singular", "gender" : "feminine", "person" : 3 }
     verb: dijo
     od: eso
 
@@ -140,7 +140,7 @@ La manzana que fue dejada era fea
     clause: La manzana era fea
         subject: La manzana
     clause: que fue dejada
-        subject: alguien
+        subject: algo
         verb: fue dejada
         od: La manzana
 
@@ -154,10 +154,13 @@ La manzana que el cartero trajo estaba podrida
         od: La manzana
 
 # Árbol inconsistente "por" no queda en la estructura subordinada. Lo atrapamos con un parche.
-La manzana por la que fueron comidos era verde
+#ANTES EL VERBO ERA "COMIDOS"
+#Se cambió porque con la semantica actual la manzana nunca come a nadie
+#La entidad sigue teniendo cierta anomalia
+La manzana por la que fueron saciados era verde
     clause: La manzana por era verde
         subject: La manzana por
-    clause: la que fueron comidos
+    clause: la que fueron saciados
         subject: La manzana por
         od: ellos
 
@@ -165,7 +168,7 @@ La manzana, la que fue dejada era fea
     clause: La manzana , era fea
         subject: La manzana
     clause: la que fue dejada
-        subject: alguien
+        subject: algo
         od: La manzana
 
 El hombre con el que jugué había muerto
@@ -197,7 +200,7 @@ El hombre con quien lidió era alto
 
 Melina, la cual estaba implicada, había sido detenida
     clause: Melina , , había sido detenida
-        subject: alguien
+        subject: algo
         od: Melina
     clause: la cual estaba implicada
         subject: Melina
@@ -320,8 +323,8 @@ La presidenta saludó a José. Yo me crucé con él y le pregunté por ella.
         subject: La presidenta
         od: José
     sentence: Yo me crucé con él y le pregunté por ella.
-        clause: Yo me crucé con él
-            instrument_goal: él -> José
+        clause: Yo me_crucé con él
+            regimen: él -> José
                 msi: { "gender" : "masculine" }
         clause: le pregunté por ella
             adjuncts: ella -> La presidenta
@@ -360,12 +363,12 @@ El hombre fue asesinado por la mujer en su casa. La hallaron así.
         od: La -> la mujer
 
 # Gerundio con enclítico
-Los charrúas comieron a Solís, condenándolo eternamente
-    clause: Los charrúas comieron a Solís , eternamente
-        subject: Los charrúas
+Los indios comieron a Solís, condenándolo eternamente
+    clause: Los indios comieron a Solís , eternamente
+        subject: Los indios
         od: Solís
     clause: condenando lo
-        subject: Los charrúas
+        subject: Los indios
         od: lo -> Solís
 
 Leandro murió. Fernando dijo que lo mató.
@@ -435,9 +438,9 @@ La presidenta murió de leucemia y tétanos
         entity: leucemia
         entity: tétanos
 
-La presidenta saludó al intendente de Buenos Aires
+La presidenta saludó al gobernador de Buenos Aires
     subject: La presidenta
-    od: el intendente de Buenos_Aires
+    od: el gobernador de Buenos_Aires
 
 # Desambiguación de número por artículo
 Los virus murieron
@@ -490,11 +493,11 @@ María y José salieron. Él dijo a ella algo.
         subject: Él -> José
         od: ella -> María
 
-El intendente de Buenos Aires murió. Él se mató.
-    sentence: El intendente de Buenos Aires murió.
-        subject: El intendente de Buenos_Aires
+El gobernador de Buenos Aires murió. Él se mató.
+    sentence: El gobernador de Buenos Aires murió.
+        subject: El gobernador de Buenos_Aires
     sentence: Él se mató.
-        subject: Él -> El intendente de Buenos_Aires
+        subject: Él -> El gobernador de Buenos_Aires
 
 # Resolución de anáfora con entidades en infinitivo (no lo resolvemos). Además es un test de un bug con PP "Yo"
 Me molesta tomar vacaciones con mi novia. Yo la detesto.
@@ -532,21 +535,21 @@ Juan y Pedro fueron al río. La mujer los encontró muertos.
         oi: los -> Juan y Pedro
 
 # Bug en resolución de "quien" relativo
-Juana, quien estudia literatura, adora a Cortázar
-    clause: Juana , , adora a Cortázar
+Juana, quien estudia literatura, adora a José Saramago
+    clause: Juana , , adora a José_Saramago
         subject: Juana
-        od: Cortázar
+        od: José_Saramago
     clause: quien estudia literatura
         subject: Juana
         od: literatura
 
 # Bug en OD con bisagra "a quien"
-El autor, a quien nombra la obra, es Cortázar
-    clause: El autor , , es Cortázar
+El autor, a quien homenajea la actriz, es José Saramago
+    clause: El autor , , es José_Saramago
         subject: El autor
-        equative: Cortázar
-    clause: a quien nombra la obra
-        subject: la obra
+        equative: José_Saramago
+    clause: a quien homenajea la actriz
+        subject: la actriz
         od: El autor
 
 # Bug en preposiciones aceptadas para llenar "regimen"
@@ -603,7 +606,7 @@ María saludó a Pedro en las oficinas, que no se destacan por ser un ámbito de
 
 # Construcciones de infinitivo subordinadas en estructuras
 Me dediqué a cumplir el pacto
-    adjuncts: cumplir el pacto
+    regimen: cumplir el pacto
 
 Me comprometo a cumplir con el pacto
     regimen: cumplir con el pacto
@@ -776,7 +779,7 @@ Salió a las 9:49hs
 
 # Movido de od_test.csv
 La casa nunca ha sido tan codiciada antes de su venida
-    subject: alguien
+    subject: algo
 #    od: La casa
 
 # Bug en clausulación
@@ -794,8 +797,8 @@ Fernando dijo que vió a María. Ella volvió.
 
 # Test: blacklist de entidades que no son NE
 Fuente: un pepino
-    sentence: Fuente
-        subject: Fuente
+    sentence: Fuente: un pepino
+        subject: un pepino
             msi: { "semantic_classification" : None }
 
 # Detección de date time
@@ -811,7 +814,7 @@ Nació en 1990
 
 Murió en la semana de mayo
     datetime: en la semana
-    datetime: de mayo
+#    datetime: de mayo
 
 Amó en la primavera del 90
     datetime: en la primavera de el 90
@@ -819,5 +822,5 @@ Amó en la primavera del 90
 Amó desde 1990
     datetime: desde 1990
 
-Murió un 15/5/1990
-    datetime: un 15/5/1990
+#Murió un 15/5/1990
+#    datetime: un 15/5/1990
