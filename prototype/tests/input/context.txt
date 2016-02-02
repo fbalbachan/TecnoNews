@@ -61,10 +61,16 @@ A Gustavo, Leandro le comió la manzana
     od: la manzana
     oi: Gustavo
 
-Él nos golpeó
+#-------ARREGLAR------
+#Él nos golpeó
+    #subject: Él
+    #od: nos
+    #verb: golpeó
+
+Él nos gustó
     subject: Él
-    od: nos
-    verb: golpeó
+    oi: nos
+    verb: gustó
 
 Leandro desconfió de Gustavo
     subject: Leandro
