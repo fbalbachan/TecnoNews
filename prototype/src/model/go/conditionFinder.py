@@ -13,11 +13,16 @@ class ConditionFinder:
         operators = []
         clause = self.clause
         leaves = clause.proper_leaves()
-        at_left = [ leaf.lexical_form for leaf in clause.leaves_at_left()[-1:] ]
-        if leaves[0].lexical_form == "que":
-            if at_left == ["en_caso_de"]: operators.append(GlobalOperator("condition", at_left[0]))
-        else:
-            if at_left == ["siempre_y_cuando"]: operators.append(GlobalOperator("condition", at_left[0]))
+        #at_left = [ leaf.lexical_form for leaf in clause.leaves_at_left()[-1:] ]
+        #if leaves[0].lexical_form == "que":
+        #    if at_left == ["en_caso_de"]: operators.append(GlobalOperator("condition", at_left[0]))
+        #else:
+        #    if at_left == ["siempre_y_cuando"]: operators.append(GlobalOperator("condition", at_left[0]))
+
+        if leaves[0].lexical_form == "en_caso_de_que":
+            operators.append(GlobalOperator("condition", "en_caso_de_que"))
+        elif leaves[0].lexical_form == "siempre_y_cuando":
+            operators.append(GlobalOperator("condition", "siempre_y_cuando"))
 
         return operators
 
