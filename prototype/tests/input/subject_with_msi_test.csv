@@ -4,5 +4,5 @@
 "todas las noches viene el cartero","3","singular","masculine","el cartero","3","singular","neutral","venir"
 "golpeó mucho a su esposa","3","singular","neutral","él/ella","3","singular","neutral","golpear"
 "me gustó caminar por el bosque","3","singular",None,"caminar por el bosque","3","singular","neutral","gustar"
-"vos y yo comemos pizza","1","plural","neutral","vos y yo","1","plural","neutral","comer"
-# "llovió toda la noche","0","singular","neutral","None","0","singular","neutral","llover"
+"vos y yo comemos pasta","1","plural","neutral","vos y yo","1","plural","neutral","comer"
+"llovió toda la noche","0","singular","neutral","None","3","singular","neutral","llover"

@@ -17,7 +17,7 @@ class TestSubject(unittest.TestCase):
 
     def test_entities_at_verb_level(self):
         examples = [
-            ('todas las noches viene el cartero',      ['todas las noches', 'el cartero']),
+            ('toda la noche molestó el cartero',      ['el cartero']),
             ('las cartas del cartero llegaron tarde',  ['las cartas de el cartero']),
             ('el golpeador golpeó mucho a su esposa',  ['el golpeador']),
         ]
@@ -27,8 +27,7 @@ class TestSubject(unittest.TestCase):
 
             sentence = Sentence(input_text)
             self.analyzer.analyze(sentence)
-
-            self.assertEqual(1, len(sentence.clauses), "La oración tiene más de una cláusula.")
+            self.assertEqual(1, len(sentence.clauses), "La oración tiene más de una cláusula." + str(sentence))
             clause = sentence.clauses[0]
 
             entities_at_verb_level = [ str(entity) for entity in clause.verb_level_entities() ]
@@ -56,22 +55,24 @@ class TestSubject(unittest.TestCase):
 
             self.assertEqual(1, len(sentence.clauses), "La oración tiene más de una cláusula.")
             clause = sentence.clauses[0]
-
-            subject = clause.structure("subject")
+            
+            if expected_subject_person != "0":
+                subject = clause.structure("subject")
 
             if expected_subject_gender == "None":
                 expected_subject_gender = None
-
-            self.assertEqual(int(expected_subject_person), subject.person())
-            self.assertEqual(expected_subject_number, subject.number())
-            self.assertEqual(expected_subject_gender, subject.gender())
-            self.assertEqual(expected_subject, subject.lexical_form())
+            
+            if expected_subject_person != "0":
+                self.assertEqual(int(expected_subject_person), subject.msi()["person"])
+                self.assertEqual(expected_subject_number, subject.msi()["number"])
+                self.assertEqual(expected_subject_gender, subject.msi()["gender"])
+                self.assertEqual(expected_subject, subject.lexical_form())
 
             verb = clause.structure("verb")
 
-            self.assertEqual(int(expected_verb_person), verb.person())
-            self.assertEqual(expected_verb_number, verb.number())
-            self.assertEqual(expected_verb_gender, verb.gender())
+            self.assertEqual(int(expected_verb_person), verb.msi()["person"])
+            self.assertEqual(expected_verb_number, verb.msi()["number"])
+            self.assertEqual(expected_verb_gender, verb.msi()["gender"])
             self.assertEqual(expected_verb, verb.entity().lemma())
 
             print "OK"
