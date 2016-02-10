@@ -22,3 +22,18 @@ class TestBase(unittest.TestCase):
             self.passed.append({"method" : self._get_current_test_name(), "expected" : first , "found" : second, "input" : self.input})
         except Exception, e:
             self.failed.append({"message" : str(e), "method" : self._get_current_test_name(), "expected" : first,"found":second , "input" : self.input })
+
+    def assertGreaterEqual(self, first, second, msg=None) : 
+        super(TestBase, self).assertGreaterEqual(first, second, msg)
+
+    def assertIsNotNone(self, first, second, msg=None) : 
+        super(TestBase, self).assertIsNotNone(first, second, msg)
+
+    def assertTrue(self, first, second, msg=None) : 
+        super(TestBase, self).assertTrue(first, second, msg)
+
+    def assertRaises(self, first, second, msg=None) : 
+        super(TestBase, self).assertRaises(first, second, msg)
+
+    def assertIn(self, first, second, msg=None) : 
+        super(TestBase, self).assertIn(first, second, msg)
