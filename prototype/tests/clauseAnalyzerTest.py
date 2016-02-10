@@ -8,11 +8,12 @@ from src.model.paragraph.paragraphAnalyzer import ParagraphAnalyzer
 from src.model.referent.entityUnifier import EntityUnifier
 from src.model.sentence.sentenceAnalyzer import SentenceAnalyzer
 from tests.freelingTreeRepository import FreelingTreeRepository
+from tests.base_test import TestBase
 
-
-class TestClauseAnalyzer(unittest.TestCase):
+class TestClauseAnalyzer(TestBase):
 
     def setUp(self):
+        super(TestClauseAnalyzer, self).setUp()
         self.sentenceAnalyzer = SentenceAnalyzer(FreelingTreeRepository("tests/input/trees"))
         self.analyzer = ParagraphAnalyzer(self.sentenceAnalyzer)
 
@@ -88,7 +89,12 @@ class TestClauseAnalyzer(unittest.TestCase):
     def sentence(self, assertion, frame):
         paragraph = frame["paragraph"]
         sentences = filter(lambda sentence: str(sentence) == assertion, paragraph.sentences)
-        self.assertTrue(len(sentences) == 1, "No se encontró la oración " + assertion)
+        
+        try:
+            self.assertTrue(len(sentences) == 1, "No se encontró la oración " + assertion)
+        except:
+            self.failed.append({"method":"sentence","message":"No se encotró la oración", "input":assertion, "expected":1,"found":len(sentences)})
+            return
 
         sentence = sentences[0]
         frame["sentence"] = sentence
@@ -111,7 +117,12 @@ class TestClauseAnalyzer(unittest.TestCase):
     def update_frame_and_assert_structure(self, structure_name, assertion, frame):
         clause = frame["clause"]
 
-        self.assertTrue(clause.has_structure(structure_name), "No existe " + structure_name)
+        try:
+            self.assertTrue(clause.has_structure(structure_name), "No existe " + structure_name)
+        except:
+            self.failed.append({"method":"update_frame_and_assert_structure","message":"No existe " + structure_name, "input":str(clause), "expected":structure_name,"found":None})
+            return
+
         structure = clause.structure(structure_name)
         frame["structure"] = structure
         if "entity" in frame: del frame["entity"]
@@ -120,7 +131,11 @@ class TestClauseAnalyzer(unittest.TestCase):
             frame["entity"] = structure.all_entities()[0]
             self.entity(assertion, frame)
         else:
-            self.assertEqual("", assertion, "Existe más de una entidad (o ninguna) para " + structure_name)
+            try:
+                self.assertEqual("", assertion, "Existe más de una entidad (o ninguna) para " + structure_name)
+            except:
+                self.failed.append({"method":"update_frame_and_assert_structure","message":"Existe mas de una entidad (o ninguna) para " + structure_name, "input":clause, "expected":"","found":assertion})
+                return
 
     def count(self, assertion, frame):
         splitted = assertion.split("=")
@@ -136,7 +151,11 @@ class TestClauseAnalyzer(unittest.TestCase):
         assertion = splitted[0].strip()
         expected = int(splitted[1].strip())
 
-        self.assertEqual(assertions[assertion](), expected, "Count for '" + assertion + "' is not " + str(expected))
+        try:
+            self.assertEqual(assertions[assertion](), expected, "Count for '" + assertion + "' is not " + str(expected))
+        except:
+            self.failed.append({"method":"count","message":"Count for '" + assertion + "' is not " + str(expected), "input":assertion, "expected":str(expected),"found":assertions[assertion]()})
+            return
 
     def entity(self, assertion, frame):
         entities = frame["structure"].all_entities()
@@ -149,7 +168,11 @@ class TestClauseAnalyzer(unittest.TestCase):
         else:
             entities = self.search_non_linked_entity(assertion, entities)
 
-        self.assertTrue(len(entities) == 1, "No se encontró la entidad " + assertion)
+        try:
+            self.assertTrue(len(entities) == 1, "No se encontró la entidad " + assertion)
+        except:
+            self.failed.append({"method":"assert_entity_into","message":"No se encotró la entidad " + assertion, "input":asserted_lexical_forms, "expected":1,"found":len(entities)})
+            return
 
         entity = entities[0]
         frame["entity"] = entity
@@ -165,7 +188,12 @@ class TestClauseAnalyzer(unittest.TestCase):
         entity = frame["entity"]
         evidence = entity.sentimental_value.evidence()
         found = filter(lambda each: each.object.lexical_form == assertion, evidence)
-        self.assertTrue(len(found) == 1, "No se encontró (o hay más de una) evidencia con forma léxica " + assertion)
+        try:
+            self.assertTrue(len(found) == 1, "No se encontró (o hay más de una) evidencia con forma léxica " + assertion)
+        except:
+            self.failed.append({"method":"sent_ev","message":"No se encontró (o hay más de una) evidencia con forma léxica " + assertion, "input":evidence, "expected":1,"found":len(found)})
+            return
+
         frame["sent_ev"] = found[0]
 
     def value(self, assertion, frame):
