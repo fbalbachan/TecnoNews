@@ -3,12 +3,13 @@
 __author__ = 'Pablo Perez De Angelis'
 import unittest
 from src.utils.textDistance import TextDistance
+from tests.base_test import TestBase
 
-
-class TestTextDistance(unittest.TestCase):
+class TestTextDistance(TestBase):
 
     @classmethod
     def setUpClass(cls):
+        super(TestTextDistance, cls).setUpClass()
         cls.td = TextDistance()
         print "[TextDistance test]"
 
@@ -30,7 +31,7 @@ class TestTextDistance(unittest.TestCase):
 
     def pre_process_kase(self, text, preprocessed):
         print "Case:", text
-
+        self.input = text
         pre_proces_text = self.td.pre_process(unicode(text, 'utf-8'))
         print "\t[text]", text
         print "\t[processed]", pre_proces_text
@@ -41,7 +42,7 @@ class TestTextDistance(unittest.TestCase):
         print "Case:"
         print "title1", title1
         print "title2", title2
-
+        self.input = title1 + "/" + title2
         distance = self.td.title_distance(unicode(title1, 'utf-8'),
                                           unicode(title2, 'utf-8'))
         print "\t[distance]", distance
@@ -52,7 +53,7 @@ class TestTextDistance(unittest.TestCase):
         print "Case:"
         print "text1", text1
         print "text2", text2
-
+        self.input = text1 + "/" + text2
         similarity = self.td.similarity(unicode(text1, 'utf-8'),
                                         unicode(text2, 'utf-8'))
         print "\t[similarity]", similarity
