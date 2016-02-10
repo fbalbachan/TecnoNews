@@ -24,7 +24,6 @@ class TestWord(TestBase):
         try:
             self.assertEqual(1, len(sentence.clauses), "La oración tiene más de una cláusula.")
         except Exception, e:
-            self.failed.append({"message" : str(e), "method" : "test_get_all_words_from_sentence", "input" : input_text, "expected" : 1,"found":len(sentence.clauses) })
             return
         
         clause = sentence.clauses[0]
@@ -45,13 +44,11 @@ class TestWord(TestBase):
             try:
                 self.assertEqual(expected_form, result_word.original_lexical_form)
             except Exception, e:
-                self.failed.append({"message" : str(e), "method" : "test_get_all_words_from_sentence", "input" : input_text, "expected" : expected_form,"found": result_word.original_lexical_form })
                 continue
 
             try:
                 self.assertEqual(expected_lemma,    result_word.lemma)
             except Exception, e:
-                self.failed.append({"message" : str(e), "method" : "test_get_all_words_from_sentence", "input" : expected_lemma, "expected" : 1, "found" : result_word.lemma })
                 continue
             #self.assertEqual(expected_tag,      result_word.tag)
 
@@ -69,7 +66,6 @@ class TestWord(TestBase):
         try:
             self.assertEqual(1, len(sentence.clauses), "La oración tiene más de una cláusula.")
         except Exception, e:
-            self.failed.append({"message" : str(e), "method" : "test_get_words_from_structure", "input" : input_text, "expected" : 1,"found":len(sentence.clauses) })
             return
         clause = sentence.clauses[0]
 
@@ -79,13 +75,11 @@ class TestWord(TestBase):
         try:
             self.assertEqual('el', primer_ministro_words[0].original_lexical_form)
         except Exception, e:
-            self.failed.append({"message" : str(e), "method" : "test_get_words_from_structure", "input" : primer_ministro_words[0].original_lexical_form, "expected" : "el","found":primer_ministro_words[0].original_lexical_form })
             return
 
         try:
             self.assertEqual('Primer_Ministro', primer_ministro_words[1].original_lexical_form)
         except Exception, e:
-            self.failed.append({"message" : str(e), "method" : "test_get_words_from_structure", "input" : primer_ministro_words[1].original_lexical_form, "expected" : "Primer_Ministro","found":primer_ministro_words[1].original_lexical_form })
             return
 
         print "OK"
