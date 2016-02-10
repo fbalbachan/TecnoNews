@@ -15,7 +15,7 @@ class TestWord(TestBase):
 
     def test_get_all_words_from_sentence(self):
 
-        input_text = 'el Primer Ministro declaró el estado de sitio'
+        self.input = input_text = 'el Primer Ministro declaró el estado de sitio'
 
         print "trying: %s .. " % input_text,
         sentence = Sentence(input_text)
@@ -38,6 +38,8 @@ class TestWord(TestBase):
             ('de',              'de',              'SPS00'),
             ('sitio',           'sitio',           'NCMS000'),
         ]
+        
+        self.input = ""
 
         for ((expected_form, expected_lemma, expected_tag), result_word) in zip(expected, clause.proper_leaves()):
             try:
@@ -57,7 +59,7 @@ class TestWord(TestBase):
 
     def test_get_words_from_structure(self):
 
-        input_text = 'el Primer Ministro declaró el estado de sitio'
+        self.input = input_text = 'el Primer Ministro declaró el estado de sitio'
 
         print "trying: %s .. " % input_text,
 
