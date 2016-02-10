@@ -8,13 +8,13 @@ from src.model.paragraph.paragraphAnalyzer import ParagraphAnalyzer
 from src.model.sentence.sentence import Sentence
 from src.model.sentence.sentenceAnalyzer import SentenceAnalyzer
 from tests.freelingTreeRepository import FreelingTreeRepository
+from tests.base_test import TestBase
 
-
-class TokenizationTest(unittest.TestCase):
+class TokenizationTest(TestBase):
     @classmethod
     def setUpClass(self):
         print "[Tokenization test]"
-
+        super(TokenizationTest, self).setUpClass()
         self.sentenceAnalyzer = SentenceAnalyzer(FreelingTreeRepository("tests/input/trees"))
         self.paragraphAnalyzer = ParagraphAnalyzer(self.sentenceAnalyzer)
 
@@ -79,7 +79,7 @@ class TokenizationTest(unittest.TestCase):
 
     def kase_compound(self, text, *expected_components):
         print "\tCase (compound):", text, "->",
-
+        self.input = text
         sentence = Sentence(text)
         self.sentenceAnalyzer.analyze(sentence)
 
@@ -92,6 +92,7 @@ class TokenizationTest(unittest.TestCase):
 
     def kase(self, text, *expected_tokens):
         sentence = Sentence(text)
+        self.input = text
         self.sentenceAnalyzer.analyze(sentence)
         self.kase_(sentence, *expected_tokens)
 
