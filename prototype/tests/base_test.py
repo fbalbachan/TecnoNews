@@ -29,8 +29,8 @@ class TestBase(unittest.TestCase):
     def assertIsNotNone(self, first, second, msg=None) : 
         super(TestBase, self).assertIsNotNone(first, second, msg)
 
-    def assertTrue(self, first, second, msg=None) : 
-        super(TestBase, self).assertTrue(first, second, msg)
+    def assertTrue(self, first, msg=None) : 
+        super(TestBase, self).assertTrue(first, msg)
 
     def assertRaises(self, first, second, msg=None) : 
         super(TestBase, self).assertRaises(first, second, msg)
