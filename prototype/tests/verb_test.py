@@ -7,10 +7,12 @@ from src.model.sentence.sentenceAnalyzer import SentenceAnalyzer
 from src.model.sentence.sentence import Sentence
 from tests.freelingTreeRepository import FreelingTreeRepository
 from src.ling.gender import Gender
+from tests.base_test import TestBase
 
-class TestVerbs(unittest.TestCase):
+class TestVerbs(TestBase):
 
     def setUp(self):
+        super(TestVerbs, self).setUp()
         self.analyzer = SentenceAnalyzer(FreelingTreeRepository("tests/input/trees"))
 
     def test_verb_msi_for_modal_verbs(self):
