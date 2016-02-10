@@ -21,7 +21,9 @@ class TestVerbs(TestBase):
 
         for (input_text, expected_verb_msi, expected_verb_lemma) in examples:
             print "trying: %s .. " % input_text,
-
+            
+            self.input = input_text
+            
             sentence = Sentence(input_text)
             self.analyzer.analyze(sentence)
 
@@ -54,7 +56,7 @@ class TestVerbs(TestBase):
             print "trying: %s .. " % input_text,
             sentence = Sentence(input_text)
             self.analyzer.analyze(sentence)
-
+            self.input = input_text
             self.assertEqual(1, len(sentence.clauses), "La oración tiene más de una cláusula.")
             clause = sentence.clauses[0]
 
@@ -86,7 +88,7 @@ class TestVerbs(TestBase):
             print "trying: %s .. " % input_text,
             sentence = Sentence(input_text)
             self.analyzer.analyze(sentence)
-
+            self.input = input_text
             self.assertEqual(1, len(sentence.clauses), "La oración tiene más de una cláusula.")
             clause = sentence.clauses[0]
 
