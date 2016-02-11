@@ -19,6 +19,8 @@ class TestPassiveSentence(unittest.TestCase):
         for (input_text, expected_verb_lemma, expected_subject, expected_od) in self.input_texts:
             print "trying: %s .. " % input_text,
 
+            self.input = input_text
+
             sentence = Sentence(input_text)
             analyzer.analyze(sentence)
 

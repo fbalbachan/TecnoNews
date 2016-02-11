@@ -17,6 +17,8 @@ class TestSentimentAnalyzer(unittest.TestCase):
         for (input_text, expected_subject_positive_sentiment, expected_subject_negative_sentiment) in self.input_texts:
             print "trying: ", input_text
 
+            self.input = input_text
+
             sentence = Sentence(input_text)
             sentiment, evidence = sentiment_analyzer.assign_sentiment_via_adverbial_criterion(sentence)
 

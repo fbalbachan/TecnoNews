@@ -61,6 +61,8 @@ class TestStructureHead(unittest.TestCase):
             sentence = Sentence(input_text)
             self.analyzer.analyze(sentence)
 
+            seft.input = input_text
+
             self.assertEqual(1, len(sentence.clauses), "La oración tiene más de una cláusula.")
             clause = sentence.clauses[0]
 
@@ -75,6 +77,8 @@ class TestStructureHead(unittest.TestCase):
         input_text = 'caminar por el bosque es peligroso'
         sentence = Sentence(input_text)
         self.analyzer.analyze(sentence)
+
+        seft.input = input_text
 
         self.assertEqual(1, len(sentence.clauses), "La oración tiene más de una cláusula.")
         clause = sentence.clauses[0]
@@ -91,6 +95,8 @@ class TestStructureHead(unittest.TestCase):
         for (input_text, expected_MSI) in self.grammatical_person_data:
             sentence = Sentence(input_text)
             self.analyzer.analyze(sentence)
+
+            seft.input = input_text
 
             self.assertEqual(1, len(sentence.clauses), "La oración tiene más de una cláusula.")
             clause = sentence.clauses[0]

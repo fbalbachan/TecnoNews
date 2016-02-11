@@ -20,6 +20,8 @@ class TestRegimen(unittest.TestCase):
         for (input_text, expected_regimen) in self.input_texts_with_regimen:
             print "trying: %s .. " % input_text,
 
+            self.input = input_text
+
             sentence = Sentence(input_text)
             analyzer.analyze(sentence)
 

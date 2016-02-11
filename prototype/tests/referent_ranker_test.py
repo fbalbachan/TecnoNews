@@ -35,6 +35,7 @@ class ReferentRankerTest(unittest.TestCase):
         self.kase("La empresa de Leandro compró a la empresa de María", ("Leandro", 1), ("María", 0.5))
 
     def kase(self, text, *expected):
+        self.input = text
         paragraph = Paragraph.from_text(text)
         self.analyzer.analyze(paragraph)
         EntityUnifier(paragraph).unify()
