@@ -24,16 +24,40 @@ class TestBase(unittest.TestCase):
             self.failed.append({"message" : str(e), "method" : self._get_current_test_name(), "expected" : first,"found":second , "input" : self.input })
 
     def assertGreaterEqual(self, first, second, msg=None) : 
-        super(TestBase, self).assertGreaterEqual(first, second, msg)
+        try :
+            super(TestBase, self).assertGreaterEqual(first, second, msg)
+            self.passed.append({"method" : self._get_current_test_name(), "expected" : first , "found" : second, "input" : self.input})
+        except Exception, e:
+            self.failed.append({"message" : str(e), "method" : self._get_current_test_name(), "expected" : first,"found":second , "input" : self.input })
+
 
     def assertIsNotNone(self, first, second, msg=None) : 
-        super(TestBase, self).assertIsNotNone(first, second, msg)
+        try :
+            super(TestBase, self).assertIsNotNone(first, second, msg)
+            self.passed.append({"method" : self._get_current_test_name(), "expected" : first , "found" : second, "input" : self.input})
+        except Exception, e:
+            self.failed.append({"message" : str(e), "method" : self._get_current_test_name(), "expected" : first,"found":second , "input" : self.input })
+
 
     def assertTrue(self, first, msg=None) : 
-        super(TestBase, self).assertTrue(first, msg)
+        try :
+            super(TestBase, self).assertTrue(first, msg)
+            self.passed.append({"method" : self._get_current_test_name(), "found" : first, "input" : self.input})
+        except Exception, e:
+            self.failed.append({"message" : str(e), "method" : self._get_current_test_name(), "found" : first, "input" : self.input })
+
 
     def assertRaises(self, first, second, msg=None) : 
-        super(TestBase, self).assertRaises(first, second, msg)
+        try :
+            super(TestBase, self).assertRaises(first, second, msg)
+            self.passed.append({"method" : self._get_current_test_name(), "expected" : first , "found" : second, "input" : self.input})
+        except Exception, e:
+            self.failed.append({"message" : str(e), "method" : self._get_current_test_name(), "expected" : first,"found":second , "input" : self.input })
+
 
     def assertIn(self, first, second, msg=None) : 
-        super(TestBase, self).assertIn(first, second, msg)
+        try :
+            super(TestBase, self).assertIn(first, second, msg)
+            self.passed.append({"method" : self._get_current_test_name(), "expected" : first , "found" : second, "input" : self.input})
+        except Exception, e:
+            self.failed.append({"message" : str(e), "method" : self._get_current_test_name(), "expected" : first,"found":second , "input" : self.input })
