@@ -4,10 +4,12 @@ import unittest
 from model.sentence import *
 from sentiment.analyzer import SentimentAnalyzer
 from csv_file_reader import load_csv_test_file
+from tests.base_test import TestBase
 
-class TestSentimentAnalyzer(unittest.TestCase):
+class TestSentimentAnalyzer(TestBase):
 
     def setUp(self):
+        super(TestSentimentAnalyzer, self).setUp()
         self.input_texts = load_csv_test_file('tests/input/sentiment_analyzer.csv')
 
     def test_sentiment_analyzer(self):

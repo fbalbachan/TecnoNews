@@ -5,11 +5,12 @@ import unittest
 from src.model.sentence.sentenceAnalyzer import SentenceAnalyzer
 from src.model.sentence.sentence import Sentence
 from tests.freelingTreeRepository import FreelingTreeRepository
+from tests.base_test import TestBase
 
-
-class TestEquative(unittest.TestCase):
+class TestEquative(TestBase):
 
     def setUp(self):
+        super(TestEquative, self).setUp()
         self.input_texts_with_equative = [
             ('Fulano me parece una buena persona', 'una buena persona'),
             ('Fulano es un hombre huraño y taciturno', 'un hombre huraño y taciturno'),

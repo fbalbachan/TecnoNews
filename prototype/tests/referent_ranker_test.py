@@ -9,11 +9,12 @@ from src.model.referent.entityUnifier import EntityUnifier
 from src.model.referent.referentRanker import ReferentRanker
 from src.model.sentence.sentenceAnalyzer import SentenceAnalyzer
 from tests.freelingTreeRepository import FreelingTreeRepository
+from tests.base_test import TestBase
 
-
-class ReferentRankerTest(unittest.TestCase):
+class ReferentRankerTest(TestBase):
     @classmethod
     def setUpClass(self):
+        super(ReferentRankerTest, self).setUp()
         print "[Referent ranking test]"
 
         self.sentenceAnalyzer = SentenceAnalyzer(FreelingTreeRepository("tests/input/trees"))

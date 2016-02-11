@@ -6,11 +6,12 @@ from src.model.sentence.sentenceAnalyzer import SentenceAnalyzer
 from src.model.sentence.sentence import Sentence
 from tests.csv_file_reader import load_csv_test_file
 from tests.freelingTreeRepository import FreelingTreeRepository
+from tests.base_test import TestBase
 
-
-class TestOD(unittest.TestCase):
+class TestOD(TestBase):
 
     def setUp(self):
+        super(TestOD, self).setUp()
         self.input_texts_with_ods = load_csv_test_file('tests/input/od_test.csv')
 
     def test_get_OD(self):

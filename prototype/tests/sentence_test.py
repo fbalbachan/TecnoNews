@@ -7,11 +7,12 @@ from csv_file_reader import load_csv_test_file
 from src.model.sentence.sentenceAnalyzer import SentenceAnalyzer
 from src.model.sentence.sentence import *
 from tests.freelingTreeRepository import FreelingTreeRepository
+from tests.base_test import TestBase
 
-
-class TestSentence(unittest.TestCase):
+class TestSentence(TestBase):
 
     def setUp(self):
+        super(TestSentence, self).setUp()
         self.input_texts = load_csv_test_file('tests/input/sentence_test.csv')
 
     def test_passive_or_active(self):

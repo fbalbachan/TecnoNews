@@ -5,11 +5,12 @@ import unittest
 from src.model.sentence.sentenceAnalyzer import SentenceAnalyzer
 from src.model.sentence.sentence import Sentence
 from tests.freelingTreeRepository import FreelingTreeRepository
+from tests.base_test import TestBase
 
-
-class TestRegimen(unittest.TestCase):
+class TestRegimen(TestBase):
 
     def setUp(self):
+        super(TestRegimen, self).setUp()
         self.input_texts_with_regimen = [
             ('todos los cuatrimestres yo lidio con mis alumnos', 'mis alumnos'),
         ]

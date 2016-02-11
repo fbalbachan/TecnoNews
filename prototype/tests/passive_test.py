@@ -6,11 +6,12 @@ from csv_file_reader import load_csv_test_file
 from src.model.sentence.sentenceAnalyzer import SentenceAnalyzer
 from src.model.sentence.sentence import Sentence
 from tests.freelingTreeRepository import FreelingTreeRepository
+from tests.base_test import TestBase
 
-
-class TestPassiveSentence(unittest.TestCase):
+class TestPassiveSentence(TestBase):
 
     def setUp(self):
+        super(TestPassiveSentence, self).setUp()
         self.input_texts = load_csv_test_file('tests/input/passive_test.csv')
 
     def test_verb(self):

@@ -6,9 +6,12 @@ import unittest
 from src.ling.msi_mapper import tag_to_full_msi, msi
 from src.ling.gender import Gender
 from src.ling.number import Number
+from tests.base_test import TestBase
 
-
-class TestMSIMapper(unittest.TestCase):
+class TestMSIMapper(TestBase):
+    
+    def setUp(self):
+        super(TestMSIMapper, self).setUp()
 
     def test_tag_to_full_msi_normal_case(self):
         normal_tag = "AQ0MS0"

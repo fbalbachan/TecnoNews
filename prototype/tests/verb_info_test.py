@@ -7,6 +7,9 @@ from tests.base_test import TestBase
 
 class TestVerbInfo(TestBase):
 
+    def setUp(self):
+        super(TestVerbInfo, self).setUp()
+
     def test_verb_scripts_and_boxes(self):
         examples = [
             (u'charlatanear',

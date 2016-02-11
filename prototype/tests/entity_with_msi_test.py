@@ -7,10 +7,12 @@ from src.model.sentence.sentenceAnalyzer import SentenceAnalyzer
 from tests.freelingTreeRepository import FreelingTreeRepository
 from src.ling.gender import Gender
 from src.ling.number import Number
+from tests.base_test import TestBase
 
-class TestStructureHead(unittest.TestCase):
+class TestStructureHead(TestBase):
 
     def setUp(self):
+        super(TestStructureHead, self).setUp()
         self.analyzer = SentenceAnalyzer(FreelingTreeRepository("tests/input/trees"))
 
         self.data = [

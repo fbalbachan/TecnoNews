@@ -10,7 +10,7 @@ from tests.base_test import TestBase
 class TestWord(TestBase):
 
     def setUp(self):
-	super(TestWord, self).setUp()
+        super(TestWord, self).setUp()
         self.analyzer = SentenceAnalyzer(FreelingTreeRepository("tests/input/trees"))
 
     def test_get_all_words_from_sentence(self):
