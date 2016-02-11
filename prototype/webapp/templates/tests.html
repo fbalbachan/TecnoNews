@@ -1,0 +1,63 @@
+$def with (output)
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <script src="/sentilecto/static/jquery-1.6.2.min.js"></script>
+    <style type="text/css">
+        @font-face {
+            font-family: meditation;
+            src: url('/static/font/Meditation.ttf');
+        }
+
+        @font-face {
+            font-family: monofur;
+            src: url('/static/font/monof55.ttf');
+        }
+
+        h1 {
+            color:#8A0808;
+            font-family: "meditation", Verdana, Tahoma;
+            font-size: 300%
+        }
+
+        body {
+            color: #2E2E2E
+        }
+
+        pre {
+            font-family      : "monofur";
+            font-size        : 100%;
+            border           : black solid 1px;
+            background-color : gray;
+        }
+
+    </style>
+    <script type="text/javascript">
+        function get_tests_results() {
+          jQuery.ajax({
+              url      : "./run_tests",
+              success  : function(resp){
+                console.log(resp, resp instanceof XMLDocument)
+                if (resp instanceof XMLDocument) {
+                    jQuery("#results").html(
+                        new XMLSerializer().serializeToString(resp.documentElement)
+                    );
+                } else {
+                    jQuery("#results").html(resp);
+                }
+              }
+          });
+        }
+        
+        var xml = null;
+        
+    </script>
+  </head>
+  <body>
+    <h1>MODEL unit tests:</h1>
+    <p><button onclick="get_tests_results()"> Run tests </button></p>
+    <p>Results</p>
+    <pre id="results"></pre>
+  </body>
+</html>

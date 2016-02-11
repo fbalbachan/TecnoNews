@@ -8,6 +8,7 @@ import sys
 from threading import Timer
 import time
 from traceback import format_exc
+import subprocess
 
 import web
 from skimpyGimpy import skimpyAPI
@@ -160,6 +161,32 @@ class Index_request:
         index = web.template.frender('templates/index.html')
         return index(str(request_id), debug_mode)
 
+class Tests_request:
+    def GET(self):
+        request_id = 999
+        index = web.template.frender('templates/tests.html')
+        return index(str(request_id))
+
+class RunTests_request:
+    def GET(self):
+        # 20160211 - Daniel Cantarín
+        # We execute the "run_tests" scripts, and return the output.
+        
+        path = os.path.dirname(os.path.realpath(__file__)) 
+
+        subprocess.call( path + "/../run_tests", shell=True )
+        # It takes its time, then writes a file. We catch that.
+        f = open( path + "/../test_results.log", "r" )
+        a = f.read()
+        f.close()
+        # For a reason i still don't understand after the whole day 
+        # trying to change its behaviour, the object serialization in 
+        # python seems to write ISO-5589-1 strings. So, we read it 
+        # USING that encoding INTO an unicode string, and NOT TO that 
+        # encoding. That is, the return value should be UTF-8.
+        return a.decode("unicode-escape").encode("latin1")
+
+
 
 class Debug_request:
     def GET(self):
@@ -293,6 +320,8 @@ if __name__ == '__main__':
             '/result',      'EntiNews_request',
             '/hidden',      'HiddenEntiNews_request',
             '/debug',       'Debug_request',
+            '/tests',       'Tests_request',
+            '/run_tests',   'RunTests_request',
             '/favicon.ico', 'Favicon_request')
 
     write_pid_file()
