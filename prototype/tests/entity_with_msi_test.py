@@ -63,7 +63,7 @@ class TestStructureHead(TestBase):
             sentence = Sentence(input_text)
             self.analyzer.analyze(sentence)
 
-            seft.input = input_text
+            self.input = input_text
 
             self.assertEqual(1, len(sentence.clauses), "La oración tiene más de una cláusula.")
             clause = sentence.clauses[0]
@@ -80,7 +80,7 @@ class TestStructureHead(TestBase):
         sentence = Sentence(input_text)
         self.analyzer.analyze(sentence)
 
-        seft.input = input_text
+        self.input = input_text
 
         self.assertEqual(1, len(sentence.clauses), "La oración tiene más de una cláusula.")
         clause = sentence.clauses[0]
@@ -98,7 +98,7 @@ class TestStructureHead(TestBase):
             sentence = Sentence(input_text)
             self.analyzer.analyze(sentence)
 
-            seft.input = input_text
+            self.input = input_text
 
             self.assertEqual(1, len(sentence.clauses), "La oración tiene más de una cláusula.")
             clause = sentence.clauses[0]
