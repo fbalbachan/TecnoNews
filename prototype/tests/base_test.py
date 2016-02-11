@@ -1,11 +1,20 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
 import unittest
+import json
 
 class TestBase(unittest.TestCase):
     def tearDown(self):
         print '<test_output test="' + self._get_current_test_name() + '" clase="' + self.__class__.__name__ + '">'
-        print [self.failed, len(self.failed), self.passed, len(self.passed)]
+        print "    <fails>"
+        for f in self.failed :
+            print "        <fail>" + json.dumps(f) + "</fail>"
+        print "    </fails>"
+        print "    <passes>"
+        for p in self.passed :
+            print "        <pass>" + json.dumps(p) + "</pass>"
+        print "    </passes>"
+        #print self.failed, len(self.failed), self.passed, len(self.passed)]).decode("utf-8") 
         print "</test_output>"
 
     def setUp(self):
