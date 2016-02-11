@@ -14,7 +14,7 @@ from tests.base_test import TestBase
 class ReferentRankerTest(TestBase):
     @classmethod
     def setUpClass(self):
-        super(ReferentRankerTest, self).setUp()
+        super(ReferentRankerTest, self).setUpClass()
         print "[Referent ranking test]"
 
         self.sentenceAnalyzer = SentenceAnalyzer(FreelingTreeRepository("tests/input/trees"))
