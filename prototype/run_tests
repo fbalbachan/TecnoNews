@@ -1,4 +1,20 @@
 #!/bin/bash
 export PYTHONPATH=$PYTHONPATH:`pwd`/src
 #set -e
-for test in tests/**/*.py; do echo "[$(date)] - EJECUTANDO $test" && python $test; done
+TEMPFILE="/tmp/sentilecto_tests_$RANDOM"
+for test in tests/*.py; do echo
+    
+    echo "[$(date)] - Ejecutando $test ..."
+    
+    python -u $test 2>&1 > $TEMPFILE
+    
+    echo "[$(date)] - ... listo."
+    
+done
+
+echo "[$(date)] - Todos los tests ejecutados. Parseando output..."
+OUTPUT="$(awk '/<test_output.+/,/<\/test_output>/' $TEMPFILE)"
+rm -f test_results.log
+echo "<test_results>$OUTPUT</test_results>" > test_results.log
+echo "[$(date)] - ... listo."
+rm -f $TEMPFILE

@@ -4,9 +4,9 @@ import unittest
 
 class TestBase(unittest.TestCase):
     def tearDown(self):
-        print '<parseable_output test="' + self._get_current_test_name() + '" clase="' + self.__class__.__name__ + '">'
+        print '<test_output test="' + self._get_current_test_name() + '" clase="' + self.__class__.__name__ + '">'
         print [self.failed, len(self.failed), self.passed, len(self.passed)]
-        print "</parseable_output>"
+        print "</test_output>"
 
     def setUp(self):
         self.passed = []
