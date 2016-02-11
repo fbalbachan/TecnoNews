@@ -179,12 +179,7 @@ class RunTests_request:
         f = open( path + "/../test_results.log", "r" )
         a = f.read()
         f.close()
-        # For a reason i still don't understand after the whole day 
-        # trying to change its behaviour, the object serialization in 
-        # python seems to write ISO-5589-1 strings. So, we read it 
-        # USING that encoding INTO an unicode string, and NOT TO that 
-        # encoding. That is, the return value should be UTF-8.
-        return a.decode("unicode-escape").encode("latin1")
+        return a.decode("unicode-escape")
 
 
 
