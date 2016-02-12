@@ -3,6 +3,13 @@ export PYTHONPATH=$PYTHONPATH:`pwd`/src
 export PYTHONIOENCODING="UTF-8"  
 #set -e
 TEMPFILE="/tmp/sentilecto_tests_$RANDOM"
+
+# Obtengo el directorio real del script, independientemente desde dónde lo ejecuto.
+# Fundamental para poder llamarlo desde Python y que después pueda leer el subdirectorio "tests"
+OLDDIR=`pwd`
+DIRECTORIO="$(dirname $(readlink -f $0))"
+cd $DIRECTORIO
+
 for test in tests/*.py; do echo
     
     echo "[$(date)] - Ejecutando $test ..."
@@ -19,3 +26,5 @@ rm -f test_results.log
 echo "<test_results>$OUTPUT</test_results>" > test_results.log
 echo "[$(date)] - ... listo."
 rm -f $TEMPFILE
+
+cd $OLDDIR
