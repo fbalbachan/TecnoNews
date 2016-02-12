@@ -234,7 +234,7 @@ $def with (output)
                 for (var i = 0; i < fail.length; i++) {
                     var tmpjson = null;
                     try {
-                        tmpjson = JSON.parse(pass[i].innerHTML);
+                        tmpjson = JSON.parse(fail[i].innerHTML);
                         str += "<div class=\"failed-case\">" 
                         for ( idx in tmpjson ) {
                             str += "<div class=\"result-field\" ><b>" + idx + " : </b> " + tmpjson[idx] + "</div>";
@@ -244,7 +244,7 @@ $def with (output)
                         // 20160211 - Daniel Cantarín
                         // Sometimes i get a malformed json.
                         // no time to debug right now
-                        tmpjson = pass[i].innerHTML;
+                        tmpjson = fail[i].innerHTML;
                         str += "<p class=\"failed-case\">(malformed json) - " + tmpjson + "</p>\n";
                     }
                 }
