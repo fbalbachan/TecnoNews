@@ -33,6 +33,10 @@ class ActiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         is_transitive = self.clause.verb.transitivity is "TRANSITIVE"
         se_before_verbal_tree = self.there_is_se_before_verbal_tree()
         return is_transitive and se_before_verbal_tree
+        #if debug_mode: print "--> ActiveVoiceSyntacticAnalyzer.there_is_an_impersonal_se(); str(verb) : " + str(self.clause.verb)
+        #impersonal_detected = str(self.clause.verb.lexical_form).endswith("rse") and self.clause.verb.msi["person"] == "3"
+        #if debug_mode: print "--> ActiveVoiceSyntacticAnalyzer.there_is_an_impersonal_se(); resultado : " + str(is_transitive and impersonal_detected)
+        #return is_transitive and impersonal_detected
 
     def analyze_impersonal_se(self, is_impersonal_passive, pre_subject, pre_od):
         if debug_mode: print "--> ActiveVoiceSyntacticAnalyzer.analyze_impersonal_se()"
