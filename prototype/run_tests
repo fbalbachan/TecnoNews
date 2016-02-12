@@ -1,5 +1,6 @@
 #!/bin/bash
 export PYTHONPATH=$PYTHONPATH:`pwd`/src
+export PYTHONIOENCODING="UTF-8"  
 #set -e
 TEMPFILE="/tmp/sentilecto_tests_$RANDOM"
 for test in tests/*.py; do echo
