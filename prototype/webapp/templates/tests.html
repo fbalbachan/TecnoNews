@@ -3,7 +3,7 @@ $def with (output)
 <html>
   <head>
     <meta charset="utf-8" />
-    <script src="/sentilecto/static/jquery-1.6.2.min.js"></script>
+    <script src="./static/jquery-1.6.2.min.js"></script>
     <style type="text/css">
         @font-face {
             font-family: meditation;
@@ -25,32 +25,337 @@ $def with (output)
             color: #2E2E2E
         }
 
-        pre {
-            font-family      : "monofur";
-            font-size        : 100%;
-            border           : black solid 1px;
-            background-color : gray;
-        }
-
-    </style>
-    <script type="text/javascript">
-        function get_tests_results() {
-          jQuery.ajax({
-              url      : "./run_tests",
-              success  : function(resp){
-                console.log(resp, resp instanceof XMLDocument)
-                if (resp instanceof XMLDocument) {
-                    jQuery("#results").html(
-                        new XMLSerializer().serializeToString(resp.documentElement)
-                    );
-                } else {
-                    jQuery("#results").html(resp);
-                }
-              }
-          });
+        #results {
+            font-family   : "monofur" ;
+            font-size     : 100%      ;
+            position      : relative  ;
+            width         : 100%      ;
+            height        : 100%      ;
+            padding       : 10px      ;
+            overflow-x    : 0px       ;
         }
         
-        var xml = null;
+        .test-case {
+            padding       : 5px      ;
+            overflow-x    : hidden   ;
+            overflow-y    : hidden   ;
+            border        : black solid 1px;
+            border-radius : 15px     ;
+            position      : relative ;
+            min-height    : 150px    ;
+            margin-bottom : 15px     ;
+            display       : block    ;
+            
+            background-color : rgba(100,100,100,0.1);
+            
+        }
+        
+        .est-case:hover {
+            background-color : rgba(100,100,100,0.25);
+        }
+        
+        .result-field {
+            margin-right  : 5px  ;
+        }
+        
+        
+        .failed-cases, .passed-cases, .failed, .passed {
+            text-align    : center   ;
+            width         : 40%      ;
+            position      : absolute ;
+        }
+        
+        .failed, .passed {
+            top           : 100px        ;
+        }
+        
+        .failed-cases, .passed-cases {
+            top           : 150px    ;
+        }
+        
+        .failed-cases, .failed {
+            left          : 2.5%     ;
+        }
+        
+        .passed-cases, .passed {
+            right         : 2.5%     ;
+        }
+        
+        .failed-cases, .passed-cases {
+            /*border        : black thin solid;*/
+        }
+        
+        .passed-case {
+            text-align    : left     ;
+            width         : 80%      ;
+            border        : black solid 1px;
+            border-radius : 15px     ;
+            box-shadow    : 5px 5px 10px;
+            margin-bottom : 10px     ;
+            display       : block    ;
+            position      : relative ;
+            padding       : 10px     ;
+            overflow      : hidden   ;
+            cursor        : default  ;
+            left          : 5%       ;
+            
+            background-color : rgba(0,200,0,0.25);
+        }
+        
+        .failed-case {
+            text-align    : left     ;
+            width         : 80%      ;
+            border        : black solid 1px;
+            border-radius : 15px     ;
+            box-shadow    : 5px 5px 10px;
+            margin-bottom : 10px     ;
+            display       : block    ;
+            position      : relative ;
+            padding       : 10px     ;
+            overflow      : hidden   ;
+            cursor        : default  ;
+            left          : 5%       ;
+            
+            background-color : rgba(200,0,0,0.25);
+        }
+        
+        .failed-case:hover {
+            background-color : rgba(200,0,0,0.5);
+        }
+        
+        .passed-case:hover {
+            background-color : rgba(0,200,0,0.5);
+        }
+        
+        h3 {
+            display          : inline-block ;
+        }
+        
+        .hidden {
+            display       : none  ;
+        }
+        
+        .expandido {
+            min-height    : 500px ;
+            overflow-y    : auto  ;
+        }
+        
+        .cover-layer {
+            position      : absolute ;
+            width         : 100%     ;
+            height        : 100%     ;
+            left          : 0px      ;
+            top           : 0px      ;
+            
+            white-space   : nowrap   ;
+            text-align    : center   ; 
+            margin        : 0px      ;
+            
+            background-color : rgba(0,0,0,0.4);
+        }
+        
+        .cover-layer > .helper {
+            display         : inline-block ;
+            height          : 100%         ;
+            vertical-align  : middle       ;
+        }
+        
+        .cover-layer > img {
+            position    :   absolute;
+            top         :   0       ;
+            bottom      :   0       ;
+            margin      :   0 auto  ;
+            padding     :   0px     ;
+            cursor      :   wait    ;
+        }
+        
+        body {
+            position    :   absolute;
+            left        :   0px     ;
+            top         :   0px     ;
+            width       :   100%    ;
+            height      :   100%    ;
+            margin      :   0px     ;
+        }
+        
+    </style>
+    <script type="text/javascript">
+        // globales
+        var xml     = null;
+        var tests   = [];
+        var results = {};
+        
+        function get_tests_results() {
+            toggle_loading();
+            jQuery.ajax({
+              url      : "./run_tests",
+              success  : function(resp){
+                xml = resp;
+                toggle_loading();
+                parse_results();
+              }
+            });
+        }
+        
+        
+        function parse_results() {
+            var str = "";
+            var rs  = xml.evaluate("//test_output", xml, null, XPathResult.ANY_TYPE, null);
+            var r   = rs.iterateNext();
+            
+            var wins  = 0;
+            var fails = 0;
+            
+            tests     = []; //reset.
+            
+            while (r) {
+                tests.push(r); //persisto los items, por si los necesito
+                
+                str += "<div class=\"test-case\" >\n";
+                str += "<p><h2>Grupo " + r.getAttribute("clase") + ", prueba <i>" + r.getAttribute("test") + "</i></h2></p>\n";
+                
+                var fail = r.querySelectorAll("fails  > fail");
+                var pass = r.querySelectorAll("passes > pass");
+                
+                str += "<div class=\"failed\"><h3> Fallas : " + fail.length + "</h3> ";
+                fails = fails + fail.length;
+                if (fail.length > 0) {
+                    str += "<button onclick=\"toggle_fails(this);\"> mostrar detalles </button>";
+                }
+                str += "</div>\n";
+                
+                str += "<div class=\"passed\"><h3> Correctos : " + pass.length + "</h3> "; 
+                wins = wins + pass.length;
+                if (pass.length > 0) {
+                    str += "<button onclick=\"toggle_passes(this);\"> mostrar detalles </button>";
+                }
+                str += "</div>\n";
+                
+                str += "<div class=\"failed-cases hidden\">\n";
+                for (var i = 0; i < fail.length; i++) {
+                    var tmpjson = null;
+                    try {
+                        tmpjson = JSON.parse(pass[i].innerHTML);
+                        str += "<div class=\"failed-case\">" 
+                        for ( idx in tmpjson ) {
+                            str += "<div class=\"result-field\" ><b>" + idx + " : </b> " + tmpjson[idx] + "</div>";
+                        }
+                        str += "</div>\n";
+                    } catch (e) {
+                        // 20160211 - Daniel Cantarín
+                        // Sometimes i get a malformed json.
+                        // no time to debug right now
+                        tmpjson = pass[i].innerHTML;
+                        str += "<p class=\"failed-case\">(malformed json) - " + tmpjson + "</p>\n";
+                    }
+                }
+                str += "</div>\n";
+                
+                
+                str += "<div class=\"passed-cases hidden\">\n";
+                for (var i = 0; i < pass.length; i++) {
+                    var tmpjson = null;
+                    try {
+                        tmpjson = JSON.parse(pass[i].innerHTML);
+                        str += "<div class=\"passed-case\">" 
+                        for ( idx in tmpjson ) {
+                            str += "<div class=\"result-field\" ><b>" + idx + " : </b> " + tmpjson[idx] + "</div>";
+                        }
+                        str += "</div>\n";
+                    } catch (e) {
+                        // 20160211 - Daniel Cantarín
+                        // Sometimes i get a malformed json.
+                        // no time to debug right now
+                        tmpjson = pass[i].innerHTML;
+                        str += "<div class=\"passed-case\">(malformed json) - " + tmpjson + "</div>\n";
+                    }
+                }
+                str += "</div>\n";
+                
+                str += "</div>\n";
+                
+                r   = rs.iterateNext();
+            }
+            
+            results.classes = tests.length;
+            results.cases   = wins + fails;
+            results.passed  = wins;
+            results.failed  = fails;
+            
+            str = "<div class=\"totales\">" 
+                + results.classes + " grupos de pruebas, " 
+                + results.cases   + " casos de prueba, " 
+                + results.passed  + " (" + results.passed * 100 / results.cases + "%) exitosos, " 
+                + results.failed  + " (" + results.failed * 100 / results.cases + "%) fallaron." 
+                + "</div>\n" 
+                + str;
+            
+            jQuery("#results").html(str);
+        }
+        
+        
+        function toggle_fails( button ) {
+            var padre = button.parentNode.parentNode;
+            var div = jQuery( button.parentNode.parentNode.querySelector(".failed-cases") );
+            
+            if (div.hasClass("hidden")){
+                button.innerHTML = " ocultar detalles ";
+                div.removeClass("hidden");
+            } else {
+                button.innerHTML = " mostrar detalles ";
+                div.addClass("hidden");
+            }
+            
+            toggle_padre(padre);
+            
+        }
+        
+        function toggle_passes( button ) {
+            var padre = button.parentNode.parentNode;
+            var div   = jQuery( padre.querySelector(".passed-cases") );
+            
+            
+            if (div.hasClass("hidden")){
+                button.innerHTML = " ocultar detalles ";
+                div.removeClass("hidden");
+            } else {
+                button.innerHTML = " mostrar detalles ";
+                div.addClass("hidden");
+            }
+            
+            toggle_padre(padre);
+            
+        }
+        
+        function toggle_padre( padre ) {
+            var p      = jQuery( padre );
+            
+            var passed = jQuery(padre.querySelector(".passed-cases"));
+            var failed = jQuery(padre.querySelector(".failed-cases"));
+            
+            console.log(padre, passed.hasClass("hidden") , failed.hasClass("hidden"))
+            
+            if (passed.hasClass("hidden") && failed.hasClass("hidden")) {
+                if (p.hasClass("expandido")) {
+                    p.removeClass("expandido");
+                }
+            } else {
+                if (!p.hasClass("expandido")) {
+                    p.addClass("expandido");
+                }
+            }
+            
+        }
+        
+        function toggle_loading() {
+            var  div = jQuery(".cover-layer");
+            
+            if ( div.hasClass("hidden") ) {
+                div.removeClass("hidden");
+            } else {
+                div.addClass("hidden");
+            }
+        }
         
     </script>
   </head>
@@ -58,6 +363,9 @@ $def with (output)
     <h1>MODEL unit tests:</h1>
     <p><button onclick="get_tests_results()"> Run tests </button></p>
     <p>Results</p>
-    <pre id="results"></pre>
+    <div id="results"></div>
+    <div class="cover-layer hidden">
+        <img src="./static/loading.gif" />
+    </div>
   </body>
 </html>
