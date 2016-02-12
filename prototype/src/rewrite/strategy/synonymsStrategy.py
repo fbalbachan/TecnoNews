@@ -75,27 +75,28 @@ class SynonymsStrategy:
 
     def rewrite_entity(self, clause, leaf, target_synonym, ontology):
         target_gender = target_synonym.msi['gender']
-        #print "SINONIMO"
-        #print target_synonym
         found_entity = None
         for an_entity in clause.entities:
-            #print "COMPARAR"
-            #print an_entity.kernel
-            #print leaf.lexical_form
+
             if str(an_entity.kernel) == str(leaf.lexical_form):
-                #print "ENCONTRO"
                 found_entity = an_entity
                 break
-        
-        #print "ENTIDAD A CAMBIAR"
-        #print found_entity
-
-        #leaf_msi = self._msi_transform(leaf.msi)
-        #leaf_msi['gender'] = target_gender
 
         rewrites = [Rewrite.preserving_case(leaf, target_synonym.text)]
         if found_entity != None:
+
+            #SKIP WORDS CONTAINED IN NESTED ENTITIES ("muro de usuarios" -> "pared de USUARIAS"!!)
+            nested = found_entity.get_nested_entities()
+            nested_leaves = []
+            for a_nested in nested:
+                nested_leaves.extend([a_leaf.lexical_form for a_leaf in a_nested.leaves()])
+
             for a_leaf in found_entity.leaves():
+
+                #SKIPS!
+                if a_leaf.lexical_form in nested_leaves:
+                    continue
+
                 leaf_msi = self._msi_transform(a_leaf.msi)
                 leaf_msi['gender'] = target_gender
                 if a_leaf != leaf and 'gender' in a_leaf.msi and a_leaf.msi['gender'] != target_gender and a_leaf.msi['gender'] != 'neutral':
