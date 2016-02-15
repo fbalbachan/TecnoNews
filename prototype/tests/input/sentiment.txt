@@ -3,10 +3,10 @@ El buen hombre murió
         count: sent_ev = 1
         sent_ev: buen
 
-El hombre de mierda murió
-    subject: El hombre de_mierda
-        count: sent_ev = 1
-        sent_ev: de_mierda
+#El hombre de mierda murió
+#    subject: El hombre de_mierda
+#        count: sent_ev = 1
+#        sent_ev: de_mierda
 
 # Faltaría poder testear la entidad subordinada "mala mierda" con dos evidencias, una adjetival y otra nominal
 El hombre de mala mierda murió
@@ -14,11 +14,11 @@ El hombre de mala mierda murió
         count: sent_ev = 1
         sent_ev: mala mierda
 
-El buen hombre de mierda murió
-    subject: El buen hombre de_mierda
-        count: sent_ev = 2
-        sent_ev: buen
-        sent_ev: de_mierda
+#El buen hombre de mierda murió
+#    subject: El buen hombre de_mierda
+#        count: sent_ev = 2
+#        sent_ev: buen
+#        sent_ev: de_mierda
 
 # Nominal con infinitivos
 Olvido agradecer así
