@@ -3422,7 +3422,7 @@ disputar,N,T,,,Anim,Bi
 distanciar,N,I,,,Anim,Bi
 distar,N,I,,,Bi,Bi
 distender,A,I,,,Bi,Bi
-distinguir,A,I,,,Bi,Bi
+distinguir,A,T,,,Bi,Bi
 distorsionar,A,T,,,Bi,Bi
 distraer,A,T,,,Bi,Bi
 distribuir,N,T,,,Bi,Bi
