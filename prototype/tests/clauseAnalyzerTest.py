@@ -41,7 +41,7 @@ class TestClauseAnalyzer(TestBase):
                 self.update_frame_and_assert(line, frame)
             else:
                 print "Analyzing [" + file + ":" + str(line_number) + "]:", line
-
+                self.input = line
                 paragraph = Paragraph.from_text(line)
                 self.analyzer.analyze(paragraph)
                 EntityUnifier(paragraph).unify()
