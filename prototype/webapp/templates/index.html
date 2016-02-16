@@ -25,20 +25,22 @@ $ captcha_src = "sentilecto/static/captcha/captcha_" + request_id + ".png"
                         <input type="file" name="datafile" accept=".txt" multiple="" size="40">
                         <br><br>
 -->
-                        <label class="control-label" for="text">Enter URL or select a .txt or .csv file (only Spanish, UTF-8 encoded)</label>
+                        <label class="control-label" for="text">Enter URL or select a .txt or .csv file (Spanish or Portuguese, UTF-8 encoded)</label>
                         <input class="input-url" type="text" style="width: 1150px;" name="url-input"/>
                         <input type="file" name="myfile" />
                     <br><br>or...<br><br>
-                    <label class="control-label" for="text">Enter Text (only Spanish)</label>
+                    <label class="control-label" for="text">Enter Text (only Spanish or Portuguese)</label>
                     <div class="controls">
                     <textarea class="input-xlarge" id="textarea" rows="26" style="width: 1150px;" name="text">
+Deixei a porta aberta, esquecendo que o cachorro não podia sair.
+
+separadores de textos. dejar este texto y borrar los otros. separadores de textos.
+
 Recientemente, los mercados financieros de Argentina se sosegaron cuando una disminución en la cotización del dólar paralelo fue vaticinada por Mauricio Macri.
 
 Apenas el Presidente Macri pronosticó una apreciable reducción en la cotización del dólar paralelo, se aquietaron los mercados financieros de Argentina.
 
 Macri predijo el decrecimiento en la cotización del dólar paralelo, a la vez que aplacaba los mercados financieros de Argentina.
-
-separadores de textos. dejar este texto y borrar los otros. separadores de textos.
 
 Me gusta que el servicio de Telefónica haya mejorado. Me gusta que el servicio de Telefónica no haya mejorado. No me gusta que el servicio de Telefónica haya mejorado. No es verdad que Telefónica haya mejorado. Exijo que el servicio de Telefónica mejore. Esperamos que el servicio de Telefónica mejore. Ella preguntó si el servicio de Telefónica mejoró. Desmintieron el rumor que había sido difundido por el diario Clarín acerca de que Telefónica ha mejorado el servicio de la empresa Movistar.
 
@@ -87,10 +89,13 @@ Yo me casé con la de Diseño Gráfico. He presenciado muchas tragedias, pero la
 
       <p><b>Could you tell who <i>left</i> who <i>astonished</i> in the text above? SentiLecto can ¿Quién "<i>DEJÓ PERPLEJO</i>" a quién en el texto de la demo?</b></p>
       <p></p>
-      <p>This Entity-based Sentiment Analysis solution yields a highly fine-grained representation for the sentiment values involved in each opinion. Unlike other approaches, this solution can deal with polarity shifting in the same sentence ('<i>I like chocolate but I hate strawberry ice-cream</i>'), within embedded clauses ('<i>Norwegians, who are an aggresive People, export the exquisite herring</i>'), or even onto the very same word ('<i>Somebody who <u>wasted</u> a chance to do something</i>' means that person did <u>something bad</u> <u>about something good</u>).
+
+<p>SentiLecto is <a href="http://natural.do/" target="_blank">Natural Tech</a>'s  NLU engine. This Entity-based Sentiment Analysis solution yields a highly fine-grained representation for the sentiment values involved in each opinion. Unlike other approaches, this solution can deal with polarity shifting in the same sentence ('<i>I like chocolate but I hate strawberry ice-cream</i>'), within embedded clauses ('<i>Norwegians, who are an aggresive People, export the exquisite herring</i>'), or even onto the very same word ('<i>Somebody who <u>wasted</u> a chance to do something</i>' means that person did <u>something bad</u> <u>about something good</u>).
+<b>SentiLecto better represents the premise whereby the entities involved in the opinion are syntactically  mapped onto SVO (subject-verb-object) slots for their sentiment assignments</b>:
+'<i>Mary hates John</i>' (2 entities but only the object has a negative presentation) vs. '<i>Mary defames John</i>' (the same 2 entities but only the subject has negative presentation). This Entity-based Sentiment Analysis solution yields a highly fine-grained representation for the sentiment values involved in each opinion. Unlike other approaches, this solution can deal with polarity shifting in the same sentence ('<i>I like chocolate but I hate strawberry ice-cream</i>'), within embedded clauses ('<i>Norwegians, who are an aggresive People, export the exquisite herring</i>'), or even onto the very same word ('<i>Somebody who <u>wasted</u> a chance to do something</i>' means that person did <u>something bad</u> <u>about something good</u>).
 <b>SentiLecto better represents the premise whereby the entities involved in the opinion are syntactically  mapped onto SVO (subject-verb-object) slots for their sentiment assignments</b>:
 '<i>Mary hates John</i>' (2 entities but only the object has a negative presentation) vs. '<i>Mary defames John</i>' (the same 2 entities but only the subject has negative presentation).</p>
-      <p>SentiLecto leans on outstanding linguistic features such as: passive/active voice transformation, negation scope, anaphora resolution and co-reference chains, ellipsis, modality treatment, semantic features (animity and others) and accurate verbal frames for all Spanish verbs, even with 'se-impersonal' usages ('<b><u>se mostraron</u></b> retratos' = '<i><b><u>alguien mostró</u></b> retratos</i>' = '<i><b><u>somebody showed</u></b> portraits</i>'), 'se-clitic' usages (for example, plain action '<b><u>mostrar</u></b>' '<i><b><u>to show</u></b> something</i>' vs. '<b><u>mostrarSE</u></b>' '<i><b><u>to show yourself</u></b>, namely <b><u>to feel some way before a situation</u></b></i>').</p>
+      <p>SentiLecto leans on outstanding linguistic features such as: passive/active voice transformation, negation scope, anaphora resolution and co-reference chains, ellipsis, modality treatment, semantic features (animity and others) and accurate verbal frames for all Spanish and Portuguese verbs, even with 'se-impersonal' usages ('<b><u>se mostraron</u></b> retratos' = '<i><b><u>alguien mostró</u></b> retratos</i>' = '<i><b><u>somebody showed</u></b> portraits</i>'), 'se-clitic' usages (for example, plain action '<b><u>mostrar</u></b>' '<i><b><u>to show</u></b> something</i>' vs. '<b><u>mostrarSE</u></b>' '<i><b><u>to show yourself</u></b>, namely <b><u>to feel some way before a situation</u></b></i>').</p>
       <p>It can recognize & classify named-entities (NERC) with identity matching. Also, SentiLecto can identify whether or not an utterance is a real fact (fact mining), <a href="http://natural.do/factnormalizer" target="_blank">normalizing facts</a> through deep understanding of syntax and semantics.</p>
       <p><b>Try our demo with this challenging input text, or you can enter any complex large text, such as news, or even raw datasets of tweets.</b> Copy & paste the entire body text from any recent news into SentiLecto's input text box and behold the results! While there might be some occasional misinterpretations in sparse utterances, after processing large data sets of converging texts in a few seconds -for example, all news about the same topic-, the most important facts and opinionated entities will certainly emerge through an accurate and exhaustive linguistic representation.</p>
       <p></p>
@@ -98,7 +103,6 @@ Yo me casé con la de Diseño Gráfico. He presenciado muchas tragedias, pero la
       <p>SentiLecto is being used to automatically generate <a href="http://entretenimientobit.com">this blog</a>
       with more than 300 high-quality posts on a daily basis, rewriting and enriching content and, more interestingly, merging news covering the same facts. This is just a show case of SentiLecto's NLU capabilities.
 
-SentiLecto currently is only available for Spanish, but we are working on the adaptation of the architecture for Brazilian Portuguese and English
     </div>
     <div align=center>visitors <img src='http://www.counter12.com/img-AdBd9B70-57.gif' border='0' ><script type='text/javascript' src='http://www.counter12.com/ad.js?id=AdBd9B70'></script></div>
   </body>

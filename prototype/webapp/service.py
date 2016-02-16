@@ -9,6 +9,8 @@ from threading import Timer
 import time
 from traceback import format_exc
 import subprocess
+import random
+import codecs
 
 import web
 from skimpyGimpy import skimpyAPI
@@ -285,7 +287,20 @@ class EntiNews_request:
                 if language == u'es' or language == u'it' or language == u'fr' or language == u'ca' or language == u'as' or language == u'gl':
                     return action_by_method[method]()
                 elif language == u'pt':
-                    return web.template.render().ptresult()
+                    #return web.template.render().ptresult()
+                    numero  = random.random()
+                    archivo = "/tmp/sentilecto-redirect-" + str(numero)
+                    print "Escribiendo archivo \"" + archivo + "\"..."
+                    f = open(archivo,"w")
+                    f.write(input_text.encode("utf-8"))
+                    f.close()
+                    #f = codecs.open(archivo, "r", "utf-8")
+                    #print "Contenido del archivo: " + f.read().decode('string-escape').decode("utf-8")
+                    #f.close()
+                   
+                    url = "/sentiportugues/result?n=" + str(numero)
+                    print "Redireccionando hacia \"" + url + "\" ..."
+                    return web.seeother(url)
                 else:
                     return web.template.render().unsupported()
 
