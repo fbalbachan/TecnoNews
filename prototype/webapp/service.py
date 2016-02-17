@@ -200,7 +200,7 @@ class Debug_request:
             return web.template.render().debug(output.getvalue())
         elif language == u'pt':
             #return web.template.render().ptresult()
-            return self.redirect_to_pt(input_text, "debug")
+            return redirect_to_pt(input_text, "debug")
         else:
             return web.template.render().unsupported()
 
@@ -219,7 +219,7 @@ class HiddenEntiNews_request:
             return web.template.render().entinews(analysis, WebOutputUtils(ontology))
         elif language == u'pt':
             #return web.template.render().ptresult()
-            return self.redirect_to_pt(input_text, "hidden")
+            return redirect_to_pt(input_text, "hidden")
         else:
             return web.template.render().unsupported()
 
@@ -290,29 +290,29 @@ class EntiNews_request:
                     return action_by_method[method]()
                 elif language == u'pt':
                     #return web.template.render().ptresult()
-                    return self.redirect_to_pt(input_text, "result")
+                    return redirect_to_pt(input_text, "result")
                 else:
                     return web.template.render().unsupported()
 
         web.redirect("/sentilecto")
     
-    # 20160217 - Daniel Cantarín
-    # Spanish sentilecto's demo needs to redirect data to Portuguese.
-    # This function handles that logic.
-    def redirect_to_pt(self, text, point) :
-        numero  = random.random()
-        archivo = "/tmp/sentilecto-redirect-" + str(numero)
-        print "Escribiendo archivo \"" + archivo + "\"..."
-        f = open(archivo,"w")
-        f.write(input_text.encode("utf-8"))
-        f.close()
-        #f = codecs.open(archivo, "r", "utf-8")
-        #print "Contenido del archivo: " + f.read().decode('string-escape').decode("utf-8")
-        #f.close()
+# 20160217 - Daniel Cantarín
+# Spanish sentilecto's demo needs to redirect data to Portuguese.
+# This function handles that logic.
+def redirect_to_pt(text, point) :
+    numero  = random.random()
+    archivo = "/tmp/sentilecto-redirect-" + str(numero)
+    print "Escribiendo archivo \"" + archivo + "\"..."
+    f = open(archivo,"w")
+    f.write(text.encode("utf-8"))
+    f.close()
+    #f = codecs.open(archivo, "r", "utf-8")
+    #print "Contenido del archivo: " + f.read().decode('string-escape').decode("utf-8")
+    #f.close()
        
-        url = "/sentiportugues/" + point + "?n=" + str(numero)
-        print "Redireccionando hacia \"" + url + "\" ..."
-        return web.seeother(url)
+    url = "/sentiportugues/" + point + "?n=" + str(numero)
+    print "Redireccionando hacia \"" + url + "\" ..."
+    return web.seeother(url)
 
 # # # MAIN # # #
 
