@@ -105,7 +105,7 @@ def get_input_text():
             file_contents = ""
 
         if file_contents != "":
-            text = file_contents
+            text = unicode(file_contents, "utf-8")
         else:
             text = web_input.text if ("url-input" not in web_input or web_input["url-input"] == "") else parse_url(web_input["url-input"])
 
