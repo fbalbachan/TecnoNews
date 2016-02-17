@@ -8,6 +8,10 @@
 .classpath
 .project
 .settings/*
+include
+lib
+local
+share
 bin/*
 build/*
 dist/*
