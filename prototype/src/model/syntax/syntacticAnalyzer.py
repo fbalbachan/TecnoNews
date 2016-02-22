@@ -179,7 +179,7 @@ class SyntacticAnalyzer(object):
                                           and entity.msi["case"] in [None, "personal", "demonstrative", "nominative"]
         valid_subject_entities = \
             filter(lambda entity: not entity.node.label == "patons"
-                                  and (entity.category() in ["noun", "determinant"] or is_valid_pronoun(entity)),
+                                  and (entity.category() in ["noun", "determinant", "adjective"] or is_valid_pronoun(entity)),
                    entities)
         return valid_subject_entities
 
