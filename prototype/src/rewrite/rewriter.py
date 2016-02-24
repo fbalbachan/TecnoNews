@@ -80,7 +80,7 @@ class Rewriter:
                 continue 
 
 
-            if debug_mode: print "\nTEXT BEFORE APPLYING DISLOCATION STRATEGY: ", strategy.__class__.__name__, ":\n[", text, "]\n"
+            if debug_mode: print "\nTEXT BEFORE APPLYING DISLOCATION STRATEGY: ", strategy.__class__.__name__, ":\n[", text, "]\n".decode('utf-8')
             self.paragraph = Paragraph.from_text(text)
             self.analyzer.analyze(self.paragraph)
             dislocations = self._dislocations_from(strategy, self.paragraph.sentences)
@@ -89,11 +89,11 @@ class Rewriter:
             if pre_text != text: #Text changed!
                 successful_strategies.append(strategy.__class__.__name__)
 
-            if debug_mode: print "\nTEXT AFTER APPLYING DISLOCATION STRATEGY: ", strategy.__class__.__name__, ":\n[", text, "]\n"
+            if debug_mode: print "\nTEXT AFTER APPLYING DISLOCATION STRATEGY: ", strategy.__class__.__name__, ":\n[", text, "]\n".decode('utf-8')
 
         replacements = []
 
-        if debug_mode: print "\nTEXT BEFORE APPLYING REPLACEMENT STRATEGIES: \n[", text, "]\n"
+        if debug_mode: print "\nTEXT BEFORE APPLYING REPLACEMENT STRATEGIES: \n[", text, "]\n".decode('utf-8')
         self.paragraph = Paragraph.from_text(text)
         self.analyzer.analyze(self.paragraph)
         clauses = self.clauses_for_replacements if self.clauses_for_replacements else self.paragraph.clauses()
@@ -102,7 +102,7 @@ class Rewriter:
             replacements.extend(replacement_rules)
 
         text = self.compose_text_with(replacements)
-        if debug_mode: print "\nTEXT AFTER APPLYING EVERY REPLACEMENT STRATEGY:\n[", text, "]\n"
+        if debug_mode: print "\nTEXT AFTER APPLYING EVERY REPLACEMENT STRATEGY:\n[", text, "]\n".decode('utf-8')
 
         return text
 
@@ -123,11 +123,11 @@ class Rewriter:
 
         new_text += source_text[index:]
 
-        if debug_mode: print "<-- compose_text_with() - source_text: ", new_text, "\n\n"
+        if debug_mode: print "<-- compose_text_with() - source_text: ", new_text.encode('utf-8'), "\n\n"
         return new_text.encode("utf-8")
 
     def _dislocations_from(self, strategy, sentences):
-        if debug_mode: print "--> Rewriter._dislocations_from(strategy: ", strategy.__class__.__name__, ")"
+        if debug_mode: print "--> Rewriter._dislocations_from(strategy: ", strategy.__class__.__name__, ")".decode('utf-8')
 
         dislocations = []
         for sentence in sentences:
@@ -138,14 +138,14 @@ class Rewriter:
             except:
                 pass  # TODO: Remove this exception handler when the problem is solved
 
-        if debug_mode: print "<-- _dislocations_from() - dislocations: ", dislocations, "\n\n"
+        if debug_mode: print "<-- _dislocations_from() - dislocations: ", dislocations, "\n\n".decode('utf-8')
         return dislocations
 
         # TODO: Use the line below again after removing the handler above
         # return [strategy.rewrite(sentence) for sentence in sentences if strategy.applies_to(sentence)]
 
     def _dislocations_from_node(self, strategy, sentence, node):
-        if debug_mode: print "--> Rewriter._dislocations_from_node(strategy: ", strategy.__class__.__name__, ", node: ", node, ")"
+        if debug_mode: print "--> Rewriter._dislocations_from_node(strategy: ", strategy.__class__.__name__, ", node: ", node, ")".decode('utf-8')
 
         dislocations = []
         applied_before = False
