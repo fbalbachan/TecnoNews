@@ -5,7 +5,7 @@ from re import compile, IGNORECASE, UNICODE
 from src.model.tokenization.token import Token
 from src.utils.stringUtils import remove_accents
 
-debug_mode = True
+debug_mode = False
 
 class TokenizationGuesser:
     def __init__(self, sentence):
@@ -26,7 +26,7 @@ class TokenizationGuesser:
         following_contraction = []
         mismatchs = deque()
 
-        #ALEXIS: I had to append items to it while processing (is it possible to do that to an iterator??)       
+        #ALEXIS: I had to append items to it while processing (is it possible to do that to an iterator??)
         leaves_lst = list(leaves_it)
         list_len = len(leaves_lst) #Failsafe limit to avoid endless loop
         moved_leaves = 0
@@ -86,7 +86,7 @@ class TokenizationGuesser:
                         #sentence_start = self.sentence.text[:bad_word_index]
                         #sentence_end = self.sentence.text[bad_word_index+len(word):]
 
-                        #fixed_text = sentence_start + sentence_end 
+                        #fixed_text = sentence_start + sentence_end
 
                         leaves_lst.append(leaf) #Move leaf at the end of the list
                         words = []
@@ -115,7 +115,7 @@ class TokenizationGuesser:
             index += length
 
             if debug_mode: print "NEW LENGTH: " + str(length)
-            
+
         leaf.token = token
 
         for word, index in mismatchs:
