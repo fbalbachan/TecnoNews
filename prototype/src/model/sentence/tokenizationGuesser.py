@@ -93,6 +93,7 @@ class TokenizationGuesser:
 
                         #Avoid endless loop if unexpected case (It would deep moving the same leaves endlessly)
                         if moved_leaves > list_len:
+                            if debug_mode: print "MOVE LIMIT! BREAK>>>>>>>>>>>>>>>>>>>>>>>>>>"
                             break
                         moved_leaves = moved_leaves +1
 
@@ -104,7 +105,7 @@ class TokenizationGuesser:
                         #raise Exception(msg, fixed_text)
 
                     mismatchs.append((match.group(0), index))
-
+                moved_leaves = 0
                 words.append(word)
 
                 length = len(match.group(0))
