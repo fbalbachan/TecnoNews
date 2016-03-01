@@ -5,7 +5,7 @@ from re import compile, IGNORECASE, UNICODE
 from src.model.tokenization.token import Token
 from src.utils.stringUtils import remove_accents
 
-debug_mode = False
+debug_mode = True
 
 class TokenizationGuesser:
     def __init__(self, sentence):
@@ -26,15 +26,24 @@ class TokenizationGuesser:
         following_contraction = []
         mismatchs = deque()
 
+        #ALEXIS: I had to append items to it while processing (is it possible to do that to an iterator??)       
+        leaves_lst = list(leaves_it)
+        list_len = len(leaves_lst) #Failsafe limit to avoid endless loop
+        moved_leaves = 0
+
         while text:
             if not words:
                 if leaf:
                     leaf.token = token
 
-                leaf = leaves_it.next()
+                #leaf = leaves_it.next()
+                leaf = leaves_lst.pop(0) #ALEXIS: Same behaviour (but with list instead of iter)
+
                 token = Token()
                 words = self.words_for(leaf)
 
+            if debug_mode: print "REMAINING WORDS: "
+            if debug_mode: print words
 
             word = words.pop()
 
@@ -70,18 +79,27 @@ class TokenizationGuesser:
                     match = self.mismatch_pattern.match(text)
                     if not match:
                         if debug_mode: print "NOT MISSMATCH"
-                        text = text if not isinstance(text, unicode) else text.encode("utf8")
-                        word = word if not isinstance(word, unicode) else word.encode("utf8")
+                        #text = text if not isinstance(text, unicode) else text.encode("utf8")
+                        #word = word if not isinstance(word, unicode) else word.encode("utf8")
 
-                        bad_word_index = self.sentence.text.find(word,index)
-                        sentence_start = self.sentence.text[:bad_word_index]
-                        sentence_end = self.sentence.text[bad_word_index+len(word):]
+                        #bad_word_index = self.sentence.text.find(word,index)
+                        #sentence_start = self.sentence.text[:bad_word_index]
+                        #sentence_end = self.sentence.text[bad_word_index+len(word):]
 
-                        fixed_text = sentence_start + sentence_end
-                        #print "AAAAAAAAAAAAAAAAAAAAA"
-                        #print fixed_text.encode("utf-8")
-                        #print "BBBBBBBBBBBBBBBBBBBB"
-                        break
+                        #fixed_text = sentence_start + sentence_end 
+
+                        leaves_lst.append(leaf) #Move leaf at the end of the list
+                        words = []
+
+                        #Avoid endless loop if unexpected case (It would deep moving the same leaves endlessly)
+                        if moved_leaves > list_len:
+                            break
+                        moved_leaves = moved_leaves +1
+
+                        if debug_mode: print "CONTINUE"
+                        continue
+
+                        #break
                         #msg = ("Tokenization error! Text: [%s] - Word: [%s]" % (text, word))
                         #raise Exception(msg, fixed_text)
 
@@ -92,8 +110,7 @@ class TokenizationGuesser:
                 length = len(match.group(0))
                 text = text[length:]
 
-
-            if debug_mode: print "TEXT AFTER CHANGES: " + text.econde('utf-8')
+            if debug_mode: print "TEXT AFTER CHANGES: " + text.encode('utf-8')
 
             index += length
 
@@ -121,7 +138,7 @@ class TokenizationGuesser:
                 token.components = [ (leaf.token.start(), leaf.token.end()) for leaf in node.leaves() ]
                 node.token = token
         except:
-            print "A"
+            print "TOKENIZATION ERROR!"
 
     def is_pending_mismatch(self, word, mismatchs):
         if not mismatchs:
