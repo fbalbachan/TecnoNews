@@ -5,6 +5,7 @@ from re import compile, IGNORECASE, UNICODE
 from src.model.tokenization.token import Token
 from src.utils.stringUtils import remove_accents
 
+debug_mode = False
 
 class TokenizationGuesser:
     def __init__(self, sentence):
@@ -13,7 +14,7 @@ class TokenizationGuesser:
     def guess(self):
         text = self.sentence.text.decode("utf-8")
         leaves = self.sentence.parse_node.leaves()
-      
+
         leaves_it = iter(leaves)
         leaf = None
         token = None
@@ -29,51 +30,61 @@ class TokenizationGuesser:
             if not words:
                 if leaf:
                     leaf.token = token
-                
+
                 leaf = leaves_it.next()
                 token = Token()
                 words = self.words_for(leaf)
 
 
             word = words.pop()
+
+            if debug_mode: print "-------------CURRENT WORD: " + word.encode('utf-8')
+
             if not following_contraction:
                 following_contraction = self.get_following_contraction(text)
 
             if following_contraction:
+                if debug_mode: print "HAS FOLLOWING CONTRACTION"
                 component = following_contraction.popleft()
                 if component[0] == word.lower():
                     word = component[1] if component[1] != word.lower() else word
                 else:
                     following_contraction = []
 
+            if debug_mode: print "WORD AFTER CONTRACTIONS:" + word.encode('utf-8')
+
             if self.starts_with(word, text):
+                if debug_mode: print "STARTS WITH"
                 length = len(word)
                 token.components.append((index, index + length))
                 text = text[len(word):]
             elif self.is_pending_mismatch(word, mismatchs):
+                if debug_mode: print "IS PENDING MISSMATCH"
                 mismatch, mismatch_index = mismatchs.popleft()
                 token.components.append((mismatch_index, mismatch_index + len(mismatch)))
                 length = 0
             else:
                 match = self.whitespace_pattern.match(text)
                 if not match:
+                    if debug_mode: print "NOT WHITESPACE"
                     match = self.mismatch_pattern.match(text)
                     if not match:
+                        if debug_mode: print "NOT MISSMATCH"
                         text = text if not isinstance(text, unicode) else text.encode("utf8")
                         word = word if not isinstance(word, unicode) else word.encode("utf8")
-                        
+
                         bad_word_index = self.sentence.text.find(word,index)
                         sentence_start = self.sentence.text[:bad_word_index]
                         sentence_end = self.sentence.text[bad_word_index+len(word):]
-                        
+
                         fixed_text = sentence_start + sentence_end
                         #print "AAAAAAAAAAAAAAAAAAAAA"
                         #print fixed_text.encode("utf-8")
                         #print "BBBBBBBBBBBBBBBBBBBB"
-                        break 
+                        break
                         #msg = ("Tokenization error! Text: [%s] - Word: [%s]" % (text, word))
                         #raise Exception(msg, fixed_text)
-                        
+
                     mismatchs.append((match.group(0), index))
 
                 words.append(word)
@@ -81,7 +92,13 @@ class TokenizationGuesser:
                 length = len(match.group(0))
                 text = text[length:]
 
+
+            if debug_mode: print "TEXT AFTER CHANGES: " + text.econde('utf-8')
+
             index += length
+
+            if debug_mode: print "NEW LENGTH: " + str(length)
+            
         leaf.token = token
 
         for word, index in mismatchs:
