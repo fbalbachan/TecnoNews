@@ -5,7 +5,7 @@ from re import compile, IGNORECASE, UNICODE
 from src.model.tokenization.token import Token
 from src.utils.stringUtils import remove_accents
 
-debug_mode = False
+debug_mode = True
 
 class TokenizationGuesser:
     def __init__(self, sentence):
@@ -120,17 +120,22 @@ class TokenizationGuesser:
         leaf.token = token
 
         for word, index in mismatchs:
+            if debug_mode: print "PROCESSING MISMATCHS"
             token = Token()
             token.components.append((index, index + len(word)))
 
-            leaf = leaves_it.next()
+            #leaf = leaves_it.next()
+            leaf = leaves_lst.pop(0)
             leaf_word = leaf.original_lexical_form.decode("utf-8")
 
             if leaf_word != word:
                 raise Exception("Tokenization error!")
             leaf.token = token
 
+        if debug_mode: print ">>>ASSING MIDDLE NODE TOKENS:"
+
         self.assing_middle_node_tokens()
+        if debug_mode: print ">>>>>>>>>>>>>>END TOKENIZATION"
 
     def assing_middle_node_tokens(self):
         try:

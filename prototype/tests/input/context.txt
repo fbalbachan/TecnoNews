@@ -1,3 +1,7 @@
+La empresa Volkswagen sufrió una baja en las acciones debido a la estafa conocida el mes pasado que afectó a la industria automotriz alemana, donde salió fortalecida Ford.
+    clause: que afectó a la industria automotriz alemana
+        verb: afectó
+
 El hombre que era bonito me dijo eso
     clause: El hombre me dijo eso
         subject: El hombre
