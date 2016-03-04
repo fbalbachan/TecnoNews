@@ -22,7 +22,7 @@ class SentimentAnalysisPT(Resource):
     def __init__(self):
         self.sentilecto = Sentilecto()
 
-    @swagger.operation(notes='Analyzes input utf-8 encoded text and returns extensive and fine-grained sentiment scores for each entity. ---- NOTE: This v0.9 is an early release, please expect v1.0 to be released soon. You will find new resources and improved functionality.',
+    @swagger.operation(notes='<b style="color:red;">PORTUGUESE ONLY</b><br/>Analyzes input utf-8 encoded text and returns extensive and fine-grained sentiment scores for each entity. ---- NOTE: This v0.9 is an early release, please expect v1.0 to be released soon. You will find new resources and improved functionality.',
                        description='Natural Language Understanding service',
                        responseClass=SentimentAnalysisResponse,
                        nickname='get sentiment analysis',
