@@ -12,6 +12,7 @@ import requests
 import urllib
 from flask import stream_with_context
 import json
+import subprocess
 
 __author__ = 'Alexis Balbachan'
 
@@ -53,11 +54,15 @@ class SentimentAnalysisPT(Resource):
                       )
     #@marshal_with(SentimentAnalysisResponse.resource_fields)
     def get(self, text, api_key):
-        req = requests.get("http://127.0.0.1:5500/api/v0.9/sentiment-analysis/" + urllib.quote_plus(text.encode("utf-8")) + "/" + api_key)
+        #url = "http://127.0.0.1:5500/api/v0.9/sentiment-analysis/" + urllib.quote_plus(text.encode("utf-8")) + "/" + api_key
+        url    = "http://127.0.0.1:5500/api/v0.9/sentiment-analysis/" + text + "/" + api_key
+        req    = requests.get(url)
+        text   = req.text
+        status = req.status_code
         response = \
             (
-                json.loads(req.text) ,
-                req.status_code , 
+                json.loads(text) ,
+                status , 
                 {
                     'Access-Control-Allow-Origin': '*',
                     'Content-Type': 'application/json; '
