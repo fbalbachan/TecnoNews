@@ -8,6 +8,7 @@ from src.utils.stringUtils import has_type_encoding
 from models import SentimentAnalysisResponse
 from flask_restful import Resource, marshal_with
 from usersStorage import users_storage
+import requests
 
 __author__ = 'Alexis Balbachan'
 
@@ -49,6 +50,23 @@ class SentimentAnalysisPT(Resource):
                       )
     @marshal_with(SentimentAnalysisResponse.resource_fields)
     def get(self, text, api_key):
+        
+        req = requests.get("http://127.0.0.1:5500/api/spec.json", stream = True)
+        
+        response = \
+            (
+                stream_with_context(req.iter_content()),
+                response_code,
+                {
+                    'Access-Control-Allow-Origin': '*',
+                    'Content-Type': 'application/json; '
+                    'charset=utf-8'
+                }
+            )
+
+        return response
+
+        
         # api_key = request.headers.get('api_key')
 
         message = self.validate_token(api_key)
