@@ -51,53 +51,8 @@ class EntitySentimentReport(Resource):
                             {"code": 500, "message": "Bad response"}
                         ]
                   )    
+    
     @marshal_with(EntitySentimentReportResponse.resource_fields)                      
-                      
-    #def validate_token(self, token):
-    #    if not users_storage.is_valid_token(token):
-    #        message = "This token does not belong to a registered user."
-    #    elif users_storage.is_valid_token(token) and users_storage.has_expired(token):
-    #        message = "The token expired (30 days or more than 500 calls)."
-    #    else:
-    #        message = ""
-    #    return message
-        
-        
-    def build_response(self, response_code, response_value):
-        response = \
-            (
-                response_value,
-                response_code,
-                {
-                    'Access-Control-Allow-Origin': '*',
-                    'Content-Type': 'application/json; '
-                    'charset=utf-8'
-                }
-            )
-
-        return response
-
-
-
-
-    def options (self, **args):
-        return {'Allow': 'GET,PUT,POST,DELETE'}, \
-               200, \
-               {'Access-Control-Allow-Origin':     '*',
-                'Access-Control-Allow-Methods':    'GET,PUT,POST,DELETE',
-                'Access-Control-Allow-Headers':    'Content-Type'}      
-                
-
-    def validate_token(self, token):
-        if not users_storage.is_valid_token(token):
-            message = "This token does not belong to a registered user."
-        elif users_storage.is_valid_token(token) and users_storage.has_expired(token):
-            message = "The token expired (30 days or more than 500 calls)."
-        else:
-            message = ""
-
-        return message
-                  
     def get(self, text, api_key):
         #messages1 = "AAAAAAAAAAAAAAAAAAA"
         messages1 = self.validate_token(api_key)
@@ -123,13 +78,13 @@ class EntitySentimentReport(Resource):
                     clause_entities = filter(lambda entity: not entity.has_attr("implicit") and not entity.has_attr("impersonal"), clause_entities)
                     clause_entities = filter(lambda entity: entity.is_maximal_regarding(clause_entities), clause_entities)
 
-	            text_entities.extend(clause_entities)
-	            
-	            if clause.relative_entity:
-	                text_entities += [clause.relative_entity]
-	            
-	    if text_entities:    
-	    
+                text_entities.extend(clause_entities)
+                
+                if clause.relative_entity:
+                    text_entities += [clause.relative_entity]
+                
+            if text_entities:    
+        
                 referents_data = output_utils.get_referents_data(text_entities)
                 
                 for referent_data in referents_data:
@@ -181,3 +136,49 @@ class EntitySentimentReport(Resource):
             )
         #response = {"A":"B"}
         return response
+    
+    #def validate_token(self, token):
+    #    if not users_storage.is_valid_token(token):
+    #        message = "This token does not belong to a registered user."
+    #    elif users_storage.is_valid_token(token) and users_storage.has_expired(token):
+    #        message = "The token expired (30 days or more than 500 calls)."
+    #    else:
+    #        message = ""
+    #    return message
+        
+        
+    def build_response(self, response_code, response_value):
+        response = \
+            (
+                response_value,
+                response_code,
+                {
+                    'Access-Control-Allow-Origin': '*',
+                    'Content-Type': 'application/json; '
+                    'charset=utf-8'
+                }
+            )
+
+        return response
+
+
+
+
+    def options (self, **args):
+        return {'Allow': 'GET,PUT,POST,DELETE'}, \
+               200, \
+               {'Access-Control-Allow-Origin':     '*',
+                'Access-Control-Allow-Methods':    'GET,PUT,POST,DELETE',
+                'Access-Control-Allow-Headers':    'Content-Type'}      
+                
+
+    def validate_token(self, token):
+        if not users_storage.is_valid_token(token):
+            message = "This token does not belong to a registered user."
+        elif users_storage.is_valid_token(token) and users_storage.has_expired(token):
+            message = "The token expired (30 days or more than 500 calls)."
+        else:
+            message = ""
+
+        return message
+    
