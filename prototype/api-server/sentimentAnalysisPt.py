@@ -9,6 +9,9 @@ from models import SentimentAnalysisResponse
 from flask_restful import Resource, marshal_with
 from usersStorage import users_storage
 import requests
+import urllib
+from flask import stream_with_context
+import json
 
 __author__ = 'Alexis Balbachan'
 
@@ -48,104 +51,13 @@ class SentimentAnalysisPT(Resource):
                                 {"code": 500, "message": "Bad response."}
                             ]
                       )
-    @marshal_with(SentimentAnalysisResponse.resource_fields)
+    #@marshal_with(SentimentAnalysisResponse.resource_fields)
     def get(self, text, api_key):
-        
-        req = requests.get("http://127.0.0.1:5500/api/spec.json", stream = True)
-        
+        req = requests.get("http://127.0.0.1:5500/api/v0.9/sentiment-analysis/" + urllib.quote_plus(text.encode("utf-8")) + "/" + api_key)
         response = \
             (
-                stream_with_context(req.iter_content()),
-                response_code,
-                {
-                    'Access-Control-Allow-Origin': '*',
-                    'Content-Type': 'application/json; '
-                    'charset=utf-8'
-                }
-            )
-
-        return response
-
-        
-        # api_key = request.headers.get('api_key')
-
-        message = self.validate_token(api_key)
-        if len(message) > 0:
-            return self.build_response(403, {'type': 'ERROR', 'message': message})
-
-        users_storage.increase_access_counter(api_key)
-
-        if has_type_encoding(text, str, 'UTF-8'):
-            text = text.decode('UTF-8')
-
-        try:
-            analysis = self.sentilecto.analyze(text)
-            paragraph = analysis["paragraph"]
-            sentiment_summary = analysis["summary"]
-
-            sentences_data = []
-            for sentence in analysis["paragraph"].sentences:
-                sentence_data = dict()
-                sentence_data["0-Sentence-Text"] = sentence.text
-
-                score = dict()
-                score["0-Positive-Score"] = sentiment_summary[sentence]['positive']
-                score["1-Negative-Score"] = sentiment_summary[sentence]['negative']
-                sentence_data["1-Sentence-Sentiment-Score"] = score
-
-                clauses_data = []
-                for clause in sentence.clauses:
-                    clause_data = dict()
-                    clause_data['0-Clause-Text'] = str(clause)
-
-                    score = dict()
-                    score["0-Positive-Score"] = sentiment_summary[clause]['positive']
-                    score["1-Negative-Score"] = sentiment_summary[clause]['negative']
-                    clause_data['1-Clause-Sentiment-Score'] = score
-
-                    entities_data = []
-                    for entity in clause.all_entities():
-                        entity_data = dict()
-                        entity_data['0-Entity-Text'] = str(entity)
-
-                        score = dict()
-                        score["0-Positive-Score"] = entity.sentimental_value.value[0]
-                        score["1-Negative-Score"] = entity.sentimental_value.value[1]
-                        entity_data['1-Entity-Sentiment-Score'] = score
-
-                        entities_data = entities_data + [entity_data]
-
-                    clause_data['2-Entities'] = entities_data
-
-                    clauses_data = clauses_data + [clause_data]
-
-                sentence_data["2-Clauses"] = clauses_data
-
-                sentences_data = sentences_data + [sentence_data]
-
-            score = dict()
-            score["0-Positive-Score"] = sentiment_summary[paragraph]['positive']
-            score["1-Negative-Score"] = sentiment_summary[paragraph]['negative']
-
-            analysis_results = \
-                {
-                    '0-Paragraph-Text':             analysis["paragraph"].text,
-                    '1-Overall-Sentiment-Score':  score,
-                    '2-Sentences':                  sentences_data
-                }
-
-            response_value = analysis_results
-            response_code = 200
-
-        except Exception, e:
-            print traceback.format_exc()
-            response_value = {'type': 'ERROR', 'message': str(e)}
-            response_code = 500
-
-        response = \
-            (
-                response_value,
-                response_code,
+                json.loads(req.text) ,
+                req.status_code , 
                 {
                     'Access-Control-Allow-Origin': '*',
                     'Content-Type': 'application/json; '
