@@ -184,6 +184,23 @@ class Clause(TreeNode):
         structure_entities = sum([structure.entities for structure in self.syntactic_structures], [])
         return structure_entities
 
+    def named_entities_by_structure(self):
+        named_entities = {}
+
+        for a_structure in self.syntactic_structures:
+
+            structure_entities = a_structure.tacit_entities + a_structure.entities
+
+            for an_entity in structure_entities:
+                entity_to_test = an_entity
+                if an_entity.is_linked():
+                    entity_to_test = an_entity.referenced()
+
+                if entity_to_test.is_named_entity():
+                    named_entities[an_entity] = a_structure.name
+
+        return named_entities
+
     def assigned_entities_with_referenced_ones(self):
         return [entity.referenced() if entity.is_linked() else entity for entity in self.assigned_entities() +
                 self.tacit_entities()]
