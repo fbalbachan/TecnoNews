@@ -22,7 +22,7 @@ class EntitySentimentReport(Resource):
         self.sentilecto = Sentilecto()
         
         
-    @swagger.operation(notes='Analyze input text and returns an entity sentiment report. ---- NOTE: This v0.9 is an early release, please expect v1.0 to be released soon. You will find new resources and improved functionality.',
+    @swagger.operation(notes='<b style="color:red;">SPANISH TEXT ONLY</b><br/>Analyze input text and returns an entity sentiment report. ---- NOTE: This v0.9 is an early release, please expect v1.0 to be released soon. You will find new resources and improved functionality.',
                    description='Natural Language Understanding / Sentiment Analysis service',
                    responseClass=EntitySentimentReportResponse,
                    nickname='get sentiment report',

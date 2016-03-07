@@ -26,7 +26,7 @@ class FactMining(Resource):
         self.synonyms = self._get_synonyms()
         self.sentilecto = Sentilecto()
 
-    @swagger.operation(notes='Analyze the text extracting named entities and the facts those entities are involved in. '
+    @swagger.operation(notes='<b style="color:red;">SPANISH TEXT ONLY</b><br/>Analyze the text extracting named entities and the facts those entities are involved in. '
                              'Fact: is a triad S.V.O., Subject-Verb-Object, meaning: an agent (syntactic subject), '
                              'an action (verb) and the object over which rests the action. The results is structured as '
                              'follows: ---- NOTE: This v0.9 is an early release, please expect v1.0 to be released soon. You will find new resources and improved functionality. ',
