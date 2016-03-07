@@ -42,4 +42,5 @@ prototype/api-server/sentilecto-api.pid
 prototype/webapp/freelings.txt
 prototype/webapp/nohup.demo.out
 prototype/webapp/sentilecto.pid
+prototype/config
 .tags*
