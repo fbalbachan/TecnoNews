@@ -9,10 +9,7 @@ from models import SentimentAnalysisResponse
 from flask_restful import Resource, marshal_with
 from usersStorage import users_storage
 import requests
-import urllib
-from flask import stream_with_context
 import json
-import subprocess
 
 __author__ = 'Alexis Balbachan'
 

@@ -10,7 +10,12 @@ from structuralUnderstanding import StructuralUnderstanding
 from sentimentAnalysis import SentimentAnalysis
 from factMining import FactMining
 from entitySentimentReport import EntitySentimentReport
+# Includes for portuguese redirection
+from entityExtractionPt import EntityExtractionPT
+from structuralUnderstandingPt import StructuralUnderstandingPT
 from sentimentAnalysisPt import SentimentAnalysisPT
+from factMiningPt import FactMiningPT
+from entitySentimentReportPt import EntitySentimentReportPT
 
 reload(sys)
 sys.setdefaultencoding("utf-8")
@@ -39,7 +44,20 @@ api.add_resource(FactMining, base_path + '/fact-mining/<string:text>/<string:api
 
 api.add_resource(EntitySentimentReport, base_path + '/entity-sentiment-report/<string:text>/<string:api_key>')
 
+# 20160304 - Daniel Cantarín
+# Adding Portuguese redirection operations
+# They're clone classes, that only act as proxies to a portuguese API instance.
+
 api.add_resource(SentimentAnalysisPT, base_path + '/pt/sentiment-analysis/<string:text>/<string:api_key>')
+
+api.add_resource(StructuralUnderstandingPT, base_path + '/deep-structure/<string:text>/<string:api_key>')
+
+api.add_resource(EntityExtractionPT, base_path + '/entity-extraction/<string:text>/<string:api_key>')
+
+api.add_resource(FactMiningPT, base_path + '/fact-mining/<string:text>/<string:api_key>')
+
+api.add_resource(EntitySentimentReportPT, base_path + '/entity-sentiment-report/<string:text>/<string:api_key>')
+
 
 
 def write_pid_file():
