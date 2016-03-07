@@ -50,13 +50,13 @@ api.add_resource(EntitySentimentReport, base_path + '/entity-sentiment-report/<s
 
 api.add_resource(SentimentAnalysisPT, base_path + '/pt/sentiment-analysis/<string:text>/<string:api_key>')
 
-api.add_resource(StructuralUnderstandingPT, base_path + '/deep-structure/<string:text>/<string:api_key>')
+api.add_resource(StructuralUnderstandingPT, base_path + '/pt/deep-structure/<string:text>/<string:api_key>')
 
-api.add_resource(EntityExtractionPT, base_path + '/entity-extraction/<string:text>/<string:api_key>')
+api.add_resource(EntityExtractionPT, base_path + '/pt/entity-extraction/<string:text>/<string:api_key>')
 
-api.add_resource(FactMiningPT, base_path + '/fact-mining/<string:text>/<string:api_key>')
+api.add_resource(FactMiningPT, base_path + '/pt/fact-mining/<string:text>/<string:api_key>')
 
-api.add_resource(EntitySentimentReportPT, base_path + '/entity-sentiment-report/<string:text>/<string:api_key>')
+api.add_resource(EntitySentimentReportPT, base_path + '/pt/entity-sentiment-report/<string:text>/<string:api_key>')
 
 
 
