@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-__author__ = 'Martín Caramés Abente'
+__author__ = 'Alexis Balbachan'
 
 from src.utils.stringUtils import *
 
