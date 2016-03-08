@@ -50,7 +50,7 @@ class Rewriter:
                                           SeImpersonalStrategy(ontology),
                                           TextualCite(),
                                           AdverbialClauseDislocationStrategy(ontology),
-                                          AlthoughClauseDislocationStrategy(),
+                                          #AlthoughClauseDislocationStrategy(),
                                           SegunToDijoDislocationStrategy()
                                           # DateTimeStrategy(ontology)
                                           ]
