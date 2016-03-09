@@ -17,6 +17,10 @@ class ContentRewriterAndGenerator:
         if debug_mode: print "--> ContentRewriterAndGenerator.run()"
         changed = text
         analysis = self._analyze(changed)
+
+        changed = GlobalRewriter(analysis['paragraph']).rewrite().decode('utf-8')
+        analysis = self._analyze(changed)
+
         analysis["referent_ranking"] = ReferentRanker(analysis["paragraph"]).rank()
         analysis["generated_content_wiki"] = WikipediaContentGenerator(analysis).generate()
 
@@ -25,8 +29,10 @@ class ContentRewriterAndGenerator:
                 content = unicode(content, 'utf-8')
             changed = changed + u"\n" + content
 
+        #analysis = self._analyze(changed)
+        #changed = GlobalRewriter(analysis['paragraph']).rewrite()
         analysis = self._analyze(changed)
-		analysis['paragraph'] = GlobalRewriter(analysis['paragraph']).rewrite()
+
         rewriter = Rewriter(analysis['paragraph'])
         changed = rewriter.rewrite()
 
