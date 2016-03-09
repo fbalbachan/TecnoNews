@@ -192,9 +192,7 @@ class Clause(TreeNode):
             structure_entities = a_structure.tacit_entities + a_structure.entities
 
             for an_entity in structure_entities:
-                entity_to_test = an_entity
-                if an_entity.is_linked():
-                    entity_to_test = an_entity.referenced()
+                entity_to_test = an_entity.referent.designated_ref()
 
                 if entity_to_test.is_named_entity():
                     named_entities[an_entity] = a_structure.name

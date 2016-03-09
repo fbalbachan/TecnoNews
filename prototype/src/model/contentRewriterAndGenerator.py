@@ -3,6 +3,7 @@ from src.extension.wikipediaContentGenerator import WikipediaContentGenerator
 from src.model.referent.referentRanker import ReferentRanker
 from src.model.sentilecto import Sentilecto
 from src.rewrite.rewriter import Rewriter
+from src.rewrite.globalRewriter import GlobalRewriter
 
 debug_mode = False
 
@@ -25,6 +26,7 @@ class ContentRewriterAndGenerator:
             changed = changed + u"\n" + content
 
         analysis = self._analyze(changed)
+		analysis['paragraph'] = GlobalRewriter(analysis['paragraph']).rewrite()
         rewriter = Rewriter(analysis['paragraph'])
         changed = rewriter.rewrite()
 
