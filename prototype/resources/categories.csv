@@ -1,14 +1,14 @@
-salud,medicina,farmacia,drogas,ambient,enfermedades,,
-economía,economia,industria,trabajo,negocio,empresa,finanza,pobreza,comercio,importacion,exportacion,consumo,venta,mercado,tarifa,portada dinero,emprendedores
-política,politica,eleccion,legisla,ministerio,poder,gobierno,psoe,pp,corrupción,podemos,pablo iglesias,nazis,donald trump
-entretenimiento,espectáculos,cine,celebridad,espectaculo,evento,festival,television,televisión,musica,música
-turismo,viaje,zoológico,,,,,
-tecnología,gadget,aplicacion,internet,tecnologia,informat,electro,sistemas operativos,teléfonos móviles,móviles,consolas,videojuegos,software,streaming
-cultura,arte,literatura,,,,,
-ciencia,espacial,espaciales,,,,,
-deporte,futbol,fútbol,equipo,baloncesto,automovilismo,boxeo,motor,realmadrid,barcelona,juventus,boca,river,nba,béisbol,
-interés general,galeria,interes,sociedad,curiosidad,educa,noticias,animales,
-internacionales,asia,latinoamerica,europa,africa,america,oceanía,internacional,isis,medio oriente,qaeda,portada américa latina,{nombre_pais},
-policiales,crimen,delito,policia,drogas,accidente,robo,inseguridad,terroris,atentado,violencia,
-clima,tiempo,sismo,terremoto,inundaciones,lluvia,tormenta,huracan,inundacion,tornado,nieve,volcan,,
-mujer,moda,desfile,vestimenta,pareja,familia,machis,feminis,genero,género,yodona
+economía,economia,industria,trabajo,negocio,finanza,pobreza,comercio,importacion,exportacion,consumo,venta,mercado,tarifa,dinero,,
+política,politica,legisla,ministerio,poder,gobierno,psoe,corrup,podemos,pablo iglesias,nazis,donald trump,,
+tecnología,gadget,aplicacion,internet,tecnologia,informat,electro,sistemas operativos,teléfonos móviles,consola,videojuego,software,streaming,emprendedor,facebook,google,instagram,uber,samsung,apple,nokia,sony,huawei,satelit,foto,digital,amazon,kindle,alphabet,silicon,smart,nexus,android,microsoft,office,gps,impresora,virtual,inteligencia,airbnb,espacial,espaciales,cyber,hacker,anonymous,telefon,satelit,paypal,square,whatsapp,app,telegram,ibm,linkedin,telecom,telefon,digital,celular,silicon valley,commerce,bitcoin,servidor,ordenador,procesador,black friday,,
+ciencia,salud,,,,,
+deporte,futbol,fútbol,equipo,baloncesto,automovilismo,boxeo,motor,real madrid,barcelona,juventus,boca,river,nba,béisbol,,
+interés general,interes,sociedad,curiosidad,animales,mascota,,
+internacionales,asia,latinoamerica,europa,africa,america,américa,oceanía,oceania,internacional,isis,medio oriente,qaeda,portada américa latina,{nombre_pais},,
+policiales,crimen,delito,policia,drogas,accidente,robo,inseguridad,terroris,atentado,violencia,,
+clima,tiempo,sismo,terremoto,inundaciones,lluvia,tormenta,huracan,huracán,inundacion,inundación,tornado,nieve,volcan,volcán,,
+estilo vida,diet,gastrono,gastronó,culina,restaurant,comida,yoga,relaja,meditaci,gourmet,gourmand,reposte,cocina,alimentaci,sommelier,fitness,ejercitaci,alimento,chef,menu,menú,cocinero,receta,,
+turismo,viaje,aeropuerto,paisaje,vacaciones,hotel,playa,aerolin,aerolí,airbnb,crucero,turisti,turísti,museo,,
+propiedades,hipoteca,inmobiliari,construcción,construccion,barrio,urbanis,urbanís,arquitect,architect,mansion,mansión,paisajis,vivienda,monumento,edificio,alquiler,propiedades,inmueble,real estate,bienes raices,bienes raíces,inquilin,apartament,,
+belleza,cosmetic,cosmétic,maquilla,peinado,look,vestido,fashion,zapato,lencería,lenceria,beauty,,
+entretenimiento,celebr,hollywood,festival,music,músic,cantante,festival,recital,televisión,television,serie,artista,actriz,actrices,espectaculo,show,,
