@@ -101,6 +101,11 @@ class EntityMSISeer:
     def msi_of_coordinated(self, entity):
         msi = {"category": "noun", "number": Number.plural, "type": None, "semantic_classification": None}
 
+        for a_child in entity.children:
+            if a_child.classification() != None:
+                msi["semantic_classification"] = a_child.classification()
+                break
+
         pronouns = sorted(entity.children_of_category("pronoun"), key=lambda pronoun: pronoun.person())
         msi["person"] = pronouns[0].person() if pronouns else 3
 
