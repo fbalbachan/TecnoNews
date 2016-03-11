@@ -14,6 +14,60 @@ class Sanitizer():
         self.paragraph_to_avoid = self._load_banned_paragraphs()
         self.language_filter = None
 
+
+    def upper_repl(self, match):
+        return match.group(1).upper()
+
+    def post_process(self, text_content):
+        if not isinstance(text_content, unicode):
+            text_content = unicode(text_content, 'utf-8')
+        new_content = text_content
+
+        re1 = re.compile(ur'\bde\b \bel\b', re.UNICODE)
+        new_content = re.sub(re1, u'del', new_content)
+        re1 = re.compile(ur'\bDe\b \bel\b', re.UNICODE)
+        new_content = re.sub(re1, u'Del', new_content)
+
+        re1 = re.compile(ur'\ba\b \bel\b', re.UNICODE)
+        new_content = re.sub(re1, u'al', new_content)
+        re1 = re.compile(ur'\bA\b \bel\b', re.UNICODE)
+        new_content = re.sub(re1, u'Al', new_content)
+
+        re1 = re.compile(ur'\by\b \b(i|I|hi)', re.UNICODE)
+        new_content = re.sub(re1, ur'e \1', new_content)
+        re1 = re.compile(ur'\bY\b \b(i|I|hi)', re.UNICODE)
+        new_content = re.sub(re1, ur'E \1', new_content)
+
+        re1 = re.compile(ur'\be\b (\b[^iI])', re.UNICODE)
+        new_content = re.sub(re1, ur'y \1', new_content)
+        re1 = re.compile(ur'\bE\b (\b[^iI])', re.UNICODE)
+        new_content = re.sub(re1, ur'Y \1', new_content)
+
+        re1 = re.compile(ur'\bu\b (\b[^oO])', re.UNICODE)
+        new_content = re.sub(re1, ur'o \1', new_content)
+        re1 = re.compile(ur'\bU\b (\b[^oO])', re.UNICODE)
+        new_content = re.sub(re1, ur'O \1', new_content)
+
+        re1 = re.compile(ur'\bo\b \b(o|O|ho|Ho)', re.UNICODE)
+        new_content = re.sub(re1, ur'u \1', new_content)
+        re1 = re.compile(ur'\bO\b \b(o|O|ho|Ho)', re.UNICODE)
+        new_content = re.sub(re1, ur'U \1', new_content)
+
+        re1 = re.compile(ur'\bdela\b', re.UNICODE)
+        new_content = re.sub(re1, u'de la', new_content)
+        re1 = re.compile(ur'\bDela\b', re.UNICODE)
+        new_content = re.sub(re1, u'De la', new_content)
+
+        re1 = re.compile(ur'([.,?!;_-])[,?!;_-]', re.UNICODE)
+        new_content = re.sub(re1, r'\1', new_content)
+
+        re1 = re.compile(ur'(^\s*[a-zñáéíóú])', re.MULTILINE | re.UNICODE)
+        new_content = re.sub(re1, self.upper_repl, new_content)
+
+        return new_content
+
+
+
     def process_content(self, content):
         # We have doubts about the stability of language Filter, so we instanciate each time
         self.language_filter = LanguageFilter()

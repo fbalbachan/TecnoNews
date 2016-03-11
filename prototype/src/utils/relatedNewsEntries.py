@@ -10,6 +10,23 @@ class RelatedNewsEntries(object):
 
     def __init__(self, original, to_compare_news_entries=None):
         DAYS_IN_THE_PAST_TO_SEARCH = 5 #number of days to search
+        if u"propiedades" in original.categories:
+            DAYS_IN_THE_PAST_TO_SEARCH = 10
+
+        if u"turismo" in original.categories:
+            DAYS_IN_THE_PAST_TO_SEARCH = 30
+
+        if u"estilo vida" in original.categories:
+            DAYS_IN_THE_PAST_TO_SEARCH = 30
+
+        if u"tecnología" in original.categories:
+            DAYS_IN_THE_PAST_TO_SEARCH = 10
+
+        if u"belleza" in original.categories:
+            DAYS_IN_THE_PAST_TO_SEARCH = 10
+
+        #if u"turismo" in original.categories and not u"tecnología" in original.categories:
+        #    DAYS_IN_THE_PAST_TO_SEARCH = 30
 
         self.news_original = original
         if to_compare_news_entries is None:
@@ -216,6 +233,15 @@ class RelatedNewsEntries(object):
 
     def related_score(self, entities_coincidence, similarity, title_distance):
         score = 0
+
+        related_logger.info("Alexis alexis score related news")
+        #if u"belleza" in self.news_original.categories: # or u"insólito" in self.news_original.categories:
+        #    if entities_coincidence >= 1:
+        #        score += 30
+        #else:
+        #    if entities_coincidence > 1:
+        #        score += 30
+
         if entities_coincidence > 1:
             score += 30
 
