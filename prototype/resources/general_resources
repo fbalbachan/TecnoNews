@@ -7,11 +7,11 @@ future_verbs = augurar, predecir, anticipar, profetizar
 
 [nec]
 
-invalid_ne = fuente,cnn_en_español,cnn,isis,juzgado_penal,fuente_cnn_en_español,fuente_cnn,click_to_watch_video,click,Click,Click_to_watch_video,CNN_Español,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,Amnistía,Michael_Brown,Mujer,Mujeres,mujeres,us,US,BBC,bbc,ULTIMO,ultimo,LO_ULTIMO,lo_ultimo
+invalid_ne = fuente,cnn_en_español,cnn,isis,juzgado_penal,fuente_cnn_en_español,fuente_cnn,click_to_watch_video,click,Click,Click_to_watch_video,CNN_Español,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,Amnistía,Michael_Brown,Mujer,Mujeres,mujeres,us,US,BBC,bbc,ULTIMO,ultimo,LO_ULTIMO,lo_ultimo,Cabello,Vitónica,Diario,Diario_de_el_Viajero,Diario_del_Viajero,Thermomix
 
 [rewrite]
 
-blacklist = CNN,ISIS,Servicio_Secreto,Maven,MAVEN,Corea,Clic,Com,Norte,Sur,Guerrero,Yo,Gobierno,gobierno,Ejército,ejército,Senado,senado,Estado,estado,Congreso,congreso,Pentágono,pentágono,Supremo,supremo,Europa,Michael_Brown,Arte_psicodélico,Interior,interior,Holland-Dozier-Holland,Policía,Rayo,América,Asia,Paris,Cristiano,Santos,Justicia,Tecnecio,TC,Francisco,A,No,Monedero,monedero,Italia,Fainá,fainá,faina,Faina,Putin,Putina,Empleo,Salud,Seguridad,BBC,España,españa,África,áfrica,méxico,México,mexico,Mexico
+blacklist = CNN,ISIS,Servicio_Secreto,Maven,MAVEN,Corea,Clic,Com,Norte,Sur,Guerrero,Yo,Gobierno,gobierno,Ejército,ejército,Senado,senado,Estado,estado,Congreso,congreso,Pentágono,pentágono,Supremo,supremo,Europa,Michael_Brown,Arte_psicodélico,Interior,interior,Holland-Dozier-Holland,Policía,Rayo,América,Asia,Paris,Cristiano,Santos,Justicia,Tecnecio,TC,Francisco,A,No,Monedero,monedero,Italia,Fainá,fainá,faina,Faina,Putin,Putina,Empleo,Salud,Seguridad,BBC,España,españa,África,áfrica,México,Mexico,méxico,mexico,Fuerza,fuerza,Iberia,iberia,Internet,internet,Cabello,cabello,Rubio,rubio,Sol,sol,Plata,plata,Navidad,navidad,Ministerio,ministerio,Francia,francia,Pedro,pedro,Diego,diego,Boca,boca,dios,Dios,Gol,gol,Cruz,cruz,García,garcía,Rodríguez,rodríguez,González,gonzález,López,lopez
 
 [syntax]
 
