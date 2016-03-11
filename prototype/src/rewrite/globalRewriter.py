@@ -95,3 +95,4 @@ class GlobalRewriter:
 
 
                         return (new_paragraph_before + " " + new_main + " " + new_paragraph_after).strip().encode('utf-8')
+        return self.paragraph.text
