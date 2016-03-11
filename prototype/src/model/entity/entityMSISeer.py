@@ -104,6 +104,7 @@ class EntityMSISeer:
         for a_child in entity.children:
             if a_child.classification() != None:
                 msi["semantic_classification"] = a_child.classification()
+                msi["type"] = a_child.msi["type"]
                 break
 
         pronouns = sorted(entity.children_of_category("pronoun"), key=lambda pronoun: pronoun.person())

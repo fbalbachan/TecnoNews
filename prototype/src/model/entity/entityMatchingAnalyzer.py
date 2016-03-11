@@ -14,7 +14,7 @@ class EntityMatchingAnalyzer:
 
     def same_kernel(self, other):
         source = self.source
-        if source.classification() and source.classification() == other.classification():
+        if source.classification() and source.classification() == other.classification() and "coordinated" not in source.attributes and "coordinated" not in other.attributes:
             return source.kernel.lexical_form == other.kernel.lexical_form
         return False
 

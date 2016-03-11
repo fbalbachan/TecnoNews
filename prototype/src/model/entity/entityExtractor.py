@@ -25,6 +25,7 @@ class EntityExtractor:
         entities = self.remove_invalid_coordinated(entities)
 
         self.assign_msi(entities)
+
         EntityExtractor.compute_proper_tree_for(entities)
 
         return entities
