@@ -112,7 +112,7 @@ class NewsCrawler(object):
         new_entries = []
 
         for entry in entries:
-            if not ns.already_in_db(entry.url):
+            if not ns.already_in_db(entry.url) and not ns.same_title_today_in_db(entry.title):
                 new_entries.append(entry)
 
         crawler_logger.info("END Discarding already_processed urls")
@@ -122,10 +122,12 @@ class NewsCrawler(object):
         crawler_logger.info("START Discarding duplicated urls urls")
         cleaned_entries = []
         cleaned_entries_urls = []
+        cleaned_entries_titles = []
 
         for entry in entries:
-            if entry.url not in cleaned_entries_urls:
+            if entry.url not in cleaned_entries_urls and entry.title not in cleaned_entries_titles:
                 cleaned_entries.append(entry)
                 cleaned_entries_urls.append(entry.url)
+                cleaned_entries_titles.append(entry.title)
         crawler_logger.info("END Discarding duplicated urls urls")
         return cleaned_entries

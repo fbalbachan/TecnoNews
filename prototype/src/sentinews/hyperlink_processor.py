@@ -134,8 +134,9 @@ class HyperlinkProcessor(object):
         attrib_by_entity = {}
         for entity in self.links_by_entity:
             link = self._choose_link(entity)
-            attrib_by_entity[entity] = {'href': link,
-                                        'target':'_blank'}
+            if link != None or link != '':
+                attrib_by_entity[entity] = {'href': link,
+                                            'target':'_blank'}
         keys = attrib_by_entity.keys()
         for entity in self.paragraph.entities():
             for main_entity in keys:

@@ -15,9 +15,9 @@ class ClarinExtrashowParser(GenericParser):
     def is_parseable_case(self, url):
         allowed = True
 
-        allowed_sections = [u'/cine/', u'/teatro/', u'/musica/']
-        if not any(k for k in allowed_sections if k in url):
-            allowed = False
+        #allowed_sections = [u'/cine/', u'/teatro/', u'/musica/']
+        #if not any(k for k in allowed_sections if k in url):
+        #    allowed = False
 
         return allowed
 
@@ -57,8 +57,16 @@ class ClarinExtrashowParser(GenericParser):
                 if l.text.lower() != 'tags':
                     tags.add(l.text)
 
-        content = soup.find('div', {"class": 'nota'}).text
+        #content = soup.find('div', {"class": 'nota'}).text
 
+        content = ""
+        paragraphs = soup.find('div', {"class": 'nota'}).findAll('p')
+        for paragraph in paragraphs:
+            clean_text = paragraph.text.strip()
+            content += "\n" + clean_text
+
+        tags=[u'entretenimiento']
+        categories=[u'entretenimiento']
         new_entry = self.create_news_entry(title=title, content=content,
                                            tags=tags,
                                            source=self.source,

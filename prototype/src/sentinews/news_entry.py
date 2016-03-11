@@ -4,6 +4,7 @@ from src.sentinews.categorizer import Categorizer
 from src.utils.logger_utils import *
 from src.utils.configProvider import ConfigProvider
 import traceback
+import ConfigParser
 
 logger = get_logger('tecnonews')
 
@@ -32,6 +33,11 @@ class NewsEntry(object):
         self.config = ConfigProvider()
         self.image = image
         self.image_search_string = image_search_string
+        self.sentiment = None
+        self.countries = []
+        self.cities = []
+        self.host_id = None
+        self.image_url = None
 
         # Defensive programing to avoid wrong encoded
         assert(isinstance(self.title, unicode))
@@ -46,17 +52,27 @@ class NewsEntry(object):
     def set_categories(self):
         # User must provide some info about original category or tags to have a better
         # category selection. If not we put always the categoty to [u'inter\xe9s general']
-        logger.info("self.original_categories %s" % self.original_categories)
-        if self.original_categories:
-            self.categories = list(Categorizer(self.original_categories).get_or_else())
-            logger.info("Categorizer(self.original_categories)")
-            logger.info("self.categories %s" % self.categories)
+        logger.info("alexis news_entry->set_categories")
+        if self.original_categories or self.tags:
+            merged_tags = []
+            if self.original_categories:
+                merged_tags += self.original_categories
+            if self.tags:
+                merged_tags += self.tags
 
-        if (not self.categories or self.categories == [u'inter\xe9s general']) \
-                and self.tags:
+            self.categories = list(Categorizer(merged_tags).get_or_else())
+
+        #logger.info("self.original_categories %s" % self.original_categories)
+        #if self.original_categories:
+        #    self.categories = list(Categorizer(self.original_categories).get_or_else())
+        #    logger.info("Categorizer(self.original_categories)")
+        #    logger.info("self.categories %s" % self.categories)
+
+        #if (not self.categories or self.categories == [u'inter\xe9s general']) \
+        #        and self.tags:
             # try to find a category using original categories
-            logger.info("categorization from tags")
-            self.categories = list(Categorizer(self.tags).get_or_else())
+        #    logger.info("categorization from tags")
+        #    self.categories = list(Categorizer(self.tags).get_or_else())
 
         assert self.categories
 
@@ -66,7 +82,7 @@ class NewsEntry(object):
             logger.info("tags %s" % self.tags)
             logger.info("url  %s" % self.url)
 
-    def set_analysis_info(self):
+    def set_analisys_info(self):
         if not self.clean_text:
             self.clean_text = self.get_clean_text()
         if not self.entities:
@@ -76,14 +92,15 @@ class NewsEntry(object):
         self.related = [entry.object_id for entry in related_news_entries]
 
     def set_news_versions(self, other_versions):
-        self.versions = [entry.object_id for entry in other_versions]
+        self.versions = [entry.object_id for entry in other_versions if entry.title != self.title]
 
     def to_dict(self):
         return dict(title=self.safe_unicode(self.title), content=self.safe_unicode(self.content),
                     tags=self.safe_unicode_list(self.tags), source=self.source,
                     original_categories=self.original_categories, categories=self.categories,
                     entities=self.entities, published_date=self.published_date, url=self.url, wp_id=self.wp_id,
-                    wp_url=self.wp_url, related=self.related, versions=self.versions)
+                    wp_url=self.wp_url, related=self.related, versions=self.versions, sentiment=self.sentiment,
+                    countries=self.countries, cities=self.cities,host_id=self.host_id,image_url=self.image_url)
 
     def analyzed_paragraph(self):
         from src.model.paragraph.paragraphAnalyzer import ParagraphAnalyzer
@@ -167,4 +184,3 @@ class NewsEntry(object):
                 str_text = text
 
         return str_text
-

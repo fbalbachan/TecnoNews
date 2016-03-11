@@ -17,6 +17,9 @@ class NewsEntriesService(object):
     def remove_all(self):
         return self.news_entries.remove({})
 
+    def get_count(self, criteria):
+        return self.news_entries.find(criteria).count()
+
     def get_list(self, criteria, limit=None):
         """ Retrieve a list of new entries
         Parameters
@@ -30,6 +33,7 @@ class NewsEntriesService(object):
                           published_date=entry['published_date'],
                           entities=entry['entities'],
                           wp_id=entry['wp_id'] if 'wp_id' in entry else None,
+                          wp_url=entry['wp_url'] if 'wp_url' in entry else None,
                           related=entry['related'] if 'related' in entry else None,
                           object_id=entry['_id'],
                           versions=entry['versions'] if 'versions' in entry else None)
@@ -46,6 +50,20 @@ class NewsEntriesService(object):
         criteria = dict(url=url)
 
         return len([entry for entry in self.news_entries.find(criteria)]) > 0
+
+
+    def same_title_today_in_db(self, title):
+        """ Return True | False
+        Parameters
+        ----------
+        title: String
+        will be used to build mongodb critera
+        """
+        from bson.objectid import ObjectId
+        import datetime
+        interval_time = datetime.datetime.utcnow() - datetime.timedelta(days=1)
+        return len(self.get_list({'title':title, '_id': {'$gte': ObjectId.from_datetime(interval_time)}})) > 0
+
 
     def get_by_date_range(self, start=None, to=None, limit=None):
         """ Retrieve a list of a news_entries by a given date UTC rage

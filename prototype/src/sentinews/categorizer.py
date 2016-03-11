@@ -50,6 +50,7 @@ class Categorizer(object):
                         if lelement in self.countries_list:
                             categories.add('internacionales')
                         if lelement.find(ltag) > -1:
+                        #if ltag.find(lelement) > -1:
                             categories.add(category)
 
         if not categories:

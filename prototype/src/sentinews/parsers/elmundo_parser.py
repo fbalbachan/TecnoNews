@@ -17,6 +17,7 @@ class ElMundoParser(GenericParser):
             return None
 
         soup = BeautifulSoup(self.opener.read(url))
+        image_search_string = None
 
         # rip out script and style elements
         for script in soup(["script", "style"]):
@@ -49,10 +50,10 @@ class ElMundoParser(GenericParser):
                 if l.text.lower() != 'tags':
                     tags.add(l.text)
 
+
         content = soup.find('div', {"itemprop": 'articleBody'}).text
 
-        new_entry = self.create_news_entry(title=title,
-                                           content=content,
+        new_entry = self.create_news_entry(title=title, content=content,
                                            tags=tags,
                                            source=self.source,
                                            url=url,

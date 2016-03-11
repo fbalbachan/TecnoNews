@@ -52,16 +52,25 @@ class LaNacionEspectaculosParser(GenericParser):
             tweets.append(tweet)
             tweet.extract()
 
-        title = soup.find('h1', {"itemprop": "name headline"})
+        title = soup.find('h1', {"itemprop": "headline"})
 
         title = title.text.strip()
 
-        categories = None
-        category = soup.find('span', {"itemprop": "title"}).text
+        #categories = None
+        #category = soup.find('span', {"itemprop": "title"}).text
 
-        tags = [category]
+        #tags = [category]
 
-        content = soup.find('section', {"itemprop": 'articleBody'}).text
+        #content = soup.find('section', {"itemprop": 'articleBody'}).text
+
+        content = ""
+        paragraphs = soup.find('section', {"id": 'cuerpo'}).findAll('p')
+        for paragraph in paragraphs:
+            clean_text = paragraph.text.strip()
+            content += "\n" + clean_text
+
+        tags=[u'entretenimiento']
+        categories=[u'entretenimiento']
         new_entry = self.create_news_entry(title=title, content=content,
                                            tags=tags,
                                            source=self.source,

@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 
 import ConfigParser
-import feedparser
-import traceback
-
 from src.services.mongodb.news_entries_service import NewsEntriesService
 from src.sentinews.parsers import *
 from src.utils.logger_utils import get_crawler_logger
+import feedparser
 from src.utils.sanitizer import Sanitizer
 from src.utils.configProvider import ConfigProvider
+import traceback
+import socket
 
 crawler_logger = get_crawler_logger()
 
@@ -17,6 +17,7 @@ class Crawler(object):
 
     def __init__(self):
         self.sanitizer = Sanitizer()
+        socket.setdefaulttimeout(300)
 
     def _filter_entries(self, entries):
         ''' Filter entries that already exist in the DB,
@@ -25,7 +26,7 @@ class Crawler(object):
         # Filter if we already process the url
         # and if is not in sections we want to filter
 
-        return [entry for entry in entries if len(service.get_list({'url': unicode(entry.link)})) == 0
+        return [entry for entry in entries if hasattr(entry, 'link') and len(service.get_list({'url': unicode(entry.link)})) == 0
                 and not '/videos/' in entry.link
                 and not '/inenglish/' in entry.link
                 and not '/album/' in entry.link
@@ -64,7 +65,7 @@ class Crawler(object):
                 feedParserDict["link"] = feedParserDict["id"]
                 crawler_logger.info("entry hacked url: %s" % feedParserDict["link"])
             try:
-                # TODO: simplify this making parse.parse accept default_tags as None
+                # TODO: simplify this making parse.parse accept degault_tags as None
                 if default_tags is not None:
                     news_entry = parser.parse(feedParserDict["link"], default_tags)
                 else:

@@ -3,6 +3,7 @@
 import wordpress_xmlrpc
 import urllib
 import mimetypes
+import traceback
 
 from wordpress_xmlrpc import Client, WordPressPost
 from wordpress_xmlrpc.methods.posts import NewPost, GetPost
@@ -14,15 +15,26 @@ from src.utils.configProvider import ConfigProvider
 from src.utils.imgeProcessor import to_desired_size, add_background
 from wordpress_xmlrpc.compat import xmlrpc_client
 from src.utils.SvgToPng import to_png
+from src.utils.stringUtils import has_type_encoding
 
+import datetime
+
+from src.services.mongodb.hosts_service import HostsService
+from bson.objectid import ObjectId
+
+#from src.utils.csvwrapper import unicode_csv_reader
 
 logger = get_logger('tecnonews')
+debug_mode = True
 
 
 class BlogPublisher(object):
 
     def __init__(self):
         self.config = ConfigProvider()
+        #countries_file = self.config.get("resources", "countries")
+        #countries_reader = unicode_csv_reader(open(countries_file, 'r'), first_line_is_header=False, delimiter=',')
+        #self.countries_list = [unicode(country[0].lower(), 'utf-8') for country in countries_reader]
 
     @staticmethod
     def check_and_remove_con_foto(client, wp_id):
@@ -42,7 +54,9 @@ class BlogPublisher(object):
         client.call(posts.EditPost(wp_id, wpost))
 
     def process_image(self, client, entry, post_id):
+        if debug_mode: logger.info("--> BLOG_PUBLISHER.process_image()")
         thumbnail = None
+        image_url = None
         if entry.image:
             image_data = self.get_data_upload_image(entry.image)
             image_data['post_id'] = post_id
@@ -51,6 +65,10 @@ class BlogPublisher(object):
 
             response = client.call(media.UploadFile(image_data))
             logger.info("response after upload image %s " % response)
+
+            if response != None and 'url' in response:
+                image_url = response['url']
+
             thumbnail = int(response['id'])
 
             logger.info("thumbnail id:%s" % thumbnail)
@@ -58,7 +76,8 @@ class BlogPublisher(object):
         else:
             logger.info("doesnt have image")
 
-        return thumbnail
+        if debug_mode: logger.info("<-- BLOG_PUBLISHER.process_image() >> thumbnail id: %s" % (thumbnail))
+        return thumbnail, image_url
 
     def get_category_instance(self, client, name):
         categories = client.call(taxonomies.GetTerms('category'))
@@ -66,16 +85,16 @@ class BlogPublisher(object):
             if cat.name == name:
                 return cat
 
-    def special_category_insertion(self, client, entry, post):
+    def special_catogory_insertion(self, client, entry, post):
         # Portada minimal logic
         logger.info("post.injected_count %s" % entry.injected_count)
-        has_valid_thumbnail_id = False
+        has_valid_thubmnail_id = False
 
         if hasattr(post, 'thumbnail'):
             if post.thumbnail:
-                has_valid_thumbnail_id = True
+                has_valid_thubmnail_id = True
 
-        if has_valid_thumbnail_id:
+        if has_valid_thubmnail_id:
             con_foto_instance = self.get_category_instance(client, "z con foto")
             if not isinstance(con_foto_instance,
                               wordpress_xmlrpc.wordpress.WordPressTerm):
@@ -88,7 +107,7 @@ class BlogPublisher(object):
 
         assert isinstance(entry.injected_count, int)
 
-        if has_valid_thumbnail_id and entry.injected_count >= 2:
+        if has_valid_thubmnail_id and entry.injected_count >= 2:
             destacada_instance = self.get_category_instance(client, "z destacada")
 
             if not isinstance(destacada_instance,
@@ -98,48 +117,469 @@ class BlogPublisher(object):
                 post.terms.append(destacada_instance)
                 logger.info("z destacada")
 
+
+
+
+
+    def add_countries(self, entry, limit=None):
+        if limit is not None:
+            country_list = entry.countries[:limit]
+        else:
+            country_list = entry.countries
+
+        if len(country_list) > 0:
+            entry.content += "<p class='country'><b><u>Countries:</u> "
+            for a_country in country_list:
+                entry.content += a_country.title() + ", "
+            entry.content = entry.content[:-2]
+            entry.content += "</b></p>"
+
+    def add_cities(self, entry, limit=None):
+        if limit is not None:
+            city_list = entry.cities[:limit]
+        else:
+            city_list = entry.cities
+
+        if len(city_list) > 0:
+            entry.content += "<p class='city'><b><u>Cities:</u> "
+            for a_city in city_list:
+                entry.content += a_city.title() + ", "
+            entry.content = entry.content[:-2]
+            entry.content += "</b></p>"
+
+    def add_sentiment(self, entry):
+        if entry.sentiment:
+            entry.content += "<p class='sentiment-score'><b><u>Sentiment score: " + entry.sentiment + "</u></b></p>"
+
+
+    def add_related_news_tree(self, entry, news_service):
+        post = entry
+        if len(entry.versions) > 0:
+            logger.info("Found several coverages: %s" % (str(entry.versions)))
+            #Fuentes relevadas para esta noticia
+            post.content += "<p class='history-tree'><b><u>La historia de esta noticia a partir de noticias previas: </u></b>"
+
+            treeEntries = []
+            added_entries_ids = []
+
+            depth = 1
+            entryDate = ""
+            entry.versions = entry.versions[:2]
+
+            try:
+                entryDate = entry.published_date.strftime('%B %d, %Y')
+            except:
+                entryDate = ""
+
+            if isinstance(entryDate, unicode):
+                entryDate = entryDate.encode("utf-8")
+
+            main_source = entry.source
+            if isinstance(main_source, unicode):
+                main_source = main_source.encode("utf-8")
+
+            main_title = entry.title
+            if isinstance(main_title, unicode):
+                main_title = main_title.encode("utf-8")
+
+            post.content += "<br>>"
+            post.content += main_title
+
+            for aRoot in entry.versions:
+                treeEntries.append({'depth':depth, '_id': aRoot})
+
+
+            while len(treeEntries) > 0:
+                currentElement = treeEntries.pop()
+                dbEntry = news_service.get_list({'_id':currentElement['_id']})
+
+
+                if currentElement['_id'] in added_entries_ids:
+                    continue
+
+                added_entries_ids.append(currentElement['_id'])
+
+
+                if len(dbEntry) > 0:
+                    if dbEntry[0].wp_id != None and currentElement['depth'] < 5:
+                        dbEntry[0].versions = dbEntry[0].versions[:2]
+                        for anEntryId in dbEntry[0].versions:
+                            treeEntries.append({'depth':currentElement['depth']+1, '_id': anEntryId})
+
+                    tabs = " "
+                    for aTab in range(currentElement['depth']):
+                        tabs += ">>>>"
+
+                    entryDate = ""
+                    try:
+                        entryDate = dbEntry[0].published_date.strftime('%B %d, %Y')
+                    except:
+                        entryDate = ""
+
+                    post_url = dbEntry[0].wp_url
+                    if isinstance(post_url, unicode):
+                        post_url = post_url.encode("utf-8")
+
+                    post_title = dbEntry[0].title
+                    if isinstance(post_title, unicode):
+                        post_title = post_title.encode("utf-8")
+
+                    post_source = dbEntry[0].source
+                    if isinstance(post_source, unicode):
+                        post_source = post_source.encode("utf-8")
+
+                    if dbEntry[0].wp_url != None:
+                        post.content += "<br>" + tabs + ">" + "<a href=\"" +post_url+ "\">" + post_title + "</a>" + " - " +  entryDate + " (EntretenimientoBit)"
+                    else:
+                        post.content += "<br>" + tabs + ">" + post_title + " - " +  entryDate + " (" + post_source + ")"
+
+            post.content += "</p>"
+
+
+
+
     def publish(self, entry, test=False):
-        news_service = NewsEntriesService() if not test else NewsEntriesService('test')
+        if debug_mode: logger.info("--> BLOG_PUBLISHER.publish(title: %s)" % (entry.title if (entry and entry.title) else "NO TITLE"))
+
+
+        if has_type_encoding(entry.content, str, 'UTF-8'):
+            logger.info("Content is UTF8")
+            pass # we expect it to be UTF-8
+        if has_type_encoding(entry.content, unicode):
+            logger.info("Content is UNICODE")
+            entry.content = entry.content.encode("utf-8")
+
+
+        news_service = NewsEntriesService()
+        hosts_service = HostsService()
+
+        #--PICK HOST AND CUSTOMIZE CONTENT--
+        valid_host = False
+
+        #Specific hosts:
+        hosts = hosts_service.get_list({'categories': {'$in': entry.categories}, "enabled":True})
+        while not valid_host:
+            if len(hosts) == 0:
+                #Non specific hosts:
+                hosts = hosts_service.get_list({'categories': {'$in': ["*"]}, "enabled":True})
+                if len(hosts) == 0:
+                    host = None         #No more hosts
+                    valid_host = True   #Ends loop
+
+            host = hosts.pop()
+
+
+            #TODO Check limits => TEMP!
+            if host['id'] == u"politica_bit":
+                interval_time = datetime.datetime.utcnow() - datetime.timedelta(seconds=86400) #1 Day
+                post_count = news_service.get_count({'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id']})
+                if post_count < 5:
+                    valid_host = True
+                    host["password"] = u"MarioKempes" #TEMP
+            elif host['id'] == u"alma_shopping":
+
+                interval_time = datetime.datetime.utcnow() - datetime.timedelta(seconds=2592000) #1 Month
+                post_count = news_service.get_count({'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id']})
+                if post_count < 300:
+                    valid_host = True
+                    host["password"] = u"District93_Alma" #TEMP
+                    entry.categories = [u"ARTICULOS"]
+
+            elif host['id'] == u"think_thank":
+                interval_time = datetime.datetime.utcnow() - datetime.timedelta(seconds=2592000) #1 Month
+                post_count = news_service.get_count({'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id']})
+                if post_count < 1000:
+                    interval_time = datetime.datetime.utcnow() - datetime.timedelta(seconds=86400) #1 Day
+                    post_count = news_service.get_count({'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id']})
+                    if post_count < 40:
+                        entry.categories = [u'--------CAMBIAR----------']
+                        valid_host = True
+
+            elif host['id'] == u"les_amis":
+
+                interval_time = datetime.datetime.utcnow() - datetime.timedelta(seconds=2592000) #1 Month
+                post_count = news_service.get_count({'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id']})
+                if post_count < 285:
+                    valid_host = True
+
+            elif host['id'] == u"noticias_com":
+                logger.info("Evaluating noticias.com...")
+                # 20160203 - Daniel Cantarin
+                # Added filter by country logic.
+                valid_country = False
+                valid_countries = [ u'peru', u'vatican city', u'bolivia', u'paraguay', u'uruguay', u'panama', u'honduras', u'nicaragua', u'el salvador', u'costa rica', u'mexico', u'colombia', u'ecuador', u'brazil', u'united states', u'argentina', u'venezuela', u'chile', u'china', u'japan', u'korea' ]
+                for country in valid_countries :
+                    if country in entry.countries :
+                        valid_country = True
+                        break
+
+                logger.info("Valid countries: " + str(valid_country))
+                if entry.image:
+                    logger.info("Entry has image")
+
+                interval_time = datetime.datetime.utcnow() - datetime.timedelta(seconds=2592000) #1 Month
+                post_count = news_service.get_count({'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id']})
+                if post_count < 1800:
+                    interval_time = datetime.datetime.utcnow() - datetime.timedelta(seconds=86400) #1 Day
+
+                    if u'policiales' in entry.categories and valid_country:
+                        logger.info("Case: Noticias.com->Policiales")
+                        post_count = news_service.get_count(
+                            {'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id'], 'categories': u'policiales'})
+
+                        if post_count < 5:
+                            entry.categories = [u'sucesos']
+                            valid_host = True
+
+                    if u'internacionales' in entry.categories and valid_country and entry.image:
+                        logger.info("Case: Noticias.com->Internacionales")
+                        post_count = news_service.get_count(
+                            {'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id'], 'categories': u'internacionales'})
+
+                        if post_count < 5:
+                            entry.categories = [u'sucesos']
+                            valid_host = True
+
+                    if u'deporte' in entry.categories and valid_country and entry.image:
+                        logger.info("Case: Noticias.com->Deporte")
+                        post_count = news_service.get_count(
+                            {'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id'], 'categories': u'deporte'})
+
+                        if post_count < 3:
+                            entry.categories = [u'deportes']
+                            valid_host = True
+
+                    if u'economía' in entry.categories and valid_country:
+                        logger.info("Case: Noticias.com->Economía")
+                        post_count = news_service.get_count(
+                            {'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id'], 'categories': u'economía'})
+
+                        if post_count < 3:
+                            entry.categories = [u'sucesos']
+                            valid_host = True
+
+                    if u'entretenimiento' in entry.categories :
+                        logger.info("Case: Noticias.com->Entretenimiento")
+                        post_count = news_service.get_count(
+                            {'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id'], 'categories': u'entretenimiento'})
+
+                        if post_count < 30 :
+                            entry.categories = [u'entretenimiento']
+                            valid_host = True
+
+                    if u'clima' in entry.categories and valid_country and entry.image:
+                        logger.info("Case: Noticias.com->Clima")
+                        post_count = news_service.get_count(
+                            {'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id'], 'categories': u'clima'})
+
+                        if post_count < 3:
+                            entry.categories = [u'sucesos']
+                            valid_host = True
+
+                    if u'estilo vida' in entry.categories:
+                        logger.info("Case: Noticias.com->Estilo Vida")
+                        post_count = news_service.get_count(
+                            {'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id'], 'categories': u'estilo vida'})
+
+                        if post_count < 5:
+                            entry.categories = [u'sociedad']
+                            valid_host = True
+
+
+                    if u'interés general' in entry.categories and valid_country:
+                        logger.info("Case: Noticias.com->interés general")
+                        post_count = news_service.get_count(
+                            {'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id'], 'categories': u'interés general'})
+
+                        if post_count < 5:
+                            entry.categories = [u'sociedad']
+                            valid_host = True
+
+
+                    if u'ciencia' in entry.categories:
+                        logger.info("Case: Noticias.com->ciencia")
+                        post_count = news_service.get_count(
+                            {'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id'], 'categories': u'ciencia'})
+
+                        if post_count < 3:
+                            entry.categories = [u'insólito']
+                            valid_host = True
+
+
+            else:
+                valid_host = True #TEMP
+                host["password"] = u"MarioKempes" #TEMP
+                self.add_sentiment(entry)
+                self.add_countries(entry)
+                self.add_cities(entry)
+                self.add_related_news_tree(entry, news_service)
+
+
+        #--CREATE WP POST--
         post = WordPressPost()
         post.title = entry.title
         post.content = entry.content
 
-        if len(entry.versions) > 0:
-            post.content += "<b><u>Otras fuentes combinadas en esta noticia: </u></b>"
-            post.content += '<ul>'
-            for version_news_id in entry.versions:
-                news_without_marshalling = news_service.get_list({'_id': version_news_id})
-                if len(news_without_marshalling) == 1:
-                    try:
-                        source = news_without_marshalling[0].source
-                        if isinstance(source, unicode):
-                            source = source.encode("utf-8")
+        #if len(entry.versions) > 0:
+        #    logger.info("Found several coverages: %s" % (str(entry.versions)))
+            #Fuentes relevadas para esta noticia
+        #    post.content += "<b><u>La historia de esta noticia a partir de noticias previas: </u></b>"
 
-                        post_title = news_without_marshalling[0].title
-                        if isinstance(post_title, unicode):
-                            post_title = post_title.encode("utf-8")
+        #    if has_type_encoding(post.content, str, 'UTF-8'):
+        #        logger.info("Content is UTF8")
+        #        pass # we expect it to be UTF-8
+        #    if has_type_encoding(post.content, unicode):
+        #        logger.info("Content is UNICODE")
+        #        post.content = post.content.encode("utf-8")
 
-                        post.content += '<li>' + post_title + '</li>' # ' - ' + source + '</li>'
-                        # post.content += '<span>&nbsp;' + news_without_marshalling[0].published_date.strftime('%B %d, %Y') + '</span>'
 
-                    except Exception as e:
-                        pass
 
-            post.content += '</ul>'
+        #    treeEntries = []
 
-        unique_host = self.config.get('publishing', 'unique_host')
-        if unique_host == 'False':
-            host = self.select_category_to_publish(entry)
-        elif unique_host == 'True':
-            host = self.get_unique_host_to_publish()
-        else:
-            logger.error("No unique host set True/False")
+        #    added_entries_ids = []
+
+        #    depth = 1
+        #    entryDate = ""
+        #    entry.versions = entry.versions[:2]
+
+        #    try:
+        #        entryDate = entry.published_date.strftime('%B %d, %Y')
+        #    except:
+        #        entryDate = ""
+
+        #    if isinstance(entryDate, unicode):
+        #        entryDate = entryDate.encode("utf-8")
+
+        #    main_source = entry.source
+        #    if isinstance(main_source, unicode):
+        #        main_source = main_source.encode("utf-8")
+
+
+        #    main_title = entry.title
+        #    if isinstance(main_title, unicode):
+        #        main_title = main_title.encode("utf-8")
+
+        #    post.content += "<br>>"
+        #    post.content += main_title
+
+        #    for aRoot in entry.versions:
+        #        treeEntries.append({'depth':depth, '_id': aRoot})
+
+
+        #    while len(treeEntries) > 0:
+        #        currentElement = treeEntries.pop()
+        #        dbEntry = news_service.get_list({'_id':currentElement['_id']})
+
+
+        #        if currentElement['_id'] in added_entries_ids:
+        #            continue
+
+        #        added_entries_ids.append(currentElement['_id'])
+
+
+        #        if len(dbEntry) > 0:
+        #            if dbEntry[0].wp_id != None and currentElement['depth'] < 5:
+        #                dbEntry[0].versions = dbEntry[0].versions[:2]
+        #                for anEntryId in dbEntry[0].versions:
+        #                    treeEntries.append({'depth':currentElement['depth']+1, '_id': anEntryId})
+
+        #            tabs = " "
+        #            for aTab in range(currentElement['depth']):
+        #                tabs += ">>>>"
+
+        #            entryDate = ""
+        #            try:
+        #                entryDate = dbEntry[0].published_date.strftime('%B %d, %Y')
+        #            except:
+        #                entryDate = ""
+
+        #            post_url = dbEntry[0].wp_url
+        #            if isinstance(post_url, unicode):
+        #                post_url = post_url.encode("utf-8")
+
+        #            post_title = dbEntry[0].title
+        #            if isinstance(post_title, unicode):
+        #                post_title = post_title.encode("utf-8")
+
+        #            post_source = dbEntry[0].source
+        #            if isinstance(post_source, unicode):
+        #                post_source = post_source.encode("utf-8")
+
+
+
+        #            if dbEntry[0].wp_url != None:
+        #                post.content += "<br>" + tabs + ">" + "<a href=\"" +post_url+ "\">" + post_title + "</a>" + " - " +  entryDate + " (EntretenimientoBit)"
+        #            else:
+        #                post.content += "<br>" + tabs + ">" + post_title + " - " +  entryDate + " (" + post_source + ")"
+
+
+
+
+        #hosts_service = HostsService()
+        #hosts = hosts_service.get_list({'categories': {'$in': entry.categories}, "enabled":True})
+
+        #valid_host = False
+        #while not valid_host:
+
+            #Non specific hosts:
+            #if len(hosts) == 0:
+            #    hosts = hosts_service.get_list({'categories': {'$in': ["*"]}, "enabled":True})
+            #    if len(hosts) == 0:
+            #        host = None         #No more hosts
+            #        valid_host = True   #Ends loop
+
+            #host = hosts.pop()
+
+            #TODO Check limits => TEMP!
+            #if host['id'] == u"politica_bit":
+            #    interval_time = datetime.datetime.utcnow() - datetime.timedelta(seconds=86400) #1 Day
+            #    post_count = news_service.get_count({'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id']})
+            #    if post_count < 5:
+            #        valid_host = True
+            #        host["password"] = u"MarioKempes" #TEMP
+            #else:
+            #    valid_host = True #TEMP
+            #    host["password"] = u"MarioKempes" #TEMP
+
+
+            #host["password"] = u"MarioKempes" #TEMP
+
+
+
+
+        #unique_host = self.config.get('publishing', 'unique_host')
+        #if unique_host == 'False':
+        #    host = self.select_category_to_publish(entry)
+        #elif unique_host == 'True':
+        #    host = self.get_unique_host_to_publish()
+
+        #else:
+        #    logger.error("No unique host set True/False")
 
         logger.info("publishing into host %s" % host['url'])
 
         client = Client(host['url'], host['username'], host['password'])
 
         camelCategories = []
+
+        #logger.info("ALEXIS: categories: %s" % ', '.join(entry.categories))
+        if u"belleza" in entry.categories:
+            entry.categories = [u"belleza"]
+
+        if u"propiedades" in entry.categories:
+            entry.categories = [u"propiedades"]
+
+        if u"tecnología" in entry.categories:
+            entry.categories = [u"tecnología"]
+
+        if u"turismo" in entry.categories:
+            entry.categories = [u"turismo"]
+
+        if u"estilo vida" in entry.categories:
+            entry.categories = [u"estilo vida"]
+
+#        if u"propiedades" in entry.categories:
+#            entry.categories = [u"propiedades"]
 
         for category in entry.categories:
             camelCategories.append(category[0].upper() + category[1:])
@@ -148,6 +588,8 @@ class BlogPublisher(object):
             'post_tag': entry.tags,
             'category': camelCategories
         }
+
+        #logger.info("ALEXIS entry.tags: %s" % ', '.join(entry.tags))
 
         # Post new entry as draft
         wp_id = client.call(NewPost(post))
@@ -161,14 +603,16 @@ class BlogPublisher(object):
             # set publish
             post = client.call(GetPost(wp_id))
             wp_url = post.link
-            thumbnail = self.process_image(client, entry, wp_id)
+            #logger.info("ALEXIS wpLink: %s" % wp_url)
+            thumbnail, image_url = self.process_image(client, entry, wp_id)
             if thumbnail:
                 post.thumbnail = thumbnail
 
-            self.special_category_insertion(client=client,
+            self.special_catogory_insertion(client=client,
                                             entry=entry,
                                             post=post)
-            post.post_status = 'publish'
+            if host["draft"] == False:
+                post.post_status = 'publish'
             self.insert_source_data(entry=entry, post=post)
 
             client.call(posts.EditPost(wp_id, post))
@@ -176,8 +620,10 @@ class BlogPublisher(object):
         else:
             logger.error("not wp_id %s" % wp_id)
             wp_url = ""
+            image_url = None
 
-        return wp_id, wp_url
+        if debug_mode: logger.info("<-- BLOG_PUBLISHER.publish(wp_id: %s, wp_url: %s)" % (wp_id, wp_url))
+        return wp_id, wp_url, host["id"], image_url
 
     def get_category_host_to_publish(self):
         import json
@@ -283,7 +729,7 @@ class BlogPublisher(object):
 
         # TODO: workaround this hardcoded data
         user = 'emmettbrown'
-        password = 'Grup0Tecn0lect0'
+        password = 'MarioKempes'
         for entry in entries:
             if not entry.wp_url:
                 logger.error(entry.title)
@@ -308,7 +754,7 @@ class BlogPublisher(object):
     def remove_from_portada(self, entries):
         # TODO: workaround this hardcoded data
         user = 'emmettbrown'
-        password = 'Grup0Tecn0lect0'
+        password = 'MarioKempes'
 
         for entry in entries:
             try:
@@ -339,4 +785,3 @@ class BlogPublisher(object):
 
     def insert_source_data(self, entry, post):
         post.custom_fields.append(dict(key='source', value=entry.source))
-

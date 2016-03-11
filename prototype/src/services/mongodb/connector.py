@@ -11,6 +11,19 @@ class MongoConnector(object):
             config = ConfigProvider()
             client = MongoClient(config.get('mongodb', 'host'),
                                  int(config.get('mongodb', 'port')))
+
+            username = None
+            try:
+                username = config.get('mongodb', 'username')
+            except:
+                pass
+
+            if not username is None :
+                client["admin"].authenticate(
+                                    username, 
+                                    config.get('mongodb', 'password'))
+
+
             if not mode is None and mode == 'test':
                 MongoConnector.__db = client[config.get('mongodb', 'db_test')]
             else:

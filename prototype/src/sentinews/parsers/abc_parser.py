@@ -17,7 +17,8 @@ class ABCParser(GenericParser):
             return None
 
         soup = BeautifulSoup(self.opener.read(url),
-                             from_encoding='iso-8859-15')
+                             from_encoding='utf-8')
+                             #from_encoding='iso-8859-15')
 
         image_search_string = None
 
@@ -35,13 +36,14 @@ class ABCParser(GenericParser):
             tweets.append(tweet)
             tweet.extract()
 
-        title = soup.find('h1', {"itemprop": "headline"})
+        title = soup.find('h1', {"itemprop": "name headline"})
 
         if not title:
-            title = soup.find('span', {"itemprop": "headline"})
+            #title = soup.find('span', {"itemprop": "headline"})
+            title = soup.find('span', {"class": "titulo-noticia"})
 
         title = title.text.strip()
-
+        #title = title.decode("iso-8859-15")
         categories = [urlparse(url).path.split("/")[1]]
 
         # des = soup.find('article', {"class": "desarrollo"})
@@ -51,7 +53,18 @@ class ABCParser(GenericParser):
         # No tags
         tags = set()
 
-        content = soup.find('div', {"itemprop": 'articleBody'}).text
+        #content = soup.find('div', {"itemprop": 'articleBody'}).text
+
+        content = ""
+        paragraphs = soup.find('div', {"itemprop": 'articleBody'}).findAll('p')
+        
+        for paragraph in paragraphs:
+            clean_text = paragraph.text.strip()
+
+                
+            content += "\n" + clean_text
+
+        content = content.strip()
 
         new_entry = self.create_news_entry(title=title, content=content,
                                            tags=tags,

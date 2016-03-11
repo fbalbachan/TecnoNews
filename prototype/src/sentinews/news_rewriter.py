@@ -4,24 +4,30 @@ import re
 import traceback
 import urllib
 
-
 from src.model.sentilecto import Sentilecto
 from src.sentinews.blog_publisher import BlogPublisher
 from src.sentinews.news_entry import NewsEntry
 from src.extension.textInserter import TextInserter
 from src.rewrite.rewriter import Rewriter
+from src.rewrite.globalRewriter import GlobalRewriter
 from src.model.referent.referentRanker import ReferentRanker
 from src.extension.wikipediaContentGenerator import WikipediaContentGenerator
 from src.utils.similarParagraph import SimilarParagraph
 from src.utils.logger_utils import *
+from src.sentinews.hyperlink_processor import HyperlinkProcessor
+
+from src.utils.webOutputUtils import WebOutputUtils
+
+from src.utils.sanitizer import Sanitizer
 
 logger = get_logger('tecnonews')
+debug_mode = True
 
 
 class NewsRewriter(object):
-    ''' Main class that contains all information 
+    ''' Main class that contains all information
         about the original news article and
-        the rewritten result. 
+        the rewritten result.
         Ties the crawler, the rewrite strategies and
         the publisher. '''
 
@@ -37,8 +43,11 @@ class NewsRewriter(object):
         self.injected_count = 0
         self.to_insert_canonical = []
         self.config = ConfigProvider()
+        self.sanitizer = Sanitizer()
 
     def _get_alt_text(self, im, h):
+        if debug_mode: logger.info("--> NEWS_REWRITER._get_alt_text()")
+
         im2 = [(x.split('/')[-1].split('.')[0], x) for x in im]
 
         res = {}
@@ -48,9 +57,11 @@ class NewsRewriter(object):
                 s = re.search("alt=\".*\" src=", x).group(0)
                 s = s[s.find('"') + 1:]
                 s = s[:s.find('"')]
-                res[url] = s if len(s) > 0 else urllib.unquote(img).decode("utf-8")
+                res[url] = s if len(s) > 0 else img
             except:
                 res[url] = url
+
+        if debug_mode: logger.info("<-- _get_alt_text >> result: [%s]" % (res.values()[0:2] if len(res) > 2 else ""))
         return res
 
     def get_main_image_url(self, wikipage):
@@ -118,12 +129,11 @@ class NewsRewriter(object):
         # TODO: make a resource with this info
         blacklist = \
             [
-                'Commons-', 'Wikispecies-logo', 'Wiktionary-logo-es', 'Wikinews-logo', 'None',
-                'Spanish_Wikiquote.SVG', 'P_vip.svg', 'Globe-with-clock.svg', 'Yes_check.svg', 'Red_pog',
-                'Wikisource-logo', 'Falta imagen', 'Estany', 'Flag_of_Egypt', 'Ice_hockey_pictogram',
-                'Firmado pero no ratificado.', 'Spanish Language Wiki.svg', 'Kit right arm blueshoulders.png',
-                'Tetragrammaton', 'signature', 'Signature', 'sig.', 'LinkedInLogo', 'culo_bueno',
-                'Check_mark', 'svg', '.ogg', '.ogv'
+                'Commons-', 'Wikispecies-logo', 'Wiktionary-logo-es', 'Wikinews-logo', 'None', 'Spanish_Wikiquote.SVG', 'P_vip.svg',
+                'Globe-with-clock.svg', 'Yes_check.svg', 'Red_pog', 'Wikisource-logo', 'Falta imagen', 'Estany', 'Flag_of_Egypt',
+                'Ice_hockey_pictogram', 'Firmado pero no ratificado.', 'Spanish Language Wiki.svg',
+                'Kit right arm blueshoulders.png', 'Tetragrammaton', 'signature', 'Signature', 'sig.',
+                'LinkedInLogo', 'culo_bueno', 'Check_mark', '.tif', 'svg', '.ogg', '.ogv', '.gif', '.webm'
             ]
 
         filtered_urls = [url for url in images_urls
@@ -135,11 +145,79 @@ class NewsRewriter(object):
         analysis = self._analyze(self.original_entry.title)
         rewriter = Rewriter(analysis['paragraph'])
         self.rewritten_entry.title = rewriter.rewrite()
+        self.rewritten_entry.title.replace('\n', ' ').replace('\t', ' ')
+        self.rewritten_entry.title = self.sanitizer.post_process(self.rewritten_entry.title)
+
+
+    def generate_entity_table(self, analysis):
+        output_utils = WebOutputUtils([])
+
+        entity_table = ''
+
+
+        sentences = analysis["paragraph"].sentences
+        text_entities = []
+        for sentence in sentences:
+            for clause in sentence.clauses:
+                clause_entities = clause.entities + clause.tacit_entities()
+
+                clause_entities = filter(lambda entity: not entity.has_attr("implicit") and not entity.has_attr("impersonal"), clause_entities)
+
+                clause_entities = filter(lambda entity: entity.is_maximal_regarding(clause_entities), clause_entities)
+
+                text_entities.extend(clause_entities)
+                if clause.relative_entity:
+                    text_entities += [clause.relative_entity]
+
+        output_utils = WebOutputUtils(ontology)
+        if text_entities:
+            referents_data = output_utils.get_referents_data(text_entities)
+            i=0
+
+            entity_table += '\n<table id="global_entities" border="1"><tr><th>Id</th><th>Entity</th><th>Positive</th><th>Negative</th><th>Named-Entity</th><th>Occurrences</th></tr>'
+
+            for referent_data in referents_data:
+
+                appearing = {}
+                for a_reference in referent_data['refs']:
+                    a_reference = output_utils.e_name(a_reference)
+                    if a_reference in appearing:
+                        appearing[a_reference]+=1
+                    else:
+                        appearing[a_reference]=1
+
+                unique_str = ""
+                for unique_elem in appearing.iterkeys():
+                    unique_str+=' ' + unique_elem+': '+output_utils.e_name(appearing[unique_elem])+','
+
+                unique_str = unique_str[:-1]
+
+
+                i+=1
+                occurrences = len(referent_data['refs'])
+
+                entity_table += '<tr>'
+                entity_table += '<td align="center" width=30>' + i + '</td>'
+                entity_table += '<td align="center" title="' + output_utils.entity_tooltip(referent_data['re']) + '">' + referent_data['rn'] + '</td>'
+                entity_table += '<td align="center" title="' + output_utils.e_sv_pos_ev(referent_data['refs']) + '" width=100>' + referent_data['pos'] + '</td>'
+                entity_table += '<td align="center" title="' + output_utils.e_sv_neg_ev(referent_data['refs']) + '" width=100>' + referent_data['neg'] + '</td>'
+                entity_table += '<td align="center" width=100>' + referent_data['sc'] + '</td>'
+                entity_table += '<td align="center" width=100>' + occurrences + '</td>'
+                entity_table += '<td align="center" width=100>' + unique_str + '</td>'
+                entity_table += '</tr>'
+
+	    entity_table += '</table>\n'
+
+	    return entity_table
+
 
     def rewrite_content(self):
         # TODO: Check every step catch exceptions and return OK|Fail
         # FIXME: analysis.text is str instead of unicode!!
         analysis = self._analyze(self.original_entry.content)
+
+        analysis = self._analyze(GlobalRewriter(analysis["paragraph"]).rewrite())
+
         analysis["referent_ranking"] = ReferentRanker(analysis["paragraph"]).rank()
 
         # Generating content
@@ -172,11 +250,138 @@ class NewsRewriter(object):
         # analysis = self._analyze(self.rewritten_entry.content)
         # hyperlink_processor = HyperlinkProcessor(analysis)
         # self.rewritten_entry.content = hyperlink_processor.get_text_with_hyperlinks()
+        #---------------------PRUEBA REACTIVACION PARA INTERNACIONALES-----------
+        #if u"tecnología" not in self.original_entry.categories and u"estilo vida" not in self.original_entry.categories and u"propiedades" not in self.original_entry.categories:
+        #    if u"internacionales" in self.original_entry.categories:
+        #        analysis = self._analyze(self.rewritten_entry.content)
+        #        hyperlink_processor = HyperlinkProcessor(analysis)
+        #        self.rewritten_entry.content = hyperlink_processor.get_text_with_hyperlinks()
+        #-----------------------FIN PRUEBA INTERNACIONALES----------------------
+        self.rewritten_entry.content = self.sanitizer.post_process(self.rewritten_entry.content)
+
+        #------ALEXIS--------SENTIMENT SCORE
+        logger.info("SENTIMENTSCORE")
+        paragraph = analysis["paragraph"]
+        sentiment_summary = analysis["summary"]
+        #sentiment_score_text = "(+%.2f%%,-%.2f%%)" % (sentiment_summary[paragraph]['positive'], sentiment_summary[paragraph]['negative'])
+        #self.rewritten_entry.content += "\n<b><u>Sentiment score (sentiment scale at the bottom of page): " + sentiment_score_text + "</u></b>\n"
+        wording_result = ""
+
+        positive_score = float(sentiment_summary[paragraph]['positive'])
+        negative_score = abs(float(sentiment_summary[paragraph]['negative']))
+        neutral_score = 0
+        if positive_score == 0 and negative_score == 0:
+            neutral_score = 1
+        elif abs(positive_score-negative_score) < 5:
+            neutral_score = 1
+            positive_score = 0
+            negative_score = 0
+        elif positive_score < 10 and negative_score < 10:
+            neutral_score = 1
+            positive_score = 0
+            negative_score = 0
+
+        positive_score /= 100
+        negative_score /= 100
+        if positive_score > negative_score:
+            wording_result = "POSITIVE"
+        elif positive_score < negative_score:
+            wording_result = "NEGATIVE"
+        else:
+            wording_result = "NEUTRAL"
+
+        if max(positive_score, negative_score) >= 0.80:
+            wording_result = "VERY " + wording_result
+        elif max(positive_score, negative_score) < 0.35 and max(positive_score, negative_score) >= 0.10:
+            wording_result = "SLIGHTLY " + wording_result
+
+        self.original_entry.sentiment = wording_result
+        self.original_entry.countries = []
+        self.original_entry.cities = []
+
+        #self.rewritten_entry.content += "\n<b><u>Sentiment score: " + wording_result + "</u></b>\n"
+
+        #------ALEXIS--------COUNTRIES
+        #logger.info("COUNTRIES")
+        #entity_places = []
+        #for an_entity in self.original_entry.entities:
+        #    if an_entity["semantic"] == "place":
+        #        entity_places.append(an_entity["name"])
+        #        self.rewritten_entry.content += an_entity["name"]+" "
+
+
+        #entity_places = []
+        entity_countries = {}
+        entity_cities = {}
+        try:
+            import socket,json
+            sock = socket.socket()
+            sock.settimeout(20)
+            sock.connect(("85.10.210.172", 8081))
+            sock.recv(1024)
+
+            logger.info("COUNTRIES")
+
+            for an_entity in self.original_entry.entities:
+                if an_entity["semantic"] == "place":
+                    #entity_places.append(an_entity["name"]
+                    sock.send(an_entity["name"].replace("_"," ")+"\n")
+                    a_response = json.loads(sock.recv(1024))
+                    if a_response[0] != "Unknown":
+                        if a_response[0] in entity_countries:
+                            entity_countries[a_response[0]] += 1
+                        else:
+                            entity_countries[a_response[0]] = 1
+                        #entity_places.append(a_response[0])
+                    if a_response[1] != "Unknown":
+                        if a_response[1] in entity_cities:
+                            entity_cities[a_response[1]] += 1
+                        else:
+                            entity_cities[a_response[1]] = 1
+                        #entity_places.append(a_response[1])
+        except Exception as e:
+            logger.error("COUNTRIES ERROR: %s" % e.message)
+            logger.error("COUNTRIES ERROR: \n%s" % traceback.format_exc())
+
+        #if len(entity_places) > 0:
+        #    self.rewritten_entry.content += "Paises: "
+        #    for a_place in entity_places:
+        #        self.rewritten_entry.content += a_place.encode('utf-8') + ", "
+        #    self.rewritten_entry.content = self.rewritten_entry.content[:-2]
+        #    self.rewritten_entry.content += "."
+
+
+        if len(entity_countries) > 0:
+            #self.rewritten_entry.content += "<b><u>Countries:</u> "
+            for a_country, a_count in sorted(entity_countries.iteritems(), key=lambda (k,v): (v,k),reverse=True):
+                #self.rewritten_entry.content += a_country.encode('utf-8').title() + ", "
+                self.original_entry.countries.append(a_country.encode('utf-8'))
+
+            #self.rewritten_entry.content = self.rewritten_entry.content[:-2]
+            #self.rewritten_entry.content += "</b>\n"
+
+
+        if len(entity_cities) > 0:
+            #self.rewritten_entry.content += "<b><u>Cities:</u> "
+            for a_city, a_count in sorted(entity_cities.iteritems(), key=lambda (k,v): (v,k),reverse=True):
+                #self.rewritten_entry.content += a_city.encode('utf-8').title() + ", "
+                self.original_entry.cities.append(a_city.encode('utf-8'))
+            #self.rewritten_entry.content = self.rewritten_entry.content[:-2]
+            #self.rewritten_entry.content += "</b>\n"
+
+
+
+        self.rewritten_entry.cities = self.original_entry.cities
+        self.rewritten_entry.countries = self.original_entry.countries
+        self.rewritten_entry.sentiment = self.original_entry.sentiment
+
+
+        #ENTITY TABLE
+        #self.rewritten_entry.content += self.generate_entity_table(analysis)
 
         if wikiinfo and filter(lambda (referent, score): referent == wikiinfo[0][0] and score > 1., ranking):
             # logger.info("WIKIINFO: %s", str(wikiinfo))
             # logger.info("Searching for %s " % wikiinfo[0][2])
-
             wikipedia_page = wikiinfo[0][2]
             entry_image = self.get_main_image_url(wikipedia_page)
 
@@ -184,8 +389,10 @@ class NewsRewriter(object):
                 self.rewritten_entry.content = self.add_image_caption(entry_image, self.rewritten_entry.content)
                 self.rewritten_entry.image = entry_image
                 logger.info("Url selected %s" % self.rewritten_entry.image['url'])
+
             else:
                 logger.info("No image selected")
+
         else:
             logger.info("NO REFERENT SCORE > 1")
 
@@ -204,6 +411,7 @@ class NewsRewriter(object):
                 # logger.info("Searching for %s " % wikiinfo[0][2])
                 wikipedia_page = wikiinfo[0][2]
                 entry_image = self.get_main_image_url(wikipedia_page)
+
                 if entry_image:
                     self.rewritten_entry.content = self.add_image_caption(entry_image, self.rewritten_entry.content)
                     self.rewritten_entry.image = entry_image
@@ -213,17 +421,54 @@ class NewsRewriter(object):
 
         self.post_process()
 
+
+
     def publish(self):
         publisher = BlogPublisher()
-        wp_id, wp_url = publisher.publish(self.rewritten_entry)
+        wp_id, wp_url, host_id, image_url = publisher.publish(self.rewritten_entry)
         publisher.insert_canonical(self.to_insert_canonical, wp_url)
         publisher.remove_from_portada(self.to_insert_canonical)
-        return wp_id, wp_url
+        return wp_id, wp_url, host_id, image_url
 
     def _analyze(self, text):
         return Sentilecto.analyze(text)
 
+    #20160129 - Daniel Cantarin
+    #Captions are usually got from wikipedia, and are often urlencoded
+    #file names. This function applies common filters in order to get
+    #a more human friendly caption.
+    def _sanitize_caption(self, caption):
+
+        if not isinstance(caption, basestring):
+            return caption
+
+        ret  = caption
+        # 1) Restore URL escaped characters.
+        try :
+            ret  = urllib.unquote(ret).decode("utf8")
+        except :
+            pass
+
+        # 2) Dealing with encodings.
+        # try :
+        #     ret = ret.decode("utf8")
+        # except :
+        #    pass
+
+        # 3) Remove common file extensions for images.
+        exts = [".jpg", ".JPG", ".svg", ".SVG", ".png", ".PNG", ".gif", ".GIF"]
+        for ext in exts:
+            ret = ret.replace(ext, "")
+
+        # 4) Change underscores for blank spaces.
+        ret  = ret.replace("_"," ")
+
+        return ret
+
+
     def add_image_caption(self, image_data, rewritten_content):
+        if debug_mode: logger.info("--> NEWS_REWRITER.add_image_caption()")
+
         rewritten_content_with_caption = rewritten_content
         try:
             caption = image_data['description']
@@ -232,6 +477,7 @@ class NewsRewriter(object):
                 if not isinstance(caption, unicode):
                     logger.info('Caption is UTF-8')
                     caption = unicode(caption,"utf-8")
+                caption = self._sanitize_caption(caption)
                 logger.info(u'Image Caption: %s' % caption)
                 rewritten_content_with_caption = u'<p><small>Foto: Wikipedia - %s</small></p> %s' % (caption, rewritten_content)
             else:
@@ -239,6 +485,7 @@ class NewsRewriter(object):
                 if isinstance(caption, unicode):
                     logger.info('Caption is UNICODE')
                     caption = caption.encode("utf-8")
+                caption = self._sanitize_caption(caption)
                 logger.info('Image Caption: %s' % caption)
                 rewritten_content_with_caption =  '<p><small>Foto: Wikipedia - %s</small></p> %s' % (caption, rewritten_content)
 
@@ -251,6 +498,7 @@ class NewsRewriter(object):
 
             logger.error(traceback.format_exc())
 
+        if debug_mode: logger.info("<-- NEWS_REWRITER.add_image_caption >> result: %s" % (caption if caption else "NO CAPTION"))
         return rewritten_content_with_caption
 
     def add_tags_from_ranking(self, ranking):
@@ -262,7 +510,7 @@ class NewsRewriter(object):
         base_tags = self.rewritten_entry.tags
         if not base_tags:
             base_tags = []
-        # avoid error if is a set insted of a list
+        # avoid error if is a set instead of a list
         # TODO: put asserts in news entry to make this an assert
         if not isinstance(base_tags, list):
             base_tags = list(base_tags)
@@ -291,7 +539,7 @@ class NewsRewriter(object):
 
         for paragraph in pre_content.split(u'\n'):
             if len(paragraph) > 0:
-                #patch to clean wrong formated paragraphs
+                # patch to clean wrong formatted paragraphs
                 if paragraph[0] in [u',', u'.']:
                     paragraph = paragraph[1:].strip()
 

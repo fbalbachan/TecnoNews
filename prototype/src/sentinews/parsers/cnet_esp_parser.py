@@ -18,7 +18,7 @@ class CNetEspParser(GenericParser):
 
     def parse(self, url):
 
-        if (u'/imagenes/' in url) or (u'/videos/' in url) or (u'/analisis/' in url):
+        if (u'/imagenes/' in url) or (u'/videos/' in url) or (u'/analisis/' in url) or (u'cazadores-de-ofertas' in url):
             return None
 
         soup = BeautifulSoup(self.opener.read(url))
@@ -29,7 +29,8 @@ class CNetEspParser(GenericParser):
 
         image_search_string = None
 
-        title = soup.find('h1', {"itemprop": "headline"})
+        #title = soup.find('h1', {"itemprop": "headline"})
+        title = soup.find('h1')
         title = title.text.strip()
 
         metadata = soup.find('ul', {"class": "breadcrumb"})
@@ -42,29 +43,35 @@ class CNetEspParser(GenericParser):
         for tag in tags_div.findAll(href=re.compile('/es/temas/')):
             tags.append(tag.text.strip())
 
-        content = soup.find('div', {"class": "article-main-body row", "itemprop": 'articleBody'})
-
+        #PUSE COL 10
+        content = ""
+        paragraphs = soup.find('div', {"class": "col-10 article-main-body row", "itemprop": 'articleBody'}).find('div',{'class':'col-8'}).findAll('p')
+        for paragraph in paragraphs:
+            content+='\n'+paragraph.text.strip()     
+        
+        content = content.strip()
         #clean relate links from content
-        for related_link in content.findAll('div', {"section": "shortcodeRelatedLinks"}):
-            related_link.extract()
+        #for relatyed_link in content.findAll('div', {"section": "shortcodeRelatedLinks"}):
+        #    related_link.extract()
         #clean any inpage videos from content
-        for video in content.findAll(class_=re.compile("video")):
-            video.extract()
+        #for video in content.findAll(class_=re.compile("video")):
+        #    video.extract()
         #clean any inpage galleries from content
-        for gallery in content.findAll(class_=re.compile("gallery")):
-            gallery.extract()
+        #for gallery in content.findAll(class_=re.compile("gallery")):
+        #    gallery.extract()
         #clean of any figures so the caption wont appear
-        for figure in content.findAll('figure'):
-            figure.extract()
+        #for figure in content.findAll('figure'):
+        #    figure.extract()
             #clean of twits in content
-        for twit in content.findAll(class_=re.compile("twitter")):
-            twit.extract()
+        #for twit in content.findAll(class_=re.compile("twitter")):
+        #    twit.extract()
 
-        content = content.text
-        assert content.find('function()') == -1
+        #content = content.text
+        #assert content.find('function()') == -1
 
         new_entry = self.create_news_entry(title=title, content=content,
-                                           tags=tags,
+                                           #tags=tags,
+                                           tags=["tecnologia"],
                                            source=self.source,
                                            url=url,
                                            original_categories=categories,

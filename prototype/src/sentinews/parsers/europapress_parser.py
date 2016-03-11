@@ -72,17 +72,19 @@ class EuropaPressParser(GenericParser):
 
         content = p_content
 
-        # TODO make a cleanning method in each parser and leave only common in the sanitize process
+        # TODO make a cleanning method in each parser and leave only common in
+        # the sanitize process
         import re
         content = re.sub(u'\(EUROPA PRESS\) ?(-|–)?', u'', content)
         content = re.sub(u'\(EDIZIONES\) ?(-|–)?', u'', content)
 
-        new_entry = self.create_news_entry(title=title,
-                                           content=content,
+        new_entry = self.create_news_entry(title=title, content=content,
                                            tags=tags,
                                            source=self.source,
                                            url=url,
                                            original_categories=categories,
                                            image_search_string=image_search_string,
                                            keywords=None)
+
         return new_entry
+
