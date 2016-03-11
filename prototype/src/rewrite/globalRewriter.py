@@ -55,7 +55,7 @@ class GlobalRewriter:
                     dereferenced_entity = a_subject_entity.referent.designated_ref()
 
                     #IF MAIN SENTENCE CONTAINS THIS ENTITY AND SECONDARY DOESNT CONTAIN APPOSITIONS:
-                    if str(dereferenced_entity) in current_entities and not a_subject_entity.appositions:
+                    if str(dereferenced_entity) in current_entities and (a_subject_entity.is_tacit() or not a_subject_entity.appositions):
 
                         main_role = current_entities[str(dereferenced_entity)]["role"]
                         main_entity = current_entities[str(dereferenced_entity)]["entity_object"]
