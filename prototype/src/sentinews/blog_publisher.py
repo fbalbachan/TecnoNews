@@ -327,7 +327,7 @@ class BlogPublisher(object):
                         post_count = news_service.get_count(
                             {'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id'], 'categories': u'policiales'})
 
-                        if post_count < 5:
+                        if post_count < 10:
                             entry.categories = [u'sucesos']
                             valid_host = True
 
@@ -336,7 +336,7 @@ class BlogPublisher(object):
                         post_count = news_service.get_count(
                             {'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id'], 'categories': u'internacionales'})
 
-                        if post_count < 5:
+                        if post_count < 10:
                             entry.categories = [u'sucesos']
                             valid_host = True
 
@@ -345,7 +345,7 @@ class BlogPublisher(object):
                         post_count = news_service.get_count(
                             {'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id'], 'categories': u'deporte'})
 
-                        if post_count < 3:
+                        if post_count < 6:
                             entry.categories = [u'deportes']
                             valid_host = True
 
@@ -354,7 +354,7 @@ class BlogPublisher(object):
                         post_count = news_service.get_count(
                             {'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id'], 'categories': u'economía'})
 
-                        if post_count < 3:
+                        if post_count < 6:
                             entry.categories = [u'sucesos']
                             valid_host = True
 
@@ -363,7 +363,7 @@ class BlogPublisher(object):
                         post_count = news_service.get_count(
                             {'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id'], 'categories': u'entretenimiento'})
 
-                        if post_count < 30 :
+                        if post_count < 40 :
                             entry.categories = [u'entretenimiento']
                             valid_host = True
 
@@ -372,7 +372,7 @@ class BlogPublisher(object):
                         post_count = news_service.get_count(
                             {'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id'], 'categories': u'clima'})
 
-                        if post_count < 3:
+                        if post_count < 6:
                             entry.categories = [u'sucesos']
                             valid_host = True
 
@@ -381,7 +381,7 @@ class BlogPublisher(object):
                         post_count = news_service.get_count(
                             {'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id'], 'categories': u'estilo vida'})
 
-                        if post_count < 5:
+                        if post_count < 10:
                             entry.categories = [u'sociedad']
                             valid_host = True
 
@@ -391,7 +391,7 @@ class BlogPublisher(object):
                         post_count = news_service.get_count(
                             {'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id'], 'categories': u'interés general'})
 
-                        if post_count < 5:
+                        if post_count < 10:
                             entry.categories = [u'sociedad']
                             valid_host = True
 
@@ -401,8 +401,18 @@ class BlogPublisher(object):
                         post_count = news_service.get_count(
                             {'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id'], 'categories': u'ciencia'})
 
-                        if post_count < 3:
+                        if post_count < 6:
                             entry.categories = [u'insólito']
+                            valid_host = True
+
+
+                    if u'tecnología' in entry.categories:
+                        logger.info("Case: Noticias.com->tecnología")
+                        post_count = news_service.get_count(
+                            {'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id'], 'categories': u'tecnología'})
+
+                        if post_count < 20:
+                            entry.categories = [u'sociedad']
                             valid_host = True
 
 
