@@ -206,9 +206,9 @@ class NewsRewriter(object):
                 entity_table += '<td align="center" width=100>' + unique_str + '</td>'
                 entity_table += '</tr>'
 
-	    entity_table += '</table>\n'
+            entity_table += '</table>\n'
 
-	    return entity_table
+        return entity_table
 
 
     def rewrite_content(self):
@@ -377,7 +377,7 @@ class NewsRewriter(object):
 
 
         #ENTITY TABLE
-        #self.rewritten_entry.content += self.generate_entity_table(analysis)
+        self.rewritten_entry.content += self.generate_entity_table(analysis)
 
         if wikiinfo and filter(lambda (referent, score): referent == wikiinfo[0][0] and score > 1., ranking):
             # logger.info("WIKIINFO: %s", str(wikiinfo))
