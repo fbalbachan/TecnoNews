@@ -7,6 +7,9 @@ from src.model.paragraph.paragraph import Paragraph
 from src.utils.resources import instance as resources
 import wikipedia as wk
 
+from src.utils.genderDetection.genderDetector import load_name_lists
+from src.utils.configProvider import ConfigProvider
+from src.utils.csvwrapper import unicode_csv_reader
 
 class WikipediaContentGenerator:
     def __init__(self, analysis):
@@ -16,6 +19,7 @@ class WikipediaContentGenerator:
         wk.set_lang("es")
         ranking = self.analysis["referent_ranking"]
         ranking = filter(lambda (referent, score): not self.is_blacklisted(referent), ranking)
+        ranking = filter(lambda (referent, score): not self.is_name_blacklisted(referent), ranking)
 
         content = []
 
@@ -28,10 +32,16 @@ class WikipediaContentGenerator:
                     break
         return content
 
+    def is_name_blacklisted(self, referent):
+        def has_blacklisted_name(entity):
+            return entity.lexical_form.upper() in self.names or entity.lexical_form.lower() in self.countries_list
+
+        return any((has_blacklisted_name(reference) for reference in referent.explicit_references() ))
+
     def is_blacklisted(self, referent):
         def has_blacklisted_word(entity):
-            return any((black_word in entity.lexical_form for black_word in self.black_words ))
-
+            #return any((black_word in entity.lexical_form for black_word in self.black_words ))
+            return entity.lexical_form in self.black_words
         return any((has_blacklisted_word(reference) for reference in referent.explicit_references() ))
 
     def content_and_page_for(self, referent):
@@ -100,3 +110,10 @@ class WikipediaContentGenerator:
         return [page for page, rank in page_rank if rank > 0.93]
 
     black_words = resources.parse_csv_in("rewrite", "blacklist")
+
+    config = ConfigProvider()
+    names = load_name_lists()
+    names = names["male"].union(names["female"]).union(names["neutral"])
+    countries_file = config.get("resources", "countries")
+    countries_reader = unicode_csv_reader(open(countries_file, 'r'), first_line_is_header=False, delimiter=',')
+    countries_list = [unicode(country[0].lower(), 'utf-8') for country in countries_reader]
