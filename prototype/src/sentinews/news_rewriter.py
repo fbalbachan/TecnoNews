@@ -150,11 +150,7 @@ class NewsRewriter(object):
 
 
     def generate_entity_table(self, analysis):
-        output_utils = WebOutputUtils([])
-
         entity_table = ''
-
-
         sentences = analysis["paragraph"].sentences
         text_entities = []
         for sentence in sentences:
@@ -169,12 +165,12 @@ class NewsRewriter(object):
                 if clause.relative_entity:
                     text_entities += [clause.relative_entity]
 
-        output_utils = WebOutputUtils(ontology)
+        output_utils = WebOutputUtils(None)
         if text_entities:
             referents_data = output_utils.get_referents_data(text_entities)
             i=0
-
-            entity_table += '\n<table id="global_entities" border="1"><tr><th>Id</th><th>Entity</th><th>Positive</th><th>Negative</th><th>Named-Entity</th><th>Occurrences</th></tr>'
+            entity_table +='\n <u>Entidades mas mencionadas en la noticia:</u>'
+            entity_table += '\n<table id="global_entities" border="1"><tr><th align="center">Id</th><th align="center">Entity</th><th align="center">Positive</th><th align="center">Negative</th><th align="center">Named-Entity</th><th align="center">Total occurrences</th><th align="center">Occurrences (appearances)</th></tr>'
 
             for referent_data in referents_data:
 
@@ -197,12 +193,12 @@ class NewsRewriter(object):
                 occurrences = len(referent_data['refs'])
 
                 entity_table += '<tr>'
-                entity_table += '<td align="center" width=30>' + i + '</td>'
+                entity_table += '<td align="center" width=30>' + str(i) + '</td>'
                 entity_table += '<td align="center" title="' + output_utils.entity_tooltip(referent_data['re']) + '">' + referent_data['rn'] + '</td>'
-                entity_table += '<td align="center" title="' + output_utils.e_sv_pos_ev(referent_data['refs']) + '" width=100>' + referent_data['pos'] + '</td>'
-                entity_table += '<td align="center" title="' + output_utils.e_sv_neg_ev(referent_data['refs']) + '" width=100>' + referent_data['neg'] + '</td>'
+                entity_table += '<td align="center" title="' + output_utils.e_sv_pos_ev(referent_data['refs']) + '" width=100>' + str(referent_data['pos']) + '</td>'
+                entity_table += '<td align="center" title="' + output_utils.e_sv_neg_ev(referent_data['refs']) + '" width=100>' + str(referent_data['neg']) + '</td>'
                 entity_table += '<td align="center" width=100>' + referent_data['sc'] + '</td>'
-                entity_table += '<td align="center" width=100>' + occurrences + '</td>'
+                entity_table += '<td align="center" width=100>' + str(occurrences) + '</td>'
                 entity_table += '<td align="center" width=100>' + unique_str + '</td>'
                 entity_table += '</tr>'
 
@@ -374,10 +370,11 @@ class NewsRewriter(object):
         self.rewritten_entry.cities = self.original_entry.cities
         self.rewritten_entry.countries = self.original_entry.countries
         self.rewritten_entry.sentiment = self.original_entry.sentiment
+        self.rewritten_entry.entity_table = self.generate_entity_table(analysis)
 
 
         #ENTITY TABLE
-        self.rewritten_entry.content += self.generate_entity_table(analysis)
+        #self.rewritten_entry.content += self.generate_entity_table(analysis)
 
         if wikiinfo and filter(lambda (referent, score): referent == wikiinfo[0][0] and score > 1., ranking):
             # logger.info("WIKIINFO: %s", str(wikiinfo))

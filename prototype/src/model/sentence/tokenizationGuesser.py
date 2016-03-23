@@ -5,7 +5,7 @@ from re import compile, IGNORECASE, UNICODE
 from src.model.tokenization.token import Token
 from src.utils.stringUtils import remove_accents
 
-debug_mode = True
+debug_mode = False
 
 class TokenizationGuesser:
     def __init__(self, sentence):

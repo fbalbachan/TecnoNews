@@ -151,6 +151,10 @@ class BlogPublisher(object):
         if entry.sentiment:
             entry.content += "<p class='sentiment-score'><b><u>Sentiment score: " + entry.sentiment + "</u></b></p>"
 
+    def add_entity_table(self, entry):
+        if entry.entity_table:
+            entry.content += entry.entity_table
+
 
     def add_related_news_tree(self, entry, news_service):
         post = entry
@@ -423,6 +427,7 @@ class BlogPublisher(object):
                 self.add_countries(entry)
                 self.add_cities(entry)
                 self.add_related_news_tree(entry, news_service)
+                self.add_entity_table(entry)
 
 
         #--CREATE WP POST--
