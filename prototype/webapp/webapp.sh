@@ -4,7 +4,7 @@ ACTION=$1
 
 OLDPWD=`pwd`
 
-DEMOROOT="$HOME/NaturalEnv/TecnoNews/prototype/webapp"
+DEMOROOT="$HOME/NaturalEnv/TecnoNews-merge/prototype/webapp"
 cd "$DEMOROOT"
 
 PID_FILE="./sentilecto.pid"
@@ -30,9 +30,7 @@ if [ "$ACTION" = "start" -o "$ACTION" = "restart" ]; then
 
     cp ../instance_config/config_instance_demo_dev ../config
 
-    {
-        nohup python -u service.py 8321
-    } >| nohup.demo.out &
+    nohup python -u service.py 8327 > nohup.demo.out 2>&1 &
 
 fi
 

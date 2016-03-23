@@ -1,16 +1,16 @@
 [DEFAULT]
-project_root = /home/natural_demo/NaturalEnv/TecnoNews
+project_root = /home/natural_demo/NaturalEnv/TecnoNews-merge
 
 [debug]
 raise_exception = False
 debug = False
 
 [demo]
-service_port = 8321
-demo_uri = sentilecto
+service_port = 8327
+demo_uri = sentinuevo
 
 [instance]
-id = blog-dev
+id = blog-dev-MERGE
 
 [news_sources]
 feeds_to_process = euronews

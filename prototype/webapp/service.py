@@ -237,19 +237,19 @@ class EntiNews_request:
 
         except Exception:
             print format_exc()
-            web.redirect("/sentilecto")
+            web.redirect("/sentinuevo")
 
     def action_fact_extraction(self):
         analysis = analyze()
         if not analysis:
-            web.redirect("/sentilecto")
+            web.redirect("/sentinuevo")
 
         return web.template.render().facts(analysis, WebOutputUtils(ontology))
 
     def action_svo_slots(self):
         analysis = analyze()
         if not analysis:
-            web.redirect("/sentilecto")
+            web.redirect("/sentinuevo")
 
         return web.template.render().entinews(analysis, WebOutputUtils(ontology))
 
