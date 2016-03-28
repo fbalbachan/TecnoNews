@@ -53,20 +53,27 @@ class SimilarParagraph:
                 in enumerate(text.split('\n')) if paragraph != ''}
 
     def load_other_sources(self, other_news):
-
-        if len(other_news) > 1:
+        if len(other_news) > 2:
             self.paragraph_c1 = self.get_paragraphs(other_news[0].content)
             self.paragraph_c2 = self.get_paragraphs(other_news[1].content)
+            self.paragraph_c3 = self.get_paragraphs(other_news[2].content)
+        elif len(other_news) > 1:
+            self.paragraph_c1 = self.get_paragraphs(other_news[0].content)
+            self.paragraph_c2 = self.get_paragraphs(other_news[1].content)
+            self.paragraph_c3 = {}
         elif len(other_news) == 1:
             self.paragraph_c1 = self.get_paragraphs(other_news[0].content)
             self.paragraph_c2 = {}
+            self.paragraph_c3 = {}
         else:
             self.paragraph_c1 = {}
             self.paragraph_c2 = {}
+            self.paragraph_c3 = {}
 
     def clean_candidate_paragraphs(self):
         self.delete_invalid_candidate_paragraph(self.paragraph_c1)
         self.delete_invalid_candidate_paragraph(self.paragraph_c2)
+        self.delete_invalid_candidate_paragraph(self.paragraph_c3)
 
     def delete_invalid_candidate_paragraph(self, paragraphs):
         for key in paragraphs.keys():
@@ -87,6 +94,10 @@ class SimilarParagraph:
             paragraph_logger.info("\tcomparing paragraph %d of t0_paragraphs" % k)
             t1_k = self._paragraphSimilarity(t0_paragraphs[k], paragraph_l)
             paragraph_logger.info("\t %s" % t1_k)
+            #ALEXIS
+            if t1_k == 1.0:
+                continue
+            #/ALEXIS
             if t1_k > max_similarity or max_idx == -1:
                 max_idx = k
                 max_similarity = t1_k
@@ -142,6 +153,8 @@ class SimilarParagraph:
         paragraph_logger.info(self.paragraph_c1)
         paragraph_logger.info("\nSecond other cover\n")
         paragraph_logger.info(self.paragraph_c2)
+        paragraph_logger.info("\nThird other cover\n")
+        paragraph_logger.info(self.paragraph_c3)
 
         paragraph_logger.info("----------------")
         # First paragraph from paragraph_c1
@@ -170,6 +183,19 @@ class SimilarParagraph:
         assert t1_p not in self.paragraph_c2
 
         paragraph_logger.info("--------------\n")
+
+
+
+        # First paragraph from paragraphs_c3
+        simil, t1_p, t0_p = self.less_similar_paragraph(self.paragraphs, self.paragraph_c3)
+
+        injection_mark = u""
+        self.select_paragraph(simil, t1_p, t0_p, self.paragraph_c3, injection_mark)
+        assert t1_p not in self.paragraph_c3
+
+        paragraph_logger.info("--------------\n")
+
+
         paragraph_logger.info("\ngenerated %s" % self.paragraphs_selected)
 
         return self.paragraphs_selected

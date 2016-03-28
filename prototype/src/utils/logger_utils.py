@@ -12,7 +12,7 @@ def get_logger(file):
     global log_obj
     if not log_obj:
         instance_info = get_instance_info()
-        file = "instance" + str(instance_info["id"]) + "-" + file
+        file = "instance-" + str(instance_info["id"]) + "-" + file
         logger = logging.getLogger(file)
         logger.propagate = False
         handler = logging.FileHandler('logs/' + file + '.log')
