@@ -297,6 +297,27 @@ class BlogPublisher(object):
                     host["password"] = u"District93_Alma" #TEMP
                     entry.categories = [u"ARTICULOS"]
 
+            elif host['id'] == u"properati":
+
+                valid_country = False
+                valid_countries = [ u'argentina', u'uruguay', u'chile', u'mexico', u'united states']
+                for country in valid_countries :
+                    if country in entry.countries :
+                        valid_country = True
+                        break
+
+                if len(entry.countries) == 0:
+                    valid_country = True
+
+                interval_time = datetime.datetime.utcnow() - datetime.timedelta(seconds=2592000) #1 Month
+                post_count = news_service.get_count({'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id']})
+                if post_count < 150 and valid_country:
+                    interval_time = datetime.datetime.utcnow() - datetime.timedelta(seconds=86400) #1 Day
+                    post_count = news_service.get_count({'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id']})
+                    if post_count < 10:
+                        valid_host = True
+                        entry.categories = [u"propiedades"]
+
             elif host['id'] == u"think_thank":
                 interval_time = datetime.datetime.utcnow() - datetime.timedelta(seconds=2592000) #1 Month
                 post_count = news_service.get_count({'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id']})
