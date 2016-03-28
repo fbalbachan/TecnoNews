@@ -12,28 +12,28 @@ class CordobaTurismoParser(GenericParser):
         super(CordobaTurismoParser, self).__init__()
 
     source = u"Cordoba Turismo"
-    
+
     def parse(self, url):
         #url = "http://www.cordobaturismo.gov.ar/el-valle-de-traslasierra-y-la-semana-brocheriana/"
-        
+
 	soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
 	for script in soup(["script", "style"]):
             script.extract()
-            
-            
+
+
         for image in soup.findAll('img'):
             image.extract()
-            
+
         for linkparent in soup.findAll('a',{'id':'linkparentimg'}):
             linkparent.extract()
 
         title = soup.find('div',{'id':'single_titulo'})
         title =  title.text.strip()
-        
-        
+
+
         #print title
         #exit()
-        content = "" 
+        content = ""
 
 
 
@@ -42,15 +42,15 @@ class CordobaTurismoParser(GenericParser):
         for paragraph in paragraphs:
             clean_text = paragraph.text.strip()
 
-                
+
             content += "\n" + clean_text
 
-        
+
         content = content.strip()
 
-        tags = ["turismo"]
-        categories=["turismo"]
-        
+        tags = [u"interés general"]
+        categories=[u"interés general"]
+
         new_entry = self.create_news_entry(title=title, content=content,
                                            tags=tags,
                                            source=self.source,
