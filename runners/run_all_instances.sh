@@ -2,7 +2,7 @@
 
 OLDPWD=`pwd`
 
-cd ~/NaturalNews/runners
+cd ~/NaturalNews-merge/runners
 source ../bin/activate
 
 truncate "instance.0.out" --size=0
@@ -26,7 +26,7 @@ sleep 3
 truncate "instance.2.out" --size=0
 truncate ../prototype/logs/instance2-tecnonews.log --size=0
 {
-nohup ./run2.sh 
+nohup ./run2.sh
 } >| "instance.2.out" 2>&1 &
 
 #ps -p $! -o pgid | grep -E "[0-9]+" >| instance.2.pgid

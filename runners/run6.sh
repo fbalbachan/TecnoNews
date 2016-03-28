@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd ~/NaturalNews/prototype
+cd ~/NaturalNews-merge/prototype
 
 source ../bin/activate
 export PYTHONPATH=$PYTHONPATH:`pwd`
