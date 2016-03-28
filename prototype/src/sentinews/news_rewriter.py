@@ -176,6 +176,9 @@ class NewsRewriter(object):
 
             for referent_data in referents_data:
 
+                if i > 9:
+                    break
+
                 appearing = {}
                 for a_reference in referent_data['refs']:
                     a_reference = output_utils.e_name(a_reference)

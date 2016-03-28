@@ -156,7 +156,7 @@ class BlogPublisher(object):
             entry.content += entry.entity_table
 
 
-    def add_related_news_tree(self, entry, news_service):
+    def add_related_news_tree(self, entry, news_service, show_source=True, show_link=True):
         post = entry
         if len(entry.versions) > 0:
             logger.info("Found several coverages: %s" % (str(entry.versions)))
@@ -232,12 +232,20 @@ class BlogPublisher(object):
                     if isinstance(post_source, unicode):
                         post_source = post_source.encode("utf-8")
 
-                    if dbEntry[0].wp_url != None:
-                        post.content += "<br>" + tabs + ">" + "<a href=\"" +post_url+ "\">" + post_title + "</a>" + " - " +  entryDate + " (EntretenimientoBit)"
+                    if dbEntry[0].wp_url != None and show_link:
+                        if show_source:
+                            post.content += "<br>" + tabs + ">" + "<a href=\"" +post_url+ "\">" + post_title + "</a>" + " - " +  entryDate + " (EntretenimientoBit)"
+                        else:
+                            post.content += "<br>" + tabs + ">" + "<a href=\"" +post_url+ "\">" + post_title + "</a>" + " - " +  entryDate
                     else:
-                        post.content += "<br>" + tabs + ">" + post_title + " - " +  entryDate + " (" + post_source + ")"
+                        if show_source:
+                            post.content += "<br>" + tabs + ">" + post_title + " - " +  entryDate + " (" + post_source + ")"
+                        else:
+                            post.content += "<br>" + tabs + ">" + post_title + " - " +  entryDate
 
             post.content += "</p>"
+
+
 
 
 

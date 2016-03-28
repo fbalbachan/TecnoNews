@@ -42,6 +42,10 @@ class NewsEntry(object):
         # Defensive programing to avoid wrong encoded
         assert(isinstance(self.title, unicode))
         assert(isinstance(self.content, unicode))
+        
+        # 20160328 - Daniel Cantarín
+        # There are some problematic titles. Here's some cleaning code.
+        self.title = self.title.replace("\n","")
 
         if self.related is None:
             self.related = []
