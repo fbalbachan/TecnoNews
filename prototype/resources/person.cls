@@ -1,3 +1,4 @@
+invitado
 botánico
 miembro
 vocal

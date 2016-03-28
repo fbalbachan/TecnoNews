@@ -1,3 +1,5 @@
+premisa,supuesto
+suposición,supuesto
 gotera,filtración
 doctorar,diplomar
 licenciar,diplomar
@@ -51,7 +53,6 @@ candela,vela
 bursátil,financiero
 ómnibus,colectivo
 pesquisa,búsqueda
-seno,pecho
 jockey,jinete
 lacayo,criado
 hidalgo,noble
@@ -315,7 +316,6 @@ ananá,piña
 peculiar,curioso
 circunstancial,transitorio
 anegar,inundar
-bebé,criatura
 ano,recto
 diferenciar,distinguir
 precedente,antecedente
@@ -339,7 +339,6 @@ circunferencia,círculo
 coalición,alianza
 cólera,ira
 confeccionar,elaborar
-conferencia,congreso
 confort,bienestar
 coraje,valor
 costumbre,uso
@@ -406,7 +405,6 @@ quebrar,romper
 asesinar,matar
 amedrentar,atemorizar
 luchar,pelear
-apenar,afligir
 abatir,derrotar
 abochornar,avergonzar
 aborrecer,odiar
@@ -589,7 +587,6 @@ cinematógrafo,cine
 cinematógrafos,cines
 circunferencia,círculo
 coalición,sociedad
-conferencia,congreso
 confort,bienestar
 coraje,valor
 hábito,costumbre
@@ -705,7 +702,6 @@ impedimento,dificultad
 impasibilidad,imperturbabilidad
 propulsor,impulsor
 instigación,incitación
-nene,menor
 vastedad,infinidad
 influjo,influencia
 dossier,informe
@@ -924,7 +920,6 @@ chubasco,lluvia
 cimiento,soporte
 cinema,cine
 cinemas,cines
-cómplice,coautor
 colcha,frazada
 cólera,rabia
 compasión,misericordia
@@ -1068,7 +1063,6 @@ moblaje,mobiliario
 moverse,trasladarse
 multitud,muchedumbre
 naipe,carta
-nena,menor
 nombrar,designar
 boda,casamiento
 objetividad,imparcialidad
@@ -1088,7 +1082,6 @@ semejanza,parecido
 semejante,parecido
 paredón,pared
 pauta,norma
-pecho,tronco
 penitencia,castigo
 perezoso,vago
 performance,desempeño
@@ -1255,7 +1248,6 @@ iberoamericano,latinoamericano
 incomodar,molestar
 inconveniente,dificultad
 indeterminación,imprecisión
-infante,menor
 informar,comunicar
 inmediación,cercanía
 intranquilidad,inquietud
@@ -1401,7 +1393,6 @@ necedad,estupidez
 óbito,muerte
 pánico,miedo
 párroco,cura
-párvulo,menor
 penar,castigar
 pesar,tristeza
 peticionar,pedir
@@ -1446,7 +1437,6 @@ complacencia,placer
 condecoración,premio
 condenado,preso
 contrariedad,dificultad
-crío,menor
 degollar,matar
 denuesto,insulto
 desasosegar,inquietar
@@ -1530,7 +1520,6 @@ disfrute,placer
 elevar,aumentar
 escarnio,insulto
 exterminar,matar
-niña,menor
 preocupación,inquietud
 traba,dificultad
 trifulca,pelea
