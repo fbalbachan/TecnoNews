@@ -23,12 +23,13 @@ from src.rewrite.strategy.tieneQueToModalDeber import TieneQueToModalDeber
 from src.rewrite.strategy.textualCite import TextualCite
 from src.rewrite.strategy.voicePassiveStrategy import VoicePassiveStrategy
 from src.rewrite.strategy.partialVoicePassiveStrategy import PartialVoicePassiveStrategy
+from src.rewrite.strategy.fromRelativeClauseToIndependentSentenceStrategy import FromRelativeClauseToIndependentSentenceStrategy
 
 debug_mode = False
 
 
 class Rewriter:
-    def __init__(self, paragraph, ontology=None, strategies=None, clauses_for_replacements=None):
+    def __init__(self, paragraph, ontology=None, strategies=None, clauses_for_replacements=None, applied_global_strategies=False):
         if debug_mode: print "--> Rewriter.init()"
 
         if ontology is None:
@@ -48,10 +49,11 @@ class Rewriter:
                                           VoicePassiveStrategy(ontology),
                                           PartialVoicePassiveStrategy(ontology),
                                           SeImpersonalStrategy(ontology),
+                                          FromRelativeClauseToIndependentSentenceStrategy(),
                                           TextualCite(),
                                           AdverbialClauseDislocationStrategy(ontology),
-                                          #AlthoughClauseDislocationStrategy(),
-                                          SegunToDijoDislocationStrategy()
+                                          AlthoughClauseDislocationStrategy(),
+                                          SegunToDijoDislocationStrategy(),
                                           # DateTimeStrategy(ontology)
                                           ]
         else:
@@ -65,6 +67,7 @@ class Rewriter:
 
         self.paragraph = paragraph
         self.clauses_for_replacements = clauses_for_replacements
+        self.applied_global_strategies = applied_global_strategies
 
     def rewrite(self):
         if debug_mode: print "--> Rewriter.rewrite()"
@@ -73,12 +76,16 @@ class Rewriter:
 
         successful_strategies = []
         for strategy in self.dislocationStrategies:
+
             pre_text = text #Save text before strategy changes
 
             #Don't apply partial voice if seImpersonal was applied
             if strategy.__class__.__name__ == "SeImpersonalStrategy" and  "PartialVoicePassiveStrategy" in successful_strategies:
-                continue 
+                continue
 
+            #Don't apply if any global strategy applied
+            if self.applied_global_strategies and strategy.__class__.__name__ == "FromRelativeClauseToIndependentSentenceStrategy":
+                continue
 
             if debug_mode: print "\nTEXT BEFORE APPLYING DISLOCATION STRATEGY: ", strategy.__class__.__name__, ":\n[", text, "]\n".decode('utf-8')
             self.paragraph = Paragraph.from_text(text)

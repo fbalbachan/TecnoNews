@@ -151,6 +151,8 @@ class NewsRewriter(object):
 
     def generate_entity_table(self, analysis):
         entity_table = ''
+
+
         sentences = analysis["paragraph"].sentences
         text_entities = []
         for sentence in sentences:
@@ -212,7 +214,17 @@ class NewsRewriter(object):
         # FIXME: analysis.text is str instead of unicode!!
         analysis = self._analyze(self.original_entry.content)
 
-        analysis = self._analyze(GlobalRewriter(analysis["paragraph"]).rewrite())
+
+        applied_global = False
+        try:
+            global_text = GlobalRewriter(analysis["paragraph"]).rewrite()
+            analysis = self._analyze(global_text)
+            applied_global = (global_text != self.original_entry.content)
+            #print "APPLIED GLOBAL"
+            #print applied_global
+        except:
+            pass
+        #analysis = self._analyze(GlobalRewriter(analysis["paragraph"]).rewrite())
 
         analysis["referent_ranking"] = ReferentRanker(analysis["paragraph"]).rank()
 
@@ -238,7 +250,7 @@ class NewsRewriter(object):
         self.rewritten_entry.injected_count = self.injected_count
 
         analysis = self._analyze(self.rewritten_entry.content)
-        rewriter = Rewriter(analysis['paragraph'])
+        rewriter = Rewriter(analysis['paragraph'], applied_global_strategies=applied_global)
         self.rewritten_entry.content = rewriter.rewrite()
 
         # Disable hyperlink insert until we fix some problems
