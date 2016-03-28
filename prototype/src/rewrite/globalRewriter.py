@@ -35,9 +35,13 @@ class GlobalRewriter:
         while sentences_entity_context:
             main_sentence_idx = len(self.paragraph.sentences) - len(sentences_entity_context)
 
-            #GET ALL ENTITIES WITH THEIR RESPECTIVE ROLES:
+            #Add context for non main clauses (main sentence ONLY!)
             current_context = sentences_entity_context.pop(0)
-            current_entities = {str(k):{"entity_object":k,"role":v} for (k,v) in current_context.iteritems() if not k.appositions}
+            for a_clause in self.paragraph.sentences[main_sentence_idx].clauses:
+                current_context.update(a_clause.named_entities_by_structure())
+
+            #GET ALL ENTITIES WITH THEIR RESPECTIVE ROLES:
+            current_entities = {str(k):{"entity_object":k,"role":v} for (k,v) in current_context.iteritems() if (k.is_tacit() or not k.appositions)}
 
             #LOOP THROUGH ALL FOLLOWING SENTENCES:
             for current_idx, a_following_context in enumerate(sentences_entity_context):
@@ -80,6 +84,11 @@ class GlobalRewriter:
                         if not secondary_entity.is_tacit():
                             new_secondary = new_secondary[secondary_entity.token.end()-secondary_sentence.token.start():].strip()
 
+                        #Lower first letter of secondary
+                        if len(new_secondary) > 1:
+                            new_secondary = new_secondary[0].lower() + new_secondary[1:]
+
+                        #Remove period
                         if new_secondary[-1] == ".":
                             new_secondary = new_secondary[:-1]
 
@@ -90,7 +99,12 @@ class GlobalRewriter:
                         #Build new merged sentence (main+secondary)
                         new_main_before = input_paragraph[main_sentence.token.start():main_entity.token.end()]
                         new_main_after = input_paragraph[main_entity.token.end():main_sentence.token.end()]
-                        new_main = new_main_before.strip() + ", que " + new_secondary + ", " + new_main_after.strip()
+
+                        if len(new_main_after) > 0 and new_main_after[0] in [",", "."]:
+                            #Avoid possible duplicated punctuations
+                            new_main = new_main_before.strip() + ", que " + new_secondary + new_main_after.strip()
+                        else:
+                            new_main = new_main_before.strip() + ", que " + new_secondary + ", " + new_main_after.strip()
 
 
 
