@@ -99,7 +99,7 @@ class SentenceSplitter:
     abbreviation_re = ("^(jr|mr|inc|ltd|co|ing|lic|dr|dra|arq|mag|mg"
                        "|phd|ph|prof|excmo|excma|mrs|gmbh|md|mons|cap"
                        "|tte|col|lt|sgt|cnel|gral|brig|pref|prof|sr|sra"
-                       "|srta|dir|etc|fed|ee|uu|h|d|ms|s|a|sa|srl|r|l)$")
+                       "|srta|dir|etc|fed|ee|uu|h|d|ms|s|a|sa|srl|r|l|nro)$")
 
     abbreviation_regex = re.compile(abbreviation_re, re.U | re.I)
 
