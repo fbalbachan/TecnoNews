@@ -168,7 +168,7 @@ class BlogPublisher(object):
 
             depth = 1
             entryDate = ""
-            entry.versions = entry.versions[:2]
+            entry.versions = entry.versions[:3]
 
             try:
                 entryDate = entry.published_date.strftime('%B %d, %Y')
@@ -189,7 +189,7 @@ class BlogPublisher(object):
             post.content += "<br>>"
             post.content += main_title
 
-            for aRoot in entry.versions:
+            for aRoot in reversed(entry.versions):
                 treeEntries.append({'depth':depth, '_id': aRoot})
 
 
@@ -206,8 +206,8 @@ class BlogPublisher(object):
 
                 if len(dbEntry) > 0:
                     if dbEntry[0].wp_id != None and currentElement['depth'] < 5:
-                        dbEntry[0].versions = dbEntry[0].versions[:2]
-                        for anEntryId in dbEntry[0].versions:
+                        dbEntry[0].versions = dbEntry[0].versions[:3]
+                        for anEntryId in reversed(dbEntry[0].versions):
                             treeEntries.append({'depth':currentElement['depth']+1, '_id': anEntryId})
 
                     tabs = " "
