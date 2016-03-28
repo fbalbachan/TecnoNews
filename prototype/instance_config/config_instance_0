@@ -6,7 +6,7 @@ raise_exception = False
 id = 0
 
 [news_sources]
-feeds_to_process = cnn_spanish,euronews,telam_espectaculos,clarin_extrashow,lanacion_espectaculos,exitoina,pronto,periodismo,glamour,pagina12_turismo,ambito_placer,telam_turismo,ciento_un_lugares,traveler,lugares_de_viaje
+feeds_to_process = cnn_spanish,euronews,telam_espectaculos,clarin_extrashow,lanacion_espectaculos,exitoina,pronto,periodismo,glamour,pagina12_turismo,ambito_placer,telam_turismo,ciento_un_lugares,traveler,lugares_de_viaje,Prensarealestate
 
 [freeling]
 
