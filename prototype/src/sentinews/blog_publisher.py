@@ -424,7 +424,7 @@ class BlogPublisher(object):
                         post_count = news_service.get_count(
                             {'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id'], 'categories': u'estilo vida'})
 
-                        if post_count < 10:
+                        if post_count < 0:
                             entry.categories = [u'sociedad']
                             valid_host = True
 
