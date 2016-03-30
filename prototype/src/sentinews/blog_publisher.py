@@ -326,7 +326,7 @@ class BlogPublisher(object):
                     post_count = news_service.get_count({'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id']})
                     if post_count < 5:
                         valid_host = True
-                        entry.categories = [u"estilo vida"]
+                        entry.categories = [u"uncategorized"]
 
             elif host['id'] == u"think_thank":
                 interval_time = datetime.datetime.utcnow() - datetime.timedelta(seconds=2592000) #1 Month
