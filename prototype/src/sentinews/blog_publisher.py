@@ -318,6 +318,16 @@ class BlogPublisher(object):
                         valid_host = True
                         entry.categories = [u"propiedades"]
 
+            elif host['id'] == u"femeninas":
+                interval_time = datetime.datetime.utcnow() - datetime.timedelta(seconds=2592000) #1 Month
+                post_count = news_service.get_count({'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id']})
+                if post_count < 110 and valid_country:
+                    interval_time = datetime.datetime.utcnow() - datetime.timedelta(seconds=86400) #1 Day
+                    post_count = news_service.get_count({'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id']})
+                    if post_count < 5:
+                        valid_host = True
+                        entry.categories = [u"uncategorized"]
+
             elif host['id'] == u"think_thank":
                 interval_time = datetime.datetime.utcnow() - datetime.timedelta(seconds=2592000) #1 Month
                 post_count = news_service.get_count({'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id']})
