@@ -212,4 +212,18 @@ class HyperlinkProcessor(object):
         ret = regex.sub( "\\1<a href=\"" + url + "\" >\\2</a>\\3", text )
         
         return ret
+    
+    @staticmethod
+    def apply_links_by_CSV( text, resource ):
+        # 20160330 - Daniel Cantarin
+        # Given a text and a CSV resource, it loops the CSV file and 
+        # applies links replaces
         
+        f = open(resource, "r")
+        content = f.readlines()
+        ret = text
+        for line in content :
+            token,url = line.split(",")
+            ret = HyperlinkProcessor.apply_link(ret, token, url.replace("\n",""))
+        
+        return ret
