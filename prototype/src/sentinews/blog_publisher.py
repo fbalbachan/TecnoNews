@@ -16,6 +16,7 @@ from src.utils.imgeProcessor import to_desired_size, add_background
 from wordpress_xmlrpc.compat import xmlrpc_client
 from src.utils.SvgToPng import to_png
 from src.utils.stringUtils import has_type_encoding
+from src.sentinews.hyperlink_processor import HyperlinkProcessor
 
 import datetime
 
@@ -622,6 +623,9 @@ class BlogPublisher(object):
 
         if u"propiedades" in entry.categories:
             entry.categories = [u"propiedades"]
+            c                = ConfigProvider()
+            path             = c.get("resources","resources_dir") + "/hyperlinks_propiedades.csv"
+            post.content     = HyperlinkProcessor.apply_links_by_CSV(post.content, path)
 
         if u"tecnología" in entry.categories:
             entry.categories = [u"tecnología"]
