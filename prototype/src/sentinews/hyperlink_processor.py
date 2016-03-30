@@ -195,3 +195,21 @@ class HyperlinkProcessor(object):
             first_result = ''
 
         return first_result
+    
+    @staticmethod
+    def apply_link( text, word, url ):
+        # 20160330 - Daniel Cantarin
+        # Given a word, and an URL, this function applies a replace in
+        # a given text.
+        import re
+        from src.utils.unicodeTools import safe_unicode
+        
+        text = safe_unicode(text)
+        word = safe_unicode(word)
+        
+        regex = re.compile(r"(.*)(\b%s\b)(.*)" % word, re.IGNORECASE | re.MULTILINE | re.UNICODE)
+        
+        ret = regex.sub( "\\1<a href=\"" + url + "\" >\\2</a>\\3", text )
+        
+        return ret
+        
