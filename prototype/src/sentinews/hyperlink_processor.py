@@ -207,7 +207,7 @@ class HyperlinkProcessor(object):
         text = safe_unicode(text)
         word = safe_unicode(word)
         
-        regex = re.compile(r"(.*)(\b%s\b)(.*)" % word, re.IGNORECASE | re.MULTILINE | re.UNICODE)
+        regex = re.compile(r"(.*)[^\-\/](\b%s\b)[^\-\/](.*)" % word, re.IGNORECASE | re.MULTILINE | re.UNICODE)
         
         ret = regex.sub( "\\1<a href=\"" + url + "\" >\\2</a>\\3", text )
         
