@@ -183,7 +183,7 @@ class WebOutputUtils:
                       else 0
 
         referents_data = filter(lambda rd:
-                            rd["re"].real_name().lower() not in ["le", "les",
+                            rd["re"].real_name().lower() not in ["se", "le", "les",
                                                                  "lo", "la", "los", "las",
                                                                  "él", "ella", "él/ella",
                                                                  "ellos", "ellas", "ellos/ellas"],
