@@ -322,11 +322,20 @@ class BlogPublisher(object):
             elif host['id'] == u"femeninas":
                 interval_time = datetime.datetime.utcnow() - datetime.timedelta(seconds=2592000) #1 Month
                 post_count = news_service.get_count({'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id']})
-                if post_count < 110 and valid_country:
+
+                if post_count < 110:
                     interval_time = datetime.datetime.utcnow() - datetime.timedelta(seconds=86400) #1 Day
-                    post_count = news_service.get_count({'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id']})
-                    if post_count < 5:
-                        valid_host = True
+                    if u'entretenimiento' in entry.categories :
+                        post_count = news_service.get_count({'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id'], 'categories': u'entretenimiento'})
+                        if post_count < 2 :
+                            valid_host = True
+
+                    elif u'estilo vida' in entry.categories:
+                        post_count = news_service.get_count({'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id'], 'categories': u'estilo vida'})
+                        if post_count < 5:
+                            valid_host = True
+
+                    if valid_host:
                         entry.categories = [u"uncategorized"]
 
             elif host['id'] == u"think_thank":
