@@ -318,6 +318,7 @@ class BlogPublisher(object):
                     if post_count < 10:
                         valid_host = True
                         entry.categories = [u"Noticias"]
+                        entry.tags = []
 
             elif host['id'] == u"femeninas":
                 interval_time = datetime.datetime.utcnow() - datetime.timedelta(seconds=2592000) #1 Month
