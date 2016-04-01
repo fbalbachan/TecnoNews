@@ -209,7 +209,7 @@ class HyperlinkProcessor(object):
         
         regex = re.compile(r"(.*)[^\-\/](\b%s\b)[^\-\/](.*)" % word, re.IGNORECASE | re.MULTILINE | re.UNICODE)
         
-        ret = regex.sub( "\\1<a href=\"" + url + "\" >\\2</a>\\3", text )
+        ret = regex.sub( "\\1 <a target=\"_blank\" href=\"" + url + "\" >\\2</a> \\3", text )
         
         return ret
     
