@@ -10,6 +10,7 @@ import wikipedia as wk
 from src.utils.genderDetection.genderDetector import load_name_lists
 from src.utils.configProvider import ConfigProvider
 from src.utils.csvwrapper import unicode_csv_reader
+from unidecode import unidecode
 
 class WikipediaContentGenerator:
     def __init__(self, analysis):
@@ -34,7 +35,8 @@ class WikipediaContentGenerator:
 
     def is_name_blacklisted(self, referent):
         def has_blacklisted_name(entity):
-            return entity.lexical_form.upper() in self.names or entity.lexical_form.lower() in self.countries_list
+            formated_entity = unidecode(entity.lexical_form.decode("utf-8"))
+            return formated_entity.upper() in self.names or formated_entity.lower() in self.countries_list
 
         return any((has_blacklisted_name(reference) for reference in referent.explicit_references() ))
 
