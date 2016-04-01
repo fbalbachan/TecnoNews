@@ -245,10 +245,16 @@ class RelatedNewsEntries(object):
         if entities_coincidence > 1:
             score += 30
 
-        if 0.6 < title_distance <= 0.95:
-            score += 20
-        elif title_distance <= 0.6:
-            score += 30
+        if u"propiedades" in self.news_original.categories:
+            if 0.7 < title_distance <= 0.95:
+                score += 20
+            elif title_distance <= 0.7:
+                score += 30
+        else:
+            if 0.6 < title_distance <= 0.95:
+                score += 20
+            elif title_distance <= 0.6:
+                score += 30
 
         if 5.0 <= similarity < 10:
             score += 10
