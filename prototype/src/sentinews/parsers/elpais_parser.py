@@ -32,8 +32,12 @@ class ElPaisParser(GenericParser):
                     list_tag = container.find(
                         'ul').find_all('li')
                     tags = [li.find('a').text for li in list_tag]
-  
+
         title_obj = soup.find('h1', {'id': 'titulo_noticia'})
+
+        if title_obj is None:
+            title_obj = soup.find('h1', {'id': 'articulo-titulo'})
+
         if title_obj is not None:
             title = title_obj.text
         if u'El resumen del d\xeda de El Pa\xeds' in title:
