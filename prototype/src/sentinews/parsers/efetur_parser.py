@@ -12,53 +12,53 @@ class EfeturParser(GenericParser):
         super(EfeturParser, self).__init__()
 
     source = u"Efetur"
-    
+
     def parse(self, url):
         #url = "http://www.efetur.com/noticia/yacimiento-por-descubrir/?utm_source=rss&utm_medium=rss&utm_campaign=yacimiento-por-descubrir"
-        
+
 	soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
 	for script in soup(["script", "style"]):
             script.extract()
-            
-            
+
+
         for image in soup.findAll('img'):
             image.extract()
 
         for caption in soup.findAll('p',{'class':'wp-caption-text'}):
             caption.extract()
-        
-            
-            
+
+
+
         title = soup.find('h1')
         title =  title.text.strip()
-        
-        
-        content = "" 
-        
+
+
+        content = ""
+
         intro = soup.find('div',{'class':'entradilla'})
         if intro:
             content += intro.text.strip()# + "."
-            
-            
+
+
         paragraphs = soup.find('div',{'class':'post-entry'}).findAll(['p','h2'])
-        
-        
+
+
         for paragraph in paragraphs:
             clean_text = paragraph.text.strip()
 
-                
+
             content += "\n" + clean_text
-            
+
             if paragraph.name == 'h2':
                 content += "."
 
-        
+
         content = content.strip()
-        
-        
+
+
         tags = []
-        categories=[u"interés general"]
-        
+        categories=[u"rojotur"]
+
         new_entry = self.create_news_entry(title=title, content=content,
                                            tags=tags,
                                            source=self.source,

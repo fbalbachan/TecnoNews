@@ -6,7 +6,7 @@ raise_exception = False
 id = 1
 
 [news_sources]
-feeds_to_process = elmundo,elpais,elpais_america,
+feeds_to_process = elmundo,elpais,elpais_america,motorpress,parabrisas,autoblog,autobild,home_lifestyle,maria_leon_style,trendenciaslifestyle,
 
 [freeling]
 
@@ -27,7 +27,7 @@ host = 85.10.210.172
 port = 27017
 db = sentinews_entrebit
 db_test = sentinews_test
-username=root 
+username=root
 password=NaturalezaMuerta
 
 [language_filter]

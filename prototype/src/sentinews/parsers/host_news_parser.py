@@ -12,40 +12,40 @@ class HostNewsParser(GenericParser):
         super(HostNewsParser, self).__init__()
 
     source = u"Host News"
-    
+
     def parse(self, url):
         #url = "http://hostnews.com.ar/index.php/news/12340/16"
-        
+
 	soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
 	for script in soup(["script", "style"]):
             script.extract()
-            
-            
+
+
         for image in soup.findAll('img'):
             image.extract()
-        
-            
-            
+
+
+
         title = soup.find('div',{'id':'contenido'}).find('h1')
         title =  title.text.strip()
-        
-        
-        content = "" 
-        
+
+
+        content = ""
+
         intro = soup.find('div',{'id':'contenido'}).find('div',{'id':'NewsPostDetailSummary'})
         if intro:
             content += intro.text.strip()# + "."
-            
+
         paragraphs = soup.find('div',{'id':'contenido'}).find('div',{'id':'NewsPostDetailContent'})
-        
+
         content += "\n" + re.sub(u'([^ ]+)[.][ ]*([A-Z“][^A-Z ]*)', r'\1.\n\2', paragraphs.text.strip()) #REEMPLAZA finparrafo.NuevoParrafo => finparrafo.\n NuevoParrafo
 
-        
+
         content = content.strip()
-        
+
         tags = []
-        categories=[u"interés general"]
-        
+        categories=[u"rojotur"]
+
         new_entry = self.create_news_entry(title=title, content=content,
                                            tags=tags,
                                            source=self.source,
@@ -55,4 +55,3 @@ class HostNewsParser(GenericParser):
                                            keywords=None)
 
         return new_entry
-        

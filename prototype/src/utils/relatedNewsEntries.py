@@ -11,7 +11,7 @@ class RelatedNewsEntries(object):
     def __init__(self, original, to_compare_news_entries=None):
         DAYS_IN_THE_PAST_TO_SEARCH = 5 #number of days to search
         if u"propiedades" in original.categories:
-            DAYS_IN_THE_PAST_TO_SEARCH = 10
+            DAYS_IN_THE_PAST_TO_SEARCH = 30
 
         if u"turismo" in original.categories:
             DAYS_IN_THE_PAST_TO_SEARCH = 30

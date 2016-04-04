@@ -44,8 +44,8 @@ class ExpresoParser(GenericParser):
         content = content.strip()
 
 
-        tags = [u"interés general"]
-        categories=[u"interés general"]
+        tags = [u"rojotur"]
+        categories=[u"rojotur"]
 
         new_entry = self.create_news_entry(title=title, content=content,
                                            tags=tags,

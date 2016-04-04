@@ -271,6 +271,7 @@ class BlogPublisher(object):
 
         #Specific hosts:
         hosts = hosts_service.get_list({'categories': {'$in': entry.categories}, "enabled":True})
+        hosts = sorted(hosts, key=lambda a_host: a_host["priority"] if "priority" in a_host else 10000, reverse=True)
         while not valid_host:
             if len(hosts) == 0:
                 #Non specific hosts:
@@ -485,141 +486,6 @@ class BlogPublisher(object):
         post.title = entry.title
         post.content = entry.content
 
-        #if len(entry.versions) > 0:
-        #    logger.info("Found several coverages: %s" % (str(entry.versions)))
-            #Fuentes relevadas para esta noticia
-        #    post.content += "<b><u>La historia de esta noticia a partir de noticias previas: </u></b>"
-
-        #    if has_type_encoding(post.content, str, 'UTF-8'):
-        #        logger.info("Content is UTF8")
-        #        pass # we expect it to be UTF-8
-        #    if has_type_encoding(post.content, unicode):
-        #        logger.info("Content is UNICODE")
-        #        post.content = post.content.encode("utf-8")
-
-
-
-        #    treeEntries = []
-
-        #    added_entries_ids = []
-
-        #    depth = 1
-        #    entryDate = ""
-        #    entry.versions = entry.versions[:2]
-
-        #    try:
-        #        entryDate = entry.published_date.strftime('%B %d, %Y')
-        #    except:
-        #        entryDate = ""
-
-        #    if isinstance(entryDate, unicode):
-        #        entryDate = entryDate.encode("utf-8")
-
-        #    main_source = entry.source
-        #    if isinstance(main_source, unicode):
-        #        main_source = main_source.encode("utf-8")
-
-
-        #    main_title = entry.title
-        #    if isinstance(main_title, unicode):
-        #        main_title = main_title.encode("utf-8")
-
-        #    post.content += "<br>>"
-        #    post.content += main_title
-
-        #    for aRoot in entry.versions:
-        #        treeEntries.append({'depth':depth, '_id': aRoot})
-
-
-        #    while len(treeEntries) > 0:
-        #        currentElement = treeEntries.pop()
-        #        dbEntry = news_service.get_list({'_id':currentElement['_id']})
-
-
-        #        if currentElement['_id'] in added_entries_ids:
-        #            continue
-
-        #        added_entries_ids.append(currentElement['_id'])
-
-
-        #        if len(dbEntry) > 0:
-        #            if dbEntry[0].wp_id != None and currentElement['depth'] < 5:
-        #                dbEntry[0].versions = dbEntry[0].versions[:2]
-        #                for anEntryId in dbEntry[0].versions:
-        #                    treeEntries.append({'depth':currentElement['depth']+1, '_id': anEntryId})
-
-        #            tabs = " "
-        #            for aTab in range(currentElement['depth']):
-        #                tabs += ">>>>"
-
-        #            entryDate = ""
-        #            try:
-        #                entryDate = dbEntry[0].published_date.strftime('%B %d, %Y')
-        #            except:
-        #                entryDate = ""
-
-        #            post_url = dbEntry[0].wp_url
-        #            if isinstance(post_url, unicode):
-        #                post_url = post_url.encode("utf-8")
-
-        #            post_title = dbEntry[0].title
-        #            if isinstance(post_title, unicode):
-        #                post_title = post_title.encode("utf-8")
-
-        #            post_source = dbEntry[0].source
-        #            if isinstance(post_source, unicode):
-        #                post_source = post_source.encode("utf-8")
-
-
-
-        #            if dbEntry[0].wp_url != None:
-        #                post.content += "<br>" + tabs + ">" + "<a href=\"" +post_url+ "\">" + post_title + "</a>" + " - " +  entryDate + " (EntretenimientoBit)"
-        #            else:
-        #                post.content += "<br>" + tabs + ">" + post_title + " - " +  entryDate + " (" + post_source + ")"
-
-
-
-
-        #hosts_service = HostsService()
-        #hosts = hosts_service.get_list({'categories': {'$in': entry.categories}, "enabled":True})
-
-        #valid_host = False
-        #while not valid_host:
-
-            #Non specific hosts:
-            #if len(hosts) == 0:
-            #    hosts = hosts_service.get_list({'categories': {'$in': ["*"]}, "enabled":True})
-            #    if len(hosts) == 0:
-            #        host = None         #No more hosts
-            #        valid_host = True   #Ends loop
-
-            #host = hosts.pop()
-
-            #TODO Check limits => TEMP!
-            #if host['id'] == u"politica_bit":
-            #    interval_time = datetime.datetime.utcnow() - datetime.timedelta(seconds=86400) #1 Day
-            #    post_count = news_service.get_count({'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id']})
-            #    if post_count < 5:
-            #        valid_host = True
-            #        host["password"] = u"MarioKempes" #TEMP
-            #else:
-            #    valid_host = True #TEMP
-            #    host["password"] = u"MarioKempes" #TEMP
-
-
-            #host["password"] = u"MarioKempes" #TEMP
-
-
-
-
-        #unique_host = self.config.get('publishing', 'unique_host')
-        #if unique_host == 'False':
-        #    host = self.select_category_to_publish(entry)
-        #elif unique_host == 'True':
-        #    host = self.get_unique_host_to_publish()
-
-        #else:
-        #    logger.error("No unique host set True/False")
 
         logger.info("publishing into host %s" % host['url'])
 
