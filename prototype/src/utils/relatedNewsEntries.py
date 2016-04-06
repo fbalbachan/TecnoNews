@@ -13,6 +13,12 @@ class RelatedNewsEntries(object):
         if u"propiedades" in original.categories:
             DAYS_IN_THE_PAST_TO_SEARCH = 30
 
+        if u"electrodomésticos" in original.categories:
+            DAYS_IN_THE_PAST_TO_SEARCH = 30
+
+        if u"automóviles" in original.categories:
+            DAYS_IN_THE_PAST_TO_SEARCH = 30
+
         if u"turismo" in original.categories:
             DAYS_IN_THE_PAST_TO_SEARCH = 30
 
@@ -24,6 +30,9 @@ class RelatedNewsEntries(object):
 
         if u"belleza" in original.categories:
             DAYS_IN_THE_PAST_TO_SEARCH = 10
+
+        if u"deporte" in original.categories:
+            DAYS_IN_THE_PAST_TO_SEARCH = 3
 
         #if u"turismo" in original.categories and not u"tecnología" in original.categories:
         #    DAYS_IN_THE_PAST_TO_SEARCH = 30
