@@ -102,7 +102,7 @@ class SeImpersonalStrategy:
     def trim_known_elements(self, clause):
         if debug_mode: print "--> SeImpersonalStrategy.trim_known_elements(clause:", clause, ")"
 
-        od_string = clause.structure('od').lexical_form()
+        od_string = clause.structure('od').lexical_form().replace("_", " ")
         replacements = [("A " + od_string, ""), ("a " + od_string, ""), (od_string, "")]
 
         left_hemiclause_leaves, right_hemiclause_leaves = clause.get_hemiclauses()
