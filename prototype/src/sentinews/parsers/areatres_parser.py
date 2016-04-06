@@ -12,10 +12,10 @@ class AreaTresParser(GenericParser):
     def __init__(self):
         super(AreaTresParser, self).__init__()
 
-    source = u"Real Estate Market"
+    source = u"Area Tres"
 
     def parse(self, url):
-        url = "http://www.revistaareatres.com.ar/novedades/index/restricciones-que-afectan-a-la-construccion"
+        #url = "http://www.revistaareatres.com.ar/novedades/index/restricciones-que-afectan-a-la-construccion"
 
         soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
         for script in soup(["script", "style"]):
@@ -42,8 +42,6 @@ class AreaTresParser(GenericParser):
             clean_text = paragraph.text.strip()
             content += "\n" + clean_text
 
-        print content
-        exit()
         categories = [u"propiedades"]
         tags = [u"propiedades"]
 
@@ -59,6 +57,3 @@ class AreaTresParser(GenericParser):
                                            keywords=None)
 
         return new_entry
-
-testParser = AreaTresParser()
-testParser.parse("a")
