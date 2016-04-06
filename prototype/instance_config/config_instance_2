@@ -6,7 +6,7 @@ raise_exception = False
 id = 2
 
 [news_sources]
-feeds_to_process = bbc_america,bbc_internacional,marronyblanco,electroimagen
+feeds_to_process = bbc_america,bbc_internacional,marronyblanco,electroimagen,revistagadgets
 
 [freeling]
 
