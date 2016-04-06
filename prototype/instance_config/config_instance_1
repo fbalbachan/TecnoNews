@@ -6,7 +6,7 @@ raise_exception = False
 id = 1
 
 [news_sources]
-feeds_to_process = elmundo,elpais,elpais_america,motorpress,parabrisas,autoblog,autobild,home_lifestyle,maria_leon_style,trendenciaslifestyle,salud_nutricion_bienestar,vida_mas_bienestar,blogyarq,elconstructor,realestatemarket,areatres,
+feeds_to_process = elmundo,elpais,elpais_america,motorpress,parabrisas,autoblog,autobild,home_lifestyle,maria_leon_style,trendenciaslifestyle,salud_nutricion_bienestar,vida_mas_bienestar,blogyarq,elconstructor,realestatemarket,areatres,massbienestar,vidanatural,
 
 [freeling]
 
