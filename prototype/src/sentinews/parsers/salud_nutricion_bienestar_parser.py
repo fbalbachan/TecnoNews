@@ -38,8 +38,8 @@ class SaludNutricionBienestarParser(GenericParser):
                 clean_text = "\t-" + clean_text
             content += "\n" + clean_text
 
-        categories = [u"rojosalud"]
-        tags = [u"rojosalud"]
+        categories = [u"salud"]
+        tags = [u"salud"]
 
         #categories=[urlparse(url).path.split("/")[1]]
         #print categories

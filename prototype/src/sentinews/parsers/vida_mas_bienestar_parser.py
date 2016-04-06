@@ -47,8 +47,8 @@ class VidaMasBienestarParser(GenericParser):
             clean_text = paragraph.text.strip()
             content += "\n" + clean_text
 
-        categories = [u"rojosalud"]
-        tags = [u"rojosalud"]
+        categories = [u"salud"]
+        tags = [u"salud"]
 
         #categories=[urlparse(url).path.split("/")[1]]
         #print categories
