@@ -377,7 +377,7 @@ class BlogPublisher(object):
 
                 interval_time = datetime.datetime.utcnow() - datetime.timedelta(seconds=2592000) #1 Month
                 post_count = news_service.get_count({'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id']})
-                if post_count < 1800:
+                if post_count < 3800:
                     interval_time = datetime.datetime.utcnow() - datetime.timedelta(seconds=86400) #1 Day
 
                     if u'policiales' in entry.categories and valid_country:
