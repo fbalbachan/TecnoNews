@@ -47,8 +47,8 @@ class MariaLeonStyleParser(GenericParser):
             clean_text = paragraph.text.strip()
             content += "\n" + clean_text
 
-        categories = [u"rojovida"]
-        tags = [u"rojovida"]
+        categories = [u"estilo vida"]
+        tags = [u"estilo vida"]
 
         #categories=[urlparse(url).path.split("/")[1]]
         #print categories

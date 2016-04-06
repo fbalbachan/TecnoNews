@@ -156,6 +156,11 @@ class BlogPublisher(object):
         if entry.entity_table:
             entry.content += entry.entity_table
 
+    def add_hyperlinks(self, entry, link_dict_file):
+        c                = ConfigProvider()
+        #path             = c.get("resources","resources_dir") + "/hyperlinks_propiedades.csv"
+        path             = c.get("resources","resources_dir") + "/" + link_dict_file
+        entry.content    = HyperlinkProcessor.apply_links_by_CSV(entry.content, path)
 
     def add_related_news_tree(self, entry, news_service, show_source=True, show_link=True):
         post = entry
@@ -308,9 +313,6 @@ class BlogPublisher(object):
                         valid_country = True
                         break
 
-                if len(entry.countries) == 0:
-                    valid_country = True
-
                 interval_time = datetime.datetime.utcnow() - datetime.timedelta(seconds=2592000) #1 Month
                 post_count = news_service.get_count({'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id']})
                 if post_count < 150 and valid_country:
@@ -318,6 +320,7 @@ class BlogPublisher(object):
                     post_count = news_service.get_count({'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id']})
                     if post_count < 10:
                         valid_host = True
+                        self.add_hyperlinks(entry, "hyperlinks_propiedades.csv")
                         entry.categories = [u"Noticias"]
                         entry.tags = []
 
@@ -334,7 +337,7 @@ class BlogPublisher(object):
 
                     elif u'estilo vida' in entry.categories:
                         post_count = news_service.get_count({'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id'], 'categories': u'estilo vida'})
-                        if post_count < 5:
+                        if post_count < 8:
                             valid_host = True
 
                     if valid_host:
@@ -474,6 +477,9 @@ class BlogPublisher(object):
             else:
                 valid_host = True #TEMP
                 host["password"] = u"MarioKempes" #TEMP
+                if u"propiedades" in entry.categories:
+                    self.add_hyperlinks(entry, "hyperlinks_propiedades.csv")
+                    entry.categories = [u"propiedades"]
                 self.add_sentiment(entry)
                 self.add_countries(entry)
                 self.add_cities(entry)
@@ -499,9 +505,6 @@ class BlogPublisher(object):
 
         if u"propiedades" in entry.categories:
             entry.categories = [u"propiedades"]
-            c                = ConfigProvider()
-            path             = c.get("resources","resources_dir") + "/hyperlinks_propiedades.csv"
-            post.content     = HyperlinkProcessor.apply_links_by_CSV(post.content, path)
 
         if u"tecnología" in entry.categories:
             entry.categories = [u"tecnología"]
