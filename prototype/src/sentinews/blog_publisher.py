@@ -439,8 +439,17 @@ class BlogPublisher(object):
                         post_count = news_service.get_count(
                             {'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id'], 'categories': u'estilo vida'})
 
-                        if post_count < 0:
+                        if post_count < 8:
                             entry.categories = [u'sociedad']
+                            valid_host = True
+
+                    if u'automóviles' in entry.categories:
+                        logger.info("Case: Noticias.com->Automóviles")
+                        post_count = news_service.get_count(
+                            {'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id'], 'categories': u'automóviles'})
+
+                        if post_count < 5:
+                            entry.categories = [u'sucesos']
                             valid_host = True
 
 
