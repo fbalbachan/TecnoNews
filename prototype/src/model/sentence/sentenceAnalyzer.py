@@ -73,6 +73,12 @@ class SentenceAnalyzer:
     def set_parse_tree_to(self, sentence):
         try:
             node = self.tree_parser.from_text(sentence.text)
+
+            #Fixes plurality in some named entities
+            for a_leaf in node.leaves():
+                if a_leaf.father and a_leaf.father.label in ["w-mp", "w-fp"]:
+                    a_leaf.msi["number"] = u"plural"
+
             sentence.parse_node = node
 
             if self.output_demo_debug:
