@@ -86,7 +86,9 @@ class TreeBuilder(BaseInfo) :
             "geo"       : {
                 "cities"    : obj["cities"],
                 "countries" : obj["countries"]
-            }
+            },
+            "tags"      : obj["tags"],
+            "categories": obj["categories"]
         }
         
         if "versions" in obj and obj["versions"] is not None:
