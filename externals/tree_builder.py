@@ -42,8 +42,9 @@ class TreeBuilder(BaseInfo) :
     def build_tree(self, id_noticia):
         
         #web.header('Content-Type', 'application/json')
-        root = self.db["news_entries"].find({"_id" : bson.ObjectId(id_noticia) })
-        
+        #root = self.db["news_entries"].find({"_id" : bson.ObjectId(id_noticia) })
+        root = self.db["news_entries"].find({"wp_id" : int(id_noticia) })
+
         ret = { "root" : id_noticia }
         
         if root.count() > 0 :
@@ -56,16 +57,16 @@ class TreeBuilder(BaseInfo) :
                 item["children"] = self._get_children(item)
                 for item2 in item["children"] :
                     item2["children"] = self._get_children(item2)
-                    #for item3 in item2["children"] :
-                    #    item3["children"] = self._get_children(item3)
-                    #    #for item4 in item3["children"] :
-                    #    #    item4["children"] = self._get_children(item4)
-                    #    #    #for item5 in item4["children"] :
-                    #    #    #    item5["children"] = self._get_children(item5)
-                    #    #    #    for item6 in item5["children"] :
-                    #    #    #        item6["children"] = self._get_children(item6)
-                    #    #    #        for item7 in item6["children"] :
-                    #    #    #            item7["children"] = self._get_children(item7)
+                    for item3 in item2["children"] :
+                        item3["children"] = self._get_children(item3)
+                        #for item4 in item3["children"] :
+                        #    item4["children"] = self._get_children(item4)
+                        #    #for item5 in item4["children"] :
+                        #    #    item5["children"] = self._get_children(item5)
+                        #    #    for item6 in item5["children"] :
+                        #    #        item6["children"] = self._get_children(item6)
+                        #    #        for item7 in item6["children"] :
+                        #    #            item7["children"] = self._get_children(item7)
             
             ret["root"] = tmp
         
@@ -116,4 +117,6 @@ if __name__ == "__main__":
         print "Debe especificar un id como primer parámetro. Imposible continuar."
         exit(1)
     
-    print TreeBuilder().build_tree(bson.ObjectId(root_id))
+    #print TreeBuilder().build_tree(bson.ObjectId(root_id))
+    print TreeBuilder().build_tree(root_id)
+
