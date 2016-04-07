@@ -88,7 +88,10 @@ class TreeBuilder(BaseInfo) :
                 "countries" : obj["countries"]
             },
             "tags"      : obj["tags"],
-            "categories": obj["categories"]
+            "categories": obj["categories"],
+            "entities"  : obj["entities"],
+            "summary"   : obj["content"].replace(".\n",". ").replace("\n", ". ").split(". ")[0] + ".",
+            "source"    : obj["source"]
         }
         
         if "versions" in obj and obj["versions"] is not None:
