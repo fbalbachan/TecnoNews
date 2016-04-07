@@ -56,8 +56,16 @@ class TreeBuilder(BaseInfo) :
                 item["children"] = self._get_children(item)
                 for item2 in item["children"] :
                     item2["children"] = self._get_children(item2)
-                    #for item3 in item2["children"] :
-                    #    item3["children"] = self._get_children(item3)
+                    for item3 in item2["children"] :
+                        item3["children"] = self._get_children(item3)
+                        for item4 in item3["children"] :
+                            item4["children"] = self._get_children(item4)
+                            for item5 in item4["children"] :
+                                item5["children"] = self._get_children(item5)
+                                for item6 in item5["children"] :
+                                    item6["children"] = self._get_children(item6)
+                                    for item7 in item6["children"] :
+                                        item7["children"] = self._get_children(item7)
             
             ret["root"] = tmp
         
