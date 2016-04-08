@@ -244,15 +244,15 @@ class RelatedNewsEntries(object):
         score = 0
 
         related_logger.info("Alexis alexis score related news")
-        #if u"belleza" in self.news_original.categories: # or u"insólito" in self.news_original.categories:
-        #    if entities_coincidence >= 1:
-        #        score += 30
-        #else:
-        #    if entities_coincidence > 1:
-        #        score += 30
+        if u"propiedades" in self.news_original.categories or u"turismo" in self.news_original.categories: # or u"insólito" in self.news_original.categories:
+            if entities_coincidence >= 1:
+                score += 30
+        else:
+            if entities_coincidence > 1:
+                score += 30
 
-        if entities_coincidence > 1:
-            score += 30
+        #if entities_coincidence > 1:
+        #    score += 30
 
         if u"propiedades" in self.news_original.categories:
             if 0.7 < title_distance <= 0.95:
