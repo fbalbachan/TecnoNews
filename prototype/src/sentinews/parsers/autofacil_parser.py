@@ -18,7 +18,7 @@ class AutoFacilParser(GenericParser):
         #url = "http://www.autofacil.es/mecanica/2016/03/28/coches-rompen-mercado/31405.html"
         #url = "http://www.autofacil.es/radares-multas/2016/04/06/instalan-radar-solidario-cantabria/31601.html"
         #url = "http://www.autofacil.es/conductor/2016/04/06/gana-curso-derrape-porsche-handling-experience-gratis-autofacil/31591.html"
-        soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
+        soup = BeautifulSoup(self.opener.read(url), from_encoding='windows-1252')
         for script in soup(["script", "style"]):
             script.extract()
 
