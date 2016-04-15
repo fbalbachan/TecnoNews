@@ -282,7 +282,11 @@ class WebOutputUtils:
             name = str(pronoun.referenced()).lower() if pronoun.is_linked() else pronoun.real_name()
 
             key = (gender, number)
-            if key in dict_by_gender_number.keys():
+            if key in dict_by_gender_number.keys() \
+                    and pronoun.is_linked() \
+                    and dict_by_gender_number[key]["refs"][0].is_linked() \
+                    and pronoun.referenced().lexical_form == dict_by_gender_number[key]["refs"][0].referenced().lexical_form:
+
                 positive = dict_by_gender_number[key]["pos"] + pronoun.sentimental_value.value[0]
                 negative = dict_by_gender_number[key]["neg"] + pronoun.sentimental_value.value[1]
                 references = dict_by_gender_number[key]["refs"] + [pronoun]
