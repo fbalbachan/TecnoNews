@@ -1,6 +1,6 @@
 #!/usr/bin/env python2.7
 # -*- coding:utf-8 -*-
-__author__ = 'Pablo Perez De Angelis'
+__author__ = 'Fernando Balbachan'
 import nltk
 import re
 import numpy
@@ -58,12 +58,25 @@ class TextDistance(object):
         return jaccard_distance(word_set1, word_set2)
 
     def distance(self, text1, text2, n):
+        #print "textDistance.distance:"
         tokens1, tokens2 = self.pre_process(text1), self.pre_process(text2)
+        #print "tokens"
+        #print [tokens1, tokens2]
         ngrams1, ngrams2 = nltk.ngrams(tokens1, n), nltk.ngrams(tokens2, n)
+        #print "ngrams"
+        #print [ngrams1, ngrams2]
         f1, f2 = nltk.FreqDist(ngrams1), nltk.FreqDist(ngrams2)
+        #print "FreqDists"
+        #print [f1,f2]
         dimensiones = set(ngrams1).union(set(ngrams2))
+        #print "dimensiones"
+        #print dimensiones
         v1, v2 = [f1.get(d, 0) for d in dimensiones], [f2.get(d, 0) for d in dimensiones]
-        return self.cosine(v1, v2) * 100
+        #print "vectores"
+        #print [v1, v2]
+        ret = self.cosine(v1, v2) * 100
+        #print "coseno: " + str(ret)
+        return ret
 
     def similarity(self, text1, text2, b=0.9):
         unigrams = self.distance(text1, text2, 1)
@@ -73,6 +86,9 @@ class TextDistance(object):
 
         # similarity = (1+b_2) * ((unigrams * bigrams) / ((b_2 * unigrams) + bigrams))
         partial = ((b_2 * unigrams) + bigrams)
+        
+        if bigrams == 0.0 :
+            bigrams = 0.19
 
         if partial != 0.0:
             similarity = (1+b_2) * ((unigrams * bigrams) / partial)
