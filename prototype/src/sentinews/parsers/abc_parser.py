@@ -30,6 +30,9 @@ class ABCParser(GenericParser):
         for social in soup.findAll('ul', {"class": "redes-sociales"}):
             social.extract()
 
+        for ante in soup.findAll('span', {"class": "antetitulo-noticia"}):
+            ante.extract()
+
         tweets = []
 
         for tweet in soup.findAll('div', {"class": "embed-twitter"}):
@@ -57,11 +60,11 @@ class ABCParser(GenericParser):
 
         content = ""
         paragraphs = soup.find('div', {"itemprop": 'articleBody'}).findAll('p')
-        
+
         for paragraph in paragraphs:
             clean_text = paragraph.text.strip()
 
-                
+
             content += "\n" + clean_text
 
         content = content.strip()
@@ -75,4 +78,3 @@ class ABCParser(GenericParser):
                                            keywords=None)
 
         return new_entry
-
