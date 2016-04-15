@@ -173,8 +173,8 @@ class RunTests_request:
     def GET(self):
         # 20160211 - Daniel Cantarín
         # We execute the "run_tests" scripts, and return the output.
-        
-        path = os.path.dirname(os.path.realpath(__file__)) 
+
+        path = os.path.dirname(os.path.realpath(__file__))
 
         subprocess.call( path + "/../run_tests", shell=True )
         # It takes its time, then writes a file. We catch that.
@@ -237,19 +237,19 @@ class EntiNews_request:
 
         except Exception:
             print format_exc()
-            web.redirect("/sentinuevo")
+            web.redirect("/sentilecto")
 
     def action_fact_extraction(self):
         analysis = analyze()
         if not analysis:
-            web.redirect("/sentinuevo")
+            web.redirect("/sentilecto")
 
         return web.template.render().facts(analysis, WebOutputUtils(ontology))
 
     def action_svo_slots(self):
         analysis = analyze()
         if not analysis:
-            web.redirect("/sentinuevo")
+            web.redirect("/sentilecto")
 
         return web.template.render().entinews(analysis, WebOutputUtils(ontology))
 
@@ -295,7 +295,7 @@ class EntiNews_request:
                     return web.template.render().unsupported()
 
         web.redirect("/sentilecto")
-    
+
 # 20160217 - Daniel Cantarín
 # Spanish sentilecto's demo needs to redirect data to Portuguese.
 # This function handles that logic.
@@ -309,7 +309,7 @@ def redirect_to_pt(text, point) :
     #f = codecs.open(archivo, "r", "utf-8")
     #print "Contenido del archivo: " + f.read().decode('string-escape').decode("utf-8")
     #f.close()
-       
+
     url = "/sentiportugues/" + point + "?n=" + str(numero)
     print "Redireccionando hacia \"" + url + "\" ..."
     return web.seeother(url)

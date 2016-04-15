@@ -6,8 +6,8 @@ raise_exception = False
 debug = False
 
 [demo]
-service_port = 8327
-demo_uri = sentinuevo
+service_port = 8321
+demo_uri = sentilecto
 
 [instance]
 id = blog-dev-MERGE

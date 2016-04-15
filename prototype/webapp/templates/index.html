@@ -1,5 +1,5 @@
 $def with (request_id, debug_mode)
-$ captcha_src = "sentinuevo/static/captcha/captcha_" + request_id + ".png"
+$ captcha_src = "sentilecto/static/captcha/captcha_" + request_id + ".png"
 <!DOCTYPE html>
 <html lang="es">
   <head>
@@ -16,7 +16,7 @@ $ captcha_src = "sentinuevo/static/captcha/captcha_" + request_id + ".png"
       <h2 style="padding-top:10px;padding-bottom:10px;"></h2>
 
       <div>
-        <form class="well form-search" enctype="multipart/form-data" action="sentinuevo/result" method="POST">
+        <form class="well form-search" enctype="multipart/form-data" action="sentilecto/result" method="POST">
             <fieldset>
                 <div class="control-group">
 <!--
