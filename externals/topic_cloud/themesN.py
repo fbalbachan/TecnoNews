@@ -46,7 +46,7 @@ mongo_data = {
 
 def sentences(text):
     return filter(lambda x: x != None and x != '', [s.strip() if s != None else s for s in re.split(sentence_delimiters, text, re.U|re.I)])
-    
+
 def words(text):
     return [w.lower() for w in re.findall(r'\w+|\w-\w|^(?!http)\w+', text, re.U)]
 
@@ -75,7 +75,7 @@ def themesN(n, freq_filter=4):
         n = len(ngram)
         p_marginals = [d1[i] / float(d1.N()) for i in ngram]
         p_joint = dn[ngram]
-        if 0 not in p_marginals: 
+        if 0 not in p_marginals:
             return abs(math.log(p_joint, 2) - math.log(reduce(lambda x,y: x*y, p_marginals, 1), 2))
         else:
             return 0
@@ -87,13 +87,13 @@ def themesN(n, freq_filter=4):
         return [((t,),f,0) for (t,f) in useful_ngrams]
 
 
-    
+
     #ngrams = nltk.util.ngrams(corpus_words, n)
     ngrams = []
     for sentence in corpus_sentences:
         ngrams += filter(lambda x: x != [], nltk.util.ngrams(words(sentence), n))
     freqsN = nltk.probability.FreqDist(ngrams)
-    # caso especial: bigramas no incluyen stopwords; el resto sí 
+    # caso especial: bigramas no incluyen stopwords; el resto sí
     if n <= 2:
         freqs1 = nltk.probability.FreqDist(corpus_words_no_stopwords)
     else:
@@ -104,9 +104,9 @@ def themesN(n, freq_filter=4):
                            and (contains_verb(t)),
                            freqsN.items())
 
-   
+
     mi = [pmi(t,freqs1,freqsN) for (t, f) in useful_ngrams]
-    out = sorted([(t,f,pmi_value) for ((t,f), pmi_value) in zip(useful_ngrams, mi)], key=operator.itemgetter(1), reverse=True) 
+    out = sorted([(t,f,pmi_value) for ((t,f), pmi_value) in zip(useful_ngrams, mi)], key=operator.itemgetter(1), reverse=True)
     return out
 
 
@@ -124,22 +124,22 @@ def show(themes, howmany=10, return_sorted=False):
         output = '%d,"%s",%d,%.2f' % (i+1, ' '.join(ngram), f, pmi_value)
         print output.encode('utf-8')
     print
-    
+
 def get_themes(return_sorted=False):
     temas_candidatos = list(itertools.chain.from_iterable([themesN(n, freq_threshold_per_ngram[n])[:howmany_threshold_per_ngram[n]]
                                                       for n in range(1,9)]))
     #print "temas candidatos"
     #print temas_candidatos
     textos_candidatos = [' '.join(tema[0]) for tema in temas_candidatos]
-    
+
     #print "textos candidatos"
     #print textos_candidatos
-    
+
     temas_finales = [tema for tema in temas_candidatos if all(' '.join(tema[0]) not in tt for tt in textos_candidatos[textos_candidatos.index(' '.join(tema[0]))+1:])]
-    
+
     #print "temas finales"
     #print temas_finales
-    
+
     if return_sorted:
         return sorted(temas_finales, key=operator.itemgetter(1), reverse=True)
     else:
@@ -162,7 +162,7 @@ if __name__ == "__main__":
         verbs_file = 'verbos.es.txt'
     stopwords=set([w.strip().lower() for w in codecs.open(stopwords_file, 'r', 'utf-8').read().split()])
     verbos = set([w.strip().lower() for w in codecs.open(verbs_file, 'r', 'utf-8').read().split()])
-    
+
     try:
         #se espera que sea un string tipo "2342362323,34535645,2346456456,"
         ids=sys.argv[2].split(",")
@@ -175,7 +175,7 @@ if __name__ == "__main__":
         oids = []
         for i in ids :
             oids.append(bson.ObjectId(i))
-        
+
         #print oids
         items = db["news_entries"].find({"_id" : {"$in" : oids }})
         #print items
@@ -184,18 +184,18 @@ if __name__ == "__main__":
         print "Debe especificar uno o mas IDs de noticias. Imposible continuar."
         print str(e)
         sys.exit(1)
-    
+
     #text_file = 'input.txt' #'BazaarBoys.csv' #'data/embelleze_30-10_30-11.csv'
     #text_reader = unicode_csv_reader(codecs.open(text_file, 'r', 'utf-8'), first_line_is_header=True)
     #opinions = [opinion for opinion in text_reader]
-    
+
     opinions = []
     for i in items:
         opinions.append( i["title"] )
         opinions.append( i["content"] )
-    
+
     print opinions
-    
+
     opinions_n = len(opinions)
 
 
@@ -220,16 +220,17 @@ if __name__ == "__main__":
     CSS_SIZES = range(1, 9)
     themes = get_themes(return_sorted=False)
     tags = dict([(' '.join(ngram), freq) for (ngram, freq, pmi_value) in themes])
-    MAX = max(tags.values())
-    STEP = MAX / float(len(CSS_SIZES))
-    
+    if len(tags) > 0:
+        MAX = max(tags.values())
+        STEP = MAX / float(len(CSS_SIZES))
+
     '''
     print """<!doctype html><html>"""
     print """<head><meta content="text/html; charset=utf-8" http-equiv="content-type"/>"""
     print """<style type="text/css">
       span.size-1 { font-size: 120%; }
-      span.size-2 { font-size: 140%; } 
-      span.size-3 { font-size: 160%; }  
+      span.size-2 { font-size: 140%; }
+      span.size-3 { font-size: 160%; }
       span.size-4 { font-size: 180%; }
       span.size-5 { font-size: 200%; }
       span.size-6 { font-size: 220%; }
@@ -239,7 +240,7 @@ if __name__ == "__main__":
     print """<body>"""
     for tag, count in tags.items():
         tag = tag.encode('utf-8')
-        css = int(round(count / STEP))        
+        css = int(round(count / STEP))
         print """<span class='size-%s'>%s, %d veces</span><br>""" % (css, tag, count),
     print "</body></html>"
     '''
@@ -247,7 +248,6 @@ if __name__ == "__main__":
     print "["
     for tag, count in tags.items():
         tag = tag.encode('utf-8')
-        css = int(round(count / STEP))        
+        css = int(round(count / STEP))
         print "[\"" + tag + "\"," + str(count) + "],"
     print "[]]"
-    
