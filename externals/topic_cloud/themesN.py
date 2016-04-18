@@ -194,7 +194,7 @@ if __name__ == "__main__":
         opinions.append( i["title"] )
         opinions.append( i["content"] )
 
-    print opinions
+    #print opinions
 
     opinions_n = len(opinions)
 
