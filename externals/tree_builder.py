@@ -89,7 +89,8 @@ class TreeBuilder(BaseInfo) :
         tmp  = {
             "id"        : str(obj["_id"]), 
             "title"     : obj["title"], 
-            "url"       : obj["url"] , 
+            "url"       : obj["url"] ,
+            "wp_url"    : obj["wp_url"] , 
             "date"      : str(obj["published_date"]),
             "sentiment" : obj["sentiment"],
             "geo"       : {
