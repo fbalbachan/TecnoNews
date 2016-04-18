@@ -15,6 +15,9 @@ class Sentence(object):
         # TODO: Preguntarle a Lean por qué toma [0] si dijo que puede haber más de una
         return self.clauses_of_level(0)[0]
 
+    def main_clauses(self):
+        return self.clauses_of_level(0)
+
     def clauses_of_level(self, level):
         return filter(lambda clause: clause.level() == level, self.clauses)
 
