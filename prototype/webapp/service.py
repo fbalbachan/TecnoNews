@@ -245,7 +245,7 @@ class EntiNews_request:
     def action_content_summarize(self):
         try:
             analysis = analyze()
-            return web.template.render().summarize(analysis["paragraph"].text, TextSummarizer(analysis).summarize())
+            return web.template.render().summary(analysis["paragraph"].text, TextSummarizer(analysis).summarize())
 
         except Exception:
             print format_exc()
