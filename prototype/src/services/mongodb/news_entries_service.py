@@ -36,7 +36,8 @@ class NewsEntriesService(object):
                           wp_url=entry['wp_url'] if 'wp_url' in entry else None,
                           related=entry['related'] if 'related' in entry else None,
                           object_id=entry['_id'],
-                          versions=entry['versions'] if 'versions' in entry else None)
+                          versions=entry['versions'] if 'versions' in entry else None,
+                          summary=entry['summary'] if 'summary' in entry else None)
                 for entry in self.news_entries.find(criteria).limit(limit if limit is not None else 0)]
 
     def already_in_db(self, url):

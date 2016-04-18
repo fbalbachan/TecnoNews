@@ -12,7 +12,7 @@ logger = get_logger('tecnonews')
 class NewsEntry(object):
     def __init__(self, title, content, tags, source, url=None, original_categories=None,
                  categories=None, wp_id=None, wp_url=None, related=None, entities=None,
-                 published_date=None, object_id=None, versions=None, image=None, image_search_string=None):
+                 published_date=None, object_id=None, versions=None, image=None, image_search_string=None, summary=None):
 
         self.title = title
         self.content = content
@@ -38,11 +38,12 @@ class NewsEntry(object):
         self.cities = []
         self.host_id = None
         self.image_url = None
+        self.summary = summary
 
         # Defensive programing to avoid wrong encoded
         assert(isinstance(self.title, unicode))
         assert(isinstance(self.content, unicode))
-        
+
         # 20160328 - Daniel Cantarín
         # There are some problematic titles. Here's some cleaning code.
         self.title = self.title.replace("\n","")
@@ -104,7 +105,8 @@ class NewsEntry(object):
                     original_categories=self.original_categories, categories=self.categories,
                     entities=self.entities, published_date=self.published_date, url=self.url, wp_id=self.wp_id,
                     wp_url=self.wp_url, related=self.related, versions=self.versions, sentiment=self.sentiment,
-                    countries=self.countries, cities=self.cities,host_id=self.host_id,image_url=self.image_url)
+                    countries=self.countries, cities=self.cities,host_id=self.host_id,image_url=self.image_url,
+                    summary=self.summary)
 
     def analyzed_paragraph(self):
         from src.model.paragraph.paragraphAnalyzer import ParagraphAnalyzer

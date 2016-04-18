@@ -19,6 +19,7 @@ from src.sentinews.hyperlink_processor import HyperlinkProcessor
 from src.utils.webOutputUtils import WebOutputUtils
 
 from src.utils.sanitizer import Sanitizer
+from src.utils.textSummarizer import TextSummarizer
 
 logger = get_logger('tecnonews')
 debug_mode = True
@@ -217,6 +218,12 @@ class NewsRewriter(object):
         # FIXME: analysis.text is str instead of unicode!!
         analysis = self._analyze(self.original_entry.content)
 
+        logger.info("Trying summarization")
+        try:
+            self.original_entry.summary = TextSummarizer(analysis).summarize()
+        except:
+            logger.info("Summarization FAILED")
+            pass
 
         applied_global = False
         try:
