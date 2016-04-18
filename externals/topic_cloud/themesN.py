@@ -24,6 +24,26 @@ import sys
 #def u_raw_input(text):
 #        return text.replace("á","\xe1").replace("é","\xe9").replace("í","\xed").replace("ó","\xf3").replace("ú","\xfa").replace("Á","\xc1").replace("É","\xc9").replace("Í","\xcd").replace("Ó","\xd3").replace("Ú","\xda").replace("ñ","\xf1").replace("Ñ","\xd1").replace("ç","\xe7").replace("Ç","\xc7").replace("¿","\xbf").replace("¡","\xa1").replace("ü","\xfc").replace("Ü","\xdc")
 
+import json
+from pymongo import MongoClient
+from sys import argv
+import bson
+
+class JSONEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, bson.ObjectId):
+            return str(o)
+        return json.JSONEncoder.default(self, o)
+
+mongo_data = {
+    "host"  :   "85.10.210.172",
+    "port"  :   27017,
+    "db"    :   "sentinews_entrebit",
+    "username" : "root",
+    "password" : "NaturalezaMuerta"
+}
+
+
 def sentences(text):
     return filter(lambda x: x != None and x != '', [s.strip() if s != None else s for s in re.split(sentence_delimiters, text, re.U|re.I)])
     
@@ -142,11 +162,40 @@ if __name__ == "__main__":
         verbs_file = 'verbos.es.txt'
     stopwords=set([w.strip().lower() for w in codecs.open(stopwords_file, 'r', 'utf-8').read().split()])
     verbos = set([w.strip().lower() for w in codecs.open(verbs_file, 'r', 'utf-8').read().split()])
+    
+    try:
+        #se espera que sea un string tipo "2342362323,34535645,2346456456,"
+        ids=sys.argv[2].split(",")
+        client = MongoClient(mongo_data["host"], mongo_data["port"])
 
-    text_file = 'input.txt' #'BazaarBoys.csv' #'data/embelleze_30-10_30-11.csv'
-    text_reader = unicode_csv_reader(codecs.open(text_file, 'r', 'utf-8'), first_line_is_header=True)
-    opinions = [opinion for opinion in text_reader]
+        if "username" in mongo_data :
+            client["admin"].authenticate( mongo_data["username"], mongo_data["password"])
 
+        db = client[mongo_data["db"]]
+        oids = []
+        for i in ids :
+            oids.append(bson.ObjectId(i))
+        
+        #print oids
+        items = db["news_entries"].find({"_id" : {"$in" : oids }})
+        #print items
+    except Exception, e:
+        print sys.argv[2]
+        print "Debe especificar uno o mas IDs de noticias. Imposible continuar."
+        print str(e)
+        sys.exit(1)
+    
+    #text_file = 'input.txt' #'BazaarBoys.csv' #'data/embelleze_30-10_30-11.csv'
+    #text_reader = unicode_csv_reader(codecs.open(text_file, 'r', 'utf-8'), first_line_is_header=True)
+    #opinions = [opinion for opinion in text_reader]
+    
+    opinions = []
+    for i in items:
+        opinions.append( i["title"] )
+        opinions.append( i["content"] )
+    
+    print opinions
+    
     opinions_n = len(opinions)
 
 
