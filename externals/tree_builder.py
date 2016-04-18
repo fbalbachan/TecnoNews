@@ -30,30 +30,30 @@ class BaseInfo(object):
             client["admin"].authenticate( mongo_data["username"], mongo_data["password"])
 
         db = client[mongo_data["db"]]
-        
+
         self.db     = db
         self.client = client
-        
+
 
 class TreeBuilder(BaseInfo) :
     def __init__(self):
         super(TreeBuilder, self).__init__()
-    
+
     def build_tree(self, id_noticia):
-        
+
         #web.header('Content-Type', 'application/json')
         #root = self.db["news_entries"].find({"_id" : bson.ObjectId(id_noticia) })
         root = self.db["news_entries"].find({"wp_id" : int(id_noticia) })
 
         ret = { "root" : id_noticia }
-        
+
         if root.count() > 0 :
             root = root[0]
             tmp  = self._get_simplified(root)
-            
+
             tmp["children"] = self._get_children( root )
-            
-            for item in tmp["children"] : 
+
+            for item in tmp["children"] :
                 item["children"] = self._get_children(item)
                 for item2 in item["children"] :
                     item2["children"] = self._get_children(item2)
@@ -67,30 +67,30 @@ class TreeBuilder(BaseInfo) :
                         #    #        item6["children"] = self._get_children(item6)
                         #    #        for item7 in item6["children"] :
                         #    #            item7["children"] = self._get_children(item7)
-            
+
             ret["root"] = tmp
-        
+
         return json.dumps(ret, sort_keys=True, indent=4, separators=(',', ': '), cls=JSONEncoder)
-    
+
     def _get_children(self, obj) :
-        
+
         children = []
         ret      = []
-        
+
         if "versions" in obj:
             children = self.db["news_entries"].find({"_id" : {"$in" : obj["versions"]} })
-        
+
         for c in children :
             ret.append( self._get_simplified( c ) )
-        
+
         return ret
-        
+
     def _get_simplified(self, obj) :
         tmp  = {
-            "id"        : str(obj["_id"]), 
-            "title"     : obj["title"], 
+            "id"        : str(obj["_id"]),
+            "title"     : obj["title"],
             "url"       : obj["url"] ,
-            "wp_url"    : obj["wp_url"] , 
+            "wp_url"    : obj["wp_url"] ,
             "date"      : str(obj["_id"].generation_time).split("+")[0], #str(obj["published_date"])
             "sentiment" : obj["sentiment"],
             "geo"       : {
@@ -103,12 +103,15 @@ class TreeBuilder(BaseInfo) :
             "summary"   : obj["content"].replace(".\n",". ").replace("\n", ". ").split(". ")[0] + ".",
             "source"    : obj["source"]
         }
-        
+
+        if "summary" in obj and obj["summary"] is not None:
+            tmp["summary"] = obj["summary"].replace("\n", ". ")
+
         if "versions" in obj and obj["versions"] is not None:
             tmp["versions"] = obj["versions"]
 
         return tmp
-        
+
 
 
 if __name__ == "__main__":
@@ -117,7 +120,6 @@ if __name__ == "__main__":
     except :
         print "Debe especificar un id como primer parámetro. Imposible continuar."
         exit(1)
-    
+
     #print TreeBuilder().build_tree(bson.ObjectId(root_id))
     print TreeBuilder().build_tree(root_id)
-
