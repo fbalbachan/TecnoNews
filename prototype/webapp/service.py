@@ -22,6 +22,8 @@ from src.utils.configProvider import ConfigProvider
 from src.ling.freelingDictionaryParser import FreelingDictionaryParser
 from src.utils.freelingLanguageDetectorClient import FreelingLanguageDetectorClient
 
+from src.utils.textSummarizer import TextSummarizer
+
 from BeautifulSoup import BeautifulSoup
 import urllib2
 import re
@@ -239,6 +241,17 @@ class EntiNews_request:
             print format_exc()
             web.redirect("/sentilecto")
 
+
+    def action_content_summarize(self):
+        try:
+            analysis = analyze()
+            return web.template.render().summarize(analysis["paragraph"].text, TextSummarizer(analysis).summarize())
+
+        except Exception:
+            print format_exc()
+            web.redirect("/sentilecto")
+
+
     def action_fact_extraction(self):
         analysis = analyze()
         if not analysis:
@@ -276,7 +289,8 @@ class EntiNews_request:
 
                 action_by_method = {"svo_slots" 		: self.action_svo_slots,
                                     "fact_extraction"	: self.action_fact_extraction,
-                                    "content_rewrite"	: self.action_content_rewrite }
+                                    "content_rewrite"	: self.action_content_rewrite,
+                                    "content_summarize" : self.action_content_summarize }
 
                 method = web_input["method"]
 
