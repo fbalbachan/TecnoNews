@@ -91,7 +91,7 @@ class TreeBuilder(BaseInfo) :
             "title"     : obj["title"], 
             "url"       : obj["url"] ,
             "wp_url"    : obj["wp_url"] , 
-            "date"      : str(obj["published_date"]),
+            "date"      : str(obj["_id"].generation_time).split("+")[0], #str(obj["published_date"])
             "sentiment" : obj["sentiment"],
             "geo"       : {
                 "cities"    : obj["cities"],
