@@ -199,7 +199,8 @@ if __name__ == "__main__":
     opinions_n = len(opinions)
 
 
-    corpus_sentences = list(itertools.chain.from_iterable([sentences(opinion[0]) for opinion in opinions]))
+    #corpus_sentences = list(itertools.chain.from_iterable([sentences(opinion[0]) for opinion in opinions]))
+    corpus_sentences = list(itertools.chain.from_iterable([sentences(opinion) for opinion in opinions]))
     corpus_words = list(itertools.chain.from_iterable([words(s) for s in corpus_sentences]))
     corpus_words_no_stopwords = filter(lambda x: x not in stopwords, corpus_words)
 
