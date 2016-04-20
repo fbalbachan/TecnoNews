@@ -602,7 +602,7 @@ function setup_galaxysummary() {
         
         for (var i = 0; i < nodos.length; i++) {
             tmp      = "<div class=\"title\"><span class=\"date\">(" + nodos[i].data().date.split(".")[0] + ")</span> - " + nodos[i].data().title + "</div>\n";
-            tmp     += "<div class=\"summary\">" + nodes[i].data().summary + "</div>";
+            tmp     += "<div class=\"summary\">" + nodos[i].data().summary + "</div>";
             
             tmphtml += tmp;
         }
