@@ -1,5 +1,11 @@
 ﻿a
 a
+feira
+segunda
+terça
+quarta
+quinta
+sexta
 acá
 adelante
 adonde
