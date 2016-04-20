@@ -150,22 +150,25 @@ if __name__ == "__main__":
     # for n in range(7,0,-1): showNthemes(n)
 
     import sys
-    language=sys.argv[1]
-    if language=='pt':
-        stopwords_file = 'stopwords.pt.txt'
-        verbs_file = 'verbos.pt.txt'
-    elif language=='en':
-        stopwords_file = 'stopwords.en_empty.txt'
-        verbs_file = 'verbos.en.txt'
-    elif language=='es':
-        stopwords_file = 'stopwords_es_limpios_sinNO.txt'
-        verbs_file = 'verbos.es.txt'
+    #language=sys.argv[1]
+    #if language=='pt':
+    #    stopwords_file = 'stopwords.pt.txt'
+    #    verbs_file = 'verbos.pt.txt'
+    #elif language=='en':
+    #    stopwords_file = 'stopwords.en_empty.txt'
+    #    verbs_file = 'verbos.en.txt'
+    #elif language=='es':
+    #    stopwords_file = 'stopwords_es_limpios_sinNO.txt'
+    #    verbs_file = 'verbos.es.txt'
+    
+    stopwords_file = "stopwords_ES_PT.txt"
+    verbs_file     = 'verbos.es.txt'
     stopwords=set([w.strip().lower() for w in codecs.open(stopwords_file, 'r', 'utf-8').read().split()])
     verbos = set([w.strip().lower() for w in codecs.open(verbs_file, 'r', 'utf-8').read().split()])
 
     try:
         #se espera que sea un string tipo "2342362323,34535645,2346456456,"
-        ids=sys.argv[2].split(",")
+        ids=sys.argv[1].split(",")
         client = MongoClient(mongo_data["host"], mongo_data["port"])
 
         if "username" in mongo_data :
@@ -180,7 +183,7 @@ if __name__ == "__main__":
         items = db["news_entries"].find({"_id" : {"$in" : oids }})
         #print items
     except Exception, e:
-        print sys.argv[2]
+        print sys.argv[1]
         print "Debe especificar uno o mas IDs de noticias. Imposible continuar."
         print str(e)
         sys.exit(1)
@@ -199,7 +202,8 @@ if __name__ == "__main__":
     opinions_n = len(opinions)
 
 
-    corpus_sentences = list(itertools.chain.from_iterable([sentences(opinion[0]) for opinion in opinions]))
+    #corpus_sentences = list(itertools.chain.from_iterable([sentences(opinion[0]) for opinion in opinions]))
+    corpus_sentences = list(itertools.chain.from_iterable([sentences(opinion) for opinion in opinions]))
     corpus_words = list(itertools.chain.from_iterable([words(s) for s in corpus_sentences]))
     corpus_words_no_stopwords = filter(lambda x: x not in stopwords, corpus_words)
 

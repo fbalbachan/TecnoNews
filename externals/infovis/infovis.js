@@ -1,0 +1,584 @@
+
+window.cy = null;
+window.$  = jQuery;
+
+
+/**
+    Given a sentiment string, returns an adequate color.
+    
+    @date 20160408
+    @author Daniel Cantarín
+*/
+function color_by_sentiment( sent ) {
+    var white = "#ffffff";
+    var red   = "#ff0000";
+    var green = "#00ff00";
+    
+    var ret = white;
+    
+    if ( sent === undefined || sent === null || sent.trim() == "") {
+        sent = "neutral";
+    }
+    
+    sent = sent.toLowerCase();
+    
+    if ( sent.indexOf("negative") > -1 ) {
+        ret = red;
+    } else if ( sent.indexOf("positive") > -1) {
+        ret = green;
+    }
+    //console.log("color_by_sentiment", sent, ret);
+    
+    return ret;
+}
+
+/**
+    Given a sentiment string, returns an adequate opacity.
+    
+    @date 20160408
+    @author Daniel Cantarín
+*/
+function opacity_by_sentiment( sent ) {
+    var very        = "1";
+    var slightly    = "0.15";
+    var normal      = "0.5";
+    
+    var ret = normal;
+    
+    if ( sent === undefined || sent === null ) {
+        sent = "neutral";
+    }
+    
+    sent = sent.toLowerCase();
+    
+    if ( sent.indexOf("very") > -1 ) {
+        ret = very;
+    } else if ( sent.indexOf("slightly") > -1) {
+        ret = slightly;
+    }
+    //console.log("opacity_by_sentiment", sent, ret);
+    
+    return ret;
+}
+
+function random_color() {
+    var red     = parseInt(Math.random() * 255);
+    var green   = parseInt(Math.random() * 255);
+    var blue    = parseInt(Math.random() * 255);
+    var color   = "#" + red.toString(16) + green.toString(16) + blue.toString(16);
+    
+    while (color.length < 7) {
+        color += "0";
+    }
+    
+    //color = "rgba(" + red + "," + green + "," + blue + "," + Math.random().toString().substring(0,4) + ")";
+    
+    return color;
+}
+
+/**
+    Given a JSON object, it creates the required structure for
+    graphic libraries to render.
+    
+    @date 20160323
+    @author Daniel Cantarín
+*/
+function process_json( obj ) {
+    
+    var nodecount = 0;
+    
+    obj.root.root = true;
+    title = obj.root.title
+    obj.root.title_small = (title.length > 25) 
+        ? title.substring(0,22) + "..." 
+        : title;
+        
+    obj.root.color      = color_by_sentiment(obj.root.sentiment);
+    obj.root.opacity    = opacity_by_sentiment(obj.root.sentiment);
+    var color           = random_color();
+    //obj.root.border     = color;
+    
+    var nodes   = [ { 
+        "data" : obj.root,
+        "css"  : {
+            "width" : obj.root.children.length * 30,
+            "height": obj.root.children.length * 30
+        }
+    }];
+    var i       = 0;
+    
+    // Hijos de root
+    for ( i = 0; i < obj.root.children.length; i++ ) {
+        var tmp         = obj.root.children[i];
+        tmp.color       = color_by_sentiment(tmp.sentiment);
+        tmp.opacity     = opacity_by_sentiment(tmp.sentiment);
+        tmp.index = 1;
+        tmp.title_small = (tmp.title.length > 25) 
+            ? tmp.title.substring(0,22) + "..." 
+            : tmp.title;
+        var len     =   (tmp.children) 
+                    ?   tmp.children.length + 1
+                    :   1;
+        
+        nodes.push( { 
+            "data" : tmp,
+            "css"  : {
+                "width" : len * 20,
+                "height": len * 20
+            } 
+        });
+        nodes.push( { "data" : { 
+            "id"        : obj.root.id + tmp.id, 
+            "source"    : obj.root.id, 
+            "target"    : tmp.id,
+            "color"     : color,
+            "union"     : true,
+            "width"     : 30 / tmp.index
+        } } );
+    }
+    
+    // Nietos de root
+    for ( i = 1; i < nodes.length; i++ ) {
+        var tmp  = nodes[i];
+        if (tmp.data.children !== undefined) {
+            //console.log(tmp.data.title + " :" + tmp.data.children.length + " hijos.");
+            color = random_color();
+            for ( var i2 = 1; i2 < tmp.data.children.length; i2++ ) {
+                var tmp2 = tmp.data.children[i2];
+                tmp2.index = 2;
+                tmp2.color       = color_by_sentiment(tmp2.sentiment);
+                //tmp2.border      = color;
+                tmp2.opacity     = opacity_by_sentiment(tmp2.sentiment);
+                tmp2.title_small = (tmp2.title.length > 25) 
+                    ? tmp2.title.substring(0,22) + "..." 
+                    : tmp2.title;
+                
+                var len     =   (tmp2.children) 
+                            ?   tmp2.children.length + 1
+                            :   1;
+                nodes.push( { 
+                    "data" : tmp2,
+                    "css"  : {
+                        "width" : len * 20,
+                        "height": len * 20
+                    } 
+                });
+                nodes.push( { "data" : { 
+                    "id"        : tmp.data.id + tmp2.id, 
+                    "source"    : tmp.data.id, 
+                    "target"    : tmp2.id,
+                    "color"     : color,
+                    "union"     : true,
+                    "width"     : 30 / tmp2.index
+                } } );
+                
+                // Bisnietos de root
+                if (tmp2.children) {
+                    for ( var i3 = 1; i3 < tmp2.children.length; i3++ ) {
+                        color           = random_color();
+                        var tmp3        = tmp2.children[i3];
+                        tmp3.index      = 3;
+                        //tmp3.border     = color;
+                        tmp3.color      = color_by_sentiment(tmp3.sentiment);
+                        tmp3.opacity    = opacity_by_sentiment(tmp3.sentiment);
+                        tmp3.title_small = (tmp3.title.length > 25) 
+                            ? tmp3.title.substring(0,22) + "..." 
+                            : tmp3.title;
+                        nodes.push( { "data" : tmp3 });
+                        nodes.push( { "data" : { 
+                            "id"        : tmp2.id + tmp3.id, 
+                            "source"    : tmp2.id, 
+                            "target"    : tmp3.id,
+                            "color"     : color,
+                            "union"     : true,
+                            "width"     : 30 / tmp3.index
+                        } } );
+                    }
+                } else {
+                    //console.log("tmp2 no tiene hijos" , tmp2);
+                }
+            }
+        }
+    }
+    
+    var urls = [];
+    for (var i = 0; i < nodes.length; i++){
+        if ( nodes[i].data && nodes[i].data.union === undefined) {
+            if ( urls.indexOf( nodes[i].data.url ) < 0 ) {
+                urls.push( nodes[i].data.url );
+                nodecount++;
+            }
+        }
+    }
+    
+    window.nodeset = {
+        "nodes"     : nodes,
+        "nodecount" : nodecount
+    };
+    
+    return {
+        "nodes" : nodes
+    };
+}
+
+function show_data_overlay( obj ){
+    
+    var cities      = (obj.geo !== null && obj.geo.cities !== null && obj.geo.cities instanceof Array) 
+                    ? array_to_divs(obj.geo.cities , "tag-styled")
+                    : "";
+    
+    var countries   = (obj.geo !== null && obj.geo.countries !== null && obj.geo.countries instanceof Array)
+                    ? array_to_divs(obj.geo.countries , "tag-styled")
+                    : "";
+    
+    var categories  = (obj.categories !== null && obj.categories instanceof Array)
+                    ? array_to_divs( obj.categories, "tag-styled")
+                    : "";
+    
+    var tags        = (obj.tags !== null && obj.tags instanceof Array)
+                    ? array_to_divs(obj.tags, "tag-styled")
+                    : "";
+    
+    var url         = (obj.wp_url !== null && obj.wp_url !== undefined)
+                    ? obj.wp_url
+                    : obj.url;
+
+    $("#title-news").html( obj.title );
+    $("#cities .value").html( cities );
+    $("#countries .value").html( countries );
+    $("#categories .value").html( categories );
+    $("#tags .value").html( tags );
+    $("#sentiment .value").html( "<div class=\"tag-styled\">" + ((obj.sentiment !== null) ? obj.sentiment : "&nbsp;") +"</div>");
+    $("#date .value").html( "<div class=\"tag-styled\">" + ((obj.date !== "None" && obj.date !== null) ? obj.date.split(".")[0] : "&nbsp;") + "</div>");
+    $("#source .value").html( "<div class=\"tag-styled\">" + ((obj.source !== null) ? obj.source : "&nbsp;") + "</div>");
+    $("#summary .value").html( "<div class=\"summary\">" + ((obj.summary !== null) ? obj.summary : "&nbsp;") + "</div>");
+    $("#url .value").html( "<div class=\"tag-styled\" style=\"overflow-x:auto;\"><a href=\"" + url + "\" target=\"_blank\">" + url + "</a></div>" );
+    $("#leyenda").hide(100);
+    $("#stats").hide(100);
+    $("#powered-by").hide(100);
+    $("#titulo-noticia").hide(100);
+    $("#visualizaciones").hide(100);
+    $("#data-overlay").slideDown(500);
+}
+
+function array_to_divs( arr , styles) {
+    var ret = "";
+    
+    for (var i = 0; i < arr.length; i++) {
+        if (arr[i] === undefined || arr[i] === null) {
+            continue;
+        }
+        ret += "<div ";
+        if (styles !== undefined) {
+            ret += "class=\"" + styles + "\" ";
+        } 
+        ret += ">" + arr[i] + "</div>";
+    }
+    
+    return ret;
+}
+
+function hide_data_overlay() {
+    $("#data-overlay").slideUp(250).promise().then(
+        function() {
+            $("#leyenda").show(500);
+            $("#stats").show(500);
+            $("#powered-by").show(500);
+            $("#visualizaciones").show(500);
+        }
+    );
+}
+
+function center_cy() {
+    cy.$("node").unselect();
+    cy.animate({
+        center: { eles: cy.$("node[root]") },
+        zoom : 0.5
+    });
+}
+
+function mostrar_titulo( titulo, fecha ) {
+    html = "<h4>" + titulo;
+    if (fecha !== undefined && fecha !== null && fecha !== "None") {
+        html += "<br/>date : " + fecha.split(".")[0];
+    }
+    $("#titulo-noticia").html( html +  "</h4>" ).fadeIn(500);
+}
+
+function ocultar_titulo() {
+    $("#titulo-noticia").fadeOut(250);
+}
+
+function setup_cy() {
+    
+    
+    
+    var tmp_resize = function() {
+        $("#cy")
+        .css("width", $(document).width() + "px")
+        .css("height",$(document).height() + "px");
+        
+        if (window.cy != null) {
+            console.log("cy not null");
+            window.setTimeout(10,window.cy.resize);
+        } else {
+            console.log("cy es null");
+        }
+    }
+    tmp_resize();
+    
+    $("#data-overlay").hide();
+    
+    window.cy = cytoscape({
+        container: document.getElementById('cy'), // container to render in
+        elements: process_json( galaxy_json ).nodes,
+        style: [ // the stylesheet for the graph
+            {
+          selector: 'node',
+          style: {
+            'background-color': 'data(color)',
+            //'background-opacity': 'data(opacity)',
+            //'border-width': '10px',
+            //'border-color': 'data(border)',
+            'border-width': '1px',
+            'border-color': 'black',
+            'shadow-color'  : 'black',
+            'shadow-opacity' : '0.8',
+            'shadow-offset-x' : '-2',
+            'shadow-offset-y' : '2',
+            'label': 'data(title_small)'
+          }
+        },
+        {
+          selector: 'node[root]',
+          style: {
+            /*'width'  : 100,
+            'height' : 100,
+            'background-color': 'red',
+            'label': 'data(title_small)'*/
+            'border-width': '10px',
+            'background-image' : 'selected.png'
+          }
+        },
+        {
+          selector: 'node[index=1]',
+          style: {
+            'width'  : 'data(children.length) * 10',
+            'height' : 'data(children.length) * 10'
+          }
+        },
+        {
+          selector: 'node[index>1]',
+          style: {
+            'width'  : 'data(index) * 100',
+            'height' : 'date(index) * 100'
+          }
+        },
+        {
+          selector: 'edge',
+          style: {
+            'width': 'data(width)',
+            //'line-color': 'data(color)',
+            'line-color': 'blue',
+            'line-color-opacity' : '0.5',
+            'target-arrow-color': 'black',
+            'target-arrow-shape': 'triangle',
+            'line-style' : 'dotted',
+            'source-arrow-shape': 'circle',
+            'source-arrow-color': 'black'
+          }
+        },
+        {
+          selector: 'node:selected',
+          style: {
+            'line-color': '#E4860D',
+            'line-weight': 3
+          }
+        },
+        {
+            selector : ':active',
+            style: {
+                'line-color': '#E4860D',
+                'line-style': 'solid',
+                'overlay-color': '#c0c0c0',
+                //'overlay-padding': '100px',
+                'overlay-opacity': 100
+            }
+        }
+        ],
+        layout: {
+            name: 'concentric',
+            concentric: function( node ){
+                return node.degree();
+            },
+            levelWidth: function( nodes ){
+                return 2;
+            }
+        }
+
+    });
+    
+    
+    cy.on("click","node", function(evt) {
+        console.log(evt.cyTarget.data().color);
+        var j = cy.$("#" + evt.cyTarget.data().id);
+        j.select();
+        //cy.center( j , 500);
+        cy.animate({
+            fit: { eles: "#" + evt.cyTarget.data().id }
+        });
+        show_data_overlay(evt.cyTarget.data());
+    });
+    
+    /*
+    cy.on("click", function(evt) {
+        //chequeo que no esté haciendo click en algún elemento de cy.
+        if ( evt.cyTarget[0] === undefined ) {
+            center_cy();
+            hide_data_overlay();
+        }
+    });
+    */
+    
+    cy.on("mouseover","node", function(evt) {
+        if (evt.originalEvent.target && !evt.originalEvent.target.classList.contains("mouseover")) {
+            evt.originalEvent.target.classList.add("mouseover");
+            var edges = evt.cyTarget.connectedEdges();
+            edges.css("line-style", "solid");
+            edges.css("line-color", "black");
+            
+            var vecinos = evt.cyTarget.neighborhood();
+            var demas = cy.elements().difference( vecinos );
+            demas.css("opacity", "0.3");
+            evt.cyTarget.css("opacity", "1");
+            
+            mostrar_titulo( evt.cyTarget.data().title, evt.cyTarget.data().date );
+            
+        }
+    });
+    
+    cy.on("mouseout","node", function(evt) {
+        if (evt.originalEvent.target && evt.originalEvent.target.classList.contains("mouseover")) {
+            evt.originalEvent.target.classList.remove("mouseover");
+            var edges = evt.cyTarget.connectedEdges();
+            edges.css("line-style", "dotted");
+            edges.css("line-color", "blue");
+            
+            var vecinos = evt.cyTarget.neighborhood();
+            var demas = cy.elements().difference( vecinos );
+            demas.css("opacity", "1");
+            
+            ocultar_titulo();
+        }
+    });
+
+/*
+    cy.$('node').qtip({
+        content: function(){ return this.data().title },
+        show: {
+            event: 'mouseover', 
+            solo: true, // hide all other tooltips.
+        },
+        hide: {
+            event: 'mouseout click',
+        },
+        position: {
+            my: 'top center',
+            at: 'bottom center'
+        },
+        style: {
+            classes: 'qtip-bootstrap',
+            tip: {
+                width: 16,
+                height: 8
+            }
+        }
+    });
+*/
+    
+    
+    $(window).on(
+        "resize", tmp_resize
+    ).on(
+        "keyup" , function(evt) {
+            
+            // Si se presiona "escape" y el overlay está visible
+            if (evt.keyCode == 27 && $("#data-overlay")[0].offsetParent !== null) {
+                center_cy();
+                hide_data_overlay();
+            }
+            
+        }
+    );
+    
+    $("#close-overlay").on("click", function(){
+        center_cy();
+        hide_data_overlay();
+    });
+    
+    
+    $("#loading-overlay").fadeOut(1000);
+    $("#stats #nodecount").html( nodeset.nodecount );
+}
+
+wc = null;
+
+function setup_wordcloud( arr ) {
+    var options = {
+        list : arr,
+        gridSize: 18,
+        weightFactor: 8,
+        fontFamily: 'dosisbook',
+        color:"#009",
+        backgroundColor: '#fff',
+        minSize: 10
+    };
+    wc = WordCloud("wc", options);
+    
+}
+
+function show_wordcloud(obj) {
+    $("#cy").fadeOut(100);
+    $("#visualizaciones div.selected").removeClass("selected");
+    $(obj).addClass("selected");
+    
+    if (wc === null) {
+        
+        //cargar los datos
+        $("#wc").css("cursor","wait").show(100);
+        
+        // primero junto los ids de nodos
+        var nodos = cy.nodes();
+        var ids   = [];
+        for (var i = 0; i < nodos.length; i++) {
+            ids.push( nodos[i].data().id );
+        }
+        
+        $.get(
+            location.protocol + "//" + location.host + "/get_cloud_data.php?news_id=" + wp_id + "&related_ids=" + ids.join(",")
+        ).promise().then(
+            function (resp, status, xhr) {
+                //console.log(resp,status,xhr);
+                if (resp.status === "success") {
+                    topic_arr = resp.data.cloud_data;
+                    var tmp = function() {setup_wordcloud(topic_arr); $("#wc").css("cursor","default");};
+                    setTimeout(tmp,200);
+                } else {
+                    var message = resp.data.message;
+                    alert("error leyendo datos de la topic cloud:\n" + message);
+                }
+            }
+        );
+        
+    } else {
+        $("#wc").fadeIn(500);
+    }
+    
+}
+
+function show_galaxy(obj) {
+    $("#wc").fadeOut(100);
+    $("#visualizaciones div.selected").removeClass("selected");
+    $(obj).addClass("selected");
+    $("#cy").fadeIn(500);
+}
