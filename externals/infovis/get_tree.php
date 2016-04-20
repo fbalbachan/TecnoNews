@@ -38,7 +38,7 @@ if (trim($json) == "") {
 
 $ret = Array(
     "status"    =>  $status,
-    "data"      =>  Array( "tree" => $json, "message" => $message )
+    "data"      =>  Array( "tree" => json_decode($json,true), "message" => $message )
 );
 
 if ($status === "error") {
