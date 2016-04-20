@@ -593,8 +593,8 @@ function setup_galaxysummary() {
         var nodos   = cy.nodes();
         var tmphtml = "";
         var sorter  = function (a, b){
-            var aName = a.data().id;
-            var bName = b.data().id; 
+            var aName = a.data().date;
+            var bName = b.data().date; 
             return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
         }
         

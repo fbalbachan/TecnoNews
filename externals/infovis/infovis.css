@@ -420,7 +420,6 @@ h4 {
     color       :   #000099;
     font-size   :   200%;
     position    :   relative;
-    display     :   inline-block;
     width       :   50%;
     left        :   25%;
 }
@@ -432,8 +431,7 @@ h4 {
 #gs .summary {
     position        :   relative;
     width           :   50%;
-    left            :   25;
-    display         :   inline-block;
+    left            :   25%;
     border-top      :   black 2px solid;
     border-bottom   :   black 1px solid;
 }
