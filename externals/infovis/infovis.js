@@ -590,19 +590,30 @@ function show_galaxy(obj) {
 
 function setup_galaxysummary() {
     if (cy !== null && cy !== undefined) {
-        var nodos   = cy.nodes();
+        var tmpnod  = cy.nodes();
+        var nodos   = [];
+        
+        for (var i = 0; i < tmpnod.length; i++) {
+            nodos.push( {
+                "title"     :   tmpnod.data().title,
+                "date"      :   tmpnod.data().date,
+                "summary"   :   tmpnod.data().summary,
+                "id"        :   tmpnod.data().id
+            } );
+        }
+        
         var tmphtml = "";
         var sorter  = function (a, b){
-            var aName = a.data().date;
-            var bName = b.data().date; 
+            var aName = a.date;
+            var bName = b.date; 
             return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
         }
         
         nodos.sort( sorter );
         
         for (var i = 0; i < nodos.length; i++) {
-            tmp      = "<div class=\"title\"><span class=\"date\">(" + nodos[i].data().date.split(".")[0] + ")</span> - " + nodos[i].data().title + "</div>\n";
-            tmp     += "<div class=\"summary\">" + nodos[i].data().summary + "</div>";
+            tmp      = "<div class=\"title\" objectid=\"" + nodos[i].id + "\"  ><span class=\"date\">(" + nodos[i].date.split(".")[0] + ")</span> - " + nodos[i].title + "</div>\n";
+            tmp     += "<div class=\"summary\">" + nodos[i]..summary + "</div>";
             
             tmphtml += tmp;
         }
