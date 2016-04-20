@@ -25,7 +25,7 @@
         <script type="text/javascript">
             <?php echo file_get_contents("jquery.js") ;?>
         </script>
-        <script type="text/javascript" src="/wp-content/themes/nanomag/js/wordcloud2/src/wordcloud2.js">
+        <script type="text/javascript">
             <?php echo file_get_contents("wordcloud2/src/wordcloud2.js");?>
         </script>
         <script type="text/javascript">
@@ -33,10 +33,6 @@
         </script>
         <style>
             <?php echo file_get_contents("infovis.min.css");?>
-            
-            
-            
-            
         </style>
         
         <script type="text/javascript">
