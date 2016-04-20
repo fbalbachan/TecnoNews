@@ -4,6 +4,7 @@ if (!isset($_REQUEST["news_id"])) {
     exit();
 }
 
+header('Content-Type: application/json; charset=UTF-8');
 ini_set('memory_limit', '500M');
 
 $filename   = "/home/nlt-runner/tree-jsons/" . $_REQUEST["news_id"] . ".json";

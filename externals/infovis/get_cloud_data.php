@@ -1,5 +1,7 @@
 <?php
 
+header('Content-Type: application/json; charset=UTF-8');
+
 $filename   = "/home/nlt-runner/wordcloud-jsons/" . $_REQUEST["news_id"] . ".json";
 $ret        = Array();
 $json       = "";
