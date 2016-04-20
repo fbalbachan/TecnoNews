@@ -57,7 +57,7 @@ if (trim($json) == "") {
 
 $ret = Array(
     "status"    =>  $status,
-    "data"      =>  Array( "cloud_data" => $json, "message" => $message )
+    "data"      =>  Array( "cloud_data" => json_decode($json), "message" => $message )
 );
 
 if ($status === "error") {
