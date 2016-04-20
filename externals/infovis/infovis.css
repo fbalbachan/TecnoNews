@@ -415,13 +415,18 @@ h4 {
     overflow-y  :   auto;
 }
 
-#gs .title {
+#gs div {
     font-family :   dosisbook;
-    color       :   #000099;
-    font-size   :   200%;
     position    :   relative;
     width       :   50%;
     left        :   25%;
+}
+
+#gs .title {
+    color           :   #000099;
+    font-size       :   125%;
+    margin-top      :   50px;
+    border-bottom   :   black 2px solid;
 }
 
 #gs .date {
@@ -429,9 +434,5 @@ h4 {
 }
 
 #gs .summary {
-    position        :   relative;
-    width           :   50%;
-    left            :   25%;
-    border-top      :   black 2px solid;
-    border-bottom   :   black 1px solid;
+    margin-top  :   5px;
 }

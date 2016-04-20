@@ -14,6 +14,7 @@
         <link href="infovis.css" rel="stylesheet" type="text/css" />
         
         <script type="text/javascript">
+            $               = jQuery;
             var wp_id       = <?php echo (isset($_REQUEST["news_id"]) ) ? $_REQUEST["news_id"] : 0; ?> ;
             var topic_arr   = [["Not enough data for topic cloud", 3]];
             var galaxy_json = {};
