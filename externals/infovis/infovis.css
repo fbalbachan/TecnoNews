@@ -356,7 +356,6 @@ h4 {
     position    :   absolute;
     width       :   100%;
     height      :   100%;
-    border      :   black 1px solid;
     left        :   0px;
     top         :   0px;
     z-index     :   1;
@@ -403,4 +402,38 @@ h4 {
 
 #visualizaciones p:hover {
     text-decoration     :   underline;
+}
+
+#gs {
+    position    :   absolute;
+    width       :   100%;
+    height      :   100%;
+    left        :   0px;
+    top         :   0px;
+    z-index     :   1;
+    overflow-x  :   hidden;
+    overflow-y  :   auto;
+}
+
+#gs .title {
+    font-family :   dosisbook;
+    color       :   #000099;
+    font-size   :   200%;
+    position    :   relative;
+    display     :   inline-block;
+    width       :   50%;
+    left        :   25%;
+}
+
+#gs .date {
+    font-weight :   bold;
+}
+
+#gs .summary {
+    position        :   relative;
+    width           :   50%;
+    left            :   25;
+    display         :   inline-block;
+    border-top      :   black 2px solid;
+    border-bottom   :   black 1px solid;
 }

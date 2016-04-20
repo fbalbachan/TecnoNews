@@ -2,6 +2,8 @@
 window.cy = null;
 window.$  = jQuery;
 
+window.gs = null; //galaxy summary
+
 
 /**
     Given a sentiment string, returns an adequate color.
@@ -539,6 +541,7 @@ function setup_wordcloud( arr ) {
 
 function show_wordcloud(obj) {
     $("#cy").fadeOut(100);
+    $("#gs").fadeOut(100);
     $("#visualizaciones div.selected").removeClass("selected");
     $(obj).addClass("selected");
     
@@ -578,7 +581,53 @@ function show_wordcloud(obj) {
 
 function show_galaxy(obj) {
     $("#wc").fadeOut(100);
+    $("#gs").fadeOut(100);
     $("#visualizaciones div.selected").removeClass("selected");
     $(obj).addClass("selected");
     $("#cy").fadeIn(500);
+}
+
+
+function setup_galaxysummary() {
+    if (cy !== null && cy !== undefined) {
+        var nodos   = cy.nodes();
+        var tmphtml = "";
+        var sorter  = function (a, b){
+            var aName = a.data().id;
+            var bName = b.data().id; 
+            return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
+        }
+        
+        nodos.sort( sorter );
+        
+        for (var i = 0; i < nodos.length; i++) {
+            tmp      = "<div class=\"title\"><span class=\"date\">(" + nodos[i].data().date.split(".")[0] + ")</span> - " + nodos[i].data().title + "</div>\n";
+            tmp     += "<div class=\"summary\">" + nodes[i].data().summary + "</div>";
+            
+            tmphtml += tmp;
+        }
+        
+        gs = tmphtml;
+        $("#gs").html( tmphtml );
+        
+    }
+}
+
+
+function show_galaxysummary(obj) {
+    $("#cy").fadeOut(100);
+    $("#wc").fadeOut(100);
+    $("#visualizaciones div.selected").removeClass("selected");
+    $(obj).addClass("selected");
+    
+    if (gs === null || gs === undefined) {
+        //setup
+        $("#gs").css("cursor","wait").show(100);
+        setup_galaxysummary();
+        $("#gs").css("cursor","default");
+        
+    } else {
+        $("#gs").fadeIn(500);
+    }
+    
 }
