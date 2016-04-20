@@ -1,3 +1,5 @@
+edición
+constructor
 2015
 renta
 viajero
