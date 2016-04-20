@@ -375,6 +375,7 @@ h4 {
     cursor              :   default;
     z-index             :   2;
     opacity             :   0.5;
+    font-size           :   15px;
 }
 
 #visualizaciones:hover {
