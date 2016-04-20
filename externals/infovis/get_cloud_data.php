@@ -32,7 +32,7 @@ if (!isset($_REQUEST["related_ids"])) {
 try {
 
     if (!file_exists($filename)) {
-        $tmp = shell_exec( "/usr/bin/generate-json-topic-cloud es " . $_REQUEST["news_id"] . " " . $_REQUEST["related_ids"] );
+        $tmp = shell_exec( "/usr/bin/generate-json-topic-cloud " . $_REQUEST["news_id"] . " " . $_REQUEST["related_ids"] );
     }
 
     try {
