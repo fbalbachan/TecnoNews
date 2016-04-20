@@ -14,6 +14,7 @@
         <link href="infovis.css" rel="stylesheet" type="text/css" />
         
         <script type="text/javascript">
+            $               = jQuery;
             var wp_id       = <?php echo (isset($_REQUEST["news_id"]) ) ? $_REQUEST["news_id"] : 0; ?> ;
             var topic_arr   = [["Not enough data for topic cloud", 3]];
             var galaxy_json = {};
@@ -123,12 +124,14 @@
             <h4>Select Infovis Graph</h4>
             <p><div class="round selected" onclick="show_galaxy(this);"></div> NewsGalaxy</p>
             <p><div class="round" onclick="show_wordcloud(this);"></div> TopicCloud</p>
+            <p><div class="round" onclick="show_galaxysummary(this);"></div> GalaxySummary</p>
         </div>
 
         <div id="powered-by">
             <a href="http://natural.do" target="_blank"><img src="naturaltech2.png" /></a>
         </div>
         <div id="wc">&nbsp;</div>
+        <div id="gs">&nbsp;</div>
         <div id="cy"></div>
     </body>
 </html>
