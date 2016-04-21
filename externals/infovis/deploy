@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cp -f infovis.* /opt/wordpress-4.1-0/apps/wordpress/htdocs/
+cp -f galaxy.php /opt/wordpress-4.1-0/apps/wordpress/htdocs/
+cp -f galaxy2.php /opt/wordpress-4.1-0/apps/wordpress/htdocs/
+
