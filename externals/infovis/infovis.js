@@ -255,11 +255,7 @@ function show_data_overlay( obj ){
     $("#source .value").html( "<div class=\"tag-styled\">" + ((obj.source !== null) ? obj.source : "&nbsp;") + "</div>");
     $("#summary .value").html( "<div class=\"summary\">" + ((obj.summary !== null) ? obj.summary : "&nbsp;") + "</div>");
     $("#url .value").html( "<div class=\"tag-styled\" style=\"overflow-x:auto;\"><a href=\"" + url + "\" target=\"_blank\">" + url + "</a></div>" );
-    $("#leyenda").hide(100);
-    $("#stats").hide(100);
-    $("#powered-by").hide(100);
-    $("#titulo-noticia").hide(100);
-    $("#visualizaciones").hide(100);
+    $("#leyenda, #stats, #powered-by, #titulo-noticia, #visualizaciones, #download").hide(100);
     $("#data-overlay").slideDown(500);
 }
 
@@ -283,10 +279,7 @@ function array_to_divs( arr , styles) {
 function hide_data_overlay() {
     $("#data-overlay").slideUp(250).promise().then(
         function() {
-            $("#leyenda").show(500);
-            $("#stats").show(500);
-            $("#powered-by").show(500);
-            $("#visualizaciones").show(500);
+            $("#leyenda, #stats, #powered-by, #visualizaciones, #download").show(500);
         }
     );
 }
