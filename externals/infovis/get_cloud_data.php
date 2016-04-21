@@ -1,5 +1,7 @@
 <?php
 
+ob_start("ob_gzhandler");
+header('Cache-Control: public');
 header('Content-Type: application/json; charset=UTF-8');
 
 $filename   = "/home/nlt-runner/wordcloud-jsons/" . $_REQUEST["news_id"] . ".json";
