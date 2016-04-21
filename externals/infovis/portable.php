@@ -25,13 +25,13 @@
         <meta charset="utf-8">
         <title>NaturalTech Infovis</title>
         <script type="text/javascript">
-            <?php echo file_get_contents("cytoscape.js-2.6.6/cytoscape.js") ;?>
+            <?php echo file_get_contents("cytoscape.js-2.6.6/cytoscape.min.js") ;?>
         </script>
         <script type="text/javascript">
             <?php echo file_get_contents("jquery.js") ;?>
         </script>
         <script type="text/javascript">
-            <?php echo file_get_contents("wordcloud2/src/wordcloud2.js");?>
+            <?php echo file_get_contents("wordcloud2/src/wordcloud2.min.js");?>
         </script>
         <script type="text/javascript">
             <?php echo file_get_contents("infovis.min.js");?>
