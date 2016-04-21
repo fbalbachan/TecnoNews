@@ -363,7 +363,7 @@ h4 {
 
 #visualizaciones {
     width               :   120px;
-    height              :   120px;
+    height              :   130px;
     background-color    :   rgba(255,255,255, 1);
     overflow            :   hidden;
     position            :   absolute;
@@ -448,4 +448,25 @@ h4 {
     text-align      : right;
     float           : left;
     margin-top      : 50px;
+}
+
+#download {
+    width               :   120px;
+    height              :   80px;
+    background-color    :   rgba(255,255,255, 1);
+    overflow            :   hidden;
+    position            :   absolute;
+    right               :   10px;
+    bottom              :   100px;
+    box-shadow          :   0px 0px 5px black;
+    font-family         :   dosisbook;
+    padding             :   5px;
+    cursor              :   default;
+    z-index             :   2;
+    opacity             :   0.5;
+    font-size           :   15px;
+}
+
+#download:hover {
+    opacity             :   1;
 }
