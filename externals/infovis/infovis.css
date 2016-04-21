@@ -437,3 +437,8 @@ h4 {
 #gs .summary {
     margin-top  :   5px;
 }
+
+#gs .news-number {
+    display         :   inline;
+    font-size       :   125%;
+}

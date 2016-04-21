@@ -3,16 +3,21 @@
     header('Cache-Control: public');
     // Expire in one day
     header('Expires: ' . gmdate('D, d M Y H:i:s', time() + 86400) . ' GMT');
+    header('Content-Type: application/octet-stream');
+    header("Content-Transfer-Encoding: Binary"); 
+    header("Content-disposition: attachment; filename=\"NaturalTech Infovis " . $_REQUEST["news_id"] . ".html\"");
     
-    $path       = 'naturaltech2.png';
-    $type       = pathinfo($path, PATHINFO_EXTENSION);
-    $data       = file_get_contents($path);
-    $ntbase64   = 'data:image/' . $type . ';base64,' . base64_encode($data);
+    function portable_base64( $path ) {
+        $ret    = "";
+        $type   = pathinfo($path, PATHINFO_EXTENSION);
+        $data   = file_get_contents($path);
+        $ret    = 'data:image/' . $type . ';base64,' . base64_encode($data);
+        return $ret;
+    }
     
-    $path       = 'selected.png';
-    $type       = pathinfo($path, PATHINFO_EXTENSION);
-    $data       = file_get_contents($path);
-    $sbase64    = 'data:image/' . $type . ';base64,' . base64_encode($data);
+    $ntbase64   = portable_base64("naturaltech2.png");
+    $sbase64    = portable_base64("selected.png");
+    
 ?>
 <!doctype html>
 <html>
@@ -33,6 +38,46 @@
         </script>
         <style>
             <?php echo file_get_contents("infovis.min.css");?>
+        </style>
+        
+        <style>
+        @font-face {
+            font-family: 'dosisbook';
+            src: url('fonts/dosis-kit/dosis-book-webfont.eot');
+            src: url('fonts/dosis-kit/dosis-book-webfont.eot?#iefix') format('embedded-opentype'),
+                 url('fonts/dosis-kit/dosis-book-webfont.woff2') format('woff2'),
+                 url('fonts/dosis-kit/dosis-book-webfont.woff') format('woff'),
+                 url('fonts/dosis-kit/dosis-book-webfont.ttf') format('truetype'),
+                 url('fonts/dosis-kit/dosis-book-webfont.svg#dosisbook') format('svg');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'exoregular';
+            src: url('fonts/exo-kit/exo-regular-webfont.eot');
+            src: url('fonts/exo-kit/exo-regular-webfont.eot?#iefix') format('embedded-opentype'),
+                 url('fonts/exo-kit/exo-regular-webfont.woff2') format('woff2'),
+                 url('fonts/exo-kit/exo-regular-webfont.woff') format('woff'),
+                 url('fonts/exo-kit/exo-regular-webfont.ttf') format('truetype'),
+                 url('fonts/exo-kit/exo-regular-webfont.svg#exoregular') format('svg');
+            font-weight: normal;
+            font-style: normal;
+
+        }
+
+        @font-face {
+            font-family: 'exodemibold';
+            src: url('fonts/exo-kit/exo-semibold-webfont.eot');
+            src: url('fonts/exo-kit/exo-semibold-webfont.eot?#iefix') format('embedded-opentype'),
+                 url('fonts/exo-kit/exo-semibold-webfont.woff2') format('woff2'),
+                 url('fonts/exo-kit/exo-semibold-webfont.woff') format('woff'),
+                 url('fonts/exo-kit/exo-semibold-webfont.ttf') format('truetype'),
+                 url('fonts/exo-kit/exo-semibold-webfont.svg#exodemibold') format('svg');
+            font-weight: normal;
+            font-style: normal;
+
+        }
         </style>
         
         <script type="text/javascript">
