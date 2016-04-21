@@ -13,7 +13,7 @@ $message    = "";
 if (!isset($_REQUEST["news_id"])) {
     $ret = Array(
         "status"    =>  "error",
-        "data"      =>  []
+        "data"      =>  [],
         "message"   => "News id expected."
     );
 
