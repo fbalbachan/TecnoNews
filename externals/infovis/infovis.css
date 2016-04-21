@@ -429,6 +429,7 @@ h4 {
     margin-top      :   50px;
     border-bottom   :   black 2px solid;
     left            :   0px;
+    display         :   inline-block;
 }
 
 #gs .date {
