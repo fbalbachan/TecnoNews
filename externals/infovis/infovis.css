@@ -428,6 +428,7 @@ h4 {
     font-size       :   125%;
     margin-top      :   50px;
     border-bottom   :   black 2px solid;
+    left            :   0px;
 }
 
 #gs .date {
@@ -439,6 +440,12 @@ h4 {
 }
 
 #gs .news-number {
-    display         :   inline;
-    font-size       :   125%;
+    display         : inline-block;
+    font-size       : 125%;
+    width           : 25%;
+    left            : 0px;
+    text-align      : right;
+    float           : left;
+    margin-top      : 50px;
+    padding-right   : 15px;
 }
