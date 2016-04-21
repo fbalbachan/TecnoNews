@@ -44,23 +44,23 @@
         @font-face {
             font-family: 'dosisbook';
             src: url(<?php echo "'" . portable_base64('fonts/dosis-kit/dosis-book-webfont.eot') . "'"; ?>);
-            src: url(<?php echo "'" . portable_base64('fonts/dosis-kit/dosis-book-webfont.eot' . "'"; ?>) format('embedded-opentype'),
-                 url(<?php echo "'" . portable_base64('fonts/dosis-kit/dosis-book-webfont.woff2' . "'"; ?>) format('woff2'),
-                 url(<?php echo "'" . portable_base64('fonts/dosis-kit/dosis-book-webfont.woff' . "'"; ?>) format('woff'),
-                 url(<?php echo "'" . portable_base64('fonts/dosis-kit/dosis-book-webfont.ttf' . "'"; ?>) format('truetype'),
-                 url(<?php echo "'" . portable_base64('fonts/dosis-kit/dosis-book-webfont.svg' . "'"; ?>) format('svg');
+            src: url(<?php echo "'" . portable_base64('fonts/dosis-kit/dosis-book-webfont.eot') . "'"; ?>) format('embedded-opentype'),
+                 url(<?php echo "'" . portable_base64('fonts/dosis-kit/dosis-book-webfont.woff2') . "'"; ?>) format('woff2'),
+                 url(<?php echo "'" . portable_base64('fonts/dosis-kit/dosis-book-webfont.woff') . "'"; ?>) format('woff'),
+                 url(<?php echo "'" . portable_base64('fonts/dosis-kit/dosis-book-webfont.ttf') . "'"; ?>) format('truetype'),
+                 url(<?php echo "'" . portable_base64('fonts/dosis-kit/dosis-book-webfont.svg') . "'"; ?>) format('svg');
             font-weight: normal;
             font-style: normal;
         }
 
         @font-face {
             font-family: 'exoregular';
-            src: url(<?php echo "'" . portable_base64('fonts/exo-kit/exo-regular-webfont.eot' . "'"; ?>);
-            src: url(<?php echo "'" . portable_base64('fonts/exo-kit/exo-regular-webfont.eot' . "'"; ?>) format('embedded-opentype'),
-                 url(<?php echo "'" . portable_base64('fonts/exo-kit/exo-regular-webfont.woff2' . "'"; ?>) format('woff2'),
-                 url(<?php echo "'" . portable_base64('fonts/exo-kit/exo-regular-webfont.woff' . "'"; ?>) format('woff'),
-                 url(<?php echo "'" . portable_base64('fonts/exo-kit/exo-regular-webfont.ttf' . "'"; ?>) format('truetype'),
-                 url(<?php echo "'" . portable_base64('fonts/exo-kit/exo-regular-webfont.svg' . "'"; ?>) format('svg');
+            src: url(<?php echo "'" . portable_base64('fonts/exo-kit/exo-regular-webfont.eot') . "'"; ?>);
+            src: url(<?php echo "'" . portable_base64('fonts/exo-kit/exo-regular-webfont.eot') . "'"; ?>) format('embedded-opentype'),
+                 url(<?php echo "'" . portable_base64('fonts/exo-kit/exo-regular-webfont.woff2') . "'"; ?>) format('woff2'),
+                 url(<?php echo "'" . portable_base64('fonts/exo-kit/exo-regular-webfont.woff') . "'"; ?>) format('woff'),
+                 url(<?php echo "'" . portable_base64('fonts/exo-kit/exo-regular-webfont.ttf') . "'"; ?>) format('truetype'),
+                 url(<?php echo "'" . portable_base64('fonts/exo-kit/exo-regular-webfont.svg') . "'"; ?>) format('svg');
             font-weight: normal;
             font-style: normal;
 
@@ -68,12 +68,12 @@
 
         @font-face {
             font-family: 'exodemibold';
-            src: url(<?php echo "'" . portable_base64('fonts/exo-kit/exo-semibold-webfont.eot' . "'"; ?>);
-            src: url(<?php echo "'" . portable_base64('fonts/exo-kit/exo-semibold-webfont.eot' . "'"; ?>) format('embedded-opentype'),
-                 url(<?php echo "'" . portable_base64('fonts/exo-kit/exo-semibold-webfont.woff2' . "'"; ?>) format('woff2'),
-                 url(<?php echo "'" . portable_base64('fonts/exo-kit/exo-semibold-webfont.woff' . "'"; ?>) format('woff'),
-                 url(<?php echo "'" . portable_base64('fonts/exo-kit/exo-semibold-webfont.ttf' . "'"; ?> format('truetype'),
-                 url(<?php echo "'" . portable_base64('fonts/exo-kit/exo-semibold-webfont.svg' . "'"; ?>) format('svg');
+            src: url(<?php echo "'" . portable_base64('fonts/exo-kit/exo-semibold-webfont.eot') . "'"; ?>);
+            src: url(<?php echo "'" . portable_base64('fonts/exo-kit/exo-semibold-webfont.eot') . "'"; ?>) format('embedded-opentype'),
+                 url(<?php echo "'" . portable_base64('fonts/exo-kit/exo-semibold-webfont.woff2') . "'"; ?>) format('woff2'),
+                 url(<?php echo "'" . portable_base64('fonts/exo-kit/exo-semibold-webfont.woff') . "'"; ?>) format('woff'),
+                 url(<?php echo "'" . portable_base64('fonts/exo-kit/exo-semibold-webfont.ttf') . "'"; ?> format('truetype'),
+                 url(<?php echo "'" . portable_base64('fonts/exo-kit/exo-semibold-webfont.svg') . "'"; ?>) format('svg');
             font-weight: normal;
             font-style: normal;
 
