@@ -65,19 +65,17 @@
             font-style: normal;
 
         }
-
-        @font-face {
-            font-family: 'exodemibold';
-            src: url(<?php echo "'" . portable_base64('fonts/exo-kit/exo-semibold-webfont.eot') . "'"; ?>);
-            src: url(<?php echo "'" . portable_base64('fonts/exo-kit/exo-semibold-webfont.eot') . "'"; ?>) format('embedded-opentype'),
-                 url(<?php echo "'" . portable_base64('fonts/exo-kit/exo-semibold-webfont.woff2') . "'"; ?>) format('woff2'),
-                 url(<?php echo "'" . portable_base64('fonts/exo-kit/exo-semibold-webfont.woff') . "'"; ?>) format('woff'),
-                 url(<?php echo "'" . portable_base64('fonts/exo-kit/exo-semibold-webfont.ttf') . "'"; ?> format('truetype'),
-                 url(<?php echo "'" . portable_base64('fonts/exo-kit/exo-semibold-webfont.svg') . "'"; ?>) format('svg');
-            font-weight: normal;
-            font-style: normal;
-
+        
+        #data-overlay > #title-news {
+            font-weight     :   bold;
+            text-align      :   center;
+            font-family     :   exoregular;
+            text-shadow     :   0px 0px 15px white;
+            font-size       :   280%;
+            width           :   100%;
+            color           :   white;
         }
+        
         </style>
         
         <script type="text/javascript">
