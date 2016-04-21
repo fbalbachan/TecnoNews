@@ -24,7 +24,7 @@ if (!isset($_REQUEST["news_id"])) {
 if (!isset($_REQUEST["related_ids"])) {
     $ret = Array(
         "status"    =>  "error",
-        "data"      =>  []
+        "data"      =>  [],
         "message"   => "Related news ids expected."
     );
 
