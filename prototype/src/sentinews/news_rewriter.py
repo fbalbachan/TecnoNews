@@ -445,8 +445,9 @@ class NewsRewriter(object):
     def publish(self):
         publisher = BlogPublisher()
         wp_id, wp_url, host_id, image_url = publisher.publish(self.rewritten_entry)
-        publisher.insert_canonical(self.to_insert_canonical, wp_url)
-        publisher.remove_from_portada(self.to_insert_canonical)
+        if host_id == u"entretenimiento_bit":
+            publisher.insert_canonical(self.to_insert_canonical, wp_url)
+            publisher.remove_from_portada(self.to_insert_canonical)
         return wp_id, wp_url, host_id, image_url
 
     def _analyze(self, text):
