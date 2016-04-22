@@ -1,5 +1,7 @@
 <?php
 
+ob_start("ob_gzhandler");
+header('Cache-Control: public');
 header('Content-Type: application/json; charset=UTF-8');
 
 $filename   = "/home/nlt-runner/wordcloud-jsons/" . $_REQUEST["news_id"] . ".json";
@@ -11,7 +13,7 @@ $message    = "";
 if (!isset($_REQUEST["news_id"])) {
     $ret = Array(
         "status"    =>  "error",
-        "data"      =>  []
+        "data"      =>  [],
         "message"   => "News id expected."
     );
 
@@ -22,7 +24,7 @@ if (!isset($_REQUEST["news_id"])) {
 if (!isset($_REQUEST["related_ids"])) {
     $ret = Array(
         "status"    =>  "error",
-        "data"      =>  []
+        "data"      =>  [],
         "message"   => "Related news ids expected."
     );
 

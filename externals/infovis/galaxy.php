@@ -126,7 +126,13 @@
             <p><div class="round" onclick="show_wordcloud(this);"></div> TopicCloud</p>
             <p><div class="round" onclick="show_galaxysummary(this);"></div> GalaxySummary</p>
         </div>
-
+        
+        <div id="download">
+            <h4>Download Portable Version</h4>
+            <p><a href="/infovis/portable.php?news_id=<?php echo (isset($_REQUEST["news_id"]) ) ? $_REQUEST["news_id"] : 0; ?>" class="download-link" target="downframe"> Click Here </a></p>
+            <iframe style="display:none;" id="downframe" name="downframe"></iframe>
+        </div>
+        
         <div id="powered-by">
             <a href="http://natural.do" target="_blank"><img src="naturaltech2.png" /></a>
         </div>
