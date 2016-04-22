@@ -1,5 +1,6 @@
 [go]
 
+question_verbs = preguntar
 volitive_verbs = querer, desear, necesitar, pretender, esperar, anhelar, ordenar, exigir, mandar, solicitar, pedir, peticionar, suplicar, rogar, proponer, demandar, ofrecer, ansiar
 negation_verbs = evitar, negar, rechazar, desmentir, desestimar, descartar, impedir, imposibilitar, desconfiar, descreer, refutar, dudar
 possibility_verbs = suponer, presumir, creer, intentar, soñar, fantasear, tratar

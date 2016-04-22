@@ -6,8 +6,11 @@ class ConditionFinder:
         self.clause = clause
 
     def find(self):
-        methods = [ self.find_conditional_si, self.find_en_caso_de_que_or_siempre_y_cuando ]
-        return sum([ method() for method in methods ], [])
+        if not self.clause.has_global_operator_of("question"):
+            methods = [ self.find_conditional_si, self.find_en_caso_de_que_or_siempre_y_cuando ]
+            return sum([ method() for method in methods ], [])
+        else:
+            return []
 
     def find_en_caso_de_que_or_siempre_y_cuando(self):
         operators = []

@@ -28,7 +28,15 @@ class VerbsWithSubordinatedFinder():
             father_verb_lemma = clause.father.verb.lemma()
             if father_verb_lemma in self.verbs:
                 for klass in self.verbs[father_verb_lemma]:
-                    operators.append(GlobalOperator(klass, father_verb_lemma + " + subord 'que' (CS)"))
+                    if klass != "question":
+                        operators.append(GlobalOperator(klass, father_verb_lemma + " + subord 'que' (CS)"))
+
+
+        if clause.is_subordinated_with("si") and clause.father.voice:
+            father_verb_lemma = clause.father.verb.lemma()
+            if father_verb_lemma in self.verbs and "question" in self.verbs[father_verb_lemma]:
+                operators.append(GlobalOperator("question", father_verb_lemma + " + subord 'si' (CS)"))
+
         return operators
 
     verbs = load_verbs()
