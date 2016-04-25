@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>{{app.config["TITLE"].decode("utf-8")}} - Login </title>
+    </head>
+    <body>
+        <h1>Login</h1>
+        <form method="post" action="/login" >
+            <p>Nombre de usuario : <input type="text" name="username" placeholder="username" /></p>
+            <p>Contraseña : <input type="password" name="password" placeholder="password" /></p>
+            <p><input type="submit" value="mandar" /></p>
+        </form>
+    </body>
+</html>
