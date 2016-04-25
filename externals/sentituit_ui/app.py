@@ -25,7 +25,7 @@ def login():
     if request.method == "POST":
         if request.form["username"] == "hola" and request.form["password"] == "hola" :
             session["username"] = "hola"
-            return UserView().post()
+            return UserView().post(app)
         else :
             return "usuario o contraseña incorrectos."
     return render_template('login.html', app=app)

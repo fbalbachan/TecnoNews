@@ -4,10 +4,8 @@ from flask.views import MethodView
 
 class UserView(MethodView):
     def get(self):
-        name = request.args.get('username', 'Damyan')
-        return 'Hello GET from %s!' % name
+        return render_template("user.html")
 
-    def post(self):
-        name = request.form.get('username', 'Damyan')
-        return 'Hello POST from %s' % name
+    def post(self, app):
+        return render_template("user.html", app=app)
 
