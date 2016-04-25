@@ -323,6 +323,9 @@ class BlogPublisher(object):
                         self.add_hyperlinks(entry, "hyperlinks_propiedades.csv")
                         entry.categories = [u"Noticias"]
                         entry.tags = []
+                        self.add_countries(entry)
+                        self.add_cities(entry)
+                        self.add_related_news_tree(entry, news_service, show_source=False, show_link=False)
 
             elif host['id'] == u"femeninas":
                 interval_time = datetime.datetime.utcnow() - datetime.timedelta(seconds=2592000) #1 Month
