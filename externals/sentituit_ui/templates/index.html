@@ -1,10 +1,5 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8" />
-        <title>{{app.config["TITLE"].decode("utf-8")}}</title>
-    </head>
-    <body>
-        <h1>{{app.config["TITLE"].decode("utf-8")}}</h1>
-    </body>
-</html>
+{% extends 'layout.html' %}
+{% block container %}
+        <p><h1>{{app.config["TITLE"].decode("utf-8")}}</h1></p>
+        <p>Esta es la página de inicio.</p>
+{% endblock %}
