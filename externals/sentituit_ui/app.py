@@ -12,13 +12,16 @@ app.add_url_rule(
 )
 
 @app.route('/')
-def hello_world():
-    return render_template("index.html", app=app)
+def index():
+    
+    if "username" not in session:
+        return login()
+    
+    return render_template("admin.html", app=app)
 
 @app.route('/login', methods=["GET", "POST"])
 def login():
-    print session
-    
+   
     if "username" in session:
         return logout()
         

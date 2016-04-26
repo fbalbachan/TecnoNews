@@ -1,19 +1,15 @@
 {% extends 'layout.html' %}
 {% block container %}
-            <div id="content-header" class="page-header">
-                <h1>
-                    Usuarios
-                    
-                    <div class="admin-tools">
-                        <div title="Nuevo" onclick="app.admin.go('/admin/usuario/new');"><i class="glyphicon glyphicon-plus"></i></div>
-                        <div title="Editar" onclick="app.admin.edit_item('usuario');"><i class="glyphicon glyphicon-edit"></i></div>
-                        <div title="Eliminar" onclick="if (app.confirmar('¿Está seguro que desea eliminar al usuario?')) { app.admin.delete_item('usuario'); }" ><i class="glyphicon glyphicon-remove"></i></div>
-                    </div>
-                    
-                </h1>
-                
+        <div class="page-wrapper">
+            <div class="container-fluid">
+                <div id="content-header" class="page-header">
+                    <h1>
+                        Usuarios
+                    </h1>
+                </div>
+                <div id="content-body">
+                    <p>Hola mundo</p>
+                </div>
             </div>
-            <div id="content-body">
-                
-            </div>
+        </div>
 {% endblock %}
