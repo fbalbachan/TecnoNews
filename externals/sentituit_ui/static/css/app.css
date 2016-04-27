@@ -211,6 +211,12 @@ body
     margin-right        :   auto;
 }
 
+.form-login 
+{
+    width               :   50%;
+    
+}
+
 #content-header 
 {
     margin-top          :   50px;
@@ -219,8 +225,8 @@ body
 
 a.navbar-brand 
 {
-	background          :   url(/static/img/naturaltech.png) no-repeat;
-	width               :   200px;
+    background          :   url(/static/img/naturaltech.png) no-repeat;
+    width               :   200px;
     background-position :   20px 0px;
 }
 
