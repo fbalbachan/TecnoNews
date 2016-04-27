@@ -86,14 +86,14 @@ class TextDistance(object):
 
         # similarity = (1+b_2) * ((unigrams * bigrams) / ((b_2 * unigrams) + bigrams))
         partial = ((b_2 * unigrams) + bigrams)
-        
-        if bigrams == 0.0 :
-            bigrams = 0.19
 
-        if partial != 0.0:
-            similarity = (1+b_2) * ((unigrams * bigrams) / partial)
+        if bigrams == 0.0 and unigrams != 0.0:
+            similarity = (1+b_2) * unigrams * 0.2
         else:
-            similarity = 0.0
+            if partial != 0.0:
+                similarity = (1+b_2) * ((unigrams * bigrams) / partial)
+            else:
+                similarity = 0.0
 
         if numpy.isnan(similarity):
             similarity = 0.0
