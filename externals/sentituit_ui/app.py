@@ -12,20 +12,23 @@ app.add_url_rule(
 )
 
 @app.route('/')
-def hello_world():
-    return render_template("index.html", app=app)
+def index():
+    
+    if "username" not in session:
+        return login()
+    
+    return render_template("admin.html", app=app)
 
 @app.route('/login', methods=["GET", "POST"])
 def login():
-    print session
-    
+   
     if "username" in session:
         return logout()
         
     if request.method == "POST":
         if request.form["username"] == "hola" and request.form["password"] == "hola" :
             session["username"] = "hola"
-            return UserView().post()
+            return UserView().post(app)
         else :
             return "usuario o contraseña incorrectos."
     return render_template('login.html', app=app)
