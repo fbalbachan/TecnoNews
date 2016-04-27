@@ -210,7 +210,7 @@ class AdverbialClauseDislocationStrategy:
     type = "dislocation"
 
     # "en_caso_de" se ve por separado en applies_to()
-    subordinate_headers = ["como_si", "mientras", "cuando", "una_vez_que", "según", "como", "tal_como", "tal_y_como",
+    subordinate_headers = ["si", "como_si", "mientras", "cuando", "una_vez_que", "según", "como", "tal_como", "tal_y_como",
                            "luego_de_que", "luego_que", "antes_de_que", "antes_que", "después_de_que", "después_que",
                            "a_el_mismo_tiempo_que", "con_tal_que", "si_bien", "mientras_que", "en_caso_de_que",
                            "en_caso_que", "desde_que", "a_menos_que", "a_no_ser_que", "una_vez_que", "aunque"]
