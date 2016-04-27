@@ -185,7 +185,7 @@ class AdverbialClauseDislocationStrategy:
         main_clause = sentence.main_clause()
         clause = main_clause.children[0]
         token = clause.children[0].node.token
-        
+
         text = sentence.paragraph.text.decode("utf-8")
         first_part = text[clause.node.token.start():token.end()].strip()
         second_part = text[token.end():clause.node.token.end()].strip()
