@@ -69,7 +69,7 @@ def generate_json_from_objectid( item_id , gens = 5) :
     db  =   client[mongo_data["db"]]
     col =   db["news_entries"]
 
-    result = col.find({"wp_id" : { "$in" : [ item_id , str(item_id) ]} })[0]
+    result = col.find({"wp_id" : { "$in" : [ int(item_id) , str(item_id) ]} })[0]
 
     to_check = []
     to_check.extend(result["versions"])
