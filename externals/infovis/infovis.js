@@ -691,7 +691,7 @@ function setup_customgraph() {
 
         
         cg = tmphtml;
-        $("#cg").html( tmphtml ).fadeIn(500);
+        $("#cg").html( tmphtml );
         
     }
 }
@@ -718,7 +718,30 @@ function show_customgraph(obj) {
 
 
 function generate_customgraph() {
-    var id = nodeset.nodes[0].data.wp_url.split("p=")[1]
-    console.log(id);
+    
+    var wp_id   = nodeset.nodes[0].data.wp_url.split("p=")[1]
+    var layout  = $("#cs-layout")[0].value
+    
+    $("#cg").css("cursor","wait");
+    
+    $.get(
+        location.protocol + "//" + location.host + "/infovis/get_custom_graph.php?news_id=" + wp_id + "&layout=" + layout;
+    ).promise().then(
+        function (resp, status, xhr) {
+            console.log(resp,status,xhr);
+            $("#cg").css("cursor","default");
+            if (resp.status === "success") {
+                $("#cg").html( resp.data.svg )
+            } else {
+                var message = resp.data.message;
+                alert("error leyendo datos de la topic cloud:\n" + message);
+            }
+        },
+        
+        function(a, b, c) {
+            console.log("generate_customgraph fail : ", a,b,c);
+            $("#cg").css("cursor","default");
+        }
+    );
 }
 
