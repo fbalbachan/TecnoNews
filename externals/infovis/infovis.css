@@ -450,6 +450,21 @@ h4 {
     margin-top      : 50px;
 }
 
+#cg {
+    position    :   absolute;
+    width       :   100%;
+    height      :   100%;
+    left        :   0px;
+    top         :   0px;
+    z-index     :   1;
+    overflow-x  :   hidden;
+    overflow-y  :   auto;
+}
+
+#gs div {
+    font-family :   dosisbook;
+}
+
 #download {
     width               :   120px;
     height              :   80px;
