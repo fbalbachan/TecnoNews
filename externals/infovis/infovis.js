@@ -3,6 +3,7 @@ window.cy = null;
 window.$  = jQuery;
 
 window.gs = null; //galaxy summary
+window.cg = null; //custom graph
 
 
 /**
@@ -635,3 +636,87 @@ function show_galaxysummary(obj) {
     }
     
 }
+
+
+function setup_customgraph() {
+    if (cy !== null && cy !== undefined) {
+        /*
+        #layout  = g.layout_kamada_kawai(maxiter=100) # ~3mins in eeepc (1.6 GHz dual core Atom)
+        #layout  = g.layout_kamada_kawai(maxiter=1000) # ~2mins in 3.0 GHz 8-core i7
+        #layout  = g.layout_kamada_kawai(maxiter=2000) # ~4mins in 3.0 GHz 8-core i7
+        #layout  = g.layout_kamada_kawai(maxiter=20000) # ~34mins in 3.0 GHz 8-core i7
+        #layout  = g.layout_grid_fruchterman_reingold() # ~5secs in eeepc (1.6 GHz dual core Atom)
+        #layout  = g.layout_fruchterman_reingold() # ~40secs in 3.0 GHz 8-core i7
+        #layout  = g.layout_reingold_tilford_circular() # ~0.1ms in 3.0 GHz 8-core i7
+        #layout  = g.layout_circle() # ~3secs in eeepc (1.6 GHz dual core Atom)
+        #layout  = g.layout_drl() # ~1min in eeepc (1.6 GHz dual core Atom)
+        #layout  = g.layout_lgl() # ~1min in eeepc (1.6 GHz dual core Atom)
+        #layout  = g.layout_random() # ~2secs in 3.0 GHz 8-core i7
+        #layout  = g.layout_graphopt() # ~40secs in 3.0 GHz 8-core i7
+        #layout  = g.layout_reingold_tilford() # ~2ms in 3.0 GHz 8-core i7
+        #layout  = g.layout_reingold_tilford_circular() # ~3ms in 3.0 GHz 8-core i7
+        #layout  = g.layout_sugiyama() # ~9ms in 3.0 GHz 8-core i7
+        #layout  = g.layout_mds() # ~15secs in 3.0 GHz 8-core i7
+        #layout  = g.layout_auto() # ~7secs in 3.0 GHz 8-core i7
+        */
+        var cs_lays = {
+            "customradial"  : "Gráfico circular",
+            "kawai100"      : "Kamada-Kawai * 100",
+            "kawai1000"     : "Kamada-Kawai * 1000",
+            "kawai2000"     : "Kamada-Kawai * 2000",
+            "fr"            : "Fruchterman-Reingold (F-R)",
+            "frgrid"        : "F-R en grilla",
+            "frcircle"      : "F-R en círculo",
+            "circle"        : "Circular",
+            "drl"           : "DRL",
+            "lgl"           : "LGL",
+            "random"        : "Random",
+            "graphopt"      : "Graphopt",
+            "rt"            : "Reingold-Tilford (R-T)",
+            "rtcircle"      : "R-T circular",
+            "sugiyama"      : "Sugiyama",
+            "mds"           : "MDS",
+            "auto"          : "Automático"
+        };
+        
+        var tmphtml = "<div class=\"cs-setup-form\"><select id=\"cs-layout\">\n";
+        var k       = "";
+        
+        for k in cs_lays {
+            tmphtml += "<option value=\"" + k + "\" >" + cs_lays[k] + "</option>\n";
+        }
+        
+        tmphtml += "</select>\n<button onclick=\"generate_customgraph()\"> generar </button>"
+        
+        cg = tmphtml;
+        $("#cg").html( tmphtml );
+        
+    }
+}
+
+
+
+function show_customgraph(obj) {
+    $("#cy, #wc, #gs").fadeOut(100);
+    
+    $("#visualizaciones div.selected").removeClass("selected");
+    $(obj).addClass("selected");
+    
+    if (cg === null || cg === undefined) {
+        //setup
+        $("#cg").css("cursor","wait").show(100);
+        setup_galaxysummary();
+        $("#cg").css("cursor","default");
+        
+    } else {
+        $("#cg").fadeIn(500);
+    }
+    
+}
+
+
+function generate_customgraph() {
+    var id = nodeset.nodes[0].data.wp_url.split("p=")[1]
+    console.log(id);
+}
+
