@@ -13,7 +13,7 @@ header('Cache-Control: public');
 header('Content-Type: application/json; charset=UTF-8');
 ini_set('memory_limit', '1000M');
 
-$filename   = "/home/nlt-runner/custom-graphs/" . $_REQUEST["news_id"] . ".svg";
+$filename   = "/home/nlt-runner/custom-graphs/" . $_REQUEST["news_id"] . "-" . $_REQUEST["layout"] . ".svg";
 $ret        = Array();
 $svg        = "";
 $status     = "success";
