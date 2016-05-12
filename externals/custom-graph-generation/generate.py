@@ -113,7 +113,8 @@ if __name__ == "__main__":
         layout  = g.layout_auto()
     
     
-    layout.fit_into( bbox=(1600,1600) )
+    if not isinstance(layout, list):
+        layout.fit_into( bbox=(1600,1600) )
     print "saving image..."
 
     print datetime.datetime.now()
@@ -132,7 +133,10 @@ if __name__ == "__main__":
     tmp = """<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1600pt" height="1600pt" viewBox="0 0 1600 1600" version="1.1">
 <g id="graph-nodes">
 """
-    g.vs["coords"] = coords = layout.coords
+    if not isinstance(layout, list):
+        g.vs["coords"] = coords = layout.coords
+    else :
+        g.vs["coords"] = coords = layout
     for i,v in enumerate(g.vs) :
         tmp += "<g wp_id=\""+v["wp_id"]+"\" label=\""+v["label"]+"\" objectid=\""+v["objectid"]+"\" stroke=\"black\" fill=\""+v["color"]+"\" stroke-width=\"1\">\n"
         tmp += "<g class=\"edge-group\">\n"
