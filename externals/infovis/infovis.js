@@ -682,14 +682,16 @@ function setup_customgraph() {
         var tmphtml = "<div class=\"cs-setup-form\"><select id=\"cs-layout\">\n";
         var k       = "";
         
-        for k in cs_lays {
+        for (k in cs_lays) {
+            //console.log(k);
             tmphtml += "<option value=\"" + k + "\" >" + cs_lays[k] + "</option>\n";
         }
         
-        tmphtml += "</select>\n<button onclick=\"generate_customgraph()\"> generar </button>"
+        tmphtml += "</select>\n<button onclick=\"generate_customgraph()\"> generar </button>";
+
         
         cg = tmphtml;
-        $("#cg").html( tmphtml );
+        $("#cg").html( tmphtml ).fadeIn(500);
         
     }
 }
@@ -705,7 +707,7 @@ function show_customgraph(obj) {
     if (cg === null || cg === undefined) {
         //setup
         $("#cg").css("cursor","wait").show(100);
-        setup_galaxysummary();
+        setup_customgraph();
         $("#cg").css("cursor","default");
         
     } else {
