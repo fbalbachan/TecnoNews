@@ -37,7 +37,7 @@ try {
     $message  = "Error reading json: " . $e->getMessage();
 }
 
-if (trim($json) == "") {
+if (trim($svg) == "") {
     //header("Location: http://entretenimientobit.com");
     //exit();
     $status = "fail";
