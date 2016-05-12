@@ -129,8 +129,7 @@ if __name__ == "__main__":
     # subgraph / copy by sentiment
     
     
-    tmp = """<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1600pt" height="1600pt" viewBox="0 0 1600 1600" version="1.1">
+    tmp = """<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1600pt" height="1600pt" viewBox="0 0 1600 1600" version="1.1">
 <g id="graph-nodes">
 """
     g.vs["coords"] = coords = layout.coords

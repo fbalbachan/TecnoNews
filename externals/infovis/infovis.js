@@ -734,7 +734,7 @@ function generate_customgraph() {
                 $("#cg").html( resp.data.svg )
             } else {
                 var message = resp.data.message;
-                alert("error leyendo datos de la topic cloud:\n" + message);
+                alert("error leyendo datos del custom graph:\n" + message);
             }
         },
         
