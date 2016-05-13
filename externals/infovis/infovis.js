@@ -736,6 +736,15 @@ function generate_customgraph() {
                 local_cg.html( resp.data.svg + cg);
                 custom_graph_data = JSON.parse( $("svg > #graph-data").text() );
                 
+                var tmparr = [];
+                for (var k in custom_graph_data) {
+                    tmparr.push(custom_graph_data[k]);
+                }
+                
+                tmparr.sort(function(a, b) { 
+                    return parseInt(a.id.split("_")[1]) - parseInt(b.id.split("_")[1]);
+                });
+
                 var tmphtml = "\n<div id=\"cg-node-list\">\
                                 <table>\
                                     <thead>\
@@ -746,8 +755,8 @@ function generate_customgraph() {
                                         </tr>\
                                     </thead>\
                                     <tbody>";
-                for (var k in custom_graph_data) {
-                    tmphtml += "<tr><td>" + custom_graph_data[k].id.split("_")[1] + "</td><td>" + custom_graph_data[k].date + "</td><td>" + custom_graph_data[k].title + "</td></tr>";
+                for (var i = 0; i < tmparr.length; i++) {
+                    tmphtml += "<tr><td>" + tmparr[i].id.split("_")[1] + "</td><td>" + tmparr[i].date + "</td><td>" + tmparr[i].title + "</td></tr>";
                 }
                 tmphtml += "</tbody></table></div>";
                 local_cg.html( local_cg.html() + tmphtml );
