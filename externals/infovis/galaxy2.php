@@ -116,9 +116,7 @@
             <h4>(mouse over and click on nodes for details and news summary)</h4>
         </div>
 
-    <div id="titulo-noticia">
-            
-        </div>
+        <div id="titulo-noticia"> </div>
 
         <div id="visualizaciones">
             <h4>Select Infovis Graph</h4>
