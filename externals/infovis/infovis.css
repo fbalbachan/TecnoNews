@@ -504,6 +504,7 @@ h4 {
 #cg-node-list {
     position            : absolute;
     width               : 50%;
+    height              : 99%;
     text-align          : center;
     top                 : 0px;
     right               : 0px;
@@ -513,11 +514,18 @@ h4 {
     background-color    : white;
     border-radius       : 15px;
     border              : black 1px solid;
+    overflow-x          : hidden;
+    overflow-y          : auto;
 }
 
 #cg-node-list:hover {
     opacity             : 1;
     box-shadow          : -5px 5px 10px black;
+}
+
+#cg-node-list tbody > tr:hover {
+    background-color    : black;
+    color               : white;
 }
 
 svg g > g.edge-group {
