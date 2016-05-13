@@ -36,6 +36,7 @@ class NewsEntry(object):
         self.sentiment = None
         self.countries = []
         self.cities = []
+        self.token_count = 0
         self.host_id = None
         self.image_url = None
         self.summary = summary

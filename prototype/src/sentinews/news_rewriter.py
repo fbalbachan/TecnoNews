@@ -260,6 +260,12 @@ class NewsRewriter(object):
         self.rewritten_entry.injected_count = self.injected_count
 
         analysis = self._analyze(self.rewritten_entry.content)
+
+        #TOKEN COUNT
+        token_count = 0
+        for a_sentence in analysis["paragraph"].sentences:
+        	token_count += len(a_sentence.parse_node.leaves())
+
         rewriter = Rewriter(analysis['paragraph'], applied_global_strategies=applied_global)
         self.rewritten_entry.content = rewriter.rewrite()
 
@@ -393,6 +399,7 @@ class NewsRewriter(object):
         self.rewritten_entry.countries = self.original_entry.countries
         self.rewritten_entry.sentiment = self.original_entry.sentiment
         self.rewritten_entry.entity_table = self.generate_entity_table(analysis)
+        self.rewritten_entry.token_count = token_count
 
 
         #ENTITY TABLE
