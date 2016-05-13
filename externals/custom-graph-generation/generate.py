@@ -150,7 +150,7 @@ if __name__ == "__main__":
         
         tmp += "<circle cx=\""+str(coords[i][0])+"\" cy=\""+str(coords[i][1])+"\" r=\""+str(v["size"] / 2 )+"\" />\n"
         tmp += "<title>"+v["label"]+"</title>\n"
-        tmp += "<text x=\""+str( coords[i][0] - v["size"] / 4 )+"\" y=\""+str(coords[i][1] - v["size"] / 4)+"\" font-family=\"Ubuntu,Tahoma\" font-size=\""+str(v["size"])+"\">"+v["label"]+"</text>"
+        tmp += "<text x=\""+str( coords[i][0] - v["size"] / 2 )+"\" y=\""+str(coords[i][1] + v["size"] / 3)+"\" fill=\"black\" font-family=\"Ubuntu,Tahoma\" font-size=\""+str(v["size"] / 1.5)+"\">"+v["label"]+"</text>"
         
         tmp += "</g>\n"
     
