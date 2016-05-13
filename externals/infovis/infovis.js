@@ -680,7 +680,7 @@ function setup_customgraph() {
             "auto"          : "Automático"
         };
         
-        var tmphtml = "<div id=\"cs-setup-form\"><select id=\"cs-layout\">\n";
+        var tmphtml = "<div id=\"cg-setup-form\"><select id=\"cg-layout\">\n";
         var k       = "";
         
         for (k in cs_lays) {
@@ -721,7 +721,7 @@ function show_customgraph(obj) {
 function generate_customgraph() {
     
     var wp_id   = nodeset.nodes[0].data.wp_url.split("p=")[1]
-    var layout  = $("#cs-layout")[0].value
+    var layout  = $("#cg-layout")[0].value
     
     $("#cg").css("cursor","wait");
     
@@ -742,7 +742,7 @@ function generate_customgraph() {
                     } 
                 ).off("mouseout").on("mouseout", ocultar_titulo);
                 
-                var tmphtml = "\n<div id=\"cs-node-list\">\
+                var tmphtml = "\n<div id=\"cg-node-list\">\
                                 <table>\
                                     <thead>\
                                         <tr>\

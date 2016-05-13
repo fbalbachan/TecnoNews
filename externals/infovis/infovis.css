@@ -486,7 +486,7 @@ h4 {
     opacity             :   1;
 }
 
-#cs-setup-form {
+#cg-setup-form {
     position    : absolute;
     width       : 50%;
     text-align  : center;
@@ -497,11 +497,11 @@ h4 {
     font-family : dosisbook;
 }
 
-#cs-setup-form:hover {
+#cg-setup-form:hover {
     opacity     : 1;
 }
 
-#cs-node-list {
+#cg-node-list {
     position            : absolute;
     width               : 50%;
     text-align          : center;
@@ -515,7 +515,7 @@ h4 {
     border              : black 1px solid;
 }
 
-#cs-node-list:hover {
+#cg-node-list:hover {
     opacity             : 1;
     box-shadow          : -5px 5px 10px black;
 }
