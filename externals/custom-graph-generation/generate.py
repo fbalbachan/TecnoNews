@@ -132,7 +132,7 @@ if __name__ == "__main__":
     # subgraph / copy by sentiment
     
     
-    tmp = """<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1600pt" height="1600pt" viewBox="0 0 1600 1600" version="1.1">
+    tmp = """<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="100%" viewBox="0 0 1600 1600" version="1.1">
 <g id="graph-nodes">
 """
     if not isinstance(layout, list):
@@ -155,7 +155,7 @@ if __name__ == "__main__":
     
     tmp += "</g>\n"
     
-    tmp += "<g class=\"graph-data\" >\n"
+    tmp += "<g id=\"graph-data\" >\n"
     f = open(args[0] + "-set.json","r")
     j = f.read()
     f.close()

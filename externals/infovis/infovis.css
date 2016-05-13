@@ -485,3 +485,18 @@ h4 {
 #download:hover {
     opacity             :   1;
 }
+
+#cs-setup-form {
+    position    : absolute;
+    width       : 50%;
+    text-align  : center;
+    top         : 0px;
+    left        : 25%;
+    z-index     : 2;
+    opacity     : 0.5;
+    font-family : dosisbook;
+}
+
+#cs-setup-form:hover {
+    opacity     : 1;
+}

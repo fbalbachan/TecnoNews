@@ -4,7 +4,7 @@ window.$  = jQuery;
 
 window.gs = null; //galaxy summary
 window.cg = null; //custom graph
-
+window.custom_graph_data = {}
 
 /**
     Given a sentiment string, returns an adequate color.
@@ -534,8 +534,7 @@ function setup_wordcloud( arr ) {
 }
 
 function show_wordcloud(obj) {
-    $("#cy").fadeOut(100);
-    $("#gs").fadeOut(100);
+    $("#cy, #gs, #cg").fadeOut(100);
     $("#visualizaciones div.selected").removeClass("selected");
     $(obj).addClass("selected");
     
@@ -574,8 +573,7 @@ function show_wordcloud(obj) {
 }
 
 function show_galaxy(obj) {
-    $("#wc").fadeOut(100);
-    $("#gs").fadeOut(100);
+    $("#wc, #gs, #cg").fadeOut(100);
     $("#visualizaciones div.selected").removeClass("selected");
     $(obj).addClass("selected");
     $("#cy").fadeIn(500);
@@ -620,8 +618,7 @@ function setup_galaxysummary() {
 
 
 function show_galaxysummary(obj) {
-    $("#cy").fadeOut(100);
-    $("#wc").fadeOut(100);
+    $("#cy, #wc, #cg").fadeOut(100);
     $("#visualizaciones div.selected").removeClass("selected");
     $(obj).addClass("selected");
     
@@ -679,7 +676,7 @@ function setup_customgraph() {
             "auto"          : "Automático"
         };
         
-        var tmphtml = "<div class=\"cs-setup-form\"><select id=\"cs-layout\">\n";
+        var tmphtml = "<div id=\"cs-setup-form\"><select id=\"cs-layout\">\n";
         var k       = "";
         
         for (k in cs_lays) {
@@ -728,10 +725,17 @@ function generate_customgraph() {
         location.protocol + "//" + location.host + "/infovis/get_custom_graph.php?news_id=" + wp_id + "&layout=" + layout
     ).promise().then(
         function (resp, status, xhr) {
-            console.log(resp,status,xhr);
+            //console.log(resp,status,xhr);
             $("#cg").css("cursor","default");
             if (resp.status === "success") {
-                $("#cg").html( resp.data.svg )
+                $("#cg").html( resp.data.svg + cg);
+                custom_graph_data = JSON.parse( $("svg > #graph-data").text() );
+                $("g:has(> circle)").off("mouseover").on("mouseover", 
+                    function(evt) { 
+                        var data = custom_graph_data[evt.target.parentNode.getAttribute("objectid")];
+                        mostrar_titulo( data.title, data.date ); 
+                    } 
+                ).off("mouseout").on("mouseout", ocultar_titulo);
             } else {
                 var message = resp.data.message;
                 alert("error leyendo datos del custom graph:\n" + message);
