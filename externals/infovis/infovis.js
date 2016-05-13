@@ -762,6 +762,7 @@ function generate_customgraph() {
                 ).off("mouseout").on("mouseout",
                     function (evt) {
                         ocultar_titulo();
+                        var grupo = $(evt.target.parentNode);
                         grupo.removeAttr("selected");
                     }
                 );
