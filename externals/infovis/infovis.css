@@ -501,6 +501,31 @@ h4 {
     opacity     : 1;
 }
 
-svg g.edge-group {
+#cs-node-list {
+    position            : absolute;
+    width               : 50%;
+    text-align          : center;
+    top                 : 0px;
+    right               : 0px;
+    z-index             : 3;
+    opacity             : 0.5;
+    font-family         : dosisbook;
+    background-color    : white;
+    border-radius       : 15px;
+    border              : black 1px solid;
+}
+
+#cs-node-list:hover {
+    opacity             : 1;
+    box-shadow          : -5px 5px 10px black;
+}
+
+svg g > g.edge-group {
     display     : none;
 }
+
+svg g[selected] > g.edge-group {
+    display     : block;
+}
+
+

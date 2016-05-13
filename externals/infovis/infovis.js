@@ -502,6 +502,10 @@ function setup_cy() {
             if (evt.keyCode == 27 && $("#data-overlay")[0].offsetParent !== null) {
                 center_cy();
                 hide_data_overlay();
+            } else if (evt.key == "l" || evt.key == "L") {
+                if ( $("#cg-node-list").length > 0 ) {
+                    toggle_cg_node_list();
+                }
             }
             
         }
@@ -753,6 +757,7 @@ function generate_customgraph() {
                 }
                 tmphtml += "</tbody></table></div>";
                 local_cg.html( local_cg.html() + tmphtml );
+                
             } else {
                 var message = resp.data.message;
                 alert("error leyendo datos del custom graph:\n" + message);
@@ -766,3 +771,11 @@ function generate_customgraph() {
     );
 }
 
+function toggle_cg_node_list() {
+    var div = $("#cg-node-list");
+    if ( div.is(":hidden") ) {
+        div.fadeIn(500);
+    } else {
+        div.fadeOut(500);
+    }
+}
