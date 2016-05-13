@@ -735,19 +735,6 @@ function generate_customgraph() {
                 var local_cg = $("#cg");
                 local_cg.html( resp.data.svg + cg);
                 custom_graph_data = JSON.parse( $("svg > #graph-data").text() );
-                $("g:has(> circle)").off("mouseover").on("mouseover", 
-                    function(evt) { 
-                        var data  = custom_graph_data[evt.target.parentNode.getAttribute("objectid")];
-                        var grupo = $(evt.target.parentNode);
-                        mostrar_titulo( data.title, data.date );
-                        grupo.attr("selected", "selected");
-                    } 
-                ).off("mouseout").on("mouseout",
-                    function (evt) {
-                        ocultar_titulo();
-                        grupo.removeAttr("selected");
-                    }
-                );
                 
                 var tmphtml = "\n<div id=\"cg-node-list\">\
                                 <table>\
@@ -764,6 +751,20 @@ function generate_customgraph() {
                 }
                 tmphtml += "</tbody></table></div>";
                 local_cg.html( local_cg.html() + tmphtml );
+                
+                $("g:has(> circle)").off("mouseover").on("mouseover", 
+                    function(evt) { 
+                        var data  = custom_graph_data[evt.target.parentNode.getAttribute("objectid")];
+                        var grupo = $(evt.target.parentNode);
+                        mostrar_titulo( data.title, data.date );
+                        grupo.attr("selected", "selected");
+                    } 
+                ).off("mouseout").on("mouseout",
+                    function (evt) {
+                        ocultar_titulo();
+                        grupo.removeAttr("selected");
+                    }
+                );
                 
             } else {
                 var message = resp.data.message;
