@@ -76,7 +76,7 @@ def generate_json_from_objectid( item_id , gens = 5) :
 
     current_id = 0
 
-    already_processed[(result["_id"])] = {"id": "node_" + str(current_id), "date" : "", "wp_id": str(result["wp_id"]), "oid": str(result["_id"]), "title": result["title"], "source": result["source"], "cats": result["categories"], "children": result["versions"]}
+    already_processed[(result["_id"])] = {"id": "node_" + str(current_id), "date" : str(result["_id"].generation_time).split("+")[0], "wp_id": str(result["wp_id"]), "oid": str(result["_id"]), "title": result["title"], "source": result["source"], "cats": result["categories"], "children": result["versions"]}
     if "sentiment" in result :
         already_processed[(result["_id"])]["sentiment"] = result["sentiment"]
 
@@ -89,7 +89,7 @@ def generate_json_from_objectid( item_id , gens = 5) :
         for checked in result:
             current_id += 1
             try :
-                already_processed[checked["_id"]] = {"id": "node_" + str(current_id), "date" : "", "wp_id": str(checked["wp_id"]), "oid": str(checked["_id"]), "cats": checked["categories"], "source": checked["source"],  "title": checked["title"], "children": checked["versions"]}
+                already_processed[checked["_id"]] = {"id": "node_" + str(current_id), "date" : str(checked["_id"].generation_time).split("+")[0], "wp_id": str(checked["wp_id"]), "oid": str(checked["_id"]), "cats": checked["categories"], "source": checked["source"],  "title": checked["title"], "children": checked["versions"]}
                 if "sentiment" in checked :
                     already_processed[checked["_id"]]["sentiment"] = checked["sentiment"]
             except Exception, e :
@@ -132,7 +132,7 @@ def generate_json_from_objectid( item_id , gens = 5) :
                 final_graph[child_id] = {"sentiment" : child_sentiment, "date" : child_date, "oid" : child_oid, "wp_id" : child_wpid , "cats" : child_cats, "source" : child_source, "title" : child_title, "referents": [], "children" : []}
             
             if a_value["id"] not in final_graph:
-                final_graph[a_value["id"]] = {"sentiment" : a_value["sentiment"], "cats" : a_value["cats"], "source" : a_value["source"], "oid" : a_value["oid"], "wp_id" : a_value["wp_id"] ,"title" : a_value["title"], "referents": [], "children" : []}
+                final_graph[a_value["id"]] = {"sentiment" : a_value["sentiment"], "date" : a_value["date"], "cats" : a_value["cats"], "source" : a_value["source"], "oid" : a_value["oid"], "wp_id" : a_value["wp_id"] ,"title" : a_value["title"], "referents": [], "children" : []}
 
             final_graph[a_value["id"]]["children"].append(child_id)
             final_graph[child_id]["referents"].append(a_value["id"])
