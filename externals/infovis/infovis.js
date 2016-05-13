@@ -737,10 +737,17 @@ function generate_customgraph() {
                 custom_graph_data = JSON.parse( $("svg > #graph-data").text() );
                 $("g:has(> circle)").off("mouseover").on("mouseover", 
                     function(evt) { 
-                        var data = custom_graph_data[evt.target.parentNode.getAttribute("objectid")];
-                        mostrar_titulo( data.title, data.date ); 
+                        var data  = custom_graph_data[evt.target.parentNode.getAttribute("objectid")];
+                        var grupo = $(evt.target.parentNode);
+                        mostrar_titulo( data.title, data.date );
+                        grupo.attr("selected", "selected");
                     } 
-                ).off("mouseout").on("mouseout", ocultar_titulo);
+                ).off("mouseout").on("mouseout",
+                    function (evt) {
+                        ocultar_titulo();
+                        grupo.removeAttr("selected");
+                    }
+                );
                 
                 var tmphtml = "\n<div id=\"cg-node-list\">\
                                 <table>\
