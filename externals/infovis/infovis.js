@@ -728,7 +728,8 @@ function generate_customgraph() {
             //console.log(resp,status,xhr);
             $("#cg").css("cursor","default");
             if (resp.status === "success") {
-                $("#cg").html( resp.data.svg + cg);
+                var local_cg = $("#cg");
+                local_cg.html( resp.data.svg + cg);
                 custom_graph_data = JSON.parse( $("svg > #graph-data").text() );
                 $("g:has(> circle)").off("mouseover").on("mouseover", 
                     function(evt) { 
@@ -736,6 +737,22 @@ function generate_customgraph() {
                         mostrar_titulo( data.title, data.date ); 
                     } 
                 ).off("mouseout").on("mouseout", ocultar_titulo);
+                
+                var tmphtml = "\n<div id=\"cs-node-list\">\
+                                <table>\
+                                    <thead>\
+                                        <tr>\
+                                            <th>nodo</th>\
+                                            <th>fecha</th>\
+                                            <th>titulo</th>\
+                                        </tr>\
+                                    </thead>\
+                                    <tbody>";
+                for (var k in custom_graph_data) {
+                    tmphtml += "<tr><td>" + custom_graph_data[k].id.split("_")[1] + "</td><td>" + custom_graph_data[k].date + "</td><td>" + custom_graph_data[k].title + "</td></tr>";
+                }
+                tmphtml += "</tbody></table></div>";
+                local_cg.html( local_cg.html() + tmphtml );
             } else {
                 var message = resp.data.message;
                 alert("error leyendo datos del custom graph:\n" + message);
