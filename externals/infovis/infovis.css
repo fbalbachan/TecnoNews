@@ -500,3 +500,7 @@ h4 {
 #cs-setup-form:hover {
     opacity     : 1;
 }
+
+svg g.edge-group {
+    display     : none;
+}
