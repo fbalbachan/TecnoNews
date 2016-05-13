@@ -315,6 +315,45 @@ class BlogPublisher(object):
                     host["password"] = u"District93_Alma" #TEMP
                     entry.categories = [u"ARTICULOS"]
 
+            elif host['id'] == u"guialocal_es":
+
+                customizations = [
+                        {category:u"economía", limit:10},
+                        {category:u"deporte", limit:5},
+                        {category:u"internacionales", limit:15},
+                        {category:u"clima", limit:5},
+                        {category:u"estilo vida", limit:15},
+                        {category:u"turismo", limit:15},
+                        {category:u"entretenimiento", limit:8},
+                        {category:u"interés general", limit:5},
+                        {category:u"policiales", limit:8},
+                        {category:u"tecnología", limit:8},    
+                ]
+                valid_country = False
+                valid_countries = [ u'argentina', u'colombia', u'chile', u'mexico', u'ecuador']
+                for country in valid_countries :
+                    if country in entry.countries :
+                        valid_country = True
+                        break
+
+                interval_time = datetime.datetime.utcnow() - datetime.timedelta(seconds=2592000) #1 Month
+                post_count = news_service.get_count({'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id']})
+                if post_count < 1800 and valid_country:
+                    interval_time = datetime.datetime.utcnow() - datetime.timedelta(seconds=86400) #1 Day
+
+                    for a_customization in customizations:
+
+                        if a_customization.category in entry.categories:
+                            post_count = news_service.get_count({'_id': {'$gte': ObjectId.from_datetime(interval_time)},
+                                 'host_id': host['id'],
+                                 'categories': a_customization.category})
+                            if post_count < a_customization.limit:
+                                valid_host = True
+                                break
+
+                if valid_host:
+                    entry.categories = [entry.countries[0]]
+
             elif host['id'] == u"properati":
 
                 valid_country = False
