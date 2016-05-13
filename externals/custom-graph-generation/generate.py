@@ -113,8 +113,10 @@ if __name__ == "__main__":
         layout  = g.layout_auto()
     
     
-    if not isinstance(layout, list):
-        layout.fit_into( bbox=(1600,1600) )
+    if isinstance(layout, list):
+        layout = Layout(layout)
+    
+    layout.fit_into( bbox=(1600,1600) )
     print "saving image..."
 
     print datetime.datetime.now()
