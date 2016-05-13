@@ -151,7 +151,7 @@ def generate_json_from_objectid( item_id , gens = 5) :
     
     return final_graph
 
-def create_pickle( object_id ) :
+def create_pickle( object_id , min_size=10) :
     # Read a common input.
     
     if not os.path.exists( object_id + "-set.json") or not os.path.exists( object_id + "-final.json") :
@@ -183,7 +183,7 @@ def create_pickle( object_id ) :
         color.append( color_from_sentiment( semi_final_graph[item]["sentiment"] ) )
         #label.append( semi_final_graph[item]["title"][:22].encode("utf-8") + "..." )
         label.append( str(i) )
-        sizes.append( 5 + len(semi_final_graph[item]["referents"]) + len(semi_final_graph[item]["children"]) )
+        sizes.append( min_size + len(semi_final_graph[item]["referents"]) + len(semi_final_graph[item]["children"]) )
         oids.append( semi_final_graph[item]["oid"] )
         wpids.append( semi_final_graph[item]["wp_id"] )
         i += 1
