@@ -502,7 +502,8 @@ function setup_cy() {
             if (evt.keyCode == 27 && $("#data-overlay")[0].offsetParent !== null) {
                 center_cy();
                 hide_data_overlay();
-            } else if (evt.key == "l" || evt.key == "L") {
+            } else if (evt.keyCode == 76) {
+                // Tecla "L", para la lista en NewsUniverse
                 if ( $("#cg-node-list").length > 0 ) {
                     toggle_cg_node_list();
                 }
@@ -688,12 +689,13 @@ function setup_customgraph() {
             tmphtml += "<option value=\"" + k + "\" >" + cs_lays[k] + "</option>\n";
         }
         
-        tmphtml += "</select-->\n<button onclick=\"generate_customgraph()\"> generar </button>";
+        tmphtml += "</select-->\n<button onclick=\"generate_customgraph()\"> Generate Universe </button>";
+        tmphtml  = "";
 
         
-        cg = tmphtml;
+        cg       = tmphtml;
         $("#cg").html( tmphtml );
-        
+        setTimeout(generate_customgraph, 100);
     }
 }
 
