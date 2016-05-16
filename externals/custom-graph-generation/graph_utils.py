@@ -50,20 +50,32 @@ def color_from_category(cat = None) :
     
     if cat != None :
         if u"policiales" in cat.lower() :
-            ret = "rgba(255,255,255,1)"
+            ret = "rgba(255,0,0,1)"
+        if u"policiais-pt" in cat.lower() : 
+            ret = "rgba(255,0,0,1)"
         if u"internacionales" in cat.lower() : 
-            ret = "rgba(255,255,255,1)"
+            ret = "rgba(100,100,0,1)"
+        if u"internacionales-pt" in cat.lower() : 
+            ret = "rgba(100,100,0,1)"
         if u"economía" in cat.lower() : 
-            ret = "rgba(255,255,255,1)"
-        if u"salud" in cat.lower() : 
-            ret = "rgba(255,255,255,1)"
+            ret = "rgba(0,0,255,1)"
+        if u"economia-pt" in cat.lower() : 
+            ret = "rgba(0,0,255,1)"
         if u"interés general" in cat.lower() : 
+            ret = "rgba(0,255,255,1)"
+        if u"interesse general-pt" in cat.lower() : 
+            ret = "rgba(0,255,255,1)"
+        if u"interesse gerais-pt" in cat.lower() : 
+            ret = "rgba(0,255,255,1)"
+        if u"política" in cat.lower() : 
+            ret = "rgba(255,0,255,1)"
+        if u"política-pt" in cat.lower() : 
+            ret = "rgba(255,0,255,1)"
+        if u"salud" in cat.lower() : 
             ret = "rgba(255,255,255,1)"
         if u"cultura" in cat.lower() : 
             ret = "rgba(255,255,255,1)"
         if u"mujer" in cat.lower() : 
-            ret = "rgba(255,255,255,1)"
-        if u"política" in cat.lower() : 
             ret = "rgba(255,255,255,1)"
         if u"deporte" in cat.lower() : 
             ret = "rgba(255,255,255,1)"
@@ -87,27 +99,15 @@ def color_from_category(cat = None) :
             ret = "rgba(255,255,255,1)"
         if u"insólito" in cat.lower() : 
             ret = "rgba(255,255,255,1)"
-        if u"interesse general-pt" in cat.lower() : 
-            ret = "rgba(255,255,255,1)"
-        if u"interesse gerais-pt" in cat.lower() : 
-            ret = "rgba(255,255,255,1)"
-        if u"política-pt" in cat.lower() : 
-            ret = "rgba(255,255,255,1)"
         if u"tecnología-pt" in cat.lower() : 
             ret = "rgba(255,255,255,1)"
-        if u"internacionales-pt" in cat.lower() : 
-            ret = "rgba(255,255,255,1)"
         if u"saúde-pt" in cat.lower() : 
-            ret = "rgba(255,255,255,1)"
-        if u"economia-pt" in cat.lower() : 
             ret = "rgba(255,255,255,1)"
         if u"entretenimento-pt" in cat.lower() : 
             ret = "rgba(255,255,255,1)"
         if u"cultura-pt" in cat.lower() : 
             ret = "rgba(255,255,255,1)"
         if u"esporte-pt" in cat.lower() : 
-            ret = "rgba(255,255,255,1)"
-        if u"policiais-pt" in cat.lower() : 
             ret = "rgba(255,255,255,1)"
         if u"interesse geral-pt" in cat.lower() : 
             ret = "rgba(255,255,255,1)"
