@@ -760,7 +760,7 @@ function generate_customgraph() {
                 custom_graph_data = JSON.parse( $("svg > #graph-data").text() );
                 
                 var tmparr = [];
-                var tmpcol = "";
+                var tmpcol = "<h4>Universe's Categories</h4>\n";
                 for (var k in custom_graph_data) {
                     tmparr.push(custom_graph_data[k]);
                     
@@ -775,7 +775,7 @@ function generate_customgraph() {
                     if (!found) {
                         var cat = {
                             "name"  :   custom_graph_data[k]["cats"][0],
-                            "color" :   custom_graph_data[k]["color"]
+                            "color" :   $("svg g[objectid=" + custom_graph_data[k]["oid"] + "]").attr("fill")
                         };
                         universe.categories.push( cat );
                         tmpcol += "<p><div class=\"round\" style=\"background-color:"+cat.color+"\"></div> "+cat.name+"</p>"
