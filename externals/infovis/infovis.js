@@ -783,8 +783,7 @@ function generate_customgraph() {
                 $("g:has(> circle)").off("mouseover").on("mouseover", 
                     function(evt) { 
                         var data  = custom_graph_data[evt.target.parentNode.getAttribute("objectid")];
-                        var grupo = $(evt.target.parentNode);
-                        mostrar_titulo( data.title, data.date );
+                        mostrar_titulo( data.title + "<br/>" + data.cats[0], data.date );
                         grupo.attr("selected", "selected");
                     } 
                 ).off("mouseout").on("mouseout",
