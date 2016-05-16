@@ -298,12 +298,15 @@ class BlogPublisher(object):
 
             elif u"puntorojo" in host['id'] and entry.token_count >= 600:
 
+                if u"interes" in host['id'] or u"viajes" in host['id'] or u"autos" in host['id']:
+                    if not entry.image:
+                        valid_host = False
+                        continue
+
                 interval_time = datetime.datetime.utcnow() - datetime.timedelta(seconds=259200) #3 Days
                 post_count = news_service.get_count({'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id']})
                 if post_count < 3:
                     valid_host = True
-                    host["password"] = u"sentirojo"
-                    host["username"] = u"sentirojo"
                     entry.categories = [u"noticias"]
 
             elif host['id'] == u"alma_shopping":
