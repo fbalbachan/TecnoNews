@@ -4,8 +4,8 @@ window.$  = jQuery;
 
 window.gs = null; //galaxy summary
 window.cg = null; //custom graph
-window.custom_graph_data = {}
-window.universe          = { nodecount = 0 }
+window.custom_graph_data = {};
+window.universe          = { "nodecount" : 0 };
 
 /**
     Given a sentiment string, returns an adequate color.
@@ -520,7 +520,8 @@ function setup_cy() {
     
     
     $("#loading-overlay").fadeOut(1000);
-    
+    $("#stats #nodecount").html( nodeset.nodecount );
+    $("#stats h4").html("News (nodes) arranged around the Galaxy");
 }
 
 wc = null;
