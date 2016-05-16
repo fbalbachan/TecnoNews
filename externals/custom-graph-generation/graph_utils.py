@@ -71,6 +71,10 @@ def color_from_category(cat = None) :
             ret = "rgba(255,0,255,1)"
         if u"política-pt" in cat.lower() : 
             ret = "rgba(255,0,255,1)"
+        if u"automóviles" in cat.lower() : 
+            ret = "rgba(255,255,255,1)"
+        if u"electrodomésticos" in cat.lower() :
+            ret = "rgba(255,255,255,1)"
         if u"salud" in cat.lower() : 
             ret = "rgba(255,255,255,1)"
         if u"cultura" in cat.lower() : 
@@ -119,21 +123,9 @@ def color_from_category(cat = None) :
             ret = "rgba(255,255,255,1)"
         if u"turismo-pt" in cat.lower() : 
             ret = "rgba(255,255,255,1)"
-        if u"lancenet" in cat.lower() : 
-            ret = "rgba(255,255,255,1)"
-        if u"rojotur" in cat.lower() : 
-            ret = "rgba(255,255,255,1)"
-        if u"automóviles" in cat.lower() : 
-            ret = "rgba(255,255,255,1)"
-        if u"rojovida" in cat.lower() : 
-            ret = "rgba(255,255,255,1)"
-        if u"rojosalud" in cat.lower() : 
-            ret = "rgba(255,255,255,1)"
-        if u"electrodomésticos" in cat.lower() :
-            ret = "rgba(255,255,255,1)"
         if u"propiedades-pt" in cat.lower() : 
             ret = "rgba(255,255,255,1)"
-
+        
     return ret
 
 def generate_json_from_objectid( item_id , gens = 5) :
