@@ -10,9 +10,9 @@ logger = get_logger('tecnonews')
 
 
 class NewsEntry(object):
-    def __init__(self, title, content, tags, source, url=None, original_categories=None,
+    def __init__(self, title, content, tags, source, url=None, original_categories=None, language=u"spanish",
                  categories=None, wp_id=None, wp_url=None, related=None, entities=None,
-                 published_date=None, object_id=None, versions=None, image=None, image_search_string=None, summary=None):
+                 published_date=None, object_id=None, versions=None, universe_versions=None, image=None, image_search_string=None, summary=None):
 
         self.title = title
         self.content = content
@@ -30,6 +30,7 @@ class NewsEntry(object):
         self.related = related
         self.object_id = object_id
         self.versions = versions
+        self.universe_versions = universe_versions
         self.config = ConfigProvider()
         self.image = image
         self.image_search_string = image_search_string
@@ -40,6 +41,7 @@ class NewsEntry(object):
         self.host_id = None
         self.image_url = None
         self.summary = summary
+        self.language = language
 
         # Defensive programing to avoid wrong encoded
         assert(isinstance(self.title, unicode))
@@ -97,6 +99,9 @@ class NewsEntry(object):
     def set_related_news(self, related_news_entries):
         self.related = [entry.object_id for entry in related_news_entries]
 
+    def set_universe_versions(self, universe_versions):
+        self.universe_versions = [entry.object_id for entry in universe_versions if entry.title != self.title]
+
     def set_news_versions(self, other_versions):
         self.versions = [entry.object_id for entry in other_versions if entry.title != self.title]
 
@@ -105,9 +110,9 @@ class NewsEntry(object):
                     tags=self.safe_unicode_list(self.tags), source=self.source,
                     original_categories=self.original_categories, categories=self.categories,
                     entities=self.entities, published_date=self.published_date, url=self.url, wp_id=self.wp_id,
-                    wp_url=self.wp_url, related=self.related, versions=self.versions, sentiment=self.sentiment,
+                    wp_url=self.wp_url, related=self.related, versions=self.versions, universe_versions=self.universe_versions, sentiment=self.sentiment,
                     countries=self.countries, cities=self.cities,host_id=self.host_id,image_url=self.image_url,
-                    summary=self.summary)
+                    summary=self.summary, language=self.language)
 
     def analyzed_paragraph(self):
         from src.model.paragraph.paragraphAnalyzer import ParagraphAnalyzer

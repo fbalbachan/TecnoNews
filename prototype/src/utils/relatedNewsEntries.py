@@ -8,8 +8,39 @@ related_logger = get_logger('tecnonews')
 
 class RelatedNewsEntries(object):
 
-    def __init__(self, original, to_compare_news_entries=None):
+    def __init__(self, original, to_compare_news_entries=None, for_universe=False):
         DAYS_IN_THE_PAST_TO_SEARCH = 5 #number of days to search
+
+        #NEW METHOD (FOR VERSIONS_UNIVERSE)
+        special_limits = [
+            {"category":u"deporte", "limit":3},
+            {"category":u"tecnología", "limit":10},
+            {"category":u"belleza", "limit":10},
+            {"category":u"propiedades", "limit":30},
+            {"category":u"electrodomésticos", "limit":30},
+            {"category":u"automóviles", "limit":30},
+            {"category":u"turismo", "limit":30},
+            {"category":u"estilo vida", "limit":30},
+            {"category":u"salud", "limit":30},
+        ]
+
+
+        default_limit = 5
+        minimum_limit = 10000
+        for a_limit in special_limits:
+            if a_limit["category"] in original.categories:
+                if a_limit["limit"] < minimum_limit:
+                    minimum_limit = a_limit["limit"]
+            else:
+                if default_limit < minimum_limit:
+                    minimum_limit = default_limit
+
+        #FAILSAFE:
+        if minimum_limit == 10000:
+            minimum_limit = default_limit
+
+
+        #OLD METHOD (FOR VERSIONS):
         if u"propiedades" in original.categories:
             DAYS_IN_THE_PAST_TO_SEARCH = 30
 
@@ -42,12 +73,16 @@ class RelatedNewsEntries(object):
 
         self.news_original = original
         if to_compare_news_entries is None:
-            self.load_news_entries(days=DAYS_IN_THE_PAST_TO_SEARCH)
+            if for_universe:
+                self.load_news_entries(days=minimum_limit, for_universe=for_universe)
+            else:
+                self.load_news_entries(days=DAYS_IN_THE_PAST_TO_SEARCH)
         else:
             self.news_to_compare = to_compare_news_entries
         self.text_distance = TextDistance()
         self.stopwords = self.load_stopwords()
 
+        print len(self.news_to_compare)
         #
         self.pre_process(self.news_original)
         for news in self.news_to_compare:
@@ -96,7 +131,7 @@ class RelatedNewsEntries(object):
 
         return u_text
 
-    def load_news_entries(self, days):
+    def load_news_entries(self, days, for_universe=False):
         from datetime import datetime, timedelta
         from src.services.mongodb.news_entries_service import NewsEntriesService
 
@@ -104,7 +139,11 @@ class RelatedNewsEntries(object):
 
         fromDate = datetime.utcnow() - timedelta(days=days)
         toDate = datetime.utcnow()
-        news_to_compare = nes.get_by_categories_date_range(fromDate=fromDate, toDate=toDate,
+
+        if for_universe:
+            news_to_compare = nes.get_by_id_date_range(fromDate=fromDate, toDate=toDate)
+        else:
+            news_to_compare = nes.get_by_categories_date_range(fromDate=fromDate, toDate=toDate,
                                                            categories=self.news_original.categories)
 
         self.news_to_compare = news_to_compare

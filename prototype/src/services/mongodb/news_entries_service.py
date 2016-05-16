@@ -104,3 +104,21 @@ class NewsEntriesService(object):
         return self.get_list({"_id": {"$gt": dummy_id_from},
                               'categories': {'$in': categories}},
                              limit)
+
+
+    def get_by_id_date_range(self, fromDate, toDate, limit=None):
+        """Retrieve a list of news entries by date range
+        Parameters
+        ----------
+        start: date
+            date to start from
+        to: date
+            date to stop
+        """
+        from bson.objectid import ObjectId
+        dummy_id_from = ObjectId.from_datetime(fromDate)
+        dummy_id_to = ObjectId.from_datetime(toDate)
+        # TODO: use dummy_id_to
+        return self.get_list({"_id": {"$gt": dummy_id_from},
+                                'language':u"spanish"},
+                             limit)

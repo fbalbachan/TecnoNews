@@ -321,16 +321,16 @@ class BlogPublisher(object):
             elif host['id'] == u"guialocal_es":
 
                 customizations = [
-                        {category:u"economía", limit:10},
-                        {category:u"deporte", limit:5},
-                        {category:u"internacionales", limit:15},
-                        {category:u"clima", limit:5},
-                        {category:u"estilo vida", limit:15},
-                        {category:u"turismo", limit:15},
-                        {category:u"entretenimiento", limit:8},
-                        {category:u"interés general", limit:5},
-                        {category:u"policiales", limit:8},
-                        {category:u"tecnología", limit:8},
+                        {"category":u"economía", "limit":10},
+                        {"category":u"deporte", "limit":5},
+                        {"category":u"internacionales", "limit":15},
+                        {"category":u"clima", "limit":5},
+                        {"category":u"estilo vida", "limit":15},
+                        {"category":u"turismo", "limit":15},
+                        {"category":u"entretenimiento", "limit":8},
+                        {"category":u"interés general", "limit":5},
+                        {"category":u"policiales", "limit":8},
+                        {"category":u"tecnología", "limit":8},
                 ]
                 valid_country = False
                 valid_countries = [ u'argentina', u'colombia', u'chile', u'mexico', u'ecuador']
@@ -348,11 +348,11 @@ class BlogPublisher(object):
 
                     for a_customization in customizations:
 
-                        if a_customization.category in entry.categories:
+                        if a_customization["category"] in entry.categories:
                             post_count = news_service.get_count({'_id': {'$gte': ObjectId.from_datetime(interval_time)},
                                  'host_id': host['id'],
-                                 'categories': a_customization.category})
-                            if post_count < a_customization.limit:
+                                 'categories': a_customization["category"]})
+                            if post_count < a_customization["limit"]:
                                 valid_host = True
                                 break
 
