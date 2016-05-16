@@ -45,6 +45,97 @@ def color_from_sentiment(sent = None) :
 
     return ret
 
+def color_from_category(cat = None) :
+    ret = "white"
+    
+    if cat != None :
+        if "policiales" in cat.lower() :
+            ret = ( 1,1,1,1)
+        if "internacionales" in cat.lower() : 
+            ret = ( 1,1,1,1)
+        if "economía" in cat.lower() : 
+            ret = ( 1,1,1,1)
+        if "salud" in cat.lower() : 
+            ret = ( 1,1,1,1)
+        if "interés general" in cat.lower() : 
+            ret = ( 1,1,1,1)
+        if "cultura" in cat.lower() : 
+            ret = ( 1,1,1,1)
+        if "mujer" in cat.lower() : 
+            ret = ( 1,1,1,1)
+        if "política" in cat.lower() : 
+            ret = ( 1,1,1,1)
+        if "deporte" in cat.lower() : 
+            ret = ( 1,1,1,1)
+        if "clima" in cat.lower() : 
+            ret = ( 1,1,1,1)
+        if "turismo" in cat.lower() : 
+            ret = ( 1,1,1,1)
+        if "tecnología" in cat.lower() : 
+            ret = ( 1,1,1,1)
+        if "ciencia" in cat.lower() : 
+            ret = ( 1,1,1,1)
+        if "entretenimiento" in cat.lower() : 
+            ret = ( 1,1,1,1)
+        if "estilo vida" in cat.lower() : 
+            ret = ( 1,1,1,1)
+        if "propiedades" in cat.lower() : 
+            ret = ( 1,1,1,1)
+        if "belleza" in cat.lower() : 
+            ret = ( 1,1,1,1)
+        if "espectáculos" in cat.lower() : 
+            ret = ( 1,1,1,1)
+        if "insólito" in cat.lower() : 
+            ret = ( 1,1,1,1)
+        if "interesse general-pt" in cat.lower() : 
+            ret = ( 1,1,1,1)
+        if "interesse gerais-pt" in cat.lower() : 
+            ret = ( 1,1,1,1)
+        if "política-pt" in cat.lower() : 
+            ret = ( 1,1,1,1)
+        if "tecnología-pt" in cat.lower() : 
+            ret = ( 1,1,1,1)
+        if "internacionales-pt" in cat.lower() : 
+            ret = ( 1,1,1,1)
+        if "saúde-pt" in cat.lower() : 
+            ret = ( 1,1,1,1)
+        if "economia-pt" in cat.lower() : 
+            ret = ( 1,1,1,1)
+        if "entretenimento-pt" in cat.lower() : 
+            ret = ( 1,1,1,1)
+        if "cultura-pt" in cat.lower() : 
+            ret = ( 1,1,1,1)
+        if "esporte-pt" in cat.lower() : 
+            ret = ( 1,1,1,1)
+        if "policiais-pt" in cat.lower() : 
+            ret = ( 1,1,1,1)
+        if "interesse geral-pt" in cat.lower() : 
+            ret = ( 1,1,1,1)
+        if "ciência-pt" in cat.lower() : 
+            ret = ( 1,1,1,1)
+        if "mulher-pt" in cat.lower() : 
+            ret = ( 1,1,1,1)
+        if "clima-pt" in cat.lower() : 
+            ret = ( 1,1,1,1)
+        if "turismo-pt" in cat.lower() : 
+            ret = ( 1,1,1,1)
+        if "lancenet" in cat.lower() : 
+            ret = ( 1,1,1,1)
+        if "rojotur" in cat.lower() : 
+            ret = ( 1,1,1,1)
+        if "automóviles" in cat.lower() : 
+            ret = ( 1,1,1,1)
+        if "rojovida" in cat.lower() : 
+            ret = ( 1,1,1,1)
+        if "rojosalud" in cat.lower() : 
+            ret = ( 1,1,1,1)
+        if "electrodomésticos" in cat.lower() :
+            ret = ( 1,1,1,1)
+        if "propiedades-pt" in cat.lower() : 
+            ret = ( 1,1,1,1)
+
+    return ret
+
 def generate_json_from_objectid( item_id , gens = 5) :
     from bson.objectid import ObjectId
     import json
@@ -180,7 +271,8 @@ def create_pickle( object_id , min_size=10) :
         final_graph.append( semi_final_graph[item] )
         #final_graph[len(final_graph) - 1]["name"] = item
         names.append(item)
-        color.append( color_from_sentiment( semi_final_graph[item]["sentiment"] ) )
+        #color.append( color_from_sentiment( semi_final_graph[item]["sentiment"] ) )
+        color.append( color_from_category( semi_final_graph[item]["cats"][0] ) )
         #label.append( semi_final_graph[item]["title"][:22].encode("utf-8") + "..." )
         label.append( str(i) )
         sizes.append( min_size + len(semi_final_graph[item]["referents"]) + len(semi_final_graph[item]["children"]) )
