@@ -5,6 +5,7 @@ window.$  = jQuery;
 window.gs = null; //galaxy summary
 window.cg = null; //custom graph
 window.custom_graph_data = {}
+window.universe          = { nodecount = 0 }
 
 /**
     Given a sentiment string, returns an adequate color.
@@ -519,7 +520,7 @@ function setup_cy() {
     
     
     $("#loading-overlay").fadeOut(1000);
-    $("#stats #nodecount").html( nodeset.nodecount );
+    
 }
 
 wc = null;
@@ -581,7 +582,12 @@ function show_galaxy(obj) {
     $("#wc, #gs, #cg").fadeOut(100);
     $("#visualizaciones div.selected").removeClass("selected");
     $(obj).addClass("selected");
-    $("#cy").fadeIn(500);
+    $("#cy").fadeIn(500).promise().then(
+        function() {
+            $("#stats #nodecount").html( nodeset.nodecount );
+            $("#stats h4").html("News (nodes) arranged around the Galaxy");
+        }
+    );
 }
 
 
@@ -714,7 +720,12 @@ function show_customgraph(obj) {
         $("#cg").css("cursor","default");
         
     } else {
-        $("#cg").fadeIn(500);
+        $("#cg").fadeIn(500).promise().then(
+            function() {
+                $("#stats #nodecount").html( universe.nodecount );
+                $("#stats h4").html("News (nodes) arranged around the Universe");
+            }
+        );
     }
     
 }
@@ -743,6 +754,8 @@ function generate_customgraph() {
                 for (var k in custom_graph_data) {
                     tmparr.push(custom_graph_data[k]);
                 }
+                
+                universe.nodecount = tmparr.length;
                 
                 tmparr.sort(function(a, b) { 
                     return parseInt(a.id.split("_")[1]) - parseInt(b.id.split("_")[1]);
@@ -780,7 +793,8 @@ function generate_customgraph() {
                         grupo.removeAttr("selected");
                     }
                 );
-                
+                $("#stats #nodecount").html( universe.nodecount );
+                $("#stats h4").html("News (nodes) arranged around the Universe");
             } else {
                 var message = resp.data.message;
                 alert("error leyendo datos del custom graph:\n" + message);
