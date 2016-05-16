@@ -116,16 +116,14 @@
             <h4>(mouse over and click on nodes for details and news summary)</h4>
         </div>
 
-    <div id="titulo-noticia">
-            
-        </div>
+        <div id="titulo-noticia"> </div>
 
         <div id="visualizaciones">
             <h4>Select Infovis Graph</h4>
             <p><div class="round selected" onclick="show_galaxy(this);"></div> NewsGalaxy</p>
             <p><div class="round" onclick="show_wordcloud(this);"></div> TopicCloud</p>
             <p><div class="round" onclick="show_galaxysummary(this);"></div> GalaxySummary</p>
-            <p><div class="round" onclick="show_customgraph(this);"></div> Custom Graph</p>
+            <p><div class="round" onclick="show_customgraph(this);"></div> NewsUniverse</p>
         </div>
         
         <div id="download">

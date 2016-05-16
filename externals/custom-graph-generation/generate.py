@@ -116,7 +116,7 @@ if __name__ == "__main__":
     if isinstance(layout, list):
         layout = Layout(layout)
     
-    layout.fit_into( bbox=(1600,1600) )
+    layout.fit_into( bbox=(1280,1024) )
     print "saving image..."
 
     print datetime.datetime.now()
@@ -132,7 +132,7 @@ if __name__ == "__main__":
     # subgraph / copy by sentiment
     
     
-    tmp = """<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1600pt" height="1600pt" viewBox="0 0 1600 1600" version="1.1">
+    tmp = """<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="100%" viewBox="0 0 1280 1024" version="1.1">
 <g id="graph-nodes">
 """
     if not isinstance(layout, list):
@@ -145,17 +145,18 @@ if __name__ == "__main__":
         for e in g.incident(g.vs.find(name=v["name"]), mode="out") :
             e  = g.es[e]
             v2 = g.vs[e.target]
-            tmp += "<line x1=\""+str(coords[i][0])+"\" y1=\""+str(coords[i][1])+"\" x2=\""+str(v2["coords"][0])+"\" y2=\""+str(v2["coords"][1])+"\" stroke=\"gray\" stroke-width=\"1\"/>\n"
+            tmp += "<line x1=\""+str(coords[i][0])+"\" y1=\""+str(coords[i][1])+"\" x2=\""+str(v2["coords"][0])+"\" y2=\""+str(v2["coords"][1])+"\" stroke=\"black\" stroke-width=\"1\"/>\n"
         tmp += "</g>\n"
         
         tmp += "<circle cx=\""+str(coords[i][0])+"\" cy=\""+str(coords[i][1])+"\" r=\""+str(v["size"] / 2 )+"\" />\n"
         tmp += "<title>"+v["label"]+"</title>\n"
+        tmp += "<text x=\""+str( coords[i][0] - v["size"] / 2 )+"\" y=\""+str(coords[i][1] + v["size"] / 3)+"\" fill=\"black\" font-family=\"Ubuntu,Tahoma\" font-size=\""+str(v["size"])+"\">"+v["label"]+"</text>"
         
         tmp += "</g>\n"
     
     tmp += "</g>\n"
     
-    tmp += "<g class=\"graph-data\" >\n"
+    tmp += "<g id=\"graph-data\" >\n"
     f = open(args[0] + "-set.json","r")
     j = f.read()
     f.close()

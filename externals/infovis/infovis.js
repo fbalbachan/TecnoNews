@@ -4,7 +4,7 @@ window.$  = jQuery;
 
 window.gs = null; //galaxy summary
 window.cg = null; //custom graph
-
+window.custom_graph_data = {}
 
 /**
     Given a sentiment string, returns an adequate color.
@@ -502,6 +502,10 @@ function setup_cy() {
             if (evt.keyCode == 27 && $("#data-overlay")[0].offsetParent !== null) {
                 center_cy();
                 hide_data_overlay();
+            } else if (evt.key == "l" || evt.key == "L") {
+                if ( $("#cg-node-list").length > 0 ) {
+                    toggle_cg_node_list();
+                }
             }
             
         }
@@ -534,8 +538,7 @@ function setup_wordcloud( arr ) {
 }
 
 function show_wordcloud(obj) {
-    $("#cy").fadeOut(100);
-    $("#gs").fadeOut(100);
+    $("#cy, #gs, #cg").fadeOut(100);
     $("#visualizaciones div.selected").removeClass("selected");
     $(obj).addClass("selected");
     
@@ -574,8 +577,7 @@ function show_wordcloud(obj) {
 }
 
 function show_galaxy(obj) {
-    $("#wc").fadeOut(100);
-    $("#gs").fadeOut(100);
+    $("#wc, #gs, #cg").fadeOut(100);
     $("#visualizaciones div.selected").removeClass("selected");
     $(obj).addClass("selected");
     $("#cy").fadeIn(500);
@@ -620,8 +622,7 @@ function setup_galaxysummary() {
 
 
 function show_galaxysummary(obj) {
-    $("#cy").fadeOut(100);
-    $("#wc").fadeOut(100);
+    $("#cy, #wc, #cg").fadeOut(100);
     $("#visualizaciones div.selected").removeClass("selected");
     $(obj).addClass("selected");
     
@@ -679,7 +680,7 @@ function setup_customgraph() {
             "auto"          : "Automático"
         };
         
-        var tmphtml = "<div class=\"cs-setup-form\"><select id=\"cs-layout\">\n";
+        var tmphtml = "<div id=\"cg-setup-form\"><!--select id=\"cg-layout\">\n";
         var k       = "";
         
         for (k in cs_lays) {
@@ -687,7 +688,7 @@ function setup_customgraph() {
             tmphtml += "<option value=\"" + k + "\" >" + cs_lays[k] + "</option>\n";
         }
         
-        tmphtml += "</select>\n<button onclick=\"generate_customgraph()\"> generar </button>";
+        tmphtml += "</select-->\n<button onclick=\"generate_customgraph()\"> generar </button>";
 
         
         cg = tmphtml;
@@ -720,7 +721,8 @@ function show_customgraph(obj) {
 function generate_customgraph() {
     
     var wp_id   = nodeset.nodes[0].data.wp_url.split("p=")[1]
-    var layout  = $("#cs-layout")[0].value
+    //var layout  = $("#cg-layout")[0].value
+    var layout  = "random";
     
     $("#cg").css("cursor","wait");
     
@@ -728,10 +730,53 @@ function generate_customgraph() {
         location.protocol + "//" + location.host + "/infovis/get_custom_graph.php?news_id=" + wp_id + "&layout=" + layout
     ).promise().then(
         function (resp, status, xhr) {
-            console.log(resp,status,xhr);
+            //console.log(resp,status,xhr);
             $("#cg").css("cursor","default");
             if (resp.status === "success") {
-                $("#cg").html( resp.data.svg )
+                var local_cg = $("#cg");
+                local_cg.html( resp.data.svg + cg);
+                custom_graph_data = JSON.parse( $("svg > #graph-data").text() );
+                
+                var tmparr = [];
+                for (var k in custom_graph_data) {
+                    tmparr.push(custom_graph_data[k]);
+                }
+                
+                tmparr.sort(function(a, b) { 
+                    return parseInt(a.id.split("_")[1]) - parseInt(b.id.split("_")[1]);
+                });
+
+                var tmphtml = "\n<div id=\"cg-node-list\">\
+                                <table>\
+                                    <thead>\
+                                        <tr>\
+                                            <th>nodo</th>\
+                                            <th>fecha</th>\
+                                            <th>titulo</th>\
+                                        </tr>\
+                                    </thead>\
+                                    <tbody>";
+                for (var i = 0; i < tmparr.length; i++) {
+                    tmphtml += "<tr><td>" + tmparr[i].id.split("_")[1] + "</td><td>" + tmparr[i].date + "</td><td>" + tmparr[i].title + "</td></tr>";
+                }
+                tmphtml += "</tbody></table></div>";
+                local_cg.html( local_cg.html() + tmphtml );
+                
+                $("g:has(> circle)").off("mouseover").on("mouseover", 
+                    function(evt) { 
+                        var data  = custom_graph_data[evt.target.parentNode.getAttribute("objectid")];
+                        var grupo = $(evt.target.parentNode);
+                        mostrar_titulo( data.title, data.date );
+                        grupo.attr("selected", "selected");
+                    } 
+                ).off("mouseout").on("mouseout",
+                    function (evt) {
+                        ocultar_titulo();
+                        var grupo = $(evt.target.parentNode);
+                        grupo.removeAttr("selected");
+                    }
+                );
+                
             } else {
                 var message = resp.data.message;
                 alert("error leyendo datos del custom graph:\n" + message);
@@ -745,3 +790,11 @@ function generate_customgraph() {
     );
 }
 
+function toggle_cg_node_list() {
+    var div = $("#cg-node-list");
+    if ( div.is(":hidden") ) {
+        div.fadeIn(500);
+    } else {
+        div.fadeOut(500);
+    }
+}

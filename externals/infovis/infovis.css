@@ -485,3 +485,55 @@ h4 {
 #download:hover {
     opacity             :   1;
 }
+
+#cg-setup-form {
+    position    : absolute;
+    width       : 50%;
+    text-align  : center;
+    top         : 0px;
+    left        : 25%;
+    z-index     : 2;
+    opacity     : 0.5;
+    font-family : dosisbook;
+}
+
+#cg-setup-form:hover {
+    opacity     : 1;
+}
+
+#cg-node-list {
+    position            : absolute;
+    width               : 50%;
+    height              : 99%;
+    text-align          : center;
+    top                 : 0px;
+    right               : 0px;
+    z-index             : 3;
+    opacity             : 0.5;
+    font-family         : dosisbook;
+    background-color    : white;
+    border-radius       : 15px;
+    border              : black 1px solid;
+    overflow-x          : hidden;
+    overflow-y          : auto;
+}
+
+#cg-node-list:hover {
+    opacity             : 1;
+    box-shadow          : -5px 5px 10px black;
+}
+
+#cg-node-list tbody > tr:hover {
+    background-color    : black;
+    color               : white;
+}
+
+svg g > g.edge-group {
+    display     : none;
+}
+
+svg g[selected] > g.edge-group {
+    display     : block;
+}
+
+
