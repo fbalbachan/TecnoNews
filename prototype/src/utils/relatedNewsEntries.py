@@ -82,7 +82,6 @@ class RelatedNewsEntries(object):
         self.text_distance = TextDistance()
         self.stopwords = self.load_stopwords()
 
-        print len(self.news_to_compare)
         #
         self.pre_process(self.news_original)
         for news in self.news_to_compare:
