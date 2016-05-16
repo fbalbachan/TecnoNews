@@ -123,7 +123,7 @@
             <p><div class="round selected" onclick="show_galaxy(this);"></div> NewsGalaxy</p>
             <p><div class="round" onclick="show_wordcloud(this);"></div> TopicCloud</p>
             <p><div class="round" onclick="show_galaxysummary(this);"></div> GalaxySummary</p>
-            <p><div class="round" onclick="show_customgraph(this);"></div> Fixed Graphs</p>
+            <p><div class="round" onclick="show_customgraph(this);"></div> NewsUniverse</p>
         </div>
         
         <div id="download">

@@ -680,7 +680,7 @@ function setup_customgraph() {
             "auto"          : "Automático"
         };
         
-        var tmphtml = "<div id=\"cg-setup-form\"><select id=\"cg-layout\">\n";
+        var tmphtml = "<div id=\"cg-setup-form\"><!--select id=\"cg-layout\">\n";
         var k       = "";
         
         for (k in cs_lays) {
@@ -688,7 +688,7 @@ function setup_customgraph() {
             tmphtml += "<option value=\"" + k + "\" >" + cs_lays[k] + "</option>\n";
         }
         
-        tmphtml += "</select>\n<button onclick=\"generate_customgraph()\"> generar </button>";
+        tmphtml += "</select-->\n<button onclick=\"generate_customgraph()\"> generar </button>";
 
         
         cg = tmphtml;
@@ -721,7 +721,8 @@ function show_customgraph(obj) {
 function generate_customgraph() {
     
     var wp_id   = nodeset.nodes[0].data.wp_url.split("p=")[1]
-    var layout  = $("#cg-layout")[0].value
+    //var layout  = $("#cg-layout")[0].value
+    var layout  = "random";
     
     $("#cg").css("cursor","wait");
     
