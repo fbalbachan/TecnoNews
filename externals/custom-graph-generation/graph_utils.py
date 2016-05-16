@@ -45,6 +45,89 @@ def color_from_sentiment(sent = None) :
 
     return ret
 
+def color_from_category(cat = None) :
+    ret = "white"
+    
+    if cat != None :
+        if u"policiales" in cat.lower() :
+            ret = "rgba(255,0,0,1)"
+        if u"policiais-pt" in cat.lower() : 
+            ret = "rgba(255,0,0,1)"
+        if u"internacionales" in cat.lower() : 
+            ret = "rgba(0,200,255,1)"
+        if u"internacionales-pt" in cat.lower() : 
+            ret = "rgba(0,200,255,1)"
+        if u"economía" in cat.lower() : 
+            ret = "rgba(0,0,255,1)"
+        if u"economia-pt" in cat.lower() : 
+            ret = "rgba(0,0,255,1)"
+        if u"interés general" in cat.lower() : 
+            ret = "rgba(0,255,255,1)"
+        if u"interesse general-pt" in cat.lower() : 
+            ret = "rgba(0,255,255,1)"
+        if u"interesse gerais-pt" in cat.lower() : 
+            ret = "rgba(0,255,255,1)"
+        if u"interesse geral-pt" in cat.lower() : 
+            ret = "rgba(0,255,255,1)"
+        if u"política" in cat.lower() : 
+            ret = "rgba(255,255,0,1)"
+        if u"política-pt" in cat.lower() : 
+            ret = "rgba(255,255,0,1)"
+        if u"espectáculos" in cat.lower() : 
+            ret = "rgba(200,190,160,1)"
+        if u"entretenimiento" in cat.lower() : 
+            ret = "rgba(200,190,160,1)"
+        if u"entretenimento-pt" in cat.lower() : 
+            ret = "rgba(200,190,160,1)"
+        if u"salud" in cat.lower() : 
+            ret = "rgba(150,100,150,1)"
+        if u"saúde-pt" in cat.lower() : 
+            ret = "rgba(150,100,150,1)"
+        if u"mujer" in cat.lower() : 
+            ret = "rgba(255,100,255,1)"
+        if u"mulher-pt" in cat.lower() : 
+            ret = "rgba(255,100,255,1)"
+        if u"belleza" in cat.lower() : 
+            ret = "rgba(255,100,255,1)"
+        if u"estilo vida" in cat.lower() : 
+            ret = "rgba(255,100,255,1)"
+        if u"turismo" in cat.lower() : 
+            ret = "rgba(100,200,100,1)"
+        if u"turismo-pt" in cat.lower() : 
+            ret = "rgba(100,200,100,1)"
+        if u"cultura" in cat.lower() : 
+            ret = "rgba(150,50,0,1)"
+        if u"cultura-pt" in cat.lower() : 
+            ret = "rgba(150,50,0,1)"
+        if u"deporte" in cat.lower() : 
+            ret = "rgba(200,100,50,1)"
+        if u"esporte-pt" in cat.lower() : 
+            ret = "rgba(200,100,50,1)"
+        if u"clima" in cat.lower() : 
+            ret = "rgba(200,200,50,1)"
+        if u"clima-pt" in cat.lower() : 
+            ret = "rgba(200,200,50,1)"
+        if u"ciencia" in cat.lower() : 
+            ret = "rgba(180,160,200,1)"
+        if u"ciência-pt" in cat.lower() : 
+            ret = "rgba(180,160,200,1)"
+        if u"insólito" in cat.lower() : 
+            ret = "rgba(180,160,200,1)"
+        if u"tecnología" in cat.lower() : 
+            ret = "rgba(200,160,170,1)"
+        if u"tecnología-pt" in cat.lower() : 
+            ret = "rgba(200,160,170,1)"
+        if u"automóviles" in cat.lower() : 
+            ret = "rgba(200,160,170,1)"
+        if u"electrodomésticos" in cat.lower() :
+            ret = "rgba(200,160,170,1)"
+        if u"propiedades" in cat.lower() : 
+            ret = "rgba(255,255,255,1)"
+        if u"propiedades-pt" in cat.lower() : 
+            ret = "rgba(255,255,255,1)"
+        
+    return ret
+
 def generate_json_from_objectid( item_id , gens = 5) :
     from bson.objectid import ObjectId
     import json
@@ -180,7 +263,8 @@ def create_pickle( object_id , min_size=10) :
         final_graph.append( semi_final_graph[item] )
         #final_graph[len(final_graph) - 1]["name"] = item
         names.append(item)
-        color.append( color_from_sentiment( semi_final_graph[item]["sentiment"] ) )
+        #color.append( color_from_sentiment( semi_final_graph[item]["sentiment"] ) )
+        color.append( color_from_category( semi_final_graph[item]["cats"][0] ) )
         #label.append( semi_final_graph[item]["title"][:22].encode("utf-8") + "..." )
         label.append( str(i) )
         sizes.append( min_size + len(semi_final_graph[item]["referents"]) + len(semi_final_graph[item]["children"]) )
