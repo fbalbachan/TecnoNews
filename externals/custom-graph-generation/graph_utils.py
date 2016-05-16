@@ -49,90 +49,90 @@ def color_from_category(cat = None) :
     ret = "white"
     
     if cat != None :
-        if "policiales" in cat.lower() :
-            ret = ( 1,1,1,1)
-        if "internacionales" in cat.lower() : 
-            ret = ( 1,1,1,1)
-        if "economía" in cat.lower() : 
-            ret = ( 1,1,1,1)
-        if "salud" in cat.lower() : 
-            ret = ( 1,1,1,1)
-        if "interés general" in cat.lower() : 
-            ret = ( 1,1,1,1)
-        if "cultura" in cat.lower() : 
-            ret = ( 1,1,1,1)
-        if "mujer" in cat.lower() : 
-            ret = ( 1,1,1,1)
-        if "política" in cat.lower() : 
-            ret = ( 1,1,1,1)
-        if "deporte" in cat.lower() : 
-            ret = ( 1,1,1,1)
-        if "clima" in cat.lower() : 
-            ret = ( 1,1,1,1)
-        if "turismo" in cat.lower() : 
-            ret = ( 1,1,1,1)
-        if "tecnología" in cat.lower() : 
-            ret = ( 1,1,1,1)
-        if "ciencia" in cat.lower() : 
-            ret = ( 1,1,1,1)
-        if "entretenimiento" in cat.lower() : 
-            ret = ( 1,1,1,1)
-        if "estilo vida" in cat.lower() : 
-            ret = ( 1,1,1,1)
-        if "propiedades" in cat.lower() : 
-            ret = ( 1,1,1,1)
-        if "belleza" in cat.lower() : 
-            ret = ( 1,1,1,1)
-        if "espectáculos" in cat.lower() : 
-            ret = ( 1,1,1,1)
-        if "insólito" in cat.lower() : 
-            ret = ( 1,1,1,1)
-        if "interesse general-pt" in cat.lower() : 
-            ret = ( 1,1,1,1)
-        if "interesse gerais-pt" in cat.lower() : 
-            ret = ( 1,1,1,1)
-        if "política-pt" in cat.lower() : 
-            ret = ( 1,1,1,1)
-        if "tecnología-pt" in cat.lower() : 
-            ret = ( 1,1,1,1)
-        if "internacionales-pt" in cat.lower() : 
-            ret = ( 1,1,1,1)
-        if "saúde-pt" in cat.lower() : 
-            ret = ( 1,1,1,1)
-        if "economia-pt" in cat.lower() : 
-            ret = ( 1,1,1,1)
-        if "entretenimento-pt" in cat.lower() : 
-            ret = ( 1,1,1,1)
-        if "cultura-pt" in cat.lower() : 
-            ret = ( 1,1,1,1)
-        if "esporte-pt" in cat.lower() : 
-            ret = ( 1,1,1,1)
-        if "policiais-pt" in cat.lower() : 
-            ret = ( 1,1,1,1)
-        if "interesse geral-pt" in cat.lower() : 
-            ret = ( 1,1,1,1)
-        if "ciência-pt" in cat.lower() : 
-            ret = ( 1,1,1,1)
-        if "mulher-pt" in cat.lower() : 
-            ret = ( 1,1,1,1)
-        if "clima-pt" in cat.lower() : 
-            ret = ( 1,1,1,1)
-        if "turismo-pt" in cat.lower() : 
-            ret = ( 1,1,1,1)
-        if "lancenet" in cat.lower() : 
-            ret = ( 1,1,1,1)
-        if "rojotur" in cat.lower() : 
-            ret = ( 1,1,1,1)
-        if "automóviles" in cat.lower() : 
-            ret = ( 1,1,1,1)
-        if "rojovida" in cat.lower() : 
-            ret = ( 1,1,1,1)
-        if "rojosalud" in cat.lower() : 
-            ret = ( 1,1,1,1)
-        if "electrodomésticos" in cat.lower() :
-            ret = ( 1,1,1,1)
-        if "propiedades-pt" in cat.lower() : 
-            ret = ( 1,1,1,1)
+        if u"policiales" in cat.lower() :
+            ret = "rgba(255,255,255,1)"
+        if u"internacionales" in cat.lower() : 
+            ret = "rgba(255,255,255,1)"
+        if u"economía" in cat.lower() : 
+            ret = "rgba(255,255,255,1)"
+        if u"salud" in cat.lower() : 
+            ret = "rgba(255,255,255,1)"
+        if u"interés general" in cat.lower() : 
+            ret = "rgba(255,255,255,1)"
+        if u"cultura" in cat.lower() : 
+            ret = "rgba(255,255,255,1)"
+        if u"mujer" in cat.lower() : 
+            ret = "rgba(255,255,255,1)"
+        if u"política" in cat.lower() : 
+            ret = "rgba(255,255,255,1)"
+        if u"deporte" in cat.lower() : 
+            ret = "rgba(255,255,255,1)"
+        if u"clima" in cat.lower() : 
+            ret = "rgba(255,255,255,1)"
+        if u"turismo" in cat.lower() : 
+            ret = "rgba(255,255,255,1)"
+        if u"tecnología" in cat.lower() : 
+            ret = "rgba(255,255,255,1)"
+        if u"ciencia" in cat.lower() : 
+            ret = "rgba(255,255,255,1)"
+        if u"entretenimiento" in cat.lower() : 
+            ret = "rgba(255,255,255,1)"
+        if u"estilo vida" in cat.lower() : 
+            ret = "rgba(255,255,255,1)"
+        if u"propiedades" in cat.lower() : 
+            ret = "rgba(255,255,255,1)"
+        if u"belleza" in cat.lower() : 
+            ret = "rgba(255,255,255,1)"
+        if u"espectáculos" in cat.lower() : 
+            ret = "rgba(255,255,255,1)"
+        if u"insólito" in cat.lower() : 
+            ret = "rgba(255,255,255,1)"
+        if u"interesse general-pt" in cat.lower() : 
+            ret = "rgba(255,255,255,1)"
+        if u"interesse gerais-pt" in cat.lower() : 
+            ret = "rgba(255,255,255,1)"
+        if u"política-pt" in cat.lower() : 
+            ret = "rgba(255,255,255,1)"
+        if u"tecnología-pt" in cat.lower() : 
+            ret = "rgba(255,255,255,1)"
+        if u"internacionales-pt" in cat.lower() : 
+            ret = "rgba(255,255,255,1)"
+        if u"saúde-pt" in cat.lower() : 
+            ret = "rgba(255,255,255,1)"
+        if u"economia-pt" in cat.lower() : 
+            ret = "rgba(255,255,255,1)"
+        if u"entretenimento-pt" in cat.lower() : 
+            ret = "rgba(255,255,255,1)"
+        if u"cultura-pt" in cat.lower() : 
+            ret = "rgba(255,255,255,1)"
+        if u"esporte-pt" in cat.lower() : 
+            ret = "rgba(255,255,255,1)"
+        if u"policiais-pt" in cat.lower() : 
+            ret = "rgba(255,255,255,1)"
+        if u"interesse geral-pt" in cat.lower() : 
+            ret = "rgba(255,255,255,1)"
+        if u"ciência-pt" in cat.lower() : 
+            ret = "rgba(255,255,255,1)"
+        if u"mulher-pt" in cat.lower() : 
+            ret = "rgba(255,255,255,1)"
+        if u"clima-pt" in cat.lower() : 
+            ret = "rgba(255,255,255,1)"
+        if u"turismo-pt" in cat.lower() : 
+            ret = "rgba(255,255,255,1)"
+        if u"lancenet" in cat.lower() : 
+            ret = "rgba(255,255,255,1)"
+        if u"rojotur" in cat.lower() : 
+            ret = "rgba(255,255,255,1)"
+        if u"automóviles" in cat.lower() : 
+            ret = "rgba(255,255,255,1)"
+        if u"rojovida" in cat.lower() : 
+            ret = "rgba(255,255,255,1)"
+        if u"rojosalud" in cat.lower() : 
+            ret = "rgba(255,255,255,1)"
+        if u"electrodomésticos" in cat.lower() :
+            ret = "rgba(255,255,255,1)"
+        if u"propiedades-pt" in cat.lower() : 
+            ret = "rgba(255,255,255,1)"
 
     return ret
 
