@@ -5,7 +5,10 @@ window.$  = jQuery;
 window.gs = null; //galaxy summary
 window.cg = null; //custom graph
 window.custom_graph_data = {};
-window.universe          = { "nodecount" : 0 };
+window.universe          = { 
+    "nodecount"     : 0,
+    "categories"    : []
+};
 
 /**
     Given a sentiment string, returns an adequate color.
@@ -520,6 +523,7 @@ function setup_cy() {
     
     
     $("#loading-overlay").fadeOut(1000);
+    nodeset.leyenda_html = $("#leyenda").html();
     $("#stats #nodecount").html( nodeset.nodecount );
     $("#stats h4").html("News (nodes) arranged around the Galaxy");
 }
@@ -587,8 +591,11 @@ function show_galaxy(obj) {
         function() {
             $("#stats #nodecount").html( nodeset.nodecount );
             $("#stats h4").html("News (nodes) arranged around the Galaxy");
+            $("#leyenda").html( nodeset.leyenda_html );
         }
     );
+    
+    
 }
 
 
@@ -725,6 +732,7 @@ function show_customgraph(obj) {
             function() {
                 $("#stats #nodecount").html( universe.nodecount );
                 $("#stats h4").html("News (nodes) arranged around the Universe");
+                $("#leyenda").html( universe.leyenda_html );
             }
         );
     }
@@ -752,11 +760,31 @@ function generate_customgraph() {
                 custom_graph_data = JSON.parse( $("svg > #graph-data").text() );
                 
                 var tmparr = [];
+                var tmpcol = "";
                 for (var k in custom_graph_data) {
                     tmparr.push(custom_graph_data[k]);
+                    
+                    var found = false;
+                    for (var i = 0; i < universe.categories.length; i++) {
+                        if (custom_graph_data[k]["cats"][0] == universe.categories[i]["name"]) {
+                            found = true;
+                            break;
+                        }
+                    }
+                    
+                    if (!found) {
+                        var cat = {
+                            "name"  :   custom_graph_data[k]["cats"][0],
+                            "color" :   custom_graph_data[k]["color"]
+                        };
+                        universe.categories.push( cat );
+                        tmpcol += "<p><div class=\"round\" style=\"background-color:"+cat.color+"\"></div> "+cat.name+"</p>"
+                    }
+                    
                 }
                 
-                universe.nodecount = tmparr.length;
+                universe.nodecount      = tmparr.length;
+                universe.leyenda_html   = tmpcol;
                 
                 tmparr.sort(function(a, b) { 
                     return parseInt(a.id.split("_")[1]) - parseInt(b.id.split("_")[1]);
@@ -795,6 +823,7 @@ function generate_customgraph() {
                 );
                 $("#stats #nodecount").html( universe.nodecount );
                 $("#stats h4").html("News (nodes) arranged around the Universe");
+                $("#leyenda").html( universe.leyenda_html );
             } else {
                 var message = resp.data.message;
                 alert("error leyendo datos del custom graph:\n" + message);
