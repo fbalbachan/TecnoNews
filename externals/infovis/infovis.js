@@ -695,7 +695,7 @@ function setup_customgraph() {
         
         cg       = tmphtml;
         $("#cg").html( tmphtml );
-        generate_customgraph();
+        setTimeout(generate_customgraph, 100);
     }
 }
 
