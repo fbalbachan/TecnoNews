@@ -327,13 +327,15 @@ class BlogPublisher(object):
                         {category:u"entretenimiento", limit:8},
                         {category:u"interés general", limit:5},
                         {category:u"policiales", limit:8},
-                        {category:u"tecnología", limit:8},    
+                        {category:u"tecnología", limit:8},
                 ]
                 valid_country = False
                 valid_countries = [ u'argentina', u'colombia', u'chile', u'mexico', u'ecuador']
+                temp_country = None
                 for country in valid_countries :
                     if country in entry.countries :
                         valid_country = True
+                        temp_country = country
                         break
 
                 interval_time = datetime.datetime.utcnow() - datetime.timedelta(seconds=2592000) #1 Month
@@ -352,7 +354,7 @@ class BlogPublisher(object):
                                 break
 
                 if valid_host:
-                    entry.categories = [entry.countries[0]]
+                    entry.categories = [temp_country]
 
             elif host['id'] == u"properati":
 
