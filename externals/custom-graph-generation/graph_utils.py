@@ -176,7 +176,7 @@ def generate_jsons_for_universe( item_id , gens = 5) :
         for checked in result:
             current_id += 1
             try :
-                already_processed[checked["_id"]] = {"id": "node_" + str(current_id), "date" : str(checked["_id"].generation_time).split("+")[0], "wp_id": str(checked["wp_id"]), "oid": str(checked["_id"]), "cats": checked["categories"], "source": checked["source"],  "title": checked["title"], "children": checked["versions"]}
+                already_processed[checked["_id"]] = {"id": "node_" + str(current_id), "date" : str(checked["_id"].generation_time).split("+")[0], "wp_id": str(checked["wp_id"]), "oid": str(checked["_id"]), "cats": checked["categories"], "source": checked["source"],  "title": checked["title"], "children": checked["universe_versions"] if "universe_versions" in checked else []}
                 if "sentiment" in checked :
                     already_processed[checked["_id"]]["sentiment"] = checked["sentiment"]
                 if "universe_versions" in checked :
