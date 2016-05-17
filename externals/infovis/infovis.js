@@ -832,7 +832,7 @@ function setup_customgraph_nodelist(svg) {
             mostrar_titulo( data.title + "<br/>Category : " + data.cats[0], data.date );
             var grupo = $(evt.target.parentNode);
             while (grupo.attr("oid") == undefined) {
-                grupo = grupo[0].parentNode);
+                grupo = $(grupo[0].parentNode);
             }
             grupo.attr("selected", "selected");
         } 
@@ -841,7 +841,7 @@ function setup_customgraph_nodelist(svg) {
             ocultar_titulo();
             var grupo = $(evt.target.parentNode);
             while (grupo.attr("oid") == undefined) {
-                grupo = grupo[0].parentNode);
+                grupo = $(grupo[0].parentNode);
             }
             grupo.removeAttr("selected");
         }
