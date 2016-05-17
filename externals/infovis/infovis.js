@@ -828,12 +828,12 @@ function setup_customgraph_nodelist(svg) {
     
     $("g:has(> circle)").off("mouseover").on("mouseover", 
         function(evt) { 
-            var data  = custom_graph_data[evt.target.parentNode.getAttribute("objectid")];
-            mostrar_titulo( data.title + "<br/>Category : " + data.cats[0], data.date );
             var grupo = $(evt.target.parentNode);
             while (grupo.attr("oid") == undefined) {
                 grupo = $(grupo[0].parentNode);
             }
+            var data  = custom_graph_data[grupo.attr("objectid")];
+            mostrar_titulo( data.title + "<br/>Category : " + data.cats[0], data.date );
             grupo.attr("selected", "selected");
         } 
     ).off("mouseout").on("mouseout",
