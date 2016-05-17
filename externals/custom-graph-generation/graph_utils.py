@@ -128,7 +128,7 @@ def color_from_category(cat = None) :
         
     return ret
 
-def generate_json_from_objectid( item_id , gens = 5) :
+def generate_jsons_for_universe( item_id , gens = 5) :
     from bson.objectid import ObjectId
     import json
     from pymongo import MongoClient
@@ -155,11 +155,15 @@ def generate_json_from_objectid( item_id , gens = 5) :
     result = col.find({"wp_id" : { "$in" : [ int(item_id) , str(item_id) ]} })[0]
 
     to_check = []
-    to_check.extend(result["versions"])
+    if "universe_versions" in result :
+        to_check.extend(result["universe_versions"])
 
     current_id = 0
 
-    already_processed[(result["_id"])] = {"id": "node_" + str(current_id), "date" : str(result["_id"].generation_time).split("+")[0], "wp_id": str(result["wp_id"]), "oid": str(result["_id"]), "title": result["title"], "source": result["source"], "cats": result["categories"], "children": result["versions"]}
+    already_processed[(result["_id"])] = {"id": "node_" + str(current_id), "date" : str(result["_id"].generation_time).split("+")[0], "wp_id": str(result["wp_id"]), "oid": str(result["_id"]), "title": result["title"], "source": result["source"], "cats": result["categories"]}
+    if "universe_versions" in result :
+        already_processed[(result["_id"])]["children"]  = result["universe_versions"]
+    
     if "sentiment" in result :
         already_processed[(result["_id"])]["sentiment"] = result["sentiment"]
 
@@ -173,13 +177,15 @@ def generate_json_from_objectid( item_id , gens = 5) :
             current_id += 1
             try :
                 already_processed[checked["_id"]] = {"id": "node_" + str(current_id), "date" : str(checked["_id"].generation_time).split("+")[0], "wp_id": str(checked["wp_id"]), "oid": str(checked["_id"]), "cats": checked["categories"], "source": checked["source"],  "title": checked["title"], "children": checked["versions"]}
-                if "sentiment" in checked :
+                if "universe_versions" in checked :
                     already_processed[checked["_id"]]["sentiment"] = checked["sentiment"]
+                if "universe_versions" in result :
+                    already_processed[checked["_id"]]["universe_versions"] = checked["universe_versions"]
             except Exception, e :
                 print e
                 print checked
                 exit(1)
-            next_level_ids.update(checked["versions"])
+            next_level_ids.update(checked["universe_versions"] if "universe_versions" in checked else [])
 
 
         to_check=list(next_level_ids)
@@ -208,6 +214,8 @@ def generate_json_from_objectid( item_id , gens = 5) :
             child_date  = already_processed[a_child]["date"]
             if "sentiment" in already_processed[a_child] :
                 child_sentiment = already_processed[a_child]["sentiment"]
+            if "universe_versions" in already_processed[a_child] :
+                child_sentiment = already_processed[a_child]["universe_versions"]
             else :
                 child_sentiment = None
 
@@ -223,11 +231,11 @@ def generate_json_from_objectid( item_id , gens = 5) :
         
 
     #print already_processed
-    f = open(item_id + "-set.json", "w")
+    f = open(item_id + "-set-universe-versions.json", "w")
     #f.write( json.dumps(already_processed, sort_keys=True, indent=4, separators=(',', ': '), cls=JSONEncoder) )
     f.write( repr(already_processed) )
     f.close()
-    f = open(item_id + "-final.json", "w")
+    f = open(item_id + "-final-universe-versions.json", "w")
     #f.write( json.dumps(already_processed, sort_keys=True, indent=4, separators=(',', ': '), cls=JSONEncoder) )
     f.write( repr(final_graph) )
     f.close()
@@ -237,16 +245,16 @@ def generate_json_from_objectid( item_id , gens = 5) :
 def create_pickle( object_id , min_size=10) :
     # Read a common input.
     
-    if not os.path.exists( object_id + "-set.json") or not os.path.exists( object_id + "-final.json") :
-        generate_json_from_objectid( object_id )
+    if not os.path.exists( object_id + "-set-universe-versions.json") or not os.path.exists( object_id + "-final-universe-versions.json") :
+        generate_jsons_for_universe( object_id )
     
     print datetime.datetime.now()
     print "reading input data..."
-    f = open(object_id + "-set.json","r")
+    f = open(object_id + "-set-universe-versions.json","r")
     j = f.read()
     f.close()
     already_processed = eval(j)
-    f = open(object_id + "-final.json","r")
+    f = open(object_id + "-final-universe-versions.json","r")
     j = f.read()
     f.close()
     semi_final_graph = eval(j)
