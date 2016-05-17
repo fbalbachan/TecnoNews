@@ -214,10 +214,13 @@ def generate_jsons_for_universe( item_id , gens = 5) :
             child_date  = already_processed[a_child]["date"]
             if "sentiment" in already_processed[a_child] :
                 child_sentiment = already_processed[a_child]["sentiment"]
-            if "universe_versions" in already_processed[a_child] :
-                child_sentiment = already_processed[a_child]["universe_versions"]
             else :
                 child_sentiment = None
+                
+            if "universe_versions" in already_processed[a_child] :
+                child_versions = already_processed[a_child]["universe_versions"]
+            else :
+                child_versions = None
 
             if child_id not in final_graph:
                 final_graph[child_id] = {"sentiment" : child_sentiment, "date" : child_date, "oid" : child_oid, "wp_id" : child_wpid , "cats" : child_cats, "source" : child_source, "title" : child_title, "referents": [], "children" : []}
