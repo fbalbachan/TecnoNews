@@ -529,11 +529,15 @@ h4 {
 }
 
 svg g > g.edge-group {
-    display     : none;
+    opacity     : 0.25;
 }
 
 svg g[selected] > g.edge-group {
-    display     : block;
+    opacity     : 1;
+    stroke-width: 2;
 }
 
+svg g[selected] > g.edge-group line {
+    stroke-width: 2;
+}
 
