@@ -231,11 +231,11 @@ def generate_jsons_for_universe( item_id , gens = 5) :
         
 
     #print already_processed
-    f = open(item_id + "-set-universe-versions.json", "w")
+    f = open(item_id + "-set.json", "w")
     #f.write( json.dumps(already_processed, sort_keys=True, indent=4, separators=(',', ': '), cls=JSONEncoder) )
     f.write( repr(already_processed) )
     f.close()
-    f = open(item_id + "-final-universe-versions.json", "w")
+    f = open(item_id + "-final.json", "w")
     #f.write( json.dumps(already_processed, sort_keys=True, indent=4, separators=(',', ': '), cls=JSONEncoder) )
     f.write( repr(final_graph) )
     f.close()
@@ -245,16 +245,16 @@ def generate_jsons_for_universe( item_id , gens = 5) :
 def create_pickle( object_id , min_size=10) :
     # Read a common input.
     
-    if not os.path.exists( object_id + "-set-universe-versions.json") or not os.path.exists( object_id + "-final-universe-versions.json") :
+    if not os.path.exists( object_id + "-set.json") or not os.path.exists( object_id + "-final.json") :
         generate_jsons_for_universe( object_id )
     
     print datetime.datetime.now()
     print "reading input data..."
-    f = open(object_id + "-set-universe-versions.json","r")
+    f = open(object_id + "-set.json","r")
     j = f.read()
     f.close()
     already_processed = eval(j)
-    f = open(object_id + "-final-universe-versions.json","r")
+    f = open(object_id + "-final.json","r")
     j = f.read()
     f.close()
     semi_final_graph = eval(j)
