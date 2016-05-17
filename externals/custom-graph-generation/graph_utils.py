@@ -177,9 +177,9 @@ def generate_jsons_for_universe( item_id , gens = 5) :
             current_id += 1
             try :
                 already_processed[checked["_id"]] = {"id": "node_" + str(current_id), "date" : str(checked["_id"].generation_time).split("+")[0], "wp_id": str(checked["wp_id"]), "oid": str(checked["_id"]), "cats": checked["categories"], "source": checked["source"],  "title": checked["title"], "children": checked["versions"]}
-                if "universe_versions" in checked :
+                if "sentiment" in checked :
                     already_processed[checked["_id"]]["sentiment"] = checked["sentiment"]
-                if "universe_versions" in result :
+                if "universe_versions" in checked :
                     already_processed[checked["_id"]]["universe_versions"] = checked["universe_versions"]
             except Exception, e :
                 print e
