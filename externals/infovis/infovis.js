@@ -760,7 +760,7 @@ function generate_customgraph() {
                 custom_graph_data = JSON.parse( $("svg > #graph-data").text() );
                 
                 var tmparr = [];
-                var tmpcol = "<h4>Universe's Categories</h4>\n";
+                var tmpcol = "<h4>News Categories</h4>\n";
                 for (var k in custom_graph_data) {
                     tmparr.push(custom_graph_data[k]);
                     
