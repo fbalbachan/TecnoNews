@@ -829,7 +829,7 @@ function setup_customgraph_nodelist(svg) {
     $("g:has(> circle)").off("mouseover").on("mouseover", 
         function(evt) { 
             var grupo = $(evt.target.parentNode);
-            while (grupo.attr("oid") == undefined) {
+            while (grupo.attr("objectid") == undefined) {
                 grupo = $(grupo[0].parentNode);
             }
             var data  = custom_graph_data[grupo.attr("objectid")];
@@ -840,7 +840,7 @@ function setup_customgraph_nodelist(svg) {
         function (evt) {
             ocultar_titulo();
             var grupo = $(evt.target.parentNode);
-            while (grupo.attr("oid") == undefined) {
+            while (grupo.attr("objectid") == undefined) {
                 grupo = $(grupo[0].parentNode);
             }
             grupo.removeAttr("selected");
