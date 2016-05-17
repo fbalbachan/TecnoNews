@@ -274,7 +274,7 @@ def create_pickle( object_id , min_size=10) :
         #color.append( color_from_sentiment( semi_final_graph[item]["sentiment"] ) )
         color.append( color_from_category( semi_final_graph[item]["cats"][0] ) )
         #label.append( semi_final_graph[item]["title"][:22].encode("utf-8") + "..." )
-        label.append( str(i) )
+        label.append( semi_final_graph[item]["node_id"].split("_")[1] ) #str(i) )
         sizes.append( min_size + len(semi_final_graph[item]["referents"]) + len(semi_final_graph[item]["children"]) )
         oids.append( semi_final_graph[item]["oid"] )
         wpids.append( semi_final_graph[item]["wp_id"] )
