@@ -158,7 +158,7 @@ def generate_jsons_for_universe( item_id , gens = 5) :
     if "universe_versions" in result :
         to_check.extend(result["universe_versions"])
 
-    current_id = 0
+    current_id = 1
 
     already_processed[(result["_id"])] = {"id": "node_" + str(current_id), "date" : str(result["_id"].generation_time).split("+")[0], "wp_id": str(result["wp_id"]), "oid": str(result["_id"]), "title": result["title"], "source": result["source"], "cats": result["categories"]}
     if "universe_versions" in result :
