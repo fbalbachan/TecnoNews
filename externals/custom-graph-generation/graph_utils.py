@@ -158,7 +158,7 @@ def generate_jsons_for_universe( item_id , gens = 5) :
     if "universe_versions" in result :
         to_check.extend(result["universe_versions"])
 
-    current_id = 0
+    current_id = 1
 
     already_processed[(result["_id"])] = {"id": "node_" + str(current_id), "date" : str(result["_id"].generation_time).split("+")[0], "wp_id": str(result["wp_id"]), "oid": str(result["_id"]), "title": result["title"], "source": result["source"], "cats": result["categories"]}
     if "universe_versions" in result :
@@ -278,7 +278,8 @@ def create_pickle( object_id , min_size=10) :
         color.append( color_from_category( semi_final_graph[item]["cats"][0] ) )
         #label.append( semi_final_graph[item]["title"][:22].encode("utf-8") + "..." )
         label.append( item.split("_")[1] ) #str(i) )
-        sizes.append( min_size + len(semi_final_graph[item]["referents"]) + len(semi_final_graph[item]["children"]) )
+        #sizes.append( min_size + len(semi_final_graph[item]["referents"]) + len(semi_final_graph[item]["children"]) )
+        sizes.append( min_size * 5 )
         oids.append( semi_final_graph[item]["oid"] )
         wpids.append( semi_final_graph[item]["wp_id"] )
         i += 1
