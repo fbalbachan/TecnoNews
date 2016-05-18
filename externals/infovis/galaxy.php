@@ -116,20 +116,19 @@
             <h4>(mouse over and click on nodes for details and news summary)</h4>
         </div>
 
-    <div id="titulo-noticia">
-            
-        </div>
+        <div id="titulo-noticia"> </div>
 
         <div id="visualizaciones">
             <h4>Select Infovis Graph</h4>
             <p><div class="round selected" onclick="show_galaxy(this);"></div> NewsGalaxy</p>
             <p><div class="round" onclick="show_wordcloud(this);"></div> TopicCloud</p>
             <p><div class="round" onclick="show_galaxysummary(this);"></div> GalaxySummary</p>
+            <p><div class="round" onclick="show_customgraph(this);"></div> NewsUniverse</p>
         </div>
         
         <div id="download">
             <h4>Download Portable Version</h4>
-            <p><a href="/infovis/portable.php?news_id=<?php echo (isset($_REQUEST["news_id"]) ) ? $_REQUEST["news_id"] : 0; ?>" class="download-link" target="downframe"> Click Here </a></p>
+            <p><a href="/infovis/portable2.php?news_id=<?php echo (isset($_REQUEST["news_id"]) ) ? $_REQUEST["news_id"] : 0; ?>" class="download-link" target="downframe"> Click Here </a></p>
             <iframe style="display:none;" id="downframe" name="downframe"></iframe>
         </div>
         
@@ -138,7 +137,7 @@
         </div>
         <div id="wc">&nbsp;</div>
         <div id="gs">&nbsp;</div>
+        <div id="cg">&nbsp;</div>
         <div id="cy"></div>
     </body>
 </html>
-
