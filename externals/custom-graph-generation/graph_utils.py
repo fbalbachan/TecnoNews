@@ -148,7 +148,16 @@ def generate_jsons_for_universe( item_id , gens = 5) :
 
     current_id = 1
 
-    already_processed[(result["_id"])] = {"id": "node_" + str(current_id), "date" : str(result["_id"].generation_time).split("+")[0], "wp_id": str(result["wp_id"]), "oid": str(result["_id"]), "title": result["title"], "source": result["source"], "cats": result["categories"]}
+    already_processed[(result["_id"])] = {
+        "id"    : "node_" + str(current_id), 
+        "date"  : str(result["_id"].generation_time).split("+")[0], 
+        "wp_id" : str(result["wp_id"]), 
+        "oid"   : str(result["_id"]), 
+        "title" : result["title"], 
+        "source": result["source"], 
+        "cats"  : result["categories"],
+        "url"   : result["wp_url"] if "wp_url" in result and result["wp_url"] is not None else result["url"]
+    }
     if "universe_versions" in result :
         already_processed[(result["_id"])]["children"]  = result["universe_versions"]
     
