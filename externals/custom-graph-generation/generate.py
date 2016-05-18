@@ -134,10 +134,10 @@ if __name__ == "__main__":
     
     tmp = """<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="100%" viewBox="0 0 1280 1024" version="1.1">
 <defs>
-    <marker id="marker-arrow" markerWidth="10" markerHeight="10" refx="0" refy="3" orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L0,6 L9,3 z" fill="#f00" />
+    <marker id="marker-arrow" markerWidth="10" markerHeight="10" refx="10" refy="3" orient="auto" markerUnits="strokeWidth">
+        <path d="M0,0 L0,6 L9,3 z" fill="#000" />
     </marker>
-  </defs>
+</defs>
 <g id="graph-nodes">
 """
     if not isinstance(layout, list):

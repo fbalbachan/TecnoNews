@@ -528,6 +528,7 @@ h4 {
     color               : white;
 }
 
+/*
 svg g > g.edge-group {
     opacity     : 0.25;
 }
@@ -540,4 +541,4 @@ svg g[selected] > g.edge-group {
 svg g[selected] > g.edge-group line {
     stroke-width: 2;
 }
-
+*/
