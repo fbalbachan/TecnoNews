@@ -535,10 +535,9 @@ svg g > g.edge-group {
 
 svg g[selected] > g.edge-group {
     opacity     : 1;
-    stroke-width: 2;
 }
 
 svg g[selected] > g.edge-group line {
-    stroke-width: 2;
+    opacity     : 1;
 }
 
