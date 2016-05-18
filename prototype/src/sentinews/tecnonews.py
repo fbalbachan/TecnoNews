@@ -67,12 +67,14 @@ class TecnoNews(object):
 
                 other_versions = tsr.get_other_versions_top_ten()
                 other_versions = [entry_version for entry_version in other_versions if entry_version.title != entry.title]
+                universe_versions_scored = tsr_universe.get_other_versions(with_score=True)
                 related = tsr.get_related_entities_top_5_not_in_list(other_versions)
 
                 entry.set_news_versions(other_versions)
-                entry.set_universe_versions(tsr_universe.get_other_versions())
+                entry.set_universe_versions([x[0] for x in universe_versions_scored])
+                entry.set_universe_scores([x[1] for x in universe_versions_scored])
                 entry.set_related_news(related)
-                
+
                 logger.info("<Tecnonews> <_process> same news different coverage number %s" % len(other_versions))
                 logger.info("<Tecnonews> <_process> related_news number %s" % len(related))
             except Exception as e:

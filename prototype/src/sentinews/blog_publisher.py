@@ -321,19 +321,19 @@ class BlogPublisher(object):
             elif host['id'] == u"guialocal_es":
 
                 customizations = [
-                        {"category":u"economía", "limit":10},
-                        {"category":u"deporte", "limit":5},
-                        {"category":u"internacionales", "limit":15},
-                        {"category":u"clima", "limit":5},
-                        {"category":u"estilo vida", "limit":15},
-                        {"category":u"turismo", "limit":15},
-                        {"category":u"entretenimiento", "limit":8},
-                        {"category":u"interés general", "limit":5},
-                        {"category":u"policiales", "limit":8},
-                        {"category":u"tecnología", "limit":8},
+                        {"category":u"economía", "limit":2},
+                        {"category":u"deporte", "limit":2},
+                        {"category":u"internacionales", "limit":2},
+                        {"category":u"clima", "limit":2},
+                        {"category":u"estilo vida", "limit":5},
+                        {"category":u"turismo", "limit":5},
+                        {"category":u"entretenimiento", "limit":2},
+                        #{"category":u"interés general", "limit":5},
+                        #{"category":u"policiales", "limit":8},
+                        #{"category":u"tecnología", "limit":8},
                 ]
                 valid_country = False
-                valid_countries = [ u'argentina', u'colombia', u'chile', u'mexico', u'ecuador']
+                valid_countries = [ u'argentina']
                 temp_country = None
                 for country in valid_countries :
                     if country in entry.countries :
@@ -343,7 +343,7 @@ class BlogPublisher(object):
 
                 interval_time = datetime.datetime.utcnow() - datetime.timedelta(seconds=2592000) #1 Month
                 post_count = news_service.get_count({'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id']})
-                if post_count < 1800 and valid_country:
+                if post_count < 350 and valid_country:
                     interval_time = datetime.datetime.utcnow() - datetime.timedelta(seconds=86400) #1 Day
 
                     for a_customization in customizations:

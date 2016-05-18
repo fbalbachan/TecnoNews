@@ -234,7 +234,7 @@ class RelatedNewsEntries(object):
         other_versions = self.get_other_versions()
         return other_versions[:10]
 
-    def get_other_versions(self):
+    def get_other_versions(self, with_score=False):
 
         final_result = []
 
@@ -279,7 +279,10 @@ class RelatedNewsEntries(object):
         related_logger.info("---------------")
         sorted_final = sorted(final_result, key=lambda x: x[1], reverse=True)
 
-        return [x[0] for x in sorted_final]
+        if with_score:
+            return sorted_final
+        else:
+            return [x[0] for x in sorted_final]
 
     def related_score(self, entities_coincidence, similarity, title_distance):
         score = 0
