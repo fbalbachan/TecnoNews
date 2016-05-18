@@ -142,10 +142,10 @@ if __name__ == "__main__":
     for i,v in enumerate(g.vs) :
         tmp += "<g wp_id=\""+v["wp_id"]+"\" label=\""+v["label"]+"\" objectid=\""+v["objectid"]+"\" stroke=\"black\" fill=\""+v["color"]+"\" stroke-width=\"1\">\n"
         tmp += "<g class=\"edge-group\">\n"
-        for e in g.incident(g.vs.find(name=v["name"]), mode="out") :
-            e  = g.es[e]
-            v2 = g.vs[e.target]
-            tmp += "<line x1=\""+str(coords[i][0])+"\" y1=\""+str(coords[i][1])+"\" x2=\""+str(v2["coords"][0])+"\" y2=\""+str(v2["coords"][1])+"\" stroke=\"black\" stroke-width=\"1\"/>\n"
+        for i2, e in enumerate(g.incident(g.vs.find(name=v["name"]), mode="out")):
+            e2 = g.es[e]
+            v2 = g.vs[e2.target]
+            tmp += "<line x1=\""+str(coords[i][0])+"\" y1=\""+str(coords[i][1])+"\" x2=\""+str(v2["coords"][0])+"\" y2=\""+str(v2["coords"][1])+"\" stroke=\"black\" stroke-width=\"" + str(v["scores"][i2]) if "scores" in v and len(v["scores"]) > 0 else str(10) + "\"/>\n"
         tmp += "</g>\n"
         
         tmp += "<circle cx=\""+str(coords[i][0])+"\" cy=\""+str(coords[i][1])+"\" r=\""+str(v["size"] / 2 )+"\" />\n"

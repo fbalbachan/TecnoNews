@@ -164,6 +164,9 @@ def generate_jsons_for_universe( item_id , gens = 5) :
     if "universe_versions" in result :
         already_processed[(result["_id"])]["children"]  = result["universe_versions"]
     
+    if "universe_scores" in result :
+        already_processed[(result["_id"])]["scores"]  = result["universe_scores"]
+    
     if "sentiment" in result :
         already_processed[(result["_id"])]["sentiment"] = result["sentiment"]
 
@@ -176,11 +179,22 @@ def generate_jsons_for_universe( item_id , gens = 5) :
         for checked in result:
             current_id += 1
             try :
-                already_processed[checked["_id"]] = {"id": "node_" + str(current_id), "date" : str(checked["_id"].generation_time).split("+")[0], "wp_id": str(checked["wp_id"]), "oid": str(checked["_id"]), "cats": checked["categories"], "source": checked["source"],  "title": checked["title"], "children": checked["universe_versions"] if "universe_versions" in checked else []}
+                already_processed[checked["_id"]] = {
+                    "id"        : "node_" + str(current_id), 
+                    "date"      : str(checked["_id"].generation_time).split("+")[0], 
+                    "wp_id"     : str(checked["wp_id"]), "oid": str(checked["_id"]), 
+                    "cats"      : checked["categories"], 
+                    "source"    : checked["source"],  
+                    "title"     : checked["title"], 
+                    "children"  : checked["universe_versions"] if "universe_versions" in checked else [], 
+                    "scores"    : checked["universe_scores"] if "universe_scores" in checked else []
+                }
                 if "sentiment" in checked :
                     already_processed[checked["_id"]]["sentiment"] = checked["sentiment"]
                 if "universe_versions" in checked :
                     already_processed[checked["_id"]]["universe_versions"] = checked["universe_versions"]
+                if "universe_scores" in checked :
+                    already_processed[checked["_id"]]["universe_scores"] = checked["universe_scores"]
             except Exception, e :
                 print e
                 print checked
@@ -222,11 +236,38 @@ def generate_jsons_for_universe( item_id , gens = 5) :
             else :
                 child_versions = None
 
+            if "universe_scores" in already_processed[a_child] :
+                child_scores = already_processed[a_child]["universe_scores"]
+            else :
+                child_scores = None
+
             if child_id not in final_graph:
-                final_graph[child_id] = {"sentiment" : child_sentiment, "date" : child_date, "oid" : child_oid, "wp_id" : child_wpid , "cats" : child_cats, "source" : child_source, "title" : child_title, "referents": [], "children" : []}
+                final_graph[child_id] = {
+                    "sentiment" : child_sentiment, 
+                    "date"      : child_date, 
+                    "oid"       : child_oid, 
+                    "wp_id"     : child_wpid , 
+                    "cats"      : child_cats, 
+                    "source"    : child_source, 
+                    "title"     : child_title, 
+                    "referents" : [], 
+                    "children"  : [],
+                    "scores"    : child_scores
+                }
             
             if a_value["id"] not in final_graph:
-                final_graph[a_value["id"]] = {"sentiment" : a_value["sentiment"], "date" : a_value["date"], "cats" : a_value["cats"], "source" : a_value["source"], "oid" : a_value["oid"], "wp_id" : a_value["wp_id"] ,"title" : a_value["title"], "referents": [], "children" : []}
+                final_graph[a_value["id"]] = {
+                    "sentiment" : a_value["sentiment"], 
+                    "date"      : a_value["date"], 
+                    "cats"      : a_value["cats"], 
+                    "source"    : a_value["source"], 
+                    "oid"       : a_value["oid"], 
+                    "wp_id"     : a_value["wp_id"] ,
+                    "title"     : a_value["title"], 
+                    "referents" : [], 
+                    "children"  : [],
+                    "scores"    : a_value["scores"] if "scores" in a_value else []
+                }
 
             final_graph[a_value["id"]]["children"].append(child_id)
             final_graph[child_id]["referents"].append(a_value["id"])
@@ -268,6 +309,7 @@ def create_pickle( object_id , min_size=10) :
     sizes = []
     oids  = []
     wpids = []
+    score = []
     
     i = 0
     for item in semi_final_graph :
@@ -282,6 +324,7 @@ def create_pickle( object_id , min_size=10) :
         sizes.append( min_size * 5 )
         oids.append( semi_final_graph[item]["oid"] )
         wpids.append( semi_final_graph[item]["wp_id"] )
+        score.append( semi_final_graph[item]["scores"] )
         i += 1
 
 
@@ -298,6 +341,7 @@ def create_pickle( object_id , min_size=10) :
     g.vs["size"]        = sizes
     g.vs["objectid"]    = oids
     g.vs["wp_id"]       = wpids
+    g.vs["scores"]      = score
 
     '''
     for v in g.vs :
