@@ -37,6 +37,7 @@ class NewsEntriesService(object):
                           related=entry['related'] if 'related' in entry else None,
                           object_id=entry['_id'],
                           versions=entry['versions'] if 'versions' in entry else None,
+                          universe_versions=entry['universe_versions'] if 'universe_versions' in entry else None,
                           summary=entry['summary'] if 'summary' in entry else None)
                 for entry in self.news_entries.find(criteria).limit(limit if limit is not None else 0)]
 
