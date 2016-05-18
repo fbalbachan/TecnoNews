@@ -173,7 +173,8 @@ def generate_jsons_for_universe( item_id , gens = 5) :
                     "wp_id"     : str(checked["wp_id"]), "oid": str(checked["_id"]), 
                     "cats"      : checked["categories"], 
                     "source"    : checked["source"],  
-                    "title"     : checked["title"], 
+                    "title"     : checked["title"],
+                    "url"       : checked["url"], 
                     "children"  : checked["universe_versions"] if "universe_versions" in checked else [], 
                     "scores"    : checked["universe_scores"] if "universe_scores" in checked else []
                 }
@@ -214,6 +215,7 @@ def generate_jsons_for_universe( item_id , gens = 5) :
             child_cats  = already_processed[a_child]["cats"]
             child_source= already_processed[a_child]["source"]
             child_date  = already_processed[a_child]["date"]
+            child_url   = already_processed[a_child]["url"]
             if "sentiment" in already_processed[a_child] :
                 child_sentiment = already_processed[a_child]["sentiment"]
             else :
@@ -238,6 +240,7 @@ def generate_jsons_for_universe( item_id , gens = 5) :
                     "cats"      : child_cats, 
                     "source"    : child_source, 
                     "title"     : child_title, 
+                    "url"       : child_url,
                     "referents" : [], 
                     "children"  : [],
                     "scores"    : child_scores
