@@ -145,7 +145,7 @@ if __name__ == "__main__":
         for i2, e in enumerate(g.incident(g.vs.find(name=v["name"]), mode="out")):
             e2 = g.es[e]
             v2 = g.vs[e2.target]
-            st = str(v["scores"][i2]) if "scores" in v and len(v["scores"]) > 0 else str(10)
+            st = str(v["scores"][i2] / 10) if v["scores"] is not None and len(v["scores"]) > 0 else str(1)
             print "stroke-width", st, v["scores"]
             tmp += "<line x1=\""+str(coords[i][0])+"\" y1=\""+str(coords[i][1])+"\" x2=\""+str(v2["coords"][0])+"\" y2=\""+str(v2["coords"][1])+"\" stroke=\"black\" stroke-width=\"" + st + "\"/>\n"
         tmp += "</g>\n"
