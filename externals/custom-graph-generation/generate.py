@@ -151,17 +151,17 @@ if __name__ == "__main__":
             e2 = g.es[e]
             v2 = g.vs[e2.target]
             if v["scores"] is not None and len(v["scores"]) > 0 :
-                if v["scores"][i2] <= 40 :
+                if   v["scores"][i2] <= 40 :
                     st = 1
-                elif v["scores"][i2] = 50 :
+                elif v["scores"][i2] == 50 :
                     st = 4
-                elif v["scores"][i2] = 60 :
+                elif v["scores"][i2] == 60 :
                     st = 7
-                elif v["scores"][i2] = 70 :
+                elif v["scores"][i2] == 70 :
                     st = 10
-                elif v["scores"][i2] = 80 :
+                elif v["scores"][i2] == 80 :
                     st = 12
-                elif v["scores"][i2] = 90 :
+                elif v["scores"][i2] == 90 :
                     st = 14
                 else :
                     st = 16
