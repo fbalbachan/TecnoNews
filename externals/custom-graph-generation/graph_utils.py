@@ -174,7 +174,7 @@ def generate_jsons_for_universe( item_id , gens = 5) :
                     "cats"      : checked["categories"], 
                     "source"    : checked["source"],  
                     "title"     : checked["title"],
-                    "url"       : checked["url"], 
+                    "url"       : checked["wp_url"] if "wp_url" in checked and checked["wp_url"] is not None else checked["url"], 
                     "children"  : checked["universe_versions"] if "universe_versions" in checked else [], 
                     "scores"    : checked["universe_scores"] if "universe_scores" in checked else []
                 }
