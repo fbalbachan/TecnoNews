@@ -165,7 +165,7 @@ def generate_jsons_for_universe( item_id , gens = 5) :
         already_processed[(result["_id"])]["children"]  = result["universe_versions"]
     
     if "universe_scores" in result :
-        already_processed[(result["_id"])]["children"]  = result["universe_scores"]
+        already_processed[(result["_id"])]["scores"]  = result["universe_scores"]
     
     if "sentiment" in result :
         already_processed[(result["_id"])]["sentiment"] = result["sentiment"]
