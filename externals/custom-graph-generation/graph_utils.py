@@ -62,13 +62,13 @@ def color_from_category(cat = None) :
         if u"economia-pt" in cat.lower() : 
             ret = "rgba(0,0,255,1)"
         if u"interés general" in cat.lower() : 
-            ret = "rgba(0,255,255,1)"
+            ret = "rgba(0,255,100,1)"
         if u"interesse general-pt" in cat.lower() : 
-            ret = "rgba(0,255,255,1)"
+            ret = "rgba(0,255,100,1)"
         if u"interesse gerais-pt" in cat.lower() : 
-            ret = "rgba(0,255,255,1)"
+            ret = "rgba(0,255,100,1)"
         if u"interesse geral-pt" in cat.lower() : 
-            ret = "rgba(0,255,255,1)"
+            ret = "rgba(0,255,100,1)"
         if u"política" in cat.lower() : 
             ret = "rgba(255,255,0,1)"
         if u"política-pt" in cat.lower() : 
