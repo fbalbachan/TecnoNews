@@ -797,7 +797,7 @@ function setup_customgraph_nodelist(svg) {
             };
             universe.categories.push( cat );
             //tmpcol += "<p><div class=\"round\" style=\"background-color:"+cat.color+"\"></div> "+cat.name+"</p>"
-            tmpcol += "<p><span class=\"round\" style=\"background-color:"+cat.color+"; width:10px; height:10px; position:relative; float:left; display:inline-block;\"></span><small style=\"position:relative;float:left;display:inline-block;\">"+cat.name+"</small></p>";
+            tmpcol += "<p><span class=\"round\" style=\"background-color:"+cat.color+"; width:10px; height:10px; position:relative; float:left; display:inline-block; border: 1px black solid;\"></span><small style=\"position:relative;float:left;display:inline-block;\">"+cat.name+"</small></p><br/>";
         }
         
     }
