@@ -168,7 +168,7 @@ if __name__ == "__main__":
             else :
                 st = 1
             print "stroke-width", st, v["scores"]
-            tmp += "<line x1=\""+str(coords[i][0])+"\" y1=\""+str(coords[i][1])+"\" x2=\""+str(v2["coords"][0])+"\" y2=\""+str(v2["coords"][1])+"\" stroke=\"black\" stroke-width=\"" + st + "\" marker-end=\"url(#marker-arrow)\" />\n"
+            tmp += "<line x1=\""+str(coords[i][0])+"\" y1=\""+str(coords[i][1])+"\" x2=\""+str(v2["coords"][0])+"\" y2=\""+str(v2["coords"][1])+"\" stroke=\"black\" stroke-width=\"" + str(st) + "\" marker-end=\"url(#marker-arrow)\" />\n"
         tmp += "</g>\n"
         
         tmp += "<circle cx=\""+str(coords[i][0])+"\" cy=\""+str(coords[i][1])+"\" r=\""+str(v["size"] / 2 )+"\" />\n"
