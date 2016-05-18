@@ -133,6 +133,11 @@ if __name__ == "__main__":
     
     
     tmp = """<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="100%" viewBox="0 0 1280 1024" version="1.1">
+<defs>
+    <marker id="marker-arrow" markerWidth="10" markerHeight="10" refx="0" refy="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#f00" />
+    </marker>
+  </defs>
 <g id="graph-nodes">
 """
     if not isinstance(layout, list):
@@ -147,7 +152,7 @@ if __name__ == "__main__":
             v2 = g.vs[e2.target]
             st = str(v["scores"][i2] / 10) if v["scores"] is not None and len(v["scores"]) > 0 else str(1)
             print "stroke-width", st, v["scores"]
-            tmp += "<line x1=\""+str(coords[i][0])+"\" y1=\""+str(coords[i][1])+"\" x2=\""+str(v2["coords"][0])+"\" y2=\""+str(v2["coords"][1])+"\" stroke=\"black\" stroke-width=\"" + st + "\"/>\n"
+            tmp += "<line x1=\""+str(coords[i][0])+"\" y1=\""+str(coords[i][1])+"\" x2=\""+str(v2["coords"][0])+"\" y2=\""+str(v2["coords"][1])+"\" stroke=\"black\" stroke-width=\"" + st + "\" marker-end=\"url(#marker-arrow)\" />\n"
         tmp += "</g>\n"
         
         tmp += "<circle cx=\""+str(coords[i][0])+"\" cy=\""+str(coords[i][1])+"\" r=\""+str(v["size"] / 2 )+"\" />\n"
