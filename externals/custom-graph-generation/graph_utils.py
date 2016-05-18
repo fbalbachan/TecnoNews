@@ -92,9 +92,9 @@ def color_from_category(cat = None) :
         if u"estilo vida" in cat.lower() : 
             ret = "rgba(255,100,255,1)"
         if u"turismo" in cat.lower() : 
-            ret = "rgba(100,200,100,1)"
+            ret = "rgba(100,100,100,1)"
         if u"turismo-pt" in cat.lower() : 
-            ret = "rgba(100,200,100,1)"
+            ret = "rgba(100,100,100,1)"
         if u"cultura" in cat.lower() : 
             ret = "rgba(150,50,0,1)"
         if u"cultura-pt" in cat.lower() : 
