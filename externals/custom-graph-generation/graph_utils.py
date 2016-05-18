@@ -50,81 +50,69 @@ def color_from_category(cat = None) :
     
     if cat != None :
         if u"policiales" in cat.lower() :
-            ret = "rgba(255,0,0,1)"
+            ret = "rgba(100,100,100,1)"
         if u"policiais-pt" in cat.lower() : 
-            ret = "rgba(255,0,0,1)"
+            ret = "rgba(100,100,100,1)"
         if u"internacionales" in cat.lower() : 
             ret = "rgba(0,200,255,1)"
         if u"internacionales-pt" in cat.lower() : 
             ret = "rgba(0,200,255,1)"
         if u"economía" in cat.lower() : 
-            ret = "rgba(0,0,255,1)"
+            ret = "rgba(255,215,0,1)"
         if u"economia-pt" in cat.lower() : 
-            ret = "rgba(0,0,255,1)"
+            ret = "rgba(255,215,0,1)"
         if u"interés general" in cat.lower() : 
-            ret = "rgba(0,255,100,1)"
-        if u"interesse general-pt" in cat.lower() : 
-            ret = "rgba(0,255,100,1)"
-        if u"interesse gerais-pt" in cat.lower() : 
-            ret = "rgba(0,255,100,1)"
+            ret = "rgba(255,255,255,1)"
         if u"interesse geral-pt" in cat.lower() : 
-            ret = "rgba(0,255,100,1)"
+            ret = "rgba(255,255,255,1)"
         if u"política" in cat.lower() : 
-            ret = "rgba(255,255,0,1)"
+            ret = "rgba(255,20,147,1)"
         if u"política-pt" in cat.lower() : 
-            ret = "rgba(255,255,0,1)"
-        if u"espectáculos" in cat.lower() : 
-            ret = "rgba(200,190,160,1)"
+            ret = "rgba(255,20,147,1)"
         if u"entretenimiento" in cat.lower() : 
-            ret = "rgba(200,190,160,1)"
+            ret = "rgba(0,255,0,1)"
         if u"entretenimento-pt" in cat.lower() : 
-            ret = "rgba(200,190,160,1)"
+            ret = "rgba(0,255,0,1)"
         if u"salud" in cat.lower() : 
-            ret = "rgba(150,100,150,1)"
+            ret = "rgba(255,222,173,1)"
         if u"saúde-pt" in cat.lower() : 
-            ret = "rgba(150,100,150,1)"
-        if u"mujer" in cat.lower() : 
-            ret = "rgba(255,100,255,1)"
+            ret = "rgba(255,222,173,1)"
         if u"mulher-pt" in cat.lower() : 
-            ret = "rgba(255,100,255,1)"
+            ret = "rgba(75,0,130,1)"
         if u"belleza" in cat.lower() : 
-            ret = "rgba(255,100,255,1)"
+            ret = "rgba(0,0,0,1)"
         if u"estilo vida" in cat.lower() : 
-            ret = "rgba(255,100,255,1)"
+            ret = "rgba(218,112,214,1)"
         if u"turismo" in cat.lower() : 
-            ret = "rgba(100,100,100,1)"
+            ret = "rgba(107,142,35,1)"
         if u"turismo-pt" in cat.lower() : 
-            ret = "rgba(100,100,100,1)"
-        if u"cultura" in cat.lower() : 
-            ret = "rgba(150,50,0,1)"
+            ret = "rgba(107,142,35,1)"
         if u"cultura-pt" in cat.lower() : 
-            ret = "rgba(150,50,0,1)"
+            ret = "rgba(176,224,230,1)"
         if u"deporte" in cat.lower() : 
-            ret = "rgba(200,100,50,1)"
+            ret = "rgba(160,82,45,1)"
         if u"esporte-pt" in cat.lower() : 
-            ret = "rgba(200,100,50,1)"
+            ret = "rgba(160,82,45,1)"
         if u"clima" in cat.lower() : 
-            ret = "rgba(200,200,50,1)"
+            ret = "rgba(220,220,220,1)"
         if u"clima-pt" in cat.lower() : 
-            ret = "rgba(200,200,50,1)"
+            ret = "rgba(220,220,220,1)"
         if u"ciencia" in cat.lower() : 
-            ret = "rgba(180,160,200,1)"
+            ret = "rgba(233,150,122,1)"
         if u"ciência-pt" in cat.lower() : 
-            ret = "rgba(180,160,200,1)"
-        if u"insólito" in cat.lower() : 
-            ret = "rgba(180,160,200,1)"
+            ret = "rgba(233,150,122,1)"
         if u"tecnología" in cat.lower() : 
-            ret = "rgba(200,160,170,1)"
+            ret = "rgba(255,0,0,1)"
         if u"tecnología-pt" in cat.lower() : 
-            ret = "rgba(200,160,170,1)"
+            ret = "rgba(255,0,0,1)"
         if u"automóviles" in cat.lower() : 
-            ret = "rgba(200,160,170,1)"
+            ret = "rgba(189,183,107,1)"
         if u"electrodomésticos" in cat.lower() :
-            ret = "rgba(200,160,170,1)"
+            ret = "rgba(0,0,205,1)"
         if u"propiedades" in cat.lower() : 
-            ret = "rgba(255,255,255,1)"
+            ret = "rgba(47,79,79,1)"
         if u"propiedades-pt" in cat.lower() : 
-            ret = "rgba(255,255,255,1)"
+            ret = "rgba(47,79,79,1)"
         
     return ret
 

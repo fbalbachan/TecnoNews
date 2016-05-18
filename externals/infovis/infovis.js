@@ -811,7 +811,7 @@ function setup_customgraph_nodelist(svg) {
 
     var tmphtml = "\n<div id=\"cg-node-list\">\
                     <div><h2>NewsUniverse Node List.</h2></div>\
-                    <div><small> (press \"L\" key to show/hide this list) </small></div>\
+                    <div><small style=\"color:red;\"> (press \"L\" key to show/hide this list) </small></div>\
                     <table>\
                         <thead>\
                             <tr>\
