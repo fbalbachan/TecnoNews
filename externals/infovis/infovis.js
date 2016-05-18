@@ -822,7 +822,7 @@ function setup_customgraph_nodelist(svg) {
                         </thead>\
                         <tbody>";
     for (var i = 0; i < tmparr.length; i++) {
-        tmphtml += "<tr><td>" + tmparr[i].id.split("_")[1] + "</td><td>" + tmparr[i].date + "</td><td><a href=\""+tmparr[i].url+"\">" + tmparr[i].title + "</a></td></tr>";
+        tmphtml += "<tr><td>" + tmparr[i].id.split("_")[1] + "</td><td>" + tmparr[i].date + "</td><td><a target=\"_blank\" href=\""+tmparr[i].url+"\">" + tmparr[i].title + "</a></td></tr>";
     }
     tmphtml += "</tbody></table></div>";
     local_cg.html( local_cg.html() + tmphtml );
