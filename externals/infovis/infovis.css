@@ -528,7 +528,7 @@ h4 {
     color               : white;
 }
 
-#cg-node-list tbody > tr:hover a {
+.hoverable:hover {
     background-color    : black;
     color               : white;
 }
