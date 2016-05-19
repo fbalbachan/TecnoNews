@@ -114,7 +114,7 @@
                             $ids        = [];
                             
                             function tmp_loop_children($nodo) {
-                                $ret = [];
+                                $ret = [$nodo["id"]];
                                 foreach ( $nodo["children"] as $k=>$v ) {
                                     $ret[] = $v["id"];
                                     
