@@ -122,13 +122,14 @@
             
             function setup_customgraph() {
                 if (cy !== null && cy !== undefined) {
+                    cg = "";
                     $("#cg").css("cursor","wait");
                     setTimeout(generate_customgraph, 100);
                 }
             }
             
             function generate_customgraph() {
-                setup_customgraph_nodelist( $("#cg svg")[0] );
+                setup_customgraph_nodelist( $("#cg").html() );
                 $("#cg").css("cursor","default");
                 $("#stats #nodecount").html( universe.nodecount );
                 $("#stats h4").html("News (nodes) arranged around the Universe");
