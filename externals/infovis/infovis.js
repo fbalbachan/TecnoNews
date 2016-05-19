@@ -801,7 +801,8 @@ function setup_customgraph_nodelist(svg) {
             //tmpcol += "<p><div class=\"round\" style=\"background-color:"+cat.color+"\"></div> "+cat.name+"</p>"
             //tmpcol += "<span class=\"round\" style=\"background-color:"+cat.color+"; width:10px; height:10px; position:relative; float:left; display:inline-block; border: 1px black solid;\"></span><small style=\"position:relative;float:left;display:inline-block;\">"+cat.name+"</small><br/>";
             tmpcol += "<circle cx=\"5\" cy=\"" + tmpi  + "\" r=\"5\" fill=\""+cat.color+"\" stroke=\"black\" />\n";
-            tmpcol += "<text x=\"25\" y=\"" + (tmpi + 5) + "\" font-size=\"15px\" textLength=\"75px\" >"+cat.name+"</text>\n";
+            var textLength = (cat.name.length >= 10 ) ? " textLength=\"85px\" " : "";
+            tmpcol += "<text x=\"15\" y=\"" + (tmpi + 5) + "\" font-size=\"15px\" " + textLength + ">"+cat.name+"</text>\n";
             tmpi += 15;
         }
         
