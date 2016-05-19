@@ -91,8 +91,7 @@
             );
             
             function show_wordcloud(obj) {
-                $("#cy").fadeOut(100);
-                $("#gs").fadeOut(100);
+                $("#cy, #gs, #cg").fadeOut(100);
                 $("#visualizaciones div.selected").removeClass("selected");
                 $(obj).addClass("selected");
                 
@@ -119,6 +118,21 @@
                     $("#wc").fadeIn(500);
                 }
                 
+            }
+            
+            function setup_customgraph() {
+                if (cy !== null && cy !== undefined) {
+                    $("#cg").css("cursor","wait");
+                    setTimeout(generate_customgraph, 100);
+                }
+            }
+            
+            function generate_customgraph() {
+                setup_customgraph_nodelist( $("#cg svg")[0] );
+                $("#cg").css("cursor","default");
+                $("#stats #nodecount").html( universe.nodecount );
+                $("#stats h4").html("News (nodes) arranged around the Universe");
+                $("#leyenda").html( universe.leyenda_html );
             }
             
         </script>
