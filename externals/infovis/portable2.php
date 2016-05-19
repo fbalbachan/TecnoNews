@@ -34,10 +34,10 @@
             <?php echo file_get_contents("wordcloud2/src/wordcloud2.min.js");?>
         </script>
         <script type="text/javascript">
-            <?php echo file_get_contents("infovis.js");?>
+            <?php echo file_get_contents("infovis.min.js");?>
         </script>
         <style>
-            <?php echo file_get_contents("infovis.css");?>
+            <?php echo file_get_contents("infovis.min.css");?>
         </style>
         
         <style>
