@@ -230,7 +230,13 @@
         <div id="wc">&nbsp;</div>
         <div id="gs">&nbsp;</div>
         <div id="cg">
-            <?php echo file_get_contents("/home/nlt-runner/custom-graphs/" . $_REQUEST["news_id"] . "-random.svg"); ?>
+            <?php 
+                $_REQUEST["layout"] = "random";
+                $_REQUEST["noecho"] = True;
+                if (!file_exists("/home/nlt-runner/custom-graphs/" . $_REQUEST["news_id"] . "-" . $_REQUEST["layout"] . ".svg")) {
+                    include( "get_custom_graph.php" );
+                }
+                echo file_get_contents("/home/nlt-runner/custom-graphs/" . $_REQUEST["news_id"] . "-" . $_REQUEST["layout"] . ".svg"); ?>
         </div>
         <div id="cy"></div>
     </body>

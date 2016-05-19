@@ -66,6 +66,8 @@ if ($status === "error") {
     $ret["message"] = $message;
 }
 
-echo json_encode($ret, JSON_UNESCAPED_UNICODE);
+if (!isset($_REQUEST["noecho"]) || (isset($_REQUEST["noecho"]) && $_REQUEST["noecho"] === False) ) {
+    echo json_encode($ret, JSON_UNESCAPED_UNICODE);
+}
 
 ?>
