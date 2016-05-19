@@ -835,15 +835,25 @@ function setup_customgraph_nodelist(svg) {
     tmphtml += "</tbody></table></div>";
     local_cg.html( local_cg.html() + tmphtml );
     
+    universe.timer_titulo = null;
+    
     $("g:has(> circle)").off("mouseover").on("mouseover", 
         function(evt) { 
-            var grupo = $(evt.target.parentNode);
-            while (grupo.attr("objectid") == undefined) {
-                grupo = $(grupo[0].parentNode);
+            if (universe.timer_titulo != null) {
+                clearTimeout(universe.timer_titulo);
             }
-            var data  = custom_graph_data[grupo.attr("objectid")];
-            mostrar_titulo( data.title + "<br/>Category : " + data.cats[0], data.date );
-            grupo.attr("selected", "selected");
+            var fun   = function() {
+                var grupo = $(evt.target.parentNode);
+                while (grupo.attr("objectid") == undefined) {
+                    grupo = $(grupo[0].parentNode);
+                }
+                var data  = custom_graph_data[grupo.attr("objectid")];
+                mostrar_titulo( data.title + "<br/>Category : " + data.cats[0], data.date );
+                grupo.attr("selected", "selected");
+                universe.timer_titulo = null;
+            };
+            
+            universe.timer_titulo = setTimeout(fun, 500);
         } 
     ).off("mouseout").on("mouseout",
         function (evt) {
