@@ -137,6 +137,22 @@ if __name__ == "__main__":
     <marker id="marker-arrow" markerWidth="10" markerHeight="10" refx="10" refy="3" orient="auto" markerUnits="strokeWidth">
         <path d="M0,0 L0,6 L9,3 z" fill="#000" />
     </marker>
+"""
+    
+    for i,v in enumerate(g.vs) :
+        for i2, e in enumerate(g.incident(g.vs.find(name=v["name"]), mode="out")):
+            e2 = g.es[e]
+            v2 = g.vs[e2.target]
+            if v["scores"] is not None and len(v["scores"]) > 0 :
+                st = v["scores"][i2]
+            else :
+                st = 40
+            
+            tmp += """<marker id="marker-text-""" + v["objectid"] + "\"" + """ markerWidth="10" markerHeight="10" refx="10" refy="3" orient="auto" markerUnits="strokeWidth">"""
+            tmp += "    <text x=\"0\" y=\"0\">" + str(st) + "</text>"
+            tmp += "</marker>"
+            
+    tmp +="""
 </defs>
 <g id="graph-nodes">
 """
@@ -168,7 +184,7 @@ if __name__ == "__main__":
             else :
                 st = 1
             print "stroke-width", st, v["scores"]
-            tmp += "<line x1=\""+str(coords[i][0])+"\" y1=\""+str(coords[i][1])+"\" x2=\""+str(v2["coords"][0])+"\" y2=\""+str(v2["coords"][1])+"\" stroke=\"black\" stroke-width=\"" + str(st) + "\" marker-end=\"url(#marker-arrow)\" />\n"
+            tmp += "<line x1=\""+str(coords[i][0])+"\" y1=\""+str(coords[i][1])+"\" x2=\""+str(v2["coords"][0])+"\" y2=\""+str(v2["coords"][1])+"\" stroke=\"black\" stroke-width=\"" + str(st) + "\" marker-end=\"url(#marker-arrow)\" marker-middle=\"url(#marker-text-" + v["objectid"] + ")\" />\n"
         tmp += "</g>\n"
         
         tmp += "<circle cx=\""+str(coords[i][0])+"\" cy=\""+str(coords[i][1])+"\" r=\""+str(v["size"] / 2 )+"\" />\n"
