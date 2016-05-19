@@ -126,7 +126,7 @@
                             }
                             
                             $ids = tmp_loop_children( $tmpjson["root"] );
-                            $_REQUEST["related_ids"]    = array_unique( $ids );
+                            $_REQUEST["related_ids"]    = implode(",",array_unique( $ids ));
                             $_REQUEST["noecho"]         = True;
                             
                             include("get_cloud_data.php");
