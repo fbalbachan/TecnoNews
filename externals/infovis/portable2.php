@@ -214,7 +214,7 @@
         <div id="wc">&nbsp;</div>
         <div id="gs">&nbsp;</div>
         <div id="cg">
-            <?php echo file_get_contents("/home/nlt-runner/custom-graph/" . $_REQUEST["news_id"] . "-random.svg"); ?>
+            <?php echo file_get_contents("/home/nlt-runner/custom-graphs/" . $_REQUEST["news_id"] . "-random.svg"); ?>
         </div>
         <div id="cy"></div>
     </body>
