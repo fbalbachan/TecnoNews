@@ -107,6 +107,32 @@
                         ids.push( nodos[i].data().id );
                     }
                     
+                    <?php
+                        if (!file_exists("/home/nlt-runner/wordcloud-jsons/" . $_REQUEST["news_id"] . ".json")) {
+                            
+                            $tmpjson    = json_decode(file_get_contents("/home/nlt-runner/tree-jsons/" . $_REQUEST["news_id"] . ".json") , True);
+                            $ids        = [];
+                            
+                            function tmp_loop_children($nodo) {
+                                $ret = [$nodo["id"]];
+                                foreach ( $nodo["children"] as $k=>$v ) {
+                                    $ret[] = $v["id"];
+                                    
+                                    foreach ( tmp_loop_children($v) as $k2=>$v2 ) {
+                                        $ret[] = $v2;
+                                    }
+                                }
+                                return $ret;
+                            }
+                            
+                            $ids = tmp_loop_children( $tmpjson["root"] );
+                            $_REQUEST["related_ids"]    = implode(",",array_unique( $ids ));
+                            $_REQUEST["noecho"]         = True;
+                            
+                            include("get_cloud_data.php");
+                        }
+                    ?>
+                    
                     topic_arr = <?php echo file_get_contents( "/home/nlt-runner/wordcloud-jsons/" . $_REQUEST["news_id"] . ".json" ); ?>;
                     var tmp = function() {
                         setup_wordcloud(topic_arr); 
@@ -230,7 +256,13 @@
         <div id="wc">&nbsp;</div>
         <div id="gs">&nbsp;</div>
         <div id="cg">
-            <?php echo file_get_contents("/home/nlt-runner/custom-graphs/" . $_REQUEST["news_id"] . "-random.svg"); ?>
+            <?php 
+                $_REQUEST["layout"] = "random";
+                $_REQUEST["noecho"] = True;
+                if (!file_exists("/home/nlt-runner/custom-graphs/" . $_REQUEST["news_id"] . "-" . $_REQUEST["layout"] . ".svg")) {
+                    include( "get_custom_graph.php" );
+                }
+                echo file_get_contents("/home/nlt-runner/custom-graphs/" . $_REQUEST["news_id"] . "-" . $_REQUEST["layout"] . ".svg"); ?>
         </div>
         <div id="cy"></div>
     </body>
