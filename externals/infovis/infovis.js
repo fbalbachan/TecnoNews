@@ -781,10 +781,9 @@ function setup_customgraph_nodelist(svg) {
     //var tmpcol = "<h4>News Categories</h4>\n";
     var tmpcol = "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"100%\" height=\"100%\" viewBox=\"0 0 100 180\" version=\"1.1\">\
     <text x=\"0\" y=\"20\" >News Categories</text>\n";
-    var tmpi   = 0;
+    var tmpi   = 40;
     for (var k in custom_graph_data) {
         tmparr.push(custom_graph_data[k]);
-        tmpi += 1;
         var found = false;
         for (var i = 0; i < universe.categories.length; i++) {
             if (custom_graph_data[k]["cats"][0] == universe.categories[i]["name"]) {
@@ -801,8 +800,9 @@ function setup_customgraph_nodelist(svg) {
             universe.categories.push( cat );
             //tmpcol += "<p><div class=\"round\" style=\"background-color:"+cat.color+"\"></div> "+cat.name+"</p>"
             //tmpcol += "<span class=\"round\" style=\"background-color:"+cat.color+"; width:10px; height:10px; position:relative; float:left; display:inline-block; border: 1px black solid;\"></span><small style=\"position:relative;float:left;display:inline-block;\">"+cat.name+"</small><br/>";
-            tmpcol += "<circle cx=\"10\" cy=\"" + (tmpi * 20) + "\" r=\"10\" fill=\""+cat.color+"\" />\n";
-            tmpcol += "<text x=\"25\" y=\"" + ((tmpi * 20) + 5) + "\" >"+cat.name+"</text>\n";
+            tmpcol += "<circle cx=\"5\" cy=\"" + tmpi  + "\" r=\"5\" fill=\""+cat.color+"\" />\n";
+            tmpcol += "<text x=\"25\" y=\"" + (tmpi + 5) + "\" font-size=\"15px\" >"+cat.name+"</text>\n";
+            tmpi += 15;
         }
         
     }
