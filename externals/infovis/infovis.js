@@ -857,6 +857,10 @@ function setup_customgraph_nodelist(svg) {
         } 
     ).off("mouseout").on("mouseout",
         function (evt) {
+            if (universe.timer_titulo != null) {
+                clearTimeout(universe.timer_titulo);
+                universe.timer_titulo = null;
+            }
             ocultar_titulo();
             var grupo = $(evt.target.parentNode);
             while (grupo.attr("objectid") == undefined) {
