@@ -528,6 +528,11 @@ h4 {
     color               : white;
 }
 
+#cg-node-list tbody > tr:hover a {
+    background-color    : black;
+    color               : white;
+}
+
 #leyenda svg, #cg svg {
     position            : absolute;
     left                : 0px;
