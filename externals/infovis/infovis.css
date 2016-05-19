@@ -541,3 +541,6 @@ svg g[selected] > g.edge-group line {
     opacity     : 1;
 }
 
+#cg, #wc, #gs {
+    display     : none;
+}
