@@ -91,8 +91,7 @@
             );
             
             function show_wordcloud(obj) {
-                $("#cy").fadeOut(100);
-                $("#gs").fadeOut(100);
+                $("#cy, #gs, #cg").fadeOut(100);
                 $("#visualizaciones div.selected").removeClass("selected");
                 $(obj).addClass("selected");
                 
@@ -119,6 +118,22 @@
                     $("#wc").fadeIn(500);
                 }
                 
+            }
+            
+            function setup_customgraph() {
+                if (cy !== null && cy !== undefined) {
+                    cg = "";
+                    $("#cg").css("cursor","wait");
+                    setTimeout(generate_customgraph, 100);
+                }
+            }
+            
+            function generate_customgraph() {
+                setup_customgraph_nodelist( $("#cg").html() );
+                $("#cg").css("cursor","default");
+                $("#stats #nodecount").html( universe.nodecount );
+                $("#stats h4").html("News (nodes) arranged around the Universe");
+                $("#leyenda").html( universe.leyenda_html );
             }
             
         </script>
@@ -206,6 +221,7 @@
             <p><div class="round selected" onclick="show_galaxy(this);"></div> NewsGalaxy</p>
             <p><div class="round" onclick="show_wordcloud(this);"></div> TopicCloud</p>
             <p><div class="round" onclick="show_galaxysummary(this);"></div> GalaxySummary</p>
+            <p><div class="round" onclick="show_customgraph(this);"></div> NewsUniverse</p>
         </div>
 
         <div id="powered-by">
@@ -213,6 +229,9 @@
         </div>
         <div id="wc">&nbsp;</div>
         <div id="gs">&nbsp;</div>
+        <div id="cg">
+            <?php echo file_get_contents("/home/nlt-runner/custom-graphs/" . $_REQUEST["news_id"] . "-random.svg"); ?>
+        </div>
         <div id="cy"></div>
     </body>
 </html>
