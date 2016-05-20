@@ -545,11 +545,11 @@ svg g > g.edge-group {
     opacity     : 0.25;
 }
 
-svg g[selected] > g.edge-group {
+svg g.edge-group[selected] {
     opacity     : 1;
 }
 
-svg g[selected] > g.edge-group line {
+svg g.edge-group[selected] line {
     opacity     : 1;
 }
 
