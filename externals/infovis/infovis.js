@@ -850,6 +850,7 @@ function setup_customgraph_nodelist(svg) {
                 var data  = custom_graph_data[grupo.attr("objectid")];
                 mostrar_titulo( data.title + "<br/>Category : " + data.cats[0], data.date );
                 grupo.attr("selected", "selected");
+                $("g.edge-group[objectid="+grupo.attr("objectid")+"]").attr("selected", "selected");
                 universe.timer_titulo = null;
             };
             
@@ -867,6 +868,7 @@ function setup_customgraph_nodelist(svg) {
                 grupo = $(grupo[0].parentNode);
             }
             grupo.removeAttr("selected");
+            $("g.edge-group[objectid="+grupo.attr("objectid")+"]").removeAttr("selected");
         }
     );
 }
