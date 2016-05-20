@@ -43,7 +43,7 @@ class WikipediaContentGenerator:
     def is_blacklisted(self, referent):
         def has_blacklisted_word(entity):
             #return any((black_word in entity.lexical_form for black_word in self.black_words ))
-            return entity.lexical_form in self.black_words
+            return entity.lexical_form in self.black_words or str(entity.kernel) in self.black_words
         return any((has_blacklisted_word(reference) for reference in referent.explicit_references() ))
 
     def content_and_page_for(self, referent):
