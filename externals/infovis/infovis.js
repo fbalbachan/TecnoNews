@@ -795,7 +795,7 @@ function setup_customgraph_nodelist(svg) {
         if (!found) {
             var cat = {
                 "name"  :   custom_graph_data[k]["cats"][0],
-                "color" :   $("svg g[objectid=" + custom_graph_data[k]["oid"] + "]").attr("fill")
+                "color" :   $("svg g:has(> circle)[objectid=" + custom_graph_data[k]["oid"] + "]").attr("fill")
             };
             universe.categories.push( cat );
             //tmpcol += "<p><div class=\"round\" style=\"background-color:"+cat.color+"\"></div> "+cat.name+"</p>"
