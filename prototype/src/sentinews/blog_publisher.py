@@ -305,7 +305,7 @@ class BlogPublisher(object):
 
                 interval_time = datetime.datetime.utcnow() - datetime.timedelta(seconds=259200) #3 Days
                 post_count = news_service.get_count({'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id']})
-                if post_count < 3:
+                if post_count < 1:
                     valid_host = True
                     entry.categories = [u"noticias"]
 
