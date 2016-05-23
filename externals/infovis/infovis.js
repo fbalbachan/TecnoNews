@@ -778,10 +778,12 @@ function setup_customgraph_nodelist(svg) {
     custom_graph_data = JSON.parse( $("svg > #graph-data").text() );
     
     var tmparr = [];
-    var tmpcol = "<h4>News Categories</h4>\n";
+    //var tmpcol = "<h4>News Categories</h4>\n";
+    var tmpcol = "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"100%\" height=\"100%\" viewBox=\"0 0 100 180\" version=\"1.1\">\
+    <text x=\"0\" y=\"20\" >News Categories</text>\n";
+    var tmpi   = 40;
     for (var k in custom_graph_data) {
         tmparr.push(custom_graph_data[k]);
-        
         var found = false;
         for (var i = 0; i < universe.categories.length; i++) {
             if (custom_graph_data[k]["cats"][0] == universe.categories[i]["name"]) {
@@ -793,14 +795,20 @@ function setup_customgraph_nodelist(svg) {
         if (!found) {
             var cat = {
                 "name"  :   custom_graph_data[k]["cats"][0],
-                "color" :   $("svg g[objectid=" + custom_graph_data[k]["oid"] + "]").attr("fill")
+                "color" :   $("svg g:has(> circle)[objectid=" + custom_graph_data[k]["oid"] + "]").attr("fill")
             };
             universe.categories.push( cat );
             //tmpcol += "<p><div class=\"round\" style=\"background-color:"+cat.color+"\"></div> "+cat.name+"</p>"
-            tmpcol += "<span class=\"round\" style=\"background-color:"+cat.color+"; width:10px; height:10px; position:relative; float:left; display:inline-block; border: 1px black solid;\"></span><small style=\"position:relative;float:left;display:inline-block;\">"+cat.name+"</small><br/>";
+            //tmpcol += "<span class=\"round\" style=\"background-color:"+cat.color+"; width:10px; height:10px; position:relative; float:left; display:inline-block; border: 1px black solid;\"></span><small style=\"position:relative;float:left;display:inline-block;\">"+cat.name+"</small><br/>";
+            tmpcol += "<circle cx=\"5\" cy=\"" + tmpi  + "\" r=\"5\" fill=\""+cat.color+"\" stroke=\"black\" />\n";
+            var textLength = (cat.name.length >= 10 ) ? " textLength=\"85px\" " : "";
+            tmpcol += "<text x=\"15\" y=\"" + (tmpi + 5) + "\" font-size=\"15px\" " + textLength + ">"+cat.name+"</text>\n";
+            tmpi += 15;
         }
         
     }
+    
+    tmpcol += "</svg>"
     
     universe.nodecount      = tmparr.length;
     universe.leyenda_html   = tmpcol;
@@ -811,7 +819,7 @@ function setup_customgraph_nodelist(svg) {
 
     var tmphtml = "\n<div id=\"cg-node-list\">\
                     <div><h2>NewsUniverse Node List.</h2></div>\
-                    <div><small style=\"color:red;\"> (press \"L\" key to show/hide this list) </small></div>\
+                    <div><h3 style=\"color:red;\"> (press \"L\" key to show/hide this list) </h3></div>\
                     <table>\
                         <thead>\
                             <tr>\
@@ -822,29 +830,45 @@ function setup_customgraph_nodelist(svg) {
                         </thead>\
                         <tbody>";
     for (var i = 0; i < tmparr.length; i++) {
-        tmphtml += "<tr><td>" + tmparr[i].id.split("_")[1] + "</td><td>" + tmparr[i].date + "</td><td><a target=\"_blank\" href=\""+tmparr[i].url+"\">" + tmparr[i].title + "</a></td></tr>";
+        tmphtml += "<tr><td>" + tmparr[i].id.split("_")[1] + "</td><td>" + tmparr[i].date + "</td><td><a class=\"hoverable\" target=\"_blank\" href=\""+tmparr[i].url+"\">" + tmparr[i].title + "</a></td></tr>";
     }
     tmphtml += "</tbody></table></div>";
     local_cg.html( local_cg.html() + tmphtml );
     
+    universe.timer_titulo = null;
+    
     $("g:has(> circle)").off("mouseover").on("mouseover", 
         function(evt) { 
-            var grupo = $(evt.target.parentNode);
-            while (grupo.attr("objectid") == undefined) {
-                grupo = $(grupo[0].parentNode);
+            if (universe.timer_titulo != null) {
+                clearTimeout(universe.timer_titulo);
             }
-            var data  = custom_graph_data[grupo.attr("objectid")];
-            mostrar_titulo( data.title + "<br/>Category : " + data.cats[0], data.date );
-            grupo.attr("selected", "selected");
+            var fun   = function() {
+                var grupo = $(evt.target.parentNode);
+                while (grupo.attr("objectid") == undefined) {
+                    grupo = $(grupo[0].parentNode);
+                }
+                var data  = custom_graph_data[grupo.attr("objectid")];
+                mostrar_titulo( data.title + "<br/>Category : " + data.cats[0], data.date );
+                grupo.attr("selected", "selected");
+                $("g.edge-group[objectid="+grupo.attr("objectid")+"]").attr("selected", "selected");
+                universe.timer_titulo = null;
+            };
+            
+            universe.timer_titulo = setTimeout(fun, 500);
         } 
     ).off("mouseout").on("mouseout",
         function (evt) {
+            if (universe.timer_titulo != null) {
+                clearTimeout(universe.timer_titulo);
+                universe.timer_titulo = null;
+            }
             ocultar_titulo();
             var grupo = $(evt.target.parentNode);
             while (grupo.attr("objectid") == undefined) {
                 grupo = $(grupo[0].parentNode);
             }
             grupo.removeAttr("selected");
+            $("g.edge-group[objectid="+grupo.attr("objectid")+"]").removeAttr("selected");
         }
     );
 }

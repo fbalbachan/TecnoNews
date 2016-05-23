@@ -137,6 +137,22 @@ if __name__ == "__main__":
     <marker id="marker-arrow" markerWidth="10" markerHeight="10" refx="10" refy="3" orient="auto" markerUnits="strokeWidth">
         <path d="M0,0 L0,6 L9,3 z" fill="#000" />
     </marker>
+"""
+    
+    #for i,v in enumerate(g.vs) :
+    #    for i2, e in enumerate(g.incident(g.vs.find(name=v["name"]), mode="out")):
+    #        e2 = g.es[e]
+    #        v2 = g.vs[e2.target]
+    #        if v["scores"] is not None and len(v["scores"]) > 0 :
+    #            st = v["scores"][i2]
+    #        else :
+    #            st = 40
+    #        
+    #        tmp += """<marker id="marker-text-""" + v["objectid"] + "-" + str(i2) + "\"" + """ markerWidth="10" markerHeight="10" refx="10" refy="3" orient="auto" markerUnits="strokeWidth">"""
+    #        tmp += "    <text x=\"0\" y=\"0\">" + str(st) + "</text>"
+    #        tmp += "</marker>"
+            
+    tmp +="""
 </defs>
 <g id="graph-nodes">
 """
@@ -144,9 +160,10 @@ if __name__ == "__main__":
         g.vs["coords"] = coords = layout.coords
     else :
         g.vs["coords"] = coords = layout
+    
+    # first the edges, so they later be drawn before the nodes.
     for i,v in enumerate(g.vs) :
-        tmp += "<g wp_id=\""+v["wp_id"]+"\" label=\""+v["label"]+"\" objectid=\""+v["objectid"]+"\" stroke=\"black\" fill=\""+v["color"]+"\" stroke-width=\"1\">\n"
-        tmp += "<g class=\"edge-group\">\n"
+        tmp += "    <g class=\"edge-group\" wp_id=\""+v["wp_id"]+"\" label=\""+v["label"]+"\" objectid=\""+v["objectid"]+"\" >\n"
         for i2, e in enumerate(g.incident(g.vs.find(name=v["name"]), mode="out")):
             e2 = g.es[e]
             v2 = g.vs[e2.target]
@@ -168,14 +185,22 @@ if __name__ == "__main__":
             else :
                 st = 1
             print "stroke-width", st, v["scores"]
-            tmp += "<line x1=\""+str(coords[i][0])+"\" y1=\""+str(coords[i][1])+"\" x2=\""+str(v2["coords"][0])+"\" y2=\""+str(v2["coords"][1])+"\" stroke=\"black\" stroke-width=\"" + str(st) + "\" marker-end=\"url(#marker-arrow)\" />\n"
-        tmp += "</g>\n"
+            tmp += "        <line x1=\""+str(coords[i][0])+"\" y1=\""+str(coords[i][1])+"\" x2=\""+str(v2["coords"][0])+"\" y2=\""+str(v2["coords"][1])+"\" stroke=\"black\" stroke-width=\"" + str(st) + "\" marker-end=\"url(#marker-arrow)\" marker-mid=\"url(#marker-text-" + v["objectid"] + "-" + str(i2) + ")\" />\n"
+        tmp += "    </g>\n"
+    
+    # Then, the nodes, that will be drawn on top of the edges.
+    for i,v in enumerate(g.vs) :
+        tmp += "    <g wp_id=\""+v["wp_id"]+"\" label=\""+v["label"]+"\" objectid=\""+v["objectid"]+"\" stroke=\"black\" fill=\""+v["color"]+"\" stroke-width=\"1\">\n"
         
-        tmp += "<circle cx=\""+str(coords[i][0])+"\" cy=\""+str(coords[i][1])+"\" r=\""+str(v["size"] / 2 )+"\" />\n"
-        tmp += "<title>"+v["label"]+"</title>\n"
-        tmp += "<text x=\""+str( coords[i][0] - v["size"] / 2 )+"\" y=\""+str(coords[i][1] + v["size"] / 3)+"\" fill=\"black\" font-family=\"Ubuntu,Tahoma\" font-size=\""+str(v["size"])+"\">"+v["label"]+"</text>"
+        tmp += "        <circle cx=\""+str(coords[i][0])+"\" cy=\""+str(coords[i][1])+"\" r=\""+str(v["size"] / 2 )+"\" />\n"
+        tmp += "        <title>"+v["label"]+"</title>\n"
+        if len(v["label"]) == 1 :
+            cent = 10
+        else:
+            cent = 0
+        tmp += "        <text x=\""+str( (coords[i][0] - v["size"] / 2) + cent )+"\" y=\""+str(coords[i][1] + v["size"] / 3)+"\" fill=\"black\" font-family=\"Ubuntu,Tahoma\" font-size=\""+str(v["size"])+"\" textLength=\""+str(v["size"])+"\" >"+v["label"]+"</text>"
         
-        tmp += "</g>\n"
+        tmp += "    </g>\n"
     
     tmp += "</g>\n"
     

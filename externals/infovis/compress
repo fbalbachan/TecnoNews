@@ -1,0 +1,4 @@
+#!/bin/bash
+yui-compressor infovis.js > infovis.min.js
+yui-compressor infovis.css > infovis.min.css
+
