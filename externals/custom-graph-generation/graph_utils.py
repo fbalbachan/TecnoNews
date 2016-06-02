@@ -321,7 +321,7 @@ def create_pickle( object_id , min_size=10) :
         #label.append( semi_final_graph[item]["title"][:22].encode("utf-8") + "..." )
         label.append( item.split("_")[1] ) #str(i) )
         #sizes.append( min_size + len(semi_final_graph[item]["referents"]) + len(semi_final_graph[item]["children"]) )
-        sizes.append( min_size * 5 )
+        sizes.append( min_size )
         oids.append( semi_final_graph[item]["oid"] )
         wpids.append( semi_final_graph[item]["wp_id"] )
         score.append( semi_final_graph[item]["scores"] )

@@ -473,7 +473,7 @@ function setup_cy() {
         }
     });
 
-    var tmphtml = "\n<div id=\"cy-node-list\">\
+    var tmphtml = "\n<div id=\"cy-node-list\" class=\"node-list\">\
                     <div><h2>NewsGalaxy Node List.</h2></div>\
                     <div><h3 style=\"color:red;\"> (press \"L\" key to show/hide this list) </h3></div>\
                     <table>\
@@ -491,8 +491,10 @@ function setup_cy() {
         }
     }
     tmphtml += "</tbody></table></div>";
-    local_cy = $("#cy");
-    local_cy.html( local_cy.html() + tmphtml );
+    local_cy = $("·cy");
+    var tmpf = function(){ local_cy.html( local_cy.html() + tmphtml );};
+    //setTimeout(tmpf,3000);
+    //tmpf();
     
     $(window).on(
         "resize", tmp_resize
@@ -505,10 +507,8 @@ function setup_cy() {
                 hide_data_overlay();
             } else if (evt.keyCode == 76) {
                 // Tecla "L", para la lista en NewsUniverse
-                if ( $("#cy-node-list").length > 0 ) {
-                    toggle_cg_node_list("#cy-node-list");
-                } else if ($("#cy-node-list").length > 0) {
-                    toggle_cy_node_list();
+                if ( $(".node-list").length > 0 ) {
+                    toggle_node_list();
                 }
             }
             
@@ -816,7 +816,7 @@ function setup_customgraph_nodelist(svg) {
         return parseInt(a.id.split("_")[1]) - parseInt(b.id.split("_")[1]);
     });
 
-    var tmphtml = "\n<div id=\"cg-node-list\">\
+    var tmphtml = "\n<div id=\"cg-node-list\" class=\"node-list\">\
                     <div><h2>NewsUniverse Node List.</h2></div>\
                     <div><h3 style=\"color:red;\"> (press \"L\" key to show/hide this list) </h3></div>\
                     <table>\
@@ -882,14 +882,14 @@ function setup_customgraph_nodelist(svg) {
     );
 }
 
-function toggle_cg_node_list( id ) {
-    if (id === undefined) {
-        id = "#cg-node-list";
-    }
-    var div = $(id);
-    if ( div.is(":hidden") ) {
-        div.fadeIn(500);
-    } else {
-        div.fadeOut(500);
-    }
+function toggle_node_list( ) {
+    var divs = $(".node-list");
+    divs.each( function(index) {
+        div = $(this);
+    	if ( div.is(":hidden") ) {
+        	div.fadeIn(500);
+    	} else {
+        	div.fadeOut(500);
+   	}
+    });
 }

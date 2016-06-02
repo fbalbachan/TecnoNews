@@ -58,7 +58,7 @@ if __name__ == "__main__":
     if not os.path.exists( args[0] + ".graph.pickle") :
         print datetime.datetime.now()
         print "generating graph from " + args[0] + "..."
-        g = gu.create_pickle( args[0] )
+        g = gu.create_pickle( args[0], 20 )
     else :
         print datetime.datetime.now()
         print "loading graph object from file " + args[0] + ".graph.pickle..."
@@ -184,8 +184,8 @@ if __name__ == "__main__":
                     st = 16
             else :
                 st = 1
-            print "stroke-width", st, v["scores"]
-            tmp += "        <line x1=\""+str(coords[i][0])+"\" y1=\""+str(coords[i][1])+"\" x2=\""+str(v2["coords"][0])+"\" y2=\""+str(v2["coords"][1])+"\" stroke=\"black\" stroke-width=\"" + str(st) + "\" marker-end=\"url(#marker-arrow)\" marker-mid=\"url(#marker-text-" + v["objectid"] + "-" + str(i2) + ")\" />\n"
+            #print "stroke-width", st, v["scores"]
+            tmp += "        <line x1=\""+str(coords[i][0])+"\" y1=\""+str(coords[i][1])+"\" x2=\""+str(v2["coords"][0])+"\" y2=\""+str(v2["coords"][1])+"\" stroke=\"black\" stroke-width=\"1\" alt-stroke-width=\"" + str(st) + "\" marker-end=\"url(#marker-arrow)\" marker-mid=\"url(#marker-text-" + v["objectid"] + "-" + str(i2) + ")\" />\n"
         tmp += "    </g>\n"
     
     # Then, the nodes, that will be drawn on top of the edges.
