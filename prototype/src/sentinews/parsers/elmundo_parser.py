@@ -15,7 +15,8 @@ class ElMundoParser(GenericParser):
     def parse(self, url):
         if u'/opinion/' in url:
             return None
-
+        #url  = "http://www.elmundo.es/espana/2016/06/01/574f24bf22601df96e8b4612.html"
+        #url  = "http://www.elmundo.es/economia/2016/01/26/56a61a39ca474156648b466c.html"
         soup = BeautifulSoup(self.opener.read(url))
         image_search_string = None
 
@@ -26,7 +27,11 @@ class ElMundoParser(GenericParser):
         # Remove sharedaddy
         for social in soup.findAll('ul', {"class": "redes-sociales"}):
             social.extract()
-            
+        
+        #Canta: noticias relacionadas.
+        for aside in soup(["aside", {"class":"related-links"}]):
+            aside.extract()
+    
         tweets = []
 
         for tweet in soup.findAll('div', {"class": "embed-twitter"}):
@@ -38,8 +43,9 @@ class ElMundoParser(GenericParser):
         categories = [urlparse(url).path.split("/")[1]]
 
         des = soup.find('article', {"class": "desarrollo"})
-        image_search_string = des.find('header').find('h2').text + u' '
-        image_search_string += title.split('.')[0]
+        
+        #image_search_string = des.find('header').find('h2').text + u' '
+        image_search_string = title.split('.')[0]
 
         tags = set()
 
@@ -50,9 +56,16 @@ class ElMundoParser(GenericParser):
                 if l.text.lower() != 'tags':
                     tags.add(l.text)
 
+        tag_links = soup.findAll('ul', {"class": "item-tags"})
+        for tag in tag_links:
+            links = tag.findAll('a')
+            for l in links:
+                if l.text.lower() != 'tags':
+                    tags.add(l.text)
+
 
         content = soup.find('div', {"itemprop": 'articleBody'}).text
-
+        #return {"content" : content, "title":title, "tags": tags, "image_search_string":image_search_string}
         new_entry = self.create_news_entry(title=title, content=content,
                                            tags=tags,
                                            source=self.source,
@@ -62,4 +75,3 @@ class ElMundoParser(GenericParser):
                                            keywords=None)
 
         return new_entry
-
