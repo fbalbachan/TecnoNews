@@ -214,6 +214,7 @@ function process_json( obj ) {
             if ( urls.indexOf( nodes[i].data.url ) < 0 ) {
                 urls.push( nodes[i].data.url );
                 nodecount++;
+                nodes[i].index = nodecount;
             }
         }
     }
@@ -472,30 +473,26 @@ function setup_cy() {
         }
     });
 
-/*
-    cy.$('node').qtip({
-        content: function(){ return this.data().title },
-        show: {
-            event: 'mouseover', 
-            solo: true, // hide all other tooltips.
-        },
-        hide: {
-            event: 'mouseout click',
-        },
-        position: {
-            my: 'top center',
-            at: 'bottom center'
-        },
-        style: {
-            classes: 'qtip-bootstrap',
-            tip: {
-                width: 16,
-                height: 8
-            }
+    var tmphtml = "\n<div id=\"cy-node-list\">\
+                    <div><h2>NewsGalaxy Node List.</h2></div>\
+                    <div><h3 style=\"color:red;\"> (press \"L\" key to show/hide this list) </h3></div>\
+                    <table>\
+                        <thead>\
+                            <tr>\
+                                <th>nodo</th>\
+                                <th>fecha</th>\
+                                <th>titulo</th>\
+                            </tr>\
+                        </thead>\
+                        <tbody>";
+    for (var i = 0; i < nodeset.nodes.length; i++) {
+        if (nodeset.nodes[i].index !== undefined ) {
+            tmphtml += "<tr><td>#" + nodeset.nodes[i].index + "</td><td>" + nodeset.nodes[i].data.date + "</td><td><a class=\"hoverable\" target=\"_blank\" href=\""+nodeset.nodes[i].data.url+"\">" + nodeset.nodes[i].data.title + "</a></td></tr>";
         }
-    });
-*/
-    
+    }
+    tmphtml += "</tbody></table></div>";
+    local_cy = $("#cy");
+    local_cy.html( local_cy.html() + tmphtml );
     
     $(window).on(
         "resize", tmp_resize
