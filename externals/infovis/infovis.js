@@ -850,7 +850,12 @@ function setup_customgraph_nodelist(svg) {
                 var data  = custom_graph_data[grupo.attr("objectid")];
                 mostrar_titulo( data.title + "<br/>Category : " + data.cats[0], data.date );
                 grupo.attr("selected", "selected");
-                $("g.edge-group[objectid="+grupo.attr("objectid")+"]").attr("selected", "selected");
+                grupo_lineas = $("g.edge-group[objectid="+grupo.attr("objectid")+"]");
+                grupo_lineas.attr("selected", "selected");
+                grupo_lineas.find("line").each( function( index ) {
+                    var linea = $(this);
+                    linea.attr("stroke-width", linea.attr("alt-stroke-width"));
+                });
                 universe.timer_titulo = null;
             };
             
@@ -868,7 +873,12 @@ function setup_customgraph_nodelist(svg) {
                 grupo = $(grupo[0].parentNode);
             }
             grupo.removeAttr("selected");
-            $("g.edge-group[objectid="+grupo.attr("objectid")+"]").removeAttr("selected");
+            grupo_lineas = $("g.edge-group[objectid="+grupo.attr("objectid")+"]");
+            grupo_lineas.removeAttr("selected");
+            grupo_lineas.find("line").each( function( index ) {
+                var linea = $(this);
+                linea.attr("stroke-width", "1");
+            });
         }
     );
 }
