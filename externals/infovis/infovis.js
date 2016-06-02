@@ -505,8 +505,10 @@ function setup_cy() {
                 hide_data_overlay();
             } else if (evt.keyCode == 76) {
                 // Tecla "L", para la lista en NewsUniverse
-                if ( $("#cg-node-list").length > 0 ) {
-                    toggle_cg_node_list();
+                if ( $("#cy-node-list").length > 0 ) {
+                    toggle_cg_node_list("#cy-node-list");
+                } else if ($("#cy-node-list").length > 0) {
+                    toggle_cy_node_list();
                 }
             }
             
@@ -880,8 +882,11 @@ function setup_customgraph_nodelist(svg) {
     );
 }
 
-function toggle_cg_node_list() {
-    var div = $("#cg-node-list");
+function toggle_cg_node_list( id ) {
+    if (id === undefined) {
+        id = "#cg-node-list";
+    }
+    var div = $(id);
     if ( div.is(":hidden") ) {
         div.fadeIn(500);
     } else {
