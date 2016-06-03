@@ -38,7 +38,7 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>News history network<?php echo ($titulo == "") ? "" : " - ".$titulo; ?></title>
+        <title>NaturalTech Infovis<?php echo ($titulo == "") ? "" : " - ".$titulo; ?></title>
         <script type="text/javascript">
             <?php echo file_get_contents("cytoscape.js-2.6.6/cytoscape.min.js") ;?>
         </script>
