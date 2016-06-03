@@ -1,8 +1,14 @@
 <!doctype html>
+<?php
+    $titulo = (isset($_REQUEST["title"]) ) ? $_REQUEST["title"] : "";
+    if ($titulo !== "") {
+        $titulo = str_replace("-"," ", $titulo);
+    }
+?>
 <html>
     <head>
         <meta charset="utf-8">
-        <title>News history network</title>
+        <title>News history network<?php echo ($titulo == "") ? "" : " - ".$titulo; ?></title>
         <script type="text/javascript" src="/wp-content/themes/nanomag/js/cytoscape.js-2.6.6/cytoscape.js"></script>
         <script type="text/javascript" src="/wp-includes/js/jquery/jquery.js?ver=1.11.2"></script>
         <script type="text/javascript" src="/wp-content/themes/nanomag/js/jquery.qtip.min.js"></script>
@@ -112,6 +118,7 @@
         <div id="page-title">
             <div class="cerrar" onclick="$('#page-title').remove();"> X </div>
             <h1>News Galaxy</h1>
+            <?php echo ($titulo == "") ? "" : "<h3>".$titulo."</h3>\n"; ?>
             <h4>(drag and drop nodes for insightful visualizations)</h4>
             <h4>(mouse over and click on nodes for details and news summary)</h4>
         </div>
