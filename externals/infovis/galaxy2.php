@@ -4,7 +4,7 @@
     if ( !file_exists($ejec) ) {
         $ejec = dirname(__FILE__).'/infovis/get-news-entry-by-wpid ' . ((int)$_REQUEST["news_id"]);
     }
-    $json = trim(utf8_decode(shell_exec( )));
+    $json = trim(utf8_decode(shell_exec( $ejec )));
     if (trim($json) == "undefined")
     {
         echo "<b>Error getting news data.</b>";
