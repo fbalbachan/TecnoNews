@@ -18,12 +18,26 @@
     $ntbase64   = portable_base64("naturaltech2.png");
     $sbase64    = portable_base64("selected.png");
     
+    $ejec = dirname(__FILE__).'/get-news-entry-by-wpid ' . ((int)$_REQUEST["news_id"]);
+    if ( !file_exists($ejec) ) {
+        $ejec = dirname(__FILE__).'/infovis/get-news-entry-by-wpid ' . ((int)$_REQUEST["news_id"]);
+    }
+    $json = trim(utf8_decode(shell_exec( $ejec )));
+    if (trim($json) == "undefined")
+    {
+        echo "<b>Error getting news data.</b>";
+        exit(1);
+    }
+    $json = preg_replace("/ObjectId\((.+)\)/Um", "$1", $json);
+    $json = preg_replace("/ISODate\((.+)\)/Um", "$1", $json);
+    $news_data = json_decode(utf8_encode($json),true);
+    $titulo    = $news_data["title"];
 ?>
 <!doctype html>
 <html>
     <head>
         <meta charset="utf-8">
-        <title>NaturalTech Infovis</title>
+        <title>News history network<?php echo ($titulo == "") ? "" : " - ".$titulo; ?></title>
         <script type="text/javascript">
             <?php echo file_get_contents("cytoscape.js-2.6.6/cytoscape.min.js") ;?>
         </script>
@@ -234,6 +248,7 @@
         <div id="page-title">
             <div class="cerrar" onclick="$('#page-title').remove();"> X </div>
             <h1>News Galaxy</h1>
+            <?php echo ($titulo == "") ? "" : "<h3>".$titulo."</h3>\n"; ?>
             <h4>(drag and drop nodes for insightful visualizations)</h4>
             <h4>(mouse over and click on nodes for details and news summary)</h4>
         </div>
