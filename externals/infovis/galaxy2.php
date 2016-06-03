@@ -1,9 +1,16 @@
 <!doctype html>
 <?php
-    $titulo = (isset($_REQUEST["title"]) ) ? $_REQUEST["title"] : "";
-    if ($titulo !== "") {
-        $titulo = str_replace("-"," ", $titulo);
+    
+    $json = trim(shell_exec(dirname(__FILE__).'/get-news-entry-by-wpid ' . ((int)$_REQUEST["news_id"]) ));
+    if (trim($json) == "undefined")
+    {
+        echo "<b>Error getting news data.</b>";
+        exit(1);
     }
+    
+    $news_data = json_decode($json,true);
+    $titulo    = $news_data["title"];
+
 ?>
 <html>
     <head>
