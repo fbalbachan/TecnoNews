@@ -1,14 +1,14 @@
 <!doctype html>
 <?php
-    
-    $json = trim(shell_exec(dirname(__FILE__).'/get-news-entry-by-wpid ' . ((int)$_REQUEST["news_id"]) ));
+    $json = trim(utf8_decode(shell_exec(dirname(__FILE__).'/get-news-entry-by-wpid ' . ((int)$_REQUEST["news_id"]) )));
     if (trim($json) == "undefined")
     {
         echo "<b>Error getting news data.</b>";
         exit(1);
     }
-    
-    $news_data = json_decode($json,true);
+    $json = preg_replace("/ObjectId\((.+)\)/Um", "$1", $json);
+    $json = preg_replace("/ISODate\((.+)\)/Um", "$1", $json);
+    $news_data = json_decode(utf8_encode($json),true);
     $titulo    = $news_data["title"];
 
 ?>
