@@ -851,10 +851,12 @@ function setup_customgraph_nodelist(svg) {
                 grupo.attr("selected", "selected");
                 grupo_lineas = $("g.edge-group[objectid="+grupo.attr("objectid")+"]");
                 grupo_lineas.attr("selected", "selected");
-                grupo_lineas.find("line").each( function( index ) {
-                    var linea = $(this);
-                    linea.attr("stroke-width", linea.attr("alt-stroke-width"));
-                });
+                if ( $("g[objectid]>circle").length > 150 ) {
+                    grupo_lineas.find("line").each( function( index ) {
+                        var linea = $(this);
+                        linea.attr("stroke-width", linea.attr("alt-stroke-width"));
+                    });
+                }
                 universe.timer_titulo = null;
             };
             
@@ -874,10 +876,12 @@ function setup_customgraph_nodelist(svg) {
             grupo.removeAttr("selected");
             grupo_lineas = $("g.edge-group[objectid="+grupo.attr("objectid")+"]");
             grupo_lineas.removeAttr("selected");
-            grupo_lineas.find("line").each( function( index ) {
-                var linea = $(this);
-                linea.attr("stroke-width", "1");
-            });
+            if ( $("g[objectid]>circle").length > 150 ) {
+                grupo_lineas.find("line").each( function( index ) {
+                    var linea = $(this);
+                    linea.attr("stroke-width", "1");
+                });
+            }
         }
     );
 }
@@ -886,10 +890,10 @@ function toggle_node_list( ) {
     var divs = $(".node-list");
     divs.each( function(index) {
         div = $(this);
-    	if ( div.is(":hidden") ) {
-        	div.fadeIn(500);
-    	} else {
-        	div.fadeOut(500);
-   	}
+        if ( div.is(":hidden") ) {
+            div.fadeIn(500);
+        } else {
+            div.fadeOut(500);
+        }
     });
 }
