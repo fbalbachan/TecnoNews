@@ -162,6 +162,7 @@ if __name__ == "__main__":
         g.vs["coords"] = coords = layout
     
     # first the edges, so they later be drawn before the nodes.
+    cant = len(g.vs)
     for i,v in enumerate(g.vs) :
         tmp += "    <g class=\"edge-group\" wp_id=\""+v["wp_id"]+"\" label=\""+v["label"]+"\" objectid=\""+v["objectid"]+"\" >\n"
         for i2, e in enumerate(g.incident(g.vs.find(name=v["name"]), mode="out")):
@@ -185,7 +186,12 @@ if __name__ == "__main__":
             else :
                 st = 1
             #print "stroke-width", st, v["scores"]
-            tmp += "        <line x1=\""+str(coords[i][0])+"\" y1=\""+str(coords[i][1])+"\" x2=\""+str(v2["coords"][0])+"\" y2=\""+str(v2["coords"][1])+"\" stroke=\"black\" stroke-width=\"1\" alt-stroke-width=\"" + str(st) + "\" marker-end=\"url(#marker-arrow)\" marker-mid=\"url(#marker-text-" + v["objectid"] + "-" + str(i2) + ")\" />\n"
+            
+            sw = 1
+            if cant <= 150 :
+                sw = st
+            
+            tmp += "        <line x1=\""+str(coords[i][0])+"\" y1=\""+str(coords[i][1])+"\" x2=\""+str(v2["coords"][0])+"\" y2=\""+str(v2["coords"][1])+"\" stroke=\"black\" stroke-width=\"" + str(sw) + "\" alt-stroke-width=\"" + str(st) + "\" marker-end=\"url(#marker-arrow)\" marker-mid=\"url(#marker-text-" + v["objectid"] + "-" + str(i2) + ")\" />\n"
         tmp += "    </g>\n"
     
     # Then, the nodes, that will be drawn on top of the edges.

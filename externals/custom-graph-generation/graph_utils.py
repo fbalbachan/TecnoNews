@@ -330,10 +330,17 @@ def create_pickle( object_id , min_size=10) :
 
     print datetime.datetime.now()
     print "creating graph object..."
+    cant    =   len(final_graph)
     g       =   Graph( directed=True )
     l       =   []
     i       =   0
-    g.add_vertices(len(final_graph))
+    
+    if cant <= 150 :
+        sizes = []
+        for item in final_graph :
+            sizes.append( 50 )
+    
+    g.add_vertices( cant )
     g.delete_edges(g.es)
     g.vs["name"]        = names
     g.vs["color"]       = color
@@ -353,7 +360,7 @@ def create_pickle( object_id , min_size=10) :
     print datetime.datetime.now()
     print "looping edges..."
     e  = 0
-    for i in range(0, len(final_graph)) :
+    for i in range(0, cant) :
         item = final_graph[i]
         # print item
         for ref in item["referents"]:
