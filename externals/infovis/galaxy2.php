@@ -1,6 +1,10 @@
 <!doctype html>
 <?php
-    $json = trim(utf8_decode(shell_exec(dirname(__FILE__).'/get-news-entry-by-wpid ' . ((int)$_REQUEST["news_id"]) )));
+    $ejec = dirname(__FILE__).'/get-news-entry-by-wpid ' . ((int)$_REQUEST["news_id"]);
+    if ( !file_exists($ejec) ) {
+        $ejec = dirname(__FILE__).'/infovis/get-news-entry-by-wpid ' . ((int)$_REQUEST["news_id"]);
+    }
+    $json = trim(utf8_decode(shell_exec( )));
     if (trim($json) == "undefined")
     {
         echo "<b>Error getting news data.</b>";
@@ -10,7 +14,6 @@
     $json = preg_replace("/ISODate\((.+)\)/Um", "$1", $json);
     $news_data = json_decode(utf8_encode($json),true);
     $titulo    = $news_data["title"];
-
 ?>
 <html>
     <head>

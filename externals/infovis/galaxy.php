@@ -1,9 +1,19 @@
 <!doctype html>
 <?php
-    $titulo = (isset($_REQUEST["title"]) ) ? $_REQUEST["title"] : "";
-    if ($titulo !== "") {
-        $titulo = str_replace("-"," ", $titulo);
+    $ejec = dirname(__FILE__).'/get-news-entry-by-wpid ' . ((int)$_REQUEST["news_id"]);
+    if ( !file_exists($ejec) ) {
+        $ejec = dirname(__FILE__).'/infovis/get-news-entry-by-wpid ' . ((int)$_REQUEST["news_id"]);
     }
+    $json = trim(utf8_decode(shell_exec( )));
+    if (trim($json) == "undefined")
+    {
+        echo "<b>Error getting news data.</b>";
+        exit(1);
+    }
+    $json = preg_replace("/ObjectId\((.+)\)/Um", "$1", $json);
+    $json = preg_replace("/ISODate\((.+)\)/Um", "$1", $json);
+    $news_data = json_decode(utf8_encode($json),true);
+    $titulo    = $news_data["title"];
 ?>
 <html>
     <head>
