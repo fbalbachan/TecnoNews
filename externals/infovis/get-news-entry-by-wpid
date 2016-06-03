@@ -1,0 +1,6 @@
+#!/bin/bash
+
+COMANDO="printjson(db.news_entries.find({'wp_id':$1, 'wp_url':/entretenimientobit/})[0])"
+
+/usr/bin/mongo --host 85.10.210.172 -uroot -pNaturalezaMuerta --authenticationDatabase admin sentinews_entrebit --quiet --eval "$COMANDO"
+
