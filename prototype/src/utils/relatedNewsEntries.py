@@ -265,7 +265,7 @@ class RelatedNewsEntries(object):
 
             score = self.related_score(entities_coincidence, similarity, title_distance)
 
-            if score >= 40:
+            if score >= 50:
                 related_logger.info(">>>")
                 final_result.append([newsItem, score])
                 related_logger.info("%s %s" % (newsItem.title, score))
