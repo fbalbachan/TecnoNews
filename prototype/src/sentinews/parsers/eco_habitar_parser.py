@@ -15,7 +15,7 @@ class EcoHabitarParser(GenericParser):
     
     def parse(self, url):
         #url = "http://www.ecohabitar.org/anpier-exige-a-rajoy-una-rectificacion/"
-        
+        #url = "http://www.ecohabitar.org/ecohabitar-en-bioterra-2016/"
 	soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
 	for script in soup(["script", "style"]):
             script.extract()
@@ -26,12 +26,12 @@ class EcoHabitarParser(GenericParser):
         
             
             
-        title = soup.find('h1',{'class':'entry-title'})
+        title = soup.find('h1')
         title =  title.text.strip()
         
         content = "" 
         
-        paragraphs = soup.find('div',{'class':'entry-content clearfix'}).findAll('p')
+        paragraphs = soup.find('div',{'class':'entry-content'}).findAll('p')
         
         
         for paragraph in paragraphs:
@@ -46,7 +46,7 @@ class EcoHabitarParser(GenericParser):
 
         tags = ["propiedades"]
         categories=["propiedades"]
-        
+        #return {"content":content, "title":title, "tags":tags}
         new_entry = self.create_news_entry(title=title, content=content,
                                            tags=tags,
                                            source=self.source,
