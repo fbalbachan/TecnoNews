@@ -304,7 +304,7 @@ class EntiNews_request:
                     return action_by_method[method]()
                 elif language == u'pt':
                     #return web.template.render().ptresult()
-                    return redirect_to_pt(input_text, "result")
+                    return redirect_to_pt(input_text, "result", web_input)
                 else:
                     return web.template.render().unsupported()
 
@@ -313,11 +313,17 @@ class EntiNews_request:
 # 20160217 - Daniel Cantarín
 # Spanish sentilecto's demo needs to redirect data to Portuguese.
 # This function handles that logic.
-def redirect_to_pt(text, point) :
+def redirect_to_pt(text, point, web_input = None) :
     numero  = random.random()
     archivo = "/tmp/sentilecto-redirect-" + str(numero)
     print "Escribiendo archivo \"" + archivo + "\"..."
     f = open(archivo,"w")
+    
+    if web_input is not None:
+        for key in web_input:
+            f.write(key.encode("utf-8") + ":" + web_input[key] + "\n")
+    
+    f.write("--------------------\n".encode("utf-8"))
     f.write(text.encode("utf-8"))
     f.close()
     #f = codecs.open(archivo, "r", "utf-8")
