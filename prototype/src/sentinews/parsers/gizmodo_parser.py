@@ -14,7 +14,8 @@ class GizmodoParser(GenericParser):
     
     def parse(self, url):
         #url = "http://es.gizmodo.com/he-usado-el-ipad-pro-como-sustituto-total-de-mi-portati-1743773109"
-	soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
+        #url = "http://es.gizmodo.com/secuestran-el-twitter-de-mark-zuckerberg-segun-los-hac-1780743041"
+        soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
         #soup = BeautifulSoup(self.opener.read(url))
 
 	for script in soup(["script", "style"]):
@@ -29,12 +30,12 @@ class GizmodoParser(GenericParser):
             
         for hidden in soup.findAll('a', {"x-inset": "hidden"}):
             hidden.extract()
-        
+
         title = soup.find('h1', {"class": "headline hover-highlight entry-title js_entry-title"})
         title = title.text.strip()
         #print title
 
-        paragraphs = soup.find('div', {"class": "column"}).findAll('p')
+        paragraphs = soup.find('div', {"class": "post-content"}).findAll('p')
         
         #paragraphs.pop()
         content = ""
@@ -45,7 +46,7 @@ class GizmodoParser(GenericParser):
         
         tags = ["tecnologia"]
         categories=["tecnologia"]
-        
+        #return {"tags":tags, "title":title,"content":content}
         new_entry = self.create_news_entry(title=title, content=content,
                                            tags=tags,
                                            source=self.source,
