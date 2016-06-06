@@ -14,8 +14,9 @@ class XatakaParser(GenericParser):
     
     def parse(self, url):
         #url = "http://www.xataka.com/empresas-y-economia/no-dependemos-del-pc-a-intel-le-va-bien-gracias-a-los-servidores-y-la-nube?utm_source=feedburner&utm_medium=feed&utm_campaign=Feed%3A+xataka2+%28Xataka%29"
-	soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
-	for script in soup(["script", "style"]):
+        #url = "http://www.xataka.com/otros-dispositivos/una-maquina-que-dobla-la-ropa-la-innovacion-que-todos-esperabamos-o-no?utm_source=feedburner&utm_medium=feed&utm_campaign=Feed%3A+xataka2+%28Xataka%29"
+        soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
+        for script in soup(["script", "style"]):
             script.extract()
             
             
@@ -23,12 +24,11 @@ class XatakaParser(GenericParser):
             image.extract()
         
         
-        title = soup.find('h1', {"class": "article-header"})
+        title = soup.find('h1')
         title = title.text.strip()
         #print title
         
-        paragraphs = soup.find('div', {"class": "article-summary"}).findAll('p')
-        
+        paragraphs = soup.find('div', {"class": "article-content"}).find("div", {"class":"blob"}).findAll('p')
         paragraphs.pop()
         
         content = ""
@@ -36,10 +36,14 @@ class XatakaParser(GenericParser):
             content += "\n" + paragraph.text.strip()
             
         content = content.strip()
-        
-        tags = ["tecnologia"]
-        categories=["tecnologia"]
-        
+        tmptags = soup.findAll('a', {"class":"article-topic-link"})
+        tags    = [u"tecnologia"]
+        if tmptags is not None :
+            for item in tmptags:
+                tags.append( item.text.strip()  )
+
+        categories=[u"tecnologia"]
+        #return {"title":title, "content":content, "tags": tags}
         new_entry = self.create_news_entry(title=title, content=content,
                                            tags=tags,
                                            source=self.source,
