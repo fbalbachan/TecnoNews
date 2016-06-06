@@ -321,7 +321,7 @@ def redirect_to_pt(text, point, web_input = None) :
     
     if web_input is not None:
         for key in web_input:
-            f.write(key.encode("utf-8") + ":" + web_input[key] + "\n")
+            f.write(key.encode("utf-8") + ":" + web_input[key].encode("utf-8") + "\n")
     
     f.write("--------------------\n".encode("utf-8"))
     f.write(text.encode("utf-8"))
