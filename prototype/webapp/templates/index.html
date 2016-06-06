@@ -1,11 +1,11 @@
 $def with (request_id, debug_mode)
-$ captcha_src = "sentilecto/static/captcha/captcha_" + request_id + ".png"
+$ captcha_src = "/sentilecto/static/captcha/captcha_" + request_id + ".png"
 <!DOCTYPE html>
 <html lang="es">
   <head>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.css">
-    <script src="static/jquery-1.6.2.min.js"></script>
+    <link rel="stylesheet" href="/sentilecto/static/bootstrap/css/bootstrap.css">
+    <script src="/sentilecto/static/jquery-1.6.2.min.js"></script>
     <title>Sentilecto</title>
   </head>
 
@@ -16,7 +16,7 @@ $ captcha_src = "sentilecto/static/captcha/captcha_" + request_id + ".png"
       <h2 style="padding-top:10px;padding-bottom:10px;"></h2>
 
       <div>
-        <form class="well form-search" enctype="multipart/form-data" action="sentilecto/result" method="POST">
+        <form class="well form-search" enctype="multipart/form-data" action="/sentilecto/result" method="POST">
             <fieldset>
                 <div class="control-group">
 <!--
