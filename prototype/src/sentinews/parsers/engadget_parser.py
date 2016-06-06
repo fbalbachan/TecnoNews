@@ -14,7 +14,8 @@ class EngadgetParser(GenericParser):
     source = u"Engadget"
     
     def parse(self, url):
-
+        #url  = "http://es.engadget.com/2016/06/06/cortana-xbox-one-nueva-actualizacion/"
+        #url  = "http://es.engadget.com/2016/06/06/kingston-datatraveler-2000-pendrive-mas-seguro-del-mundo/"
 	soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
 	for script in soup(["script", "style"]):
             script.extract()
@@ -23,13 +24,14 @@ class EngadgetParser(GenericParser):
         for image in soup.findAll('img'):
             image.extract()
         
-        soup.find('p', {'class':'read-more'}).extract()
+        for p in soup.findAll('p', {'class':'read-more'}):
+            p.extract()
         
-        title = soup.find('h1', {"itemprop": "headline"})
+        title = soup.find('h1', {"class": "post-title"})
         title = title.text.strip()
         
         
-        paragraphs = soup.find('div', {"itemprop": "articleBody"}).findAll('p')
+        paragraphs = soup.find('div', {"class": "m-permalink-post-data"}).findAll('p')
         
         content = ""
         for paragraph in paragraphs:
@@ -40,9 +42,14 @@ class EngadgetParser(GenericParser):
         
         #print content
         #exit()
-        tags = ["tecnologia"]
-        categories=["tecnologia"]
-        
+        tmptags    = soup.find("div",{"class":"post-meta-tags"}).findAll("a")
+        tags       = [u"tecnologia"]
+        categories = [u"tecnologia"]
+
+        for t in tmptags:
+            tags.append( t.text.strip() )
+
+        #return {"tags":tags,"content":content,"title":title}
         new_entry = self.create_news_entry(title=title, content=content,
                                            tags=tags,
                                            source=self.source,
