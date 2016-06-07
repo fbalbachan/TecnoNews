@@ -15,8 +15,10 @@ class MujerHoyParser(GenericParser):
     
     def parse(self, url):
         #url = "http://www.mujerhoy.com/moda/moda-vip/looks-famosas-rosa-cuarzo-pantone-2016-920125112015.html"
+        #url = "http://blogs.mujerhoy.com/adelgazar/2016/01/11/culos-sentados-grasas-en-expansion.html"
+        #url = "http://www.mujerhoy.com/celebrities/corazon/201606/07/entrevista-noriega-michelle-jenner-amor-letra-20160607124020.html"
         
-	soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
+	soup = BeautifulSoup(self.opener.read(url), "html.parser", from_encoding='utf-8')
 	for script in soup(["script", "style"]):
             script.extract()
             
@@ -25,7 +27,7 @@ class MujerHoyParser(GenericParser):
             image.extract()
         
         
-        title = soup.find('h1', {'class':'headline regular entry-title'})
+        title = soup.find('h1', {'itemprop':'headline'})
         title =  title.text.strip()
         
         content = "" 
@@ -36,8 +38,11 @@ class MujerHoyParser(GenericParser):
         
         
 
-        
-        paragraphs = soup.find('div',{'class':'entry content'}).findAll('p')
+        # This site has two templates. Gotta catch them all.
+        article = soup.find('div',{'itemprop':'articleBody'})
+        if article is None :
+            article = soup.find("div",{"class":"description"})
+        paragraphs = article.find_all("p")
 
         for paragraph in paragraphs:
             clean_text = paragraph.text.strip()
@@ -50,7 +55,7 @@ class MujerHoyParser(GenericParser):
         
         tags = ["estilo vida"]
         categories=["estilo vida"]
-        
+        #return {"content":content, "title":title}
         new_entry = self.create_news_entry(title=title, content=content,
                                            tags=tags,
                                            source=self.source,
