@@ -16,7 +16,7 @@ class DirectoalpaladarParser(GenericParser):
     
     def parse(self, url):
         #url = "http://www.directoalpaladar.com/otros/te-apetece-un-adorable-personaje-de-disney-para-desayunar?utm_source=feedburner&utm_medium=feed&utm_campaign=Feed%3A+directoalpaladar+%28Directo+al+paladar%29"
-        
+        #url = "http://feeds.weblogssl.com/~r/directoalpaladar/~3/Kg-oaasvR2E/paseo-por-la-gastronomia-de-la-red-13-recetas-frescas-para-ir-preparando-el-verano"        
         soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
         for script in soup(["script", "style"]):
             script.extract()
@@ -25,12 +25,12 @@ class DirectoalpaladarParser(GenericParser):
         for image in soup.findAll('img'):
             image.extract()
         
-        title = soup.find("h1", {"class", "article-header"}).text.strip()
+        title = soup.find("h1").text.strip()
         
         content = "" 
-        article_content = soup.find("div", {"class", "article-summary"})
+        article_content = soup.find("div", {"class", "article-content"})
         
-        paragraphs = article_content.findAll("p")[:-1]
+        paragraphs = article_content.findAll("p")[:-2]
         
         for paragraph in paragraphs:
             clean_text = paragraph.text.strip()
