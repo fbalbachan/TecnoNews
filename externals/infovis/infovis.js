@@ -722,10 +722,13 @@ function show_customgraph(obj) {
     
     if (cg === null || cg === undefined) {
         //setup
-        $("#cg").css("cursor","wait").show(100);
-        setup_customgraph();
-        $("#cg").css("cursor","default");
-        
+        //$("#cg").css("cursor","wait").show(100);
+        app.espere("Loading NewsUniverse. please wait...", " finished.").then(
+            function() {
+                setup_customgraph();
+                app.desespere("Loading NewsUniverse. please wait...");
+            }
+        );
     } else {
         $("#cg").fadeIn(500).promise().then(
             function() {
