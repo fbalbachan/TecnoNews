@@ -725,8 +725,6 @@ function show_customgraph(obj) {
         app.espere("Loading NewsUniverse, please wait...", " finished.").then(
             function() {
                 setup_customgraph();
-                $("#cg").css("cursor","wait").show(100);
-                app.desespere("Loading NewsUniverse, please wait...");
             }
         );
     } else {
@@ -755,7 +753,6 @@ function generate_customgraph() {
     ).promise().then(
         function (resp, status, xhr) {
             //console.log(resp,status,xhr);
-            $("#cg").css("cursor","default");
             if (resp.status === "success") {
                 setup_customgraph_nodelist( resp.data.svg )
                 $("#stats #nodecount").html( universe.nodecount );
@@ -765,11 +762,14 @@ function generate_customgraph() {
                 var message = resp.data.message;
                 alert("error leyendo datos del custom graph:\n" + message);
             }
+            $("#cg").css("cursor","default").show(100);
+            app.desespere("Loading NewsUniverse, please wait...");
         },
         
         function(a, b, c) {
             console.log("generate_customgraph fail : ", a,b,c);
-            $("#cg").css("cursor","default");
+            $("#cg").css("cursor","default").show(100);
+            app.desespere("Loading NewsUniverse, please wait...");
         }
     );
 }
