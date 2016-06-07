@@ -39,8 +39,8 @@ class TelamEspectaculosParser(GenericParser):
     def parse(self, url):
         #if not self.is_parseable_case(url):
         #    return None
-
-        soup = BeautifulSoup(self.opener.read(url))
+        #url = "http://www.telam.com.ar/notas/201606/150421-robert-plant-y-jimmy-page-estaran-presentes-en-el-juicio-por-supuesto-plagio.html"
+        soup = BeautifulSoup(self.opener.read(url), "html.parser", from_encoding='windows-1252')
         #categories = self.get_categories(soup)
 
         image_search_string = None
@@ -86,6 +86,7 @@ class TelamEspectaculosParser(GenericParser):
         
         tags=[u'entretenimiento']
         categories=[u'entretenimiento']
+        #return {"content":content, "title":title}
         new_entry = self.create_news_entry(title=title, content=content,
                                            tags=tags,
                                            source=self.source,
@@ -95,4 +96,3 @@ class TelamEspectaculosParser(GenericParser):
                                            keywords=None)
 
         return new_entry
-
