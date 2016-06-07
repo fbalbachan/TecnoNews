@@ -17,7 +17,7 @@ class ProntoParser(GenericParser):
     
     def parse(self, url):
         #url = "http://www.pronto.com.ar/articulo/famosos/alfredo-caseros-protagonizo-escandalo-policial-casa-ex-mujer/20160127153351202196.html"
-        
+        #url = "http://www.pronto.com.ar/articulo/famosos/famosa-rubia-confiesa-miro-peliculas-porno-sacar-ideas/20160607112825214023.html"
         soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
         for script in soup(["script", "style"]):
             script.extract()
@@ -30,7 +30,7 @@ class ProntoParser(GenericParser):
         title = soup.select('h1.title')[0].text.strip()
         
         content = ""
-        article_content = soup.select('.inner-article-content .body')[0]
+        article_content = soup.select('article')[0]
         
         paragraphs = article_content.findAll('p')
 
