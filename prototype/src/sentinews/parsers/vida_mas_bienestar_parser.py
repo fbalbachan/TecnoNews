@@ -16,7 +16,7 @@ class VidaMasBienestarParser(GenericParser):
 
     def parse(self, url):
         #url = "http://vidaybienestar.mx/limpieza-cada-temporada/?utm_source=rss&utm_medium=rss&utm_campaign=limpieza-cada-temporada"
-
+        #url = "http://vidaybienestar.mx/el-calentamiento/"
         soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
         for script in soup(["script", "style"]):
             script.extract()
@@ -27,7 +27,7 @@ class VidaMasBienestarParser(GenericParser):
 
 
         #-------------------TITLE--------------------------
-        title = soup.find('h1',{'class':'entry-title'})
+        title = soup.find('h3',{'itemprop':'headline'})
         title = title.text.strip()
 
         #-------------------CONTENT--------------------------
@@ -52,7 +52,7 @@ class VidaMasBienestarParser(GenericParser):
 
         #categories=[urlparse(url).path.split("/")[1]]
         #print categories
-
+        #return {"content":content, "title":title}
         new_entry = self.create_news_entry(title=title, content=content,
                                            tags=tags,
                                            source=self.source,
