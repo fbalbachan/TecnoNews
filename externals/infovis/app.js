@@ -239,7 +239,7 @@ var App = (function() {
     }
     
     app._str_to_id = function($str){
-        var $tmp = $str.toLowerCase().replace(/\ /gi,"-").replace(/\"/gi,"");
+        var $tmp = $str.toLowerCase().replace(/\ /gi,"-").replace(/\"/gi,"").replace(/\./gi,"").replace(/\,/gi,"");
         return $tmp;
     }
     
