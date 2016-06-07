@@ -21,7 +21,7 @@ class SportlifeParser(GenericParser):
         #FIX: sportlife construye las URLs con un error de sintaxis menor. Lo arreglo.
         tmp1 = url.split("://")
         tmp2 = tmp1[1].replace("//","/")
-        url  = tmp1[0] + "://" + tmp1[1]
+        url  = tmp1[0] + "://" + tmp2
 
         soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
         for script in soup(["script", "style"]):
