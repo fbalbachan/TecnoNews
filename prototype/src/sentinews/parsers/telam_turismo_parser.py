@@ -16,8 +16,8 @@ class TelamTurismoParser(GenericParser):
 
     def parse(self, url):
         #url = "http://www.telam.com.ar/notas/201603/140085-chaco-semana-santa-turismo.html"
-
-        soup = BeautifulSoup(self.opener.read(url), from_encoding='windows-1252')
+        #url = "http://www.telam.com.ar/notas/201606/150059-peru-turismo-gastronomia-comida-lugares.html"
+        soup = BeautifulSoup(self.opener.read(url), "html.parser", from_encoding='windows-1252')
         for script in soup(["script", "style"]):
             script.extract()
 
@@ -56,7 +56,7 @@ class TelamTurismoParser(GenericParser):
 
         #categories=[urlparse(url).path.split("/")[1]]
         #print categories
-
+        #return {"content":content,"title":title}
         new_entry = self.create_news_entry(title=title, content=content,
                                            tags=tags,
                                            source=self.source,
