@@ -21,6 +21,7 @@
         <title>News history network<?php echo ($titulo == "") ? "" : " - ".$titulo; ?></title>
         <script type="text/javascript" src="/wp-content/themes/nanomag/js/cytoscape.js-2.6.6/cytoscape.js"></script>
         <script type="text/javascript" src="/wp-includes/js/jquery/jquery.js?ver=1.11.2"></script>
+        <script type="text/javascript" src="app.js"></script>
         <script type="text/javascript" src="/wp-content/themes/nanomag/js/jquery.qtip.min.js"></script>
         <script type="text/javascript" src="/wp-content/themes/nanomag/js/cytoscape.js-2.6.6/cytoscape-qtip.js"></script>
         <script defer type="text/javascript" src="/wp-content/themes/nanomag/js/wordcloud2/src/wordcloud2.js"></script>
