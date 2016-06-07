@@ -5,3 +5,4 @@ cp -f galaxy.php /opt/wordpress-4.1-0/apps/wordpress/htdocs/
 cp -f galaxy2.php /opt/wordpress-4.1-0/apps/wordpress/htdocs/
 
 cp -f get_*.php /opt/wordpress-4.1-0/apps/wordpress/htdocs/
+cp -f app.* /opt/wordpress-4.1-0/apps/wordpress/htdocs/

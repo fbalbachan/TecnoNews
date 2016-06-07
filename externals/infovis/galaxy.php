@@ -21,6 +21,7 @@
         <title>News history network<?php echo ($titulo == "") ? "" : " - ".$titulo; ?></title>
         <script type="text/javascript" src="/wp-content/themes/nanomag/js/cytoscape.js-2.6.6/cytoscape.js"></script>
         <script type="text/javascript" src="/wp-includes/js/jquery/jquery.js?ver=1.11.2"></script>
+        <script type="text/javascript" src="app.js"></script>
         <script type="text/javascript" src="/wp-content/themes/nanomag/js/jquery.qtip.min.js"></script>
         <script type="text/javascript" src="/wp-content/themes/nanomag/js/cytoscape.js-2.6.6/cytoscape-qtip.js"></script>
         <script defer type="text/javascript" src="/wp-content/themes/nanomag/js/wordcloud2/src/wordcloud2.js"></script>
@@ -28,6 +29,7 @@
         
         <link href="/wp-content/themes/nanomag/css/jquery.qtip.min.css" rel="stylesheet" type="text/css" />
         <link href="infovis.css" rel="stylesheet" type="text/css" />
+        <link href="app.css" rel="stylesheet" type="text/css" />
         
         <script type="text/javascript">
             $               = jQuery;
@@ -68,7 +70,6 @@
             ga('create', 'UA-61076814-3', 'auto');
             ga('send', 'pageview');
         </script>
-
         <div id="loading-overlay">
             <div>Loading Galaxy. Please wait...</div>
         </div>
