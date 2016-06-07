@@ -29,6 +29,7 @@
         
         <link href="/wp-content/themes/nanomag/css/jquery.qtip.min.css" rel="stylesheet" type="text/css" />
         <link href="infovis.css" rel="stylesheet" type="text/css" />
+        <link href="app.css" rel="stylesheet" type="text/css" />
         
         <script type="text/javascript">
             $               = jQuery;
