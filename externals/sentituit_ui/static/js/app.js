@@ -1,3 +1,4 @@
+window.$ = jQuery;
 /**
  * App class.
  * It's used as a global namespace for common operations.
