@@ -17,7 +17,7 @@ class BalamodaParser(GenericParser):
     def parse(self, url):
         #url = "http://www.balamoda.net/2016/01/currently-loving-las-cosas-que-me-ponen.html?utm_source=feedburner&utm_medium=feed&utm_campaign=Feed%3A+balamoda+%28B+a+la+moda%29&utm_content=FeedBurner"
         
-        soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
+        soup = BeautifulSoup(self.opener.read(url), "html.parser", from_encoding='utf-8')
         for script in soup(["script", "style"]):
             script.extract()
             
@@ -32,11 +32,7 @@ class BalamodaParser(GenericParser):
         
         content = "" 
         
-        article_content = None
-        for div in soup.select('div[class*=post-body]'):
-            article_content = div
-        
-        paragraphs = article_content.findAll("div")
+        paragraphs = soup.find("div",{"class","post-body"}).findAll("div")
         
         for paragraph in paragraphs:
             clean_text = paragraph.text.strip()
@@ -51,7 +47,7 @@ class BalamodaParser(GenericParser):
 
         tags = ["belleza"]
         categories=["belleza"]
-        
+        #return {"content":content, "title":title}
         new_entry = self.create_news_entry(title=title, content=content,
                                            tags=tags,
                                            source=self.source,
