@@ -491,7 +491,7 @@ function setup_cy() {
         }
     }
     tmphtml += "</tbody></table></div>";
-    local_cy = $("·cy");
+    local_cy = $("#cy");
     local_cy.append( tmphtml );
     
     $(window).on(
