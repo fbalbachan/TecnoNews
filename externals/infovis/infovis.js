@@ -722,7 +722,7 @@ function show_customgraph(obj) {
     
     if (cg === null || cg === undefined) {
         //setup
-        app.espere("Loading NewsUniverse, please wait...", " finished.").then(
+        app.espere("Loading NewsUniverse, please wait...", "Loaded. Rendering...").then(
             function() {
                 setup_customgraph();
             }
