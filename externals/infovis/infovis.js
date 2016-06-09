@@ -492,9 +492,7 @@ function setup_cy() {
     }
     tmphtml += "</tbody></table></div>";
     local_cy = $("·cy");
-    var tmpf = function(){ local_cy.html( local_cy.html() + tmphtml );};
-    //setTimeout(tmpf,3000);
-    //tmpf();
+    local_cy.append( tmphtml );
     
     $(window).on(
         "resize", tmp_resize
