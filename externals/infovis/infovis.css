@@ -542,9 +542,9 @@ h4 {
 
 #leyenda svg, #cg svg {
     position            : absolute;
-    left                : 0px;
+    left                : 140px;
     top                 : 0px;
-    width               : 100%;
+    width               : calc(100% - 140px);
     height              : 100%;
 }
 
