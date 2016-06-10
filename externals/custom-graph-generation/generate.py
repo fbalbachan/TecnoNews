@@ -142,6 +142,7 @@ if __name__ == "__main__":
         layout = Layout(layout)
     
     layout.fit_into( bbox=(int(width) - 50, int(height) - 50), keep_aspect_ratio=False )
+    layout.fit_into( bbox=(int(width), int(height)), keep_aspect_ratio=True )
     print "saving image..."
 
     print datetime.datetime.now()
