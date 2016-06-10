@@ -540,7 +540,15 @@ h4 {
     color               : white;
 }
 
-#leyenda svg, #cg svg {
+#leyenda svg {
+    position            : absolute;
+    left                : 0px;
+    top                 : 0px;
+    width               : 100%;
+    height              : 100%;
+} 
+
+#cg svg {
     position            : absolute;
     left                : 140px;
     top                 : 0px;
