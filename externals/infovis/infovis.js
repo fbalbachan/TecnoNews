@@ -543,8 +543,7 @@ function setup_wordcloud( arr ) {
 
 function show_wordcloud(obj) {
     $("#cy, #gs, #cg").fadeOut(100);
-    $("#visualizaciones div.selected").removeClass("selected");
-    $(obj).addClass("selected");
+    select_graph_UI(obj);
     
     if (wc === null) {
         
@@ -582,8 +581,7 @@ function show_wordcloud(obj) {
 
 function show_galaxy(obj) {
     $("#wc, #gs, #cg").fadeOut(100);
-    $("#visualizaciones div.selected").removeClass("selected");
-    $(obj).addClass("selected");
+    select_graph_UI(obj);
     $("#cy").fadeIn(500).promise().then(
         function() {
             $("#stats #nodecount").html( nodeset.nodecount );
@@ -635,8 +633,7 @@ function setup_galaxysummary() {
 
 function show_galaxysummary(obj) {
     $("#cy, #wc, #cg").fadeOut(100);
-    $("#visualizaciones div.selected").removeClass("selected");
-    $(obj).addClass("selected");
+    select_graph_UI(obj);
     
     if (gs === null || gs === undefined) {
         //setup
@@ -714,9 +711,7 @@ function setup_customgraph() {
 
 function show_customgraph(obj) {
     $("#cy, #wc, #gs").fadeOut(100);
-    
-    $("#visualizaciones div.selected").removeClass("selected");
-    $(obj).addClass("selected");
+    select_graph_UI(obj);
     
     if (cg === null || cg === undefined) {
         //setup
@@ -897,4 +892,9 @@ function toggle_node_list( ) {
             div.fadeOut(500);
         }
     });
+}
+
+function select_graph_UI(obj) {
+    $("#visualizaciones .selected").removeClass("selected");
+    $(obj).find("span").addClass("selected");
 }
