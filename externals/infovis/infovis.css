@@ -395,7 +395,9 @@ h4 {
 #visualizaciones div.selected,
 #visualizaciones span.selected {
     border              :   black 2px inset;
-    background-color    :   blue;
+    background-color    :   rgba(0, 0, 255, 0.25);
+    background-image    :   url("check.png");
+    background-size     :   100% 100%;
 }
 
 #visualizaciones p {
