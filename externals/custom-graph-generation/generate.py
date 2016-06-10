@@ -19,7 +19,9 @@ import sys, getopt
 
 if __name__ == "__main__":
     args    = sys.argv[1:]
-    layout  = "customradial"
+    layout  = "random"
+    width   = "1280"
+    height  = "1024"
     
     if len(args) <= 0 :
         print "Sebe ingresar un wp_id. Imposible continuar."
@@ -52,6 +54,29 @@ if __name__ == "__main__":
             print "Invalid layout \"" + str(layout) + "\". Expected possible values : " + str(valid_layouts)
             exit(1)
     
+    if len(args) >= 3 :
+        width = args[2]
+        test  = 0
+        try:
+            test = int(width)
+        except Exception, e:
+            print "Invalid width \"" + str(width) + "\". Expected positive number."
+            exit(1)
+        if test <= 0 :
+            print "Invalid width \"" + str(width) + "\". Expected positive number."
+            exit(1)
+    
+    if len(args) >= 4 :
+        height = args[3]
+        test  = 0
+        try:
+            test = int(height)
+        except Exception, e:
+            print "Invalid height \"" + str(height) + "\". Expected positive number."
+            exit(1)
+        if test <= 0 :
+            print "Invalid height \"" + str(height) + "\". Expected positive number."
+            exit(1)
     
     g = None
     
@@ -116,7 +141,7 @@ if __name__ == "__main__":
     if isinstance(layout, list):
         layout = Layout(layout)
     
-    layout.fit_into( bbox=(1280,1024) )
+    layout.fit_into( bbox=(int(width),int(height)) )
     print "saving image..."
 
     print datetime.datetime.now()
@@ -132,7 +157,7 @@ if __name__ == "__main__":
     # subgraph / copy by sentiment
     
     
-    tmp = """<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="100%" viewBox="0 0 1280 1024" version="1.1">
+    tmp = """<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="100%" viewBox="0 0 """ + width + " " + height + """ " version="1.1">
 <defs>
     <marker id="marker-arrow" markerWidth="10" markerHeight="10" refx="10" refy="3" orient="auto" markerUnits="strokeWidth">
         <path d="M0,0 L0,6 L9,3 z" fill="#000" />
