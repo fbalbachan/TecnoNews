@@ -260,10 +260,10 @@
 
         <div id="visualizaciones">
             <h4>Select Infovis Graph</h4>
-            <p><div class="round selected" onclick="show_galaxy(this);"></div> NewsGalaxy</p>
-            <p><div class="round" onclick="show_wordcloud(this);"></div> TopicCloud</p>
-            <p><div class="round" onclick="show_galaxysummary(this);"></div> GalaxySummary</p>
-            <p><div class="round" onclick="show_customgraph(this);"></div> NewsUniverse</p>
+            <p onclick="show_galaxy(this);"         > <span class="selected" ></span> NewsGalaxy</p>
+            <p onclick="show_wordcloud(this);"      > <span class="" ></span> TopicCloud</p>
+            <p onclick="show_galaxysummary(this);"  > <span class="" ></span> GalaxySummary</p>
+            <p onclick="show_customgraph(this);"    > <span class="" ></span> NewsUniverse</p>
         </div>
 
         <div id="powered-by">
