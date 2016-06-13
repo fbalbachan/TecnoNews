@@ -231,11 +231,18 @@ if __name__ == "__main__":
         else:
             cent = 0
         
-        text_length = 10
+        text_length = 12
         if (len(v["label"]) >= 3) :
-            text_length = 20
+            text_length = 19
         
-        tmp += "        <text x=\""+str( (coords[i][0] - v["size"] / 2) + cent )+"\" y=\""+str(coords[i][1] + v["size"] / 3)+"\" fill=\"black\" stroke=\"none\" font-family=\"Ubuntu,Tahoma\" font-size=\""+str(int(v["size"]) / 1.8)+"\" textLength=\""+str(text_length)+"\" >"+v["label"]+"</text>"
+        pos_x = (coords[i][0] - v["size"] / 2) + cent
+        pos_y = coords[i][1] + v["size"] / 3
+        
+        if text_length == 12 :
+            pos_x = pos_x + 5
+            pos_y = pos_y - 2
+        
+        tmp += "        <text x=\""+str( pos_x )+"\" y=\""+str( pos_y )+"\" fill=\"black\" stroke=\"none\" font-family=\"Ubuntu,Tahoma\" font-size=\""+str(int(v["size"]) / 1.8)+"\" textLength=\""+str(text_length)+"\" >"+v["label"]+"</text>"
         
         tmp += "    </g>\n"
     
