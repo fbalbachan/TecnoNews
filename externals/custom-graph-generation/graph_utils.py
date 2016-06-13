@@ -116,7 +116,7 @@ def color_from_category(cat = None) :
         
     return ret
 
-def generate_jsons_for_universe( item_id , gens = 10) :
+def generate_jsons_for_universe( item_id , gens = 5) :
     from bson.objectid import ObjectId
     import json
     from pymongo import MongoClient
