@@ -31,30 +31,30 @@ nohup ./run2.sh
 
 #ps -p $! -o pgid | grep -E "[0-9]+" >| instance.2.pgid
 
-sleep 3
-truncate "instance.3.out" --size=0
-truncate ../prototype/logs/instance3-tecnonews.log --size=0
-{
-nohup ./run3.sh
-} >| "instance.3.out" 2>&1 &
+#sleep 3
+#truncate "instance.3.out" --size=0
+#truncate ../prototype/logs/instance3-tecnonews.log --size=0
+#{
+#nohup ./run3.sh
+#} >| "instance.3.out" 2>&1 &
 
 #ps -p $! -o pgid | grep -E "[0-9]+" >| instance.3.pgid
 
-sleep 3
-truncate "instance.4.out" --size=0
-truncate ../prototype/logs/instance4-tecnonews.log --size=0
-{
-nohup ./run4.sh
-} >| "instance.4.out" 2>&1 &
+#sleep 3
+#truncate "instance.4.out" --size=0
+#truncate ../prototype/logs/instance4-tecnonews.log --size=0
+#{
+#nohup ./run4.sh
+#} >| "instance.4.out" 2>&1 &
 
 #ps -p $! -o pgid | grep -E "[0-9]+" >| instance.4.pgid
 
-sleep 3
-truncate "instance.5.out" --size=0
-truncate ../prototype/logs/instance5-tecnonews.log --size=0
-{
-nohup ./run5.sh
-} >| "instance.5.out" 2>&1 &
+#sleep 3
+#truncate "instance.5.out" --size=0
+#truncate ../prototype/logs/instance5-tecnonews.log --size=0
+#{
+#nohup ./run5.sh
+#} >| "instance.5.out" 2>&1 &
 
 #ps -p $! -o pgid | grep -E "[0-9]+" >| instance.5.pgid
 
