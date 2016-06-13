@@ -10,12 +10,17 @@ from structuralUnderstanding import StructuralUnderstanding
 from sentimentAnalysis import SentimentAnalysis
 from factMining import FactMining
 from entitySentimentReport import EntitySentimentReport
+from rewriting import Rewriting
+from summarizing import Summarizing
 # Includes for portuguese redirection
 from entityExtractionPt import EntityExtractionPT
 from structuralUnderstandingPt import StructuralUnderstandingPT
 from sentimentAnalysisPt import SentimentAnalysisPT
 from factMiningPt import FactMiningPT
 from entitySentimentReportPt import EntitySentimentReportPT
+
+from src.model.contentRewriterAndGenerator import ContentRewriterAndGenerator
+
 
 reload(sys)
 sys.setdefaultencoding("utf-8")
@@ -57,6 +62,13 @@ api.add_resource(EntityExtractionPT, base_path + '/pt/entity-extraction/<string:
 api.add_resource(FactMiningPT, base_path + '/pt/fact-mining/<string:text>/<string:api_key>')
 
 api.add_resource(EntitySentimentReportPT, base_path + '/pt/entity-sentiment-report/<string:text>/<string:api_key>')
+
+
+# 20160613 - Daniel Cantarín
+# Adding extra API methods: rewritting and summarizing.
+api.add_resource(Rewriting, base_path + '/rewriting/<string:text>/<string:api_key>')
+
+#api.add_resource(Summarizing, base_path + '/summarizing/<string:text>/<string:api_key>')
 
 
 
