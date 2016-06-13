@@ -230,7 +230,12 @@ if __name__ == "__main__":
             cent = 10
         else:
             cent = 0
-        tmp += "        <text x=\""+str( (coords[i][0] - v["size"] / 2) + cent )+"\" y=\""+str(coords[i][1] + v["size"] / 3)+"\" fill=\"black\" stroke=\"none\" font-family=\"Ubuntu,Tahoma\" font-size=\""+str(int(v["size"]) / 1.8)+"\" textLength=\""+str(v["size"])+"\" >"+v["label"]+"</text>"
+        
+        text_length = 10
+        if (len(v["label"]) >= 3) :
+            text_length = 20
+        
+        tmp += "        <text x=\""+str( (coords[i][0] - v["size"] / 2) + cent )+"\" y=\""+str(coords[i][1] + v["size"] / 3)+"\" fill=\"black\" stroke=\"none\" font-family=\"Ubuntu,Tahoma\" font-size=\""+str(int(v["size"]) / 1.8)+"\" textLength=\""+str(text_length)+"\" >"+v["label"]+"</text>"
         
         tmp += "    </g>\n"
     
