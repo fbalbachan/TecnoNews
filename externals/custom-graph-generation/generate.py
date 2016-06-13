@@ -223,6 +223,7 @@ if __name__ == "__main__":
         tmp += "    </g>\n"
     
     # Then, the nodes, that will be drawn on top of the edges.
+    nodes_length = len(g.vs)
     for i,v in enumerate(g.vs) :
         tmp += "    <g wp_id=\""+v["wp_id"]+"\" label=\""+v["label"]+"\" objectid=\""+v["objectid"]+"\" stroke=\"black\" fill=\""+v["color"]+"\" stroke-width=\"1\">\n"
         
@@ -245,6 +246,10 @@ if __name__ == "__main__":
 
         if (len(v["label"]) == 1) :
             pos_x = pos_x - 8
+        
+        if (nodes_length <= 150) : 
+            text_length = 40
+            pos_y       = pos_y - 3
         
         tmp += "        <text x=\""+str( pos_x )+"\" y=\""+str( pos_y )+"\" fill=\"black\" stroke=\"none\" font-family=\"Ubuntu,Tahoma\" font-size=\""+str(int(v["size"]) / 1.8)+"\" textLength=\""+str(text_length)+"\" >"+v["label"]+"</text>"
         
