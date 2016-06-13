@@ -241,6 +241,9 @@ if __name__ == "__main__":
         if text_length == 12 :
             pos_x = pos_x + 5
             pos_y = pos_y - 2
+
+        if (len(v["label"]) == 1) :
+            pos_x = pos_x - 8
         
         tmp += "        <text x=\""+str( pos_x )+"\" y=\""+str( pos_y )+"\" fill=\"black\" stroke=\"none\" font-family=\"Ubuntu,Tahoma\" font-size=\""+str(int(v["size"]) / 1.8)+"\" textLength=\""+str(text_length)+"\" >"+v["label"]+"</text>"
         
