@@ -11,15 +11,13 @@ from sentimentAnalysis import SentimentAnalysis
 from factMining import FactMining
 from entitySentimentReport import EntitySentimentReport
 from rewriting import Rewriting
-from summarizing import Summarizing
+#from summarizing import Summarizing
 # Includes for portuguese redirection
 from entityExtractionPt import EntityExtractionPT
 from structuralUnderstandingPt import StructuralUnderstandingPT
 from sentimentAnalysisPt import SentimentAnalysisPT
 from factMiningPt import FactMiningPT
 from entitySentimentReportPt import EntitySentimentReportPT
-
-from src.model.contentRewriterAndGenerator import ContentRewriterAndGenerator
 
 
 reload(sys)
