@@ -361,12 +361,13 @@ class BlogPublisher(object):
 
             elif host['id'] == u"properati":
 
-                valid_country = False
-                valid_countries = [ u'argentina', u'uruguay', u'chile', u'mexico', u'united states']
-                for country in valid_countries :
-                    if country in entry.countries :
-                        valid_country = True
-                        break
+                #valid_country = False
+                #valid_countries = [ u'argentina', u'uruguay', u'chile', u'mexico', u'united states']
+                #for country in valid_countries :
+                #    if country in entry.countries :
+                #        valid_country = True
+                #        break
+                valid_country = True
 
                 interval_time = datetime.datetime.utcnow() - datetime.timedelta(seconds=2592000) #1 Month
                 post_count = news_service.get_count({'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id']})
@@ -376,11 +377,12 @@ class BlogPublisher(object):
                     if post_count < 10:
                         valid_host = True
                         self.add_hyperlinks(entry, "hyperlinks_propiedades.csv")
-                        entry.categories = [u"Noticias"]
+                        #entry.categories = [u"Noticias"]
+                        entry.categories = [u"propiedades"]
                         entry.tags = []
-                        #self.add_countries(entry)
-                        #self.add_cities(entry)
-                        #self.add_related_news_tree(entry, news_service, show_source=False, show_link=False)
+                        self.add_countries(entry)
+                        self.add_cities(entry)
+                        self.add_related_news_tree(entry, news_service, show_source=True, show_link=True)
 
             elif host['id'] == u"think_thank":
                 interval_time = datetime.datetime.utcnow() - datetime.timedelta(seconds=2592000) #1 Month
