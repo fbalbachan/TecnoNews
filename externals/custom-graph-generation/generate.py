@@ -160,7 +160,7 @@ if __name__ == "__main__":
     
     tmp = """<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="100%" viewBox="0 0 """ + width + " " + height + """ " version="1.1">
 <defs>
-    <marker id="marker-arrow" markerWidth="10" markerHeight="10" refx="10" refy="3" orient="auto" markerUnits="strokeWidth">
+    <marker id="marker-arrow" markerWidth="8" markerHeight="8" refx="8" refy="3" orient="auto" markerUnits="strokeWidth">
         <path d="M0,0 L0,6 L9,3 z" fill="#000" />
     </marker>
 """
@@ -230,7 +230,7 @@ if __name__ == "__main__":
             cent = 10
         else:
             cent = 0
-        tmp += "        <text x=\""+str( (coords[i][0] - v["size"] / 2) + cent )+"\" y=\""+str(coords[i][1] + v["size"] / 3)+"\" fill=\"black\" font-family=\"Ubuntu,Tahoma\" font-size=\""+str(v["size"])+"\" textLength=\""+str(v["size"])+"\" >"+v["label"]+"</text>"
+        tmp += "        <text x=\""+str( (coords[i][0] - v["size"] / 2) + cent )+"\" y=\""+str(coords[i][1] + v["size"] / 3)+"\" fill=\"black\" stroke=\"none\" font-family=\"Ubuntu,Tahoma\" font-size=\""+str(int(v["size"]) / 1.8)+"\" textLength=\""+str(v["size"])+"\" >"+v["label"]+"</text>"
         
         tmp += "    </g>\n"
     
