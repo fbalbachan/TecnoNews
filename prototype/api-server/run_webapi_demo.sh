@@ -20,7 +20,5 @@ then
     source ../../../bin/activate
 
     cp instances_config/config_instance_demo config
-    {
-        nohup python api_server.py
-    } |> nohup.api.out 2>&1 &
+    nohup python api_server.py > nohup.api.out 2>&1 &
 fi
