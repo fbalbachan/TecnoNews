@@ -141,8 +141,10 @@ if __name__ == "__main__":
     if isinstance(layout, list):
         layout = Layout(layout)
     
-    layout.fit_into( bbox=(int(width) - 100, int(height) - 200), keep_aspect_ratio=False )
-    layout.fit_into( bbox=(int(width), int(height)), keep_aspect_ratio=True )
+    bb = BoundingBox(width, height)
+    #layout.fit_into( bbox=(int(width) - 125, int(height) - 200), keep_aspect_ratio=False )
+    layout.fit_into( bbox=bb, keep_aspect_ratio=False )
+    layout.fit_into( bbox=layout.bounding_box(border=-25), keep_aspect_ratio=True )
     print "saving image..."
 
     print datetime.datetime.now()
