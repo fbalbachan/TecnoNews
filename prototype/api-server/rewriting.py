@@ -7,17 +7,21 @@ from models import EntitiesResponse
 from flask_restful import Resource, marshal_with
 from usersStorage import users_storage
 
+from src.model.contentRewriterAndGenerator import ContentRewriterAndGenerator
+
+
 __author__ = 'Alexis Balbachan'
+__author__ = 'Daniel Cantarín'
 
 
-class Rewtiting(Resource):
+class Rewriting(Resource):
 
     def __init__(self):
         self.sentilecto = Sentilecto()
 
     @swagger.operation(notes='<b style="color:red;">SPANISH TEXT ONLY</b><br/>Rewriting and content generation.',
                        description='Text rewriting service',
-                       responseClass=EntitiesResponse,
+                       responseClass=RewritingResponse,
                        nickname='rewrite',
                        parameters=
                             [
@@ -47,23 +51,27 @@ class Rewtiting(Resource):
     @marshal_with(EntitiesResponse.resource_fields)
     def get(self, text, api_key):
         # api_key = request.headers.get('api_key')
+        #print "Rewriting. text:", text
 
         message = self.validate_token(api_key)
         if len(message) > 0:
             return self.build_response(403, {'type': 'ERROR', 'message': message})
 
+        #print "users_storage"
         users_storage.increase_access_counter(api_key)
-
+        #print "has_type_encoding"
         if has_type_encoding(text, str, 'UTF-8'):
             text = text.decode('UTF-8')
 
         try:
+            #print "rewrite_analysis"
             rewrite_analysis = ContentRewriterAndGenerator().run( text )
+            #print "results:", rewrite_analysis
 
             analysis_results = \
                 {
-                    '0-source-text':    analysis["paragraph"].text,
-                    '1-rewritten-text':  analysis["tagged_text"]
+                    '0-source-text'    :  rewrite_analysis["source"],
+                    '1-rewritten-text' :  rewrite_analysis["changed"]
                 }
 
             response_value = analysis_results
@@ -72,7 +80,7 @@ class Rewtiting(Resource):
         except Exception, e:
             response_value = {'type': 'ERROR', 'message': str(e)}
             response_code = 500,
-
+        #print "building response"
         response = \
             (
                 response_value,
@@ -83,7 +91,7 @@ class Rewtiting(Resource):
                     'charset=utf-8'
                 }
             )
-
+        #print "returning:", response
         return response
 
     def validate_token(self, token):
