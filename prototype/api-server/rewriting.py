@@ -3,7 +3,7 @@ from flask_restful_swagger import swagger
 
 from src.model.sentilecto import Sentilecto
 from src.utils.stringUtils import has_type_encoding
-from models import EntitiesResponse
+from models import RewritingResponse
 from flask_restful import Resource, marshal_with
 from usersStorage import users_storage
 

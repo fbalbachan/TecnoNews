@@ -30,6 +30,13 @@ class EntitiesResponse(Flask.response_class):
             '2-Sentences':          fields.List(fields.String)
         }
 
+@swagger.model
+class RewritingResponse(Flask.response_class):
+    resource_fields = \
+        {
+            '0-Source-Text'     : fields.String(),
+            '1-Rewritten-Text'  : fields.String()
+        }
 
 @swagger.model
 class SentimentAnalysisResponse(Flask.response_class):
