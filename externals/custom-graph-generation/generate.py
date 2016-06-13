@@ -236,11 +236,10 @@ if __name__ == "__main__":
             text_length = 19
         
         pos_x = (coords[i][0] - v["size"] / 2) + cent
-        pos_y = coords[i][1] + v["size"] / 3
+        pos_y = (coords[i][1] + v["size"] / 3) - 2
         
         if text_length == 12 :
             pos_x = pos_x + 5
-            pos_y = pos_y - 2
 
         if (len(v["label"]) == 1) :
             pos_x = pos_x - 8
