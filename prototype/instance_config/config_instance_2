@@ -6,7 +6,7 @@ raise_exception = False
 id = 2
 
 [news_sources]
-feeds_to_process = bbc_america,bbc_internacional,marronyblanco,electroimagen,revistagadgets,bbc_economia,bbc_tecnologia,bbc_ciencia,bbc_salud,bbc_cultura,bbc_deportes,abc,xataka,gizmodo,engadget,genbeta,elle,entre_mujeres,mujer_hoy,vitonica,top_inmobiliario,veredes,foto_casa,pisos,clarin_arquitectura,cosas_de_arquitectos,cic_construccion,mvotma,eco_habitar,diario_del_viajero,expreso,nexotur,host_news,hoteltur,efetur,la_nacion_turismo,caribbean_news_digital,inmodiario,cincodias,veinte_minutos_vivienda,trendenciasbelleza,voguebelleza,voguemoda,la_pinturera,pon_tu_cara_bonita,id_belleza,silviaquiros,guapaalinstante,elrincondemoda,balamoda,telvabelleza,telvamoda,cordoba_turismo,clarin_todo_viajes,afuegolento,diariodegastronomia,directoalpaladar,elcomercio_gastronomia,sportlife,vida_y_salud,turismo_perfil
+feeds_to_process = bbc_america,bbc_internacional,marronyblanco,electroimagen,revistagadgets
 
 [freeling]
 
