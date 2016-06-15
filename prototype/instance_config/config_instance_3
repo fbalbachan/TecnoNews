@@ -6,8 +6,8 @@ raise_exception = False
 id = 3
 
 [news_sources]
-#feeds_to_process = bbc_economia,bbc_tecnologia,bbc_ciencia,bbc_salud,bbc_cultura,bbc_deportes
-feeds_to_process = bbc_economia,bbc_tecnologia,bbc_ciencia,bbc_salud,bbc_cultura,bbc_deportes,cnet_esp,diario_america,forbes_mexico,informador_mexico,nuevoherald,vivelo_hoy,Eonline
+feeds_to_process = bbc_economia,bbc_tecnologia,bbc_ciencia,bbc_salud,bbc_cultura,bbc_deportes
+#feeds_to_process = bbc_economia,bbc_tecnologia,bbc_ciencia,bbc_salud,bbc_cultura,bbc_deportes,cnet_esp,diario_america,forbes_mexico,informador_mexico,nuevoherald,vivelo_hoy,Eonline
 
 
 [freeling]
