@@ -1,5 +1,11 @@
-import cairo
-import rsvg
+try:
+    import cairo
+except ImportError:
+    import cairocffi as cairo
+try:
+    import rsvg
+except ImportError:
+    import cairosvg as rsvg
 from wand.image import Image
 from wand.color import Color
 
