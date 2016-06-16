@@ -6,8 +6,8 @@ raise_exception = False
 id = 0
 
 [news_sources]
-feeds_to_process = cnn_spanish,euronews,telam_espectaculos,clarin_extrashow,lanacion_espectaculos,exitoina,pronto,periodismo,glamour,pagina12_turismo,ambito_placer,telam_turismo,ciento_un_lugares,traveler,lugares_de_viaje,Prensarealestate,santiagodemolina,revistaplot,la_nacion_propiedades,arqa
-
+#feeds_to_process = cnn_spanish,euronews,telam_espectaculos,clarin_extrashow,lanacion_espectaculos,exitoina,pronto,periodismo,glamour,pagina12_turismo,ambito_placer,telam_turismo,ciento_un_lugares,traveler,lugares_de_viaje,Prensarealestate,santiagodemolina,revistaplot,la_nacion_propiedades,arqa
+feeds_to_process = cnn_spanish,euronews,telam_espectaculos,clarin_extrashow,lanacion_espectaculos,exitoina,pronto,periodismo,glamour,pagina12_turismo,ambito_placer,telam_turismo,ciento_un_lugares,traveler,lugares_de_viaje,Prensarealestate,santiagodemolina,revistaplot,la_nacion_propiedades,arqa,bbc_economia,bbc_tecnologia,bbc_ciencia,bbc_salud,bbc_cultura,bbc_deportes,cnet_esp,diario_america,forbes_mexico,informador_mexico,nuevoherald,vivelo_hoy,Eonline
 [freeling]
 
 host        = 85.10.210.172
