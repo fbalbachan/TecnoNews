@@ -535,9 +535,12 @@ class BlogPublisher(object):
             post = client.call(GetPost(wp_id))
             wp_url = post.link
             #logger.info("ALEXIS wpLink: %s" % wp_url)
-            thumbnail, image_url = self.process_image(client, entry, wp_id)
-            if thumbnail:
-                post.thumbnail = thumbnail
+            try:
+                thumbnail, image_url = self.process_image(client, entry, wp_id)
+                if thumbnail:
+                    post.thumbnail = thumbnail
+            except Exception, e:
+                logger.error("Error al procesar la imagen. WP_ID: %s" % wp_id)
 
             self.special_catogory_insertion(client=client,
                                             entry=entry,
