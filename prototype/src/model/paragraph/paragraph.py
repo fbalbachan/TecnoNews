@@ -46,6 +46,7 @@ class Paragraph:
         paragraph = Paragraph([], text)
         paragraph._process_parenthesis()
         paragraph._process_parenthetic_dashes()
+        paragraph.text = re.sub(r'[ ]+', ' ', paragraph.text)
 
         sentences = SentenceSplitter().sentences_in(paragraph.text, paragraph)
 
