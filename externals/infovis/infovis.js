@@ -5,14 +5,14 @@ window.$  = jQuery;
 window.gs = null; //galaxy summary
 window.cg = null; //custom graph
 window.custom_graph_data = {};
-window.universe          = { 
+window.universe          = {
     "nodecount"     : 0,
     "categories"    : []
 };
 
 /**
     Given a sentiment string, returns an adequate color.
-    
+
     @date 20160408
     @author Daniel Cantarín
 */
@@ -20,28 +20,28 @@ function color_by_sentiment( sent ) {
     var white = "#ffffff";
     var red   = "#ff0000";
     var green = "#00ff00";
-    
+
     var ret = white;
-    
+
     if ( sent === undefined || sent === null || sent.trim() == "") {
         sent = "neutral";
     }
-    
+
     sent = sent.toLowerCase();
-    
+
     if ( sent.indexOf("negative") > -1 ) {
         ret = red;
     } else if ( sent.indexOf("positive") > -1) {
         ret = green;
     }
     //console.log("color_by_sentiment", sent, ret);
-    
+
     return ret;
 }
 
 /**
     Given a sentiment string, returns an adequate opacity.
-    
+
     @date 20160408
     @author Daniel Cantarín
 */
@@ -49,22 +49,22 @@ function opacity_by_sentiment( sent ) {
     var very        = "1";
     var slightly    = "0.15";
     var normal      = "0.5";
-    
+
     var ret = normal;
-    
+
     if ( sent === undefined || sent === null ) {
         sent = "neutral";
     }
-    
+
     sent = sent.toLowerCase();
-    
+
     if ( sent.indexOf("very") > -1 ) {
         ret = very;
     } else if ( sent.indexOf("slightly") > -1) {
         ret = slightly;
     }
     //console.log("opacity_by_sentiment", sent, ret);
-    
+
     return ret;
 }
 
@@ -73,39 +73,39 @@ function random_color() {
     var green   = parseInt(Math.random() * 255);
     var blue    = parseInt(Math.random() * 255);
     var color   = "#" + red.toString(16) + green.toString(16) + blue.toString(16);
-    
+
     while (color.length < 7) {
         color += "0";
     }
-    
+
     //color = "rgba(" + red + "," + green + "," + blue + "," + Math.random().toString().substring(0,4) + ")";
-    
+
     return color;
 }
 
 /**
     Given a JSON object, it creates the required structure for
     graphic libraries to render.
-    
+
     @date 20160323
     @author Daniel Cantarín
 */
 function process_json( obj ) {
-    
+
     var nodecount = 0;
-    
+
     obj.root.root = true;
     title = obj.root.title
-    obj.root.title_small = (title.length > 25) 
-        ? title.substring(0,22) + "..." 
+    obj.root.title_small = (title.length > 25)
+        ? title.substring(0,22) + "..."
         : title;
-        
+
     obj.root.color      = color_by_sentiment(obj.root.sentiment);
     obj.root.opacity    = opacity_by_sentiment(obj.root.sentiment);
     var color           = random_color();
     //obj.root.border     = color;
-    
-    var nodes   = [ { 
+
+    var nodes   = [ {
         "data" : obj.root,
         "css"  : {
             "width" : obj.root.children.length * 30,
@@ -113,37 +113,37 @@ function process_json( obj ) {
         }
     }];
     var i       = 0;
-    
+
     // Hijos de root
     for ( i = 0; i < obj.root.children.length; i++ ) {
         var tmp         = obj.root.children[i];
         tmp.color       = color_by_sentiment(tmp.sentiment);
         tmp.opacity     = opacity_by_sentiment(tmp.sentiment);
         tmp.index = 1;
-        tmp.title_small = (tmp.title.length > 25) 
-            ? tmp.title.substring(0,22) + "..." 
+        tmp.title_small = (tmp.title.length > 25)
+            ? tmp.title.substring(0,22) + "..."
             : tmp.title;
-        var len     =   (tmp.children) 
+        var len     =   (tmp.children)
                     ?   tmp.children.length + 1
                     :   1;
-        
-        nodes.push( { 
+
+        nodes.push( {
             "data" : tmp,
             "css"  : {
                 "width" : len * 20,
                 "height": len * 20
-            } 
+            }
         });
-        nodes.push( { "data" : { 
-            "id"        : obj.root.id + tmp.id, 
-            "source"    : obj.root.id, 
+        nodes.push( { "data" : {
+            "id"        : obj.root.id + tmp.id,
+            "source"    : obj.root.id,
             "target"    : tmp.id,
             "color"     : color,
             "union"     : true,
             "width"     : 30 / tmp.index
         } } );
     }
-    
+
     // Nietos de root
     for ( i = 1; i < nodes.length; i++ ) {
         var tmp  = nodes[i];
@@ -156,29 +156,29 @@ function process_json( obj ) {
                 tmp2.color       = color_by_sentiment(tmp2.sentiment);
                 //tmp2.border      = color;
                 tmp2.opacity     = opacity_by_sentiment(tmp2.sentiment);
-                tmp2.title_small = (tmp2.title.length > 25) 
-                    ? tmp2.title.substring(0,22) + "..." 
+                tmp2.title_small = (tmp2.title.length > 25)
+                    ? tmp2.title.substring(0,22) + "..."
                     : tmp2.title;
-                
-                var len     =   (tmp2.children) 
+
+                var len     =   (tmp2.children)
                             ?   tmp2.children.length + 1
                             :   1;
-                nodes.push( { 
+                nodes.push( {
                     "data" : tmp2,
                     "css"  : {
                         "width" : len * 20,
                         "height": len * 20
-                    } 
+                    }
                 });
-                nodes.push( { "data" : { 
-                    "id"        : tmp.data.id + tmp2.id, 
-                    "source"    : tmp.data.id, 
+                nodes.push( { "data" : {
+                    "id"        : tmp.data.id + tmp2.id,
+                    "source"    : tmp.data.id,
                     "target"    : tmp2.id,
                     "color"     : color,
                     "union"     : true,
                     "width"     : 30 / tmp2.index
                 } } );
-                
+
                 // Bisnietos de root
                 if (tmp2.children) {
                     for ( var i3 = 1; i3 < tmp2.children.length; i3++ ) {
@@ -188,13 +188,13 @@ function process_json( obj ) {
                         //tmp3.border     = color;
                         tmp3.color      = color_by_sentiment(tmp3.sentiment);
                         tmp3.opacity    = opacity_by_sentiment(tmp3.sentiment);
-                        tmp3.title_small = (tmp3.title.length > 25) 
-                            ? tmp3.title.substring(0,22) + "..." 
+                        tmp3.title_small = (tmp3.title.length > 25)
+                            ? tmp3.title.substring(0,22) + "..."
                             : tmp3.title;
                         nodes.push( { "data" : tmp3 });
-                        nodes.push( { "data" : { 
-                            "id"        : tmp2.id + tmp3.id, 
-                            "source"    : tmp2.id, 
+                        nodes.push( { "data" : {
+                            "id"        : tmp2.id + tmp3.id,
+                            "source"    : tmp2.id,
                             "target"    : tmp3.id,
                             "color"     : color,
                             "union"     : true,
@@ -207,7 +207,7 @@ function process_json( obj ) {
             }
         }
     }
-    
+
     var urls = [];
     for (var i = 0; i < nodes.length; i++){
         if ( nodes[i].data && nodes[i].data.union === undefined) {
@@ -218,35 +218,35 @@ function process_json( obj ) {
             }
         }
     }
-    
+
     window.nodeset = {
         "nodes"     : nodes,
         "nodecount" : nodecount
     };
-    
+
     return {
         "nodes" : nodes
     };
 }
 
 function show_data_overlay( obj ){
-    
-    var cities      = (obj.geo !== null && obj.geo.cities !== null && obj.geo.cities instanceof Array) 
+
+    var cities      = (obj.geo !== null && obj.geo.cities !== null && obj.geo.cities instanceof Array)
                     ? array_to_divs(obj.geo.cities , "tag-styled")
                     : "";
-    
+
     var countries   = (obj.geo !== null && obj.geo.countries !== null && obj.geo.countries instanceof Array)
                     ? array_to_divs(obj.geo.countries , "tag-styled")
                     : "";
-    
+
     var categories  = (obj.categories !== null && obj.categories instanceof Array)
                     ? array_to_divs( obj.categories, "tag-styled")
                     : "";
-    
+
     var tags        = (obj.tags !== null && obj.tags instanceof Array)
                     ? array_to_divs(obj.tags, "tag-styled")
                     : "";
-    
+
     var url         = (obj.wp_url !== null && obj.wp_url !== undefined)
                     ? obj.wp_url
                     : obj.url;
@@ -267,7 +267,7 @@ function show_data_overlay( obj ){
 
 function array_to_divs( arr , styles) {
     var ret = "";
-    
+
     for (var i = 0; i < arr.length; i++) {
         if (arr[i] === undefined || arr[i] === null) {
             continue;
@@ -275,10 +275,10 @@ function array_to_divs( arr , styles) {
         ret += "<div ";
         if (styles !== undefined) {
             ret += "class=\"" + styles + "\" ";
-        } 
+        }
         ret += ">" + arr[i] + "</div>";
     }
-    
+
     return ret;
 }
 
@@ -311,14 +311,14 @@ function ocultar_titulo() {
 }
 
 function setup_cy() {
-    
-    
-    
+
+
+
     var tmp_resize = function() {
         $("#cy")
         .css("width", $(document).width() + "px")
         .css("height",$(document).height() + "px");
-        
+
         if (window.cy != null) {
             console.log("cy not null");
             window.setTimeout(10,window.cy.resize);
@@ -327,9 +327,9 @@ function setup_cy() {
         }
     }
     tmp_resize();
-    
+
     $("#data-overlay").hide();
-    
+
     window.cy = cytoscape({
         container: document.getElementById('cy'), // container to render in
         elements: process_json( galaxy_json ).nodes,
@@ -418,8 +418,8 @@ function setup_cy() {
         }
 
     });
-    
-    
+
+
     cy.on("click","node", function(evt) {
         console.log(evt.cyTarget.data().color);
         var j = cy.$("#" + evt.cyTarget.data().id);
@@ -430,7 +430,7 @@ function setup_cy() {
         });
         show_data_overlay(evt.cyTarget.data());
     });
-    
+
     /*
     cy.on("click", function(evt) {
         //chequeo que no esté haciendo click en algún elemento de cy.
@@ -440,35 +440,35 @@ function setup_cy() {
         }
     });
     */
-    
+
     cy.on("mouseover","node", function(evt) {
         if (evt.originalEvent.target && !evt.originalEvent.target.classList.contains("mouseover")) {
             evt.originalEvent.target.classList.add("mouseover");
             var edges = evt.cyTarget.connectedEdges();
             edges.css("line-style", "solid");
             edges.css("line-color", "black");
-            
+
             var vecinos = evt.cyTarget.neighborhood();
             var demas = cy.elements().difference( vecinos );
             demas.css("opacity", "0.3");
             evt.cyTarget.css("opacity", "1");
-            
+
             mostrar_titulo( evt.cyTarget.data().title, evt.cyTarget.data().date );
-            
+
         }
     });
-    
+
     cy.on("mouseout","node", function(evt) {
         if (evt.originalEvent.target && evt.originalEvent.target.classList.contains("mouseover")) {
             evt.originalEvent.target.classList.remove("mouseover");
             var edges = evt.cyTarget.connectedEdges();
             edges.css("line-style", "dotted");
             edges.css("line-color", "blue");
-            
+
             var vecinos = evt.cyTarget.neighborhood();
             var demas = cy.elements().difference( vecinos );
             demas.css("opacity", "1");
-            
+
             ocultar_titulo();
         }
     });
@@ -494,12 +494,12 @@ function setup_cy() {
     tmphtml += "</tbody></table></div>";
     local_cy = $("#cy");
     local_cy.append( tmphtml );
-    
+
     $(window).on(
         "resize", tmp_resize
     ).on(
         "keyup" , function(evt) {
-            
+
             // Si se presiona "escape" y el overlay está visible
             if (evt.keyCode == 27 && $("#data-overlay")[0].offsetParent !== null) {
                 center_cy();
@@ -510,16 +510,16 @@ function setup_cy() {
                     toggle_node_list();
                 }
             }
-            
+
         }
     );
-    
+
     $("#close-overlay").on("click", function(){
         center_cy();
         hide_data_overlay();
     });
-    
-    
+
+
     $("#loading-overlay").fadeOut(1000);
     nodeset.leyenda_html = $("#leyenda").html();
     $("#stats #nodecount").html( nodeset.nodecount );
@@ -539,25 +539,25 @@ function setup_wordcloud( arr ) {
         minSize: 10
     };
     wc = WordCloud("wc", options);
-    
+
 }
 
 function show_wordcloud(obj) {
     $("#cy, #gs, #cg").fadeOut(100);
     select_graph_UI(obj);
-    
+
     if (wc === null) {
-        
+
         //cargar los datos
         $("#wc").css("cursor","wait").show(100);
-        
+
         // primero junto los ids de nodos
         var nodos = cy.nodes();
         var ids   = [];
         for (var i = 0; i < nodos.length; i++) {
             ids.push( nodos[i].data().id );
         }
-        
+
         $.get(
             location.protocol + "//" + location.host + "/get_cloud_data.php?news_id=" + wp_id + "&related_ids=" + ids.join(",")
         ).promise().then(
@@ -573,11 +573,11 @@ function show_wordcloud(obj) {
                 }
             }
         );
-        
+
     } else {
         $("#wc").fadeIn(500);
     }
-    
+
 }
 
 function show_galaxy(obj) {
@@ -590,8 +590,8 @@ function show_galaxy(obj) {
             $("#leyenda").html( nodeset.leyenda_html );
         }
     );
-    
-    
+
+
 }
 
 
@@ -599,7 +599,7 @@ function setup_galaxysummary() {
     if (cy !== null && cy !== undefined) {
         var tmpnod  = cy.nodes();
         var nodos   = [];
-        
+
         for (var i = 0; i < tmpnod.length; i++) {
             nodos.push( {
                 "title"     :   tmpnod[i].data().title,
@@ -608,26 +608,26 @@ function setup_galaxysummary() {
                 "id"        :   tmpnod[i].data().id
             } );
         }
-        
+
         var tmphtml = "";
         var sorter  = function (a, b){
             var aName = a.date;
-            var bName = b.date; 
+            var bName = b.date;
             return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
         }
-        
+
         nodos.sort( sorter );
-        
+
         for (var i = 0; i < nodos.length; i++) {
             tmp      = "<div class=\"news-number\"> #" + (i+1) + "&nbsp;&nbsp;</div><div class=\"title\" objectid=\"" + nodos[i].id + "\"  ><span class=\"date\">(" + nodos[i].date.split(".")[0] + ")</span> - " + nodos[i].title + "</div>\n";
             tmp     += "<div class=\"summary\">" + nodos[i].summary + "</div>";
-            
+
             tmphtml += tmp;
         }
-        
+
         gs = tmphtml;
         $("#gs").html( tmphtml );
-        
+
     }
 }
 
@@ -635,17 +635,17 @@ function setup_galaxysummary() {
 function show_galaxysummary(obj) {
     $("#cy, #wc, #cg").fadeOut(100);
     select_graph_UI(obj);
-    
+
     if (gs === null || gs === undefined) {
         //setup
         $("#gs").css("cursor","wait").show(100);
         setup_galaxysummary();
         $("#gs").css("cursor","default");
-        
+
     } else {
         $("#gs").fadeIn(500);
     }
-    
+
 }
 
 
@@ -689,19 +689,19 @@ function setup_customgraph() {
             "mds"           : "MDS",
             "auto"          : "Automático"
         };
-        
+
         var tmphtml = "<div id=\"cg-setup-form\"><!--select id=\"cg-layout\">\n";
         var k       = "";
-        
+
         for (k in cs_lays) {
             //console.log(k);
             tmphtml += "<option value=\"" + k + "\" >" + cs_lays[k] + "</option>\n";
         }
-        
+
         tmphtml += "</select-->\n<button onclick=\"generate_customgraph()\"> Generate Universe </button>";
         tmphtml  = "";
 
-        
+
         cg       = tmphtml;
         $("#cg").html( tmphtml );
         setTimeout(generate_customgraph, 100);
@@ -713,7 +713,7 @@ function setup_customgraph() {
 function show_customgraph(obj) {
     $("#cy, #wc, #gs").fadeOut(100);
     select_graph_UI(obj);
-    
+
     if (cg === null || cg === undefined) {
         //setup
         app.espere("Loading NewsUniverse, please wait...", "Loaded. Rendering...").then(
@@ -730,18 +730,18 @@ function show_customgraph(obj) {
             }
         );
     }
-    
+
 }
 
 
 function generate_customgraph() {
-    
+
     var wp_id   = nodeset.nodes[0].data.wp_url.split("p=")[1]
     //var layout  = $("#cg-layout")[0].value
     var layout  = "random";
-    
+
     $("#cg").css("cursor","wait");
-    
+
     $.get(
         location.protocol + "//" + location.host + "/infovis/get_custom_graph.php?news_id=" + wp_id + "&layout=" + layout + "&w=" + ($("#cg").width() - 140) + "&h=" + $("#cg").height()
     ).promise().then(
@@ -759,7 +759,7 @@ function generate_customgraph() {
             $("#cg").css("cursor","default").show(100);
             app.desespere("Loading NewsUniverse, please wait...");
         },
-        
+
         function(a, b, c) {
             console.log("generate_customgraph fail : ", a,b,c);
             $("#cg").css("cursor","default").show(100);
@@ -772,7 +772,7 @@ function setup_customgraph_nodelist(svg) {
     var local_cg = $("#cg");
     local_cg.html( svg + cg);
     custom_graph_data = JSON.parse( $("svg > #graph-data").text() );
-    
+
     var tmparr = [];
     //var tmpcol = "<h4>News Categories</h4>\n";
     var tmpcol = "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"100%\" height=\"100%\" viewBox=\"0 0 100 180\" version=\"1.1\">\
@@ -787,7 +787,7 @@ function setup_customgraph_nodelist(svg) {
                 break;
             }
         }
-        
+
         if (!found) {
             var cat = {
                 "name"  :   custom_graph_data[k]["cats"][0],
@@ -801,15 +801,15 @@ function setup_customgraph_nodelist(svg) {
             tmpcol += "<text x=\"15\" y=\"" + (tmpi + 5) + "\" font-size=\"15px\" " + textLength + ">"+cat.name+"</text>\n";
             tmpi += 15;
         }
-        
+
     }
-    
+
     tmpcol += "</svg>"
-    
+
     universe.nodecount      = tmparr.length;
     universe.leyenda_html   = tmpcol;
-    
-    tmparr.sort(function(a, b) { 
+
+    tmparr.sort(function(a, b) {
         return parseInt(a.id.split("_")[1]) - parseInt(b.id.split("_")[1]);
     });
 
@@ -831,11 +831,11 @@ function setup_customgraph_nodelist(svg) {
     }
     tmphtml += "</tbody></table></div>";
     local_cg.html( local_cg.html() + tmphtml );
-    
+
     universe.timer_titulo = null;
-    
-    $("g:has(> circle)").off("mouseover").on("mouseover", 
-        function(evt) { 
+
+    $("g:has(> circle)").off("mouseover").on("mouseover",
+        function(evt) {
             if (universe.timer_titulo != null) {
                 clearTimeout(universe.timer_titulo);
             }
@@ -849,7 +849,7 @@ function setup_customgraph_nodelist(svg) {
                 grupo.attr("selected", "selected");
                 grupo_lineas = $("g.edge-group[objectid="+grupo.attr("objectid")+"]");
                 grupo_lineas.attr("selected", "selected");
-                if ( $("g[objectid]>circle").length > 150 ) {
+                if ( $("g[objectid]>circle").length > 100 ) {
                     grupo_lineas.find("line").each( function( index ) {
                         var linea = $(this);
                         linea.attr("stroke-width", linea.attr("alt-stroke-width"));
@@ -857,9 +857,9 @@ function setup_customgraph_nodelist(svg) {
                 }
                 universe.timer_titulo = null;
             };
-            
+
             universe.timer_titulo = setTimeout(fun, 500);
-        } 
+        }
     ).off("mouseout").on("mouseout",
         function (evt) {
             if (universe.timer_titulo != null) {
@@ -874,7 +874,7 @@ function setup_customgraph_nodelist(svg) {
             grupo.removeAttr("selected");
             grupo_lineas = $("g.edge-group[objectid="+grupo.attr("objectid")+"]");
             grupo_lineas.removeAttr("selected");
-            if ( $("g[objectid]>circle").length > 150 ) {
+            if ( $("g[objectid]>circle").length > 100 ) {
                 grupo_lineas.find("line").each( function( index ) {
                     var linea = $(this);
                     linea.attr("stroke-width", "1");
