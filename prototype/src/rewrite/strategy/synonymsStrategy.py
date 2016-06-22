@@ -32,14 +32,14 @@ class SynonymsStrategy:
     def rewrite(self, clause):
         if debug_mode: print "--> SynonymsStrategy.rewrite(clause: ", clause, ")"
         ontology = self.ontology
-        
+
         rewrites = []
         for leaf in clause.proper_leaves():
             replacement = None
 
             if 'semantic_classification' in leaf.msi and leaf.msi['semantic_classification'] != None:
                 continue
-            
+
             self.synonyms.update(self.unidirectional_synonyms)
 
             if leaf.lemma in self.synonyms.keys():
@@ -83,7 +83,8 @@ class SynonymsStrategy:
                 break
 
         rewrites = [Rewrite.preserving_case(leaf, target_synonym.text)]
-        if found_entity != None:
+        #Solo cambio el resto de la entidad si el genero NO es neutro!
+        if found_entity != None and target_gender != u'neutral':
 
             #SKIP WORDS CONTAINED IN NESTED ENTITIES ("muro de usuarios" -> "pared de USUARIAS"!!)
             nested = found_entity.get_nested_entities()
@@ -110,7 +111,7 @@ class SynonymsStrategy:
                         if form_msi == leaf_msi:
                         #if 'gender' in a_form.msi and a_form.msi['gender'] == target_gender:
                             rewrites.append(Rewrite.preserving_case(a_leaf, a_form.text))
-                            
+
         return rewrites
 
 
