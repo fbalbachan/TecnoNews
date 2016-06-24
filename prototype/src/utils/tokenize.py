@@ -47,6 +47,7 @@ def all_in_upper_case(token):
 
 def limpieza_inicial(s):
     # estos replaces están porque Freeling reemplaza estos signos (si están solos) por 'y'
+    s = s.replace('&', 'y')
     #s = s.replace('¡', '')
     #s = s.replace('-', '')
     #s = s.replace('–', '')
