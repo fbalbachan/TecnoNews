@@ -849,7 +849,7 @@ function setup_customgraph_nodelist(svg) {
                 grupo.attr("selected", "selected");
                 grupo_lineas = $("g.edge-group[objectid="+grupo.attr("objectid")+"]");
                 grupo_lineas.attr("selected", "selected");
-                if ( $("g[objectid]>circle").length > 100 ) {
+                if ( $("g[objectid]>circle").length > 50 ) {
                     grupo_lineas.find("line").each( function( index ) {
                         var linea = $(this);
                         linea.attr("stroke-width", linea.attr("alt-stroke-width"));
@@ -874,7 +874,7 @@ function setup_customgraph_nodelist(svg) {
             grupo.removeAttr("selected");
             grupo_lineas = $("g.edge-group[objectid="+grupo.attr("objectid")+"]");
             grupo_lineas.removeAttr("selected");
-            if ( $("g[objectid]>circle").length > 100 ) {
+            if ( $("g[objectid]>circle").length > 50 ) {
                 grupo_lineas.find("line").each( function( index ) {
                     var linea = $(this);
                     linea.attr("stroke-width", "1");
