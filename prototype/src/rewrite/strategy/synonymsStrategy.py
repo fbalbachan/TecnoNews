@@ -87,15 +87,19 @@ class SynonymsStrategy:
         if found_entity != None and target_gender != u'neutral':
 
             #SKIP WORDS CONTAINED IN NESTED ENTITIES ("muro de usuarios" -> "pared de USUARIAS"!!)
-            nested = found_entity.get_nested_entities()
-            nested_leaves = []
-            for a_nested in nested:
-                nested_leaves.extend([a_leaf.lexical_form for a_leaf in a_nested.leaves()])
+            entity_level = found_entity.level()
+
+            #nested = found_entity.get_nested_entities()
+            #nested_leaves = []
+            #for a_nested in nested:
+            #    nested_leaves.extend([a_leaf.lexical_form for a_leaf in a_nested.leaves()])
 
             for a_leaf in found_entity.leaves():
 
                 #SKIPS!
-                if a_leaf.lexical_form in nested_leaves:
+                #if a_leaf.lexical_form in nested_leaves:
+                #    continue
+                if a_leaf.level() != entity_level:
                     continue
 
                 leaf_msi = self._msi_transform(a_leaf.msi)
