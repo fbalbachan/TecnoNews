@@ -166,7 +166,7 @@ if __name__ == "__main__":
         <path d="M0,0 L0,6 L9,3 z" fill="#000" />
     </marker>
     <marker id="marker-red-arrow" markerWidth="8" markerHeight="8" refx="8" refy="3" orient="auto" markerUnits="strokeWidth">
-        <path d="M0,0 L0,6 L9,3 z" fill="#FF0000" />
+        <path d="M0,0 L0,6 L9,3 z" fill="#F00" />
     </marker>
 """
 
