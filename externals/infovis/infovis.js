@@ -849,11 +849,27 @@ function setup_customgraph_nodelist(svg) {
                 grupo.attr("selected", "selected");
                 grupo_lineas = $("g.edge-group[objectid="+grupo.attr("objectid")+"]");
                 grupo_lineas.attr("selected", "selected");
+
+                //ALEXIS
+                grupo_entradas = $("line[target-id="+grupo.attr("objectid")+"]");
+                grupo_entradas.each( function( index ){
+                    var linea = $(this);
+                    linea.attr("selected", linea.attr("selected"));
+                });
+                //>ALEXIS
+
+
                 if ( $("g[objectid]>circle").length > 50 ) {
                     grupo_lineas.find("line").each( function( index ) {
                         var linea = $(this);
                         linea.attr("stroke-width", linea.attr("alt-stroke-width"));
                     });
+                    //ALEXIS
+                    grupo_entradas.each( function( index ){
+                        var linea = $(this);
+                        linea.attr("stroke-width", linea.attr("alt-stroke-width"));
+                    });
+                    //>ALEXIS
                 }
                 universe.timer_titulo = null;
             };
@@ -874,11 +890,27 @@ function setup_customgraph_nodelist(svg) {
             grupo.removeAttr("selected");
             grupo_lineas = $("g.edge-group[objectid="+grupo.attr("objectid")+"]");
             grupo_lineas.removeAttr("selected");
+
+            //ALEXIS
+            grupo_entradas = $("line[target-id="+grupo.attr("objectid")+"]");
+            grupo_entradas.each( function( index ){
+                var linea = $(this);
+                linea.removeAttr("selected");
+            });
+            //>ALEXIS
+
             if ( $("g[objectid]>circle").length > 50 ) {
                 grupo_lineas.find("line").each( function( index ) {
                     var linea = $(this);
                     linea.attr("stroke-width", "1");
                 });
+
+                //ALEXIS
+                grupo_entradas.each( function( index ){
+                    var linea = $(this);
+                    linea.attr("stroke-width", "1");
+                });
+                //>ALEXIS
             }
         }
     );

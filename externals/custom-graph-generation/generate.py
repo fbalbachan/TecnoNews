@@ -219,7 +219,7 @@ if __name__ == "__main__":
             if cant <= 50 :
                 sw = st
 
-            tmp += "        <line x1=\""+str(coords[i][0])+"\" y1=\""+str(coords[i][1])+"\" x2=\""+str(v2["coords"][0])+"\" y2=\""+str(v2["coords"][1])+"\" stroke=\"black\" stroke-width=\"" + str(sw) + "\" alt-stroke-width=\"" + str(st) + "\" marker-end=\"url(#marker-arrow)\" marker-mid=\"url(#marker-text-" + v["objectid"] + "-" + str(i2) + ")\" />\n"
+            tmp += "        <line target-id=\""+v2["objectid"]+"\" x1=\""+str(coords[i][0])+"\" y1=\""+str(coords[i][1])+"\" x2=\""+str(v2["coords"][0])+"\" y2=\""+str(v2["coords"][1])+"\" stroke=\"black\" stroke-width=\"" + str(sw) + "\" alt-stroke-width=\"" + str(st) + "\" marker-end=\"url(#marker-arrow)\" marker-mid=\"url(#marker-text-" + v["objectid"] + "-" + str(i2) + ")\" />\n"
         tmp += "    </g>\n"
 
     # Then, the nodes, that will be drawn on top of the edges.

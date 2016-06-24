@@ -164,7 +164,7 @@ body {
     cursor          :   pointer;
     border          :   black 3px solid;
     border-radius   :   15px;
-    
+
 }
 
 #close-overlay:hover {
@@ -546,7 +546,7 @@ h4 {
     top                 : 0px;
     width               : 100%;
     height              : 100%;
-} 
+}
 
 #cg svg {
     position            : absolute;
@@ -565,6 +565,10 @@ svg g.edge-group[selected] {
 }
 
 svg g.edge-group[selected] line {
+    opacity     : 1;
+}
+
+svg line[selected] {
     opacity     : 1;
 }
 
