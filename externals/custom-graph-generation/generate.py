@@ -247,7 +247,7 @@ if __name__ == "__main__":
         if (len(v["label"]) == 1) :
             pos_x = pos_x - 8
 
-        if (nodes_length <= 150) :
+        if (nodes_length <= 50) :
             text_length = 40
             pos_y       = pos_y - 3
 
