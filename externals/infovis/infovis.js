@@ -855,6 +855,8 @@ function setup_customgraph_nodelist(svg) {
                 grupo_entradas.each( function( index ){
                     var linea = $(this);
                     linea.attr("selected", linea.attr("selected"));
+                    linea.attr("stroke", "red")
+                    linea.attr("marker-end", "url(#marker-red-arrow)")
                 });
                 //>ALEXIS
 

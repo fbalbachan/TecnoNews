@@ -165,6 +165,9 @@ if __name__ == "__main__":
     <marker id="marker-arrow" markerWidth="8" markerHeight="8" refx="8" refy="3" orient="auto" markerUnits="strokeWidth">
         <path d="M0,0 L0,6 L9,3 z" fill="#000" />
     </marker>
+    <marker id="marker-red-arrow" markerWidth="8" markerHeight="8" refx="8" refy="3" orient="auto" markerUnits="strokeWidth">
+        <path d="M0,0 L0,6 L9,3 z" fill="#FF0000" />
+    </marker>
 """
 
     #for i,v in enumerate(g.vs) :
