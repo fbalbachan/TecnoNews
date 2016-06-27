@@ -15,7 +15,7 @@ class ClauseExtractor:
     def extract_from(sentence):
         if debug_mode: print "--> ClauseExtractor. extract_from(sentence) - sentence: ", sentence.text
 
-        clause_separators = ["grup-verb", "subord-rel", "subord", "subord-ger", "verb-pass"]
+        clause_separators = ["grup-verb", "subord-rel", "subord", "forma-ger", "verb-pass"]
         root = sentence.parse_node
         potential_clause_roots = set(root.nodes_with_labels(clause_separators))
         potential_clause_roots = ClauseExtractor.filter_invalid_subordinated_clauses(potential_clause_roots)
