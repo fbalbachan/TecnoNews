@@ -568,7 +568,7 @@ svg g.edge-group[selected] line {
     opacity     : 1;
 }
 
-svg line[selected] {
+.solida{
     opacity     : 1;
 }
 
