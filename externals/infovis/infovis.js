@@ -849,6 +849,8 @@ function setup_customgraph_nodelist(svg) {
                 grupo.attr("selected", "selected");
                 grupo_lineas = $("g.edge-group[objectid="+grupo.attr("objectid")+"]");
                 grupo_lineas.attr("selected", "selected");
+                grupo_lineas.attr("stroke", "blue")
+                grupo_lineas.attr("marker-end", "url(#marker-blue-arrow)")
 
                 //ALEXIS
                 grupo_entradas = $("line[target-id="+grupo.attr("objectid")+"]");
@@ -892,6 +894,8 @@ function setup_customgraph_nodelist(svg) {
             grupo.removeAttr("selected");
             grupo_lineas = $("g.edge-group[objectid="+grupo.attr("objectid")+"]");
             grupo_lineas.removeAttr("selected");
+            grupo_lineas.attr("stroke", "black")
+            grupo_lineas.attr("marker-end", "url(#marker-arrow)")
 
             //ALEXIS
             grupo_entradas = $("line[target-id="+grupo.attr("objectid")+"]");

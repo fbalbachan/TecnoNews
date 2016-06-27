@@ -557,7 +557,7 @@ h4 {
 }
 
 svg g > g.edge-group {
-    opacity     : 0.25;
+    opacity     : 0.1;
 }
 
 svg g.edge-group[selected] {
