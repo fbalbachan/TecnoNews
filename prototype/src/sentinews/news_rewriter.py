@@ -466,13 +466,20 @@ class NewsRewriter(object):
     #a more human friendly caption.
     def _sanitize_caption(self, caption):
 
-        if not isinstance(caption, basestring):
-            return caption
+        #if not isinstance(caption, basestring):
+        #    return caption
 
         ret  = caption
         # 1) Restore URL escaped characters.
         try :
-            ret  = urllib.unquote(ret).decode("utf8")
+            #ALEXIS: Encodeo a UTF-8 PORQUE LOS URL ENCODINGS (%%) DEPENDEN DEL ENCODING FUENTE (WINDOWS-1xxx != UTF-8)
+            ret = ret.encode('utf-8')
+
+            #DECODEO PORCENTAJES
+            ret  = urllib.unquote(ret)
+
+            #VUELVO A CONVERTIR A UNICODE PORQUE ERA LO QUE ME VINO
+            ret = ret.decode('utf-8')
         except :
             pass
 
