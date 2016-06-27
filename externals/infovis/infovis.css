@@ -556,8 +556,16 @@ h4 {
     height              : 100%;
 }
 
-svg g > g.edge-group {
+/*svg g > g.edge-group {
     opacity     : 0.1;
+}
+*/
+svg g.edge-group line.solida{
+    opacity     : 1;
+}
+
+svg g.edge-group line{
+    opacity : 0.1;
 }
 
 svg g.edge-group[selected] {
@@ -568,9 +576,6 @@ svg g.edge-group[selected] line {
     opacity     : 1;
 }
 
-.solida{
-    opacity     : 1;
-}
 
 #cg, #wc, #gs {
     display     : none;
