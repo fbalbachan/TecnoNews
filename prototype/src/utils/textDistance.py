@@ -100,11 +100,11 @@ class TextDistance(object):
 
         return similarity
 
-    def relevant_entities_coincidence(self, newsItem1, newsItem2):
+    def relevant_entities_coincidence(self, newsItem1, newsItem2, stopAt=5):
         coincidences_count = 0
-        for entity in self._top_five(newsItem1.entities):
+        for entity in self._top_five(newsItem1.entities)[:stopAt]:
 
-            coincidences = [e for e in self._top_five(newsItem2.entities) if entity['name'] == e['name']]
+            coincidences = [e for e in self._top_five(newsItem2.entities)[:stopAt] if entity['name'] == e['name']]
             # and entity['semantic'] == e['semantic']]
             if len(coincidences) > 0:
                 coincidences_count += 1

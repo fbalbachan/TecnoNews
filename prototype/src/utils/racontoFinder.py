@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 class RacontoFinder(object):
     def __init__(self, original):
         default_from = 30
-        default_to = 15
+        default_to = 7
         self.news_original = original
         self.news_to_compare = []
 
@@ -29,12 +29,13 @@ class RacontoFinder(object):
     def get_best_raconto(self):
         final_result = []
         for newsItem in self.news_to_compare:
-            entities_coincidence = self.text_distance.relevant_entities_coincidence(self.news_original, newsItem)
+            entities_coincidence_5 = self.text_distance.relevant_entities_coincidence(self.news_original, newsItem)
+			entities_coincidence_3 = self.text_distance.relevant_entities_coincidence(self.news_original, newsItem, stopAt=3)
             similarity = self.text_distance.similarity(self.news_original.clean_text, newsItem.clean_text)
             title_distance = self.text_distance.title_distance(self.news_original.title, newsItem.title)
 
             threshold = 40
-            score = self.related_score(entities_coincidence, similarity, title_distance)
+            score = self.related_score(entities_coincidence_5, entities_coincidence_3, similarity, title_distance)
             if score >= threshold:
                 final_result.append([newsItem, score])
 
@@ -48,10 +49,10 @@ class RacontoFinder(object):
 
         return final_return
 
-    def related_score(self, entities_coincidence, similarity, title_distance):
+    def related_score(self, entities_coincidence_5, entities_coincidence_3, similarity, title_distance):
         score = 0
 
-        if entities_coincidence > 1:
+        if entities_coincidence_5 > 1 or entities_coincidence_3 > 0:
             score += 30
 
             if 0.6 < title_distance <= 0.95:
