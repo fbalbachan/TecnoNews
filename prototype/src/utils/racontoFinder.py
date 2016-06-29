@@ -44,8 +44,8 @@ class RacontoFinder(object):
         earliest = datetime.utcnow()
         final_return = None
         for a_final in sorted_final:
-            if a_final[0].object_id.generation_time < earliest:
-                final_return = a_final[0]
+            #if a_final[0].object_id.generation_time < earliest:
+            final_return = a_final[0]
 
         return final_return
 
