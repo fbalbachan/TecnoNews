@@ -102,7 +102,7 @@ class NewsEntriesService(object):
         dummy_id_from = ObjectId.from_datetime(fromDate)
         dummy_id_to = ObjectId.from_datetime(toDate)
         # TODO: use dummy_id_to
-        return self.get_list({"_id": {"$gt": dummy_id_from},
+        return self.get_list({"_id": {"$gt": dummy_id_from, "$lt": dummy_id_to},
                               'categories': {'$in': categories}},
                              limit)
 
