@@ -384,15 +384,26 @@ class BlogPublisher(object):
                         self.add_cities(entry)
                         self.add_related_news_tree(entry, news_service, show_source=True, show_link=True)
 
-            elif host['id'] == u"think_thank":
-                interval_time = datetime.datetime.utcnow() - datetime.timedelta(seconds=2592000) #1 Month
-                post_count = news_service.get_count({'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id']})
-                if post_count < 1000:
-                    interval_time = datetime.datetime.utcnow() - datetime.timedelta(seconds=86400) #1 Day
-                    post_count = news_service.get_count({'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id']})
-                    if post_count < 40:
-                        entry.categories = [u'--------CAMBIAR----------']
-                        valid_host = True
+            elif host['id'] == u"zolvers":
+                customizations = [
+                        {"category":u"salud", "limit":5},
+                        {"category":u"estilo vida", "limit":5},
+                        {"category":u"belleza", "limit":200000},
+                        {"category":u"zolvers", "limit":200000},
+                ]
+
+                interval_time = datetime.datetime.utcnow() - datetime.timedelta(seconds=86400) #1 Day
+                for a_customization in customizations:
+                    if a_customization["category"] in entry.categories:
+                        post_count = news_service.get_count({'_id': {'$gte': ObjectId.from_datetime(interval_time)},
+                             'host_id': host['id'],
+                             'categories': a_customization["category"]})
+                        if post_count < a_customization["limit"]:
+                            valid_host = True
+                            break
+
+                if valid_host:
+                    entry.categories = u"zolvers"
 
             elif host['id'] == u"les_amis":
 

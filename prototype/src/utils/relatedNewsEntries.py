@@ -15,13 +15,14 @@ class RelatedNewsEntries(object):
         special_limits = [
             {"category":u"deporte", "limit":3},
             {"category":u"tecnología", "limit":10},
-            {"category":u"belleza", "limit":10},
+            {"category":u"belleza", "limit":30},
             {"category":u"propiedades", "limit":30},
             {"category":u"electrodomésticos", "limit":30},
             {"category":u"automóviles", "limit":30},
             {"category":u"turismo", "limit":30},
             {"category":u"estilo vida", "limit":30},
             {"category":u"salud", "limit":30},
+            {"category":u"zolvers", "limit":30},
         ]
 
 
@@ -60,12 +61,15 @@ class RelatedNewsEntries(object):
             DAYS_IN_THE_PAST_TO_SEARCH = 10
 
         if u"belleza" in original.categories:
-            DAYS_IN_THE_PAST_TO_SEARCH = 10
+            DAYS_IN_THE_PAST_TO_SEARCH = 30
 
         if u"deporte" in original.categories:
             DAYS_IN_THE_PAST_TO_SEARCH = 3
 
         if u"salud" in original.categories:
+            DAYS_IN_THE_PAST_TO_SEARCH = 30
+
+        if u"zolvers" in original.categories:
             DAYS_IN_THE_PAST_TO_SEARCH = 30
 
         #if u"turismo" in original.categories and not u"tecnología" in original.categories:
@@ -265,7 +269,11 @@ class RelatedNewsEntries(object):
 
             score = self.related_score(entities_coincidence, similarity, title_distance)
 
-            if score >= 50:
+            threshold = 50
+            if any(special_cat in self.news_original.categories for special_cat in [u"belleza", u"estilo vida", u"propiedades", u"salud", u"zolvers"]):
+                threshold = 40
+
+            if score >= threshold:
                 related_logger.info(">>>")
                 final_result.append([newsItem, score])
                 related_logger.info("%s %s" % (newsItem.title, score))
@@ -289,7 +297,7 @@ class RelatedNewsEntries(object):
 
         related_logger.info("Alexis alexis score related news")
         #if u"propiedades" in self.news_original.categories or u"turismo" in self.news_original.categories: # or u"insólito" in self.news_original.categories:
-        if any(special_cat in self.news_original.categories for special_cat in [u"electrodomésticos"]):
+        if any(special_cat in self.news_original.categories for special_cat in [u"electrodomésticos", u"salud", u"estilo vida", "zolvers", "belleza", "propiedades"]):
             if entities_coincidence >= 1:
                 score += 30
         else:
