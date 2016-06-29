@@ -6,6 +6,7 @@ from src.utils.freelingClientParser import FreelingClientParser
 from src.utils.textDistance import TextDistance
 from src.services.mongodb.news_entries_service import NewsEntriesService
 from src.utils.relatedNewsEntries import RelatedNewsEntries
+from src.utils.racontoFinder import RacontoFinder
 from src.utils.logger_utils import *
 from src.utils.configProvider import ConfigProvider
 from bs4 import BeautifulSoup
@@ -62,6 +63,12 @@ class TecnoNews(object):
         try:
             entry.set_analisys_info()
             try:
+                raconto_finder = RacontoFinder(entry)
+                raconto = raconto_finder.get_best_raconto()
+                with open("raconto.txt", "a") as myfile:
+                    if raconto is not None:
+                        myfile.write(entry.url + " --> " + raconto.url)
+
                 tsr = RelatedNewsEntries(entry)
                 tsr_universe = RelatedNewsEntries(entry, for_universe=True)
 
