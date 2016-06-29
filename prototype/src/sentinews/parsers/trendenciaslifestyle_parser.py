@@ -50,8 +50,8 @@ class TrendenciasLifeStyleParser(GenericParser):
             clean_text = paragraph.text.strip()
             content += "\n" + clean_text
 
-        categories = [u"estilo vida"]
-        tags = [u"estilo vida"]
+        categories = [u"belleza"]
+        tags = [u"belleza"]
 
         #categories=[urlparse(url).path.split("/")[1]]
         #print categories
