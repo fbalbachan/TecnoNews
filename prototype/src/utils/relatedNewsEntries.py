@@ -258,6 +258,7 @@ class RelatedNewsEntries(object):
             related_logger.info("\tmetrics:")
 
             entities_coincidence = self.text_distance.relevant_entities_coincidence(self.news_original, newsItem)
+            entities_coincidence_2 = self.text_distance.relevant_entities_coincidence(self.news_original, newsItem, stopAt=2)
             related_logger.info("\t\tEntities coincidence %s" % entities_coincidence)
 
             similarity = self.text_distance.similarity(self.news_original.clean_text, newsItem.clean_text)
@@ -267,7 +268,7 @@ class RelatedNewsEntries(object):
 
             related_logger.info("\t\tTitle Distance %s" % title_distance)
 
-            score = self.related_score(entities_coincidence, similarity, title_distance)
+            score = self.related_score(entities_coincidence, entities_coincidence_2, similarity, title_distance)
 
             threshold = 50
             if any(special_cat in self.news_original.categories for special_cat in [u"belleza", u"estilo vida", u"propiedades", u"salud", u"zolvers"]):
@@ -292,7 +293,7 @@ class RelatedNewsEntries(object):
         else:
             return [x[0] for x in sorted_final]
 
-    def related_score(self, entities_coincidence, similarity, title_distance):
+    def related_score(self, entities_coincidence, entities_coincidence_2, similarity, title_distance):
         score = 0
 
         related_logger.info("Alexis alexis score related news")
@@ -303,6 +304,8 @@ class RelatedNewsEntries(object):
         else:
             if entities_coincidence > 1:
                 score += 30
+            elif entities_coincidence_2 > 0:
+                score += 20
 
         #if entities_coincidence > 1:
         #    score += 30
