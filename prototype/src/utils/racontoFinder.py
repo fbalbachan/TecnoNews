@@ -30,7 +30,7 @@ class RacontoFinder(object):
         final_result = []
         for newsItem in self.news_to_compare:
             entities_coincidence_5 = self.text_distance.relevant_entities_coincidence(self.news_original, newsItem)
-			entities_coincidence_3 = self.text_distance.relevant_entities_coincidence(self.news_original, newsItem, stopAt=3)
+            entities_coincidence_3 = self.text_distance.relevant_entities_coincidence(self.news_original, newsItem, stopAt=3)
             similarity = self.text_distance.similarity(self.news_original.clean_text, newsItem.clean_text)
             title_distance = self.text_distance.title_distance(self.news_original.title, newsItem.title)
 
