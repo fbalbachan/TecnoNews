@@ -245,7 +245,7 @@ class NewsRewriter(object):
 
             if len(date_numbers) == 3:
                 intro = u"El " + days[weekday] + u" " + date_numbers[2] + u" de " + months[date_numbers[1]] + u" " + self.original_entry.raconto_content
-
+                intro = intro.encode("utf-8")
         if intro is None:
             intro = self.original_entry.raconto_content.encode("utf-8")
 
