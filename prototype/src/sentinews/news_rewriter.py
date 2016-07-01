@@ -212,6 +212,44 @@ class NewsRewriter(object):
 
         return entity_table
 
+    def rewrite_raconto(self):
+        months = {
+                    "01":u"enero",
+                    "02":u"febrero",
+                    "03":u"marzo",
+                    "04":u"abril",
+                    "05":u"mayo",
+                    "06":u"junio",
+                    "07":u"julio",
+                    "08":u"agosto",
+                    "09":u"septiembre",
+                    "10":u"octubre",
+                    "11":u"noviembre",
+                    "12":u"diciembre",
+                }
+        days = {
+                    "0":u"lunes",
+                    "1":u"martes",
+                    "2":u"miércoles",
+                    "3":u"jueves",
+                    "4":u"viernes",
+                    "5":u"sábado",
+                    "6":u"domingo",
+        }
+
+        intro = None
+        if self.original_entry.raconto_date is not None:
+            date = unicode(self.original_entry.raconto_date).split()[0]
+            weekday = unicode(self.original_entry.raconto_date.weekday())
+            date_numbers = date.split('-')
+
+            if len(date_numbers) == 3:
+                intro = u"El " + days[weekday] + u" " + date_numbers[2] + u" de " + months[date_numbers[1]] + u" " + self.original_entry.raconto_content
+
+        if intro is None:
+            intro = self.original_entry.raconto_content
+
+        return intro
 
     def rewrite_content(self):
         # TODO: Check every step catch exceptions and return OK|Fail
@@ -242,7 +280,10 @@ class NewsRewriter(object):
         analysis["generated_content_wiki"] = WikipediaContentGenerator(analysis).generate()
         sp = SimilarParagraph(analysis=analysis, other_versions=self.rewritten_entry.other_versions)
         analysis["generated_content_other_sources"] = sp.get_generated_content()
-        analysis["raconto_content"] = self.original_entry.raconto_content
+
+        raconto_analysis = self._analyze(self.rewrite_raconto)
+        rewriter = Rewriter(raconto_analysis['paragraph'])
+        analysis["raconto_content"] = rewriter.rewrite(raconto=True)
 
         if not self.config.get('instance', 'id') == 'Test':
             self.to_insert_canonical = self.rewritten_entry.other_versions[:2]

@@ -24,6 +24,7 @@ from src.rewrite.strategy.textualCite import TextualCite
 from src.rewrite.strategy.voicePassiveStrategy import VoicePassiveStrategy
 from src.rewrite.strategy.partialVoicePassiveStrategy import PartialVoicePassiveStrategy
 from src.rewrite.strategy.fromRelativeClauseToIndependentSentenceStrategy import FromRelativeClauseToIndependentSentenceStrategy
+from src.rewrite.strategy.racontoStrategy import RacontoStrategy
 
 debug_mode = False
 
@@ -43,7 +44,8 @@ class Rewriter:
                                           TieneQueToModalDeber(ontology),
                                           FutureToGoConstructionStrategy(ontology),
                                           GoConstructionToFutureStrategy(ontology),
-                                          SubjunctiveImperfectStrategy(ontology)]
+                                          SubjunctiveImperfectStrategy(ontology)],
+                                          RacontoStrategy(ontology)
 
             self.dislocationStrategies = [AppositionDislocationStrategy(),
                                           VoicePassiveStrategy(ontology),
@@ -69,7 +71,7 @@ class Rewriter:
         self.clauses_for_replacements = clauses_for_replacements
         self.applied_global_strategies = applied_global_strategies
 
-    def rewrite(self):
+    def rewrite(self, raconto=False):
         if debug_mode: print "--> Rewriter.rewrite()"
 
         text = self.paragraph.text
@@ -81,6 +83,9 @@ class Rewriter:
 
             #Don't apply partial voice if seImpersonal was applied
             if strategy.__class__.__name__ == "SeImpersonalStrategy" and  "PartialVoicePassiveStrategy" in successful_strategies:
+                continue
+
+            if raconto:
                 continue
 
             #Don't apply if any global strategy applied
@@ -105,7 +110,7 @@ class Rewriter:
         self.analyzer.analyze(self.paragraph)
         clauses = self.clauses_for_replacements if self.clauses_for_replacements else self.paragraph.clauses()
         for clause in clauses:
-            replacement_rules = self.replacements_for(clause)
+            replacement_rules = self.replacements_for(clause, raconto)
             replacements.extend(replacement_rules)
 
         text = self.compose_text_with(replacements)
@@ -174,10 +179,15 @@ class Rewriter:
 
         return dislocations
 
-    def replacements_for(self, clause):
+    def replacements_for(self, clause, raconto=False):
         if debug_mode: print "--> Rewriter.replacements_for()"
         replacements = []
         for strategy in self.replacementStrategies:
+            if strategy.__class__.__name__ == "RacontoStrategy" and raconto==False:
+                continue
+            if strategy.__class__.__name__ != "RacontoStrategy" and raconto==True:
+                continue
+                
             try:
                 if strategy.applies_to(clause):
                     rewrites = strategy.rewrite(clause)
