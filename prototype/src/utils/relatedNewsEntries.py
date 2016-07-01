@@ -270,7 +270,7 @@ class RelatedNewsEntries(object):
 
             score = self.related_score(entities_coincidence, similarity, title_distance)
 
-            threshold = 50
+            threshold = 40
             if any(special_cat in self.news_original.categories for special_cat in [u"belleza", u"estilo vida", u"propiedades", u"salud", u"zolvers"]):
                 threshold = 40
 
