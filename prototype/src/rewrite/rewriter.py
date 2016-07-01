@@ -44,8 +44,8 @@ class Rewriter:
                                           TieneQueToModalDeber(ontology),
                                           FutureToGoConstructionStrategy(ontology),
                                           GoConstructionToFutureStrategy(ontology),
-                                          SubjunctiveImperfectStrategy(ontology)],
-                                          RacontoStrategy(ontology)
+                                          SubjunctiveImperfectStrategy(ontology),
+                                          RacontoStrategy(ontology)]
 
             self.dislocationStrategies = [AppositionDislocationStrategy(),
                                           VoicePassiveStrategy(ontology),
@@ -187,7 +187,7 @@ class Rewriter:
                 continue
             if strategy.__class__.__name__ != "RacontoStrategy" and raconto==True:
                 continue
-                
+
             try:
                 if strategy.applies_to(clause):
                     rewrites = strategy.rewrite(clause)
