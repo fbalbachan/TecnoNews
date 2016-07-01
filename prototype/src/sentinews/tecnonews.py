@@ -64,7 +64,7 @@ class TecnoNews(object):
             entry.set_analisys_info()
             try:
                 raconto_finder = RacontoFinder(entry)
-                raconto = raconto_finder.get_best_raconto()
+                raconto = raconto_finder.set_best_raconto()
                 with open("raconto.txt", "a", 0) as myfile:
                     if raconto is not None:
                         myfile.write(entry.url + " --> " + raconto.url + "\n")

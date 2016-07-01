@@ -43,6 +43,10 @@ class NewsEntry(object):
         self.image_url = None
         self.summary = summary
         self.language = language
+        self.raconto_id = None
+        self.raconto_title = None
+        self.raconto_content = None
+        self.raconto_date = None
 
         # Defensive programing to avoid wrong encoded
         assert(isinstance(self.title, unicode))
@@ -117,7 +121,8 @@ class NewsEntry(object):
                     wp_url=self.wp_url, related=self.related, versions=self.versions,
                     universe_versions=self.universe_versions, universe_scores=self.universe_scores, sentiment=self.sentiment,
                     countries=self.countries, cities=self.cities,host_id=self.host_id,image_url=self.image_url,
-                    summary=self.summary, language=self.language)
+                    summary=self.summary, language=self.language, raconto_id=self.raconto_id, raconto_title=self.raconto_title,
+                    raconto_content=self.raconto_content, raconto_date=self.raconto_date)
 
     def analyzed_paragraph(self):
         from src.model.paragraph.paragraphAnalyzer import ParagraphAnalyzer
