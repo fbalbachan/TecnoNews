@@ -19,7 +19,7 @@ class TextInserter:
 
         injected_count = 0  # keep the count of how many paragraph we add to the news
         wiki_injected = False
-        raconto_available = self.analysis["raconto"] is not None
+        raconto_available = self.analysis["raconto_content"] is not None
 
         for idx, paragraph in enumerate(self.paragraphs):
             if not isinstance(paragraph, unicode):
@@ -35,7 +35,7 @@ class TextInserter:
                 generated += u'\n' + injections_paragraphs[idx] + u'\n'
                 if raconto_available:
                     raconto_available = False
-                    generated += self.analysis["raconto"] + u'\n'
+                    generated += self.analysis["raconto_content"] + u'\n'
                 # generated += u'[eyesonly logged="in"]' \
                 #              + u'<p><strong> Ends paragraph from other coverage<strong></p>[/eyesonly]'
 
