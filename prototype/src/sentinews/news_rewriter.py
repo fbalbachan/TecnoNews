@@ -247,7 +247,7 @@ class NewsRewriter(object):
                 intro = u"El " + days[weekday] + u" " + date_numbers[2] + u" de " + months[date_numbers[1]] + u" " + self.original_entry.raconto_content
 
         if intro is None:
-            intro = self.original_entry.raconto_content
+            intro = self.original_entry.raconto_content.encode("utf-8")
 
         return intro
 
@@ -283,6 +283,7 @@ class NewsRewriter(object):
 
         dated_raconto = self.rewrite_raconto
         if dated_raconto is not None:
+            logger.info(type(dated_raconto))
             raconto_analysis = self._analyze(dated_raconto)
             rewriter = Rewriter(raconto_analysis['paragraph'])
             analysis["raconto_content"] = rewriter.rewrite(raconto=True)
