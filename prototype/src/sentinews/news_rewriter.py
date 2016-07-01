@@ -242,6 +242,7 @@ class NewsRewriter(object):
         analysis["generated_content_wiki"] = WikipediaContentGenerator(analysis).generate()
         sp = SimilarParagraph(analysis=analysis, other_versions=self.rewritten_entry.other_versions)
         analysis["generated_content_other_sources"] = sp.get_generated_content()
+        analysis["raconto_content"] = self.original_entry.raconto_content
 
         if not self.config.get('instance', 'id') == 'Test':
             self.to_insert_canonical = self.rewritten_entry.other_versions[:2]
