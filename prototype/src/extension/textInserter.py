@@ -19,7 +19,8 @@ class TextInserter:
 
         injected_count = 0  # keep the count of how many paragraph we add to the news
         wiki_injected = False
-        raconto_available = self.analysis["raconto_content"] is not None
+        #raconto_available = self.analysis["raconto_content"] is not None
+        raconto_available = False
 
         for idx, paragraph in enumerate(self.paragraphs):
             if not isinstance(paragraph, unicode):
