@@ -62,7 +62,7 @@ class RacontoFinder(object):
             for a_final in final_result:
                 if a_final[1] > selected_best[1]:
                     selected_best = a_final
-                elif a_final[1] = selected_best[1]:
+                elif a_final[1] == selected_best[1]:
                     if a_final[0].object_id.generation_time > selected_best[0].object_id.generation_time:
                         selected_best = a_final
             self.format_raconto(selected_best[0])
