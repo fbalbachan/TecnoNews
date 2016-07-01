@@ -47,6 +47,7 @@ class NewsEntry(object):
         self.raconto_title = None
         self.raconto_content = None
         self.raconto_date = None
+        self.raconto_url = None
 
         # Defensive programing to avoid wrong encoded
         assert(isinstance(self.title, unicode))
@@ -122,7 +123,7 @@ class NewsEntry(object):
                     universe_versions=self.universe_versions, universe_scores=self.universe_scores, sentiment=self.sentiment,
                     countries=self.countries, cities=self.cities,host_id=self.host_id,image_url=self.image_url,
                     summary=self.summary, language=self.language, raconto_id=self.raconto_id, raconto_title=self.raconto_title,
-                    raconto_content=self.raconto_content, raconto_date=self.raconto_date)
+                    raconto_content=self.raconto_content, raconto_date=self.raconto_date, raconto_url=self.raconto_url)
 
     def analyzed_paragraph(self):
         from src.model.paragraph.paragraphAnalyzer import ParagraphAnalyzer

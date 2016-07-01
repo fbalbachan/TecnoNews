@@ -71,10 +71,15 @@ class RacontoFinder(object):
             return None
 
     def format_raconto(self, raconto):
-        self.news_original.raconto_content = raconto.content.split()[0]
+        self.news_original.raconto_content = raconto.content.split('\n')[0]
+        if len(raconto.content.split('\n')[0]) < 100 or len(raconto.content.split('\n')[0] > 500):
+            if len(raconto.content.split('\n')) > 1:
+                self.news_original.raconto_content = raconto.content.split('\n')[1]
+
         self.news_original.raconto_title = raconto.title
         self.news_original.raconto_date = raconto.object_id.generation_time
         self.news_original.raconto_id = raconto.object_id
+        self.news_original.raconto_url = raconto.url
 
     def related_score(self, entities_coincidence_5, entities_coincidence_3, similarity, title_distance):
         score = 0
