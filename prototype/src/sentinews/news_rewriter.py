@@ -245,9 +245,9 @@ class NewsRewriter(object):
 
             if len(date_numbers) == 3:
                 intro = u"El " + days[weekday] + u" " + date_numbers[2] + u" de " + months[date_numbers[1]] + u" " + self.original_entry.raconto_content
-                intro = intro.encode("utf-8")
+                intro = intro
         if intro is None:
-            intro = self.original_entry.raconto_content.encode("utf-8")
+            intro = self.original_entry.raconto_content
 
         return intro
 
@@ -285,7 +285,7 @@ class NewsRewriter(object):
         if dated_raconto is not None:
             raconto_analysis = self._analyze(dated_raconto)
             rewriter = Rewriter(raconto_analysis['paragraph'])
-            analysis["raconto_content"] = rewriter.rewrite(raconto=True)
+            analysis["raconto_content"] = rewriter.rewrite(raconto=True).decode('utf-8')
 
         if not self.config.get('instance', 'id') == 'Test':
             self.to_insert_canonical = self.rewritten_entry.other_versions[:2]
