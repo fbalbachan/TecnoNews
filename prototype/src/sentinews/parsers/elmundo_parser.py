@@ -27,11 +27,15 @@ class ElMundoParser(GenericParser):
         # Remove sharedaddy
         for social in soup.findAll('ul', {"class": "redes-sociales"}):
             social.extract()
-        
+
+        # Remove trash
+        for atext in soup.findAll(True,{"class": ["image", "aside-tools", "summary-lead"]}):
+            atext.extract()
+
         #Canta: noticias relacionadas.
         for aside in soup(["aside", {"class":"related-links"}]):
             aside.extract()
-    
+
         tweets = []
 
         for tweet in soup.findAll('div', {"class": "embed-twitter"}):
@@ -43,7 +47,7 @@ class ElMundoParser(GenericParser):
         categories = [urlparse(url).path.split("/")[1]]
 
         des = soup.find('article', {"class": "desarrollo"})
-        
+
         #image_search_string = des.find('header').find('h2').text + u' '
         image_search_string = title.split('.')[0]
 
@@ -64,7 +68,11 @@ class ElMundoParser(GenericParser):
                     tags.add(l.text)
 
 
-        content = soup.find('div', {"itemprop": 'articleBody'}).text
+        content = ""
+        for a_paragraph in soup.find('div', {"itemprop": 'articleBody'}).findAll('p'):
+            content += "\n" + a_paragraph.text.strip()
+
+        content = content.strip()
         #return {"content" : content, "title":title, "tags": tags, "image_search_string":image_search_string}
         new_entry = self.create_news_entry(title=title, content=content,
                                            tags=tags,
