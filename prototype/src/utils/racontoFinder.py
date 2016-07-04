@@ -71,10 +71,16 @@ class RacontoFinder(object):
             return None
 
     def format_raconto(self, raconto):
-        self.news_original.raconto_content = raconto.content.split('\n')[0]
-        if len(raconto.content.split('\n')[0]) < 100:
-            if len(raconto.content.split('\n')) > 1:
-                self.news_original.raconto_content = raconto.content.split('\n')[1]
+        set_paragraph = False
+        for a_paragraph in raconto.content.split('\n'):
+            if len(a_paragraph) >= 150:
+                set_paragraph = True
+                self.news_original.raconto_content = a_paragraph
+                break
+
+        if not set_paragraph:
+            return
+
         if not isinstance(self.news_original.raconto_content, unicode):
             self.news_original.raconto_content = unicode(self.news_original.raconto_content, 'utf-8')
         self.news_original.raconto_title = raconto.title
