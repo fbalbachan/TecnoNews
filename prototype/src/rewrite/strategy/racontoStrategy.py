@@ -10,7 +10,7 @@ class RacontoStrategy:
 
     def applies_to(self, clause):
         clause_verb = clause.verb
-        return (clause_verb.matches_msi({"mode": "indicative"}) or clause_verb.matches_msi({"mode": "subjuntive"})) and not clause_verb.is_locution()# and clause.voice == 'active'
+        return clause_verb is not None and (clause_verb.matches_msi({"mode": "indicative"}) or clause_verb.matches_msi({"mode": "subjuntive"})) and not clause_verb.is_locution()# and clause.voice == 'active'
 
     def rewrite(self, clause):
         ontology = self.ontology
@@ -21,13 +21,14 @@ class RacontoStrategy:
         else:
             clause_verb = []
         if len(clause_verb) == 0:
-            return
+            return []
         clause_verb = clause_verb[0]
 
         rewriten_verb = ""
         for a_leaf in clause_verb.leaves():
             if ("time" not in a_leaf.msi or a_leaf.msi["time"] == "singular" or a_leaf.msi["time"] == "plural")\
-                or (a_leaf.lemma == "haber" and a_leaf.msi["time"] == "presente"):
+                or (a_leaf.lemma == "haber" and a_leaf.msi["time"] == "presente")\
+                or (a_leaf.msi["time"] != "pasado" and a_leaf.msi["time"] != "presente"):
 
                 rewriten_verb += " " + a_leaf.lexical_form
 
@@ -65,6 +66,8 @@ class RacontoStrategy:
 
         if rewriten_verb != "":
             return Rewrite.preserving_case(clause_verb, rewriten_verb)
+        else:
+            return []
 
 
     type = "replacement"
