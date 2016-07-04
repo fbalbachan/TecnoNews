@@ -248,40 +248,45 @@ class NewsRewriter(object):
                     "rep11": u"Domingo",
                     "rep12": u"miercoles"
         }
-        tempReplace =  self.original_entry.raconto_content
-        for a_day in days.values():
-            tempReplace = tempReplace.replace(u"este " + a_day + u" ", "")
-            tempReplace = tempReplace.replace(u"el " + a_day + u" pasado", "")
-            tempReplace = tempReplace.replace(u"el pasado" + a_day + u" ", "")
-            tempReplace = tempReplace.replace(u"el " + a_day + u" que viene ", "")
-            tempReplace = tempReplace.replace(u"el " + a_day + u" entrante ", "")
-            tempReplace = tempReplace.replace(u"el " + a_day + u" próximo ", "")
-            tempReplace = tempReplace.replace(u"el " + a_day + u" proximo ", "")
-            tempReplace = tempReplace.replace(u"el próximo" + a_day + u" ", "")
-            tempReplace = tempReplace.replace(u"el proximo" + a_day + u" ", "")
-            tempReplace = tempReplace.replace(u"el " + a_day + u" ", "")
 
-        tempReplace = tempReplace.replace(u"esta semana ", "")
-        tempReplace = tempReplace.replace(u"esta mañana ", "")
-        tempReplace = tempReplace.replace(u"esta tarde ", "")
-        tempReplace = tempReplace.replace(u"esta noche ", "")
-        tempReplace = tempReplace.replace(u"la semana pasada ", "")
-        tempReplace = tempReplace.replace(u"la pasada semana ", "")
-        tempReplace = tempReplace.replace(u"la semana que viene ", "")
-        tempReplace = tempReplace.replace(u"la semana entrante ", "")
-        tempReplace = tempReplace.replace(u"la semana próxima ", "")
-        tempReplace = tempReplace.replace(u"la semana proxima ", "")
-        tempReplace = tempReplace.replace(u"la próxima semana ", "")
-        tempReplace = tempReplace.replace(u"la proxima semana ", "")
-        tempReplace = tempReplace.replace(u"la semana ", "")
-        tempReplace = tempReplace.replace(u"ayer ", "")
-        tempReplace = tempReplace.replace(u"hoy ", "")
-        tempReplace = tempReplace.replace(u"mañana ", "")
-        tempReplace = tempReplace.replace(u"anoche ", "")
-
-        self.original_entry.raconto_content = tempReplace
         intro = None
         if self.original_entry.raconto_date is not None:
+            
+            tempReplace =  self.original_entry.raconto_content
+            for a_day in days.values():
+                tempReplace = tempReplace.replace(u"este " + a_day + u" ", "")
+                tempReplace = tempReplace.replace(u"el " + a_day + u" pasado", "")
+                tempReplace = tempReplace.replace(u"el pasado " + a_day + u" ", "")
+                tempReplace = tempReplace.replace(u"el " + a_day + u" que viene ", "")
+                tempReplace = tempReplace.replace(u"el " + a_day + u" entrante ", "")
+                tempReplace = tempReplace.replace(u"el " + a_day + u" próximo ", "")
+                tempReplace = tempReplace.replace(u"el " + a_day + u" proximo ", "")
+                tempReplace = tempReplace.replace(u"el próximo " + a_day + u" ", "")
+                tempReplace = tempReplace.replace(u"el proximo " + a_day + u" ", "")
+                tempReplace = tempReplace.replace(u"el " + a_day + u" ", "")
+
+            tempReplace = tempReplace.replace(u"esta semana ", "")
+            tempReplace = tempReplace.replace(u"esta mañana ", "")
+            tempReplace = tempReplace.replace(u"esta tarde ", "")
+            tempReplace = tempReplace.replace(u"esta noche ", "")
+            tempReplace = tempReplace.replace(u"este mediodía ", "")
+            tempReplace = tempReplace.replace(u"esta madrugada ", "")
+            tempReplace = tempReplace.replace(u"la semana pasada ", "")
+            tempReplace = tempReplace.replace(u"la pasada semana ", "")
+            tempReplace = tempReplace.replace(u"la semana que viene ", "")
+            tempReplace = tempReplace.replace(u"la semana entrante ", "")
+            tempReplace = tempReplace.replace(u"la semana próxima ", "")
+            tempReplace = tempReplace.replace(u"la semana proxima ", "")
+            tempReplace = tempReplace.replace(u"la próxima semana ", "")
+            tempReplace = tempReplace.replace(u"la proxima semana ", "")
+            tempReplace = tempReplace.replace(u"la semana ", "")
+            tempReplace = tempReplace.replace(u"ayer ", "")
+            tempReplace = tempReplace.replace(u"hoy ", "")
+            tempReplace = tempReplace.replace(u"mañana ", "")
+            tempReplace = tempReplace.replace(u"anoche ", "")
+
+            self.original_entry.raconto_content = tempReplace
+
             date = unicode(self.original_entry.raconto_date).split()[0]
             weekday = unicode(self.original_entry.raconto_date.weekday())
             date_numbers = date.split('-')
