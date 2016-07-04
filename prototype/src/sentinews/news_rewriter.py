@@ -235,8 +235,51 @@ class NewsRewriter(object):
                     "4":u"viernes",
                     "5":u"sábado",
                     "6":u"domingo",
+                    "rep1": u"día",
+                    "rep2": u"dia",
+                    "rep3": u"Lunes",
+                    "rep4": u"Martes",
+                    "rep5": u"Miércoles",
+                    "rep6": u"Miercoles",
+                    "rep7": u"Jueves",
+                    "rep8": u"Viernes",
+                    "rep9": u"Sábado",
+                    "rep10": u"Sabado",
+                    "rep11": u"Domingo",
+                    "rep12": u"miercoles"
         }
+        tempReplace =  self.original_entry.raconto_content
+        for a_day in days.values():
+            tempReplace = tempReplace.replace(u"este " + a_day + u" ", "")
+            tempReplace = tempReplace.replace(u"el " + a_day + u" pasado", "")
+            tempReplace = tempReplace.replace(u"el pasado" + a_day + u" ", "")
+            tempReplace = tempReplace.replace(u"el " + a_day + u" que viene ", "")
+            tempReplace = tempReplace.replace(u"el " + a_day + u" entrante ", "")
+            tempReplace = tempReplace.replace(u"el " + a_day + u" próximo ", "")
+            tempReplace = tempReplace.replace(u"el " + a_day + u" proximo ", "")
+            tempReplace = tempReplace.replace(u"el próximo" + a_day + u" ", "")
+            tempReplace = tempReplace.replace(u"el proximo" + a_day + u" ", "")
+            tempReplace = tempReplace.replace(u"el " + a_day + u" ", "")
 
+        tempReplace = tempReplace.replace(u"esta semana ", "")
+        tempReplace = tempReplace.replace(u"esta mañana ", "")
+        tempReplace = tempReplace.replace(u"esta tarde ", "")
+        tempReplace = tempReplace.replace(u"esta noche ", "")
+        tempReplace = tempReplace.replace(u"la semana pasada ", "")
+        tempReplace = tempReplace.replace(u"la pasada semana ", "")
+        tempReplace = tempReplace.replace(u"la semana que viene ", "")
+        tempReplace = tempReplace.replace(u"la semana entrante ", "")
+        tempReplace = tempReplace.replace(u"la semana próxima ", "")
+        tempReplace = tempReplace.replace(u"la semana proxima ", "")
+        tempReplace = tempReplace.replace(u"la próxima semana ", "")
+        tempReplace = tempReplace.replace(u"la proxima semana ", "")
+        tempReplace = tempReplace.replace(u"la semana ", "")
+        tempReplace = tempReplace.replace(u"ayer ", "")
+        tempReplace = tempReplace.replace(u"hoy ", "")
+        tempReplace = tempReplace.replace(u"mañana ", "")
+        tempReplace = tempReplace.replace(u"anoche ", "")
+
+        self.original_entry.raconto_content = tempReplace
         intro = None
         if self.original_entry.raconto_date is not None:
             date = unicode(self.original_entry.raconto_date).split()[0]
@@ -244,7 +287,7 @@ class NewsRewriter(object):
             date_numbers = date.split('-')
 
             if len(date_numbers) == 3:
-                intro = u"El " + days[weekday] + u" " + date_numbers[2] + u" de " + months[date_numbers[1]] + u" " + self.original_entry.raconto_content
+                intro = u"El " + days[weekday] + u" " + date_numbers[2] + u" de " + months[date_numbers[1]] + u" " + self.original_entry.raconto_content[:2].lower() + self.original_entry.raconto_content[2:]
                 intro = intro
         if intro is None:
             intro = self.original_entry.raconto_content
