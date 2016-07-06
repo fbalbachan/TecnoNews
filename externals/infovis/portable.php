@@ -51,9 +51,6 @@
         <script type="text/javascript">
             <?php echo file_get_contents("infovis.min.js");?>
         </script>
-        <script type="text/javascript">
-            <?php echo file_get_contents("app.js");?>
-        </script>
         <style>
             <?php echo file_get_contents("infovis.min.css");?>
         </style>
