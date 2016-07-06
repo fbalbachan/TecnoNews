@@ -28,7 +28,8 @@ class RacontoStrategy:
         for a_leaf in clause_verb.leaves():
             if ("time" not in a_leaf.msi or a_leaf.msi["time"] == "singular" or a_leaf.msi["time"] == "plural")\
                 or (a_leaf.lemma == "haber" and a_leaf.msi["time"] == "presente")\
-                or (a_leaf.msi["time"] != "pasado" and a_leaf.msi["time"] != "presente"):
+                or (a_leaf.msi["time"] != "pasado" and a_leaf.msi["time"] != "presente")
+                or (a_leaf.lemma == "ir"):
 
                 rewriten_verb += " " + a_leaf.lexical_form
 
