@@ -64,14 +64,15 @@ class Rewriting(Resource):
             text = text.decode('UTF-8')
 
         try:
+            print text
             #print "rewrite_analysis"
             rewrite_analysis = ContentRewriterAndGenerator().run( text )
-            #print "results:", rewrite_analysis
+            print "results:", rewrite_analysis
 
             analysis_results = \
                 {
-                    '0-source-text'    :  rewrite_analysis["source"],
-                    '1-rewritten-text' :  rewrite_analysis["changed"]
+                    '0-Source-Text'    :  rewrite_analysis["source"],
+                    '1-Rewritten-Text' :  rewrite_analysis["changed"]
                 }
 
             response_value = analysis_results
