@@ -11,6 +11,7 @@ from sentimentAnalysis import SentimentAnalysis
 from factMining import FactMining
 from entitySentimentReport import EntitySentimentReport
 from rewriting import Rewriting
+from rewritingPt import RewritingPT
 #from summarizing import Summarizing
 # Includes for portuguese redirection
 from entityExtractionPt import EntityExtractionPT
@@ -65,7 +66,7 @@ api.add_resource(EntitySentimentReportPT, base_path + '/pt/entity-sentiment-repo
 # 20160613 - Daniel Cantarín
 # Adding extra API methods: rewritting and summarizing.
 api.add_resource(Rewriting, base_path + '/rewriting/<string:text>/<string:api_key>')
-
+api.add_resource(RewritingPT, base_path + '/pt/rewriting/<string:text>/<string:api_key>')
 #api.add_resource(Summarizing, base_path + '/summarizing/<string:text>/<string:api_key>')
 
 
