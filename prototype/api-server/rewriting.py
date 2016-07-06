@@ -48,7 +48,7 @@ class Rewriting(Resource):
                                 {"code": 500, "message": "Bad response"}
                             ]
                       )
-    @marshal_with(EntitiesResponse.resource_fields)
+    @marshal_with(RewritingResponse.resource_fields)
     def get(self, text, api_key):
         # api_key = request.headers.get('api_key')
         #print "Rewriting. text:", text
