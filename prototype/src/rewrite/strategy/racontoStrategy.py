@@ -15,9 +15,11 @@ class RacontoStrategy:
     def rewrite(self, clause):
         ontology = self.ontology
         if clause.voice == "active":
-            clause_verb = clause.node.nodes_with_labels("verb")
+            #clause_verb = clause.node.nodes_with_labels("verb")
+            clause_verb = clause.proper_tree().nodes_with_labels("verb")
         elif clause.voice == "passive":
-            clause_verb = clause.node.nodes_with_labels("vser")
+            #clause_verb = clause.node.nodes_with_labels("vser")
+            clause_verb = clause.proper_tree().nodes_with_labels("vser")
         else:
             clause_verb = []
         if len(clause_verb) == 0:
