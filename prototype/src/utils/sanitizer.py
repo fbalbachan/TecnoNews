@@ -79,6 +79,21 @@ class Sanitizer():
         new_content = '\n'.join([paragraph for paragraph in content.split('\n')
                                  if not any(x == paragraph[:len(x)] for x in self.paragraph_to_avoid)])
 
+        modified = True
+        while modified:
+            modified = False
+            words = new_content.split()
+            if len(words) > 0:
+                words[0] = re.sub(u'^[A-Z)(_-]+$', u'', words[0])
+                if "(" in words[0] and ")" in words[0]:
+                    words[0] = u""
+
+                if words[0] == u"":
+                    modified = True
+                    new_content = u' '.join(words)
+
+
+
         if self.language_filter_status == 'ON':
             new_content = self.language_filter.only_spanish_paragraph(new_content)
 
