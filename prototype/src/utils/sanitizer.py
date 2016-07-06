@@ -84,7 +84,7 @@ class Sanitizer():
             modified = False
             words = new_content.split()
             if len(words) > 0:
-                words[0] = re.sub(u'^[A-Z)(_-]+$', u'', words[0])
+                words[0] = re.sub(u'^[A-ZÁÉÍÓÚÑÂÊÎÔÛÇÈËÀÃÜÙÌÕÒ)(_-]+$', u'', words[0])
                 if "(" in words[0] and ")" in words[0]:
                     words[0] = u""
 
