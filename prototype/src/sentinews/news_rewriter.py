@@ -21,6 +21,8 @@ from src.utils.webOutputUtils import WebOutputUtils
 from src.utils.sanitizer import Sanitizer
 from src.utils.textSummarizer import TextSummarizer
 
+from src.ling.freelingDictionaryParser import FreelingDictionaryParser
+
 logger = get_logger('tecnonews')
 debug_mode = True
 
@@ -45,6 +47,7 @@ class NewsRewriter(object):
         self.to_insert_canonical = []
         self.config = ConfigProvider()
         self.sanitizer = Sanitizer()
+        self.ontology = FreelingDictionaryParser.get_ontology()
 
     def _get_alt_text(self, im, h):
         if debug_mode: logger.info("--> NEWS_REWRITER._get_alt_text()")
@@ -250,6 +253,13 @@ class NewsRewriter(object):
         }
 
         intro = None
+
+        if self.original_entry.raconto_content is not None:
+            words = re.split(r'[ .,]+', self.original_entry.raconto_content, re.U)
+            if len(words) > 0:
+                if self.ontology.is_valid_word(words[0].lower()):
+                    self.original_entry.raconto_content = self.original_entry.raconto_content.replace(words[0], words[0].lower(), 1)
+
         if self.original_entry.raconto_date is not None:
             
             tempReplace =  self.original_entry.raconto_content
@@ -292,7 +302,7 @@ class NewsRewriter(object):
             date_numbers = date.split('-')
 
             if len(date_numbers) == 3:
-                intro = u"El " + days[weekday] + u" " + date_numbers[2] + u" de " + months[date_numbers[1]] + u" " + self.original_entry.raconto_content[:2].lower() + self.original_entry.raconto_content[2:]
+                intro = u"El " + days[weekday] + u" " + date_numbers[2] + u" de " + months[date_numbers[1]] + u" " + self.original_entry.raconto_content
                 intro = intro
         if intro is None:
             intro = self.original_entry.raconto_content

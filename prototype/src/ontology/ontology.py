@@ -31,3 +31,9 @@ class Ontology:
                     lexical_forms.append(lexical_form)
         return lexical_forms
 
+    def is_valid_word(self, word):
+        for concept in self.concepts.values():
+            for lexical_form in concept.lexical_forms:
+                if lexical_form.text == word:
+                    return True
+        return False
