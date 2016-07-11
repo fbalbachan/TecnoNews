@@ -129,9 +129,24 @@ class PartialVoicePassiveStrategy:
             replacements = (verb, ''), (od, '')
 
         ntext = self.multiple_replace(text, *replacements).strip(' ')
-        ntext = ntext[0].lower() + ntext[1:]
+        ntext = ntext[:1].lower() + ntext[1:]
 
-        ntext = "se " + rewritten_verb + " " + od_rewritten + " " + ntext
+        if od_rewritten not in ["él", "ella", "ellos", "ellas"]:
+            ntext = "se " + rewritten_verb + " " + od_rewritten + " " + ntext
+        else:
+            if od_rewritten == "él":
+                od_rewritten = "lo "
+            elif od_rewritten == "ella":
+                od_rewritten = "la "
+            elif od_rewritten == "ellos":
+                od_rewritten = "los "
+            elif od_rewritten == "ellas":
+                od_rewritten = "las "
+
+            ntext = "se "+ od_rewritten + rewritten_verb + " "  + " " + ntext
+
+
+
         ntext = ntext.replace(' ,', ',')
         # Fix space with point at the end
         if ntext[-2:] == ' .':
@@ -182,16 +197,30 @@ class PartialVoicePassiveStrategy:
             repls = (verb, ''), (od, '')
 
         ntext = self.multiple_replace(text, *repls).strip(' ')
-        ntext = ntext[0].lower() + ntext[1:]
+        ntext = ntext[:1].lower() + ntext[1:]
 
-        if od_rewritten[0:3] == 'el ':
-            od_rewritten = 'al ' + od_rewritten[3:]
-        elif od_rewritten[0:3] == 'yo ' or od_rewritten[0:3] == 'yo':
-            od_rewritten = 'a mí'
+        if od_rewritten not in ["él", "ella", "ellos", "ellas"]:
+            if od_rewritten[0:3] == 'el ':
+                od_rewritten = 'al ' + od_rewritten[3:]
+            elif od_rewritten[0:3] == 'yo ' or od_rewritten[0:3] == 'yo':
+                od_rewritten = 'a mí'
+            else:
+                od_rewritten = 'a ' + od_rewritten
+
+            ntext = "se " + rewritten_verb + " " + od_rewritten + " " + ntext
         else:
-            od_rewritten = 'a ' + od_rewritten
+            if od_rewritten == "él":
+                od_rewritten = "lo "
+            elif od_rewritten == "ella":
+                od_rewritten = "la "
+            elif od_rewritten == "ellos":
+                od_rewritten = "los "
+            elif od_rewritten == "ellas":
+                od_rewritten = "las "
 
-        ntext = "se " + rewritten_verb + " " + od_rewritten + " " + ntext
+            ntext = "se "+ od_rewritten + rewritten_verb + " "  + " " + ntext
+
+
 
         ntext = ntext.replace(' ,', ',')
         # Fix space with point at the end
