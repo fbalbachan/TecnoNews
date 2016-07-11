@@ -176,6 +176,12 @@ def generate_jsons_for_universe( item_id , gens = 10) :
         for checked in result:
             current_id += 1
             try :
+                if "universe_versions" in checked and checked["universe_versions"] is None:
+                    checked["universe_versions"] = []
+
+                if "universe_scores" in checked and checked["universe_scores"] is None:
+                    checked["universe_scores"] = []
+
                 already_processed[checked["_id"]] = {
                     "id"        : "node_" + str(current_id),
                     "date"      : str(checked["_id"].generation_time).split("+")[0],
