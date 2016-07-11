@@ -448,6 +448,8 @@ class NewsRewriter(object):
         logger.info("Injected Count %s" % self.injected_count)
 
         self.rewritten_entry.injected_count = self.injected_count
+        self.set_sentiment_score(analysis)
+        self.set_countries()
 
         skip_rewriting = False
         if self.injected_count == 0:
@@ -455,6 +457,7 @@ class NewsRewriter(object):
             skip_rewriting = True
 
         if not skip_rewriting:
+            logger.info("Injections found: Rewriting text")
             analysis = self._analyze(self.rewritten_entry.content)
 
             rewriter = Rewriter(analysis['paragraph'], applied_global_strategies=applied_global)
@@ -470,9 +473,10 @@ class NewsRewriter(object):
             token_count = 0
             for a_sentence in analysis["paragraph"].sentences:
             	token_count += len(a_sentence.parse_node.leaves())
-                
+
             self.rewritten_entry.token_count = token_count
             self.rewritten_entry.entity_table = self.generate_entity_table(analysis)
+            self.set_sentiment_score(analysis)
 
 
             if wikiinfo and filter(lambda (referent, score): referent == wikiinfo[0][0] and score > 1., ranking):
@@ -516,9 +520,6 @@ class NewsRewriter(object):
                         logger.info("No image selected from title")
 
             self.post_process()
-
-        self.set_sentiment_score(analysis)
-        self.set_countries()
 
 
     def publish(self):
