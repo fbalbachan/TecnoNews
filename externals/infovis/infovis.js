@@ -61,9 +61,12 @@ function exportToCsv(filename, rows) {
 function exportCSV() {
     custom_graph_data = JSON.parse( $("svg > #graph-data").text() );
     csvRows = []
+    console.log(custom_graph_data)
     for (a_key in custom_graph_data){
             csvRows.push(custom_graph_data[a_key])
+            console.log(custom_graph_data[a_key])
     }
+    console.log(csvRows)
     exportToCsv("prueba", csvRows)
 }
 
