@@ -19,6 +19,7 @@ window.universe          = {
 function setVisible(obj, state) {
     var obj = document.getElementById(obj);
     obj.setAttribute("hidden", state);
+}
 
 
 function exportToCsv(filename, rows) {
