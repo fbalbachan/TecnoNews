@@ -10,6 +10,7 @@ from structuralUnderstanding import StructuralUnderstanding
 from sentimentAnalysis import SentimentAnalysis
 from factMining import FactMining
 from entitySentimentReport import EntitySentimentReport
+from summarizing import Summarizing
 from rewriting import Rewriting
 from rewritingPt import RewritingPT
 #from summarizing import Summarizing
@@ -48,6 +49,10 @@ api.add_resource(FactMining, base_path + '/fact-mining/<string:text>/<string:api
 
 api.add_resource(EntitySentimentReport, base_path + '/entity-sentiment-report/<string:text>/<string:api_key>')
 
+api.add_resource(Rewriting, base_path + '/rewriting/<string:text>/<string:api_key>')
+
+api.add_resource(Summarizing, base_path + '/summarizing/<string:text>/<string:api_key>')
+
 # 20160304 - Daniel Cantarín
 # Adding Portuguese redirection operations
 # They're clone classes, that only act as proxies to a portuguese API instance.
@@ -65,7 +70,7 @@ api.add_resource(EntitySentimentReportPT, base_path + '/pt/entity-sentiment-repo
 
 # 20160613 - Daniel Cantarín
 # Adding extra API methods: rewritting and summarizing.
-api.add_resource(Rewriting, base_path + '/rewriting/<string:text>/<string:api_key>')
+
 api.add_resource(RewritingPT, base_path + '/pt/rewriting/<string:text>/<string:api_key>')
 #api.add_resource(Summarizing, base_path + '/summarizing/<string:text>/<string:api_key>')
 
@@ -97,4 +102,3 @@ if __name__ == '__main__':
 
     write_pid_file()
     app.run(host='127.0.0.1', port=5000, debug=True)
-
