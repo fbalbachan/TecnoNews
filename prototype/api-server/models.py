@@ -10,7 +10,7 @@ class EntitySentimentReportResponse(Flask.response_class):
     resource_fields = \
         {
             '0-Paragraph-Text':     fields.String(),
-            '1-Entities-Report':    fields.List(fields.String)        
+            '1-Entities-Report':    fields.List(fields.String)
         }
 
 
@@ -36,6 +36,14 @@ class RewritingResponse(Flask.response_class):
         {
             '0-Source-Text'     : fields.String(),
             '1-Rewritten-Text'  : fields.String()
+        }
+
+@swagger.model
+class SummarizingResponse(Flask.response_class):
+    resource_fields = \
+        {
+            '0-Source-Text'     : fields.String(),
+            '1-Summarized-Text'  : fields.String()
         }
 
 @swagger.model

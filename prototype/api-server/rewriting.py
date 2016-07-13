@@ -64,10 +64,10 @@ class Rewriting(Resource):
             text = text.decode('UTF-8')
 
         try:
-            print text
+            #print text
             #print "rewrite_analysis"
             rewrite_analysis = ContentRewriterAndGenerator().run( text )
-            print "results:", rewrite_analysis
+            #print "results:", rewrite_analysis
 
             analysis_results = \
                 {
