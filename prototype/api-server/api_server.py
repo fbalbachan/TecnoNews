@@ -20,6 +20,7 @@ from structuralUnderstandingPt import StructuralUnderstandingPT
 from sentimentAnalysisPt import SentimentAnalysisPT
 from factMiningPt import FactMiningPT
 from entitySentimentReportPt import EntitySentimentReportPT
+from summarizingPt import SummarizingPT
 
 
 reload(sys)
@@ -72,6 +73,8 @@ api.add_resource(EntitySentimentReportPT, base_path + '/pt/entity-sentiment-repo
 # Adding extra API methods: rewritting and summarizing.
 
 api.add_resource(RewritingPT, base_path + '/pt/rewriting/<string:text>/<string:api_key>')
+
+api.add_resource(SummarizingPT, base_path + '/pt/summarizing/<string:text>/<string:api_key>')
 #api.add_resource(Summarizing, base_path + '/summarizing/<string:text>/<string:api_key>')
 
 
