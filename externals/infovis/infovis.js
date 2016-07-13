@@ -16,11 +16,6 @@ window.universe          = {
     @date 20160408
     @author Daniel Cantarín
 */
-function setVisible(obj, state) {
-    var obj = document.getElementById(obj);
-    obj.setAttribute("hidden", state);
-}
-
 
 function exportToCsv(filename, rows) {
         var processRow = function (row) {
@@ -70,7 +65,11 @@ function exportCSV() {
     //console.log(custom_graph_data)
     for (a_key in custom_graph_data){
             a_node = custom_graph_data[a_key]
-            csvRows.push([a_node["oid"], a_node["title"], a_node["url"], JSON.stringify(a_node["cats"]), a_node["source"], a_node["date"], a_node["sentiment"], JSON.stringify(a_node["children"])])
+            scored_children = []
+            for (i = 0; i < a_node["children"].length; i++) {
+                scored_children.push({"id": a_node["children"][i], "score": a_node["scores"][i]})
+            }
+            csvRows.push([a_node["oid"], a_node["title"], a_node["url"], JSON.stringify(a_node["cats"]), a_node["source"], a_node["date"], a_node["sentiment"], JSON.stringify(scored_children)])
             //console.log(custom_graph_data[a_key])
     }
     //console.log(csvRows)
@@ -605,8 +604,6 @@ function setup_wordcloud( arr ) {
 
 function show_wordcloud(obj) {
     $("#cy, #gs, #cg").fadeOut(100);
-    setVisible("universeh4", false);
-    setVisible("universep", false);
     select_graph_UI(obj);
 
     if (wc === null) {
@@ -645,8 +642,6 @@ function show_wordcloud(obj) {
 
 function show_galaxy(obj) {
     $("#wc, #gs, #cg").fadeOut(100);
-    setVisible("universeh4", false);
-    setVisible("universep", false);
     select_graph_UI(obj);
     $("#cy").fadeIn(500).promise().then(
         function() {
@@ -699,8 +694,6 @@ function setup_galaxysummary() {
 
 function show_galaxysummary(obj) {
     $("#cy, #wc, #cg").fadeOut(100);
-    setVisible("universeh4", false);
-    setVisible("universep", false);
     select_graph_UI(obj);
 
     if (gs === null || gs === undefined) {
@@ -779,8 +772,6 @@ function setup_customgraph() {
 
 function show_customgraph(obj) {
     $("#cy, #wc, #gs").fadeOut(100);
-    setVisible("universeh4", true);
-    setVisible("universep", true);
     select_graph_UI(obj);
 
     if (cg === null || cg === undefined) {

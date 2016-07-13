@@ -158,8 +158,8 @@
             <h4>Download Portable Version</h4>
             <p><a href="/infovis/portable.php?news_id=<?php echo (isset($_REQUEST["news_id"]) ) ? $_REQUEST["news_id"] : 0; ?>" class="download-link" target="downframe"> Click Here </a></p>
             <iframe style="display:none;" id="downframe" name="downframe"></iframe>
-            <h4 id="universeh4">Download Universe data</h4>
-            <p id="universep"><a href="#" onClick="exportCSV();" class="download-link"> Click Here </a></p>
+            <h4>Download Universe data</h4>
+            <p><a href="#" onClick="exportCSV();" class="download-link"> Click Here </a></p>
         </div>
 
         <div id="powered-by">
