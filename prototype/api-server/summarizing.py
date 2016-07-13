@@ -66,15 +66,14 @@ class Summarizing(Resource):
             #print text
             #print "analysis"
             analysis = self.sentilecto.analyze(text)
-            summarized_text = TextSummarizer(analysis).summarize()
+            summarized_text = TextSummarizer(analysis).summarize().strip()
             #print "results:", analysis
 
             analysis_results = \
                 {
                     '0-Source-Text'    :  text,
-                    '1-Rewritten-Text' :  summarized_text
+                    '1-Summarized-Text' :  summarized_text
                 }
-
             response_value = analysis_results
             response_code = 200
 

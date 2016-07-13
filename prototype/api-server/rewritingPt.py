@@ -48,7 +48,7 @@ class RewritingPT(Resource):
                       )
     #@marshal_with(EntitiesResponse.resource_fields)
     def get(self, text, api_key):
-        url    = "http://127.0.0.1:5500/api/v0.9/rewrite/" + text + "/" + api_key
+        url    = "http://127.0.0.1:5500/api/v0.9/rewriting/" + text + "/" + api_key
         req    = requests.get(url)
         text   = req.text
         status = req.status_code
