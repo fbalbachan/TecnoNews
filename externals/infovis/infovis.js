@@ -18,6 +18,7 @@ window.universe          = {
 */
 
 function exportToCsv(filename, rows) {
+        console.log("AAAAA")
         var processRow = function (row) {
             var finalVal = '';
             for (var j = 0; j < row.length; j++) {
@@ -59,6 +60,7 @@ function exportToCsv(filename, rows) {
     }
 
 function exportCSV() {
+    console.log("0000000000")
     custom_graph_data = JSON.parse( $("svg > #graph-data").text() );
     csvRows = []
     console.log(custom_graph_data)
