@@ -16,6 +16,10 @@ window.universe          = {
     @date 20160408
     @author Daniel Cantarín
 */
+function setVisible(obj, state) {
+    var obj = document.getElementById(obj);
+    obj.style.visibility = state;
+
 
 function exportToCsv(filename, rows) {
         var processRow = function (row) {
@@ -600,6 +604,8 @@ function setup_wordcloud( arr ) {
 
 function show_wordcloud(obj) {
     $("#cy, #gs, #cg").fadeOut(100);
+    setVisible("universeh4", "hidden")
+    setVisible("universep", "hidden")
     select_graph_UI(obj);
 
     if (wc === null) {
@@ -638,6 +644,8 @@ function show_wordcloud(obj) {
 
 function show_galaxy(obj) {
     $("#wc, #gs, #cg").fadeOut(100);
+    setVisible("universeh4", "hidden")
+    setVisible("universep", "hidden")
     select_graph_UI(obj);
     $("#cy").fadeIn(500).promise().then(
         function() {
@@ -690,6 +698,8 @@ function setup_galaxysummary() {
 
 function show_galaxysummary(obj) {
     $("#cy, #wc, #cg").fadeOut(100);
+    setVisible("universeh4", "hidden")
+    setVisible("universep", "hidden")
     select_graph_UI(obj);
 
     if (gs === null || gs === undefined) {
@@ -768,6 +778,8 @@ function setup_customgraph() {
 
 function show_customgraph(obj) {
     $("#cy, #wc, #gs").fadeOut(100);
+    setVisible("universeh4", "visible")
+    setVisible("universep", "visible")
     select_graph_UI(obj);
 
     if (cg === null || cg === undefined) {
