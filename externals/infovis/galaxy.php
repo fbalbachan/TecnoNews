@@ -155,7 +155,7 @@
         </div>
 
         <div id="download">
-            <h4>Download Portable Version</h4>
+            <h4>Portable Version</h4>
             <p><a href="/infovis/portable.php?news_id=<?php echo (isset($_REQUEST["news_id"]) ) ? $_REQUEST["news_id"] : 0; ?>" class="download-link" target="downframe"> Click Here </a></p>
             <iframe style="display:none;" id="downframe" name="downframe"></iframe>
             <h4>Download Universe (First select that option from infovis graph list and then...)</h4>
