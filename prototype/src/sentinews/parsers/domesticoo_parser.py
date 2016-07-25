@@ -53,8 +53,8 @@ class DomesticooParser(GenericParser):
 
         #print content
         #exit()
-        categories = [u"zolvers"]
-        tags = [u"zolvers"]
+        categories = [u"interés general"]
+        tags = [u"interés general"]
 
         #categories=[urlparse(url).path.split("/")[1]]
         #print categories

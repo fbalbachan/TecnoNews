@@ -53,8 +53,8 @@ class BlogHogarParser(GenericParser):
 
         #print content
         #exit()
-        categories = [u"zolvers"]
-        tags = [u"zolvers"]
+        categories = [u"estilo vida"]
+        tags = [u"estilo vida"]
 
         #categories=[urlparse(url).path.split("/")[1]]
         #print categories

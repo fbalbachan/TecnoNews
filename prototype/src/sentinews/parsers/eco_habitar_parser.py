@@ -44,8 +44,8 @@ class EcoHabitarParser(GenericParser):
         content = content.strip()
 
 
-        tags = ["zolvers"]
-        categories=["zolvers"]
+        tags = ["estilo vida"]
+        categories=["estilo vida"]
         #return {"content":content, "title":title, "tags":tags}
         new_entry = self.create_news_entry(title=title, content=content,
                                            tags=tags,
