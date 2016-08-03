@@ -1,8 +1,3 @@
-webmaster webmaster NCMS000
-webmasters webmaster NCMP000
-ceo ceo NCMS000
-nómade nómade AQ0CS0 nómade NCCS000
-nómades nómade AQ0CP0 nómade NCCP000
 abejarruco abejarruco NCMS000
 abejarrucos abejarruco NCMP000
 abichón abichón NCMS000
@@ -76094,7 +76089,7 @@ aunases aunar VMSI2S0
 aunaste aunar VMIS2S0
 aunasteis aunar VMIS2P0
 aunemos aunar VMM01P0 aunar VMSP1P0
-aunque aunque CC
+aunque aunque CS
 aunábamos aunar VMII1P0
 aunáis aunar VMIP2P0
 aunáramos aunar VMSI1P0
@@ -350753,7 +350748,6 @@ irunesas irunés NCFP000
 iruneses irunés NCMP000
 irunés irunés NCMS000
 irá ir VMIF3S0
-irán ir VMIF3P0
 irás ir VMIF2S0
 iré ir VMIF1S0
 iréis ir VMIF2P0
@@ -376275,7 +376269,7 @@ matasteis matar VMIS2P0
 matasuegras matasuegras NCMN000
 match match NCMS000
 matches match NCMP000
-mate matar VMM03S0 matar VMSP3S0 matar VMSP3S0 mate AQ0CN0 mate NCMS000
+mate mate AQ0CN0 mate NCMS000
 matea matear VMIP3S0 matear VMM02S0
 mateaba matear VMII1S0 matear VMII3S0
 mateabais matear VMII2P0
@@ -485587,10 +485581,6 @@ rompes romper VMIP2S0
 rompevirutas rompevirutas NCMN000
 rompible rompible AQ0CS0
 rompibles rompible AQ0CP0
-rompida romper VMP00SF
-rompidas romper VMP00PF
-rompido romper VMP00SM rompido NCMS000
-rompidos romper VMP00PM rompido NCMP000
 rompiendo romper VMG0000
 rompiente rompiente AQ0CS0 rompiente NCMS000
 rompientes rompiente AQ0CP0 rompiente NCMP000
