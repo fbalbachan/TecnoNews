@@ -14,11 +14,11 @@ class MujerHoyParser(GenericParser):
     source = u"MujerHoy"
 
     def parse(self, url):
-        #url = "http://www.mujerhoy.com/moda/moda-vip/looks-famosas-rosa-cuarzo-pantone-2016-920125112015.html"
+        #url = "http://blogs.mujerhoy.com/maquillaje-estrellas/2016/08/04/maquillaje-ojos-de-gata-los-trucos-para-conseguir-el-perfecto-eyeliner.html"
         #url = "http://blogs.mujerhoy.com/adelgazar/2016/01/11/culos-sentados-grasas-en-expansion.html"
         #url = "http://www.mujerhoy.com/celebrities/corazon/201606/07/entrevista-noriega-michelle-jenner-amor-letra-20160607124020.html"
 
-	soup = BeautifulSoup(self.opener.read(url), "html.parser", from_encoding='utf-8')
+	soup = BeautifulSoup(self.opener.read(url).decode('utf-8','ignore'), "html.parser", from_encoding='utf-8')
 	for script in soup(["script", "style"]):
             script.extract()
 
@@ -28,6 +28,8 @@ class MujerHoyParser(GenericParser):
 
 
         title = soup.find('h1', {'itemprop':'headline'})
+        if title is None:
+            title = soup.find('h1', {'class':'headline'})
         title =  title.text.strip()
 
         content = ""
@@ -41,7 +43,7 @@ class MujerHoyParser(GenericParser):
         # This site has two templates. Gotta catch them all.
         article = soup.find('div',{'itemprop':'articleBody'})
         if article is None :
-            article = soup.find("div",{"class":"description"})
+            article = soup.find("div",{"class":["description", "content"]})
         paragraphs = article.find_all("p")
 
         for paragraph in paragraphs:

@@ -79,6 +79,9 @@ class Sanitizer():
         new_content = '\n'.join([paragraph for paragraph in content.split('\n')
                                  if not any(x == paragraph[:len(x)] for x in self.paragraph_to_avoid)])
 
+        new_content = re.sub(u'\(CNN( Español ?)?\) ?(-|–)?', u'', new_content)
+        new_content = re.sub(u'\(CNNMoney\) ?(-|–)?', u'', new_content)
+        
         modified = True
         while modified:
             modified = False
@@ -97,8 +100,6 @@ class Sanitizer():
         if self.language_filter_status == 'ON':
             new_content = self.language_filter.only_spanish_paragraph(new_content)
 
-        new_content = re.sub(u'\(CNN( Español ?)?\) ?(-|–)?', u'', new_content)
-        new_content = re.sub(u'\(CNNMoney\) ?(-|–)?', u'', new_content)
         new_content = re.sub(u'No te pierdas el v\xeddeo!', u'', new_content)
 
         re.sub(r'a EL PAÍS|a EL PAIS',  u'al diario El País de España',
