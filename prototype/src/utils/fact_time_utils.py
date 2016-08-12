@@ -10,7 +10,7 @@ class FactTimeUtils(object):
     def normalize_datainfo(self, datainfo, normalized_token = None):
         new_info = {}
         for a_label in self.time_labels:
-            if a_label not in datainfo:
+            if a_label not in datainfo or datainfo[a_label] is None:
                 new_info[a_label] = normalized_token
             else:
                 new_info[a_label] = datainfo[a_label]
@@ -81,4 +81,7 @@ class FactTimeUtils(object):
                 timeframe = now - datetime.timedelta(1)
                 data_info = {"year": timeframe.year, "month": timeframe.month, "day": timeframe.day}
 
+        if len(data_info) > 0 and ("year" not in data_info or data_info["year"] is None):
+            data_info["year"] = 2016
+            
         return data_info
