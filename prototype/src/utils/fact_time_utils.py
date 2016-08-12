@@ -17,17 +17,20 @@ class FactTimeUtils(object):
 
         return new_info
 
-    def datainfo_to_timestamp(self, datainfo):
+    def datainfo_to_timestamp(self, datainfo, with_time=False):
         normalized_info = self.normalize_datainfo(datainfo, "??")
 
-        timestamp = ""
+        timestamp = "("
         if normalized_info["day_of_week"] != "??":
             timestamp += normalized_info["day_of_week"].title() + " "
         timestamp += str(normalized_info["day"]) + "/" + str(normalized_info["month"]) + "/" + str(normalized_info["year"]) + " "
-        timestamp += str(normalized_info["hours"]) + ":" + str(normalized_info["minutes"])
 
-        if normalized_info["period"] != "??":
-            timestamp += " " + normalized_info["period"].upper()
+        if with_time:
+            timestamp += str(normalized_info["hours"]) + ":" + str(normalized_info["minutes"])
+            if normalized_info["period"] != "??":
+                timestamp += " " + normalized_info["period"].upper()
+
+        timestamp += ")"
 
         return timestamp
 
