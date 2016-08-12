@@ -44,7 +44,7 @@ class FactTimeUtils(object):
         time_regex = re.compile(ur"^\[[0-9A-Z:?/.]+\]$", re.U | re.I)
         day_of_week_labels = {"L": "lunes", "M": "martes", "X": "miércoles", "J": "jueves", "V": "viernes", "S": "sábado", "G": "domingo"}
 
-        for a_data in clause.node.nodes_with_labels("data"):
+        for a_data in clause.proper_tree().nodes_with_labels("data"):
             for a_leaf in a_data.leaves():
                 if time_regex.match(a_leaf.lemma):
 
