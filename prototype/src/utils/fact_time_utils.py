@@ -23,10 +23,10 @@ class FactTimeUtils(object):
         timestamp = "("
         if normalized_info["day_of_week"] != "??":
             timestamp += normalized_info["day_of_week"].title() + " "
-        timestamp += str(normalized_info["year"]) + "/" + str(normalized_info["month"]) + "/" + str(normalized_info["day"]) + " "
+        timestamp += str(normalized_info["year"]) + "/" + str(normalized_info["month"]) + "/" + str(normalized_info["day"])
 
         if with_time:
-            timestamp += str(normalized_info["hours"]) + ":" + str(normalized_info["minutes"])
+            timestamp += " " + str(normalized_info["hours"]) + ":" + str(normalized_info["minutes"])
             if normalized_info["period"] != "??":
                 timestamp += " " + normalized_info["period"].upper()
 
@@ -64,7 +64,6 @@ class FactTimeUtils(object):
                     if data_info["day_of_week"] in day_of_week_labels:
                         data_info["day_of_week"] = day_of_week_labels[data_info["day_of_week"]]
 
-                    return data_info
 
         #NO DATA LABEL, EXTRACT FROM TIME BOX:
         now = datetime.datetime.now()
@@ -72,7 +71,7 @@ class FactTimeUtils(object):
 
         year_regexp = re.compile(ur"(1\d{3}$|^2[012]\d{2})", re.U | re.I)
 
-        if timebox is not None:
+        if len(data_info) == 0 and timebox is not None:
             if year_regexp.search(timebox):
                 data_info = {"year": int(year_regexp.search(timebox).group(0))}
             elif "hoy" in timebox:
@@ -83,5 +82,5 @@ class FactTimeUtils(object):
 
         if len(data_info) > 0 and ("year" not in data_info or data_info["year"] is None):
             data_info["year"] = 2016
-            
+
         return data_info
