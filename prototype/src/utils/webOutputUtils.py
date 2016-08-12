@@ -2,6 +2,7 @@
 from src.ling.gender import Gender
 from src.ling.number import Number
 from src.utils.factNormalizer import FactNormalizer
+from src.utils.fact_time_utils import FactTimeUtils
 from src.ling.tacit_subjects import tacit_subjects
 from src.utils.configProvider import ConfigProvider
 from _csv import reader
@@ -61,7 +62,7 @@ class WebOutputUtils:
             tooltip = tooltip + " - Transitivity " + transitivity + " - Sentiment script " + klass
 
         return tooltip
-    
+
     def e_name(self, entity):
         return str(entity)
 
@@ -96,6 +97,11 @@ class WebOutputUtils:
         number_string = str(number) + number_string
 
         return number_string
+
+    def get_timestamp(self, clause):
+        time_utils = FactTimeUtils()
+        timestamp = time_utils.datainfo_to_timestamp(time_utils.extract_data_info(clause))
+        return timestamp
 
     def fact(self, clause):
         if debug_mode: print "--> WebOutputUtils.fact(clause:", clause, ")"
