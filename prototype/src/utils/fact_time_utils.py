@@ -23,7 +23,7 @@ class FactTimeUtils(object):
         timestamp = "("
         if normalized_info["day_of_week"] != "??":
             timestamp += normalized_info["day_of_week"].title() + " "
-        timestamp += str(normalized_info["day"]) + "/" + str(normalized_info["month"]) + "/" + str(normalized_info["year"]) + " "
+        timestamp += str(normalized_info["year"]) + "/" + str(normalized_info["month"]) + "/" + str(normalized_info["day"]) + " "
 
         if with_time:
             timestamp += str(normalized_info["hours"]) + ":" + str(normalized_info["minutes"])
