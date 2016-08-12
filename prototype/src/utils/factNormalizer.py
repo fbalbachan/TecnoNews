@@ -47,8 +47,9 @@ class FactNormalizer:
             lexical_forms = []
             for entity in structure.all_entities():
 
-                if entity.is_linked():
-                    entity = entity.referenced()
+                #if entity.is_linked():
+                #    entity = entity.referenced()
+                entity = entity.referent.designated_ref()
 
                 entity_normalization = self._get_entity_normalization(entity)
 
