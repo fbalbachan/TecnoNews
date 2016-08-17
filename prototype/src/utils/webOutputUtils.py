@@ -106,6 +106,8 @@ class WebOutputUtils:
 
     def get_fact_comparison_score(self, clause1, clause2):
         score = FactCompare(clause1, clause2).compare()
+        if score == 0:
+            score = int(score)
         return str(score * 100)
 
     def fact(self, clause):
