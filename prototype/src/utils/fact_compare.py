@@ -42,7 +42,7 @@ class FactCompare(object):
         if not self.clause1.is_fact() or not self.clause2.is_fact():
             return 0
 
-        weights = {"subject": 1.2, "verb": 1.1, "object": 1, "time": 1}
+        weights = {"subject": 1.2, "verb": 1.1, "object": 0.9, "time": 0.8}
 
         fact1 = FactNormalizer(self.clause1, FactCompare._ontology).fact()
         fact2 = FactNormalizer(self.clause2, FactCompare._ontology).fact()
