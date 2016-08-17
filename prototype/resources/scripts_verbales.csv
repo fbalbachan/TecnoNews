@@ -6916,7 +6916,7 @@ retrovender,N,X,,,Bi,Bi
 retrucar,N,I,,,Bi,Bi
 retumbar,N,I,,,Bi,Bi
 reubicar,N,T,,,Bi,Bi
-reunir,N,T,,,Bi,Bi
+reunir,N,I,,,Anim,Bi
 reutilizar,N,T,,,Bi,Bi
 revacunar,N,T,,,Bi,Bi
 revalidar,O,T,,,Bi,Bi

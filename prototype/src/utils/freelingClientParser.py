@@ -28,4 +28,3 @@ class FreelingClientParser:
         raw_output = p.communicate(input=text)[0]
 
         return raw_output.split('\n')
-
