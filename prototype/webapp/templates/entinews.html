@@ -116,7 +116,7 @@ $def with (analysis, printer)
             <br><b><u>Normalized fact:</u></b> $printer.fact(clause) &nbsp<font color="#8A0808">$printer.fact_real_or_not(clause)</font> &nbsp $printer.get_timestamp(clause)<br>
             <br><b><u>Fact similarity:</u></b>
             $for a_sentence in sentences:
-                $for a_clause in a_sentence:
+                $for a_clause in a_sentence.clauses:
                     $if a_clause == clause:
                         $continue
                     <u>Clause $(sentences.index(a_sentence) + 1).$printer.clause_number(a_clause, a_sentence):</u> $printer.get_fact_comparison_score(clause, a_clause)<br>
