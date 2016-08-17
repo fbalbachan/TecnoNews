@@ -3,6 +3,7 @@ from src.ling.gender import Gender
 from src.ling.number import Number
 from src.utils.factNormalizer import FactNormalizer
 from src.utils.fact_time_utils import FactTimeUtils
+from src.utils.fact_compare import FactCompare
 from src.ling.tacit_subjects import tacit_subjects
 from src.utils.configProvider import ConfigProvider
 from _csv import reader
@@ -102,6 +103,10 @@ class WebOutputUtils:
         time_utils = FactTimeUtils()
         timestamp = time_utils.datainfo_to_timestamp(time_utils.extract_data_info(clause))
         return timestamp
+
+    def get_fact_comparison_score(self, clause1, clause2):
+        score = FactCompare(clause1, clause2).compare()
+        return str(score * 100)
 
     def fact(self, clause):
         if debug_mode: print "--> WebOutputUtils.fact(clause:", clause, ")"
