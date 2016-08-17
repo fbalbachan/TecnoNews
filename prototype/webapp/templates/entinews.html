@@ -113,8 +113,7 @@ $def with (analysis, printer)
             </tr>
             </table>
             <p class="normal">
-            <br><b><u>Normalized fact:</u></b> $printer.fact(clause) &nbsp<font color="#8A0808">$printer.fact_real_or_not(clause)</font><br>
-
+            <br><b><u>Normalized fact:</u></b> $printer.fact(clause) &nbsp<font color="#8A0808">$printer.fact_real_or_not(clause)</font> &nbsp $printer.get_timestamp(clause)<br>
 
 	<hr size=5 noshade>
     $code:
@@ -145,11 +144,11 @@ $def with (analysis, printer)
                         $ appearing[a_reference]+=1
                     $else:
                         $ appearing[a_reference]=1
-                
-                $ unique_str = ""    
+
+                $ unique_str = ""
                 $for unique_elem in appearing.iterkeys():
                     $ unique_str+=' ' + unique_elem+': '+printer.e_name(appearing[unique_elem])+','
-                
+
                 $ unique_str = unique_str[:-1]
                 $ i+=1
                 $ occurrences = len(referent_data['refs'])

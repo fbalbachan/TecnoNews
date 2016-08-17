@@ -16,4 +16,4 @@ blacklist = CNN,ISIS,Servicio_Secreto,Maven,MAVEN,Corea,Clic,Com,Norte,Sur,Guerr
 
 [syntax]
 
-time_words = fin_de_semana, enero, febrero, marzo, abril, mayo, junio, octubre, agosto, septiembre, noviembre, diciembre, mes, semana, lunes, martes, miércoles, jueves, viernes, sábado, domingo, julio, día, década, noche, cuatrimestre, trimestre, bimestre, siglo, hora, minuto, temporada, mañana, tarde, mediodía, madrugada, tarde, medianoche, verano, invierno, primavera, otoño, fines, fin, comienzo, mediado, fecha, tiempo, quincena, hoy, ayer, anteayer, pasado_mañana, anoche
+time_words = fin_de_semana, enero, febrero, marzo, abril, mayo, junio, octubre, agosto, septiembre, noviembre, diciembre, mes, semana, lunes, martes, miércoles, jueves, viernes, sábado, domingo, julio, día, década, noche, cuatrimestre, trimestre, bimestre, siglo, hora, minuto, instante, momento, época, período, temporada, mañana, tarde, mediodía, madrugada, tarde, medianoche, verano, invierno, primavera, otoño, fines, fin, comienzo, mediado, fecha, era, tiempo, quincena, vez, hoy, ayer, anteayer, pasado_mañana, anteanoche
