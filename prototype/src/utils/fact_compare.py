@@ -67,7 +67,7 @@ class FactCompare(object):
                 if boxes1[a_label] in ["alguien", "algo", None] or boxes2[a_label] in ["alguien", "algo", None]:
                     equality_box[a_label] = -1.0
             else:
-                if boxes1[a_label] in ["alguien", "algo", None] or boxes2[a_label] == ["alguien", "algo", None]:
+                if boxes1[a_label] in ["alguien", "algo", None] or boxes2[a_label] in ["alguien", "algo", None]:
                     equality_box[a_label] = -1.0
 
         #REFERENT:
