@@ -17,6 +17,9 @@ class FactCompare(object):
     def get_boxes(self, a_fact):
         if not isinstance(a_fact, unicode):
             a_fact = a_fact.decode("utf-8")
+
+        boxes = {"subject": None, "verb": None, "object": None, "time": None}
+
         halfs = a_fact.split("--TIME:")
         time = halfs[1].strip().lower()
         if time == "":
@@ -24,7 +27,7 @@ class FactCompare(object):
 
         parts = halfs[0].split("+")
         if len(parts) < 2:
-            return None
+            return boxes
 
         boxes = {"subject": parts[0].strip(), "verb": parts[1].strip(), "object": None, "time": time}
         if len(parts) == 3:
