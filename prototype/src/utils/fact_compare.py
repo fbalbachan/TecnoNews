@@ -150,8 +150,8 @@ class FactCompare(object):
 
         #print fact1
         #print fact2
-        print self.get_boxes(fact1)
-        print self.get_boxes(fact2)
-        print equality_box
+        #print self.get_boxes(fact1)
+        #print self.get_boxes(fact2)
+        #print equality_box
         #print final_score
         return final_score
