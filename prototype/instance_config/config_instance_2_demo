@@ -7,7 +7,7 @@ id = 2
 
 [news_sources]
 #feeds_to_process = bbc_america,bbc_internacional,marronyblanco,electroimagen,revistagadgets
-feeds_to_process = diario_america,elmundo,bbc_america,bbc_internacional,bbc_economia,bbc_tecnologia,bbc_ciencia,bbc_salud,bbc_cultura,bbc_deportes,autoblog,autobild,exitoina,Prensarealestate,santiagodemolina,revistaplot,la_nacion_propiedades,arqa,bloghogar,salud_nutricion_bienestar,vida_mas_bienestar,blogyarq,marronyblanco,electroimagen,revistagadgets,afuegolento,diariodegastronomia,diario_del_viajero,directoalpaladar,elcomercio_gastronomia,gastronomia_y_cia
+feeds_to_process = diario_america,elmundo,bbc_america,bbc_internacional,bbc_economia,bbc_tecnologia,bbc_ciencia,bbc_salud,bbc_cultura,bbc_deportes,autoblog,autobild,exitoina,Prensarealestate,santiagodemolina,revistaplot,la_nacion_propiedades,arqa,bloghogar,salud_nutricion_bienestar,vida_mas_bienestar,blogyarq,marronyblanco,electroimagen,revistagadgets,afuegolento,diariodegastronomia,diario_del_viajero,directoalpaladar,elcomercio_gastronomia
 [freeling]
 
 host        = 85.10.210.172
