@@ -93,16 +93,18 @@ class FactCompare(object):
                 else:
                     msiScore = 0.0
                     if msi1["person"] == msi2["person"] and msi1["number"] == msi2["number"] and msi1["animity"] == msi2["animity"]:
-                        msiScore = 0.5
+                        msiScore = 0.4
                     else:
                         if msi1["person"] == msi2["person"]:
-                            msiScore = 0.20
+                            msiScore = 0.1
                             if msi1["animity"] == msi2["animity"]:
-                                msiScore = 0.35
+                                msiScore = 0.25
                         elif msi1["number"] == msi2["number"]:
-                            msiScore = 0.15
+                            msiScore = 0.05
                             if msi1["animity"] == msi2["animity"]:
-                                msiScore = 0.20
+                                msiScore = 0.10
+
+                    equality_box["subject"] = msiScore
 
             else:
                 if msi1["semantic_classification"] != msi2["semantic_classification"]:
@@ -152,6 +154,6 @@ class FactCompare(object):
         #print fact2
         #print self.get_boxes(fact1)
         #print self.get_boxes(fact2)
-        #print equality_box
+        print equality_box
         #print final_score
         return final_score
