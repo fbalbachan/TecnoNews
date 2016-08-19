@@ -42,7 +42,7 @@ class FactCompare(object):
 
 
     def compare(self):
-        if not self.clause1.is_fact() or not self.clause2.is_fact():
+        if not self.clause1.is_fact() or not self.clause2.is_fact() or not self.clause1.verb or not self.clause2.verb:
             return 0
 
         weights = {"subject": 1.2, "verb": 1.1, "object": 0.9, "time": 0.9}
@@ -100,9 +100,10 @@ class FactCompare(object):
         #VERB:
         if equality_box["verb"] == 1.0:
             #TIME y PERSON y NUMBER
+            msiScore = 0.0
+
             msi1 = self.clause1.verb.msi
             msi2 = self.clause2.verb.msi
-            msiScore = 0.0
 
             if msi1["person"] == msi2["person"]:
                 msiScore = 0.75
