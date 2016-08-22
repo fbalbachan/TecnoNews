@@ -41,7 +41,6 @@ class FactCompare(object):
         return boxes
 
     def compare_entities(self, entity1, entity2, equality_value):
-        print entity1
         referent1 = entity1.referent.designated_ref()
         referent2 = entity2.referent.designated_ref()
         msi1 = referent1.msi
