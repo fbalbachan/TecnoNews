@@ -104,11 +104,17 @@ class WebOutputUtils:
         timestamp = time_utils.datainfo_to_timestamp(time_utils.extract_data_info(clause))
         return timestamp
 
-    def get_fact_comparison_score(self, clause1, clause2):
+    def get_fact_comparison_score(self, clause1, clause2, as_integer=False):
         score = FactCompare(clause1, clause2).compare()
         if score == 0:
             score = int(score)
-        return str(score * 100)
+
+        score = score * 100
+
+        if not as_integer:
+            score = str(score)
+            
+        return score
 
     def fact(self, clause):
         if debug_mode: print "--> WebOutputUtils.fact(clause:", clause, ")"
