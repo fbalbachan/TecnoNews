@@ -101,11 +101,11 @@ class FactTimeUtils(object):
         if not reference_time:
             today = {"year": now.year, "month": now.month, "day": now.day}
             reference_time = today
-        if "month" not in reference_time:
+        if "month" not in reference_time or reference_time["month"] is None:
             reference_time["month"] = 1
-        if "day" not in reference_time:
+        if "day" not in reference_time or reference_time["day"] is None:
             reference_time["day"] = 1
-        if "year" not in reference_time:
+        if "year" not in reference_time or reference_time["year"] is None:
             reference_time["year"] = now.year
 
         #SANITIZE
