@@ -142,6 +142,7 @@ class FactTimeUtils(object):
                             ur"\bantes\b"          : {"use_number": True, "sign": -1},
                             ur"\batrás\b"          : {"use_number": True, "sign": -1},
                             ur"\bdespués\b"        : {"use_number": True, "sign": +1},
+                            ur"\bviene\b"          : {"use_number": True, "sign": +1},
                             ur"\bpróxim(o|a)s\b"   : {"use_number": True, "value": +1},
                             ur"\bvenider(o|a)s\b"  : {"use_number": True, "value": +1},
                             ur"\banteriores\b"     : {"use_number": True, "value": -1},
@@ -198,7 +199,7 @@ class FactTimeUtils(object):
                         for a_label in reference_time:
                             if a_label not in input_reference_time or input_reference_time[a_label] is None:
                                 labels.append(a_label)
-                                
+
                         for a_label in labels:
                             reference_time.pop(a_label, None)
         if changed:
