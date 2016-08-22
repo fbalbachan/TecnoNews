@@ -116,9 +116,10 @@ class FactCompare(object):
 
         #SUBJECT:
         if self.clause1.has_structure("subject") and self.clause2.has_structure("subject"):
-            subject1 = self.clause1.structure("subject").all_entities()[0]
-            subject2 = self.clause2.structure("subject").all_entities()[0]
-            equality_box["subject"] = self.compare_entities(subject1, subject2, equality_box["subject"])
+            entities1 = self.clause1.structure("subject").all_entities()
+            entities2 = self.clause2.structure("subject").all_entities()
+            if len(entities1) > 0 and len(entities2) > 0:
+                equality_box["subject"] = self.compare_entities(entities1[0], entities2[0], equality_box["subject"])
 
 
         #OBJECT:
@@ -127,10 +128,14 @@ class FactCompare(object):
         for a_right_entity in ["od", "regimen", "equative"]:
 
             if object1 is None and self.clause1.has_structure(a_right_entity):
-                object1 = self.clause1.structure(a_right_entity).all_entities()[0]
+                entities1 = self.clause1.structure(a_right_entity).all_entities()
+                if len(entities1) > 0:
+                    object1 = entities1[0]
 
             if object2 is None and self.clause2.has_structure(a_right_entity):
-                object2 = self.clause2.structure(a_right_entity).all_entities()[0]
+                entities2 = self.clause2.structure(a_right_entity).all_entities()
+                if len(entities2) > 0:
+                    object2 = entities2[0]
 
         if object1 and object2:
             equality_box["object"] = self.compare_entities(object1, object2, equality_box["object"])
