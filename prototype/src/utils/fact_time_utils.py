@@ -89,6 +89,35 @@ class FactTimeUtils(object):
         return data_info
 
 
+    def parse_relative_time_info(self, timebox, reference_time=None):
+        if not reference_time:
+            now = datetime.datetime.now()
+            today = {"year": now.year, "month": now.month, "day": now.day}
+            reference_time = today
+
+        timebox = timebox.lower()
+        
+        date_magnitudes = {
+                            "day":          {"weigth": 1, "regex": ur"\bdías?\b"},
+                            "week":         {"weigth": 7, "regex": ur"\bsemanas?\b"},
+                            "fortnight":    {"weigth": 15, "regex": ur"\bquincenas?\b"},
+                            "month":        {"weigth": 30, "regex": ur"\bmes(es)?\b"},
+                            "year":         {"weigth": 365, "regex": ur"\baños?\b"},
+                            "decade":       {"weigth": 3650, "regex": ur"\bdécadas?\b"},
+                            "century":      {"weigth": 36500, "regex": ur"\bsiglos?\b"},
+                        }
+
+        #TYPES OF OPERATIONS: 0 => USE MAGNITUDE, +x => ADD WEIGTH, -x => SUBTRACT WEIGTH
+        date_operations = {
+                            ur"\bhace\b"          : 0,
+                            ur"\bantes\b"         : 0,
+                            ur"\bdespués\b"       : 0,
+                            ur"\bpasad(o|a)\b"    : -1,
+                            ur"\bpróxim(o|a)\b"   : +1,
+                        }
+
+
+
     def compare_dates(self, date1, date2):
         """Compare two dates (year defaults to 2016 if any other data is present).
 
