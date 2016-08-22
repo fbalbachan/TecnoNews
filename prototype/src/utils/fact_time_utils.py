@@ -146,12 +146,12 @@ class FactTimeUtils(object):
                             ur"\bantes\b"          : {"use_number": True, "sign": -1},
                             ur"\batrás\b"          : {"use_number": True, "sign": -1},
                             ur"\bdespués\b"        : {"use_number": True, "sign": +1},
-                            ur"\bviene\b"          : {"use_number": True, "sign": +1},
-                            ur"\bpróxim(o|a)s\b"   : {"use_number": True, "value": +1},
-                            ur"\bvenider(o|a)s\b"  : {"use_number": True, "value": +1},
-                            ur"\banteriores\b"     : {"use_number": True, "value": -1},
-                            ur"\bpasad(o|a)s\b"    : {"use_number": True, "value": -1},
+                            ur"\bpróxim(o|a)s\b"   : {"use_number": True, "sign": +1},
+                            ur"\bvenider(o|a)s\b"  : {"use_number": True, "sign": +1},
+                            ur"\banteriores\b"     : {"use_number": True, "sign": -1},
+                            ur"\bpasad(o|a)s\b"    : {"use_number": True, "sign": -1},
 
+                            ur"\bviene\b"          : {"use_number": False, "value": +1},
                             ur"\bpasad(o|a)\b"     : {"use_number": False, "value": -1},
                             ur"\banterior\b"       : {"use_number": False, "value": -1},
                             ur"\bsiguiente\b"      : {"use_number": False, "value": -1},
@@ -180,7 +180,7 @@ class FactTimeUtils(object):
                 else:
                     a_number = an_operation["value"]
                 break
-
+        print selected_operation
         #MAGNITUDE:
         if a_number:
             for a_regex, a_value in date_magnitudes.iteritems():
