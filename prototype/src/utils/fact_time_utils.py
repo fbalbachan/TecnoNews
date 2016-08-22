@@ -190,7 +190,7 @@ class FactTimeUtils(object):
                     #THE PROCESSED DATE CANNOT BE MORE ACCURATE THAN THE INPUT DATE!
                     if input_reference_time is not None:
                         for a_label in reference_time:
-                            if a_label not in input_reference_time:
+                            if a_label not in input_reference_time or input_reference_time[a_label] is None:
                                 reference_time.pop(a_label, None)
 
         if changed:
