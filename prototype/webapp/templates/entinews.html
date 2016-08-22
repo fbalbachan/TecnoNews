@@ -119,7 +119,7 @@ $def with (analysis, printer)
                 $for a_clause in a_sentence.clauses:
                     $if a_clause == clause:
                         $continue
-                    $ comparison_score = printer.get_fact_comparison_score(clause, a_clause, as_integer=False)
+                    $ comparison_score = printer.get_fact_comparison_score(clause, a_clause, as_integer=True)
                     $if comparison_score >= 60:
                         with clause $(sentences.index(a_sentence) + 1).$printer.clause_number(a_clause, a_sentence): $comparison_score%<br>
 
