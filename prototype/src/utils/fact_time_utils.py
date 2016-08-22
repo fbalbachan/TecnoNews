@@ -113,7 +113,7 @@ class FactTimeUtils(object):
             timebox = timebox.decode("utf-8")
         timebox = timebox.lower()
 
-        number_words = [ur"un(o|a)", ur"dos", ur"tres", ur"cuatro", ur"cinco", ur"seis", ur"siete", ur"ocho", ur"nueve", ur"diez",
+        number_words = [ur"un(o|a)?", ur"dos", ur"tres", ur"cuatro", ur"cinco", ur"seis", ur"siete", ur"ocho", ur"nueve", ur"diez",
                         ur"once", ur"doce", ur"trece", ur"catorce", ur"quince", ur"dieciseis", ur"diecisiete", ur"dieciocho", ur"diecinueve", ur"veinte",
                         ur"(veintiun(o|a))|(veintiún)", ur"veintidos", ur"veintitrés", ur"veinticuatro", ur"veinticinco", ur"veintiseis", ur"veintisiete", ur"veintiocho", ur"veintinueve", ur"treinta"]
 
