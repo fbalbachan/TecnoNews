@@ -21,7 +21,7 @@ $def with (analysis, printer)
 
     $ sentences = analysis["paragraph"].sentences
     $ text_entities = []
-
+    $ time_reference = None
     $for sentence in sentences:
 	<hr size=5 noshade>
 
@@ -113,7 +113,14 @@ $def with (analysis, printer)
             </tr>
             </table>
             <p class="normal">
-            <br><b><u>Normalized fact:</u></b> $printer.fact(clause) &nbsp<font color="#8A0808">$printer.fact_real_or_not(clause)</font> &nbsp $printer.get_timestamp(clause)<br>
+
+            $ current_time = $printer.get_data_info(clause)
+            $if current_time != {} or time_reference is None:
+                $ time_reference = current_time
+
+            $ time_reference = printer.get_relative_info(clause, time_reference)
+
+            <br><b><u>Normalized fact:</u></b> $printer.fact(clause) &nbsp<font color="#8A0808">$printer.fact_real_or_not(clause)</font> &nbsp $printer.get_timestamp(time_reference)<br>
             <br><b><u>Fact similarity:</u></b><br>
             $for a_sentence in sentences:
                 $for a_clause in a_sentence.clauses:

@@ -99,10 +99,20 @@ class WebOutputUtils:
 
         return number_string
 
-    def get_timestamp(self, clause):
+    def get_timestamp(self, data_info):
         time_utils = FactTimeUtils()
-        timestamp = time_utils.datainfo_to_timestamp(time_utils.extract_data_info(clause))
+        timestamp = time_utils.datainfo_to_timestamp(data_info)
         return timestamp
+
+    def get_data_info(self, clause):
+        time_utils = FactTimeUtils()
+        return time_utils.extract_data_info(clause)
+
+    def get_relative_info(self, clause, time_ref):
+        time_utils = FactTimeUtils()
+        timebox = time_utils.get_timebox(clause)
+        return time_utils.parse_relative_time_info(timebox, time_ref)
+
 
     def get_fact_comparison_score(self, clause1, clause2, as_integer=False):
         score = FactCompare(clause1, clause2).compare()
@@ -113,7 +123,7 @@ class WebOutputUtils:
 
         if not as_integer:
             score = str(score)
-            
+
         return score
 
     def fact(self, clause):

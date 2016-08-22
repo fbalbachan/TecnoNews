@@ -35,10 +35,14 @@ class FactTimeUtils(object):
         return timestamp
 
 
+    def get_timebox(self, clause):
+        time_lexical_forms = [" ".join([repr(l) for l in reference.leaves()]) for reference in clause.time_references]
+        timebox = ", ".join(time_lexical_forms).lower()
+        return timebox
+
     def extract_data_info(self, clause, timebox=None):
         if timebox is None:
-            time_lexical_forms = [" ".join([repr(l) for l in reference.leaves()]) for reference in clause.time_references]
-            timebox = ", ".join(time_lexical_forms).lower()
+            timebox = self.get_timebox(clause)
 
         data_info = {}
         time_regex = re.compile(ur"^\[[0-9A-Z:?/.]+\]$", re.U | re.I)
@@ -89,32 +93,111 @@ class FactTimeUtils(object):
         return data_info
 
 
-    def parse_relative_time_info(self, timebox, reference_time=None):
+    def parse_relative_time_info(self, timebox, input_reference_time=None):
+        reference_time = input_reference_time
+        changed = False
+        #DEFAULT VALUES:
+        now = datetime.datetime.now()
         if not reference_time:
-            now = datetime.datetime.now()
             today = {"year": now.year, "month": now.month, "day": now.day}
             reference_time = today
+        if "month" not in reference_time:
+            reference_time["month"] = 1
+        if "day" not in reference_time:
+            reference_time["day"] = 1
+        if "year" not in reference_time:
+            reference_time["year"] = now.year
 
+        #SANITIZE
+        if not isinstance(timebox, unicode):
+            timebox = timebox.decode("utf-8")
         timebox = timebox.lower()
-        
+
+        number_words = [ur"un(o|a)", ur"dos", ur"tres", ur"cuatro", ur"cinco", ur"seis", ur"siete", ur"ocho", ur"nueve", ur"diez",
+                        ur"once", ur"doce", ur"trece", ur"catorce", ur"quince", ur"dieciseis", ur"diecisiete", ur"dieciocho", ur"diecinueve", ur"veinte",
+                        ur"(veintiun(o|a))|(veintiún)", ur"veintidos", ur"veintitrés", ur"veinticuatro", ur"veinticinco", ur"veintiseis", ur"veintisiete", ur"veintiocho", ur"veintinueve", ur"treinta"]
+
         date_magnitudes = {
-                            "day":          {"weigth": 1, "regex": ur"\bdías?\b"},
-                            "week":         {"weigth": 7, "regex": ur"\bsemanas?\b"},
-                            "fortnight":    {"weigth": 15, "regex": ur"\bquincenas?\b"},
-                            "month":        {"weigth": 30, "regex": ur"\bmes(es)?\b"},
-                            "year":         {"weigth": 365, "regex": ur"\baños?\b"},
-                            "decade":       {"weigth": 3650, "regex": ur"\bdécadas?\b"},
-                            "century":      {"weigth": 36500, "regex": ur"\bsiglos?\b"},
+                            ur"\bdías?\b"          : {"weigth": 1,     "overrides": []},
+                            ur"\bsemanas?\b"       : {"weigth": 7,     "overrides": []},
+                            ur"\bquincenas?\b"     : {"weigth": 15,    "overrides": []},
+                            ur"\bmes(es)?\b"       : {"weigth": 30,    "overrides": ["day"]},
+                            ur"\bbimestres?\b"     : {"weigth": 60,    "overrides": ["day"]},
+                            ur"\btrimestres?\b"    : {"weigth": 90,    "overrides": ["day"]},
+                            ur"\bcuatrimestres?\b" : {"weigth": 120,   "overrides": ["day"]},
+                            ur"\bsemestres?\b"     : {"weigth": 180,   "overrides": ["day"]},
+                            ur"\baños?\b"          : {"weigth": 365,   "overrides": ["day", "month"]},
+                            ur"\bdécadas?\b"       : {"weigth": 3650,  "overrides": ["day", "month"]},
+                            ur"\bsiglos?\b"        : {"weigth": 36500, "overrides": ["day", "month"]},
                         }
 
         #TYPES OF OPERATIONS: 0 => USE MAGNITUDE, +x => ADD WEIGTH, -x => SUBTRACT WEIGTH
         date_operations = {
-                            ur"\bhace\b"          : 0,
-                            ur"\bantes\b"         : 0,
-                            ur"\bdespués\b"       : 0,
-                            ur"\bpasad(o|a)\b"    : -1,
-                            ur"\bpróxim(o|a)\b"   : +1,
+                            ur"\bhace\b"           : {"use_number": True, "sign": -1},
+                            ur"\bantes\b"          : {"use_number": True, "sign": -1},
+                            ur"\batrás\b"          : {"use_number": True, "sign": -1},
+                            ur"\bdespués\b"        : {"use_number": True, "sign": +1},
+                            ur"\bpróxim(o|a)s\b"   : {"use_number": True, "value": +1},
+                            ur"\bvenider(o|a)s\b"  : {"use_number": True, "value": +1},
+                            ur"\banteriores\b"     : {"use_number": True, "value": -1},
+                            ur"\bpasad(o|a)s\b"    : {"use_number": True, "value": -1},
+
+                            ur"\bpasad(o|a)\b"     : {"use_number": False, "value": -1},
+                            ur"\banterior\b"       : {"use_number": False, "value": -1},
+                            ur"\bsiguiente\b"      : {"use_number": False, "value": -1},
+                            ur"\bpróxim(o|a)\b"    : {"use_number": False, "value": +1},
+                            ur"\bvenider(o|a)\b"   : {"use_number": False, "value": +1},
                         }
+
+        #NUMBER:
+        number_regex = ur"\b[0-9]{1,3}\b"
+        a_number = re.search(number_regex, timebox)
+        if a_number:
+            a_number = int(a_number.group(0))
+        else:
+            for idx, a_word in enumerate(number_words):
+                if re.search(ur"\b"+a_word+ur"\b", timebox):
+                    a_number = idx + 1
+
+        #MODIFIER:
+        selected_operation = None
+        for an_operation_regex, an_operation in date_operations.iteritems():
+            if re.search(an_operation_regex, timebox):
+                selected_operation = an_operation
+                if an_operation["use_number"]:
+                    if a_number:
+                        a_number = an_operation["sign"] * a_number
+                else:
+                    a_number = an_operation["value"]
+                break
+
+        #MAGNITUDE:
+        if a_number:
+            for a_regex, a_value in date_magnitudes.iteritems():
+                if re.search(a_regex, timebox):
+                    a_number = a_number * a_value["weigth"]
+
+                    previous_time = datetime.date(reference_time["year"], reference_time["month"], reference_time["day"])
+                    timeframe = previous_time + datetime.timedelta(a_number)
+                    reference_time = {"year": timeframe.year, "month": timeframe.month, "day": timeframe.day}
+                    changed = True
+                    #Vague reference => blur calculated time!
+                    if selected_operation["use_number"] == False:
+                        for an_overriden_time in a_value["overrides"]:
+                            reference_time.pop(an_overriden_time, None)
+
+                    #Remove tags that were not present in the original date:
+                    #THE PROCESSED DATE CANNOT BE MORE ACCURATE THAN THE INPUT DATE!
+                    if input_reference_time is not None:
+                        for a_label in reference_time:
+                            if a_label not in input_reference_time:
+                                reference_time.pop(a_label, None)
+
+        if changed:
+            return reference_time
+        else:
+            return input_reference_time
+
 
 
 
