@@ -45,7 +45,7 @@ class FactCompare(object):
         referent2 = entity2.referent.designated_ref()
         msi1 = referent1.msi
         msi2 = referent2.msi
-        final_score = 0
+        final_score = equality_value
 
         #entity1 != entity2:
         if equality_value == 0.0:
