@@ -114,7 +114,7 @@ $def with (analysis, printer)
             </table>
             <p class="normal">
 
-            $ current_time = $printer.get_data_info(clause)
+            $ current_time = printer.get_data_info(clause)
             $if current_time != {} or time_reference is None:
                 $ time_reference = current_time
 
