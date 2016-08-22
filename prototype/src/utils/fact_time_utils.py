@@ -96,9 +96,13 @@ class FactTimeUtils(object):
     def parse_relative_time_info(self, timebox, input_reference_time=None):
 
         reference_time = {}
-        for a_label in input_reference_time:
-            if input_reference_time[a_label] is not None:
-                reference_time[a_label] = input_reference_time[a_label]
+
+        if input_reference_time is not None:
+            for a_label in input_reference_time:
+                if input_reference_time[a_label] is not None:
+                    reference_time[a_label] = input_reference_time[a_label]
+        else:
+            reference_time = None
         changed = False
 
         #DEFAULT VALUES:
