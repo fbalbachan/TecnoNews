@@ -94,8 +94,13 @@ class FactTimeUtils(object):
 
 
     def parse_relative_time_info(self, timebox, input_reference_time=None):
-        reference_time = input_reference_time
+
+        reference_time = {}
+        for a_label in input_reference_time:
+            if input_reference_time[a_label] is not None:
+                reference_time[a_label] = input_reference_time[a_label]
         changed = False
+
         #DEFAULT VALUES:
         now = datetime.datetime.now()
         if not reference_time:
@@ -189,10 +194,13 @@ class FactTimeUtils(object):
                     #Remove tags that were not present in the original date:
                     #THE PROCESSED DATE CANNOT BE MORE ACCURATE THAN THE INPUT DATE!
                     if input_reference_time is not None:
+                        labels = []
                         for a_label in reference_time:
                             if a_label not in input_reference_time or input_reference_time[a_label] is None:
-                                reference_time.pop(a_label, None)
-
+                                labels.append(a_label)
+                                
+                        for a_label in labels:
+                            reference_time.pop(a_label, None)
         if changed:
             return reference_time
         else:
