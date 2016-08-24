@@ -8,6 +8,7 @@ from src.model.referent.referentInformationExtractor import ReferentInformationE
 from src.model.referent.referentSentimentalScorer import ReferentSentimentalScorer
 from src.model.sentence.sentenceAnalyzer import SentenceAnalyzer
 from src.sentiment.sentimentalSummarizer import SentimentalSummarizer
+from src.utils.fact_time_utils import FactTimeUtils
 
 
 class Sentilecto:
@@ -38,5 +39,7 @@ class Sentilecto:
         tagged_text, tag_mapping = ParagraphEntityTagger().tag_all(paragraph, "span")
         analysis["tagged_text"] = tagged_text
         analysis["tag_mapping"] = tag_mapping
+
+        FactTimeUtils().set_analysis_time_reference(analysis)
 
         return analysis

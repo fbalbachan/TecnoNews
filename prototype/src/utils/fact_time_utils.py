@@ -7,6 +7,40 @@ class FactTimeUtils(object):
     def __init__(self):
         self.time_labels = ["day_of_week", "day", "month", "year", "hours", "minutes", "period"]
 
+    #SETS CONTINUOUS DATE INFORMATION TO CLAUSES, EACH CLAUSE STARTS FROM THE PREVIOUS CLAUSE'S DATE
+    def set_analysis_time_reference(self, analysis):
+        time_reference = None
+        for a_sentence in analysis["paragraph"].sentences:
+            for a_clause in a_sentence.clauses:
+                #GET STRAIGHTFORWARD TIMES (FROM FREELING OR "hoy", "ayer", etc)
+                clause_own_time = self.extract_data_info(a_clause)
+
+                #HAS NEW DATE OR IS THE FIRST CLAUSE => OVERWRITE TIME REFERENCE:
+                if self.date_has_info(clause_own_time) or time_reference is None:
+                    time_reference = self.normalize_datainfo(clause_own_time)
+
+                #PARSE TIME BOX AND APPLY OPERATIONS TO TIME REFERENCE:
+                clause_timebox = self.get_timebox(a_clause)
+
+                try:
+                    #THIS OPERATION MAY FAIL IF OPERATING WITH BIG NUMBERS AND CENTURIES!
+                    time_reference = self.parse_relative_time_info(clause_timebox, time_reference)
+                except Exception as e:
+                    pass
+
+                #ASSIGN TIME REFERENCE TO CLAUSE:
+                a_clause.time_reference = self.normalize_datainfo(time_reference)
+
+
+    #DATE ISNT NONE AND CONTAINS AT LEAST A VALID, NON NULL LABEL
+    def date_has_info(self, a_data_info):
+        if a_data_info is not None:
+            for a_label in a_data_info:
+                if a_label in self.time_labels and a_data_info[a_label] is not None:
+                    return True
+        return False
+
+    #FILLS DATAINFO WITH ITS MISSING LABELS TAKING "normalized_token" AS VALUE
     def normalize_datainfo(self, datainfo, normalized_token = None):
         new_info = {}
         for a_label in self.time_labels:
@@ -17,6 +51,7 @@ class FactTimeUtils(object):
 
         return new_info
 
+    #CONVERTS DATAINFO TO A STR TIMESTAMP
     def datainfo_to_timestamp(self, datainfo, with_time=False):
         normalized_info = self.normalize_datainfo(datainfo, "??")
 
@@ -35,11 +70,13 @@ class FactTimeUtils(object):
         return timestamp
 
 
+    #GETS CONTENTS OF THE CLAUSE'S TIMEBOX
     def get_timebox(self, clause):
         time_lexical_forms = [" ".join([repr(l) for l in reference.leaves()]) for reference in clause.time_references]
         timebox = ", ".join(time_lexical_forms).lower()
         return timebox
 
+    #LOOK FOR DATE INFO FROM FREELING AND DOES A MINIMAL PARSE TO TIMEBOX ("hoy", "ayer", etc)
     def extract_data_info(self, clause, timebox=None):
         if timebox is None:
             timebox = self.get_timebox(clause)
@@ -93,6 +130,7 @@ class FactTimeUtils(object):
         return data_info
 
 
+    #DOES A DEEPER PARSE TO CLAUSE'S TIMEBOX, APPLIES OPERATIONS (hace, despues, antes) TO A TIMEFRAME(DATAINFO)
     def parse_relative_time_info(self, timebox, input_reference_time=None):
 
         reference_time = {}
@@ -180,7 +218,7 @@ class FactTimeUtils(object):
                 else:
                     a_number = an_operation["value"]
                 break
-        print selected_operation
+
         #MAGNITUDE:
         if a_number:
             for a_regex, a_value in date_magnitudes.iteritems():

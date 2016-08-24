@@ -93,8 +93,10 @@ class FactCompare(object):
         boxes1 = self.get_boxes(fact1)
         boxes2 = self.get_boxes(fact2)
 
-        time_data1 = FactCompare._time_utils.extract_data_info(self.clause1)
-        time_data2 = FactCompare._time_utils.extract_data_info(self.clause2)
+        #time_data1 = FactCompare._time_utils.extract_data_info(self.clause1)
+        #time_data2 = FactCompare._time_utils.extract_data_info(self.clause2)
+        time_data1 = self.clause1.time_reference
+        time_data2 = self.clause2.time_reference
         #print time_data1
         #print time_data2
 
