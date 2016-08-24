@@ -115,7 +115,7 @@ class FactTimeUtils(object):
         if len(data_info) == 0 and timebox is not None:
             if year_regexp.search(timebox):
                 data_info = {"year": int(year_regexp.search(timebox).group(0))}
-            elif "hoy" in timebox:
+            elif "hoy" in timebox or "ahora" in timebox:
                 data_info = today
             elif any(a_day_before_yesterday in timebox for a_day_before_yesterday in ["anteayer", "anteanoche"]):
                 timeframe = now - datetime.timedelta(2)
