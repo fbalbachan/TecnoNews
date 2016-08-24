@@ -125,7 +125,7 @@ class FactTimeUtils(object):
                 data_info = {"year": timeframe.year, "month": timeframe.month, "day": timeframe.day}
 
         if len(data_info) > 0 and ("year" not in data_info or data_info["year"] is None):
-            data_info["year"] = 2016
+            data_info["year"] = today["year"]
 
         return data_info
 
@@ -145,7 +145,7 @@ class FactTimeUtils(object):
 
         #DEFAULT VALUES:
         now = datetime.datetime.now()
-        if not reference_time:
+        if not reference_time or not self.date_has_info(reference_time):
             today = {"year": now.year, "month": now.month, "day": now.day}
             reference_time = today
         if "month" not in reference_time or reference_time["month"] is None:
@@ -236,7 +236,8 @@ class FactTimeUtils(object):
 
                     #Remove tags that were not present in the original date:
                     #THE PROCESSED DATE CANNOT BE MORE ACCURATE THAN THE INPUT DATE!
-                    if input_reference_time is not None:
+                    #if input time had no valid data, then keep the defaulted date (today) and dont remove anything
+                    if input_reference_time is not None and self.date_has_info(input_reference_time):
                         labels = []
                         for a_label in reference_time:
                             if a_label not in input_reference_time or input_reference_time[a_label] is None:
