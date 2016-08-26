@@ -30,12 +30,12 @@ $def with (analysis, printer)
         $for sentence2 in sentences:
             $if sentence == sentence2:
                 $continue
-            $ comparison_score = $printer.get_sentence_comparison_score(sentence, sentence2, as_integer=True)
+            $ comparison_score = printer.get_sentence_comparison_score(sentence, sentence2, as_integer=True)
             $if comparison_score > 20:
                 $if not similar_found:
                     $ similar_found = True
                     <b>Sentence comparison:</b><br>
-                with sentence $(sentences.index(sentence) + 1): $comparison_score%<br>
+                with sentence $(sentences.index(sentence2) + 1): $comparison_score%<br>
 
         $for clause in sentence.clauses:
 	    <hr size=2 noshade>
