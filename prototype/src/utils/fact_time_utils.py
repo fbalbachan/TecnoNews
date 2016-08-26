@@ -192,7 +192,7 @@ class FactTimeUtils(object):
                             ur"\bviene\b"          : {"use_number": False, "value": +1},
                             ur"\bpasad(o|a)\b"     : {"use_number": False, "value": -1},
                             ur"\banterior\b"       : {"use_number": False, "value": -1},
-                            ur"\bsiguiente\b"      : {"use_number": False, "value": -1},
+                            ur"\bsiguiente\b"      : {"use_number": False, "value": +1},
                             ur"\bpróxim(o|a)\b"    : {"use_number": False, "value": +1},
                             ur"\bvenider(o|a)\b"   : {"use_number": False, "value": +1},
                         }
