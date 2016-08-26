@@ -40,7 +40,7 @@ class FactCompare(object):
 
         while len(scores) < len(long_sentence.clauses):
             scores.append(0)
-
+        #print scores
         final_score = float(sum(scores)) / len(scores)
         #print final_score
 
@@ -67,8 +67,13 @@ class FactCompare(object):
 
         if boxes["subject"] in [u"alguien", u"algo"]:
             boxes["subject"] = u"alguien"
+        elif boxes["subject"] == u"∅":
+            boxes["subject"] == None
+
         if boxes["object"] in [u"alguien", u"algo"]:
             boxes["object"] = u"alguien"
+        elif boxes["object"] == u"∅":
+            boxes["object"] = None
 
         return boxes
 
@@ -193,6 +198,10 @@ class FactCompare(object):
                     msiScore = 0.5
 
             equality_box["verb"] = msiScore
+
+            penality_verbs = ["ser", "decir", "hacer", "tener"]
+            if boxes1["verb"] in penality_verbs or boxes2["verb"] in penality_verbs:
+                equality_box["verb"] = float(equality_box["verb"]) / 2
 
 
         #TIME:
