@@ -51,14 +51,14 @@ class TreeBuilder(BaseInfo) :
             root = root[0]
             tmp  = self._get_simplified(root)
 
-            tmp["children"] = self._get_children( root )
+            tmp["children"] = self._get_children( root, root["categories"] )
 
             for item in tmp["children"] :
-                item["children"] = self._get_children(item)
+                item["children"] = self._get_children(item, root["categories"])
                 for item2 in item["children"] :
-                    item2["children"] = self._get_children(item2)
+                    item2["children"] = self._get_children(item2, root["categories"])
                     for item3 in item2["children"] :
-                        item3["children"] = self._get_children(item3)
+                        item3["children"] = self._get_children(item3, root["categories"])
                         #for item4 in item3["children"] :
                         #    item4["children"] = self._get_children(item4)
                         #    #for item5 in item4["children"] :
@@ -72,13 +72,15 @@ class TreeBuilder(BaseInfo) :
 
         return json.dumps(ret, sort_keys=True, indent=4, separators=(',', ': '), cls=JSONEncoder)
 
-    def _get_children(self, obj) :
+    def _get_children(self, obj, root_categories) :
 
         children = []
         ret      = []
 
         if "versions" in obj:
-            children = self.db["news_entries"].find({"_id" : {"$in" : obj["versions"]} })
+            children = self.db["news_entries"].find({"_id" : {"$in" : obj["versions"]}, "categories" : {"$in" : root_categories} })
+            if children is None:
+                children = []
 
         for c in children :
             ret.append( self._get_simplified( c ) )
