@@ -2348,7 +2348,7 @@ decapitar,N,T,,,Anim,Anim
 decentar,N,X,,,Bi,Bi
 decepcionar,A,T,,,Bi,Anim
 decidir,N,T,,,Anim,Bi
-decir,N,T,,,Anim,Bi
+decir,N,T,,,Anim,No
 declamar,N,T,,,Anim,Bi
 declarar,N,T,,,Anim,Bi
 declinar,A,I,,,Anim,Bi
