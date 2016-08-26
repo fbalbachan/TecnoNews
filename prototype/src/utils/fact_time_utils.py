@@ -110,7 +110,7 @@ class FactTimeUtils(object):
         now = datetime.datetime.now()
         today = {"year": now.year, "month": now.month, "day": now.day}
 
-        year_regexp = re.compile(ur"(1\d{3}$|2[012]\d{2})", re.U | re.I)
+        year_regexp = re.compile(ur"(1\d{3}|2[012]\d{2})($|[^0-9])", re.U | re.I)
 
         if len(data_info) == 0 and timebox is not None:
             if year_regexp.search(timebox):
