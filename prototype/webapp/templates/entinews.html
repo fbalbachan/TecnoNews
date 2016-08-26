@@ -34,7 +34,7 @@ $def with (analysis, printer)
             $if comparison_score > 20:
                 $if not similar_found:
                     $ similar_found = True
-                    <b>Sentence comparison:</b><br>
+                    <b>Sentence comparison (fact similarity):</b><br>
                 with sentence $(sentences.index(sentence2) + 1): $comparison_score%<br>
 
         $for clause in sentence.clauses:
