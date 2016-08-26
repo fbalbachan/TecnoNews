@@ -10,9 +10,41 @@ class FactCompare(object):
     _ontology = _ontology_parser.get_ontology()
     _time_utils = FactTimeUtils()
 
-    def __init__(self, clause1, clause2):
+    def __init__(self, clause1=None, clause2=None):
         self.clause1 = clause1
         self.clause2 = clause2
+
+    def compare_clause(self, clause1, clause2):
+        self.clause1 = clause1
+        self.clause2 = clause2
+        return self.compare()
+
+    def compare_sentence(self, sentence1, sentence2):
+        short_sentence = None
+        long_sentence = None
+
+        if len(sentence1.clauses) >= len(sentence2.clauses):
+            long_sentence = sentence1
+            short_sentence = sentence2
+        else:
+            long_sentence = sentence2
+            short_sentence = sentence1
+
+        scores = []
+        for a_clause1 in short_sentence.clauses:
+            scores.append(0)
+            for a_clause2 in long_sentence.clauses:
+                score = self.compare_clause(a_clause1, a_clause2)
+                if score > scores[-1]:
+                    scores[-1] = score
+
+        while len(scores) < len(long_sentence.clauses):
+            scores.append(0)
+
+        final_score = float(sum(scores)) / len(scores)
+        #print final_score
+
+        return final_score
 
     def get_boxes(self, a_fact):
         if not isinstance(a_fact, unicode):

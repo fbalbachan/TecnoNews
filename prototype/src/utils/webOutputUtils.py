@@ -126,6 +126,18 @@ class WebOutputUtils:
 
         return score
 
+    def get_sentence_comparison_score(self, sentence1, sentence2, as_integer=False):
+        score = FactCompare().compare_sentence(sentence1, sentence2)
+        if score == 0:
+            score = int(score)
+
+        score = score * 100
+
+        if not as_integer:
+            score = str(score)
+
+        return score
+
     def fact(self, clause):
         if debug_mode: print "--> WebOutputUtils.fact(clause:", clause, ")"
         return FactNormalizer(clause, self.ontology).fact()
