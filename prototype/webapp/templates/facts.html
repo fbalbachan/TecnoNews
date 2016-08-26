@@ -37,7 +37,7 @@ $def with (analysis, printer)
                     <li data-jstree='{"icon":"static/icon/facts.png"}'>Normalized Facts
                     <ul>
                         $for clause in paragraph.facts_for(referent):
-                            <li data-jstree='{"icon":"None"}'>$printer.fact(clause)</li>
+                            <li data-jstree='{"icon":"None"}'>$printer.fact(clause) &nbsp $printer.get_timestamp(clause.time_reference)</li>
                     </ul>
                     </li>
                 </ul>
