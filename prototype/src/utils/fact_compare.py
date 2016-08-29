@@ -41,7 +41,9 @@ class FactCompare(object):
         while len(scores) < len(long_sentence.clauses):
             scores.append(0)
         #print scores
-        final_score = float(sum(scores)) / len(scores)
+        final_score = 0
+        if len(scores) > 0:
+            final_score = float(sum(scores)) / len(scores)
         #print final_score
 
         return final_score
@@ -218,7 +220,10 @@ class FactCompare(object):
                 sum_scores += weights[a_label] * a_score
 
 
-        final_score = sum_scores/available_scores
+        final_score = 0
+        if available_scores > 0:
+            final_score = sum_scores/available_scores
+
         if final_score > 1:
             final_score = 1
 
