@@ -14,32 +14,32 @@ class ProntoParser(GenericParser):
         super(ProntoParser, self).__init__()
 
     source = u"Pronto"
-    
+
     def parse(self, url):
         #url = "http://www.pronto.com.ar/articulo/famosos/alfredo-caseros-protagonizo-escandalo-policial-casa-ex-mujer/20160127153351202196.html"
         #url = "http://www.pronto.com.ar/articulo/famosos/famosa-rubia-confiesa-miro-peliculas-porno-sacar-ideas/20160607112825214023.html"
         soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
         for script in soup(["script", "style"]):
             script.extract()
-            
-            
+
+
         for image in soup.findAll('img'):
             image.extract()
-        
-        
+
+
         title = soup.select('h1.title')[0].text.strip()
-        
+
         content = ""
         article_content = soup.select('article')[0]
-        
-        paragraphs = article_content.findAll('p')
+
+        paragraphs = article_content.findAll('p',{"style":None})
 
         for paragraph in paragraphs:
             clean_text = paragraph.text.strip()
             content += "\n" + clean_text
-        
+
         content = content.strip()
-        
+
         categories = []
         tags = []
 
