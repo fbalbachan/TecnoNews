@@ -18,6 +18,8 @@ class TextSummarizer:
             main_clauses = a_sentence.main_clauses()
 
             for main_clause in main_clauses:
+                if not main_clause.is_fact():
+                    continue
                 #STRUCTURES;
                 subject_structure = None
                 equative_structure = None
