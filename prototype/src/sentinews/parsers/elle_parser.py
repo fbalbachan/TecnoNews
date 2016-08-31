@@ -17,7 +17,7 @@ class ElleParser(GenericParser):
         #url = "http://www.elle.es/moda/news/cara-delevingne-im-not-a-trophy"
         #url = "http://www.elle.es/elledeco/casas/casa-michael-jackson-las-vegas"
 	#soup = BeautifulSoup(self.opener.read(url).decode('utf-8','ignore'), from_encoding='utf-8')
-        soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
+        soup = BeautifulSoup(self.opener.read(url).decode("utf-8", 'ignore'), from_encoding='utf-8')
 
 	for script in soup(["script", "style"]):
             script.extract()
@@ -48,7 +48,11 @@ class ElleParser(GenericParser):
             else:
                 content += "\n" + intro.text.strip()
         
-        paragraphs = soup.find('div',{'class':'galeria'}).findAll('p')
+        paragraphs = soup.find('div',{'class':'galeria'})
+        
+        if paragraphs is None:
+            paragraphs = soup.find(True, {'class':[ 'articulo']})
+        paragraphs = paragraphs.findAll('p')
 
         #content = ""
         for paragraph in paragraphs:
@@ -57,7 +61,6 @@ class ElleParser(GenericParser):
             content += "\n" + paragraph.text.strip()
         
         content = content.strip()
-        
 
         raw_categories = soup.find('div',{'id':'breadCrumbs'}).findAll('a')
         

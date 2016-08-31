@@ -12,32 +12,37 @@ class EonlineParser(GenericParser):
         super(EonlineParser, self).__init__()
 
     source = u"Eonline"
-    
+
     def parse(self, url):
         #url = "http://la.eonline.com/argentina/2016/bella-thorne-tambien-hablo-de-la-polemica-alrededor-de-la-selfie-desnuda-de-kim-kardashian/"
-        
+
         soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
         for script in soup(["script", "style"]):
             script.extract()
-            
-            
+
+
         for image in soup.findAll('img'):
             image.extract()
-        
-        
-        title = soup.select('h1.entry-title_sing')[0].text.strip()
-        
+
+        title = soup.find(True, {"class":"entry-title"})
+        if title is None:
+            title = soup.select('h1.entry-title_sing')[0]
+        title = title.text.strip()
+
         content = ""
-        article_content = soup.select('div.entry-content_sing')[0]
-        
+        article_content = soup.find(True, {"class":"entry-content"})
+        if article_content is None:
+            article_content = soup.select('div.entry-content_sing')[0]
+
         paragraphs = article_content.findAll('p')
 
         for paragraph in paragraphs:
             clean_text = paragraph.text.strip()
+            clean_text = re.sub(ur"^E! NEWS >.+$", "", clean_text)
             content += "\n" + clean_text
-        
+
         content = content.strip()
-        
+
         categories = []
         tags = []
 

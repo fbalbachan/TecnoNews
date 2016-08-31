@@ -22,12 +22,11 @@ class EuroNewsParser(GenericParser):
         tags = []
         title = ''
         if soup is not None:
-            try:
-                paragraphs = soup.find('div', {'id': 'articleTranscript'}).find_all('p')
-            except Exception as e:
-                logger = get_logger('tecnonews')
-                logger.error("Problem Parsing euronews new..")
-                logger.error(e.message)
+            #OLD METHOD WORKING?
+            paragraphs = soup.find('div', {'id': 'articleTranscript'})
+            if paragraphs is None:
+                paragraphs = soup.find(True,{'itemprop':'articleBody'})
+            paragraphs = paragraphs.find_all('p')
 
             if paragraphs is not None:
                 content_paragraphs_list = [paragraph.text for paragraph in paragraphs]
@@ -47,8 +46,10 @@ class EuroNewsParser(GenericParser):
 
         content = self.sanitize(content)
 
-        title_obj = soup.find(
-            'div', {'id': 'title-wrap-new'}).find('h1').find('a')
+        try:
+            title_obj = soup.html.head.title
+        except Exception as e:
+            title_obj = soup.find('div', {'id': 'title-wrap-new'}).find('h1').find('a')
 
         if title_obj is not None:
             title = title_obj.text

@@ -21,6 +21,9 @@ class AutoBildMxParser(GenericParser):
         for script in soup(["script", "style"]):
             script.extract()
 
+        for trash in soup.findAll(True, {'class': 'bwl-pro-voting-feedback-form-container'}):
+            trash.extract()
+
         #-------------------TITLE--------------------------
         title = soup.find(True,{'class':'entry-title'})
         title = title.text.strip()
@@ -35,6 +38,8 @@ class AutoBildMxParser(GenericParser):
 
 
         article_content = soup.find(True,{'id':'HOTWordsTxt'})
+        if article_content is None:
+            article_content = soup.find(True, {'class': 'entry-content'})
 
         paragraphs = article_content.findAll('p')
 

@@ -15,6 +15,8 @@ class TravelerParser(GenericParser):
     source = u"Traveler"
 
     def parse(self, url):
+        if u"/galerias/" in url:
+            return None
         #url = "http://www.traveler.es/viajes/viajes-urbanos/articulos/cosas-que-debes-saber-antes-de-viajar-a-cuba/8582"
 
         soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')

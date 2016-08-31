@@ -17,9 +17,10 @@ class MujerHoyParser(GenericParser):
         #url = "http://blogs.mujerhoy.com/maquillaje-estrellas/2016/08/04/maquillaje-ojos-de-gata-los-trucos-para-conseguir-el-perfecto-eyeliner.html"
         #url = "http://blogs.mujerhoy.com/adelgazar/2016/01/11/culos-sentados-grasas-en-expansion.html"
         #url = "http://www.mujerhoy.com/celebrities/corazon/201606/07/entrevista-noriega-michelle-jenner-amor-letra-20160607124020.html"
-
-	soup = BeautifulSoup(self.opener.read(url).decode('utf-8','ignore'), "html.parser", from_encoding='utf-8')
-	for script in soup(["script", "style"]):
+        if u"/galerias/" in url:
+            return None
+        soup = BeautifulSoup(self.opener.read(url).decode('utf-8','ignore'), "html.parser", from_encoding='utf-8')
+        for script in soup(["script", "style"]):
             script.extract()
 
 

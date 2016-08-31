@@ -50,7 +50,7 @@ class ViveloHoyParser(GenericParser):
 
         image_search_string = None
 
-        title = soup.find('h1', {"class": "entry-title"})
+        title = soup.find('h1', {"class": ["entry-title", "detailTitle"]})
         title = title.text
 
         category = soup.find('meta',{"property":"article:section"})
@@ -70,6 +70,11 @@ class ViveloHoyParser(GenericParser):
         twits = content.findAll(class_=re.compile("twitter"))
         for twit in twits:
             twit.extract()
+            
+        sides = content.findAll(True,{"class": ["col-side", "footerDetail"]})
+        for side in sides:
+            side.extract()
+            
         
         #remove city names
 
@@ -93,6 +98,7 @@ class ViveloHoyParser(GenericParser):
         #take out first line
         first_line_regex = re.compile(ur'( ?\S)+? ?[-|—|–]')
         content = first_line_regex.sub(u'', content, 1)
+        content = content.strip()
 
         new_entry = self.create_news_entry(title=title, content=content,
                                            tags=tags,
@@ -103,4 +109,3 @@ class ViveloHoyParser(GenericParser):
                                            keywords=None)
 
         return new_entry
-

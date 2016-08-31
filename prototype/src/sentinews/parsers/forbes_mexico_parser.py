@@ -14,10 +14,10 @@ class ForbesMexicoParser(GenericParser):
     source = u"Forbes Mexico"
 
     def parse(self, url):
-        
+
         #url = "http://www.forbes.com.mx/remesas-mexico-suben-8-3-abril/?utm_source=feedburner&utm_medium=feed&utm_campaign=Feed%3A+ForbesMexico+%28Forbes+M%C3%A9xico%29"
         #url = "http://feedproxy.google.com/~r/ForbesMexico/~3/PoUldQ3tza8/"
-        soup = BeautifulSoup(self.opener.read(url))        
+        soup = BeautifulSoup(self.opener.read(url))
         # rip out script and style elements
         for script in soup(["script", "style"]):
             script.extract()
@@ -29,8 +29,19 @@ class ForbesMexicoParser(GenericParser):
         title = title.text.strip()
 
         metadata = soup.find('ul', {"class" : "meta"})
+        #OLD METHOD WORKING?
         category = metadata.find(href=re.compile('/category/'))
-        categories = [category.text.strip()]
+
+        categories = []
+        #NEW METHOD:
+        if category is None:
+            category = metadata.findAll("li")
+            category = category[1:]
+            category = category[:-1]
+            for a_category in category:
+                categories.append(a_category.text.strip())
+        else:
+            categories = [category.text.strip()]
 
         tags = set()
         for tag in soup.findAll(rel='tag'):
