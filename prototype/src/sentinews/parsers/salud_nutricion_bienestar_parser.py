@@ -22,13 +22,13 @@ class SaludNutricionBienestarParser(GenericParser):
             script.extract()
 
         #-------------------TITLE--------------------------
-        title = soup.find('h1',{'class':'entry-title'})
+        title = soup.find(True,{'class':'entry-title'})
         title = title.text.strip()
 
         #-------------------CONTENT--------------------------
         content = ""
 
-        article_content = soup.find('div',{'class':'entry-content'})
+        article_content = soup.find(True,{'class':['entry-content', 'post-content']})
 
         paragraphs = article_content.findAll(['p','h2', 'li'])
 
@@ -40,7 +40,7 @@ class SaludNutricionBienestarParser(GenericParser):
 
         categories = [u"salud"]
         tags = [u"salud"]
-
+        
         #categories=[urlparse(url).path.split("/")[1]]
         #print categories
 

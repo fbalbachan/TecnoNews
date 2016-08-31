@@ -12,32 +12,34 @@ class RevistaplotParser(GenericParser):
         super(RevistaplotParser, self).__init__()
 
     source = u"revistaplot"
-    
+
     def parse(self, url):
+        if u"/tienda/" in url:
+            return None
         #url = "http://www.revistaplot.com/es/finalistas-mchap-emerge-20142015/"
-        
+
         soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
         for script in soup(["script", "style", "noscript"]):
             script.extract()
-            
-            
+
+
         for image in soup.findAll('img'):
             image.extract()
-        
-        
+
+
         title = soup.select('#single-header h2')[0].text.strip()
-        
+
         content = ""
         article_content = soup.select('#single-content')[0]
-        
+
         paragraphs = article_content.findAll('p')
 
         for paragraph in paragraphs:
             clean_text = paragraph.text.strip()
             content += "\n" + clean_text
-        
+
         content = content.strip()
-        
+
         categories = []
         tags = []
 

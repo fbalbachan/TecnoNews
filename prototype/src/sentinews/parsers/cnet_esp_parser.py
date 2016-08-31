@@ -27,6 +27,9 @@ class CNetEspParser(GenericParser):
         for script in soup(["script", "style"]):
             script.extract()
 
+        for trash in soup.findAll(True, {"class": ["sharebarWrapper", "caption"]}):
+            trash.extract()
+
         image_search_string = None
 
         #title = soup.find('h1', {"itemprop": "headline"})
@@ -47,8 +50,8 @@ class CNetEspParser(GenericParser):
         content = ""
         paragraphs = soup.find('div', {"class": "col-10 article-main-body row", "itemprop": 'articleBody'}).find('div',{'class':'col-8'}).findAll('p')
         for paragraph in paragraphs:
-            content+='\n'+paragraph.text.strip()     
-        
+            content+='\n'+paragraph.text.strip()
+
         content = content.strip()
         #clean relate links from content
         #for relatyed_link in content.findAll('div', {"section": "shortcodeRelatedLinks"}):
@@ -78,4 +81,3 @@ class CNetEspParser(GenericParser):
                                            image_search_string=image_search_string,
                                            keywords=None)
         return new_entry
-

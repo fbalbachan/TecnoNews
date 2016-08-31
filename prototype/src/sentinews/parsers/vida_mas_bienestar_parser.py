@@ -28,6 +28,8 @@ class VidaMasBienestarParser(GenericParser):
 
         #-------------------TITLE--------------------------
         title = soup.find('h3',{'itemprop':'headline'})
+        if title is None:
+            title = soup.find('h2')
         title = title.text.strip()
 
         #-------------------CONTENT--------------------------
@@ -40,8 +42,10 @@ class VidaMasBienestarParser(GenericParser):
 
 
         article_content = soup.find('div',{'class':'entry'})
+        if article_content is None:
+            article_content = soup.find('article')
 
-        paragraphs = article_content.findAll('p')
+        paragraphs = article_content.findAll('p',{'class':None})
 
         for paragraph in paragraphs:
             clean_text = paragraph.text.strip()
@@ -49,7 +53,6 @@ class VidaMasBienestarParser(GenericParser):
 
         categories = [u"salud"]
         tags = [u"salud"]
-
         #categories=[urlparse(url).path.split("/")[1]]
         #print categories
         #return {"content":content, "title":title}

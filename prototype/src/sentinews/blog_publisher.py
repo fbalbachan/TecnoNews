@@ -298,7 +298,7 @@ class BlogPublisher(object):
 
             elif u"puntorojo" in host['id'] and entry.token_count >= 600:
 
-                if u"interes" in host['id'] or u"viajes" in host['id'] or u"autos" in host['id']:
+                if u"interes" in host['id']:
                     if not entry.image:
                         valid_host = False
                         continue

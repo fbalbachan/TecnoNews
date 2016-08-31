@@ -93,4 +93,3 @@ class NuevoHeraldParser(GenericParser):
                                     keywords=keywords)
 
         return new_entry
-
