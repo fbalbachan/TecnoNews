@@ -36,7 +36,7 @@ class FactNormalizer:
 
                 fact += normalized_string
 
-        if insert_false_entity and len(clause.false_entities) > 0:
+        if insert_false_entity and len(clause.false_entities) > 0 and clause.has_structure["equative"]:
             fact = fact.replace("∅", "")
             fact += " ".join([false_entity.lexical_form.strip() for false_entity in clause.false_entities])
 
