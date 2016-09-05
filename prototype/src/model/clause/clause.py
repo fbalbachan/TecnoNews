@@ -34,6 +34,8 @@ class Clause(TreeNode):
 
         self.attributes = []
 
+        self.false_entities = []
+
     #
     # Questions to the Clause object
     #

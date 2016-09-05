@@ -21,6 +21,8 @@ class FactNormalizer:
         # structure_order = ["subject", "verb", "od", "oi", "regimen", "equative", "instrument_goal", "adjuncts"]
         structure_order = ["subject", "verb", "od", "regimen", "equative"]
 
+        insert_false_entity = True
+
         for structure_name in structure_order:
 
             if clause.has_structure(structure_name):
@@ -28,7 +30,15 @@ class FactNormalizer:
                 if fact:
                     fact += " + "
 
-                fact += self.get_normalized_string(structure_name, clause)
+                normalized_string = self.get_normalized_string(structure_name, clause)
+                if structure_name in ["od", "regimen", "equative"] and normalized_string != "∅" and normalized_string.strip() != "":
+                    insert_false_entity = False
+
+                fact += normalized_string
+
+        if insert_false_entity and len(clause.false_entities) > 0:
+            fact = fact.replace("∅", "")
+            fact += " ".join([false_entity.lexical_form.strip() for false_entity in clause.false_entities])
 
         time_lexical_forms = [" ".join([repr(l) for l in reference.leaves()]) for reference in clause.time_references]
         fact = fact + " --TIME: " + ", ".join(time_lexical_forms)

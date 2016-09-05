@@ -38,6 +38,7 @@ class IsolatedAdjectiveAnalyzer:
     def evidence_with(self, coef):
         evidences = []
         for hint in self.clause.isolated_adjectives:
+            self.clause.false_entities.append(hint)
             valued = SentiWordNet.get(hint.lemma)
             if valued.is_neutral(): continue
             evidence = SentimentalValuedObject(hint, valued.value)
