@@ -180,6 +180,12 @@ class FactCompare(object):
 
         if object1 and object2:
             equality_box["object"] = self.compare_entities(object1, object2, equality_box["object"])
+        elif not object1 and not object2:
+            if clause1.has_structure("equative") and clause2.has_structure("equative"):
+                if len(clause1.false_entities) > 0 and len(clause2.false_entities) > 0:
+                    fake1 = " ".join([false_entity.lemma for false_entity in clause1.false_entities])
+                    fake2 = " ".join([false_entity.lemma for false_entity in clause2.false_entities])
+                    equality_box["object"] = float(fake1 == fake2)
 
 
         #VERB:
@@ -201,7 +207,7 @@ class FactCompare(object):
 
             equality_box["verb"] = msiScore
 
-            penality_verbs = ["decir"]
+            penality_verbs = ["decir", "estar"]
             if boxes1["verb"] in penality_verbs or boxes2["verb"] in penality_verbs:
                 equality_box["verb"] = float(equality_box["verb"]) / 2
 
