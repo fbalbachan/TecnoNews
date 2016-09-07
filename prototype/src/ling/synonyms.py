@@ -36,10 +36,13 @@ class Synonyms:
 #
 #        return synonym
 
-    def get_base_synonym(self, word):
+    def get_base_synonym(self, word, include_base=False):
         base_synonym = None
         for base_word, synonym_list in self.replacements.items():
             if word in synonym_list:
+                base_synonym = base_word
+                break
+            elif include_base and word == base_word:
                 base_synonym = base_word
                 break
 

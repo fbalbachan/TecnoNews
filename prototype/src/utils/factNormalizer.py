@@ -109,13 +109,13 @@ class FactNormalizer:
             # is set to "noun", ie: "La de la casa amarilla" --> kernel: "La" - Msi= category:"noun" - type:"articulo"
             normalization = entity.lexical_form
 
-        elif not self.synonyms.get_base_synonym(lemma):
+        elif not self.synonyms.get_base_synonym(lemma, is_fake):
             normalization = entity_kernel.lexical_form
             if is_fake:
                 normalization = entity_kernel.lemma
 
         else:
-            base_synonym = self.synonyms.get_base_synonym(lemma)
+            base_synonym = self.synonyms.get_base_synonym(lemma, is_fake)
             if '_' in base_synonym or base_synonym not in self.ontology.concepts:
                 # if synonym in self.locutions and self.locutions[synonym]:
                 #    pass
