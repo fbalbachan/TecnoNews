@@ -97,7 +97,7 @@ class FactMiningResponse(Flask.response_class):
             '0-Clause-Order':       fields.String(),
             '1-Clause-Text':        fields.String(),
             '2-Clause-Normalized-Fact':    fields.String(),
-            '3-Clause-Comparison':  Fields.List(fields.Nested(score))
+            '3-Clause-Comparison':  fields.List(fields.Nested(score))
         }
 
     sentence = \

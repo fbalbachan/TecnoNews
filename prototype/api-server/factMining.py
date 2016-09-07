@@ -153,7 +153,7 @@ class FactMining(Resource):
 
         return sentence_data
 
-    def get_clause_data(self, clause, sentence, paragraph_sentences):
+    def get_clause_data(self, clause, sentence, sentence_data, paragraph_sentences):
         clause_data = dict()
         clause_order = str(sentence_data['0-Sentence-Order']) + "." + self.clause_number(clause, sentence)
         clause_data["0-Clause-Order"] = clause_order
@@ -161,7 +161,7 @@ class FactMining(Resource):
         clause_data["2-Clause-Normalized-Fact"] = self.get_normalized_fact(clause)
         clause_data["3-Clause-Comparison"] = []
         
-        sentence_index = 0
+        sentence_index = 1
         for a_sentence in paragraph_sentences:
             for a_clause in a_sentence.clauses:
                 if a_clause == clause:
@@ -171,7 +171,7 @@ class FactMining(Resource):
                 if score == 0:
                     score = int(score)
                     
-                clause_data["3-Clause-Comparison"].append({"0-Clause-Order": str(sentence_index)+"."+self.clause_number(a_clause, sentence). "1-Score": str(score)})
+                clause_data["3-Clause-Comparison"].append({"0-Clause-Order": str(sentence_index)+"."+self.clause_number(a_clause, a_sentence), "1-Score": str(score)})
                 
             sentence_index += 1
                     
