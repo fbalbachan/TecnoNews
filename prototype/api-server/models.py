@@ -86,11 +86,18 @@ class SentimentAnalysisResponse(Flask.response_class):
 @swagger.model
 class FactMiningResponse(Flask.response_class):
 
+    score = \
+        {
+            '0-Clause-Order': fields.String(),
+            '1-Score':        fields.String()
+        }
+
     clause = \
         {
             '0-Clause-Order':       fields.String(),
             '1-Clause-Text':        fields.String(),
-            '2-Clause-Normalized-Fact':    fields.String()
+            '2-Clause-Normalized-Fact':    fields.String(),
+            '3-Clause-Comparison':  Fields.List(fields.Nested(score))
         }
 
     sentence = \

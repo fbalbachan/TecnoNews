@@ -12,6 +12,7 @@ from usersStorage import users_storage
 from models import FactMiningResponse
 from src.utils.configProvider import ConfigProvider
 from src.utils.factNormalizer import FactNormalizer
+from src.utils.fact_compare import FactCompare
 from src.ling.freelingDictionaryParser import FreelingDictionaryParser
 
 __author__ = 'Alexis Balbachan'
@@ -80,7 +81,7 @@ class FactMining(Resource):
 
                 try:
                     index = paragraph_sentences.index(sentence) + 1
-                    sentence_data = self.get_sentence_data(sentence, index)
+                    sentence_data = self.get_sentence_data(sentence, index, paragraph_sentences)
                     sentences = sentences + [sentence_data]
 
                 except Exception as e:
@@ -140,24 +141,41 @@ class FactMining(Resource):
 
         return response
 
-    def get_sentence_data(self, sentence, index):
+    def get_sentence_data(self, sentence, index, paragraph_sentences):
         sentence_data = dict()
         sentence_data['0-Sentence-Order'] = index
         sentence_data['1-Sentence-Text'] = sentence.text
 
         sentence_data['2-Sentence-Clauses'] = []
         for clause in sentence.clauses:
-            clause_data = self.get_clause_data(clause, sentence, sentence_data)
+            clause_data = self.get_clause_data(clause, sentence, sentence_data, paragraph_sentences)
             sentence_data['2-Sentence-Clauses'] = sentence_data['2-Sentence-Clauses'] + [clause_data]
 
         return sentence_data
 
-    def get_clause_data(self, clause, sentence, sentence_data):
+    def get_clause_data(self, clause, sentence, paragraph_sentences):
         clause_data = dict()
         clause_order = str(sentence_data['0-Sentence-Order']) + "." + self.clause_number(clause, sentence)
         clause_data["0-Clause-Order"] = clause_order
         clause_data["1-Clause-Text"] = str(clause)
         clause_data["2-Clause-Normalized-Fact"] = self.get_normalized_fact(clause)
+        clause_data["3-Clause-Comparison"] = []
+        
+        sentence_index = 0
+        for a_sentence in paragraph_sentences:
+            for a_clause in a_sentence.clauses:
+                if a_clause == clause:
+                    continue
+                
+                score = FactCompare(clause, a_clause).compare()
+                if score == 0:
+                    score = int(score)
+                    
+                clause_data["3-Clause-Comparison"].append({"0-Clause-Order": str(sentence_index)+"."+self.clause_number(a_clause, sentence). "1-Score": str(score)})
+                
+            sentence_index += 1
+                    
+                
         return clause_data
 
     def get_normalized_fact(self, clause):
