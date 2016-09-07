@@ -38,7 +38,7 @@ class FactNormalizer:
 
         if insert_false_entity and len(clause.false_entities) > 0 and clause.has_structure("equative"):
             fact = fact.replace("∅", "")
-            fact += " ".join([false_entity.lexical_form.strip() for false_entity in clause.false_entities])
+            fact += " ".join([self._get_normalization_for_entity_with_kernel(false_entity, false_entity.lexical_form, True) for false_entity in clause.false_entities])
 
         time_lexical_forms = [" ".join([repr(l) for l in reference.leaves()]) for reference in clause.time_references]
         fact = fact + " --TIME: " + ", ".join(time_lexical_forms)
@@ -94,17 +94,23 @@ class FactNormalizer:
 
         return normalization
 
-    def _get_normalization_for_entity_with_kernel(self, entity, default):
+    def _get_normalization_for_entity_with_kernel(self, entity, default, is_fake=False):
         normalization = default
 
-        lemma = entity.kernel.lemma
-        if entity.kernel.msi["category"] == "noun" and entity.kernel.msi["type"] == "articulo":
+        entity_kernel = None
+        if is_fake:
+            entity_kernel = entity
+        else:
+            entity_kernel = entity.kernel
+
+        lemma = entity_kernel.lemma
+        if entity_kernel.msi["category"] == "noun" and entity_kernel.msi["type"] == "articulo":
             # Kernels formed by only 1 non-"noun" token are modified during entity extraction: msi["category"]
             # is set to "noun", ie: "La de la casa amarilla" --> kernel: "La" - Msi= category:"noun" - type:"articulo"
             normalization = entity.lexical_form
 
         elif not self.synonyms.get_base_synonym(lemma):
-            normalization = entity.kernel.lexical_form
+            normalization = entity_kernel.lexical_form
 
         else:
             base_synonym = self.synonyms.get_base_synonym(lemma)
@@ -115,7 +121,7 @@ class FactNormalizer:
 
             else:
                 concept = self.ontology.concept(base_synonym)
-                leaf_msi = self._msi_transform(entity.kernel.msi)
+                leaf_msi = self._msi_transform(entity_kernel.msi)
 
                 forms = [form for form in concept.lexical_forms if leaf_msi == self._msi_transform(form.msi)]
                 if not forms:
