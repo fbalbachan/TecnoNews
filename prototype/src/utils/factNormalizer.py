@@ -111,6 +111,8 @@ class FactNormalizer:
 
         elif not self.synonyms.get_base_synonym(lemma):
             normalization = entity_kernel.lexical_form
+            if is_fake:
+                normalization = entity_kernel.lemma
 
         else:
             base_synonym = self.synonyms.get_base_synonym(lemma)
