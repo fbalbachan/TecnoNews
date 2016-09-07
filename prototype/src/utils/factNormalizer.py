@@ -122,6 +122,10 @@ class FactNormalizer:
                 normalization = base_synonym.replace('_', ' ')
 
             else:
+                if is_fake:
+                    normalization = base_synonym
+                    return normalization
+
                 concept = self.ontology.concept(base_synonym)
                 leaf_msi = self._msi_transform(entity_kernel.msi)
 
