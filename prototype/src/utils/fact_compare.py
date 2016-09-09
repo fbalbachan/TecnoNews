@@ -13,6 +13,8 @@ class FactCompare(object):
     def __init__(self, clause1=None, clause2=None):
         self.clause1 = clause1
         self.clause2 = clause2
+        self.penality_verbs = ["decir", "estar"]
+        self.weights = {"subject": 1.2, "verb": 1.1, "object": 0.9, "time": 0.9}
 
     def compare_clause(self, clause1, clause2):
         self.clause1 = clause1
@@ -79,11 +81,7 @@ class FactCompare(object):
 
         return boxes
 
-    def compare_entities(self, entity1, entity2, equality_value):
-        referent1 = entity1.referent.designated_ref()
-        referent2 = entity2.referent.designated_ref()
-        msi1 = referent1.msi
-        msi2 = referent2.msi
+    def compare_entities_data(self, referent1, referent2, msi1, msi2, equality_value):
         final_score = equality_value
 
         #entity1 != entity2:
@@ -118,13 +116,133 @@ class FactCompare(object):
 
         return final_score
 
+    def compare_entities(self, entity1, entity2, equality_value):
+        referent1 = entity1.referent.designated_ref()
+        referent2 = entity2.referent.designated_ref()
+        msi1 = referent1.msi
+        msi2 = referent2.msi
+        return self.compare_entities_data(referent1, referent2, msi1, msi2, equality_value)
 
 
+    #EXTRACTS EVERYTHING WE NEED TO KNOW TO COMPARE CLAUSES (THIS IS USEFUL FOR SAVING TO DB AND MAKE A COMPARISON WITHOUT REANALYZING)
+    def extract_comparable_data(self, a_clause):
+        comparable_data = {}
+
+        a_fact = FactNormalizer(a_clause, FactCompare._ontology).fact()
+        comparable_data["boxes"] = self.get_boxes(a_fact)
+        comparable_data["time_reference"] = a_clause.time_reference
+        comparable_data["subject_msi"] = None
+        comparable_data["subject_referent"] = None
+        comparable_data["verb_msi"] = None
+        comparable_data["object_msi"] = None
+        comparable_data["object_referent"] = None
+        comparable_data["penalized_verb"] = (comparable_data["boxes"]["verb"] in self.penality_verbs)
+        comparable_data["is_fact"] = a_clause.is_fact()
+
+        if a_clause.has_structure("subject"):
+            entities = a_clause.structure("subject").all_entities()
+            if len(entities) > 0:
+                comparable_data["subject_msi"] = entities[0].referent.designated_ref().msi
+                comparable_data["subject_referent"] = str(entities[0].referent.designated_ref())
+
+        if a_clause.verb is not None:
+            comparable_data["verb_msi"] = a_clause.verb.msi
+
+        for a_right_entity in ["od", "regimen", "equative"]:
+                if a_clause.has_structure(a_right_entity):
+                    entities = a_clause.structure(a_right_entity).all_entities()
+                    if len(entities) > 0:
+                        comparable_data["object_msi"] = entities[0].referent.designated_ref().msi
+                        comparable_data["object_referent"] = str(entities[0].referent.designated_ref())
+
+        return comparable_data
+
+    def test_compare(self, compare_data1=None, compare_data2=None):
+        if not compare_data1:
+            compare_data1 = self.extract_comparable_data(self.clause1)
+        if not compare_data2:
+            compare_data2 = self.extract_comparable_data(self.clause2)
+
+        if not compare_data1["is_fact"] or not compare_data2["is_fact"] or not compare_data1["verb_msi"] or not compare_data2["verb_msi"]:
+            return 0
+
+        boxes1 = compare_data1["boxes"]
+        boxes2 = compare_data2["boxes"]
+
+        time_data1 = compare_data1["time_reference"]
+        time_data2 = compare_data2["time_reference"]
+
+        equality_box = {}
+        for a_label, a_value1 in boxes1.iteritems():
+            equality_box[a_label] = float((boxes2[a_label] == a_value1))
+
+        #WILDCARD
+        possible_wildcard_labels = ["subject", "object"]
+        for a_label in possible_wildcard_labels:
+            if equality_box[a_label] == 1.0:
+                if boxes1[a_label] in ["alguien", "algo", None] or boxes2[a_label] in ["alguien", "algo", None]:
+                    equality_box[a_label] = -1.0
+            else:
+                if boxes1[a_label] in ["alguien", "algo", None] or boxes2[a_label] in ["alguien", "algo", None]:
+                    equality_box[a_label] = -1.0
+
+        if compare_data1["subject_msi"] is not None and compare_data2["subject_msi"] is not None:
+            equality_box["subject"] = self.compare_entities_data(compare_data1["subject_referent"], compare_data2["subject_referent"], compare_data1["subject_msi"], compare_data2["subject_msi"], equality_box["subject"])
+
+        if compare_data1["object_msi"] is not None and compare_data2["object_msi"] is not None:
+            equality_box["object"] = self.compare_entities_data(compare_data1["object_referent"], compare_data2["object_referent"], compare_data1["object_msi"], compare_data2["object_msi"], equality_box["object"])
+
+        #VERB:
+        if equality_box["verb"] == 1.0:
+            #TIME y PERSON y NUMBER
+            msiScore = 0.0
+
+            msi1 = compare_data1["verb_msi"]
+            msi2 = compare_data2["verb_msi"]
+
+            if msi1["person"] == msi2["person"]:
+                msiScore = 0.75
+                if msi1["number"] == msi2["number"]:
+                    msiScore = 1.0
+            else:
+                msiScore = 0.25
+                if msi1["number"] == msi2["number"]:
+                    msiScore = 0.5
+
+            equality_box["verb"] = msiScore
+
+        if compare_data1["penalized_verb"] or compare_data2["penalized_verb"]:
+            equality_box["verb"] = float(equality_box["verb"]) / 2
+
+        #TIME:
+        time_score = FactCompare._time_utils.compare_dates(compare_data1["time_reference"], compare_data2["time_reference"])
+        equality_box["time"] = time_score
+
+        #FINAL SCORE:
+        available_scores = 0
+        sum_scores = 0
+        for a_label, a_score in equality_box.iteritems():
+            if a_score > -1:
+                available_scores += 1
+                sum_scores += self.weights[a_label] * a_score
+
+
+        final_score = 0
+        if available_scores > 0:
+            final_score = sum_scores/available_scores
+
+        if final_score > 1:
+            final_score = 1
+
+        #print equality_box
+        #print final_score
+        return final_score
+
+
+#LEGACY FUNCTION! CUANDO SE VERIFIQUE QUE LA NUEVA FUNCIONE => ELIMINAR
     def compare(self):
         if not self.clause1.is_fact() or not self.clause2.is_fact() or not self.clause1.verb or not self.clause2.verb:
             return 0
-
-        weights = {"subject": 1.2, "verb": 1.1, "object": 0.9, "time": 0.9}
 
         fact1 = FactNormalizer(self.clause1, FactCompare._ontology).fact()
         fact2 = FactNormalizer(self.clause2, FactCompare._ontology).fact()
@@ -207,8 +325,7 @@ class FactCompare(object):
 
             equality_box["verb"] = msiScore
 
-            penality_verbs = ["decir", "estar"]
-            if boxes1["verb"] in penality_verbs or boxes2["verb"] in penality_verbs:
+            if boxes1["verb"] in self.penality_verbs or boxes2["verb"] in self.penality_verbs:
                 equality_box["verb"] = float(equality_box["verb"]) / 2
 
 
@@ -223,7 +340,7 @@ class FactCompare(object):
         for a_label, a_score in equality_box.iteritems():
             if a_score > -1:
                 available_scores += 1
-                sum_scores += weights[a_label] * a_score
+                sum_scores += self.weights[a_label] * a_score
 
 
         final_score = 0

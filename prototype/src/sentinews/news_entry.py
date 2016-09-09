@@ -12,7 +12,8 @@ logger = get_logger('tecnonews')
 class NewsEntry(object):
     def __init__(self, title, content, tags, source, url=None, original_categories=None, language=u"spanish",
                  categories=None, wp_id=None, wp_url=None, related=None, entities=None,
-                 published_date=None, object_id=None, versions=None, universe_versions=None, universe_scores=None, image=None, image_search_string=None, summary=None):
+                 published_date=None, object_id=None, versions=None, universe_versions=None,
+                 universe_scores=None, image=None, image_search_string=None, summary=None, extended_summary=None):
 
         self.title = title
         self.content = content
@@ -48,7 +49,7 @@ class NewsEntry(object):
         self.raconto_content = None
         self.raconto_date = None
         self.raconto_url = None
-
+        self.extended_summary = extended_summary
         # Defensive programing to avoid wrong encoded
         assert(isinstance(self.title, unicode))
         assert(isinstance(self.content, unicode))
@@ -123,7 +124,7 @@ class NewsEntry(object):
                     universe_versions=self.universe_versions, universe_scores=self.universe_scores, sentiment=self.sentiment,
                     countries=self.countries, cities=self.cities,host_id=self.host_id,image_url=self.image_url,
                     summary=self.summary, language=self.language, raconto_id=self.raconto_id, raconto_title=self.raconto_title,
-                    raconto_content=self.raconto_content, raconto_date=self.raconto_date, raconto_url=self.raconto_url)
+                    raconto_content=self.raconto_content, raconto_date=self.raconto_date, raconto_url=self.raconto_url, extended_summary=self.extended_summary)
 
     def analyzed_paragraph(self):
         from src.model.paragraph.paragraphAnalyzer import ParagraphAnalyzer

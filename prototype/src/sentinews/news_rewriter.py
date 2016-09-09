@@ -404,7 +404,17 @@ class NewsRewriter(object):
 
         logger.info("Trying summarization")
         try:
-            self.original_entry.summary = TextSummarizer(analysis).summarize()
+            #self.original_entry.summary = TextSummarizer(analysis).summarize()
+            extended_summary = TextSummarizer(analysis).summarize(extended=True)
+            self.original_entry.extended_summary = extended_summary
+
+            summary_text = ""
+            for a_clause in extended_summary:
+                summary_text += "\n" + a_clause["text"]
+            summary_text = summary_text.strip()
+            if summary_text != None:
+                self.original_entry.summary = summary_text
+
         except:
             logger.info("Summarization FAILED")
             pass

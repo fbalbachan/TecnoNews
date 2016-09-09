@@ -1,15 +1,18 @@
 # -*- coding: utf-8 -*-
 from src.rewrite.strategy.textualCite import TextualCite
+from src.utils.fact_compare import FactCompare
 
 class TextSummarizer:
     def __init__(self, analysis):
         self.analysis = analysis
         self.verbs_que = TextualCite().verbs_que
+        self.fact_compare = FactCompare()
 
-    def summarize(self):
+    def summarize(self, extended=False):
         sentences = self.analysis["paragraph"].sentences
 
         final_text = ""
+        extended_summary = []
 
         for a_sentence in sentences:
             if self._sentence_has_cite(a_sentence):
@@ -70,9 +73,17 @@ class TextSummarizer:
                     valid_equative = True
 
                 if valid_subject and valid_equative:
-                    final_text += "\n" + self._summarize_clause(main_clause)
+                    if not extended:
+                        final_text += "\n" + self._summarize_clause(main_clause)
+                    else:
+                        clause_data = self.fact_compare.extract_comparable_data(main_clause)
+                        clause_data["text"] = self._summarize_clause(main_clause)
+                        extended_summary.append(clause_data)
 
-        return final_text
+        if not extended:
+            return final_text
+        else:
+            return extended_summary
 
     def _summarize_clause(self, a_clause):
         clause_text = a_clause.__repr__().replace("_", " ")
