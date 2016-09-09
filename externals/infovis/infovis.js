@@ -665,7 +665,8 @@ function setup_galaxysummary() {
                 "title"     :   tmpnod[i].data().title,
                 "date"      :   tmpnod[i].data().date,
                 "summary"   :   tmpnod[i].data().summary,
-                "id"        :   tmpnod[i].data().id
+                "id"        :   tmpnod[i].data().id,
+                "scored_summary_clauses": tmpnod[i].data().scored_summary_clauses
             } );
         }
 
@@ -680,7 +681,24 @@ function setup_galaxysummary() {
 
         for (var i = 0; i < nodos.length; i++) {
             tmp      = "<div class=\"news-number\"> #" + (i+1) + "&nbsp;&nbsp;</div><div class=\"title\" objectid=\"" + nodos[i].id + "\"  ><span class=\"date\">(" + nodos[i].date.split(".")[0] + ")</span> - " + nodos[i].title + "</div>\n";
-            tmp     += "<div class=\"summary\">" + nodos[i].summary + "</div>";
+
+            if(nodos[i].scored_summary_clauses === undefined){
+                tmp     += "<div class=\"summary\">" + nodos[i].summary + "</div>";
+            }else{
+                tmp     += "<div class=\"summary\">";
+                for(var j = 0; j < nodos[i].scored_summary_clauses.length; j++){
+                    if(nodos[i].scored_summary_clauses[j]["score"] > 0.6){
+                        tmp     += '<font color="red">';
+                        tmp     += nodos[i].scored_summary_clauses[j]["text"];
+                        tmp     += '</font>';
+                    }else{
+                        tmp     += nodos[i].scored_summary_clauses[j]["text"];
+                    }
+                    tmp     += "&nbsp";
+                }
+                tmp     += "</div>";
+            }
+
 
             tmphtml += tmp;
         }

@@ -5,6 +5,7 @@ import json
 from pymongo import MongoClient
 from sys import argv
 import bson
+from src.utils.fact_compare import FactCompare
 
 class JSONEncoder(json.JSONEncoder):
     def default(self, o):
@@ -38,9 +39,11 @@ class BaseInfo(object):
 class TreeBuilder(BaseInfo) :
     def __init__(self):
         super(TreeBuilder, self).__init__()
+        self.summary_clauses = []
+        self.fact_compare = FactCompare()
 
     def build_tree(self, id_noticia):
-
+        self.summary_clauses = []
         #web.header('Content-Type', 'application/json')
         #root = self.db["news_entries"].find({"_id" : bson.ObjectId(id_noticia) })
         root = self.db["news_entries"].find({"wp_id" : int(id_noticia) })
@@ -69,6 +72,15 @@ class TreeBuilder(BaseInfo) :
                         #    #            item7["children"] = self._get_children(item7)
 
             ret["root"] = tmp
+
+        for a_clause in self.summary_clauses:
+            for a_clause2 in self.summary_clauses:
+                if a_clause == a_clause2:
+                    continue
+                comparison_score = self.fact_compare.test_compare(a_clause["clause"], a_clause2["clause"])
+                comparison_score = round(comparison_score, 2)
+                if comparison_score > a_clause["score_obj"]["score"]:
+                    a_clause["score_obj"]["score"] = comparison_score
 
         return json.dumps(ret, sort_keys=True, indent=4, separators=(',', ': '), cls=JSONEncoder)
 
@@ -103,7 +115,8 @@ class TreeBuilder(BaseInfo) :
             "categories": obj["categories"],
             #"entities"  : obj["entities"],
             "summary"   : obj["content"].replace(".\n",". ").replace("\n", ". ").split(". ")[0] + ".",
-            "source"    : obj["source"]
+            "scored_summary_clauses": [],
+            "source"    : obj["source"],
         }
 
         if "summary" in obj and obj["summary"] is not None:
@@ -111,6 +124,14 @@ class TreeBuilder(BaseInfo) :
 
         if "versions" in obj and obj["versions"] is not None:
             tmp["versions"] = obj["versions"]
+
+
+        if "extended_summary" in obj and obj["extended_summary"] is not None:
+            for a_clause in obj["extended_summary"]:
+                tmp["scored_summary_clauses"].append({"text": a_clause["text"], "score": 0})
+                self.summary_clauses.append({"clause": a_clause, "score_obj": tmp["scored_summary_clauses"][-1]})
+        else:
+            tmp["scored_summary_clauses"].append({"text": tmp["summary"], "score": 0})
 
         return tmp
 
@@ -124,4 +145,6 @@ if __name__ == "__main__":
         exit(1)
 
     #print TreeBuilder().build_tree(bson.ObjectId(root_id))
-    print TreeBuilder().build_tree(root_id)
+    tree_builder = TreeBuilder()
+    print tree_builder.build_tree(root_id)
+    #print json.dumps(tree_builder.summary_clauses, sort_keys=True, indent=4, separators=(',', ': '), cls=JSONEncoder)
