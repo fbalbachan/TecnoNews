@@ -88,7 +88,7 @@ class FactCompare(object):
         if equality_value == 0.0:
 
             #ref(entity1) == ref(entity2):
-            if str(referent1) == str(referent2):
+            if referent1 == referent2:
                 final_score = 0.5
                 if msi1["semantic_classification"] == msi2["semantic_classification"]:
                     final_score = 1.0
@@ -121,7 +121,7 @@ class FactCompare(object):
         referent2 = entity2.referent.designated_ref()
         msi1 = referent1.msi
         msi2 = referent2.msi
-        return self.compare_entities_data(referent1, referent2, msi1, msi2, equality_value)
+        return self.compare_entities_data(str(referent1), str(referent2), msi1, msi2, equality_value)
 
 
     #EXTRACTS EVERYTHING WE NEED TO KNOW TO COMPARE CLAUSES (THIS IS USEFUL FOR SAVING TO DB AND MAKE A COMPARISON WITHOUT REANALYZING)
