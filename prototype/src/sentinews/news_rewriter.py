@@ -415,9 +415,12 @@ class NewsRewriter(object):
             if summary_text != None:
                 self.original_entry.summary = summary_text
 
-        except:
+        except Exception as e:
+            logger.info(traceback.format_exc())
             logger.info("Summarization FAILED")
             pass
+            
+        logger.info("Summarization SUCCESS")
 
         applied_global = False
         try:
