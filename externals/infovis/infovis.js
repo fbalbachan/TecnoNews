@@ -687,7 +687,11 @@ function setup_galaxysummary() {
             }else{
                 tmp     += "<div class=\"summary\">";
                 for(var j = 0; j < nodos[i].scored_summary_clauses.length; j++){
-                    if(nodos[i].scored_summary_clauses[j]["score"] > 0.6){
+                    if(nodos[i].scored_summary_clauses[j]["score"] >= 0.7 && nodos[i].scored_summary_clauses[j]["score"] < 0.85){
+                        tmp     += '<font color="orange">';
+                        tmp     += nodos[i].scored_summary_clauses[j]["text"];
+                        tmp     += '</font>';
+                    }else if(nodos[i].scored_summary_clauses[j]["score"] >= 0.85){
                         tmp     += '<font color="red">';
                         tmp     += nodos[i].scored_summary_clauses[j]["text"];
                         tmp     += '</font>';
