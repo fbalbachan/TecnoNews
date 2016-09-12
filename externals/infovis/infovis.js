@@ -680,30 +680,16 @@ function setup_galaxysummary() {
         nodos.sort( sorter );
 
         var font_colors = [
-                        "red",
-                        "orange",
-                        "green",
-                        "yellow",
-                        "blue",
-                        "olive",
-                        "navy",
-                        "purple",
-                        "deeppink",
-                        "mediumseagreen",
-                        "crimson",
-                        "teal",
-                        "darkred",
-                        "sienna",
-                        "salmon",
-                        "indigo",
-                        "gold",
-                        "lime",
-                        "purple",
-                        "darkorange",
-                        "magenta",
-                        "rosybrown",
-                        "royalblue",
-                        "mediumvioletred",
+                                "red",
+                                "lime",
+                                "orange",
+                                "green",
+                                "blue",
+                                "fuchsia",
+                                "darkred",
+                                "gold",
+                                "mediumvioletred",
+                                "teal",
         ];
 
         for (var i = 0; i < nodos.length; i++) {
@@ -715,9 +701,25 @@ function setup_galaxysummary() {
                 tmp     += "<div class=\"summary\">";
                 for(var j = 0; j < nodos[i].scored_summary_clauses.length; j++){
                     if(nodos[i].scored_summary_clauses[j]["group"] !== undefined && nodos[i].scored_summary_clauses[j]["group"] > 0){
-                        color_group = nodos[i].scored_summary_clauses[j]["group"] % font_colors.length
+                        color_group = nodos[i].scored_summary_clauses[j]["group"] % font_colors.length;
+                        extra_tags_open = "";
+                        extra_tags_close = "";
+                        if(nodos[i].scored_summary_clauses[j]["group"] > font_colors.length){
+                                extra_tags_open += "<b>";
+                                extra_tags_close += "</b>";
+                        }
+                        if(nodos[i].scored_summary_clauses[j]["group"] > 2*font_colors.length){
+                                extra_tags_open = "<u>" + extra_tags_open;
+                                extra_tags_close += "</u>";
+                        }
+                        if(nodos[i].scored_summary_clauses[j]["group"] > 3*font_colors.length){
+                                extra_tags_open = "<i>" + extra_tags_open;
+                                extra_tags_close += "</i>";
+                        }
                         tmp     += '<font color="'+ font_colors[color_group] + '">';
+                        tmp     += extra_tags_open;
                         tmp     += nodos[i].scored_summary_clauses[j]["text"];
+                        tmp     += extra_tags_close;
                         tmp     += '</font>';
                     }else{
                         tmp     += nodos[i].scored_summary_clauses[j]["text"];
