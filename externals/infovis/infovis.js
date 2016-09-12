@@ -714,7 +714,7 @@ function setup_galaxysummary() {
             }else{
                 tmp     += "<div class=\"summary\">";
                 for(var j = 0; j < nodos[i].scored_summary_clauses.length; j++){
-                    if(nodos[i].scored_summary_clauses[j]["group"] > 0){
+                    if(nodos[i].scored_summary_clauses[j]["group"] !== undefined && nodos[i].scored_summary_clauses[j]["group"] > 0){
                         color_group = nodos[i].scored_summary_clauses[j]["group"] % font_colors.length
                         tmp     += '<font color="'+ font_colors[color_group] + '">';
                         tmp     += nodos[i].scored_summary_clauses[j]["text"];
