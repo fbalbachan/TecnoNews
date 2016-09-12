@@ -140,9 +140,11 @@ class TreeBuilder(BaseInfo) :
 
 
         if "extended_summary" in obj and obj["extended_summary"] is not None:
+            clause_index = 0
             for a_clause in obj["extended_summary"]:
                 tmp["scored_summary_clauses"].append({"text": a_clause["text"], "score": 0, "group": 0})
-                self.summary_clauses.append({"id": tmp["id"], "clause": a_clause, "score_obj": tmp["scored_summary_clauses"][-1]})
+                self.summary_clauses.append({"id": tmp["id"]+str(clause_index), "clause": a_clause, "score_obj": tmp["scored_summary_clauses"][-1]})
+                clause_index += 1
         else:
             tmp["scored_summary_clauses"].append({"text": tmp["summary"], "score": 0, "group": 0})
 
