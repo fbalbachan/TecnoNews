@@ -73,12 +73,25 @@ class TreeBuilder(BaseInfo) :
 
             ret["root"] = tmp
 
+        group_index = 1
+        group_threshold = 0.85
         for a_clause in self.summary_clauses:
             for a_clause2 in self.summary_clauses:
                 if a_clause == a_clause2:
                     continue
                 comparison_score = self.fact_compare.test_compare(a_clause["clause"], a_clause2["clause"])
                 comparison_score = round(comparison_score, 2)
+
+                if comparison_score >= group_threshold:
+                    if a_clause["score_obj"]["group"] == 0 and a_clause2["score_obj"]["group"] == 0:
+                        a_clause["score_obj"]["group"] = group_index
+                        a_clause2["score_obj"]["group"] = group_index
+                        group_index += 1
+                    elif a_clause["score_obj"]["group"] != 0 and a_clause2["score_obj"]["group"] == 0:
+                        a_clause2["score_obj"]["group"] = a_clause["score_obj"]["group"]
+                    elif a_clause["score_obj"]["group"] == 0 and a_clause2["score_obj"]["group"] != 0:
+                        a_clause["score_obj"]["group"] = a_clause2["score_obj"]["group"]
+
                 if comparison_score > a_clause["score_obj"]["score"]:
                     a_clause["score_obj"]["score"] = comparison_score
 
@@ -128,10 +141,10 @@ class TreeBuilder(BaseInfo) :
 
         if "extended_summary" in obj and obj["extended_summary"] is not None:
             for a_clause in obj["extended_summary"]:
-                tmp["scored_summary_clauses"].append({"text": a_clause["text"], "score": 0})
+                tmp["scored_summary_clauses"].append({"text": a_clause["text"], "score": 0, "group": 0})
                 self.summary_clauses.append({"clause": a_clause, "score_obj": tmp["scored_summary_clauses"][-1]})
         else:
-            tmp["scored_summary_clauses"].append({"text": tmp["summary"], "score": 0})
+            tmp["scored_summary_clauses"].append({"text": tmp["summary"], "score": 0, "group": 0})
 
         return tmp
 

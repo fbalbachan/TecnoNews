@@ -679,6 +679,33 @@ function setup_galaxysummary() {
 
         nodos.sort( sorter );
 
+        var font_colors = [
+                        "red",
+                        "orange",
+                        "green",
+                        "yellow",
+                        "blue",
+                        "olive",
+                        "navy",
+                        "purple",
+                        "deeppink",
+                        "mediumseagreen",
+                        "crimson",
+                        "teal",
+                        "darkred",
+                        "sienna",
+                        "salmon",
+                        "indigo",
+                        "gold",
+                        "lime",
+                        "purple",
+                        "darkorange",
+                        "magenta",
+                        "rosybrown",
+                        "royalblue",
+                        "mediumvioletred",
+        ];
+
         for (var i = 0; i < nodos.length; i++) {
             tmp      = "<div class=\"news-number\"> #" + (i+1) + "&nbsp;&nbsp;</div><div class=\"title\" objectid=\"" + nodos[i].id + "\"  ><span class=\"date\">(" + nodos[i].date.split(".")[0] + ")</span> - " + nodos[i].title + "</div>\n";
 
@@ -687,12 +714,9 @@ function setup_galaxysummary() {
             }else{
                 tmp     += "<div class=\"summary\">";
                 for(var j = 0; j < nodos[i].scored_summary_clauses.length; j++){
-                    if(nodos[i].scored_summary_clauses[j]["score"] >= 0.7 && nodos[i].scored_summary_clauses[j]["score"] < 0.85){
-                        tmp     += '<font color="orange">';
-                        tmp     += nodos[i].scored_summary_clauses[j]["text"];
-                        tmp     += '</font>';
-                    }else if(nodos[i].scored_summary_clauses[j]["score"] >= 0.85){
-                        tmp     += '<font color="red">';
+                    if(nodos[i].scored_summary_clauses[j]["group"] > 0){
+                        color_group = nodos[i].scored_summary_clauses[j]["group"] % font_colors.length
+                        tmp     += '<font color="'+ font_colors[color_group] + '">';
                         tmp     += nodos[i].scored_summary_clauses[j]["text"];
                         tmp     += '</font>';
                     }else{
