@@ -681,7 +681,7 @@ function setup_galaxysummary() {
 
         var font_colors = [
                                 "red",
-                                "lime",
+                                "darkviolet",
                                 "orange",
                                 "green",
                                 "blue",
