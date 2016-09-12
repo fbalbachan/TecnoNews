@@ -27,7 +27,7 @@ def detroll(text):
         if there_is_next_token:
             token = output_tokens[index]
             next_token = output_tokens[index+1]
-            if all_in_upper_case(token) and all_in_upper_case(next_token):
+            if len(token) >2 and all_in_upper_case(token) and all_in_upper_case(next_token):
                 return text.lower()
 
     return ' '.join(output_tokens)
