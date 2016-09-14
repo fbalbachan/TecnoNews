@@ -1,3 +1,8 @@
+canal
+radio
+agencia
+diario
+medio
 narcotraficante
 invitado
 botánico
