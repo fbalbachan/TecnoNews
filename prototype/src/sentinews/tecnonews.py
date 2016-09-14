@@ -137,7 +137,7 @@ class TecnoNews(object):
 
             except Exception as e:
                 logger.error("<Tecnonews> <_process> rewriting fail: %s " % entry.title)
-                logger.error("%s" % str(e))
+                logger.error("%s" % repr(e))
                 logger.error(traceback.format_exc())
 
         except Exception as e:
