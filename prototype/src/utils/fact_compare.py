@@ -13,7 +13,7 @@ class FactCompare(object):
     def __init__(self, clause1=None, clause2=None):
         self.clause1 = clause1
         self.clause2 = clause2
-        self.penality_verbs = ["decir", "estar"]
+        self.penality_verbs = ["decir", "estar", "existir", "ser"]
         self.weights = {"subject": 1.2, "verb": 1.1, "object": 0.9, "time": 0.9}
 
     def compare_clause(self, clause1, clause2):
@@ -326,7 +326,7 @@ class FactCompare(object):
             equality_box["verb"] = msiScore
 
             if boxes1["verb"] in self.penality_verbs or boxes2["verb"] in self.penality_verbs:
-                equality_box["verb"] = float(equality_box["verb"]) / 2
+                equality_box["verb"] = float(equality_box["verb"]) / 1.5
 
 
         #TIME:

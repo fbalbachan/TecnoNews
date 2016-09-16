@@ -724,7 +724,8 @@ function setup_galaxysummary() {
                     }else{
                         tmp     += nodos[i].scored_summary_clauses[j]["text"];
                     }
-                    tmp     += "&nbsp";
+                    //tmp     += "&nbsp";
+                    tmp     += "<br>";
                 }
                 tmp     += "</div>";
             }
