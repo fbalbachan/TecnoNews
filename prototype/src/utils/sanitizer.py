@@ -113,16 +113,6 @@ class Sanitizer():
         new_content = re.sub(u'a CNN', u'al medio estadounidense CNN', new_content)
         new_content = re.sub(u'A CNN', u'Al medio estadounidense CNN', new_content)
 
-        content_paragraphs = new_content.strip().split(u"\n")
-        if len(content_paragraphs) >= 4:
-            current_index = len(content_paragraphs) -2
-            while content_paragraphs[current_index].strip() == "" and current_index >= 2:
-                current_index = current_index -1
-
-            content_paragraphs.pop(current_index)
-
-        new_content = u"\n".join(content_paragraphs)
-
         return new_content.strip()
 
     def _load_banned_paragraphs(self):

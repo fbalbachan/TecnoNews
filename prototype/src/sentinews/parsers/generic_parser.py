@@ -39,6 +39,17 @@ class GenericParser(object):
         content = self.sanitize(content)
         assert content.find('function()') == -1
 
+        content_paragraphs = content.strip().split(u"\n")
+        if len(content_paragraphs) >= 4:
+            current_index = len(content_paragraphs) -2
+            while content_paragraphs[current_index].strip() == "" and current_index >= 2:
+                current_index = current_index -1
+
+            content_paragraphs.pop(current_index)
+
+        content = u"\n".join(content_paragraphs)
+
+
         if original_categories and u'video' in original_categories:
             return None
 
