@@ -688,7 +688,8 @@ function setup_galaxysummary() {
                                 "fuchsia",
                                 "darkred",
                                 "gold",
-                                "mediumvioletred",
+                                "gray",
+                                //"mediumvioletred",
                                 "teal",
         ];
 
