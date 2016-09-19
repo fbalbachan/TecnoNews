@@ -326,7 +326,7 @@ class FactCompare(object):
             equality_box["verb"] = msiScore
 
             if boxes1["verb"] in self.penality_verbs or boxes2["verb"] in self.penality_verbs:
-                equality_box["verb"] = float(equality_box["verb"]) / 1.5
+                equality_box["verb"] = float(equality_box["verb"]) / 2
 
 
         #TIME:
