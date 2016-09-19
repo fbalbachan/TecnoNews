@@ -50,7 +50,7 @@
                                 setTimeout(setup_cy, 3000);
                             } else {
                                 var message = resp.data.message;
-                                alert("error leyendo datos de la galaxia:\n" + message);
+                                alert("Still generating data. Please refresh the page in a while:\n" + message);
                             }
                         }
                     );

@@ -40,10 +40,12 @@ class TreeBuilder(BaseInfo) :
     def __init__(self):
         super(TreeBuilder, self).__init__()
         self.summary_clauses = []
+        self.clauses_ids = {}
         self.fact_compare = FactCompare()
 
     def build_tree(self, id_noticia):
         self.summary_clauses = []
+        self.clauses_ids = {}
         #web.header('Content-Type', 'application/json')
         #root = self.db["news_entries"].find({"_id" : bson.ObjectId(id_noticia) })
         root = self.db["news_entries"].find({"wp_id" : int(id_noticia) })
@@ -72,9 +74,8 @@ class TreeBuilder(BaseInfo) :
                         #    #            item7["children"] = self._get_children(item7)
 
             ret["root"] = tmp
-
         group_index = 1
-        group_threshold = 0.75
+        group_threshold = 0.80
         for a_clause in self.summary_clauses:
             for a_clause2 in self.summary_clauses:
                 if a_clause["id"] == a_clause2["id"]:
@@ -94,6 +95,13 @@ class TreeBuilder(BaseInfo) :
 
                 if comparison_score > a_clause["score_obj"]["score"]:
                     a_clause["score_obj"]["score"] = comparison_score
+
+                for other_score in a_clause["others"]:
+                    other_score["group"] = a_clause["score_obj"]["group"]
+                    other_score["score"] = a_clause["score_obj"]["score"]
+                for other_score in a_clause2["others"]:
+                    other_score["group"] = a_clause2["score_obj"]["group"]
+                    other_score["score"] = a_clause2["score_obj"]["score"]
 
         return json.dumps(ret, sort_keys=True, indent=4, separators=(',', ': '), cls=JSONEncoder)
 
@@ -143,7 +151,11 @@ class TreeBuilder(BaseInfo) :
             clause_index = 0
             for a_clause in obj["extended_summary"]:
                 tmp["scored_summary_clauses"].append({"text": a_clause["text"], "score": 0, "group": 0})
-                self.summary_clauses.append({"id": tmp["id"]+str(clause_index), "clause": a_clause, "score_obj": tmp["scored_summary_clauses"][-1]})
+                if (tmp["id"] + str(clause_index)) not in self.clauses_ids:
+                    self.summary_clauses.append({"id": tmp["id"]+str(clause_index), "clause": a_clause, "score_obj": tmp["scored_summary_clauses"][-1], "others": []})
+                    self.clauses_ids[tmp["id"]+ str(clause_index)] = self.summary_clauses[-1]
+                else:
+                    self.clauses_ids[tmp["id"]+ str(clause_index)]["others"].append(tmp["scored_summary_clauses"][-1])
                 clause_index += 1
         else:
             tmp["scored_summary_clauses"].append({"text": tmp["summary"], "score": 0, "group": 0})
