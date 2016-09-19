@@ -705,16 +705,14 @@ function setup_galaxysummary() {
                         extra_tags_open = "";
                         extra_tags_close = "";
                         if(nodos[i].scored_summary_clauses[j]["group"] > font_colors.length){
-                                extra_tags_open += "<b>";
-                                extra_tags_close += "</b>";
-                        }
-                        if(nodos[i].scored_summary_clauses[j]["group"] > 2*font_colors.length){
-                                extra_tags_open = "<u>" + extra_tags_open;
+                                extra_tags_open += "<u>";
                                 extra_tags_close += "</u>";
-                        }
-                        if(nodos[i].scored_summary_clauses[j]["group"] > 3*font_colors.length){
+                        }else if(nodos[i].scored_summary_clauses[j]["group"] > 2*font_colors.length){
                                 extra_tags_open = "<i>" + extra_tags_open;
                                 extra_tags_close += "</i>";
+                        }else if(nodos[i].scored_summary_clauses[j]["group"] > 3*font_colors.length){
+                                extra_tags_open = "<b>" + extra_tags_open;
+                                extra_tags_close += "</b>";
                         }
                         tmp     += '<font color="'+ font_colors[color_group] + '">';
                         tmp     += extra_tags_open;
