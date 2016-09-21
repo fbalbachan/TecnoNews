@@ -75,7 +75,7 @@ class TreeBuilder(BaseInfo) :
 
             ret["root"] = tmp
         group_index = 1
-        group_threshold = 0.85
+        group_threshold = 0.75
         for a_clause in self.summary_clauses:
             for a_clause2 in self.summary_clauses:
                 if a_clause["id"] == a_clause2["id"]:
