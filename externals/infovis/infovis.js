@@ -210,7 +210,7 @@ function process_json( obj ) {
         if (tmp.data.children !== undefined) {
             //console.log(tmp.data.title + " :" + tmp.data.children.length + " hijos.");
             color = random_color();
-            for ( var i2 = 1; i2 < tmp.data.children.length; i2++ ) {
+            for ( var i2 = 0; i2 < tmp.data.children.length; i2++ ) {
                 var tmp2 = tmp.data.children[i2];
                 tmp2.index = 2;
                 tmp2.color       = color_by_sentiment(tmp2.sentiment);
@@ -241,7 +241,7 @@ function process_json( obj ) {
 
                 // Bisnietos de root
                 if (tmp2.children) {
-                    for ( var i3 = 1; i3 < tmp2.children.length; i3++ ) {
+                    for ( var i3 = 0; i3 < tmp2.children.length; i3++ ) {
                         color           = random_color();
                         var tmp3        = tmp2.children[i3];
                         tmp3.index      = 3;
