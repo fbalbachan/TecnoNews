@@ -11,18 +11,12 @@ class DateTimeStrategy:
         self.time_utils = FactTimeUtils()
 
     def applies_to(self, sentence, node):
-        return any((self.applies_to_clause(clause) for clause in sentence.clauses))
+        return any((self.applies_to_clause(clause) for clause in sentence.clauses_of_level(0)))
 
     def rewrite(self, sentence, node):
         # Select first, because the others sometimes are garbage
-        #clause = [clause for clause in sentence.clauses_of_level(0) if self.applies_to_clause(clause)][0]
-        rewrites = []
-        for a_clause in sentence.clauses:
-            if self.applies_to_clause(a_clause):
-                rewrites.append(self.rewrite_clause(a_clause))
-
-        return rewrites
-        #return self.rewrite_clause(clause)
+        clause = [clause for clause in sentence.clauses_of_level(0) if self.applies_to_clause(clause)][0]
+        return self.rewrite_clause(clause)
 
     def applies_to_clause(self, clause):
         clause_own_time = self.time_utils.extract_data_info(clause)
