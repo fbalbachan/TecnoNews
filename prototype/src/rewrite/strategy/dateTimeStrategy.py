@@ -2,22 +2,35 @@
 from src.rewrite.rewrite import Rewrite
 from src.utils.collectionUtils import dict_by
 from src.utils.stringUtils import set_first_letter_case
-
+from src.utils.fact_time_utils import FactTimeUtils
+import datetime
 
 class DateTimeStrategy:
     def __init__(self, ontology):
         self.ontology = ontology
+        self.time_utils = FactTimeUtils()
 
     def applies_to(self, sentence, node):
-        return any((self.applies_to_clause(clause) for clause in sentence.clauses_of_level(0)))
+        return any((self.applies_to_clause(clause) for clause in sentence.clauses))
 
     def rewrite(self, sentence, node):
         # Select first, because the others sometimes are garbage
-        clause = [clause for clause in sentence.clauses_of_level(0) if self.applies_to_clause(clause)][0]
-        return self.rewrite_clause(clause)
+        #clause = [clause for clause in sentence.clauses_of_level(0) if self.applies_to_clause(clause)][0]
+        rewrites = []
+        for a_clause in sentence.clauses:
+            if self.applies_to_clause(a_clause):
+                rewrites.append(self.rewrite_clause(a_clause))
+
+        return rewrites
+        #return self.rewrite_clause(clause)
 
     def applies_to_clause(self, clause):
-        return bool(clause.time_references)
+        clause_own_time = self.time_utils.extract_data_info(clause)
+
+        #time_reference = self.time_utils.normalize_datainfo(clause_own_time)
+        #clause_timebox = self.time_utils.get_timebox(clause)
+        #print self.time_utils.parse_relative_time_info(clause_timebox, time_reference)
+        return bool(clause.time_references) and self.time_utils.date_has_info(clause_own_time)
 
     def rewrite_clause(self, clause):
         grouped = self.grouped_references_for(clause)
@@ -32,13 +45,51 @@ class DateTimeStrategy:
         first_leaf_lf = clause.proper_leaves()[0].original_lexical_form
         text = ""
 
+        clause_own_time = self.time_utils.extract_data_info(clause)
+        normalized_time =  self.time_utils.normalize_datainfo(clause_own_time)
+        now = datetime.datetime.now()
+
+        if normalized_time["year"] is not None and normalized_time["year"] - now.year != 0:
+            difference = normalized_time["year"] - now.year
+            if difference < 0:
+                text += "Hace " + str(difference*(-1))
+            else:
+                text += "En " + str(difference)
+
+            text += " año"
+            if abs(difference) > 1:
+                text += "s"
+            text += ", "
+        elif normalized_time["month"] is not None and normalized_time["month"] - now.month != 0:
+            difference = normalized_time["month"] - now.month
+            if difference < 0:
+                text += "Hace " + str(difference*(-1))
+            else:
+                text += "En " + str(difference)
+
+            text += " mes"
+            if abs(difference) > 1:
+                text += "es"
+            text += ", "
+        elif normalized_time["day"] is not None and normalized_time["day"] - now.day != 0:
+            difference = normalized_time["day"] - now.day
+            if difference < 0:
+                text += "Hace " + str(difference*(-1))
+            else:
+                text += "En " + str(difference)
+
+            text += " día"
+            if abs(difference) > 1:
+                text += "s"
+            text += ", "
+
         groups_by_pos = dict_by(groups, lambda (group, position): position)
 
         middle_end_groups = sum([[group for group, pos in groups_by_pos[pos]] for pos in ["middle", "end"]
                                  if pos in groups_by_pos], [])
 
-        if middle_end_groups:
-            text += set_first_letter_case(first_leaf_lf, self.text_for(middle_end_groups, True))
+        #if middle_end_groups:
+        #    text += set_first_letter_case(first_leaf_lf, self.text_for(middle_end_groups, True))
 
         last_is_dot = source_leaves[-1].lexical_form == "."
         middle_leaves = source_leaves if not last_is_dot else source_leaves[:-1]

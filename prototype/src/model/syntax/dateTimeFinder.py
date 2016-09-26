@@ -58,4 +58,4 @@ class DateTimeFinder:
 
     time_words = {word.lower() for word in resources.parse_csv_in("syntax", "time_words")}
 
-    non_temporal_adpositions = ["por", "de", "con", "contra", "a", "ante", "bajo", "sin", "según", "tras", "a_causa_de"]
+    non_temporal_adpositions = ["contra", "a", "ante", "bajo", "sin", "según", "tras", "a_causa_de"]
