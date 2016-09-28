@@ -85,34 +85,34 @@ class DateTimeStrategy:
                 text += "s"
             text += ", "
 
-        #groups_by_pos = dict_by(groups, lambda (group, position): position)
+        groups_by_pos = dict_by(groups, lambda (group, position): position)
 
-        #middle_end_groups = sum([[group for group, pos in groups_by_pos[pos]] for pos in ["middle", "end"]
-        #                         if pos in groups_by_pos], [])
+        middle_end_groups = sum([[group for group, pos in groups_by_pos[pos]] for pos in ["middle", "end"]
+                                 if pos in groups_by_pos], [])
 
         ##if middle_end_groups:
         ##    text += set_first_letter_case(first_leaf_lf, self.text_for(middle_end_groups, True))
 
-        #last_is_dot = source_leaves[-1].lexical_form == "."
-        #middle_leaves = source_leaves if not last_is_dot else source_leaves[:-1]
+        last_is_dot = source_leaves[-1].lexical_form == "."
+        middle_leaves = source_leaves if not last_is_dot else source_leaves[:-1]
 
-        #middle_text = self.with_adjusted_case(" ".join([leaf.joined_text() for leaf in middle_leaves]), source_leaves[0])
+        middle_text = self.with_adjusted_case(" ".join([leaf.joined_text() for leaf in middle_leaves]), source_leaves[0])
 
-        #if not text:
-        #    middle_text = set_first_letter_case(first_leaf_lf, middle_text)
-        #text += middle_text
+        if not text:
+            middle_text = set_first_letter_case(first_leaf_lf, middle_text)
+        text += middle_text
 
-        #if "start" in groups_by_pos:
-        #    groups = [group for group, pos in groups_by_pos["start"]]
-        #    text += self.text_for(groups, False)
+        if "start" in groups_by_pos:
+            groups = [group for group, pos in groups_by_pos["start"]]
+            text += self.text_for(groups, False)
 
-        #text = text.replace(" ,", ",").replace(" .", ".")
+        text = text.replace(" ,", ",").replace(" .", ".")
 
-        #if last_is_dot:
-        #    text += "."
-        text += self.with_adjusted_case(first_leaf_lf, clause.proper_leaves()[0])
-        text += " " + " ".join([str(leaf) for leaf in clause.proper_leaves()[1:]])
-        text = text.replace("_", " ")
+        if last_is_dot:
+            text += "."
+        #text += self.with_adjusted_case(first_leaf_lf, clause.proper_leaves()[0])
+        #text += " " + " ".join([str(leaf) for leaf in clause.proper_leaves()[1:]])
+        #text = text.replace("_", " ")
 
         return text
 
