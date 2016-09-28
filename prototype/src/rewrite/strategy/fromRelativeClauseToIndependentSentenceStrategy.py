@@ -76,11 +76,12 @@ class FromRelativeClauseToIndependentSentenceStrategy:
 
 
                         #Extract sub clause, replace for pronoun, and clean:
-                        new_second_sentence = original_sentence[:dereferenced_entity.token.start()] + entity_pronoun + original_sentence[dereferenced_entity.token.end():clause_start_index].strip() + original_sentence[clause_end_index:].strip()
+                        new_second_sentence = original_sentence[:dereferenced_entity.token.start()] + entity_pronoun + " " + original_sentence[dereferenced_entity.token.end():clause_start_index].strip() + original_sentence[clause_end_index:].strip()
                         new_second_sentence = re.sub(u',,', u'', new_second_sentence)
                         new_second_sentence = re.sub(u',\.', u'.', new_second_sentence)
                         new_second_sentence = re.sub(ur'(.),(.)', ur'\1 \2', new_second_sentence)
                         new_second_sentence = re.sub(ur',$', ur'', new_second_sentence)
+                        new_second_sentence = re.sub(ur'\s{2,}', ur' ', new_second_sentence)
 
 
                         new_first_sentence = original_sentence[clause_start_index:clause_end_index]
