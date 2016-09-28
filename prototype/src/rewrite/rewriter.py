@@ -56,7 +56,7 @@ class Rewriter:
                                           AdverbialClauseDislocationStrategy(ontology),
                                           AlthoughClauseDislocationStrategy(),
                                           SegunToDijoDislocationStrategy(),
-                                          # DateTimeStrategy(ontology)
+                                          DateTimeStrategy(ontology)
                                           ]
         else:
             self.replacementStrategies = []
