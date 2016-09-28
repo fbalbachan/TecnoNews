@@ -42,7 +42,7 @@ def all_rest_in_lower_case(token):
 
 
 def all_in_upper_case(token):
-    return token.upper() == token
+    return re.match(r"[abdefghijkmnñopqstuvwxyzABDEFGHIJKMNÑOPQSTUVWXYZáéíóúÁÉÍÓÚ]", token) and token.upper() == token
 
 
 def limpieza_inicial(s):
