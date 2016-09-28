@@ -9,7 +9,7 @@ class DateTimeStrategy:
     def __init__(self, ontology):
         self.ontology = ontology
         self.time_utils = FactTimeUtils()
-        self.forbidden_words = ["por", "hasta", "entre"]
+        self.forbidden_words = ["por", "hasta", "entre", "desde"]
 
     def applies_to(self, sentence, node):
         return any((self.applies_to_clause(clause) for clause in sentence.clauses_of_level(0)))
@@ -29,10 +29,20 @@ class DateTimeStrategy:
         for a_forbidden_word in self.forbidden_words:
             if a_forbidden_word == clause_timebox_words[0]:
                 return False
+
+        good_difference = False
+        normalized_time =  self.time_utils.normalize_datainfo(clause_own_time)
+        now = datetime.datetime.now()
+        if normalized_time["year"] is not None and normalized_time["year"] - now.year != 0:
+            good_difference = True
+        if normalized_time["month"] is not None and normalized_time["month"] - now.month != 0:
+            good_difference = True
+        if normalized_time["day"] is not None and normalized_time["day"] - now.day != 0:
+            good_difference = True
         #time_reference = self.time_utils.normalize_datainfo(clause_own_time)
         #clause_timebox = self.time_utils.get_timebox(clause)
         #print self.time_utils.parse_relative_time_info(clause_timebox, time_reference)
-        return bool(clause.time_references) and self.time_utils.date_has_info(clause_own_time)
+        return bool(clause.time_references) and self.time_utils.date_has_info(clause_own_time) and good_difference
 
     def rewrite_clause(self, clause):
         grouped = self.grouped_references_for(clause)
