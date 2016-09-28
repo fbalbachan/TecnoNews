@@ -9,6 +9,7 @@ class DateTimeStrategy:
     def __init__(self, ontology):
         self.ontology = ontology
         self.time_utils = FactTimeUtils()
+        self.forbidden_words = ["por", "hasta", "entre"]
 
     def applies_to(self, sentence, node):
         return any((self.applies_to_clause(clause) for clause in sentence.clauses_of_level(0)))
@@ -20,7 +21,14 @@ class DateTimeStrategy:
 
     def applies_to_clause(self, clause):
         clause_own_time = self.time_utils.extract_data_info(clause)
+        clause_timebox = self.time_utils.get_timebox(clause)
+        clause_timebox_words = clause_timebox.lower().split()
+        if len(clause_timebox_words) == 0:
+            return False
 
+        for a_forbidden_word in self.forbidden_words:
+            if a_forbidden_word == clause_timebox_words[0]:
+                return False
         #time_reference = self.time_utils.normalize_datainfo(clause_own_time)
         #clause_timebox = self.time_utils.get_timebox(clause)
         #print self.time_utils.parse_relative_time_info(clause_timebox, time_reference)
@@ -77,31 +85,34 @@ class DateTimeStrategy:
                 text += "s"
             text += ", "
 
-        groups_by_pos = dict_by(groups, lambda (group, position): position)
+        #groups_by_pos = dict_by(groups, lambda (group, position): position)
 
-        middle_end_groups = sum([[group for group, pos in groups_by_pos[pos]] for pos in ["middle", "end"]
-                                 if pos in groups_by_pos], [])
+        #middle_end_groups = sum([[group for group, pos in groups_by_pos[pos]] for pos in ["middle", "end"]
+        #                         if pos in groups_by_pos], [])
 
-        #if middle_end_groups:
-        #    text += set_first_letter_case(first_leaf_lf, self.text_for(middle_end_groups, True))
+        ##if middle_end_groups:
+        ##    text += set_first_letter_case(first_leaf_lf, self.text_for(middle_end_groups, True))
 
-        last_is_dot = source_leaves[-1].lexical_form == "."
-        middle_leaves = source_leaves if not last_is_dot else source_leaves[:-1]
+        #last_is_dot = source_leaves[-1].lexical_form == "."
+        #middle_leaves = source_leaves if not last_is_dot else source_leaves[:-1]
 
-        middle_text = self.with_adjusted_case(" ".join([leaf.joined_text() for leaf in middle_leaves]), source_leaves[0])
+        #middle_text = self.with_adjusted_case(" ".join([leaf.joined_text() for leaf in middle_leaves]), source_leaves[0])
 
-        if not text:
-            middle_text = set_first_letter_case(first_leaf_lf, middle_text)
-        text += middle_text
+        #if not text:
+        #    middle_text = set_first_letter_case(first_leaf_lf, middle_text)
+        #text += middle_text
 
-        if "start" in groups_by_pos:
-            groups = [group for group, pos in groups_by_pos["start"]]
-            text += self.text_for(groups, False)
+        #if "start" in groups_by_pos:
+        #    groups = [group for group, pos in groups_by_pos["start"]]
+        #    text += self.text_for(groups, False)
 
-        text = text.replace(" ,", ",").replace(" .", ".")
+        #text = text.replace(" ,", ",").replace(" .", ".")
 
-        if last_is_dot:
-            text += "."
+        #if last_is_dot:
+        #    text += "."
+        text += self.with_adjusted_case(first_leaf_lf, clause.proper_leaves()[0])
+        text += " " + " ".join([str(leaf) for leaf in clause.proper_leaves()[1:]])
+        text = text.replace("_", " ")
 
         return text
 
