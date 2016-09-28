@@ -37,8 +37,9 @@ class FromRelativeClauseToIndependentSentenceStrategy:
 
                 sentence_before_clause = sentence.text[:clause.node.leaves()[0].token.start()].strip()
 
-                if sentence_before_clause[-1] ==  u",":
-                    result = True
+                #if sentence_before_clause[-1] ==  u",":
+                #    result = True
+                result = True
 
         return result
 
