@@ -89,8 +89,8 @@ class Rewriter:
                 continue
 
             #Don't apply if any global strategy applied
-            if self.applied_global_strategies and strategy.__class__.__name__ == "FromRelativeClauseToIndependentSentenceStrategy":
-                continue
+            #if self.applied_global_strategies and strategy.__class__.__name__ == "FromRelativeClauseToIndependentSentenceStrategy":
+            #    continue
 
             if debug_mode: print "\nTEXT BEFORE APPLYING DISLOCATION STRATEGY: ", strategy.__class__.__name__, ":\n[", text, "]\n".decode('utf-8')
             self.paragraph = Paragraph.from_text(text)

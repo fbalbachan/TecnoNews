@@ -419,7 +419,7 @@ class NewsRewriter(object):
             logger.info(traceback.format_exc())
             logger.info("Summarization FAILED")
             pass
-            
+
         logger.info("Summarization SUCCESS")
 
         applied_global = False
