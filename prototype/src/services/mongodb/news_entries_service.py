@@ -117,7 +117,7 @@ class NewsEntriesService(object):
             return self.get_iterable({"_id": {"$gt": dummy_id_from, "$lt": dummy_id_to}, 'categories': {'$in': categories}}, projection)
 
 
-    def get_by_id_date_range(self, fromDate, toDate, limit=None):
+    def get_by_id_date_range(self, fromDate, toDate, limit=None, get_iterable=False, projection=None):
         """Retrieve a list of news entries by date range
         Parameters
         ----------
@@ -130,6 +130,7 @@ class NewsEntriesService(object):
         dummy_id_from = ObjectId.from_datetime(fromDate)
         dummy_id_to = ObjectId.from_datetime(toDate)
         # TODO: use dummy_id_to
-        return self.get_list({"_id": {"$gt": dummy_id_from},
-                                'language':u"spanish"},
-                             limit)
+        if not get_iterable:
+            return self.get_list({"_id": {"$gt": dummy_id_from}, 'language':u"spanish"}, limit)
+        else:
+            return self.get_iterable({"_id": {"$gt": dummy_id_from}, 'language':u"spanish"}, projection)

@@ -71,13 +71,15 @@ class TecnoNews(object):
                 #    else:
                 #        myfile.write(entry.url + " --> None\n")
 
-                tsr = RelatedNewsEntries(entry)
-                tsr_universe = RelatedNewsEntries(entry, for_universe=True)
+                tsr = RelatedNewsEntries(entry, optimized=True)
+                tsr_universe = RelatedNewsEntries(entry, for_universe=True, optimized=True)
 
-                other_versions = tsr.get_other_versions_top_ten()
+                #other_versions = tsr.get_other_versions_top_ten()
+                other_versions = tsr.get_other_versions_optimized()[:10]
                 other_versions = [entry_version for entry_version in other_versions if entry_version.title != entry.title]
-                universe_versions_scored = tsr_universe.get_other_versions(with_score=True)
-                related = tsr.get_related_entities_top_5_not_in_list(other_versions)
+                universe_versions_scored = tsr_universe.get_other_versions_optimized(with_score=True)
+                #related = tsr.get_related_entities_top_5_not_in_list(other_versions)
+                related = []
 
                 entry.set_news_versions(other_versions)
                 entry.set_universe_versions([x[0] for x in universe_versions_scored])

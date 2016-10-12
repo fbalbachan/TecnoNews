@@ -3,12 +3,14 @@ __author__ = 'Pablo Perez De Angelis'
 from src.utils.textDistance import TextDistance
 from src.utils.configProvider import ConfigProvider
 from src.utils.logger_utils import *
+from datetime import datetime, timedelta
+from src.services.mongodb.news_entries_service import NewsEntriesService
 
 related_logger = get_logger('tecnonews')
 
 class RelatedNewsEntries(object):
 
-    def __init__(self, original, to_compare_news_entries=None, for_universe=False):
+    def __init__(self, original, to_compare_news_entries=None, for_universe=False, optimized=False):
         DAYS_IN_THE_PAST_TO_SEARCH = 5 #number of days to search
 
         #NEW METHOD (FOR VERSIONS_UNIVERSE)
@@ -76,7 +78,14 @@ class RelatedNewsEntries(object):
         #    DAYS_IN_THE_PAST_TO_SEARCH = 30
 
         self.news_original = original
-        if to_compare_news_entries is None:
+        self.for_universe = for_universe
+        if for_universe:
+            self.time_from = datetime.utcnow() - timedelta(days=minimum_limit)
+        else:
+            self.time_from = datetime.utcnow() - timedelta(days=DAYS_IN_THE_PAST_TO_SEARCH)
+        self.time_to = datetime.utcnow()
+
+        if to_compare_news_entries is None and not optimized:
             if for_universe:
                 self.load_news_entries(days=minimum_limit, for_universe=for_universe)
             else:
@@ -88,8 +97,10 @@ class RelatedNewsEntries(object):
 
         #
         self.pre_process(self.news_original)
-        for news in self.news_to_compare:
-            self.pre_process(news)
+
+        if not optimized:
+            for news in self.news_to_compare:
+                self.pre_process(news)
 
         # self.get_logger()
 
@@ -135,9 +146,6 @@ class RelatedNewsEntries(object):
         return u_text
 
     def load_news_entries(self, days, for_universe=False):
-        from datetime import datetime, timedelta
-        from src.services.mongodb.news_entries_service import NewsEntriesService
-
         nes = NewsEntriesService()
 
         fromDate = datetime.utcnow() - timedelta(days=days)
@@ -238,6 +246,86 @@ class RelatedNewsEntries(object):
         other_versions = self.get_other_versions()
         return other_versions[:10]
 
+    def get_other_versions_optimized(self, with_score=False):
+        related_logger.info("\ntitle: %s" % self.news_original.title)
+
+        nes = NewsEntriesService()
+        entries_iterable = None
+        if not self.for_universe:
+            entries_iterable = nes.get_by_categories_date_range(self.time_from, self.time_to, self.news_original.categories, get_iterable=True,  projection={'_id': 1, 'url':1, 'content':1, 'title':1, 'entities':1})
+        else:
+            entries_iterable = nes.get_by_id_date_range(self.time_from, self.time_to, get_iterable=True, projection={'_id': 1, 'url':1, 'content':1, 'title':1, 'entities':1})
+
+        final_result = []
+        threshold = 40
+
+        has_next = True
+        while has_next:
+            newsItem = entries_iterable.next()
+            has_next = newsItem is not None
+            if not has_next:
+                continue
+
+            related_logger.info("\ncase comparing to:")
+            related_logger.info("\t%s" % newsItem.title)
+            related_logger.info("\t%s\n" % newsItem.url)
+
+            score = 0
+
+            if not newsItem.url or newsItem.url == self.news_original.url:
+                continue
+
+            entities_coincidence = self.text_distance.relevant_entities_coincidence(self.news_original, newsItem)
+            title_distance = self.text_distance.title_distance(self.news_original.title, newsItem.title)
+
+            related_logger.info("\t\tEntities coincidence %s" % entities_coincidence)
+            related_logger.info("\t\tTitle Distance %s" % title_distance)
+
+            #-------------SCORING--------------
+            if any(special_cat in self.news_original.categories for special_cat in [u"electrodomésticos", "propiedades"]):
+                if entities_coincidence >= 1:
+                    score += 30
+            else:
+                if entities_coincidence > 1:
+                    score += 30
+
+            if u"propiedades" in self.news_original.categories:
+                if 0.7 < title_distance <= 0.95:
+                    score += 20
+                elif title_distance <= 0.7:
+                    score += 30
+            else:
+                if 0.6 < title_distance <= 0.95:
+                    score += 20
+                elif title_distance <= 0.6:
+                    score += 30
+
+            if score == 0:
+                continue
+
+            newsItem.clean_text = ' '.join([w for w in newsItem.content.split() if w not in self.stopwords])
+            similarity = self.text_distance.similarity(self.news_original.clean_text, newsItem.clean_text)
+
+
+            if 5.0 <= similarity < 10:
+                score += 10
+            elif 10.0 <= similarity < 30:
+                score += 30
+            elif 30.0 <= similarity <= 100:
+                #score += 50
+                score = 0 #PROBABLEMENTE SEA CONTENIDO IDENTICO!
+
+            if score >= threshold:
+                final_result.append([newsItem, score])
+                related_logger.info("%s %s" % (newsItem.title, score))
+
+        sorted_final = sorted(final_result, key=lambda x: x[1], reverse=True)
+        if with_score:
+            return sorted_final
+        else:
+            return [x[0] for x in sorted_final]
+
+
     def get_other_versions(self, with_score=False):
 
         final_result = []
@@ -323,8 +411,8 @@ class RelatedNewsEntries(object):
             score += 10
         elif 10.0 <= similarity < 30:
             score += 30
-        elif 30.0 <= similarity <= 100:
-            score += 50
+        #elif 30.0 <= similarity <= 100:
+        #    score += 50
 
         return score
 
