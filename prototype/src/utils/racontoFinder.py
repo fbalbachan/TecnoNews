@@ -68,6 +68,7 @@ class RacontoFinder(object):
             if entities_coincidence_3 == 0 and entities_coincidence_5 <= 1:
                 continue
 
+            print "PASA 1"
             score += 30
 
             newsItem.clean_text = ' '.join([w for w in newsItem.content.split() if w not in self.stopwords])
@@ -87,9 +88,8 @@ class RacontoFinder(object):
             elif 30.0 <= similarity <= 100:
                 score += 50
 
-
-        if score >= threshold:
-            final_result.append([newsItem, score])
+            if score >= threshold:
+                final_result.append([newsItem, score])
 
             if len(final_result) > 0:
                 selected_best = final_result[0]
