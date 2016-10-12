@@ -68,7 +68,6 @@ class RacontoFinder(object):
             if entities_coincidence_3 == 0 and entities_coincidence_5 <= 1:
                 continue
 
-            print "PASA 1"
             score += 30
 
             newsItem.clean_text = ' '.join([w for w in newsItem.content.split() if w not in self.stopwords])
@@ -91,18 +90,18 @@ class RacontoFinder(object):
             if score >= threshold:
                 final_result.append([newsItem, score])
 
-            if len(final_result) > 0:
-                selected_best = final_result[0]
-                for a_final in final_result:
-                    if a_final[1] > selected_best[1]:
+        if len(final_result) > 0:
+            selected_best = final_result[0]
+            for a_final in final_result:
+                if a_final[1] > selected_best[1]:
+                    selected_best = a_final
+                elif a_final[1] == selected_best[1]:
+                    if a_final[0].object_id.generation_time > selected_best[0].object_id.generation_time:
                         selected_best = a_final
-                    elif a_final[1] == selected_best[1]:
-                        if a_final[0].object_id.generation_time > selected_best[0].object_id.generation_time:
-                            selected_best = a_final
-                self.format_raconto(selected_best[0])
-                return selected_best[0]
-            else:
-                return None
+            self.format_raconto(selected_best[0])
+            return selected_best[0]
+        else:
+            return None
 
 
     def set_best_raconto(self):
