@@ -80,7 +80,9 @@ def color_from_category(cat = None) :
         if u"mulher-pt" in cat.lower() :
             ret = "rgba(75,0,130,1)"
         if u"belleza" in cat.lower() :
-            ret = "rgba(0,0,0,1)"
+            ret = "rgba(255,69,0,1)"
+        if u"mujer" in cat.lower() :
+            ret = "rgba(255,69,0,1)"
         if u"estilo vida" in cat.lower() :
             ret = "rgba(218,112,214,1)"
         if u"turismo" in cat.lower() :

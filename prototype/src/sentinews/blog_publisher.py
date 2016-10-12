@@ -505,9 +505,6 @@ class BlogPublisher(object):
         camelCategories = []
 
         #logger.info("ALEXIS: categories: %s" % ', '.join(entry.categories))
-        if u"belleza" in entry.categories:
-            entry.categories = [u"belleza"]
-
         if u"propiedades" in entry.categories:
             entry.categories = [u"propiedades"]
 

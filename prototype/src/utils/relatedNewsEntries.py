@@ -15,7 +15,7 @@ class RelatedNewsEntries(object):
         special_limits = [
             {"category":u"deporte", "limit":3},
             {"category":u"tecnología", "limit":10},
-            {"category":u"belleza", "limit":30},
+            {"category":u"mujer", "limit":30},
             {"category":u"propiedades", "limit":30},
             {"category":u"electrodomésticos", "limit":30},
             {"category":u"automóviles", "limit":30},
@@ -60,7 +60,7 @@ class RelatedNewsEntries(object):
         if u"tecnología" in original.categories:
             DAYS_IN_THE_PAST_TO_SEARCH = 10
 
-        if u"belleza" in original.categories:
+        if u"mujer" in original.categories:
             DAYS_IN_THE_PAST_TO_SEARCH = 30
 
         if u"deporte" in original.categories:
