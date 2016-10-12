@@ -31,7 +31,9 @@ class RacontoFinder(object):
 
         self.text_distance = TextDistance()
         self.stopwords = self.load_stopwords()
-        self.load_news_entries(timedelta_from=default_from, timedelta_to=default_to)
+        #self.load_news_entries(timedelta_from=default_from, timedelta_to=default_to)
+        self.time_from = datetime.utcnow() - timedelta(days=default_from)
+        self.time_to = datetime.utcnow() - timedelta(days=default_to)
         for news in self.news_to_compare:
             news.clean_text = ' '.join([w for w in news.content.split() if w not in self.stopwords])
 
@@ -43,6 +45,65 @@ class RacontoFinder(object):
                                                             fromDate=fromDate,
                                                             toDate=toDate,
                                                             categories=self.news_original.categories)
+
+    def set_best_raconto_optimized(self):
+        nes = NewsEntriesService()
+        entries_iterable = nes.get_by_categories_date_range(self.time_from, self.time_to, self.news_original.categories, get_iterable=True,  projection={'_id': 1, 'url':1, 'content':1, 'title':1, 'entities':1})
+        final_result = []
+
+        threshold = 40
+
+        has_next = True
+        while has_next:
+            score = 0
+
+            newsItem = entries_iterable.next()
+            has_next = newsItem is not None
+            if not has_next:
+                continue
+
+            entities_coincidence_5 = self.text_distance.relevant_entities_coincidence(self.news_original, newsItem)
+            entities_coincidence_3 = self.text_distance.relevant_entities_coincidence(self.news_original, newsItem, stopAt=3)
+
+            if entities_coincidence_3 == 0 and entities_coincidence_5 <= 1:
+                continue
+
+            score += 30
+
+            newsItem.clean_text = ' '.join([w for w in newsItem.content.split() if w not in self.stopwords])
+
+            title_distance = self.text_distance.title_distance(self.news_original.title, newsItem.title)
+            similarity = self.text_distance.similarity(self.news_original.clean_text, newsItem.clean_text)
+
+            if 0.6 < title_distance <= 0.95:
+                score += 20
+            elif title_distance <= 0.6:
+                score += 30
+
+            if 5.0 <= similarity < 10:
+                score += 10
+            elif 10.0 <= similarity < 30:
+                score += 30
+            elif 30.0 <= similarity <= 100:
+                score += 50
+
+
+        if score >= threshold:
+            final_result.append([newsItem, score])
+
+            if len(final_result) > 0:
+                selected_best = final_result[0]
+                for a_final in final_result:
+                    if a_final[1] > selected_best[1]:
+                        selected_best = a_final
+                    elif a_final[1] == selected_best[1]:
+                        if a_final[0].object_id.generation_time > selected_best[0].object_id.generation_time:
+                            selected_best = a_final
+                self.format_raconto(selected_best[0])
+                return selected_best[0]
+            else:
+                return None
+
 
     def set_best_raconto(self):
         final_result = []

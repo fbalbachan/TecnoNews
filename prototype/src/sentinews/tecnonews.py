@@ -64,12 +64,12 @@ class TecnoNews(object):
             entry.set_analisys_info()
             try:
                 raconto_finder = RacontoFinder(entry)
-                raconto = raconto_finder.set_best_raconto()
-                with open("raconto.txt", "a", 0) as myfile:
-                    if raconto is not None:
-                        myfile.write(entry.url + " --> " + raconto.url + "\n")
-                    else:
-                        myfile.write(entry.url + " --> None\n")
+                raconto = raconto_finder.set_best_raconto_optimized()
+                #with open("raconto.txt", "a", 0) as myfile:
+                #    if raconto is not None:
+                #        myfile.write(entry.url + " --> " + raconto.url + "\n")
+                #    else:
+                #        myfile.write(entry.url + " --> None\n")
 
                 tsr = RelatedNewsEntries(entry)
                 tsr_universe = RelatedNewsEntries(entry, for_universe=True)

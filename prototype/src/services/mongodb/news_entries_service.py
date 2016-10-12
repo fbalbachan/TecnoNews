@@ -20,6 +20,13 @@ class NewsEntriesService(object):
     def get_count(self, criteria):
         return self.news_entries.find(criteria).count()
 
+    def get_iterable(self, criteria, projection=None):
+        from src.services.mongodb.news_entry_iterable import NewsEntryIterable
+        if projection is None:
+            return NewsEntryIterable(self.news_entries.find(criteria))
+        else:
+            return NewsEntryIterable(self.news_entries.find(criteria, projection))
+
     def get_list(self, criteria, limit=None):
         """ Retrieve a list of new entries
         Parameters
@@ -88,7 +95,7 @@ class NewsEntriesService(object):
         """
         return self.get_list({'categories': {'$in': categories}}, limit)
 
-    def get_by_categories_date_range(self, fromDate, toDate, categories, limit=None):
+    def get_by_categories_date_range(self, fromDate, toDate, categories, limit=None, get_iterable=False, projection=None):
         """Retrieve a list of news entries by a given categories array and date range
         Parameters
         ----------
@@ -103,9 +110,11 @@ class NewsEntriesService(object):
         dummy_id_from = ObjectId.from_datetime(fromDate)
         dummy_id_to = ObjectId.from_datetime(toDate)
         # TODO: use dummy_id_to
-        return self.get_list({"_id": {"$gt": dummy_id_from, "$lt": dummy_id_to},
-                              'categories': {'$in': categories}},
-                             limit)
+        if not get_iterable:
+            return self.get_list({"_id": {"$gt": dummy_id_from, "$lt": dummy_id_to},
+                                  'categories': {'$in': categories}}, limit)
+        else:
+            return self.get_iterable({"_id": {"$gt": dummy_id_from, "$lt": dummy_id_to}, 'categories': {'$in': categories}}, projection)
 
 
     def get_by_id_date_range(self, fromDate, toDate, limit=None):

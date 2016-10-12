@@ -102,16 +102,16 @@ class TextDistance(object):
 
     def relevant_entities_coincidence(self, newsItem1, newsItem2, stopAt=5):
         coincidences_count = 0
-        for entity in self._top_five(newsItem1.entities)[:stopAt]:
+        for entity in self._top_x(newsItem1.entities, stopAt):
 
-            coincidences = [e for e in self._top_five(newsItem2.entities)[:stopAt] if entity['name'] == e['name']]
+            coincidences = [e for e in self._top_x(newsItem2.entities, stopAt) if entity['name'] == e['name']]
             # and entity['semantic'] == e['semantic']]
             if len(coincidences) > 0:
                 coincidences_count += 1
 
         return coincidences_count
 
-    def _top_five(self, entities):
+    def _top_x(self, entities, stopAt=5):
         """
         get the entities within the first 5 top scores levels
         (include multiple entities in with the same score as one level)
@@ -122,18 +122,19 @@ class TextDistance(object):
         current = entities[0]['score']
         count = 1
 
-        top5entities = []
+        topXentities = []
 
         for idx, entity in enumerate(entities[1:]):
             if entity['score'] != current:
-                if count == 5:
-                    top5entities = entities[:idx]
+                if count == stopAt:
+                    topXentities = entities[:idx+1]
+                    count += 1
                     break
                 else:
                     count += 1
                     current = entity['score']
 
-        if count < 5:
-            top5entities = entities
+        if count <= stopAt:
+            topXentities = entities
 
-        return top5entities
+        return topXentities
