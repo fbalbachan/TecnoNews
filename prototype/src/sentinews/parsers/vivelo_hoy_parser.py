@@ -14,7 +14,7 @@ class ViveloHoyParser(GenericParser):
     source = u"Vivelo Hoy"
 
     def is_parseable(self, url, soup=None):
-        
+
         allowed = True
         if not soup:
             soup = BeautifulSoup(self.opener.read(url))
@@ -28,12 +28,12 @@ class ViveloHoyParser(GenericParser):
         #los post sin tags son solo video
         tag_list = soup.findAll('meta',{"property":"article:tag"})
         if not tag_list:
-            allowed = False    
+            allowed = False
 
         #take out post that are photo galleries
-        gallery = soup.findAll(class_=re.compile("format-post-format-gallery"))    
+        gallery = soup.findAll(class_=re.compile("format-post-format-gallery"))
         if gallery:
-             allowed = False  
+             allowed = False
 
         return allowed
 
@@ -47,6 +47,9 @@ class ViveloHoyParser(GenericParser):
         # rip out script and style elements
         for script in soup(["script", "style"]):
             script.extract()
+
+        for embed in soup.find("iframe", {"class": "wp-embedded-content"}):
+            embed.extract()
 
         image_search_string = None
 
@@ -70,12 +73,12 @@ class ViveloHoyParser(GenericParser):
         twits = content.findAll(class_=re.compile("twitter"))
         for twit in twits:
             twit.extract()
-            
+
         sides = content.findAll(True,{"class": ["col-side", "footerDetail"]})
         for side in sides:
             side.extract()
-            
-        
+
+
         #remove city names
 
         tag_list = soup.findAll('meta',{"property":"article:tag"})
