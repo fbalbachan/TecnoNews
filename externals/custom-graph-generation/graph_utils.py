@@ -110,7 +110,7 @@ def color_from_category(cat = None) :
         if u"automóviles" in cat.lower() :
             ret = "rgba(189,183,107,1)"
         if u"electrodomésticos" in cat.lower() :
-            ret = "rgba(0,0,205,1)"
+            ret = "rgba(65,105,225,1)"
         if u"propiedades" in cat.lower() :
             ret = "rgba(47,79,79,1)"
         if u"propiedades-pt" in cat.lower() :
