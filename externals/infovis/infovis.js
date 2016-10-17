@@ -143,6 +143,105 @@ function random_color() {
     return color;
 }
 
+
+function process_json_new( obj ) {
+        //LEGACY MODE:
+        if(obj.root !== undefined){
+            return process_json(obj);
+        }
+
+        //NEW MODE:
+        var nodes = [];
+
+        //NODES:
+        var node_index = 0;
+        while(obj[node_index] !== undefined){
+                node_object = obj[node_index];
+
+                if(node_object.title.length > 25){
+                    node_object.title_small = node_object.title.substring(0,22) + "...";
+                }else{
+                    node_object.title_small = node_object.title;
+                }
+
+                node_object.id      = node_index.toString();
+
+                //VALUES FOR NODE COLOR:
+                node_object.color   = color_by_sentiment(node_object.sentiment);
+
+                //VALUES FOR NODE SIZE:
+                var children_size = 1;
+                if(node_object.edges){
+
+                    children_size = node_object.edges.length + 1;
+
+                }
+
+
+                var children_multiplier = 0;
+                if(node_object.level == 0){            //ONLY ROOT PARAMETERS:
+
+                    node_object.root = true;
+                    children_multiplier = 30;
+                    children_size--;
+
+                }else if(node_object.level == 1 || node_object.level == 2){    //ONLY SECOND AND THIRD GENERATION:
+                    children_multiplier = 20;
+                }
+
+                //COMPATIBILITY ONLY:
+                node_object["index"] = node_object["level"];
+                node_object["children"] = node_object.edges;
+
+                final_node = {
+                            "group": "nodes",
+                            "data" : node_object,
+                        };
+                if(node_object.level <= 2){
+                    final_node["style"] = {
+                        "width"             : children_size * children_multiplier,
+                        "height"            : children_size * children_multiplier,
+                    };
+                }
+
+                nodes.push(final_node);
+
+                node_index++;
+        }
+
+        var nodecount = node_index;
+
+        //EDGES:
+        var node_index = 0;
+        while(obj[node_index] !== undefined){
+                node_object = obj[node_index];
+
+                for(var i = 0; i < node_object.edges.length; i++){
+                        nodes.push({
+                                "group"        : "edges",
+                                "data"        :{
+                                    "id"        : node_index.toString() + "-" + node_object.edges[i].toString(),
+                                    "source"    : node_index.toString(),
+                                    "target"    : node_object.edges[i].toString(),
+                                    "width"     : 30 / node_object["level"];
+                                },
+                        });
+                }
+                node_index++;
+        }
+
+
+        window.nodeset = {
+            "nodes"     : nodes,
+            "nodecount" : nodecount
+        };
+
+        return {
+            "nodes" : nodes
+        };
+}
+
+
 /**
     Given a JSON object, it creates the required structure for
     graphic libraries to render.
