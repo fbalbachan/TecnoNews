@@ -164,6 +164,7 @@ function process_json_new( obj ) {
                     node_object.title_small = node_object.title;
                 }
 
+                node_object.mongo_id = node_object.id;
                 node_object.id      = node_index.toString();
 
                 //VALUES FOR NODE COLOR:
@@ -718,7 +719,7 @@ function show_wordcloud(obj) {
         var nodos = cy.nodes();
         var ids   = [];
         for (var i = 0; i < nodos.length; i++) {
-            ids.push( nodos[i].data().id );
+            ids.push( nodos[i].data().mongo_id );
         }
 
         $.get(
