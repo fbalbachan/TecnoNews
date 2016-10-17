@@ -493,6 +493,9 @@ function setup_cy() {
     window.cy = cytoscape({
         container: document.getElementById('cy'), // container to render in
         elements: process_json_new( galaxy_json ).nodes,
+        layout: {
+            fit: true
+        },
         style: [ // the stylesheet for the graph
             {
           selector: 'node',
