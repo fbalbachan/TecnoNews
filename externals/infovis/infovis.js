@@ -580,7 +580,9 @@ function setup_cy() {
     });
 
     cy.on('layoutstop', function() {
-        cy.fit();
+        cy.animate({
+            fit: { eles: cy.$("node") },
+        });
     });
 
     cy.on("click","node", function(evt) {
