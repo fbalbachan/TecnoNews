@@ -84,6 +84,7 @@ class TreeBuilder(BaseInfo) :
                 node_id = self.get_short_id(a_node["_id"])
                 node_object = {
                                 "edges"     : [],
+                                "id"        : a_node["_id"]
                                 "title"     : a_node["title"],
                                 "date"      : str(a_node["_id"].generation_time).split("+")[0],
                                 "url"       : a_node["url"] ,
