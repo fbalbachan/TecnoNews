@@ -542,7 +542,7 @@ function setup_cy() {
             'width': 'data(width)',
             //'line-color': 'data(color)',
             'line-color': 'blue',
-            'line-color-opacity' : '0.3',
+            'opacity' : '0.4',
             'target-arrow-color': 'black',
             'target-arrow-shape': 'triangle',
             //'line-style' : 'dotted',
