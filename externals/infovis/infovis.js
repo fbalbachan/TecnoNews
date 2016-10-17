@@ -223,7 +223,7 @@ function process_json_new( obj ) {
                                     "id"        : node_index.toString() + "-" + node_object.edges[i].toString(),
                                     "source"    : node_index.toString(),
                                     "target"    : node_object.edges[i].toString(),
-                                    "width"     : 30 / node_object["level"];
+                                    "width"     : 30 / node_object["level"],
                                 },
                         });
                 }
