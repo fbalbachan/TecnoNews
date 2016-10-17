@@ -579,12 +579,6 @@ function setup_cy() {
 
     });
 
-    cy.on('layoutstop', function() {
-        cy.animate({
-            fit: { eles: cy.$("node") },
-        });
-    });
-
     cy.on("click","node", function(evt) {
         console.log(evt.cyTarget.data().color);
         var j = cy.$("#" + evt.cyTarget.data().id);
