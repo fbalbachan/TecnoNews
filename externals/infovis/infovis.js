@@ -719,7 +719,11 @@ function show_wordcloud(obj) {
         var nodos = cy.nodes();
         var ids   = [];
         for (var i = 0; i < nodos.length; i++) {
-            ids.push( nodos[i].data().mongo_id );
+            if(nodos[i].data().mongo_id !== undefined){
+                ids.push( nodos[i].data().mongo_id );
+            }else{
+                ids.push( nodos[i].data().id );
+            }
         }
 
         $.get(
