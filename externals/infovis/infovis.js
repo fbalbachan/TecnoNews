@@ -491,6 +491,7 @@ function setup_cy() {
     $("#data-overlay").hide();
 
     window.cy = cytoscape({
+        wheelSensitivity: 0.1,
         container: document.getElementById('cy'), // container to render in
         elements: process_json_new( galaxy_json ).nodes,
         style: [ // the stylesheet for the graph
@@ -541,10 +542,10 @@ function setup_cy() {
             'width': 'data(width)',
             //'line-color': 'data(color)',
             'line-color': 'blue',
-            'line-color-opacity' : '0.5',
+            'line-color-opacity' : '0.3',
             'target-arrow-color': 'black',
             'target-arrow-shape': 'triangle',
-            'line-style' : 'dotted',
+            //'line-style' : 'dotted',
             'source-arrow-shape': 'circle',
             'source-arrow-color': 'black'
           }
