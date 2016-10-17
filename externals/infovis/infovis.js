@@ -196,6 +196,7 @@ function process_json_new( obj ) {
                 final_node = {
                             "group": "nodes",
                             "data" : node_object,
+                            "index": nodes.length +1,
                         };
                 if(node_object.level <= 2){
                     final_node["style"] = {
