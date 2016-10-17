@@ -542,7 +542,7 @@ function setup_cy() {
             'width': 'data(width)',
             //'line-color': 'data(color)',
             'line-color': 'blue',
-            'opacity' : '0.4',
+            'opacity' : '0.6',
             'target-arrow-color': 'black',
             'target-arrow-shape': 'triangle',
             //'line-style' : 'dotted',
@@ -607,6 +607,7 @@ function setup_cy() {
             var edges = evt.cyTarget.connectedEdges();
             edges.css("line-style", "solid");
             edges.css("line-color", "black");
+            edges.css("opacity", "1");
 
             var vecinos = evt.cyTarget.neighborhood();
             var demas = cy.elements().difference( vecinos );
@@ -622,12 +623,14 @@ function setup_cy() {
         if (evt.originalEvent.target && evt.originalEvent.target.classList.contains("mouseover")) {
             evt.originalEvent.target.classList.remove("mouseover");
             var edges = evt.cyTarget.connectedEdges();
-            edges.css("line-style", "dotted");
+            //edges.css("line-style", "dotted");
             edges.css("line-color", "blue");
 
-            var vecinos = evt.cyTarget.neighborhood();
-            var demas = cy.elements().difference( vecinos );
-            demas.css("opacity", "1");
+            //var vecinos = evt.cyTarget.neighborhood();
+            //var demas = cy.elements().difference( vecinos );
+            //demas.css("opacity", "1");
+            cy.elements("node").css("opacity", "1")
+            cy.elements("edge").css("opacity", "0.6")
 
             ocultar_titulo();
         }
