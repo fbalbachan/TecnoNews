@@ -578,7 +578,10 @@ function setup_cy() {
         }
 
     });
-    cy.fit()
+
+    cy.on('layoutstop', function() {
+        cy.fit();
+    });
 
     cy.on("click","node", function(evt) {
         console.log(evt.cyTarget.data().color);
