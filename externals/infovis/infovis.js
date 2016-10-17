@@ -218,7 +218,7 @@ function process_json_new( obj ) {
 
                 for(var i = 0; i < node_object.edges.length; i++){
                         nodes.push({
-                                "group"        : "edges",
+                                "group"       : "edges",
                                 "data"        :{
                                     "id"        : node_index.toString() + "-" + node_object.edges[i].toString(),
                                     "source"    : node_index.toString(),
@@ -491,7 +491,7 @@ function setup_cy() {
 
     window.cy = cytoscape({
         container: document.getElementById('cy'), // container to render in
-        elements: process_json( galaxy_json ).nodes,
+        elements: process_json_new( galaxy_json ).nodes,
         style: [ // the stylesheet for the graph
             {
           selector: 'node',
