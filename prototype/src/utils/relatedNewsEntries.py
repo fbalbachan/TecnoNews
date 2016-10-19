@@ -20,7 +20,7 @@ class RelatedNewsEntries(object):
             {"category":u"mujer", "limit":30},
             {"category":u"propiedades", "limit":30},
             {"category":u"electrodomésticos", "limit":30},
-            {"category":u"automóviles", "limit":30},
+            {"category":u"automóviles", "limit":15},
             {"category":u"turismo", "limit":30},
             {"category":u"estilo vida", "limit":30},
             {"category":u"salud", "limit":30},
@@ -51,7 +51,7 @@ class RelatedNewsEntries(object):
             DAYS_IN_THE_PAST_TO_SEARCH = 30
 
         if u"automóviles" in original.categories:
-            DAYS_IN_THE_PAST_TO_SEARCH = 30
+            DAYS_IN_THE_PAST_TO_SEARCH = 15
 
         if u"turismo" in original.categories:
             DAYS_IN_THE_PAST_TO_SEARCH = 30
