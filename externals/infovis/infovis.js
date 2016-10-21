@@ -959,7 +959,7 @@ function generate_customgraph() {
     $("#cg").css("cursor","wait");
 
     $.get(
-        location.protocol + "//" + location.host + "/get_universe.php?news_id=" + wp_id
+        location.protocol + "//" + location.host + "/infovis/get_universe.php?news_id=" + wp_id
     ).promise().then(
         function (resp, status, xhr) {
             //console.log(resp,status,xhr);
