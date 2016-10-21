@@ -577,6 +577,6 @@ svg g.edge-group[selected] line {
 }
 
 
-#cg, #wc, #gs {
+#wc, #gs {
     display     : none;
 }

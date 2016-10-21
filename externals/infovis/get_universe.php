@@ -9,7 +9,7 @@ header('Cache-Control: public');
 header('Content-Type: application/json; charset=UTF-8');
 ini_set('memory_limit', '1000M');
 
-$filename   = "/home/pi/sentilecto/universe-jsons/" . $_REQUEST["news_id"] . ".json";
+$filename   = "/home/nlt-runner/universe-jsons/" . $_REQUEST["news_id"] . ".json";
 $ret        = Array();
 $json       = "";
 $status     = "success";
@@ -17,7 +17,7 @@ $message    = "";
 
 try {
     if (!file_exists($filename)) {
-        $tmp = shell_exec( "/home/pi/sentilecto/generate-json-universe " . $_REQUEST["news_id"] );
+        $tmp = shell_exec( "/usr/bin/generate-json-universe " . $_REQUEST["news_id"] );
     }
 
     try {
@@ -26,7 +26,7 @@ try {
         $message    = "Error reading json: " . $e->getMessage();
         $status     = "error";
     }
-    
+
 } catch (Exception $e) {
     $status   = "error";
     $message  = "Error reading json: " . $e->getMessage();
