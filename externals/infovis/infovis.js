@@ -1257,7 +1257,7 @@ function setup_universe_from_json( obj ) {
                         node_object.title = node_object.title.substring(0,22) + "...";
                 }
                 node_object.id          = node_index.toString();
-                node_object.color = color_from_category(node_object.categories);
+                node_object.color = color_from_category([node_object.categories[0]]);
                 if(node_object.level == 0){
                         node_object.color = "black";
                 }
