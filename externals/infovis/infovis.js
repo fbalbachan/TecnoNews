@@ -934,7 +934,7 @@ function show_customgraph(obj) {
         //setup
         app.espere("Loading NewsUniverse, please wait...", "Loaded. Rendering...").then(
             function() {
-                setup_customgraph();
+                generate_customgraph();
             }
         );
     } else {
@@ -959,12 +959,13 @@ function generate_customgraph() {
     $("#cg").css("cursor","wait");
 
     $.get(
-        location.protocol + "//" + location.host + "/infovis/get_custom_graph.php?news_id=" + wp_id + "&layout=" + layout + "&w=" + ($("#cg").width() - 140) + "&h=" + $("#cg").height()
+        location.protocol + "//" + location.host + "/get_universe.php?news_id=" + wp_id
     ).promise().then(
         function (resp, status, xhr) {
             //console.log(resp,status,xhr);
             if (resp.status === "success") {
-                setup_customgraph_nodelist( resp.data.svg )
+                //setup_customgraph_nodelist( resp.data.svg )
+				setup_universe_from_json(resp.data.universe);
                 $("#stats #nodecount").html( universe.nodecount );
                 $("#stats h4").html("News (nodes) arranged around the Universe");
                 $("#leyenda").html( universe.leyenda_html );
@@ -1244,7 +1245,7 @@ function color_from_category(categories){
 
 function setup_universe_from_json( obj ) {
         var nodes = [];
-        var universe_categories = {"root": "black"};
+        var universe_categories = {"starting point": "black"};
         var node_objects = []
 
         //NODES:
@@ -1260,7 +1261,6 @@ function setup_universe_from_json( obj ) {
                 if(node_object.level == 0){
                         node_object.color = "black";
                 }
-
                 //FILL CATEGORIES
                 if(node_object.level != 0 && universe_categories[node_object.categories[0]] === undefined){
                         universe_categories[node_object.categories[0]] = node_object.color;
@@ -1345,14 +1345,15 @@ function set_universe_data(nodecount, categories, node_objects){
 
         var node_list_html = "\n<div id=\"cg-node-list\" class=\"node-list\">\
                         <div class=\"cerrar\" onclick=\"toggle_node_list();\"> X </div>\
-                        <div><h2>NewsUniverse Node List.</h2></div>\
+                        <div><h2>NewsUniverse Node List</h2></div>\
+						<div><h3 style=\"color:black;\">(drag & drop and mouse over nodes for insightful visualizations)</h3></div>\
                         <div><h3 style=\"color:red;\"> (press \"L\" key to show/hide this list) </h3></div>\
                         <table>\
                             <thead>\
                                 <tr>\
-                                    <th>nodo</th>\
-                                    <th>fecha</th>\
-                                    <th>titulo</th>\
+                                    <th>node</th>\
+                                    <th>date</th>\
+                                    <th>title</th>\
                                 </tr>\
                             </thead>\
                             <tbody>";
@@ -1367,6 +1368,7 @@ function set_universe_data(nodecount, categories, node_objects){
         universe.timer_titulo = null;
 
 }
+
 
 function build_universe(universe_nodes) {
     //Node params:
@@ -1393,6 +1395,7 @@ function build_universe(universe_nodes) {
 
         if (window.cg != null) {
             console.log("cg not null");
+			console.log(window.cg == '');
             window.setTimeout(10,window.cg.resize);
         } else {
             console.log("cg es null");
@@ -1450,8 +1453,7 @@ function build_universe(universe_nodes) {
     });
 
     cg.on("tapdragover","node", function(evt) {
-            console.log("MOUSEOVER");
-            console.log(evt.cyTarget);
+            //console.log("MOUSEOVER");
             var edges = evt.cyTarget.connectedEdges();
             var nodes = edges.connectedNodes();
 
@@ -1505,7 +1507,7 @@ function build_universe(universe_nodes) {
     });
 
     cg.on("tap","node", function(evt) {
-        console.log("click");
+        //console.log("click");
         var edges = evt.cyTarget.connectedEdges();
         var nodes = edges.connectedNodes();
 
@@ -1560,8 +1562,8 @@ function build_universe(universe_nodes) {
 
     //Get elements:
     var elements = universe_nodes;
-
-
+	console.log("---------------");
+	console.log(elements);
     function inc_elem(start_from){
         var sub_array = [];
 
@@ -1570,12 +1572,14 @@ function build_universe(universe_nodes) {
             //All elements drawn: enable panning and fit view
             cg.panningEnabled( true );
             cg.fit();
+			console.log(cg);
+			console.log("OK CYTO");
             return;
         }
 
         if((start_from+batch_size) >= elements.length){
             //Slice remaining elements
-            sub_array = elements.slice(start_from, -1);
+            sub_array = elements.slice(start_from, elements.length-1);
         }else{
             //Slice #batch_size elements
             sub_array = elements.slice(start_from, start_from+batch_size);
@@ -1593,7 +1597,10 @@ function build_universe(universe_nodes) {
 
     //Start from 0
     inc_elem(0);
-
+	//console.log("ADD 1");
+	//cg.add(elements[0]).layout({name: 'random'});
+	//cg.add(elements[1]).layout({name: 'random'});
+	//cg.resize();
 
 
 
