@@ -1458,8 +1458,8 @@ function build_universe(universe_nodes) {
             var nodes = edges.connectedNodes();
 
 
-            var starting = edges.filter("[source=\"" + evt.cyTarget.data().id.toString()+"\"]");
-            var ending = edges.filter("[target=\"" + evt.cyTarget.data().id.toString()+"\"]");
+            var starting = edges.filter("[source=\"" + evt.cyTarget.data().id.toString()+"\"]").filter("[^selected], [selected=0]");
+            var ending = edges.filter("[target=\"" + evt.cyTarget.data().id.toString()+"\"]").filter("[^selected], [selected=0]");
             cg.startBatch();
                 nodes.css("width"        , node_size*size_multiplier);
                 nodes.css("height"       , node_size*size_multiplier);
@@ -1522,6 +1522,12 @@ function build_universe(universe_nodes) {
         selected_nodes.data("selected", 0);
 
         if(!already_selected){
+            var ending = edges.filter("[target=\"" + evt.cyTarget.data().id.toString()+"\"]");
+            cy.startBatch();
+                ending.css("width"                , 5)
+                ending.css("line-color"            , "red");
+                ending.css("target-arrow-color"    , "red");
+            cy.endBatch();
             nodes.data("selected", 1);
             edges.data("selected", 1);
             evt.cyTarget.data("selected",2);
