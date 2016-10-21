@@ -25,7 +25,7 @@ $def with (analysis, printer)
 	<hr size=5 noshade>
 
         <h2>Sentence $(sentences.index(sentence) + 1) </h2>
-        <p class="grande">$sentence <font size=3>(sentence score $printer.score_of(analysis,sentence))</font></p>
+        <p class="grande">$sentence <font size=3>(sentence sentiment score $printer.score_of(analysis,sentence))</font></p>
         $ similar_found = False
         $for sentence2 in sentences:
             $if sentence == sentence2:
@@ -40,7 +40,7 @@ $def with (analysis, printer)
         $for clause in sentence.clauses:
 	    <hr size=2 noshade>
             <h3>Clause $(sentences.index(sentence) + 1).$printer.clause_number(clause, sentence) <font size=5>(mouse over <u>SVO slots</u>, <u>entities</u> and <u>sentiment scores</u> for specific attributes to appear)</font></h3>
-            <p class="grande">$clause <font size=3>(clause score $printer.score_of(analysis,clause))</font></p>
+            <p class="grande">$clause <font size=3>(clause sentiment score $printer.score_of(analysis,clause))</font></p>
 
             $code:
                 clause_entities = clause.entities + clause.tacit_entities()
@@ -195,7 +195,7 @@ $def with (analysis, printer)
             </div>
             </p>
 
-            <center><h2><font color="black">Overall text score (+$printer.score_of(analysis,analysis["paragraph"]).split(",")[0]% , $printer.score_of(analysis,analysis["paragraph"]).split(",")[1]%)</font></h2></center>
+            <center><h2><font color="black">Overall text sentiment score (+$printer.score_of(analysis,analysis["paragraph"]).split(",")[0]% , $printer.score_of(analysis,analysis["paragraph"]).split(",")[1]%)</font></h2></center>
 
 
             <div class="sentimaforo">    <span class="very-positive">very_positive</span>    <span class="positive">positive</span>    <span class="slightly-positive">slightly_positive</span>    <span class="neutral">neutral</span>    <span class="slightly-negative">slightly_negative</span>    <span class="negative">negative</span>    <span class="very-negative">very_negative</span>    </div>
