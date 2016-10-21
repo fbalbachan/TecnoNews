@@ -21,6 +21,7 @@ $def with (analysis, printer)
 
     $ sentences = analysis["paragraph"].sentences
     $ text_entities = []
+
     $for sentence in sentences:
 	<hr size=5 noshade>
 
@@ -200,7 +201,7 @@ $def with (analysis, printer)
 
             <div class="sentimaforo">    <span class="very-positive">very_positive</span>    <span class="positive">positive</span>    <span class="slightly-positive">slightly_positive</span>    <span class="neutral">neutral</span>    <span class="slightly-negative">slightly_negative</span>    <span class="negative">negative</span>    <span class="very-negative">very_negative</span>    </div>
 
-            <center><h3><font color="black">Overall text score scale</font></h3></center>
+            <center><h3><font color="black">Sentiment score scale</font></h3></center>
 
             <center><table id="scale_at_the_bottom" border="1">
                 <tr>
