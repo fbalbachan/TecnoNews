@@ -547,6 +547,7 @@ function setup_cy() {
             'target-arrow-color': 'black',
             'target-arrow-shape': 'triangle',
             //'line-style' : 'dotted',
+            'curve-style'       : 'bezier',
             'source-arrow-shape': 'circle',
             'source-arrow-color': 'black'
           }
