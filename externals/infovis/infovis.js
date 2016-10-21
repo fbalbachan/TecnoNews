@@ -1562,8 +1562,6 @@ function build_universe(universe_nodes) {
 
     //Get elements:
     var elements = universe_nodes;
-	console.log("---------------");
-	console.log(elements);
     function inc_elem(start_from){
         var sub_array = [];
 
@@ -1572,14 +1570,12 @@ function build_universe(universe_nodes) {
             //All elements drawn: enable panning and fit view
             cg.panningEnabled( true );
             cg.fit();
-			console.log(cg);
-			console.log("OK CYTO");
             return;
         }
 
         if((start_from+batch_size) >= elements.length){
             //Slice remaining elements
-            sub_array = elements.slice(start_from, elements.length-1);
+            sub_array = elements.slice(start_from, elements.length);
         }else{
             //Slice #batch_size elements
             sub_array = elements.slice(start_from, start_from+batch_size);
