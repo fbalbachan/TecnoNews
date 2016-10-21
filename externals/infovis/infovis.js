@@ -1523,10 +1523,15 @@ function build_universe(universe_nodes) {
 
         if(!already_selected){
             var ending = edges.filter("[target=\"" + evt.cyTarget.data().id.toString()+"\"]");
+            var starting = edges.filter("[source=\"" + evt.cyTarget.data().id.toString()+"\"]");
             cy.startBatch();
                 ending.css("width"                , 5)
                 ending.css("line-color"            , "red");
                 ending.css("target-arrow-color"    , "red");
+
+                starting.css("width"                , 10)
+                starting.css("line-color"            , "blue");
+                starting.css("target-arrow-color"    , "blue");
             cy.endBatch();
             nodes.data("selected", 1);
             edges.data("selected", 1);
