@@ -1159,3 +1159,442 @@ function select_graph_UI(obj) {
     $("#visualizaciones .selected").removeClass("selected");
     $(obj).find("span").addClass("selected");
 }
+
+
+function color_from_category(categories){
+        ret = "white";
+
+        if(categories !== undefined){
+                category_array = []
+                for(var i = 0; i < categories.length; i++){
+                        category_array[i] = categories[i].toLowerCase();
+                }
+
+                if(category_array.indexOf("policiales") > -1){
+                        ret = "rgba(100,100,100,1)";
+                }else if(category_array.indexOf("policiales") > -1){
+                        ret = "rgba(100,100,100,1)";
+                }else if(category_array.indexOf("internacionales") > -1){
+                        ret = "rgba(0,200,255,1)";
+                }else if(category_array.indexOf("internacionales-pt") > -1){
+                        ret = "rgba(0,200,255,1)";
+                }else if(category_array.indexOf("economía") > -1){
+                        ret = "rgba(255,215,0,1)";
+                }else if(category_array.indexOf("economia-pt") > -1){
+                        ret = "rgba(255,215,0,1)";
+                }else if(category_array.indexOf("interés general") > -1){
+                        ret = "rgba(255,255,255,1)";
+                }else if(category_array.indexOf("interesse geral-pt") > -1){
+                        ret = "rgba(255,255,255,1)";
+                }else if(category_array.indexOf("política") > -1){
+                        ret = "rgba(255,20,147,1)";
+                }else if(category_array.indexOf("política-pt") > -1){
+                        ret = "rgba(255,20,147,1)";
+                }else if(category_array.indexOf("entretenimiento") > -1){
+                        ret = "rgba(0,255,0,1)";
+                }else if(category_array.indexOf("entretenimento-pt") > -1){
+                        ret = "rgba(0,255,0,1)";
+                }else if(category_array.indexOf("salud") > -1){
+                        ret = "rgba(255,222,173,1)";
+                }else if(category_array.indexOf("saúde-pt") > -1){
+                        ret = "rgba(255,222,173,1)";
+                }else if(category_array.indexOf("mulher-pt") > -1){
+                        ret = "rgba(75,0,130,1)";
+                }else if(category_array.indexOf("belleza") > -1){
+                        ret = "rgba(255,69,0,1)";
+                }else if(category_array.indexOf("mujer") > -1){
+                        ret = "rgba(255,69,0,1)";
+                }else if(category_array.indexOf("estilo vida") > -1){
+                        ret = "rgba(218,112,214,1)";
+                }else if(category_array.indexOf("turismo") > -1){
+                        ret = "rgba(107,142,35,1)";
+                }else if(category_array.indexOf("turismo-pt") > -1){
+                        ret = "rgba(107,142,35,1)";
+                }else if(category_array.indexOf("cultura-pt") > -1){
+                        ret = "rgba(176,224,230,1)";
+                }else if(category_array.indexOf("deporte") > -1){
+                        ret = "rgba(160,82,45,1)";
+                }else if(category_array.indexOf("esporte-pt") > -1){
+                        ret = "rgba(160,82,45,1)";
+                }else if(category_array.indexOf("clima") > -1){
+                        ret = "rgba(220,220,220,1)";
+                }else if(category_array.indexOf("clima-pt") > -1){
+                        ret = "rgba(220,220,220,1)";
+                }else if(category_array.indexOf("ciencia") > -1){
+                        ret = "rgba(233,150,122,1)";
+                }else if(category_array.indexOf("ciência-pt") > -1){
+                        ret = "rgba(233,150,122,1)";
+                }else if(category_array.indexOf("tecnología") > -1){
+                        ret = "rgba(255,0,0,1)";
+                }else if(category_array.indexOf("tecnología-pt") > -1){
+                        ret = "rgba(255,0,0,1)";
+                }else if(category_array.indexOf("automóviles") > -1){
+                        ret = "rgba(189,183,107,1)";
+                }else if(category_array.indexOf("electrodomésticos") > -1){
+                        ret = "rgba(65,105,225,1)";
+                }else if(category_array.indexOf("propiedades") > -1){
+                        ret = "rgba(47,79,79,1)";
+                }else if(category_array.indexOf("propiedades-pt") > -1){
+                        ret = "rgba(47,79,79,1)";
+                }
+        }
+        return ret;
+}
+
+
+function setup_universe_from_json( obj ) {
+        var nodes = [];
+        var universe_categories = {"root": "black"};
+        var node_objects = []
+
+        //NODES:
+        var node_index = 0;
+        while(obj[node_index] !== undefined){
+                node_object = obj[node_index];
+
+                if(node_object.title.length > 25){
+                        node_object.title = node_object.title.substring(0,22) + "...";
+                }
+                node_object.id          = node_index.toString();
+                node_object.color = color_from_category(node_object.categories);
+                if(node_object.level == 0){
+                        node_object.color = "black";
+                }
+
+                //FILL CATEGORIES
+                if(node_object.level != 0 && universe_categories[node_object.categories[0]] === undefined){
+                        universe_categories[node_object.categories[0]] = node_object.color;
+                }
+
+                //PUSH NODE
+                nodes.push({
+                                "group": "nodes",
+                                "data" : node_object,
+                        });
+
+                node_objects.push(node_object);
+
+                node_index++;
+        }
+
+        var nodecount = node_index;
+
+        //EDGES:
+        var node_index = 0;
+        while(obj[node_index] !== undefined){
+                node_object = obj[node_index];
+
+                for(var i = 0; i < node_object.edges.length; i++){
+                        nodes.push({
+                                        "group"            : "edges",
+                                        "data"             :{
+                                                "id"            : node_index.toString() + "-" + node_object.edges[i][0].toString(),
+                                                "source"        : node_index.toString(),
+                                                "target"        : node_object.edges[i][0].toString(),
+                                        }
+                        });
+                }
+                node_index++;
+        }
+
+
+        //window.nodeset = {
+        //        "nodes"         : nodes,
+        //        "nodecount" : nodecount
+        //};
+        //universe.nodecount = nodecount;
+        set_universe_data(nodecount, universe_categories, node_objects);
+        build_universe(nodes);
+        //return {
+        //        "nodes" : nodes
+        //};
+}
+
+
+function set_universe_data(nodecount, categories, node_objects){
+        universe.nodecount = nodecount;
+
+        var colors_svg = "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"100%\" height=\"100%\" viewBox=\"0 0 100 180\" version=\"1.1\">"
+
+        colors_svg += "<text x=\"0\" y=\"20\" >News Categories</text>\n";
+
+        var current_heigth = 40;
+
+        for(var category_name in categories){
+                var category_color = categories[category_name];
+
+                var text_length_attr = "";
+                if(category_name.length >= 10){
+                        text_length_attr = " textLength=\"85px\" ";
+                }
+
+                colors_svg += "<circle cx=\"5\" cy=\"" + current_heigth + "\" r=\"5\" fill=\"" + category_color + "\" stroke=\"black\" />\n";
+                colors_svg += "<text x=\"15\" y=\"" + (current_heigth + 5) + "\" font-size=\"15px\" " + text_length_attr + ">" + category_name + "</text>\n";
+                current_heigth += 15;
+        }
+
+        colors_svg += "</svg>";
+
+        universe.leyenda_html   = colors_svg;
+
+
+
+        node_objects.sort(function(a, b) {
+                return parseInt(a.id) - parseInt(b.id);
+        });
+
+        var node_list_html = "\n<div id=\"cg-node-list\" class=\"node-list\">\
+                        <div class=\"cerrar\" onclick=\"toggle_node_list();\"> X </div>\
+                        <div><h2>NewsUniverse Node List.</h2></div>\
+                        <div><h3 style=\"color:red;\"> (press \"L\" key to show/hide this list) </h3></div>\
+                        <table>\
+                            <thead>\
+                                <tr>\
+                                    <th>nodo</th>\
+                                    <th>fecha</th>\
+                                    <th>titulo</th>\
+                                </tr>\
+                            </thead>\
+                            <tbody>";
+        for (var i = 0; i < node_objects.length; i++) {
+                node_list_html += "<tr><td>" + node_objects[i].id + "</td><td>" + node_objects[i].date + "</td><td><a class=\"hoverable\" target=\"_blank\" href=\""+node_objects[i].url+"\">" + node_objects[i].title + "</a></td></tr>";
+        }
+        node_list_html += "</tbody></table></div>";
+
+        var local_cg = $("#cg");
+        local_cg.html( local_cg.html() + node_list_html );
+
+        universe.timer_titulo = null;
+
+}
+
+function build_universe(universe_nodes) {
+    //Node params:
+    var node_size                = 15;
+    var font_size                = node_size/3;
+    var size_multiplier            = 3;
+
+    //Edge Params:
+    var edge_width                = 0.1;
+    var edge_opacity            = 0.3;
+
+    //Loading Params:
+    var batch_size                = 3000;
+    var interval                = 150;
+
+
+
+    //console.log(process_json_new( galaxy_json ).nodes);
+
+    var tmp_resize = function() {
+        $("#cg")
+        .css("width", $(document).width() + "px")
+        .css("height",$(document).height() + "px");
+
+        if (window.cg != null) {
+            console.log("cg not null");
+            window.setTimeout(10,window.cg.resize);
+        } else {
+            console.log("cg es null");
+        }
+    }
+    tmp_resize();
+
+    window.cg = cytoscape({
+        textureOnViewport: true,
+        //pixelRatio: 1,
+        wheelSensitivity: 0.1,
+        container: document.getElementById('cg'), // container to render in
+        elements: [],
+        style: [
+
+            {
+                selector : 'node',
+                style: {
+                    'width'                : node_size,
+                    'height'            : node_size,
+                    'background-color'    : 'data(color)',
+                    'border-color'        : 'black',
+                    'border-width'        : '1px',
+                    'label'                  : 'data(id)',
+                    'text-valign'        : 'center',
+                    'text-halign'        : 'center',
+                    'font-size'            : font_size,
+                    'min-zoomed-font-size'    : '5px',
+                }
+            },
+
+            {
+                selector : 'node[level=0]',
+                style: {
+                    'width'                : node_size*2,
+                    'height'            : node_size*2,
+                    'shape'                : 'rectangle',
+                }
+            },
+
+            {
+                selector : 'edge',
+                style: {
+                    "width": edge_width,
+                    'line-color' : 'black',
+                    'opacity'     : edge_opacity,
+                    'target-arrow-shape': 'triangle',
+                }
+            }
+        ],
+        layout: {
+            name: 'random',
+        }
+
+    });
+
+    cg.on("tapdragover","node", function(evt) {
+            console.log("MOUSEOVER");
+            console.log(evt.cyTarget);
+            var edges = evt.cyTarget.connectedEdges();
+            var nodes = edges.connectedNodes();
+
+
+            var starting = edges.filter("[source=\"" + evt.cyTarget.data().id.toString()+"\"]");
+            var ending = edges.filter("[target=\"" + evt.cyTarget.data().id.toString()+"\"]");
+            cg.startBatch();
+                nodes.css("width"        , node_size*size_multiplier);
+                nodes.css("height"       , node_size*size_multiplier);
+                nodes.css("font-size"    , font_size*size_multiplier);
+                nodes.css("z-index"        , 10000000);
+
+                edges.css("line-style"    , "solid");
+                edges.css("opacity"        , "1");
+                edges.css("curve-style"    , "bezier");
+                edges.css("z-index"        , 10000000);
+
+                starting.css("width"                , 10)
+                starting.css("line-color"            , "blue");
+                starting.css("target-arrow-color"    , "blue");
+
+                ending.css("width"                , 5)
+                ending.css("line-color"            , "red");
+                ending.css("target-arrow-color"    , "red");
+            cg.endBatch();
+    });
+
+    cg.on("tapdragout","node", function(evt) {
+        var edges = evt.cyTarget.connectedEdges().filter("[^selected], [selected=0]");
+        var nodes = edges.connectedNodes().filter("[^selected], [selected=0]");
+        var roots = nodes.filter("[level=0]");
+
+
+        cg.startBatch();
+            nodes.css("width"         , node_size);
+            nodes.css("height"       , node_size);
+            nodes.css("font-size"    , font_size);
+            nodes.css("z-index"        , 0);
+
+            roots.css("width"         , node_size*2);
+            roots.css("height"       , node_size*2);
+
+            edges.css("opacity"        , edge_opacity);
+            edges.css("width"        , edge_width);
+            edges.css("line-color"    , "black");
+            edges.css("curve-style"    , "haystack");
+            edges.css("z-index"        , 0);
+        cg.endBatch();
+
+
+    });
+
+    cg.on("tap","node", function(evt) {
+        console.log("click");
+        var edges = evt.cyTarget.connectedEdges();
+        var nodes = edges.connectedNodes();
+
+        already_selected = (evt.cyTarget.data().selected !== undefined && evt.cyTarget.data().selected == 2);
+
+
+        var selected_nodes = cg.nodes().filter("[selected>=1]");
+        var selected_edges = cg.edges().filter("[selected>=1]");
+
+
+        selected_edges.data("selected", 0);
+        selected_nodes.data("selected", 0);
+
+        if(!already_selected){
+            nodes.data("selected", 1);
+            edges.data("selected", 1);
+            evt.cyTarget.data("selected",2);
+        }
+
+        nodes = cg.nodes().filter("[^selected], [selected=0]");
+        edges = cg.edges().filter("[^selected], [selected=0]");
+        var roots = nodes.filter("[level=0]");
+
+        cg.startBatch();
+            nodes.css("width"         , node_size);
+            nodes.css("height"       , node_size);
+            nodes.css("font-size"    , font_size);
+            nodes.css("z-index"        , 0);
+
+            roots.css("width"         , node_size*2);
+            roots.css("height"       , node_size*2);
+
+            edges.css("opacity"        , edge_opacity)
+            edges.css("width"        , edge_width)
+            edges.css("line-color"    , "black");
+            edges.css("curve-style"    , "haystack");
+            edges.css("z-index"        , 0);
+        cg.endBatch();
+
+        //console.log(evt.cyTarget.data().selected);
+    });
+
+
+    cg.on("layoutstop", function(evt) {
+    });
+
+
+    //------Incremental Loading-------
+
+    //Disable panning to avoid auto screen repositioning
+    cg.panningEnabled( false );
+
+    //Get elements:
+    var elements = universe_nodes;
+
+
+    function inc_elem(start_from){
+        var sub_array = [];
+
+
+        if(start_from > elements.length){
+            //All elements drawn: enable panning and fit view
+            cg.panningEnabled( true );
+            cg.fit();
+            return;
+        }
+
+        if((start_from+batch_size) >= elements.length){
+            //Slice remaining elements
+            sub_array = elements.slice(start_from, -1);
+        }else{
+            //Slice #batch_size elements
+            sub_array = elements.slice(start_from, start_from+batch_size);
+        }
+        //Add new elements and redraw
+        cg.add(sub_array).layout({name: 'random'});
+
+        //Process next batch_size after interval
+        setTimeout(
+                    function(){inc_elem(start_from+batch_size);},
+                    interval
+                );
+        return;
+    }
+
+    //Start from 0
+    inc_elem(0);
+
+
+
+
+}
