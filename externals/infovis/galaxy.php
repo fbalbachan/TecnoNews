@@ -167,7 +167,7 @@
         </div>
         <div id="wc">&nbsp;</div>
         <div id="gs">&nbsp;</div>
-        <div id="cg">&nbsp;</div>
+        <div id="cg"></div>
         <div id="cy"></div>
     </body>
 </html>
