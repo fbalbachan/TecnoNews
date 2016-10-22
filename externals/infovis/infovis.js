@@ -1480,6 +1480,7 @@ function build_universe(universe_nodes) {
                 ending.css("line-color"            , "red");
                 ending.css("target-arrow-color"    , "red");
             cg.endBatch();
+            mostrar_titulo( evt.cyTarget.data().title + "<br/>Category : " + evt.cyTarget.data().categories[0], evt.cyTarget.data().date );
     });
 
     cg.on("tapdragout","node", function(evt) {
@@ -1503,6 +1504,7 @@ function build_universe(universe_nodes) {
             edges.css("curve-style"    , "haystack");
             edges.css("z-index"        , 0);
         cg.endBatch();
+        ocultar_titulo();
 
 
     });
