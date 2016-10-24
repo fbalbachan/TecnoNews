@@ -61,20 +61,27 @@ function exportToCsv(filename, rows) {
 
 function exportCSV() {
     //console.log("0000000000")
-    custom_graph_data = JSON.parse( $("svg > #graph-data").text() );
+    //custom_graph_data = JSON.parse( $("svg > #graph-data").text() );
     csvRows = [["id", "title", "url", "categories", "source", "date", "sentiment", "children"]]
     //console.log(custom_graph_data)
-    for (a_key in custom_graph_data){
-            a_node = custom_graph_data[a_key]
-            scored_children = []
-            for (i = 0; i < a_node["children"].length; i++) {
-                scored_children.push({"id": a_node["children"][i], "score": a_node["scores"][i]})
-            }
-            csvRows.push([a_node["oid"], a_node["title"], a_node["url"], JSON.stringify(a_node["cats"]), a_node["source"], a_node["date"], a_node["sentiment"], JSON.stringify(scored_children)])
+    //for (a_key in custom_graph_data){
+//            a_node = custom_graph_data[a_key]
+//            scored_children = []
+//            for (i = 0; i < a_node["children"].length; i++) {
+//                scored_children.push({"id": a_node["children"][i], "score": a_node["scores"][i]})
+//            }
+//            csvRows.push([a_node["oid"], a_node["title"], a_node["url"], JSON.stringify(a_node["cats"]), a_node["source"], a_node["date"], a_node["sentiment"], JSON.stringify(scored_children)])
             //console.log(custom_graph_data[a_key])
-    }
+//    }
     //console.log(csvRows)
-    exportToCsv("universe.csv", csvRows)
+    for(a_node in window.cg.nodes()){
+            scored_children = []
+            for(a_child in a_node.data().edges){
+                    scored_children.push({"id": a_child[0], "score": a_child[1]});
+            }
+            csvRows.push([a_node.data().id, a_node.data().title, a_node.data().url,JSON.stringify(a_node.data().categories), a_node.data().source, a_node.data().data, a_node.data().sentiment, JSON.stringify(scored_children)]);
+    }
+    exportToCsv("universe.csv", csvRows);
 }
 
 function color_by_sentiment( sent ) {
