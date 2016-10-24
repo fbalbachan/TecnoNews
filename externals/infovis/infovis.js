@@ -77,7 +77,6 @@ function exportCSV() {
     for(var i = 0; i < window.cg.nodes().length; i++){
             a_node_data = window.cg.nodes()[i].data();
             scored_children = []
-            console.log(a_node)
             console.log(a_node_data)
             console.log(a_node_data())
             for(a_child in a_node_data().edges){
