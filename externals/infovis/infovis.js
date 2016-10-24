@@ -76,9 +76,9 @@ function exportCSV() {
     //console.log(csvRows)
     for(var i = 0; i < window.cg.nodes().length; i++){
             a_node_data = window.cg.nodes()[i].data();
-            scored_children = []
-            for(a_child in a_node_data.edges){
-                    scored_children.push({"id": a_child[0], "score": a_child[1]});
+            scored_children = [];
+            for(var j = 0; j < a_node_data.edges.length; j++){
+                    scored_children.push({"id": a_node_data.edges[j][0], "score": a_node_data.edges[j][1]});
             }
             csvRows.push([a_node_data.id, a_node_data.title, a_node_data.url,JSON.stringify(a_node_data.categories), a_node_data.source, a_node_data.date, a_node_data.sentiment, JSON.stringify(scored_children)]);
     }
