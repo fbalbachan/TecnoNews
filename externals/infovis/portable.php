@@ -109,8 +109,8 @@
                 $("#cy, #gs, #cg").fadeOut(100);
                 $("#visualizaciones div.selected").removeClass("selected");
                 $(obj).addClass("selected");
-
                 if (wc === null) {
+
 
                     //cargar los datos
                     $("#wc").css("cursor","wait").show(100);
@@ -127,6 +127,7 @@
                     }
 
                     <?php
+
                         if (!file_exists("/home/nlt-runner/wordcloud-jsons/" . $_REQUEST["news_id"] . ".json")) {
 
                             $tmpjson    = json_decode(file_get_contents("/home/nlt-runner/tree-jsons/" . $_REQUEST["news_id"] . ".json") , True);
@@ -144,7 +145,10 @@
                                 return $ret;
                             }
 
-                            $ids = tmp_loop_children( $tmpjson["root"] );
+                            //$ids = tmp_loop_children( $tmpjson["root"] );
+                            foreach($tmpjson as $nodo){
+                                $ids[] = $nodo["id"];
+                            }
                             $_REQUEST["related_ids"]    = implode(",",array_unique( $ids ));
                             $_REQUEST["noecho"]         = True;
 
@@ -158,10 +162,10 @@
                         $("#wc").css("cursor","default");
                     };
                     setTimeout(tmp,200);
-
                 } else {
                     $("#wc").fadeIn(500);
                 }
+
 
             }
 
