@@ -463,10 +463,10 @@ function center_cy() {
 function mostrar_titulo( titulo, fecha, category, url, node_number ) {
     html = "<h4>";
     if(node_number !== undefined){
-            html += "(#" + node_number + ")";
+            html += "(#" + node_number + ") ";
     }
     if(url !== undefined){
-            html += "<a href=\"" + url + "\">" + titulo + "</a>";
+            html += "<a href=\"" + url + "\" target=\"_blank\">" + titulo + "</a>";
     }else{
             html += titulo;
     }
