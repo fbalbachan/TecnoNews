@@ -76,6 +76,9 @@ function exportCSV() {
     //console.log(csvRows)
     for(a_node in window.cg.nodes()){
             scored_children = []
+            console.log(a_node)
+            console.log(a_node.data)
+            console.log(a_node.data())
             for(a_child in a_node.data().edges){
                     scored_children.push({"id": a_child[0], "score": a_child[1]});
             }
