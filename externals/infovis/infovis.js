@@ -645,9 +645,9 @@ function setup_cy() {
                     <table>\
                         <thead>\
                             <tr>\
-                                <th>nodo</th>\
-                                <th>fecha</th>\
-                                <th>titulo</th>\
+                                <th>node</th>\
+                                <th>date</th>\
+                                <th>title</th>\
                             </tr>\
                         </thead>\
                         <tbody>";
@@ -1038,9 +1038,9 @@ function setup_customgraph_nodelist(svg) {
                     <table>\
                         <thead>\
                             <tr>\
-                                <th>nodo</th>\
-                                <th>fecha</th>\
-                                <th>titulo</th>\
+                                <th>node</th>\
+                                <th>date</th>\
+                                <th>title</th>\
                             </tr>\
                         </thead>\
                         <tbody>";
@@ -1253,6 +1253,8 @@ function setup_universe_from_json( obj ) {
         var node_index = 0;
         while(obj[node_index] !== undefined){
                 node_object = obj[node_index];
+                node_object.selected = 0;
+                node_object.pinned = 0;
 
                 //if(node_object.title.length > 25){
                 //        node_object.title = node_object.title.substring(0,22) + "...";
@@ -1271,6 +1273,9 @@ function setup_universe_from_json( obj ) {
                 nodes.push({
                                 "group": "nodes",
                                 "data" : node_object,
+                                "pinned"    : 0,
+                                "selected"  : 0,
+                                "direction" : 0,
                         });
 
                 node_objects.push(node_object);
@@ -1329,7 +1334,11 @@ function set_universe_data(nodecount, categories, node_objects){
                         text_length_attr = " textLength=\"85px\" ";
                 }
 
-                colors_svg += "<circle cx=\"5\" cy=\"" + current_heigth + "\" r=\"5\" fill=\"" + category_color + "\" stroke=\"black\" />\n";
+                if(category_color=="black"){
+                        colors_svg += "<rect height=\"10\" stroke=\"black\" fill=\"black\" width=\"10\" x=\"0\" y=\"35\"></rect>\n";
+                }else{
+                        colors_svg += "<circle cx=\"5\" cy=\"" + current_heigth + "\" r=\"5\" fill=\"" + category_color + "\" stroke=\"black\" />\n";
+                }
                 colors_svg += "<text x=\"15\" y=\"" + (current_heigth + 5) + "\" font-size=\"15px\" " + text_length_attr + ">" + category_name + "</text>\n";
                 current_heigth += 15;
         }
@@ -1347,7 +1356,8 @@ function set_universe_data(nodecount, categories, node_objects){
         var node_list_html = "\n<div id=\"cg-node-list\" class=\"node-list\">\
                         <div class=\"cerrar\" onclick=\"toggle_node_list();\"> X </div>\
                         <div><h2>NewsUniverse Node List</h2></div>\
-						<div><h3 style=\"color:black;\">(drag & drop and mouse over nodes for insightful visualizations)</h3></div>\
+						<div><h3 style=\"color:black;\">(drag & drop, click and mouse over nodes for insightful visualizations)</h3></div>\
+                                                <div><h3 style=\"color:black;\">(zoom in & out display or drag whole canvas for better vizualization)</h3></div>\
                         <div><h3 style=\"color:red;\"> (press \"L\" key to show/hide this list) </h3></div>\
                         <table>\
                             <thead>\
@@ -1373,7 +1383,7 @@ function set_universe_data(nodecount, categories, node_objects){
 
 function build_universe(universe_nodes) {
     //Node params:
-    var node_size                = 15;
+    var node_size                = 20;
     var font_size                = node_size/3;
     var size_multiplier            = 3;
 
@@ -1388,11 +1398,12 @@ function build_universe(universe_nodes) {
 
 
     //console.log(process_json_new( galaxy_json ).nodes);
-
+    var margin_left_px = 130;
     var tmp_resize = function() {
         $("#cg")
-        .css("width", $(document).width() + "px")
-        .css("height",$(document).height() + "px");
+        .css("width", ($(document).width()-margin_left_px) + "px")
+        .css("height",$(document).height() + "px")
+        .css("margin-left", margin_left_px + "px")
 
         if (window.cg != null) {
             console.log("cg not null");
@@ -1415,37 +1426,97 @@ function build_universe(universe_nodes) {
             {
                 selector : 'node',
                 style: {
-                    'width'                : node_size,
-                    'height'            : node_size,
                     'background-color'    : 'data(color)',
                     'border-color'        : 'black',
                     'border-width'        : '1px',
-                    'label'                  : 'data(id)',
-                    'text-valign'        : 'center',
-                    'text-halign'        : 'center',
-                    'font-size'            : font_size,
+                    'label'               : 'data(id)',
+                    'text-valign'         : 'center',
+                    'text-halign'         : 'center',
                     'min-zoomed-font-size'    : '5px',
                 }
             },
 
+                {
+                selector : 'node[selected=0]',
+                style: {
+                    'width'             : node_size,
+                    'height'            : node_size,
+                    'font-size'         : font_size,
+                    'z-index'           : 0,
+                }
+            },
+
+            {
+                selector : 'node[selected=1]',
+                style: {
+                    'width'             : node_size*size_multiplier,
+                    'height'            : node_size*size_multiplier,
+                    'font-size'         : font_size*size_multiplier,
+                    'z-index'           : 10000000,
+                }
+            },
+
+
             {
                 selector : 'node[level=0]',
                 style: {
-                    'width'                : node_size*2,
-                    'height'            : node_size*2,
                     'shape'                : 'rectangle',
+                }
+            },
+
+            {
+                selector : 'node[level=0][selected=0]',
+                style: {
+                    'width'                : node_size*2,
+                    'height'               : node_size*2,
                 }
             },
 
             {
                 selector : 'edge',
                 style: {
-                    "width": edge_width,
-                    'line-color' : 'black',
-                    'opacity'     : edge_opacity,
                     'target-arrow-shape': 'triangle',
+                    'line-style'        : 'solid',
                 }
-            }
+            },
+
+            {
+                selector : 'edge[selected=0]',
+                style: {
+                    "width"      : edge_width,
+                    'line-color' : 'black',
+                    'opacity'    : edge_opacity,
+                    'curve-style': 'haystack',
+                    'z-index'	 : 0,
+                }
+            },
+
+            {
+                selector : 'edge[selected=1]',
+                style: {
+                    'width'      : 10,
+                    'line-color' : 'black',
+                    'opacity'    : 1,
+                    'curve-style': 'bezier',
+                    'z-index'	 : 10000000,
+                }
+            },
+
+            {
+                selector : 'edge[direction=1]',
+                style: {
+                        'line-color' 		 : 'blue',
+                        'target-arrow-color' : 'blue',
+                }
+            },
+
+            {
+                selector : 'edge[direction=-1]',
+                style: {
+                        'line-color' 		 : 'red',
+                        'target-arrow-color' : 'red',
+                }
+            },
         ],
         layout: {
             name: 'random',
@@ -1453,116 +1524,66 @@ function build_universe(universe_nodes) {
 
     });
 
-    cg.on("tapdragover","node", function(evt) {
-            //console.log("MOUSEOVER");
-            var edges = evt.cyTarget.connectedEdges();
-            var nodes = edges.connectedNodes();
+        cg.on("tapdragover","node", function(evt) {
+                var edges = evt.cyTarget.connectedEdges("[selected=0]");
+                var nodes = edges.connectedNodes("[selected=0]");
 
 
-            var starting = edges.filter("[source=\"" + evt.cyTarget.data().id.toString()+"\"]").filter("[^selected], [selected=0]");
-            var ending = edges.filter("[target=\"" + evt.cyTarget.data().id.toString()+"\"]").filter("[^selected], [selected=0]");
-            cg.startBatch();
-                nodes.css("width"        , node_size*size_multiplier);
-                nodes.css("height"       , node_size*size_multiplier);
-                nodes.css("font-size"    , font_size*size_multiplier);
-                nodes.css("z-index"        , 10000000);
+                var starting = edges.filter("[source=\"" + evt.cyTarget.data().id.toString()+"\"]");
+                var ending = edges.filter("[target=\"" + evt.cyTarget.data().id.toString()+"\"]");
 
-                edges.css("line-style"    , "solid");
-                edges.css("opacity"        , "1");
-                edges.css("curve-style"    , "bezier");
-                edges.css("z-index"        , 10000000);
+                cg.startBatch();
+                        nodes.data("selected",1);
+                        edges.data("selected",1);
+                        starting.data("direction",1);
+                        ending.data("direction",-1);
+                cg.endBatch();
 
-                starting.css("width"                , 10)
-                starting.css("line-color"            , "blue");
-                starting.css("target-arrow-color"    , "blue");
+                mostrar_titulo( evt.cyTarget.data().title + "<br/>Category : " + evt.cyTarget.data().categories[0], evt.cyTarget.data().date );
+        });
 
-                ending.css("width"                , 5)
-                ending.css("line-color"            , "red");
-                ending.css("target-arrow-color"    , "red");
-            cg.endBatch();
-            mostrar_titulo( evt.cyTarget.data().title + "<br/>Category : " + evt.cyTarget.data().categories[0], evt.cyTarget.data().date );
-    });
+        cg.on("tapdragout","node", function(evt) {
+                var edges = evt.cyTarget.connectedEdges("[selected=1][pinned=0]");
+                var nodes = edges.connectedNodes("[selected=1][pinned=0]");
 
-    cg.on("tapdragout","node", function(evt) {
-        var edges = evt.cyTarget.connectedEdges().filter("[^selected], [selected=0]");
-        var nodes = edges.connectedNodes().filter("[^selected], [selected=0]");
-        var roots = nodes.filter("[level=0]");
+                cg.startBatch();
+                        nodes.data("selected",0);
+                        edges.data("selected",0);
+                        edges.data("direction",0);
+                cg.endBatch();
+                ocultar_titulo();
+        });
 
+        cg.on("tap","node", function(evt) {
 
-        cg.startBatch();
-            nodes.css("width"         , node_size);
-            nodes.css("height"       , node_size);
-            nodes.css("font-size"    , font_size);
-            nodes.css("z-index"        , 0);
+                var pinned_nodes = cg.nodes("[pinned>=1]");
+                var pinned_edges = pinned_nodes.connectedEdges("[pinned=1]");
 
-            roots.css("width"         , node_size*2);
-            roots.css("height"       , node_size*2);
+                already_pinned = (evt.cyTarget.data().pinned == 2);
 
-            edges.css("opacity"        , edge_opacity);
-            edges.css("width"        , edge_width);
-            edges.css("line-color"    , "black");
-            edges.css("curve-style"    , "haystack");
-            edges.css("z-index"        , 0);
-        cg.endBatch();
-        ocultar_titulo();
+                cg.startBatch();
+                        pinned_nodes.data("pinned", 0);
+                        pinned_edges.data("pinned", 0);
+                        pinned_nodes.data("selected", 0);
+                        pinned_edges.data("selected", 0);
+                        pinned_edges.data("direction",0);
 
+                        if(!already_pinned){
+                                var edges = evt.cyTarget.connectedEdges();
+                                var nodes = edges.connectedNodes();
+                                var starting = edges.filter("[source=\"" + evt.cyTarget.data().id.toString()+"\"]");
+                                var ending = edges.filter("[target=\"" + evt.cyTarget.data().id.toString()+"\"]");
 
-    });
-
-    cg.on("tap","node", function(evt) {
-        //console.log("click");
-        var edges = evt.cyTarget.connectedEdges();
-        var nodes = edges.connectedNodes();
-
-        already_selected = (evt.cyTarget.data().selected !== undefined && evt.cyTarget.data().selected == 2);
-
-
-        var selected_nodes = cg.nodes().filter("[selected>=1]");
-        var selected_edges = cg.edges().filter("[selected>=1]");
-
-
-        selected_edges.data("selected", 0);
-        selected_nodes.data("selected", 0);
-
-        if(!already_selected){
-            var ending = edges.filter("[target=\"" + evt.cyTarget.data().id.toString()+"\"]");
-            var starting = edges.filter("[source=\"" + evt.cyTarget.data().id.toString()+"\"]");
-            cy.startBatch();
-                ending.css("width"                , 5)
-                ending.css("line-color"            , "red");
-                ending.css("target-arrow-color"    , "red");
-
-                starting.css("width"                , 10)
-                starting.css("line-color"            , "blue");
-                starting.css("target-arrow-color"    , "blue");
-            cy.endBatch();
-            nodes.data("selected", 1);
-            edges.data("selected", 1);
-            evt.cyTarget.data("selected",2);
-        }
-
-        nodes = cg.nodes().filter("[^selected], [selected=0]");
-        edges = cg.edges().filter("[^selected], [selected=0]");
-        var roots = nodes.filter("[level=0]");
-
-        cg.startBatch();
-            nodes.css("width"         , node_size);
-            nodes.css("height"       , node_size);
-            nodes.css("font-size"    , font_size);
-            nodes.css("z-index"        , 0);
-
-            roots.css("width"         , node_size*2);
-            roots.css("height"       , node_size*2);
-
-            edges.css("opacity"        , edge_opacity)
-            edges.css("width"        , edge_width)
-            edges.css("line-color"    , "black");
-            edges.css("curve-style"    , "haystack");
-            edges.css("z-index"        , 0);
-        cg.endBatch();
-
-        //console.log(evt.cyTarget.data().selected);
-    });
+                                nodes.data("pinned", 1);
+                                edges.data("pinned", 1);
+                                nodes.data("selected", 1);
+                                edges.data("selected", 1);
+                                starting.data("direction",1);
+                                ending.data("direction" ,-1);
+                                evt.cyTarget.data("pinned", 2);
+                        }
+                cg.endBatch();
+        });
 
 
     cg.on("layoutstop", function(evt) {
