@@ -459,16 +459,26 @@ function center_cy() {
     });
 }
 
-function mostrar_titulo( titulo, fecha ) {
-    html = "<h4>" + titulo;
-    if (fecha !== undefined && fecha !== null && fecha !== "None") {
-        html += "<br/>date : " + fecha.split(".")[0];
+function mostrar_titulo( titulo, fecha, url, node_number ) {
+    html = "<h4>";
+    if(node_number !== undefined){
+            html += "(#" + node_number + ")";
     }
-    $("#titulo-noticia").html( html +  "</h4>" ).fadeIn(500);
+    if(url !== undefined){
+            html += "<a href=\"" + url + "\">" + titulo + "</a>";
+    }else{
+            html += titulo;
+    }
+    if (fecha !== undefined && fecha !== null && fecha !== "None") {
+        html += "<br/>Date : " + fecha.split(".")[0];
+    }
+    //500
+    $("#titulo-noticia").html( html +  "</h4>" ).fadeIn(50);
 }
 
 function ocultar_titulo() {
-    $("#titulo-noticia").fadeOut(250);
+    //250
+    $("#titulo-noticia").fadeOut(50);
 }
 
 function setup_cy() {
@@ -1243,6 +1253,30 @@ function color_from_category(categories){
         return ret;
 }
 
+function get_edge_width(edge_score){
+        if(edge_score === undefined){
+                return 1;
+        }
+
+        if(edge_score <= 40){
+                final_score = 1;
+        }else if(edge_score == 50){
+                final_score = 4;
+        }else if(edge_score == 60){
+                final_score = 7;
+        }else if(edge_score == 70){
+                final_score = 10;
+        }else if(edge_score == 80){
+                final_score = 12;
+        }else if(edge_score == 90){
+                final_score = 14;
+        }else{
+                final_score = 16;
+        }
+        return final_score;
+}
+
+
 
 function setup_universe_from_json( obj ) {
         var nodes = [];
@@ -1294,6 +1328,7 @@ function setup_universe_from_json( obj ) {
                                                 "id"            : node_index.toString() + "-" + node_object.edges[i][0].toString(),
                                                 "source"        : node_index.toString(),
                                                 "target"        : node_object.edges[i][0].toString(),
+                                                "selected_width": get_edge_width(node_object.edges[i][1]),
                                                 "pinned"        : 0,
                                                 "selected"      : 0,
                                                 "direction"     : 0,
@@ -1432,7 +1467,7 @@ function build_universe(universe_nodes) {
                     'label'               : 'data(id)',
                     'text-valign'         : 'center',
                     'text-halign'         : 'center',
-                    'min-zoomed-font-size'    : '5px',
+                    'min-zoomed-font-size': '5px',
                 }
             },
 
@@ -1483,7 +1518,7 @@ function build_universe(universe_nodes) {
             {
                 selector : 'edge[selected=0]',
                 style: {
-                    "width"      : edge_width,
+                    'width'      : edge_width,
                     'line-color' : 'black',
                     'opacity'    : edge_opacity,
                     'curve-style': 'haystack',
@@ -1494,8 +1529,7 @@ function build_universe(universe_nodes) {
             {
                 selector : 'edge[selected=1]',
                 style: {
-                    'width'      : 10,
-                    'line-color' : 'black',
+                    'width'      : 'data(selected_width)',
                     'opacity'    : 1,
                     'curve-style': 'bezier',
                     'z-index'	 : 10000000,
@@ -1505,15 +1539,15 @@ function build_universe(universe_nodes) {
             {
                 selector : 'edge[direction=1]',
                 style: {
-                        'line-color' 		 : 'blue',
-                        'target-arrow-color' : 'blue',
+                        'line-color'             : 'blue',
+                        'target-arrow-color'     : 'blue',
                 }
             },
 
             {
                 selector : 'edge[direction=-1]',
                 style: {
-                        'line-color' 		 : 'red',
+                        'line-color'         : 'red',
                         'target-arrow-color' : 'red',
                 }
             },
@@ -1539,7 +1573,10 @@ function build_universe(universe_nodes) {
                         ending.data("direction",-1);
                 cg.endBatch();
 
-                mostrar_titulo( evt.cyTarget.data().title + "<br/>Category : " + evt.cyTarget.data().categories[0], evt.cyTarget.data().date );
+                if(cg.nodes("[pinned=2]").length == 0){
+                        target_data = evt.cyTarget.data();
+                        mostrar_titulo(target_data.title + "<br/>Category : " + target_data.categories[0], target_data.date, target_data.url, target_data.id);
+                }
         });
 
         cg.on("tapdragout","node", function(evt) {
@@ -1551,7 +1588,10 @@ function build_universe(universe_nodes) {
                         edges.data("selected",0);
                         edges.data("direction",0);
                 cg.endBatch();
-                ocultar_titulo();
+
+                if(cg.nodes("[pinned=2]").length == 0){
+                        ocultar_titulo();
+                }
         });
 
         cg.on("tap","node", function(evt) {
