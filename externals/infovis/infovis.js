@@ -463,7 +463,7 @@ function center_cy() {
 function mostrar_titulo( titulo, fecha, category, url, node_number ) {
     html = "<h4>";
     if(node_number !== undefined){
-            html += "(#" + node_number + ") ";
+            html += "(Node #" + node_number + ") ";
     }
     if(url !== undefined){
             html += "<a href=\"" + url + "\" target=\"_blank\">" + titulo + "</a>";
@@ -654,7 +654,7 @@ function setup_cy() {
 
     var tmphtml = "\n<div id=\"cy-node-list\" class=\"node-list\">\
                     <div class=\"cerrar\" onclick=\"toggle_node_list();\"> X </div>\
-                    <div><h2>NewsGalaxy Node List.</h2></div>\
+                    <div><h2>NewsGalaxy Node List</h2></div>\
                     <div><h3 style=\"color:red;\"> (press \"L\" key to show/hide this list) </h3></div>\
                     <table>\
                         <thead>\
