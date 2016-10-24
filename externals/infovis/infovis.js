@@ -459,7 +459,7 @@ function center_cy() {
     });
 }
 
-function mostrar_titulo( titulo, fecha, url, node_number ) {
+function mostrar_titulo( titulo, fecha, category, url, node_number ) {
     html = "<h4>";
     if(node_number !== undefined){
             html += "(#" + node_number + ")";
@@ -468,6 +468,9 @@ function mostrar_titulo( titulo, fecha, url, node_number ) {
             html += "<a href=\"" + url + "\">" + titulo + "</a>";
     }else{
             html += titulo;
+    }
+    if(category !== undefined){
+            html += "<br/>Category : " + category;
     }
     if (fecha !== undefined && fecha !== null && fecha !== "None") {
         html += "<br/>Date : " + fecha.split(".")[0];
@@ -1575,7 +1578,7 @@ function build_universe(universe_nodes) {
 
                 if(cg.nodes("[pinned=2]").length == 0){
                         target_data = evt.cyTarget.data();
-                        mostrar_titulo(target_data.title + "<br/>Category : " + target_data.categories[0], target_data.date, target_data.url, target_data.id);
+                        mostrar_titulo(target_data.title, target_data.date, target_data.categories[0], target_data.url, target_data.id);
                 }
         });
 
