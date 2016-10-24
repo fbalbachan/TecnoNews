@@ -486,7 +486,7 @@ class BlogPublisher(object):
                     self.add_hyperlinks(entry, "hyperlinks_propiedades.csv")
                     entry.categories = [u"propiedades"]
 
-                if "source" in entry and entry.source is not None:
+                if entry.source is not None:
                     tmp_source = entry.source
                     if isinstance(entry.source, unicode):
                         tmp_source = entry.source.encode("utf-8")
