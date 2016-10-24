@@ -74,15 +74,16 @@ function exportCSV() {
             //console.log(custom_graph_data[a_key])
 //    }
     //console.log(csvRows)
-    for(a_node in window.cg.nodes()){
+    for(var i = 0; i < window.cg.nodes().length; i++){
+            a_node_data = window.cg.nodes()[i].data();
             scored_children = []
             console.log(a_node)
-            console.log(a_node.data)
-            console.log(a_node.data())
-            for(a_child in a_node.data().edges){
+            console.log(a_node_data)
+            console.log(a_node_data())
+            for(a_child in a_node_data().edges){
                     scored_children.push({"id": a_child[0], "score": a_child[1]});
             }
-            csvRows.push([a_node.data().id, a_node.data().title, a_node.data().url,JSON.stringify(a_node.data().categories), a_node.data().source, a_node.data().data, a_node.data().sentiment, JSON.stringify(scored_children)]);
+            csvRows.push([a_node_data().id, a_node_data().title, a_node_data().url,JSON.stringify(a_node_data().categories), a_node_data().source, a_node_data().date, a_node_data().sentiment, JSON.stringify(scored_children)]);
     }
     exportToCsv("universe.csv", csvRows);
 }
