@@ -490,7 +490,7 @@ class BlogPublisher(object):
                     tmp_source = entry.source
                     if isinstance(entry.source, unicode):
                         tmp_source = entry.source.encode("utf-8")
-                    entry.content += "<p align=\"right\">Source: " + tmp.source + "</p>"
+                    entry.content += "<p align=\"right\">Source: " + tmp_source + "</p>"
                 self.add_sentiment(entry)
                 self.add_countries(entry)
                 self.add_cities(entry)
