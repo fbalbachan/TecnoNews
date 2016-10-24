@@ -42,7 +42,8 @@ class NewsRewriter(object):
                                          original_entry.source,
                                          categories=original_entry.categories,
                                          related=original_entry.related,
-                                         versions=original_entry.versions)
+                                         versions=original_entry.versions,
+                                         url=original_entry.url)
         self.injected_count = 0
         self.to_insert_canonical = []
         self.config = ConfigProvider()
