@@ -4,6 +4,7 @@ window.$  = jQuery;
 
 window.gs = null; //galaxy summary
 window.cg = null; //custom graph
+window.cg_pinned = 0;
 window.custom_graph_data = {};
 window.universe          = {
     "nodecount"     : 0,
@@ -1576,7 +1577,7 @@ function build_universe(universe_nodes) {
                         ending.data("direction",-1);
                 cg.endBatch();
 
-                if(cg.nodes("[pinned=2]").length == 0){
+                if(window.cg_pinned == 0){
                         target_data = evt.cyTarget.data();
                         mostrar_titulo(target_data.title, target_data.date, target_data.categories[0], target_data.url, target_data.id);
                 }
@@ -1592,7 +1593,7 @@ function build_universe(universe_nodes) {
                         edges.data("direction",0);
                 cg.endBatch();
 
-                if(cg.nodes("[pinned=2]").length == 0){
+                if(window.cg_pinned == 0){
                         ocultar_titulo();
                 }
         });
@@ -1610,6 +1611,7 @@ function build_universe(universe_nodes) {
                         pinned_nodes.data("selected", 0);
                         pinned_edges.data("selected", 0);
                         pinned_edges.data("direction",0);
+                        window.cg_pinned = 0;
 
                         if(!already_pinned){
                                 var edges = evt.cyTarget.connectedEdges();
@@ -1624,6 +1626,7 @@ function build_universe(universe_nodes) {
                                 starting.data("direction",1);
                                 ending.data("direction" ,-1);
                                 evt.cyTarget.data("pinned", 2);
+                                window.cg_pinned = 1;
                         }
                 cg.endBatch();
         });
