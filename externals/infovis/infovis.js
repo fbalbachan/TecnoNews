@@ -836,15 +836,22 @@ function setup_galaxysummary() {
                         color_group = nodos[i].scored_summary_clauses[j]["group"] % font_colors.length;
                         extra_tags_open = "";
                         extra_tags_close = "";
-                        if(nodos[i].scored_summary_clauses[j]["group"] > font_colors.length){
-                                extra_tags_open += "<u>";
-                                extra_tags_close += "</u>";
+
+                        if(nodos[i].scored_summary_clauses[j]["group"] > 5*font_colors.length){
+                                extra_tags_open += "<b><i>";
+                                extra_tags_close += "</i></b>";
+                        }else if(nodos[i].scored_summary_clauses[j]["group"] > 4*font_colors.length){
+                                extra_tags_open += "<b><u>";
+                                extra_tags_close += "</u></b>";
+                        }else if(nodos[i].scored_summary_clauses[j]["group"] > 3*font_colors.length){
+                                extra_tags_open += "<b>";
+                                extra_tags_close += "</b>";
                         }else if(nodos[i].scored_summary_clauses[j]["group"] > 2*font_colors.length){
                                 extra_tags_open = "<i>" + extra_tags_open;
                                 extra_tags_close += "</i>";
-                        }else if(nodos[i].scored_summary_clauses[j]["group"] > 3*font_colors.length){
-                                extra_tags_open = "<b>" + extra_tags_open;
-                                extra_tags_close += "</b>";
+                        }else if(nodos[i].scored_summary_clauses[j]["group"] > font_colors.length){
+                                extra_tags_open = "<u>" + extra_tags_open;
+                                extra_tags_close += "</u>";
                         }
                         tmp     += '<font color="'+ font_colors[color_group] + '">';
                         tmp     += extra_tags_open;
