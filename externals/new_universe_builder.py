@@ -89,7 +89,7 @@ class TreeBuilder(BaseInfo) :
 
                 # Add child edges if necessary:
                 if generations > 0:
-                    if "universe_versions" in a_node and a_node["universe_versions" is not None]:
+                    if "universe_versions" in a_node and a_node["universe_versions"] is not None:
                         for idx, a_child_id in enumerate(a_node["universe_versions"]):
                             node_object["edges"].append([self.get_short_id(a_child_id), a_node["universe_scores"][idx]])
 
