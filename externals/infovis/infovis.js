@@ -1273,9 +1273,6 @@ function setup_universe_from_json( obj ) {
                 nodes.push({
                                 "group": "nodes",
                                 "data" : node_object,
-                                "pinned"    : 0,
-                                "selected"  : 0,
-                                "direction" : 0,
                         });
 
                 node_objects.push(node_object);
@@ -1297,6 +1294,9 @@ function setup_universe_from_json( obj ) {
                                                 "id"            : node_index.toString() + "-" + node_object.edges[i][0].toString(),
                                                 "source"        : node_index.toString(),
                                                 "target"        : node_object.edges[i][0].toString(),
+                                                "pinned"        : 0,
+                                                "selected"      : 0,
+                                                "direction"     : 0,
                                         }
                         });
                 }
