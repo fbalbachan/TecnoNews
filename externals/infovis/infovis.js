@@ -1450,6 +1450,7 @@ function build_universe(universe_nodes) {
         .css("width", ($(document).width()-margin_left_px) + "px")
         .css("height",$(document).height() + "px")
         .css("margin-left", margin_left_px + "px")
+        .css("margin-bottom", margin_left_px + "px")
 
         if (window.cg != null) {
             console.log("cg not null");
