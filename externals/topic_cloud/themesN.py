@@ -183,7 +183,7 @@ if __name__ == "__main__":
         items = db["news_entries"].find({"_id" : {"$in" : oids }})
         #print items
     except Exception, e:
-        print sys.argv[1]
+        #print sys.argv[1]
         print "Debe especificar uno o mas IDs de noticias. Imposible continuar."
         print str(e)
         sys.exit(1)
