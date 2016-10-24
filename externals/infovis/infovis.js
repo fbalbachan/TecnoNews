@@ -1628,6 +1628,7 @@ function build_universe(universe_nodes) {
                         pinned_edges.data("selected", 0);
                         pinned_edges.data("direction",0);
                         window.cg_pinned = 0;
+                        ocultar_titulo();
 
                         if(!already_pinned){
                                 var edges = evt.cyTarget.connectedEdges();
@@ -1643,6 +1644,8 @@ function build_universe(universe_nodes) {
                                 ending.data("direction" ,-1);
                                 evt.cyTarget.data("pinned", 2);
                                 window.cg_pinned = 1;
+                                target_data = evt.cyTarget.data();
+                                mostrar_titulo(target_data.title, target_data.date, target_data.categories[0], target_data.url, target_data.id);
                         }
                 cg.endBatch();
         });
