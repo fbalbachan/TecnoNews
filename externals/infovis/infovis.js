@@ -1518,6 +1518,7 @@ function build_universe(universe_nodes) {
             {
                 selector : 'node[level=0]',
                 style: {
+                    'border-color'         : 'gray',
                     'shape'                : 'rectangle',
                 }
             },
@@ -1527,6 +1528,13 @@ function build_universe(universe_nodes) {
                 style: {
                     'width'                : node_size*2,
                     'height'               : node_size*2,
+                }
+            },
+
+            {
+                selector : 'node[pinned=2]',
+                style: {
+                    'border-width'        : '10px'
                 }
             },
 
@@ -1674,7 +1682,7 @@ function build_universe(universe_nodes) {
                                 orphan_nodes.forEach(function(a_node, idx, all_nodes){
                                     //Check if those nodes can reach another pin group:
                                     var orphan_edges = a_node.connectedEdges();
-                                    var adopting_nodes = orphan_edges.connectedNodes("[pin_group!=" + current_group + "]");
+                                    var adopting_nodes = orphan_edges.connectedNodes("[pinned=2][pin_group!=" + current_group + "]");
                                     if(!adopting_nodes.empty()){
                                         //If so => adopt them!
                                         a_node.data("pin_group", adopting_nodes.first().data().pin_group);
