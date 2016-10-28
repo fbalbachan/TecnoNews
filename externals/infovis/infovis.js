@@ -5,6 +5,7 @@ window.$  = jQuery;
 window.gs = null; //galaxy summary
 window.cg = null; //custom graph
 window.cg_pinned = 0;
+window.cg_pin_group = 0;
 window.custom_graph_data = {};
 window.universe          = {
     "nodecount"     : 0,
@@ -662,7 +663,7 @@ function setup_cy() {
 
     var tmphtml = "\n<div id=\"cy-node-list\" class=\"node-list\">\
                     <div class=\"cerrar\" onclick=\"toggle_node_list();\"> X </div>\
-                    <div><h2>NewsGalaxy Node List</h2></div>\
+                    <div><h2>NewsGalaxy List</h2></div>\
                     <div><h3 style=\"color:red;\"> (press \"L\" key to show/hide this list) </h3></div>\
                     <table>\
                         <thead>\
@@ -1308,6 +1309,7 @@ function setup_universe_from_json( obj ) {
                 node_object = obj[node_index];
                 node_object.selected = 0;
                 node_object.pinned = 0;
+                node_object.pin_group = 0;
 
                 //if(node_object.title.length > 25){
                 //        node_object.title = node_object.title.substring(0,22) + "...";
@@ -1351,6 +1353,7 @@ function setup_universe_from_json( obj ) {
                                                 "pinned"        : 0,
                                                 "selected"      : 0,
                                                 "direction"     : 0,
+                                                "pin_group"     : 0,
                                         }
                         });
                 }
@@ -1409,10 +1412,10 @@ function set_universe_data(nodecount, categories, node_objects){
 
         var node_list_html = "\n<div id=\"cg-node-list\" class=\"node-list\">\
                         <div class=\"cerrar\" onclick=\"toggle_node_list();\"> X </div>\
-                        <div><h2>NewsUniverse Node List</h2></div>\
-						<div><h3 style=\"color:black;\">(drag & drop, click and mouse over nodes for insightful visualizations)</h3></div>\
-                                                <div><h3 style=\"color:black;\">(zoom in & out display or drag whole canvas for better vizualization)</h3></div>\
-                        <div><h3 style=\"color:red;\"> (press \"L\" key to show/hide this list) </h3></div>\
+                        <div><h2>NewsUniverse Instructions</h2></div>\
+						<div><h3 style=\"color:black;\">1. Drag & drop, click and mouse over nodes (or groups of nodes with ctrl + click) for insightful visualizations</h3></div>\
+                                                <div><h3 style=\"color:black;\">2. Zoom in & out display or drag whole canvas for better vizualization</h3></div>\
+                        <div><h3 style=\"color:red;\"> 3. Press \"L\" key to show/hide this list </h3></div>\
                         <table>\
                             <thead>\
                                 <tr>\
@@ -1616,23 +1619,17 @@ function build_universe(universe_nodes) {
 
         cg.on("tap","node", function(evt) {
 
-                var pinned_nodes = cg.nodes("[pinned>=1]");
-                var pinned_edges = pinned_nodes.connectedEdges("[pinned=1]");
+                //var pinned_nodes = cg.nodes("[pinned>=1]");
+                //var pinned_edges = pinned_nodes.connectedEdges("[pinned=1]");
 
                 already_pinned = (evt.cyTarget.data().pinned == 2);
 
                 cg.startBatch();
-                        pinned_nodes.data("pinned", 0);
-                        pinned_edges.data("pinned", 0);
-                        pinned_nodes.data("selected", 0);
-                        pinned_edges.data("selected", 0);
-                        pinned_edges.data("direction",0);
-                        window.cg_pinned = 0;
-                        ocultar_titulo();
-
                         if(!already_pinned){
-                                var edges = evt.cyTarget.connectedEdges();
-                                var nodes = edges.connectedNodes();
+                                window.cg_pin_group++;
+                                window.cg_pinned++;
+                                var edges = evt.cyTarget.connectedEdges("[pin_group=0]");
+                                var nodes = edges.connectedNodes("[pin_group=0]");
                                 var starting = edges.filter("[source=\"" + evt.cyTarget.data().id.toString()+"\"]");
                                 var ending = edges.filter("[target=\"" + evt.cyTarget.data().id.toString()+"\"]");
 
@@ -1640,12 +1637,63 @@ function build_universe(universe_nodes) {
                                 edges.data("pinned", 1);
                                 nodes.data("selected", 1);
                                 edges.data("selected", 1);
+                                nodes.data("pin_group", window.cg_pin_group);
+                                edges.data("pin_group", window.cg_pin_group);
+                                evt.cyTarget.data("pin_group", window.cg_pin_group);
                                 starting.data("direction",1);
                                 ending.data("direction" ,-1);
                                 evt.cyTarget.data("pinned", 2);
-                                window.cg_pinned = 1;
                                 target_data = evt.cyTarget.data();
+                                ocultar_titulo();
                                 mostrar_titulo(target_data.title, target_data.date, target_data.categories[0], target_data.url, target_data.id);
+                        }else{
+                                window.cg_pinned--;
+                                if(window.cg_pinned==0){
+                                    ocultar_titulo();
+                                }
+
+                                var current_group = evt.cyTarget.data().pin_group;
+                                var edges = evt.cyTarget.connectedEdges();  //neighborhood edges
+                                var nodes = edges.connectedNodes();         //neighborhood nodes
+
+                                //Get all neighboring clicked nodes with different group (could click 2 consecutive connected nodes)
+                                var external_nodes = nodes.filter("[pinned=2][pin_group!=" + current_group + "][pin_group!=0]");
+                                external_nodes.forEach( function(a_node, idx, all_nodes){
+                                    //Each neighbor adopts orphan edges pointing to the unpinned node
+                                    var external_edges = a_node.connectedEdges();
+                                    var external_target_edges = external_edges.filter("[target=\"" + evt.cyTarget.data().id.toString()+"\"]");
+                                    var external_source_edges = external_edges.filter("[source=\"" + evt.cyTarget.data().id.toString()+"\"]");
+                                    external_target_edges.data("pin_group", a_node.data().pin_group);
+                                    external_source_edges.data("pin_group", a_node.data().pin_group);
+                                    external_target_edges.data("direction", -1);
+                                    external_source_edges.data("direction", 1);
+                                });
+
+                                //Get all pin group nodes
+                                var orphan_nodes = nodes.filter("[pin_group=" + current_group + "]");
+                                orphan_nodes.forEach(function(a_node, idx, all_nodes){
+                                    //Check if those nodes can reach another pin group:
+                                    var orphan_edges = a_node.connectedEdges();
+                                    var adopting_nodes = orphan_edges.connectedNodes("[pin_group!=" + current_group + "]");
+                                    if(!adopting_nodes.empty()){
+                                        //If so => adopt them!
+                                        a_node.data("pin_group", adopting_nodes.first().data().pin_group);
+                                        a_node.data("pinned", 1);
+                                    }
+                                });
+
+                                //Rest of nodes/edges => UNSELECT!
+                                var group_nodes = nodes.filter("[pin_group=" + current_group + "]");
+                                var group_edges = edges.filter("[pin_group=" + current_group + "]");
+                                group_nodes.data("pinned", 0);
+                                group_edges.data("pinned", 0);
+                                group_nodes.data("selected", 0);
+                                group_edges.data("selected", 0);
+                                group_nodes.data("pin_group", 0);
+                                group_edges.data("pin_group", 0);
+                                group_edges.data("direction", 0);
+
+
                         }
                 cg.endBatch();
         });

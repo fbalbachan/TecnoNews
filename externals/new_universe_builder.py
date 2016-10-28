@@ -42,7 +42,7 @@ class TreeBuilder(BaseInfo) :
             self.short_id_dict[an_id] = len(self.short_id_dict)
         return self.short_id_dict[an_id]
 
-    def build_tree(self, id_noticia, generations=7):
+    def build_tree(self, id_noticia, generations=6):
         self.short_id_dict = {}
 
         #MongoDB Nodes handling:
@@ -79,7 +79,7 @@ class TreeBuilder(BaseInfo) :
                                 "edges"     : [],
                                 "title"     : a_node["title"],
                                 "date"      : str(a_node["_id"].generation_time).split("+")[0],
-                                "url"       : a_node["wp_url"] if "wp_url" in a_node and a_node["wp_url"] is not None else a_node["url"],
+                                "url"       : a_node["url"],
                                 "wp_id"     : a_node["wp_id"] ,
                                 "sentiment" : a_node["sentiment"],
                                 "categories": a_node["categories"],
