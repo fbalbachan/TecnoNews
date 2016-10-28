@@ -1446,7 +1446,7 @@ function build_universe(universe_nodes) {
 
     //Edge Params:
     var edge_width                = 0.1;
-    var edge_opacity            = 0.3;
+    var edge_opacity            = 0.4;
 
     //Loading Params:
     var batch_size                = 3000;
@@ -1665,8 +1665,8 @@ function build_universe(universe_nodes) {
                                     var external_source_edges = external_edges.filter("[source=\"" + evt.cyTarget.data().id.toString()+"\"]");
                                     external_target_edges.data("pin_group", a_node.data().pin_group);
                                     external_source_edges.data("pin_group", a_node.data().pin_group);
-                                    external_target_edges.data("direction", -1);
-                                    external_source_edges.data("direction", 1);
+                                    external_target_edges.data("direction", 1);
+                                    external_source_edges.data("direction", -1);
                                 });
 
                                 //Get all pin group nodes
