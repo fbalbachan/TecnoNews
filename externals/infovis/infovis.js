@@ -6,6 +6,7 @@ window.gs = null; //galaxy summary
 window.cg = null; //custom graph
 window.cg_pinned = 0;
 window.cg_pin_group = 0;
+window.cg_path_pinned = 0;
 window.custom_graph_data = {};
 window.universe          = {
     "nodecount"     : 0,
@@ -487,6 +488,12 @@ function mostrar_titulo( titulo, fecha, category, url, node_number ) {
     }
     //500
     $("#titulo-noticia").html( html +  "</h4>" ).fadeIn(50);
+}
+
+function mostrar_texto(texto){
+        html = "<h4>";
+	html += texto;
+	$("#titulo-noticia").html( html +  "</h4>" ).fadeIn(50);
 }
 
 function ocultar_titulo() {
@@ -1543,7 +1550,7 @@ function build_universe(universe_nodes) {
             {
                 selector : 'node[path_pinned=1]',
                 style: {
-                    'background-color' : 'yellow',
+                    //'background-color' : 'yellow',
                     'shape'            : 'pentagon',
                     'width'             : node_size*size_multiplier,
                     'height'            : node_size*size_multiplier,
@@ -1606,8 +1613,8 @@ function build_universe(universe_nodes) {
                     'opacity'    : 1,
                     'curve-style': 'bezier',
                     'z-index'	 : 10000000,
-                    'line-color' : 'yellow',
-                    'target-arrow-color' : 'yellow',
+                    'line-color' : 'rgb(59, 232, 23)',
+                    'target-arrow-color' : 'rgb(59, 232, 23)',
                 }
             },
         ],
@@ -1632,7 +1639,7 @@ function build_universe(universe_nodes) {
                         ending.data("direction",-1);
                 cg.endBatch();
 
-                if(window.cg_pinned == 0){
+                if(window.cg_pinned == 0 && window.cg_path_pinned==0){
                         target_data = evt.cyTarget.data();
                         mostrar_titulo(target_data.title, target_data.date, target_data.categories[0], target_data.url, target_data.id);
                 }
@@ -1648,7 +1655,7 @@ function build_universe(universe_nodes) {
                         edges.data("direction",0);
                 cg.endBatch();
 
-                if(window.cg_pinned == 0){
+                if(window.cg_pinned == 0 && window.cg_path_pinned==0){
                         ocultar_titulo();
                 }
         });
@@ -1665,9 +1672,15 @@ function build_universe(universe_nodes) {
 
                 if(evt.cyTarget.data("path_pinned") == 1){
                         evt.cyTarget.data("path_pinned", 0);
+                        window.cg_path_pinned = 0;
+                        ocultar_titulo();
                 }else{
                         evt.cyTarget.data("path_pinned", 1);
+                        window.cg_path_pinned = 1;
+                        mostrar_texto("Click on another node to show the shortest most significant path");
                         if(path_pinned_nodes.size() == 1){
+                                window.cg_path_pinned = 0;
+                                ocultar_titulo();
                                 //MARK PATH
                                 shortest_path = cg.elements().aStar({
                                                 root: path_pinned_nodes.first(),
