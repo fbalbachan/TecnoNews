@@ -1677,7 +1677,7 @@ function build_universe(universe_nodes) {
                 }else{
                         evt.cyTarget.data("path_pinned", 1);
                         window.cg_path_pinned = 1;
-                        mostrar_texto("<font color=\"rgb(57, 122, 26)\"> <u> Select another node to show the shortest most significant path between both nodes</u> </font>");
+                        mostrar_texto("<font color=\"green\"> <u><b> Right-click on another node to show the shortest most significant path between both nodes</b></u> </font>");
                         if(path_pinned_nodes.size() == 1){
                                 window.cg_path_pinned = 0;
                                 ocultar_titulo();
