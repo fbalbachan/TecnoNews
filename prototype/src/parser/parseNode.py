@@ -69,8 +69,15 @@ class ParseNode(TreeNode):
     def subordinates_others(self):
         return not self.is_leaf() and self.label in ["subord-rel", "subord"]
 
+    def subordinates_others_special(self):
+        if not self.is_leaf() and self.label in ["subord-rel"]:
+            if self.level() == 0:
+                return False
+        
+        return self.subordinates_others
+
     def is_subordinate(self):
-        return any((node.subordinates_others() for node in self.path_to_root()))
+        return any((node.subordinates_others_special() for node in self.path_to_root()))
 
     def label_node_children(self):
         if debug_mode: print "--> ParseNode.label_node_children()"
