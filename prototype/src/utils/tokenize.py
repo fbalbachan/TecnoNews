@@ -87,6 +87,7 @@ def limpieza_inicial(s):
     s = re.sub(r'\b(http|HTTP)\:--\S*\b', '', s)
     s = re.sub(r'\biPhone\b', 'Iphone', s)
     # s = re.sub(r"\n+(\w)", '.\1', s, re.U)
+    s = re.sub(r'([0-9]+([,.][0-9]+)?)%', r'%\1', s)
     return s
 
 
