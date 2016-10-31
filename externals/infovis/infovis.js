@@ -1310,6 +1310,7 @@ function setup_universe_from_json( obj ) {
                 node_object.selected = 0;
                 node_object.pinned = 0;
                 node_object.pin_group = 0;
+                node_object.path_pinned = 0;
 
                 //if(node_object.title.length > 25){
                 //        node_object.title = node_object.title.substring(0,22) + "...";
@@ -1354,6 +1355,7 @@ function setup_universe_from_json( obj ) {
                                                 "selected"      : 0,
                                                 "direction"     : 0,
                                                 "pin_group"     : 0,
+                                                "path_pinned"   : 0,
                                         }
                         });
                 }
@@ -1539,6 +1541,20 @@ function build_universe(universe_nodes) {
             },
 
             {
+                selector : 'node[path_pinned=1]',
+                style: {
+                    'background-color' : 'yellow',
+                    'shape'            : 'pentagon',
+                    'width'             : node_size*size_multiplier,
+                    'height'            : node_size*size_multiplier,
+                    'font-size'         : font_size*size_multiplier,
+                    'z-index'           : 10000000,
+
+                }
+
+            },
+
+            {
                 selector : 'edge',
                 style: {
                     'target-arrow-shape': 'triangle',
@@ -1582,6 +1598,18 @@ function build_universe(universe_nodes) {
                         'target-arrow-color' : 'red',
                 }
             },
+
+            {
+                selector : 'edge[path_pinned=1]',
+                style: {
+                    'width'      : 'data(selected_width)',
+                    'opacity'    : 1,
+                    'curve-style': 'bezier',
+                    'z-index'	 : 10000000,
+                    'line-color' : 'yellow',
+                    'target-arrow-color' : 'yellow',
+                }
+            },
         ],
         layout: {
             name: 'random',
@@ -1623,6 +1651,39 @@ function build_universe(universe_nodes) {
                 if(window.cg_pinned == 0){
                         ocultar_titulo();
                 }
+        });
+
+        cg.on("cxttap", "node", function(evt){
+            path_pinned_nodes = cg.nodes("[path_pinned=1]");
+            path_pinned_edges = cg.edges("[path_pinned=1]");
+
+            cg.startBatch();
+                if(path_pinned_nodes.size() >= 2){
+                        path_pinned_nodes.data("path_pinned", 0);
+                        path_pinned_edges.data("path_pinned", 0);
+                }
+
+                if(evt.cyTarget.data("path_pinned") == 1){
+                        evt.cyTarget.data("path_pinned", 0);
+                }else{
+                        evt.cyTarget.data("path_pinned", 1);
+                        if(path_pinned_nodes.size() == 1){
+                                //MARK PATH
+                                shortest_path = cg.elements().aStar({
+                                                root: path_pinned_nodes.first(),
+                                                goal: evt.cyTarget,
+                                                weigth: function(edge){
+                                                        return 1/edge.data("selected_width");
+                                                },
+                                });
+                                //console.log(shortest_path);
+                                if(shortest_path["found"] == true){
+                                        shortest_path["path"].data("path_pinned",1);
+                                }
+                        }
+                }
+            cg.endBatch();
+
         });
 
         cg.on("tap","node", function(evt) {
