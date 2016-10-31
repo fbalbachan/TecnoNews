@@ -1303,6 +1303,29 @@ function get_edge_width(edge_score){
         return final_score;
 }
 
+function get_edge_distance(edge_score){
+        if(edge_score === undefined){
+                return 1000;
+        }
+
+        if(edge_score <= 40){
+                final_score = 7;
+        }else if(edge_score == 50){
+                final_score = 6;
+        }else if(edge_score == 60){
+                final_score = 5;
+        }else if(edge_score == 70){
+                final_score = 4;
+        }else if(edge_score == 80){
+                final_score = 3;
+        }else if(edge_score == 90){
+                final_score = 2;
+        }else{
+                final_score = 1;
+        }
+        return final_score;
+}
+
 
 
 function setup_universe_from_json( obj ) {
@@ -1358,6 +1381,7 @@ function setup_universe_from_json( obj ) {
                                                 "source"        : node_index.toString(),
                                                 "target"        : node_object.edges[i][0].toString(),
                                                 "selected_width": get_edge_width(node_object.edges[i][1]),
+                                                "distance"      : get_edge_distance(node_object.edges[i][1]),
                                                 "pinned"        : 0,
                                                 "selected"      : 0,
                                                 "direction"     : 0,
@@ -1424,6 +1448,7 @@ function set_universe_data(nodecount, categories, node_objects){
                         <div><h2>NewsUniverse Instructions</h2></div>\
 						<div><h3 style=\"color:black;\">1. Drag & drop, click and mouse over nodes (or groups of nodes with ctrl + click) for insightful visualizations</h3></div>\
                                                 <div><h3 style=\"color:black;\">2. Zoom in & out display or drag whole canvas for better vizualization</h3></div>\
+                                                <div><h3 style=\"color:black;\">3. Right click on pairs of nodes for the most significant shortest path between them</h3></div>\
                         <div><h3 style=\"color:red;\"> 3. Press \"L\" key to show/hide this list </h3></div>\
                         <table>\
                             <thead>\
