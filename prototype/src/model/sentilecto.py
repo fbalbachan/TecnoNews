@@ -21,9 +21,10 @@ class Sentilecto:
             text = text.encode("utf-8")  # unicode -> str (utf8-encoded)
 
         analysis = {}
+        analysis["global_context"] = {"TEST":"TEST1"}
 
         paragraph = Paragraph.from_text(text)
-        sentence_analyzer = SentenceAnalyzer()
+        sentence_analyzer = SentenceAnalyzer(global_context=analysis["global_context"])
         paragraph_analyzer = ParagraphAnalyzer(sentence_analyzer, output_demo_debug)
 
         paragraph_analyzer.analyze(paragraph)

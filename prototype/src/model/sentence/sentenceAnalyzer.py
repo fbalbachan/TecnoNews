@@ -12,11 +12,12 @@ debug_mode = True
 
 
 class SentenceAnalyzer:
-    def __init__(self, tree_parser=FreelingTreeParser(), output_demo_debug=False):
+    def __init__(self, tree_parser=FreelingTreeParser(), global_context={}, output_demo_debug=False):
         self.tree_parser = tree_parser
         self.context = {"sentences": []}
         self.invoker = Invoker()
         self.output_demo_debug = output_demo_debug
+        self.global_context = global_context
 
     def analyze(self, sentence):
         if debug_mode: print "--> SentenceAnalyzer.analyze()"
@@ -63,7 +64,7 @@ class SentenceAnalyzer:
         if debug_mode: print "--> SentenceAnalyzer.analyze_clauses_of(sentence: ", sentence, ")"
 
         self.context["clauses"] = []
-        clause_analyzer = ClauseAnalyzer()
+        clause_analyzer = ClauseAnalyzer(global_context=self.global_context)
         clause_analyzer.context = self.context
 
         for clause in sentence.clauses:

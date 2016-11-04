@@ -11,17 +11,18 @@ debug_mode = False
 
 class EntityMSISeer:
 
-    def __init__(self):
+    def __init__(self, global_context={}):
         self.persons = resources.get_wordlist_safe("resources", "persons")
         self.demonyms = resources.get_wordlist_safe("resources", "demonyms")
         self.animals = resources.get_wordlist_safe("resources", "animals")
+        self.global_context = global_context
 
     def msi_of(self, entity):
         if debug_mode: print "--> EntityMSISeer.msi_of(entity:", entity, ")"
 
         label = entity.node.label
         entity.msi = self.msi_seer_by_label[label](self, entity) if label in self.msi_seer_by_label else {}
-        semantic_analyzer = EntitySemanticAnalyzer()
+        semantic_analyzer = EntitySemanticAnalyzer(global_context=self.global_context)
         semantic_analyzer.analyze(entity)
         entity.msi["animity"] = self.calculate_animity_for(entity)
         return entity.msi

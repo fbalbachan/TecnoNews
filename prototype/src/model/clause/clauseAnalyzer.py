@@ -20,10 +20,11 @@ debug_mode = False
 
 class ClauseAnalyzer:
 
-    def __init__(self):
+    def __init__(self, global_context={}):
         if debug_mode: print "--> ClauseAnalyzer.init()"
 
         self.context = {}
+        self.global_context = global_context
 
     def analyze(self, clause):
         if debug_mode: print "-->  Clause.Analyze (clause: ", clause, ")"
@@ -32,7 +33,7 @@ class ClauseAnalyzer:
         if clause.voice:
             clause.verb = ClauseAnalyzer.verb_of(clause)
 
-        clause.entities = ClauseAnalyzer.entities_of(clause)
+        clause.entities = ClauseAnalyzer.entities_of(clause, self.global_context)
 
         ClauseAnalyzer.find_time_references(clause)
 
@@ -192,9 +193,9 @@ class ClauseAnalyzer:
         return verb
 
     @staticmethod
-    def entities_of(clause):
+    def entities_of(clause, global_context={}):
         if debug_mode: print "--> ClauseAnalyzer.entities_of"
-        return EntityExtractor(clause).extract()
+        return EntityExtractor(clause, global_context=global_context).extract()
 
     @staticmethod
     def voice_of(clause):

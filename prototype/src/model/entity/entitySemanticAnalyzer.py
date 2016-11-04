@@ -4,15 +4,26 @@ from src.utils.genderDetection.genderDetector import GenderDetector
 from src.utils.resources import instance as resources
 
 class EntitySemanticAnalyzer:
+    def __init__(self, global_context={}):
+        self.global_context = global_context
+
     def analyze(self, entity):
+        if "persons" not in self.global_context:
+            self.global_context["persons"] = []
+
         for method in [self.detect_gender_if_necessary,
                        self.fix_semantic_classification,
                        self.fix_invalid_ne,
+                       self.fix_place_classification,
                        self.fix_org_classification,
                        self.fix_person_classification,
                        self.set_names_for_person,
                        self.set_attrs_for_org ]:
             method(entity)
+
+        if "semantic_classification" in entity.msi:
+            if entity.msi["semantic_classification"] == "person":
+                self.global_context["persons"].append(entity)
 
     def fix_invalid_ne(self, entity):
         if entity.lexical_form.lower() in self.invalid_name_entities:
@@ -54,6 +65,16 @@ class EntitySemanticAnalyzer:
 
                 if not attribute in entity.attributes: entity.attributes[attribute] = []
                 entity.attributes[attribute].append(word)
+
+
+    def fix_place_classification(self, entity):
+        msi = entity.msi
+        if msi["semantic_classification"] == "place" and entity.kernel:
+            words = entity.kernel.components()
+            for a_person in self.global_context["persons"]:
+                if "surnames" in a_person.attributes:
+                    msi["semantic_classification"] = "person"
+
 
     def fix_org_classification(self, entity):
         msi = entity.msi

@@ -6,11 +6,12 @@ from src.parser.parseNode import ParseNode
 
 class EntityExtractor:
 
-    def __init__(self, clause):
+    def __init__(self, clause, global_context={}):
         global debug_mode
         debug_mode = False
 
         self.clause = clause
+        self.global_context = global_context
 
     def extract(self):
         if debug_mode: print "--> EntityExtractor.extract()"
@@ -89,7 +90,7 @@ class EntityExtractor:
 
     def assign_msi(self, entities):
         if debug_mode: print "--> EntityExtractor.assign_msi(entities): ", entities
-        entity_msi_seer = EntityMSISeer()
+        entity_msi_seer = EntityMSISeer(global_context=self.global_context)
         for entity in entities:
             entity.msi = entity_msi_seer.msi_of(entity)
 
