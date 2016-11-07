@@ -193,7 +193,7 @@ class WebOutputUtils:
 
         return gender, number
 
-    def get_referents_data(self, entities):
+    def get_referents_data(self, entities, clauses):
         if debug_mode: print "--> WebOutputUtils.get_referents_data(entities:", entities, ")"
         preferred_genders_numbers = self.preferred_genders_numbers_to_unify_with(entities)
         preferred_classifications = self.preferred_classifications_to_unify_with(entities)
@@ -232,8 +232,25 @@ class WebOutputUtils:
 
         referents_data = sorted(referents_data, cmp=compare)
 
+        tmp_idx=0
         for referent_data in referents_data:
             referent_data["rn"] = referent_data["rn"] if referent_data["sc"] != "NONE" else referent_data["rn"].lower()
+            tmp_idx += 1
+            referent_data["index"] = tmp_idx
+            referent_data["links"] = []
+
+        for a_clause in clauses:
+            for a_clause2 in clauses:
+                if a_clause == a_clause2:
+                    continue
+                tmp_score = self.get_fact_comparison_score(a_clause, a_clause2, as_integer=True)
+                if tmp_score >= 80 and a_clause.has_structure("subject") and a_clause2.has_structure("subject"):
+                    for referent_data in referents_data:
+                        if str(referent_data["re"]) == str(a_clause.structure("subject")):
+                            for referent_data2 in referents_data:
+                                if str(referent_data2["re"]) == str(a_clause2.structure("subject")):
+                                    referent_data["links"].append(str(referent_data2["index"]))
+
 
         return referents_data
 

@@ -21,6 +21,7 @@ $def with (analysis, printer)
 
     $ sentences = analysis["paragraph"].sentences
     $ text_entities = []
+    $ all_clauses = []
 
     $for sentence in sentences:
 	<hr size=5 noshade>
@@ -52,6 +53,8 @@ $def with (analysis, printer)
 
                 clause_entities = filter(lambda entity: entity.is_maximal_regarding(clause_entities),
                                          clause_entities)
+
+                all_clauses.append(clause)
 
                 text_entities.extend(clause_entities)
                 entities_data = [(clause_entities, "Opinionated Entities (sentiment scores)", "")]
@@ -143,7 +146,7 @@ $def with (analysis, printer)
 
     $for entities, title, subtitle in entities_data:
         $if entities:
-            $ referents_data = printer.get_referents_data(entities)
+            $ referents_data = printer.get_referents_data(entities, all_clauses)
             <a name="overall_score"></a>
             <p class="normal">
             <br><center><b><u><font size=5 color="#8A0808">$title</font></u></b></center>
@@ -170,6 +173,8 @@ $def with (analysis, printer)
                     $ unique_str+=' ' + unique_elem+': '+printer.e_name(appearing[unique_elem])+','
 
                 $ unique_str = unique_str[:-1]
+                $for a_link in referent_data["links"]:
+                    $ unique_str += ', (#' + a_link + ")"
                 $ i+=1
                 $ occurrences = len(referent_data['refs'])
                 $if occurrences == len(referents_data[0]['refs']):
