@@ -193,7 +193,7 @@ class WebOutputUtils:
 
         return gender, number
 
-    def get_referents_data(self, entities, clauses):
+    def get_referents_data(self, entities, clauses = []):
         if debug_mode: print "--> WebOutputUtils.get_referents_data(entities:", entities, ")"
         preferred_genders_numbers = self.preferred_genders_numbers_to_unify_with(entities)
         preferred_classifications = self.preferred_classifications_to_unify_with(entities)
