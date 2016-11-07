@@ -174,7 +174,7 @@ $def with (analysis, printer)
 
                 $ unique_str = unique_str[:-1]
                 $for a_link in referent_data["links"]:
-                    $ unique_str += ', (#' + a_link + ")"
+                    $ unique_str += ', (Linked with: #' + a_link + ")"
                 $ i+=1
                 $ occurrences = len(referent_data['refs'])
                 $if occurrences == len(referents_data[0]['refs']):
