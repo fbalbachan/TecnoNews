@@ -55,7 +55,7 @@ class TreeBuilder(BaseInfo) :
         #Fact compare auxiliary variables:
         merged_summary_clauses = []
         group_index = 1
-        group_threshold = 0.85
+        group_threshold = 0.80
 
         #Result:
         result = {}
