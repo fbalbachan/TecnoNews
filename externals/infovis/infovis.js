@@ -4,6 +4,7 @@ window.$  = jQuery;
 
 window.gs = null; //galaxy summary
 window.cg = null; //custom graph
+window.cg_tapped = null;
 window.cg_pinned = 0;
 window.cg_pin_group = 0;
 window.cg_path_pinned = 0;
@@ -1725,6 +1726,28 @@ function build_universe(universe_nodes) {
         });
 
         cg.on("tap","node", function(evt) {
+                if(window.cg_tapped === null){
+                        window.cg_tapped = evt.cyTarget;
+                        setTimeout(function(){
+                            if(window.cg_tapped === null){
+                                    return;
+                            }
+                            window.cg_tapped = null;
+                            evt.cyTarget.trigger("single_tap");
+
+                        }, 200);
+
+                }else if(window.cg_tapped == evt.cyTarget){
+                        evt.cyTarget.trigger("double_tap");
+                        window.cg_tapped = null;
+                }
+        });
+
+        cg.on("double_tap", "node", function(evt){
+                console.log("DOUBLE CLICK");
+        });
+
+        cg.on("single_tap","node", function(evt) {
 
                 //var pinned_nodes = cg.nodes("[pinned>=1]");
                 //var pinned_edges = pinned_nodes.connectedEdges("[pinned=1]");
