@@ -1342,6 +1342,9 @@ function setup_universe_from_json( obj ) {
                 node_object.pinned = 0;
                 node_object.pin_group = 0;
                 node_object.path_pinned = 0;
+                node_object.category_selected = 0;
+                node_object.opacity = 1;
+                node_object.main_category = node_object.categories[0];
 
                 //if(node_object.title.length > 25){
                 //        node_object.title = node_object.title.substring(0,22) + "...";
@@ -1526,6 +1529,7 @@ function build_universe(universe_nodes) {
                     'text-valign'         : 'center',
                     'text-halign'         : 'center',
                     'min-zoomed-font-size': '5px',
+                    'opacity'             : 'data(opacity)'
                 }
             },
 
@@ -1744,6 +1748,20 @@ function build_universe(universe_nodes) {
         });
 
         cg.on("double_tap", "node", function(evt){
+                cg.startBatch();
+                    var all_nodes = cg.nodes();
+                    if(evt.cyTarget.data().category_selected == 1){
+                        all_nodes.data("category_selected", 0);
+                        all_nodes.data("opacity", 1);
+                    }else{
+                        var cat_nodes = all_nodes.filter("[main_category=\"" + evt.cyTarget.data().main_category + "\"]");
+                        all_nodes.data("opacity", 0.3);
+                        all_nodes.data("category_selected", 0);
+                        cat_nodes.data("opacity", 1);
+                        cat_nodes.data("category_selected", 1);
+                    }
+
+                cg.endBatch();
                 console.log("DOUBLE CLICK");
         });
 
