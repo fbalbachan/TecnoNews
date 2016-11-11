@@ -1453,7 +1453,8 @@ function set_universe_data(nodecount, categories, node_objects){
 						<div><h3 style=\"color:black;\">1. Drag & drop, click and mouse over nodes (or groups of nodes with ctrl + click) for insightful visualizations</h3></div>\
                                                 <div><h3 style=\"color:black;\">2. Zoom in & out display or drag whole canvas for better visualization</h3></div>\
                                                 <div><h3 style=\"color:black;\">3. Right click on pairs of nodes for the most significant shortest path between them</h3></div>\
-                        <div><h3 style=\"color:red;\"> 4. Press \"L\" key to show/hide this list </h3></div>\
+                                                <div><h3 style=\"color:black;\">4. Double click on a node to highlight all nodes with same category</h3></div>\
+                        <div><h3 style=\"color:red;\"> 5. Press \"L\" key to show/hide this list </h3></div>\
                         <table>\
                             <thead>\
                                 <tr>\
@@ -1642,7 +1643,7 @@ function build_universe(universe_nodes) {
                     'width'      : 'data(selected_width)',
                     'opacity'    : 1,
                     'curve-style': 'bezier',
-                    'z-index'	 : 10000000,
+                    'z-index'	 : 10000001,
                     'line-color' : 'rgb(59, 232, 23)',
                     'target-arrow-color' : 'rgb(59, 232, 23)',
                 }
