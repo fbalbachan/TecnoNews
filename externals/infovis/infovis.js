@@ -1450,10 +1450,10 @@ function set_universe_data(nodecount, categories, node_objects){
         var node_list_html = "\n<div id=\"cg-node-list\" class=\"node-list\">\
                         <div class=\"cerrar\" onclick=\"toggle_node_list();\"> X </div>\
                         <div><h2>NewsUniverse Instructions</h2></div>\
-						<div><h3 style=\"color:black;\">1. Drag & drop, click and mouse over nodes (or groups of nodes with ctrl + click) for insightful visualizations</h3></div>\
+						<div><h3 style=\"color:black;\">1. Drag & drop, click and mouse over nodes (or groups of nodes with ctrl + click)</h3></div>\
                                                 <div><h3 style=\"color:black;\">2. Zoom in & out display or drag whole canvas for better visualization</h3></div>\
-                                                <div><h3 style=\"color:black;\">3. Right click on pairs of nodes for the most significant shortest path between them</h3></div>\
-                                                <div><h3 style=\"color:black;\">4. Double click on a node to highlight all nodes with same category</h3></div>\
+                                                <div><h3 style=\"color:black;\">3. Right-click on pairs of nodes for the most significant shortest path between</h3></div>\
+                                                <div><h3 style=\"color:black;\">4. Double-click on a node to highlight all nodes with same category</h3></div>\
                         <div><h3 style=\"color:red;\"> 5. Press \"L\" key to show/hide this list </h3></div>\
                         <table>\
                             <thead>\
