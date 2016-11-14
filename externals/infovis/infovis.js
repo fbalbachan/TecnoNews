@@ -9,6 +9,7 @@ window.cg_pinned = 0;
 window.cg_pin_group = 0;
 window.cg_path_pinned = 0;
 window.custom_graph_data = {};
+window.panel_out = 0;
 window.universe          = {
     "nodecount"     : 0,
     "categories"    : []
@@ -690,7 +691,8 @@ function setup_cy() {
     tmphtml += "</tbody></table></div>";
     local_cy = $("#cy");
     local_cy.append( tmphtml );
-    setTimeout(function(){toggle_node_list(); $('#page-title').remove();}, 30000);
+    window.panel_out = 0;
+    setTimeout(function(){toggle_node_list(); $('#page-title').remove(); window.panel_out = 1;}, 30000);
     $(window).on(
         "resize", tmp_resize
     ).on(
@@ -1190,7 +1192,9 @@ function toggle_node_list( ) {
         if ( div.is(":hidden") ) {
             div.fadeIn(500);
         } else {
-            div.fadeOut(500);
+            if(window.panel_out == 0){
+                    div.fadeOut(500);
+            }
         }
     });
 }
@@ -1468,7 +1472,8 @@ function set_universe_data(nodecount, categories, node_objects){
                 node_list_html += "<tr><td>" + node_objects[i].id + "</td><td>" + node_objects[i].date + "</td><td><a class=\"hoverable\" target=\"_blank\" href=\""+node_objects[i].url+"\">" + node_objects[i].title + "</a></td></tr>";
         }
         node_list_html += "</tbody></table></div>";
-        setTimeout(function(){toggle_node_list();}, 30000);
+        window.panel_out = 0;
+        setTimeout(function(){toggle_node_list(); window.panel_out = 1;}, 30000);
         var local_cg = $("#cg");
         local_cg.html( local_cg.html() + node_list_html );
 
