@@ -33,7 +33,14 @@ class TextInserter:
                 injected_count += 1
                 # generated += u'[eyesonly logged="in"]' \
                 #              + u'<p><strong>Start paragraph from other coverage</strong></p>[/eyesonly]'
-                generated += u'\n' + injections_paragraphs[idx] + u'\n'
+                generated += u'\n'
+                
+                if idx == 1:
+                    generated += u"A su vez, "
+                if idx == 2:
+                    generated += u"Por otra parte, "
+
+                generated += injections_paragraphs[idx] + u'\n'
                 if raconto_available:
                     raconto_available = False
                     generated += self.analysis["raconto_content"] + u'\n'

@@ -23,7 +23,8 @@ class EntitySemanticAnalyzer:
 
         if "semantic_classification" in entity.msi:
             if entity.msi["semantic_classification"] == "person":
-                self.global_context["persons"].append(entity)
+                if "surnames" in entity.attributes:
+                    self.global_context["persons"].append(' '.join(entity.attributes["surnames"]).lower())
 
     def fix_invalid_ne(self, entity):
         if entity.lexical_form.lower() in self.invalid_name_entities:
@@ -72,7 +73,7 @@ class EntitySemanticAnalyzer:
         if msi["semantic_classification"] == "place" and entity.kernel:
             words = entity.kernel.components()
             for a_person in self.global_context["persons"]:
-                if "surnames" in a_person.attributes:
+                if ' '.join(words).lower() == a_person:
                     msi["semantic_classification"] = "person"
 
 
