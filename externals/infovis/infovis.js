@@ -1212,7 +1212,7 @@ function color_from_category(categories){
 
                 if(category_array.indexOf("policiales") > -1){
                         ret = "rgba(100,100,100,1)";
-                }else if(category_array.indexOf("policiales") > -1){
+                }else if(category_array.indexOf("policiais-pt") > -1){
                         ret = "rgba(100,100,100,1)";
                 }else if(category_array.indexOf("internacionales") > -1){
                         ret = "rgba(0,200,255,1)";
