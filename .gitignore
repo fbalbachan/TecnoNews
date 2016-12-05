@@ -44,4 +44,6 @@ prototype/webapp/freelings.txt
 prototype/webapp/nohup.demo.out
 prototype/webapp/sentilecto.pid
 prototype/config
+prototype/*.py
+prototype/config_*
 .tags*
