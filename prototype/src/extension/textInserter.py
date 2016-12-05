@@ -22,10 +22,12 @@ class TextInserter:
         raconto_available = ("raconto_content" in self.analysis and self.analysis["raconto_content"] is not None)
         #raconto_available = False
 
+        true_index = 0
         for idx, paragraph in enumerate(self.paragraphs):
             if not isinstance(paragraph, unicode):
                 paragraph = unicode(paragraph, 'utf-8')
                 # TODO: Transform all to unicode at the beginning of the pipeline!!!
+            true_index += 1
             generated += paragraph + u'\n'
 
             # if there is some paragraph to append
@@ -33,7 +35,15 @@ class TextInserter:
                 injected_count += 1
                 # generated += u'[eyesonly logged="in"]' \
                 #              + u'<p><strong>Start paragraph from other coverage</strong></p>[/eyesonly]'
-                generated += u'\n' + injections_paragraphs[idx] + u'\n'
+                generated += u'\n'
+
+                if true_index == 1:
+                    generated += "A su vez, "
+
+                if true_index == 2:
+                    generated += u"Por otra parte, "
+
+                generated += injections_paragraphs[idx] + u'\n'
                 if raconto_available:
                     raconto_available = False
                     generated += self.analysis["raconto_content"] + u'\n'
