@@ -37,10 +37,10 @@ class TextInserter:
                 #              + u'<p><strong>Start paragraph from other coverage</strong></p>[/eyesonly]'
                 generated += u'\n'
 
-                if true_index == 1:
-                    generated += "A su vez, "
+                if true_index == 3:
+                    generated += u"A su vez, "
 
-                if true_index == 2:
+                if true_index == 4:
                     generated += u"Por otra parte, "
 
                 generated += injections_paragraphs[idx] + u'\n'
