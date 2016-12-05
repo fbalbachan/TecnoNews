@@ -37,13 +37,15 @@ class TextInserter:
                 #              + u'<p><strong>Start paragraph from other coverage</strong></p>[/eyesonly]'
                 generated += u'\n'
 
+                lowered = injections_paragraphs[idx][:1].lower() + injections_paragraphs[idx][1:]
                 if true_index == 3:
-                    generated += u"A su vez, "
+                    generated += u"A su vez, " + lowered
+                elif true_index == 4:
+                    generated += u"Por otra parte, " + lowered
+                else:
+                    generated += injections_paragraphs[idx]
 
-                if true_index == 4:
-                    generated += u"Por otra parte, "
-
-                generated += injections_paragraphs[idx] + u'\n'
+                generated += u'\n'
                 if raconto_available:
                     raconto_available = False
                     generated += self.analysis["raconto_content"] + u'\n'
