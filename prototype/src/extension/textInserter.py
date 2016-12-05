@@ -38,9 +38,9 @@ class TextInserter:
                 generated += u'\n'
 
                 lowered = injections_paragraphs[idx][:1].lower() + injections_paragraphs[idx][1:]
-                if true_index == 3:
+                if true_index == 4:
                     generated += u"A su vez, " + lowered
-                elif true_index == 4:
+                elif true_index == 5:
                     generated += u"Por otra parte, " + lowered
                 else:
                     generated += injections_paragraphs[idx]
