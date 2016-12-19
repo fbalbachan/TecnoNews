@@ -65,7 +65,7 @@ class RacontoFinder(object):
             entities_coincidence_5 = self.text_distance.relevant_entities_coincidence(self.news_original, newsItem)
             entities_coincidence_3 = self.text_distance.relevant_entities_coincidence(self.news_original, newsItem, stopAt=3)
 
-            if entities_coincidence_5 <= 1 or entities_coincidence_3 == 0:
+            if entities_coincidence_5 <= 1:
                 continue
 
             score += 30
