@@ -60,7 +60,10 @@ class WikipediaContentGenerator:
 
         summary = page.summary.encode("utf-8")
 
-        sentence = self.first_content_sentence_of(summary)
+        try:
+            sentence = self.first_content_sentence_of(summary)
+        except Exception e:
+            return
 
         content = sentence.text
         if content[-1] != ".":
