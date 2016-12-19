@@ -62,7 +62,7 @@ class WikipediaContentGenerator:
 
         try:
             sentence = self.first_content_sentence_of(summary)
-        except Exception:
+        except Exception as exception:
             return
 
         content = sentence.text
