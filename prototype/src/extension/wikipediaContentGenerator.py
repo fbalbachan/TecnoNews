@@ -48,6 +48,8 @@ class WikipediaContentGenerator:
 
     def content_and_page_for(self, referent):
         page_rank = self.page_rank_for(referent)
+        tokens = [unidecode(a_token.decode("utf-8")).lower() for a_token in referent.name().split()]
+
         if not page_rank:
             return
 
@@ -58,11 +60,14 @@ class WikipediaContentGenerator:
             if not page:
                 return
 
+        if any(a_token not in unidecode(page.summary).lower() for a_token in tokens):
+            return
+
         summary = page.summary.encode("utf-8")
 
         try:
             sentence = self.first_content_sentence_of(summary)
-        except Exception as exception:
+        except StopIteration:
             return
 
         content = sentence.text
