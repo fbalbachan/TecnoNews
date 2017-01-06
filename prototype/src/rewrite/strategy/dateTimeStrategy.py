@@ -42,7 +42,7 @@ class DateTimeStrategy:
         #time_reference = self.time_utils.normalize_datainfo(clause_own_time)
         #clause_timebox = self.time_utils.get_timebox(clause)
         #print self.time_utils.parse_relative_time_info(clause_timebox, time_reference)
-        return bool(clause.time_references) and self.time_utils.date_has_info(clause_own_time) and good_difference
+        return bool(clause.time_references) and self.time_utils.date_has_info(clause_own_time) and good_difference and clause.verb is not None and "time" in clause.verb.msi and clause.verb.msi["time"] in ["pasado", "imperfecto", "futuro"]
 
     def rewrite_clause(self, clause):
         grouped = self.grouped_references_for(clause)
@@ -61,6 +61,12 @@ class DateTimeStrategy:
         normalized_time =  self.time_utils.normalize_datainfo(clause_own_time)
         now = datetime.datetime.now()
 
+        verb_time = "present"
+        if clause.verb.msi["time"] in ["pasado", "imperfecto"]:
+            verb_time = "past"
+        elif clause.verb.msi["time"] in ["futuro"]:
+            verb_time = "future"
+
         if normalized_time["year"] is not None and normalized_time["year"] - now.year != 0:
             difference = normalized_time["year"] - now.year
             if difference < 0:
@@ -74,21 +80,28 @@ class DateTimeStrategy:
             text += ", "
         elif normalized_time["month"] is not None and normalized_time["month"] - now.month != 0:
             difference = normalized_time["month"] - now.month
-            if difference < 0:
-                text += "Hace " + str(difference*(-1))
-            else:
-                text += "En " + str(difference)
+
+            if verb_time != "future":
+                difference = 12 - abs(difference)
+                text += "Hace "
+            elif verb_time != "past":
+                text += "En "
+
+            text += str(difference)
 
             text += " mes"
             if abs(difference) > 1:
                 text += "es"
             text += ", "
         elif normalized_time["day"] is not None and normalized_time["day"] - now.day != 0:
-            difference = normalized_time["day"] - now.day
-            if difference < 0:
-                text += "Hace " + str(difference*(-1))
-            else:
-                text += "En " + str(difference)
+            difference = abs(normalized_time["day"] - now.day)
+
+            if verb_time != "future":
+                text += "Hace "
+            elif verb_time != "past":
+                text += "En "
+
+            text += str(abs(difference))
 
             text += " día"
             if abs(difference) > 1:
