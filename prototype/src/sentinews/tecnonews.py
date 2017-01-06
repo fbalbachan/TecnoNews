@@ -153,7 +153,7 @@ class TecnoNews(object):
 
     def valid_to_publish(self, rewriter_instance):
         td = TextDistance()
-        td.stopwords = []  #avoid using stopwords filter
+        td.stopwords = []  #avoid using stopwords filter because we want to compare the whole input and output
         clean_rewrited = BeautifulSoup(rewriter_instance.rewritten_entry.content).getText()
         similarity = td.similarity(rewriter_instance.original_entry.content,
                                    clean_rewrited)
