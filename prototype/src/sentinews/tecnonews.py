@@ -158,8 +158,8 @@ class TecnoNews(object):
         similarity = td.similarity(rewriter_instance.original_entry.content,
                                    clean_rewrited)
 
-        logger.info("\nsimilarity %s" % similarity)
-        logger_similarity.info("\nsimilarity %s" % similarity)
+        logger.info("\nQA final similarity %s" % similarity)
+        logger_similarity.info("\nQA final similarity %s" % similarity)
 
         # return similarity <= 95
         return rewriter_instance.injected_count > 0 and len(clean_rewrited) >= 300
