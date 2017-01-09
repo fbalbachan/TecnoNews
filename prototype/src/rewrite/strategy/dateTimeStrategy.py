@@ -81,10 +81,15 @@ class DateTimeStrategy:
         elif normalized_time["month"] is not None and normalized_time["month"] - now.month != 0:
             difference = normalized_time["month"] - now.month
 
-            if verb_time != "future":
-                difference = 12 - abs(difference)
+            if verb_time == "past":
+                if difference > 0:
+                    difference = 12 - difference
+                else:
+                    difference = abs(difference)
                 text += "Hace "
-            elif verb_time != "past":
+            elif verb_time == "future":
+                if difference < 0:
+                    difference = 12 - abs(difference)
                 text += "En "
 
             text += str(difference)
@@ -96,9 +101,9 @@ class DateTimeStrategy:
         elif normalized_time["day"] is not None and normalized_time["day"] - now.day != 0:
             difference = abs(normalized_time["day"] - now.day)
 
-            if verb_time != "future":
+            if verb_time == "past":
                 text += "Hace "
-            elif verb_time != "past":
+            elif verb_time == "future":
                 text += "En "
 
             text += str(abs(difference))
