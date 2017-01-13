@@ -21,6 +21,12 @@ class Ontology:
         lexical_forms = self._get_lexical_forms(lemma, msi, True)
         return lexical_forms[0] if lexical_forms else None
 
+    def get_lemma_and_msi(self, a_lexical_form):
+        for concept in self.concepts.values():
+            for lexical_form in concept.lexical_forms:
+                if lexical_form.text == a_lexical_form:
+                    return {"lemma": lexical_form.lemma, "msi": lexical_form.msi}
+
     def _get_lexical_forms(self, lemma, msi, stop_on_match=False):
         lexical_forms = []
         for concept in self.concepts.values():

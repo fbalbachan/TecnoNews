@@ -26,6 +26,8 @@ from src.rewrite.strategy.partialVoicePassiveStrategy import PartialVoicePassive
 from src.rewrite.strategy.fromRelativeClauseToIndependentSentenceStrategy import FromRelativeClauseToIndependentSentenceStrategy
 from src.rewrite.strategy.racontoStrategy import RacontoStrategy
 
+from src.rewrite.strategy.gentilicioStrategy import GentilicioStrategy
+
 debug_mode = False
 
 
@@ -37,7 +39,8 @@ class Rewriter:
             ontology = self.ontology
 
         if strategies is None:
-            self.replacementStrategies = [SynonymsStrategy(ontology),
+            self.replacementStrategies = [GentilicioStrategy(ontology),
+                                          SynonymsStrategy(ontology),
                                           PastSimpleToCompoundStrategy(ontology),
                                           PastCompoundToSimpleStrategy(ontology),
                                           ModalDeberToTieneQue(ontology),
