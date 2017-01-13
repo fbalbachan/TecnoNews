@@ -78,10 +78,10 @@ class GentilicioStrategy:
             target_msi = an_entity.kernel.msi
             for a_concept in concepts.lexical_forms:
                 if a_concept.msi["category"] == "adjective":
-                        if "number" in a_concept.msi and "number" in target_msi and a_concept.msi["number"] == target_msi["number"]:
-                            if "gender" in a_concept.msi and "gender" in target_msi and a_concept.msi["gender"] == target_msi["gender"]:
-                                return Rewrite(gent_match["de_node"].father, a_concept.text)
-                                #return repr(a_clause).replace("_", " ").replace("de " + a_country.encode("utf-8"), a_concept.text)
+                    if "number" in a_concept.msi and "number" in target_msi and a_concept.msi["number"] == target_msi["number"]:
+                        if "gender" in a_concept.msi and "gender" in target_msi and a_concept.msi["gender"] == target_msi["gender"]:
+                            return Rewrite(gent_match["de_node"].father, a_concept.text)
+                            #return repr(a_clause).replace("_", " ").replace("de " + a_country.encode("utf-8"), a_concept.text)
 
         return []
 
