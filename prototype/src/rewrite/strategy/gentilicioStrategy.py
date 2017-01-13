@@ -70,10 +70,12 @@ class GentilicioStrategy:
         an_entity = gent_match['entity']
         a_gent = gent_match['gentilicio']
         a_country = gent_match['country']
+
         rewrites = []
         if gent_match is not None:
             gent_info = self.ontology.get_lemma_and_msi(a_gent.encode("utf-8"))
             concepts = self.ontology.concept(gent_info["lemma"])
+
             target_msi = an_entity.kernel.msi
             for a_concept in concepts.lexical_forms:
                 if a_concept.msi["category"] == "adjective":
