@@ -66,6 +66,7 @@ freeling_dict = %(resources_dir)s/freeling_es.dic
 verbs_que = %(resources_dir)s/verbs-que-es.dat
 categories = %(resources_dir)s/categories.csv
 countries = %(resources_dir)s/nombre_pais_ESP.csv
+countries_cities = %(resources_dir)s/pais_and_cities_for_gen_strategy.csv
 persons = %(resources_dir)s/person.cls
 animals = %(resources_dir)s/animal.csv
 demonyms = %(resources_dir)s/twGENT.dat

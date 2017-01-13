@@ -5,13 +5,14 @@ __author__ = 'Alexis Balbachan'
 from src.utils.csvwrapper import unicode_csv_reader
 from src.utils.configProvider import ConfigProvider
 from src.rewrite.rewrite import Rewrite
+from unidecode import unidecode
 import re
 
 
 class GentilicioStrategy:
     def __init__(self, ontology):
         self.ontology = ontology
-        #self.forbidden_words = ["por", "hasta", "entre", "desde"]
+        self.forbidden_words = ["todo", "toda", "nada", "parte", "medio"]
 
     '''
     def applies_to(self, sentence, node):
@@ -24,7 +25,7 @@ class GentilicioStrategy:
     def get_gent_match(self, a_clause):
         clause_entities = a_clause.assigned_entities()
         for an_entity in clause_entities:
-            if an_entity.kernel is None:
+            if an_entity.kernel is None or an_entity.kernel.lexical_form in self.forbidden_words:
                 continue
             entity_nodes = an_entity.node.leaves()
 
@@ -44,7 +45,7 @@ class GentilicioStrategy:
 
             if previous_de is not None and country_node is not None:
                 for a_country in countries_list:
-                    if a_country in an_entity.lexical_form.decode("utf-8"):
+                    if unidecode(a_country) in unidecode(an_entity.lexical_form.decode("utf-8").replace("_", " ")):
                         country_prefix_len = 5
                         gent_found = False
                         gent_match = None
@@ -69,17 +70,15 @@ class GentilicioStrategy:
         an_entity = gent_match['entity']
         a_gent = gent_match['gentilicio']
         a_country = gent_match['country']
-
         rewrites = []
         if gent_match is not None:
             gent_info = self.ontology.get_lemma_and_msi(a_gent.encode("utf-8"))
             concepts = self.ontology.concept(gent_info["lemma"])
-
             target_msi = an_entity.kernel.msi
             for a_concept in concepts.lexical_forms:
                 if a_concept.msi["category"] == "adjective":
                     if "number" in a_concept.msi and "number" in target_msi and a_concept.msi["number"] == target_msi["number"]:
-                        if "gender" in a_concept.msi and "gender" in target_msi and a_concept.msi["gender"] == target_msi["gender"]:
+                        if "gender" in a_concept.msi and "gender" in target_msi and (a_concept.msi["gender"] == target_msi["gender"] or a_concept.msi['gender'] == 'neutral'):
                             return Rewrite(gent_match["de_node"].father, a_concept.text)
                             #return repr(a_clause).replace("_", " ").replace("de " + a_country.encode("utf-8"), a_concept.text)
 
@@ -89,7 +88,7 @@ class GentilicioStrategy:
 
 
 config = ConfigProvider()
-countries_file = config.get("resources", "countries")
+countries_file = config.get("resources", "countries_cities")
 countries_reader = unicode_csv_reader(open(countries_file, 'r'), first_line_is_header=False, delimiter=',')
 countries_list = [unicode(country[0], 'utf-8') for country in countries_reader]
 
