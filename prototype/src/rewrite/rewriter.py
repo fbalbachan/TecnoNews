@@ -27,6 +27,7 @@ from src.rewrite.strategy.fromRelativeClauseToIndependentSentenceStrategy import
 from src.rewrite.strategy.racontoStrategy import RacontoStrategy
 
 from src.rewrite.strategy.gentilicioStrategy import GentilicioStrategy
+from src.rewrite.strategy.counterGentilicioStrategy import CounterGentilicioStrategy
 
 debug_mode = False
 
@@ -39,7 +40,8 @@ class Rewriter:
             ontology = self.ontology
 
         if strategies is None:
-            self.replacementStrategies = [GentilicioStrategy(ontology),
+            self.replacementStrategies = [CounterGentilicioStrategy(ontology),
+                                          GentilicioStrategy(ontology),
                                           SynonymsStrategy(ontology),
                                           PastSimpleToCompoundStrategy(ontology),
                                           PastCompoundToSimpleStrategy(ontology),
