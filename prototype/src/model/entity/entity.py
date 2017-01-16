@@ -61,7 +61,7 @@ class Entity (TacitEntity):
             return None
         node = self.highest_subordinating_node()
         first_leaf = node.leaves()[0]
-        if first_leaf.msi["type"] != "preposition": 
+        if first_leaf.msi["type"] != "preposition":
             return None
         return first_leaf
 

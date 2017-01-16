@@ -21,6 +21,7 @@ class SynonymsStrategy:
         self.adverbs = self._get_adverbs()
         self.locutions = self._get_locutions()
         self.unidirectional_synonyms = self._get_unidirectional_synonyms()
+        self.synonyms.update(self.unidirectional_synonyms)
 
     def applies_to(self, clause):
         for leaf in clause.proper_leaves():
@@ -39,8 +40,6 @@ class SynonymsStrategy:
 
             if 'semantic_classification' in leaf.msi and leaf.msi['semantic_classification'] != None:
                 continue
-
-            self.synonyms.update(self.unidirectional_synonyms)
 
             if leaf.lemma in self.synonyms.keys():
                 synonym = self.synonyms[leaf.lemma]
@@ -87,20 +86,25 @@ class SynonymsStrategy:
         if found_entity != None and target_gender != u'neutral':
 
             #SKIP WORDS CONTAINED IN NESTED ENTITIES ("muro de usuarios" -> "pared de USUARIAS"!!)
-            kernel_leaf_level = leaf.level()
+            #kernel_leaf_level = leaf.level()
 
             #nested = found_entity.get_nested_entities()
             #nested_leaves = []
             #for a_nested in nested:
             #    nested_leaves.extend([a_leaf.lexical_form for a_leaf in a_nested.leaves()])
 
-            for a_leaf in found_entity.leaves():
+            nested_entities = found_entity.get_nested_entities()
+            current_tree = found_entity.node
+            for a_subord_entity in nested_entities:
+                current_tree = current_tree.cloned_by_original(a_subord_entity.node)
+
+            for a_leaf in [a_node for a_node in current_tree if a_node.is_leaf()]:
 
                 #SKIPS!
                 #if a_leaf.lexical_form in nested_leaves:
                 #    continue
-                if a_leaf.level() != kernel_leaf_level:
-                    continue
+                #if a_leaf.level() != kernel_leaf_level:
+                #    continue
 
                 leaf_msi = self._msi_transform(a_leaf.msi)
                 leaf_msi['gender'] = target_gender
@@ -108,6 +112,8 @@ class SynonymsStrategy:
                     lexical_forms = ontology.concept(a_leaf.lemma).lexical_forms
                     for a_form in lexical_forms:
                         form_msi = self._msi_transform(a_form.msi)
+                        if 'gender' not in form_msi:
+                            continue
                         form_msi['gender'] = a_form.msi['gender']
                         #print "MSI COMPARE"
                         #print form_msi
