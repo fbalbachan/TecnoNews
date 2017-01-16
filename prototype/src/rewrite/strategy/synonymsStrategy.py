@@ -97,6 +97,7 @@ class SynonymsStrategy:
             current_tree = found_entity.node
             for a_subord_entity in nested_entities:
                 current_tree = current_tree.cloned_by_original(a_subord_entity.node)
+                break
 
             for a_leaf in [a_node for a_node in current_tree if a_node.is_leaf()]:
 
