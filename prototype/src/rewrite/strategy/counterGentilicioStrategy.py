@@ -12,7 +12,7 @@ import re
 class CounterGentilicioStrategy:
     def __init__(self, ontology):
         self.ontology = ontology
-        self.forbidden_words = ["todo", "toda", "nada", "parte", "medio"]
+        self.forbidden_words = ["todo", "toda", "nada", "parte", "medio", "hispano", "hispana"]
 
 
     def applies_to(self, a_clause):
@@ -28,6 +28,9 @@ class CounterGentilicioStrategy:
             gent_node = None
             #SEARCH FOR RELEVANT NODES
             for a_node in entity_nodes:
+                if a_node.lemma in self.forbidden_words:
+                    continue
+
                 if a_node.lemma.decode('utf-8').lower() in gent_list:
                     if 'category' in a_node.msi and a_node.msi['category'] == 'adjective':
                         gent_node = a_node
