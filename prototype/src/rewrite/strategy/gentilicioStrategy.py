@@ -67,13 +67,15 @@ class GentilicioStrategy:
 
     def rewrite_clause(self, a_clause):
         gent_match = self.get_gent_match(a_clause)
-        an_entity = gent_match['entity']
-        a_gent = gent_match['gentilicio']
-        a_country = gent_match['country']
 
         rewrites = []
         if gent_match is not None:
+            an_entity = gent_match['entity']
+            a_gent = gent_match['gentilicio']
+            a_country = gent_match['country']
             gent_info = self.ontology.get_lemma_and_msi(a_gent.encode("utf-8"))
+            if gent_info is None:
+                return []
             concepts = self.ontology.concept(gent_info["lemma"])
 
             target_msi = an_entity.kernel.msi
