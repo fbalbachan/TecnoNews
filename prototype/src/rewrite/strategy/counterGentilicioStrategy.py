@@ -39,7 +39,7 @@ class CounterGentilicioStrategy:
             country_match = None
             if gent_node is not None:
                 while gent_prefix_len >= 3 and not country_found:
-                    regex=re.compile("^"+unidecode(gent_node.lexical_form.decode('utf-8'))[:gent_prefix_len].lower()+".*")
+                    regex=re.compile("^"+gent_node.lexical_form.decode('utf-8')[:gent_prefix_len].lower()+".*")
                     country_match = [a_country for a_country in countries_list for a_match in [regex.search(a_country.lower().replace("_", " "))] if a_match]
                     if len(country_match) > 0:
                         country_match = country_match[0]
@@ -51,7 +51,7 @@ class CounterGentilicioStrategy:
                 if not country_found:
                     gent_prefix_len = 5
                     while gent_prefix_len >= 3 and not country_found:
-                        regex=re.compile("^"+unidecode(gent_node.lexical_form.decode('utf-8'))[:gent_prefix_len].lower()+".*")
+                        regex=re.compile("^"+gent_node.lexical_form.decode('utf-8')[:gent_prefix_len].lower()+".*")
                         country_match = [a_country for a_country in countries_cities_list for a_match in [regex.search(a_country.lower().replace("_", " "))] if a_match]
                         if len(country_match) > 0:
                             country_match = country_match[0]
