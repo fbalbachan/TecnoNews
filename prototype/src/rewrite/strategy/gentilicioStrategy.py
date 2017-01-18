@@ -34,8 +34,9 @@ class GentilicioStrategy:
             country_node = None
             for a_node in entity_nodes:
                 if a_node.father.label == 'w-ms' and previous_de is not None:
-                    country_node = a_node
-                    break
+                    if 'semantic_classification' in a_node.msi and a_node.msi['semantic_classification'] == 'place':
+                        country_node = a_node
+                        break
 
                 previous_de = None
                 if a_node.father.label == 'sp-de':

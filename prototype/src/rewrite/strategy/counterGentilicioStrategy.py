@@ -12,7 +12,7 @@ import re
 class CounterGentilicioStrategy:
     def __init__(self, ontology):
         self.ontology = ontology
-        self.forbidden_words = ["todo", "toda", "nada", "parte", "medio", "hispano", "hispana"]
+        self.forbidden_words = ["todo", "toda", "nada", "parte", "medio", "hispano", "hispana", "británico", "británica", "jerónimo", "jerónima"]
 
 
     def applies_to(self, a_clause):
