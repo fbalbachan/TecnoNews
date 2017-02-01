@@ -9,7 +9,7 @@ class PastCompoundToSimpleStrategy:
 
     def applies_to(self, clause):
         verb = clause.verb
-        return clause.voice == "active" and verb.has_compound_time() \
+        return verb is not None and clause.voice == "active" and verb.has_compound_time() \
             and verb.matches_msi({ "mode" : "indicative", "time" : "presente" }) and not verb.is_locution()
 
     def rewrite(self, clause):

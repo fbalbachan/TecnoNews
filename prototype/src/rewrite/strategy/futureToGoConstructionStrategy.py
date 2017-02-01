@@ -9,7 +9,7 @@ class FutureToGoConstructionStrategy:
 
     def applies_to(self, clause):
         verb = clause.verb
-        return clause.voice == "active" and not verb.is_compound() and \
+        return verb is not None and clause.voice == "active" and not verb.is_compound() and \
             verb.matches_msi({"mode": "indicative", "time": "futuro"}) and not verb.is_locution()
 
     def rewrite(self, clause):

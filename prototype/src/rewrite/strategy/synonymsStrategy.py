@@ -109,7 +109,7 @@ class SynonymsStrategy:
 
                 leaf_msi = self._msi_transform(a_leaf.msi)
                 leaf_msi['gender'] = target_gender
-                if a_leaf != leaf and 'gender' in a_leaf.msi and a_leaf.msi['gender'] != target_gender and a_leaf.msi['gender'] != 'neutral':
+                if a_leaf != leaf and 'gender' in a_leaf.msi and a_leaf.msi['gender'] != target_gender and a_leaf.msi['gender'] != 'neutral' and a_leaf.lemma in ontology.concepts:
                     lexical_forms = ontology.concept(a_leaf.lemma).lexical_forms
                     for a_form in lexical_forms:
                         form_msi = self._msi_transform(a_form.msi)

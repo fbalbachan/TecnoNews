@@ -53,6 +53,8 @@ class RacontoStrategy:
                         "number": "singular"
                     }
                 )
+                if haber_lf is None or participle_lf is None:
+                    return []
                 rewriten_verb += " " + haber_lf.text + " " + participle_lf.text
 
             elif a_leaf.msi["time"] == "presente":

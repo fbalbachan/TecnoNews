@@ -8,7 +8,7 @@ class ModalDeberToTieneQue:
 
     def applies_to(self, clause):
         verb = clause.verb
-        return clause.voice == "active" and verb.is_modal_of("deber") and len(verb.leaves()) == 2 \
+        return verb is not None and clause.voice == "active" and verb.is_modal_of("deber") and len(verb.leaves()) == 2 \
             and not verb.is_locution() and not str(verb.leaves()[0]).startswith('t')
 
     def rewrite(self, clause):

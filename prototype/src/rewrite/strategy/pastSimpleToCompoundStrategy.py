@@ -10,7 +10,7 @@ class PastSimpleToCompoundStrategy:
 
     def applies_to(self, clause):
         verb = clause.verb
-        return clause.voice == "active" \
+        return verb is not None and clause.voice == "active" \
                and not verb.has_compound_time() \
                and verb.matches_msi({"mode": "indicative", "time": "pasado"}) \
                and not verb.is_locution()
@@ -23,6 +23,9 @@ class PastSimpleToCompoundStrategy:
 
         haber_lf = ontology.get_lexical_form("haber", PastSimpleToCompoundStrategy.msi_for(inflected_leaf))
         participle_lf = ontology.get_lexical_form(inflected_leaf.lemma, self.participle_msi)
+
+        if haber_lf is None or participle_lf is None:
+            return []
 
         rewritten_verb = haber_lf.text + " " + participle_lf.text
         if verb.has_modal():

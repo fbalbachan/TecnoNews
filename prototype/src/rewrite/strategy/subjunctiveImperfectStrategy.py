@@ -9,7 +9,7 @@ class SubjunctiveImperfectStrategy:
 
     def applies_to(self, clause):
         verb = clause.verb
-        return clause.voice == "active" and verb.matches_msi({"mode": "subjunctive", "time" : "imperfecto"}) \
+        return verb is not None and clause.voice == "active" and verb.matches_msi({"mode": "subjunctive", "time" : "imperfecto"}) \
             and not verb.is_locution()
 
     def rewrite(self, clause):
@@ -18,7 +18,12 @@ class SubjunctiveImperfectStrategy:
         leaf = verb.leaf()
 
         lexical_forms = ontology.get_lexical_forms(leaf.lemma, SubjunctiveImperfectStrategy.msi_for(leaf))
-        rewritten_verb = filter(lambda lf: lf.text != leaf.lexical_form, lexical_forms)[0].text
+
+        filtered_list = filter(lambda lf: lf.text != leaf.lexical_form, lexical_forms)
+        if len(filtered_list) == 0:
+            return []
+
+        rewritten_verb = filtered_list[0].text
 
         return Rewrite.preserving_case(verb.node, rewritten_verb)
 
