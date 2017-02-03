@@ -134,8 +134,9 @@ class TokenizationGuesser:
 
         if debug_mode: print ">>>ASSING MIDDLE NODE TOKENS:"
 
-        self.assing_middle_node_tokens()
+        good_tokenization = self.assing_middle_node_tokens()
         if debug_mode: print ">>>>>>>>>>>>>>END TOKENIZATION"
+        return good_tokenization
 
     def assing_middle_node_tokens(self):
         try:
@@ -143,8 +144,10 @@ class TokenizationGuesser:
                 token = Token()
                 token.components = [ (leaf.token.start(), leaf.token.end()) for leaf in node.leaves() ]
                 node.token = token
+            return True
         except:
             print "TOKENIZATION ERROR!"
+            return False
 
     def is_pending_mismatch(self, word, mismatchs):
         if not mismatchs:
@@ -162,6 +165,12 @@ class TokenizationGuesser:
     def starts_with(self, word, text):
         if len(text) < len(word):
             return False
+
+        next_letter = text[len(word):][:1]
+        if len(next_letter) > 0:
+            if compile("[a-zA-Z]").search(remove_accents(next_letter)):
+                return False
+
         prefix = text[:len(word)]
         return remove_accents(prefix) == remove_accents(word)
 

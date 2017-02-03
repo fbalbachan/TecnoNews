@@ -7,6 +7,7 @@ from src.model.sentence.tokenizationGuesser import TokenizationGuesser
 from src.parser.freelingTreeParser import FreelingTreeParser
 from src.sentiment.sentimentalAnalyzer import SentimentalAnalyzer
 from src.utils.invoker import Invoker
+import re
 
 debug_mode = True
 
@@ -30,7 +31,18 @@ class SentenceAnalyzer:
         self.set_parse_tree_to(sentence)
         #    try:
                 #If guess ends normally => end while
-        TokenizationGuesser(sentence).guess()
+        if not TokenizationGuesser(sentence).guess():
+            if self.output_demo_debug:
+                print ""
+                print ""
+                print ""
+                print "TOKENIZATION ERROR => TRYING TO FIX SENTENCE:"
+            sentence.text = sentence.text.decode("utf-8")
+            sentence.text = re.sub(ur"\b(a|A)l\b", ur"\1 el", sentence.text)
+            sentence.text = re.sub(ur"\b(d|D)el\b", ur"\1e el", sentence.text)
+            sentence.text = sentence.text.encode("utf-8")
+            self.set_parse_tree_to(sentence)
+            TokenizationGuesser(sentence).guess()
         #        done = True
         #    except Exception, e:
                 #Tokenization error! => exception comes with a fixed version of the text
