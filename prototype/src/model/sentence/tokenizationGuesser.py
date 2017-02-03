@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from collections import deque
 from re import compile, IGNORECASE, UNICODE
+import re
 
 from src.model.tokenization.token import Token
 from src.utils.stringUtils import remove_accents
@@ -169,7 +170,12 @@ class TokenizationGuesser:
         next_letter = text[len(word):][:1]
         if len(next_letter) > 0:
             if compile("[a-zA-Z]").search(remove_accents(next_letter)):
-                return False
+                found_contraction = False
+                for a_contraction in self.contractions:
+                    if re.search(ur"^\b" + a_contraction + ur"\b", text):
+                        found_contraction = True
+                if not found_contraction:
+                    return False
 
         prefix = text[:len(word)]
         return remove_accents(prefix) == remove_accents(word)
