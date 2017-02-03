@@ -166,6 +166,7 @@ class TokenizationGuesser:
         if len(text) < len(word):
             return False
 
+        '''
         next_letter = text[len(word):][:1]
         if len(next_letter) and (word == 'a' or word == 'de'):
             if compile("[a-zA-Z]").search(remove_accents(next_letter)):
@@ -175,6 +176,7 @@ class TokenizationGuesser:
                         found_contraction = True
                 if not found_contraction:
                     return False
+        '''
 
         prefix = text[:len(word)]
         return remove_accents(prefix) == remove_accents(word)
