@@ -37,6 +37,7 @@ class SentenceAnalyzer:
                 print ""
                 print ""
                 print "TOKENIZATION ERROR => TRYING TO FIX SENTENCE:"
+            sentence.rewritable = False
             sentence.text = sentence.text.decode("utf-8")
             sentence.text = re.sub(ur"\b(a|A)l\b", ur"\1 el", sentence.text)
             sentence.text = re.sub(ur"\b(d|D)el\b", ur"\1e el", sentence.text)

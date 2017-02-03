@@ -10,6 +10,7 @@ class Sentence(object):
         self.token = self.build_token()
         self.parse_node = None
         self.clauses = []
+        self.rewritable = True
 
     def main_clause(self):
         # TODO: Preguntarle a Lean por qué toma [0] si dijo que puede haber más de una
