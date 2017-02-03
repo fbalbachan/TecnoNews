@@ -167,7 +167,7 @@ class TokenizationGuesser:
             return False
 
         next_letter = text[len(word):][:1]
-        if len(next_letter) > 0:
+        if len(next_letter) and (word == 'a' or word == 'de'):
             if compile("[a-zA-Z]").search(remove_accents(next_letter)):
                 found_contraction = False
                 for a_contraction in self.contractions:
