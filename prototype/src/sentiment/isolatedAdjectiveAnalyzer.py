@@ -11,6 +11,7 @@ class IsolatedAdjectiveAnalyzer:
 
     def analyze(self):
         clause = self.clause
+        current_go = None
 
         if not clause.has_structure("subject") or clause.structure("subject").is_empty():
             return
@@ -24,24 +25,29 @@ class IsolatedAdjectiveAnalyzer:
 
             if clause.is_negated():
                 coef = VerbalSentimentAnalyzer.NEGATION_COEF
+                current_go = "negation"
             elif clause.has_global_operator_of("possibility", "volitive"):
+                if clause.has_global_operator_of("possibility"):
+                    current_go = "possibility"
+                else:
+                    current_go = "volitive"
                 coef = VerbalSentimentAnalyzer.POSSIBILITY_COEF
 
             cataphoric_destination_subjects = self.cataphoric_destination_subjects()
             if cataphoric_destination_subjects:
                 destinations = cataphoric_destination_subjects
 
-        evidences = self.evidence_with(coef)
+        evidences = self.evidence_with(coef, current_go)
         for destination in destinations:
             destination.sentimental_value.add_evidence(*evidences)
 
-    def evidence_with(self, coef):
+    def evidence_with(self, coef, global_operator=None):
         evidences = []
         for hint in self.clause.isolated_adjectives:
             self.clause.false_entities.append(hint)
             valued = SentiWordNet.get(hint.lemma)
             if valued.is_neutral(): continue
-            evidence = SentimentalValuedObject(hint, valued.value)
+            evidence = SentimentalValuedObject(hint, valued.value, global_operator)
             evidence.apply_coef(coef)
 
             evidences.append(evidence)

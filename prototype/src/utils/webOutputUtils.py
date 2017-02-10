@@ -76,7 +76,7 @@ class WebOutputUtils:
                           for entity in entities if entity.sentimental_value.value[1] > 0])
 
     def evidence_string(self, entity, component, evidence_list):
-        return ", ".join([str(evidence.object) + " (" + str(evidence.value[component]) + ")"
+        return ", ".join([str(evidence.object) + " (" + str(evidence.value[component]) + ")" + (" " + evidence.global_operator.upper() if evidence.global_operator else "")
                           for evidence in evidence_list])
 
     def msi_string(self, msi):

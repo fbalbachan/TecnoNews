@@ -24,10 +24,14 @@ class VerbalSentimentAnalyzer:
         source = clause.structure("equative").entity()
         evidence = source.sentimental_value
 
+        current_go = None
         if clause.is_negated():
-            evidence = SentimentalValuedObject.cloned(evidence, self.NEGATION_COEF)
+            evidence = SentimentalValuedObject.cloned(evidence, self.NEGATION_COEF, "negation")
         elif clause.has_global_operator_of("possibility", "volitive"):
-            evidence = SentimentalValuedObject.cloned(evidence, self.POSSIBILITY_COEF)
+            if clause.has_global_operator_of("possibility"):
+                evidence = SentimentalValuedObject.cloned(evidence, self.POSSIBILITY_COEF, "possibility")
+            else:
+                evidence = SentimentalValuedObject.cloned(evidence, self.POSSIBILITY_COEF, "volitive")
 
         destination.sentimental_value.add_evidence(evidence)
 
@@ -56,14 +60,22 @@ class VerbalSentimentAnalyzer:
         verb = clause.verb
         valued = SentiWordNet.get(verb.lemma())
 
-        if clause.is_negated(): coef = coef * self.NEGATION_COEF
-        elif clause.has_global_operator_of("possibility", "volitive"): coef = coef * self.POSSIBILITY_COEF 
+        current_go = None
+        if clause.is_negated():
+            coef = coef * self.NEGATION_COEF
+            current_go = "negation"
+        elif clause.has_global_operator_of("possibility", "volitive"):
+            coef = coef * self.POSSIBILITY_COEF
+            if clause.has_global_operator_of("possibility"):
+                current_go = "possibility"
+            else:
+                current_go = "volitive"
 
         for destination in destinations:
             if not clause.has_structure(destination) or clause.structure(destination).is_empty(): continue
             entity = clause.structure(destination).entity()
 
-            evidence = SentimentalValuedObject(verb, valued.value)
+            evidence = SentimentalValuedObject(verb, valued.value, current_go)
             evidence.apply_coef(coef)
 
             entity.sentimental_value.add_evidence(evidence)
