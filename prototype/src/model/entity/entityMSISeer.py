@@ -32,7 +32,10 @@ class EntityMSISeer:
 
         useful_leaves = self.get_useful_leaves(entity)
 
-        entity.kernel = useful_leaves.pop()
+        if len(useful_leaves) == 0:
+            entity.kernel = entity.node.leaves()[-1]
+        else:
+            entity.kernel = useful_leaves.pop()
 
         msi = entity.kernel.msi
 
