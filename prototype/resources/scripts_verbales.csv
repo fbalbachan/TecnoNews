@@ -4765,7 +4765,7 @@ gansear,N,X,,,Bi,Bi
 gañir,N,X,,,Bi,Bi
 garabatear,N,T,,,Anim,Bi
 garantir,N,X,,,Bi,Bi
-garantizar,O,T,,,Bi,Bi
+garantizar,D,T,70,100,Bi,Bi
 garapiñar,N,X,,,Bi,Bi
 garbear,N,X,,,Bi,Bi
 garbillar,N,X,,,Bi,Bi
