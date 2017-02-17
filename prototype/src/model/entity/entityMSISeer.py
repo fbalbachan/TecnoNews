@@ -34,10 +34,11 @@ class EntityMSISeer:
 
         if len(useful_leaves) == 0:
             entity.kernel = entity.node.leaves()[-1]
+            msi = entity.kernel.msi
+            msi["category"] = "noun"
         else:
             entity.kernel = useful_leaves.pop()
-
-        msi = entity.kernel.msi
+            msi = entity.kernel.msi
 
         if msi["category"] == "number":
             msi["gender"] = Gender.neutral
