@@ -4097,7 +4097,7 @@ transfusora
 transgresor
 transgresora
 transponedora
-transportador
+transportista
 transvestido
 tranviaria
 tranviario
