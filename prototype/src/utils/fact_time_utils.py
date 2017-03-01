@@ -82,7 +82,7 @@ class FactTimeUtils(object):
             timebox = self.get_timebox(clause)
 
         data_info = {}
-        time_regex = re.compile(ur"^\[[0-9A-Z:?/.]+\]$", re.U | re.I)
+        time_regex = re.compile(ur"^\[[0-9A-Z:?/.]+\]$", re.U)
         day_of_week_labels = {"L": "lunes", "M": "martes", "X": "miércoles", "J": "jueves", "V": "viernes", "S": "sábado", "G": "domingo"}
 
         for a_data in clause.proper_tree().nodes_with_labels("data"):
