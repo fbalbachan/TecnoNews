@@ -148,6 +148,8 @@ class WebOutputUtils:
     def preferred_genders_numbers_to_unify_with(self, entities):
         preferred = {}
         for entity in entities:
+            if "gender" not in entity.msi:
+                continue
             (gender, number) = (entity.gender(), entity.number())
             if gender == Gender.neutral or number == Number.invariable:
                 (gender, number) = self.choose_gender_number(entity, entities)
