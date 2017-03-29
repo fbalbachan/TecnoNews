@@ -71,8 +71,9 @@ class SentimentAnalysis(Resource):
                 sentence_data["0-Sentence-Text"] = sentence.text
 
                 score = dict()
-                score["0-Positive-Score"] = sentiment_summary[sentence]['positive']
-                score["1-Negative-Score"] = sentiment_summary[sentence]['negative']
+                if 'positive' in sentiment_summary[sentence] and 'negative' in sentiment_summary[sentence]:
+                    score["0-Positive-Score"] = sentiment_summary[sentence]['positive']
+                    score["1-Negative-Score"] = sentiment_summary[sentence]['negative']
                 sentence_data["1-Sentence-Sentiment-Score"] = score
 
                 clauses_data = []
@@ -81,8 +82,9 @@ class SentimentAnalysis(Resource):
                     clause_data['0-Clause-Text'] = str(clause)
 
                     score = dict()
-                    score["0-Positive-Score"] = sentiment_summary[clause]['positive']
-                    score["1-Negative-Score"] = sentiment_summary[clause]['negative']
+                    if 'positive' in sentiment_summary[clause] and 'negative' in sentiment_summary[clause]:
+                        score["0-Positive-Score"] = sentiment_summary[clause]['positive']
+                        score["1-Negative-Score"] = sentiment_summary[clause]['negative']
                     clause_data['1-Clause-Sentiment-Score'] = score
 
                     entities_data = []
