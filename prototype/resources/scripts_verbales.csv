@@ -2562,7 +2562,6 @@ desarrebozar,N,X,,,Bi,Bi
 desarreglar,D,T,90,30,Bi,No
 desarrendar,N,X,,,Bi,Bi
 desarrimar,N,X,,,Bi,Bi
-desarrollar,N,T,,,Anim,No
 desarropar,N,X,,,Bi,Bi
 desarrugar,N,X,,,Bi,Bi
 desarrumar,N,X,,,Bi,Bi
@@ -4893,6 +4892,7 @@ hablar_bien,O,R,,,Anim,Bi
 hablar_mal,O,R,,,Anim,Bi
 hacendar,N,X,,,Bi,Bi
 hacer,E,E,,,Bi,Bi
+desarrollar,E,E,,,Bi,Bi
 hacer_cargo,N,I,,,Anim,Bi
 hacer_cimarra,N,I,,,Anim,Bi
 hacer_frente,A,R,,,Anim,Bi
