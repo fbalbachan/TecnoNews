@@ -1430,7 +1430,7 @@ function setup_universe_from_json( obj ) {
         universe_categories_arr.sort(function(a,b){return b["count"]- a["count"]});
         universe_categories_arr.unshift(starting_point);
 
-        set_universe_data(nodecount, universe_categories, node_objects);
+        set_universe_data(nodecount, universe_categories_arr, node_objects);
         build_universe(nodes);
         //return {
         //        "nodes" : nodes
