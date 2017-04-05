@@ -1462,7 +1462,7 @@ function set_universe_data(nodecount, categories, node_objects){
                 }else{
                         colors_svg += "<circle cx=\"5\" cy=\"" + current_heigth + "\" r=\"5\" fill=\"" + category_color + "\" stroke=\"black\" />\n";
                 }
-                colors_svg += "<text x=\"15\" y=\"" + (current_heigth + 5) + "\" font-size=\"15px\" " + text_length_attr + ">" + category_name + "("+ category_count + ")" "</text>\n";
+                colors_svg += "<text x=\"15\" y=\"" + (current_heigth + 5) + "\" font-size=\"15px\" " + text_length_attr + ">" + category_name + "("+ category_count + ")" + "</text>\n";
                 current_heigth += 15;
         }
 
