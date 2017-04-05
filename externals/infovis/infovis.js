@@ -1340,7 +1340,7 @@ function get_edge_distance(edge_score){
 
 function setup_universe_from_json( obj ) {
         var nodes = [];
-        var universe_categories = {"starting point": "black"};
+        var universe_categories = {"starting point": {"color": "black", "count": 1}};
         var node_objects = []
 
         //NODES:
@@ -1364,8 +1364,11 @@ function setup_universe_from_json( obj ) {
                         node_object.color = "black";
                 }
                 //FILL CATEGORIES
-                if(node_object.level != 0 && universe_categories[node_object.categories[0]] === undefined){
-                        universe_categories[node_object.categories[0]] = node_object.color;
+                if(node_object.level != 0){
+                    if(universe_categories[node_object.categories[0]] === undefined){
+                        universe_categories[node_object.categories[0]] = {"color":node_object.color, "count":0};
+                    }
+                    universe_categories[node_object.categories[0]]["count"]++;
                 }
 
                 //PUSH NODE
@@ -1412,6 +1415,21 @@ function setup_universe_from_json( obj ) {
         //        "nodecount" : nodecount
         //};
         //universe.nodecount = nodecount;
+        var universe_categories_arr = []
+        var starting_point = null;
+        for (category_name in universe_categories){
+            var current_cat = universe_categories[category_name];
+            var new_value = {"name": category_name, "color": current_cat["color"], "count": current_cat["count"]};
+            if (category_name === "starting point"){
+                starting_point = new_value;
+            }else{
+                universe_categories_arr.push(new_value);
+            }
+
+        }
+        universe_categories_arr.sort(function(a,b){return b["count"]- a["count"]});
+        universe_categories_arr.unshift(starting_point);
+
         set_universe_data(nodecount, universe_categories, node_objects);
         build_universe(nodes);
         //return {
@@ -1429,8 +1447,10 @@ function set_universe_data(nodecount, categories, node_objects){
 
         var current_heigth = 40;
 
-        for(var category_name in categories){
-                var category_color = categories[category_name];
+        for(var i = 0; i < categories.length; i++){
+                var category_color = categories[i]["color"];
+                var category_name = categories[i]["name"];
+                var category_count = categories[i]["count"];
 
                 var text_length_attr = "";
                 if(category_name.length >= 10){
@@ -1442,7 +1462,7 @@ function set_universe_data(nodecount, categories, node_objects){
                 }else{
                         colors_svg += "<circle cx=\"5\" cy=\"" + current_heigth + "\" r=\"5\" fill=\"" + category_color + "\" stroke=\"black\" />\n";
                 }
-                colors_svg += "<text x=\"15\" y=\"" + (current_heigth + 5) + "\" font-size=\"15px\" " + text_length_attr + ">" + category_name + "</text>\n";
+                colors_svg += "<text x=\"15\" y=\"" + (current_heigth + 5) + "\" font-size=\"15px\" " + text_length_attr + ">" + category_name + "("+ category_count + ")" "</text>\n";
                 current_heigth += 15;
         }
 
