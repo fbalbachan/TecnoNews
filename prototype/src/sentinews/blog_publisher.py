@@ -493,7 +493,7 @@ class BlogPublisher(object):
                         tmp_source = entry.source.encode("utf-8")
                     if isinstance(entry.url, unicode):
                         tmp_url = entry.url.encode("utf-8")
-                    entry.content = "<p align=\"left\">Por: <a href=\"http://natural.do\" target=\"_blank\">Sentilecto</a></p>" + entry.content
+                    entry.content = "<p align=\"left\">Por: <a href=\"http://natural.do\" target=\"_blank\">SentiLecto</a></p>" + entry.content
                     entry.content += "<p align=\"right\">Fuente: <a href=\"" + tmp_url + "\" target=\"_blank\">" + tmp_source + "</a></p>"
                 self.add_sentiment(entry)
                 self.add_countries(entry)
