@@ -57,6 +57,56 @@ def parse_url(url):
     return "\n".join(textParagraphs)
 
 
+def financial_result(analysis):
+    import json
+    oraciones = {}
+    for a_sentence in analysis["paragraph"].sentences:
+        oraciones[str(a_sentence)] = []
+        for a_clause in a_sentence.clauses:
+            if a_clause.verb is not None:
+                if a_clause.verb.lemma() in ['estafar', 'defraudar', 'quebrar', 'evadir', 'sobornar', 'coimear']:
+                    if a_clause.has_structure('subject') and a_clause.structure('subject').entity().referent.semantic_classification() in ['person', 'organization']:
+                        oraciones[str(a_sentence)].append({'involucrado': str(a_clause.structure('subject').entity().referent.designated_ref()), 'condicion': 'Perpetrador de acción delictiva'})
+                        #print "DETECTA CONDICION 1"
+
+
+                if a_clause.verb.lemma() in ['investigar', 'denunciar', 'condenar', 'acusar', 'procesar', 'implicar', 'involucrar', 'sentenciar']:
+                    if a_clause.has_structure('od') and a_clause.structure('od').entity().referent.semantic_classification() in ['person', 'organization']:
+                        for an_entity in a_clause.structure('adjuncts').all_entities():
+                            if any(a_word in an_entity.referent.designated_ref().lexical_form for a_word in ['estafa', 'fraud', 'quiebra', 'acreedor', 'deud', 'embarg', 'contraband', 'lavad', 'soborn', 'evadir', 'evasión', 'evadido', 'cohecho', 'coim']):
+                                oraciones[str(a_sentence)].append({'involucrado': str(a_clause.structure('od').entity().referent.designated_ref()), 'condicion': 'Acusado'})
+                                #print "DETECTA CONDICION 2"
+                                break
+
+                if a_clause.verb.lemma() in ['realizar', 'hacer', 'cometer', 'perpetrar', 'llevar_a_cabo', 'llevar_adelante', 'organizar', 'planear', 'implementar', 'articular', 'tener']:
+                    if a_clause.has_structure('subject') and a_clause.structure('subject').entity().referent.semantic_classification() in ['person', 'organization'] and a_clause.has_structure('od'):
+                        for an_entity in a_clause.structure('od').all_entities():
+                            if any(a_word in an_entity.referent.designated_ref().lexical_form for a_word in ['estafa', 'fraud', 'quiebra', 'acreedor', 'deud', 'embarg', 'contraband', 'lavad', 'soborn', 'evadir', 'evasión', 'evadido', 'cohecho', 'coim']):
+                                oraciones[str(a_sentence)].append({'involucrado': str(a_clause.structure('subject').entity().referent.designated_ref()), 'condicion': 'Perpetrador de un delito'})
+                                #print "DETECTA CONDICION 3"
+                                break
+
+            for a_structure in [structure.name for structure in a_clause.syntactic_structures]:
+                if a_clause.has_structure(a_structure):
+                    for an_entity in a_clause.structure(a_structure).all_entities():
+                        referent_entity = an_entity.referent.designated_ref()
+                        if referent_entity.is_explicit() and referent_entity.kernel is not None and any(a_word in referent_entity.kernel.lexical_form for a_word in ['estafa', 'fraud', 'quiebra', 'acreedor', 'deud', 'embarg', 'contraband', 'lavad', 'soborn', 'evadir', 'evasión', 'evadido', 'cohecho', 'coim']):
+                            for a_nested_entity in referent_entity.get_nested_entities():
+                                if a_nested_entity.referent.semantic_classification() in ['person', 'organization'] and a_nested_entity.is_subordinated_with_preposition('de'):
+                                    oraciones[str(a_sentence)].append({'involucrado': str(a_nested_entity), 'condicion': 'Perpetrador inferido'})
+                                    #print "DETECTA CONDICION 4"
+
+
+    output = ""
+    for a_sentence in oraciones:
+        if len(oraciones[a_sentence]) > 0:
+            output += "\n" + str(a_sentence)
+        for a_condition in oraciones[a_sentence]:
+            output += "\n" + json.dumps(a_condition)
+
+    return output
+
+
 def generate_captcha(req_id):
     captcha_key = os.urandom(2).encode("hex")
     request_data[req_id] = {"captcha": captcha_key,
@@ -251,6 +301,15 @@ class EntiNews_request:
             print format_exc()
             web.redirect("/sentilecto")
 
+    def action_content_financial(self):
+        try:
+            analysis = analyze()
+            return web.template.render().financial(analysis["paragraph"].text, financial_result(analysis))
+
+        except Exception:
+            print format_exc()
+            web.redirect("/sentilecto")
+
 
     def action_fact_extraction(self):
         analysis = analyze()
@@ -290,7 +349,8 @@ class EntiNews_request:
                 action_by_method = {"svo_slots" 		: self.action_svo_slots,
                                     "fact_extraction"	: self.action_fact_extraction,
                                     "content_rewrite"	: self.action_content_rewrite,
-                                    "content_summarize" : self.action_content_summarize }
+                                    "content_summarize" : self.action_content_summarize,
+                                    "financial_compliance" : self.action_content_financial }
 
                 method = web_input["method"]
 
@@ -318,11 +378,11 @@ def redirect_to_pt(text, point, web_input = None) :
     archivo = "/tmp/sentilecto-redirect-" + str(numero)
     print "Escribiendo archivo \"" + archivo + "\"..."
     f = open(archivo,"w")
-    
+
     if web_input is not None:
         for key in web_input:
             f.write(key.encode("utf-8") + ":" + web_input[key].encode("utf-8") + "\n")
-    
+
     f.write("--------------------\n".encode("utf-8"))
     f.write(text.encode("utf-8"))
     f.close()
