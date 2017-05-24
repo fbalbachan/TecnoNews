@@ -73,15 +73,15 @@ def financial_result(analysis):
                 if a_clause.verb.lemma() in ['investigar', 'denunciar', 'condenar', 'acusar', 'procesar', 'implicar', 'involucrar', 'sentenciar']:
                     if a_clause.has_structure('od') and a_clause.structure('od').entity().referent.semantic_classification() in ['person', 'organization']:
                         for an_entity in a_clause.structure('adjuncts').all_entities():
-                            if any(a_word in an_entity.referent.designated_ref().lexical_form for a_word in ['estafa', 'fraud', 'quiebra', 'acreedor', 'deud', 'embarg', 'contraband', 'lavad', 'soborn', 'evadir', 'evasión', 'evadido', 'cohecho', 'coim']):
-                                oraciones[str(a_sentence)].append({'Suspect': str(a_clause.structure('od').entity().referent.designated_ref()), 'Condition': 'Acused'})
+                            if any(a_word in an_entity.referent.designated_ref().lexical_form for a_word in ['peculado', 'enriqueci', 'estafa', 'fraud', 'quiebra', 'acreedor', 'deud', 'embarg', 'contraband', 'lavad', 'soborn', 'evadir', 'evasión', 'evadido', 'cohecho', 'coim']):
+                                oraciones[str(a_sentence)].append({'Suspect': str(a_clause.structure('od').entity().referent.designated_ref()), 'Condition': 'Accused'})
                                 #print "DETECTA CONDICION 2"
                                 break
 
                 if a_clause.verb.lemma() in ['realizar', 'hacer', 'cometer', 'perpetrar', 'llevar_a_cabo', 'llevar_adelante', 'organizar', 'planear', 'implementar', 'articular', 'tener']:
                     if a_clause.has_structure('subject') and a_clause.structure('subject').entity().referent.semantic_classification() in ['person', 'organization'] and a_clause.has_structure('od'):
                         for an_entity in a_clause.structure('od').all_entities():
-                            if any(a_word in an_entity.referent.designated_ref().lexical_form for a_word in ['estafa', 'fraud', 'quiebra', 'acreedor', 'deud', 'embarg', 'contraband', 'lavad', 'soborn', 'evadir', 'evasión', 'evadido', 'cohecho', 'coim']):
+                            if any(a_word in an_entity.referent.designated_ref().lexical_form for a_word in ['peculado', 'enriqueci', 'estafa', 'fraud', 'quiebra', 'acreedor', 'deud', 'embarg', 'contraband', 'lavad', 'soborn', 'evadir', 'evasión', 'evadido', 'cohecho', 'coim']):
                                 oraciones[str(a_sentence)].append({'Suspect': str(a_clause.structure('subject').entity().referent.designated_ref()), 'Condition': 'Explicit'})
                                 #print "DETECTA CONDICION 3"
                                 break
@@ -90,7 +90,7 @@ def financial_result(analysis):
                 if a_clause.has_structure(a_structure):
                     for an_entity in a_clause.structure(a_structure).all_entities():
                         referent_entity = an_entity.referent.designated_ref()
-                        if referent_entity.is_explicit() and referent_entity.kernel is not None and any(a_word in referent_entity.kernel.lexical_form for a_word in ['estafa', 'fraud', 'quiebra', 'acreedor', 'deud', 'embarg', 'contraband', 'lavad', 'soborn', 'evadir', 'evasión', 'evadido', 'cohecho', 'coim']):
+                        if referent_entity.is_explicit() and referent_entity.kernel is not None and any(a_word in referent_entity.kernel.lexical_form for a_word in ['peculado', 'enriqueci', 'estafa', 'fraud', 'quiebra', 'acreedor', 'deud', 'embarg', 'contraband', 'lavad', 'soborn', 'evadir', 'evasión', 'evadido', 'cohecho', 'coim']):
                             for a_nested_entity in referent_entity.get_nested_entities():
                                 if a_nested_entity.referent.semantic_classification() in ['person', 'organization'] and a_nested_entity.is_subordinated_with_preposition('de'):
                                     oraciones[str(a_sentence)].append({'Suspect': str(a_nested_entity), 'Condition': 'Inferred'})
