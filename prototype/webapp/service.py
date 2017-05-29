@@ -60,7 +60,7 @@ def parse_url(url):
 
 def financial_result(analysis):
     import json
-    crimes = ['corrup', 'droga', 'narco', 'estupefac', 'Ros', 'fiscal', 'econ', 'financ', 'terroris', 'peculado', 'enriqueci', 'estafa', 'fraud', 'quiebra', 'acreedor', 'deud', 'embarg', 'contraband', 'lavad', 'soborn', 'evadir', 'evasión', 'evadido', 'cohecho', 'coim']
+    crimes = ['corrup', 'droga', 'narco', 'estupefac', 'econ', 'terroris', 'peculado', 'enriqueci', 'estafa', 'fraud', 'quiebra', 'acreedor', 'deud', 'embarg', 'contraband', 'lavad', 'soborn', 'evadir', 'evasión', 'evadido', 'cohecho', 'coim']
     oraciones = {}
     for a_sentence in analysis["paragraph"].sentences:
         oraciones[str(a_sentence)] = []
