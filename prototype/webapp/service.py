@@ -39,9 +39,10 @@ debug_mode = (config.get("debug", "debug") == "True")
 ontology = FreelingDictionaryParser.get_ontology()
 freeling_language_detector = FreelingLanguageDetectorClient()
 
+
 def parse_url(url):
     try:
-        page=urllib2.urlopen(url)
+        page = urllib2.urlopen(url)
 
         soup = BeautifulSoup(page.read())
         texts = soup.findAll("p")
@@ -51,7 +52,7 @@ def parse_url(url):
     textParagraphs = []
     for node in texts:
         temp = ''.join(node.findAll(text=True))
-        if re.match(".*[.]$",temp):
+        if re.match(".*[.]$", temp):
             textParagraphs.append(temp)
 
     return "\n".join(textParagraphs)
@@ -59,6 +60,7 @@ def parse_url(url):
 
 def financial_result(analysis):
     import json
+    crimes = ['corrup', 'droga', 'narco', 'estupefac', 'Ros', 'fiscal', 'econ', 'financ', 'terroris', 'peculado', 'enriqueci', 'estafa', 'fraud', 'quiebra', 'acreedor', 'deud', 'embarg', 'contraband', 'lavad', 'soborn', 'evadir', 'evasión', 'evadido', 'cohecho', 'coim']
     oraciones = {}
     for a_sentence in analysis["paragraph"].sentences:
         oraciones[str(a_sentence)] = []
@@ -67,45 +69,43 @@ def financial_result(analysis):
                 if a_clause.verb.lemma() in ['estafar', 'defraudar', 'quebrar', 'evadir', 'sobornar', 'coimear']:
                     if a_clause.has_structure('subject') and a_clause.structure('subject').entity().referent.semantic_classification() in ['person', 'organization']:
                         oraciones[str(a_sentence)].append({'Suspect': str(a_clause.structure('subject').entity().referent.designated_ref()), 'Condition': 'Agent'})
-                        #print "DETECTA CONDICION 1"
-
+                        # print "DETECTA CONDICION 1"
 
                 if a_clause.verb.lemma() in ['investigar', 'denunciar', 'condenar', 'acusar', 'procesar', 'implicar', 'involucrar', 'sentenciar']:
                     if a_clause.has_structure('od') and a_clause.structure('od').entity().referent.semantic_classification() in ['person', 'organization']:
                         for an_entity in a_clause.structure('adjuncts').all_entities():
-                            if any(a_word in an_entity.referent.designated_ref().lexical_form for a_word in ['fiscal', 'econ', 'peculado', 'enriqueci', 'estafa', 'fraud', 'quiebra', 'acreedor', 'deud', 'embarg', 'contraband', 'lavad', 'soborn', 'evadir', 'evasión', 'evadido', 'cohecho', 'coim']):
+                            if any(a_word in an_entity.referent.designated_ref().lexical_form for a_word in crimes):
                                 oraciones[str(a_sentence)].append({'Suspect': str(a_clause.structure('od').entity().referent.designated_ref()), 'Condition': 'Accused'})
-                                #print "DETECTA CONDICION 2"
+                                # print "DETECTA CONDICION 2"
                                 break
 
                 if a_clause.verb.lemma() in ['realizar', 'hacer', 'cometer', 'perpetrar', 'llevar_a_cabo', 'llevar_adelante', 'organizar', 'planear', 'implementar', 'articular', 'tener']:
-                    if a_clause.has_structure('subject') and a_clause.structure('subject').entity().referent.semantic_classification() in ['person', 'organization'] and a_clause.has_structure('od'):
-                        for an_entity in a_clause.structure('od').all_entities():
-                            if any(a_word in an_entity.referent.designated_ref().lexical_form for a_word in ['fiscal', 'econ', 'peculado', 'enriqueci', 'estafa', 'fraud', 'quiebra', 'acreedor', 'deud', 'embarg', 'contraband', 'lavad', 'soborn', 'evadir', 'evasión', 'evadido', 'cohecho', 'coim']):
-                                oraciones[str(a_sentence)].append({'Suspect': str(a_clause.structure('subject').entity().referent.designated_ref()), 'Condition': 'Explicit'})
-                                #print "DETECTA CONDICION 3"
-                                break
+                    if a_clause.has_structure('subject') and a_clause.structure('subject').entity().referent.semantic_classification() in ['person', 'organization']:
+                        for a_structure in [structure.name for structure in a_clause.syntactic_structures]:
+                            if a_clause.has_structure(a_structure):
+                                for an_entity in a_clause.structure(a_structure).all_entities():
+                                    if any(a_word in an_entity.referent.designated_ref().lexical_form for a_word in crimes):
+                                        oraciones[str(a_sentence)].append({'Suspect': str(a_clause.structure('subject').entity().referent.designated_ref()), 'Condition': 'Explicit'})
+                                        # print "DETECTA CONDICION 3"
+                                        break
 
                 if a_clause.verb.lemma() in ['estar']:
                     if a_clause.has_structure('subject') and a_clause.structure('subject').entity().referent.semantic_classification() in ['person', 'organization'] and any(a_false_entity.lemma in ['investigar', 'denunciar', 'condenar', 'acusar', 'procesar', 'implicar', 'involucrar', 'sentenciar'] for a_false_entity in a_clause.false_entities):
                         for an_entity in (a_clause.structure('adjuncts').all_entities() + a_clause.structure('equative').all_entities()):
-                            if any(a_word in an_entity.referent.designated_ref().lexical_form for a_word in ['fiscal', 'econ', 'peculado', 'enriqueci', 'estafa', 'fraud', 'quiebra', 'acreedor', 'deud', 'embarg', 'contraband', 'lavad', 'soborn', 'evadir', 'evasión', 'evadido', 'cohecho', 'coim']):
+                            if any(a_word in an_entity.referent.designated_ref().lexical_form for a_word in crimes):
                                 oraciones[str(a_sentence)].append({'Suspect': str(a_clause.structure('subject').entity().referent.designated_ref()), 'Condition': 'Justice State'})
-                                #print "DETECTA CONDICION 2"
+                                # print "DETECTA CONDICION 5"
                                 break
 
             for a_structure in [structure.name for structure in a_clause.syntactic_structures]:
                 if a_clause.has_structure(a_structure):
                     for an_entity in a_clause.structure(a_structure).all_entities():
                         referent_entity = an_entity.referent.designated_ref()
-                        if referent_entity.is_explicit() and referent_entity.kernel is not None and any(a_word in referent_entity.kernel.lexical_form for a_word in ['fiscal', 'econ', 'peculado', 'enriqueci', 'estafa', 'fraud', 'quiebra', 'acreedor', 'deud', 'embarg', 'contraband', 'lavad', 'soborn', 'evadir', 'evasión', 'evadido', 'cohecho', 'coim']):
+                        if referent_entity.is_explicit() and referent_entity.kernel is not None and any(a_word in referent_entity.kernel.lexical_form for a_word in crimes):
                             for a_nested_entity in referent_entity.get_nested_entities():
                                 if a_nested_entity.referent.semantic_classification() in ['person', 'organization'] and a_nested_entity.is_subordinated_with_preposition('de'):
                                     oraciones[str(a_sentence)].append({'Suspect': str(a_nested_entity), 'Condition': 'Inferred'})
-                                    #print "DETECTA CONDICION 4"
-
-
-
+                                    # print "DETECTA CONDICION 4"
 
     output = ""
     for a_sentence in oraciones:
@@ -156,13 +156,14 @@ def detect_language(input_text):
     else:
         return result[0]
 
+
 def get_input_text():
     try:
         web_input = web.input()
         # x = web.input(datafile={})
         x = web.input(myfile={})
         try:
-            file_contents = x['myfile'].file.read() # Or use a file(-like) object
+            file_contents = x['myfile'].file.read()  # Or use a file(-like) object
         except:
             file_contents = ""
 
@@ -225,11 +226,13 @@ class Index_request:
         index = web.template.frender('templates/index.html')
         return index(str(request_id), debug_mode)
 
+
 class Tests_request:
     def GET(self):
         request_id = 999
         index = web.template.frender('templates/tests.html')
         return index(str(request_id))
+
 
 class RunTests_request:
     def GET(self):
@@ -238,13 +241,12 @@ class RunTests_request:
 
         path = os.path.dirname(os.path.realpath(__file__))
 
-        subprocess.call( path + "/../run_tests", shell=True )
+        subprocess.call(path + "/../run_tests", shell=True)
         # It takes its time, then writes a file. We catch that.
-        f = open( path + "/../test_results.log", "r" )
+        f = open(path + "/../test_results.log", "r")
         a = f.read()
         f.close()
         return a.decode("unicode-escape")
-
 
 
 class Debug_request:
@@ -261,14 +263,13 @@ class Debug_request:
             analysis = analyze(debug_output=True)
             return web.template.render().debug(output.getvalue())
         elif language == u'pt':
-            #return web.template.render().ptresult()
+            # return web.template.render().ptresult()
             return redirect_to_pt(input_text, "debug")
         else:
             return web.template.render().unsupported()
 
-
-        #analyze(debug_output=True)
-        #return web.template.render().debug(output.getvalue())
+        # analyze(debug_output=True)
+        # return web.template.render().debug(output.getvalue())
 
 
 class HiddenEntiNews_request:
@@ -280,14 +281,14 @@ class HiddenEntiNews_request:
             analysis = analyze()
             return web.template.render().entinews(analysis, WebOutputUtils(ontology))
         elif language == u'pt':
-            #return web.template.render().ptresult()
+            # return web.template.render().ptresult()
             return redirect_to_pt(input_text, "hidden")
         else:
             return web.template.render().unsupported()
 
-        #analysis = analyze()
+        # analysis = analyze()
 
-        #return web.template.render().entinews(analysis, WebOutputUtils(ontology))
+        # return web.template.render().entinews(analysis, WebOutputUtils(ontology))
 
 
 class EntiNews_request:
@@ -300,7 +301,6 @@ class EntiNews_request:
         except Exception:
             print format_exc()
             web.redirect("/sentilecto")
-
 
     def action_content_summarize(self):
         try:
@@ -319,7 +319,6 @@ class EntiNews_request:
         except Exception:
             print format_exc()
             web.redirect("/sentilecto")
-
 
     def action_fact_extraction(self):
         analysis = analyze()
@@ -359,8 +358,8 @@ class EntiNews_request:
                 action_by_method = {"svo_slots" 		: self.action_svo_slots,
                                     "fact_extraction"	: self.action_fact_extraction,
                                     "content_rewrite"	: self.action_content_rewrite,
-                                    "content_summarize" : self.action_content_summarize,
-                                    "financial_compliance" : self.action_content_financial }
+                                    "content_summarize": self.action_content_summarize,
+                                    "financial_compliance": self.action_content_financial}
 
                 method = web_input["method"]
 
@@ -373,21 +372,22 @@ class EntiNews_request:
                 if language == u'es' or language == u'it' or language == u'fr' or language == u'ca' or language == u'as' or language == u'gl':
                     return action_by_method[method]()
                 elif language == u'pt':
-                    #return web.template.render().ptresult()
+                    # return web.template.render().ptresult()
                     return redirect_to_pt(input_text, "result", web_input)
                 else:
                     return web.template.render().unsupported()
 
         web.redirect("/sentilecto")
 
+
 # 20160217 - Daniel Cantarín
 # Spanish sentilecto's demo needs to redirect data to Portuguese.
 # This function handles that logic.
-def redirect_to_pt(text, point, web_input = None) :
-    numero  = random.random()
+def redirect_to_pt(text, point, web_input=None):
+    numero = random.random()
     archivo = "/tmp/sentilecto-redirect-" + str(numero)
     print "Escribiendo archivo \"" + archivo + "\"..."
-    f = open(archivo,"w")
+    f = open(archivo, "w")
 
     if web_input is not None:
         for key in web_input:
@@ -396,9 +396,9 @@ def redirect_to_pt(text, point, web_input = None) :
     f.write("--------------------\n".encode("utf-8"))
     f.write(text.encode("utf-8"))
     f.close()
-    #f = codecs.open(archivo, "r", "utf-8")
-    #print "Contenido del archivo: " + f.read().decode('string-escape').decode("utf-8")
-    #f.close()
+    # f = codecs.open(archivo, "r", "utf-8")
+    # print "Contenido del archivo: " + f.read().decode('string-escape').decode("utf-8")
+    # f.close()
 
     url = "/sentiportugues/" + point + "?n=" + str(numero)
     print "Redireccionando hacia \"" + url + "\" ..."
