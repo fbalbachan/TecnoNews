@@ -1,13 +1,14 @@
-$def with (input, output)
+$def with (input, output, quotes)
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Summary</title>
+    <title>Summary &amp; Quotes to check</title>
 </head>
 <body>
 $ source = input.replace("\n", "<br>")
 $ changed = output.replace("\n", "<br>")
+$ html_quotes = quotes.replace("\n", "<br>")
 
 <h3>Input text</h3>
 
@@ -18,6 +19,12 @@ $ changed = output.replace("\n", "<br>")
 <h3>Output text</h3>
 
 <p>$:changed</p>
+
+<hr>
+
+<h3>Quotes to check</h3>
+
+<p>$:html_quotes</p>
 
 </body>
 </html>

@@ -23,6 +23,7 @@ from src.ling.freelingDictionaryParser import FreelingDictionaryParser
 from src.utils.freelingLanguageDetectorClient import FreelingLanguageDetectorClient
 
 from src.utils.textSummarizer import TextSummarizer
+from src.utils.quoteFinder import QuoteFinder
 
 from BeautifulSoup import BeautifulSoup
 import urllib2
@@ -305,7 +306,7 @@ class EntiNews_request:
     def action_content_summarize(self):
         try:
             analysis = analyze()
-            return web.template.render().summary(analysis["paragraph"].text, TextSummarizer(analysis).summarize())
+            return web.template.render().summary(analysis["paragraph"].text, TextSummarizer(analysis).summarize(), QuoteFinder(analysis).get_checkable_quotes())
 
         except Exception:
             print format_exc()
