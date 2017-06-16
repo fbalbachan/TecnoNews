@@ -34,25 +34,25 @@ class QuoteFinder:
             closing_quote_idxs = self.textual_cite.find_quote_comma(node)
             closing_quote_idx = closing_quote_idxs[0]
             quote_text = text[node.children[0].token.start():node.children[closing_quote_idx].token.end()].strip()
-            quote = {'text': quote_text, 'is_fact': sentence.main_clause().is_fact(), 'spoke_person': spoke_person}
+            quote = {'text': quote_text.encode('utf-8'), 'is_fact': sentence.main_clause().is_fact(), 'spoke_person': spoke_person}
         else:
             # print "CASO 2"
             if sentence.main_clause().has_structure("subject"):
                 spoke_person = str(sentence.main_clause().structure("subject").entity().referent.designated_ref())
             quote_indexes = self.textual_cite.find_children_cite_indexes(node)
             quote_text = text[node.children[quote_indexes[0]].token.start():node.children[quote_indexes[1]].token.end()].strip()
-            quote = {'text': quote_text, 'is_fact': sentence.clauses_of_level(1)[0].is_fact(), 'spoke_person': spoke_person}
+            quote = {'text': quote_text.encode('utf-8'), 'is_fact': sentence.clauses_of_level(1)[0].is_fact(), 'spoke_person': spoke_person}
         return quote
 
     def get_checkable_quotes(self):
         final_text = ""
         for a_quote in self.get_quotes():
             if a_quote['is_fact']:
-                final_text += a_quote['text'].encode('utf-8') + " (" + a_quote["spoke_person"].encode('utf-8') + " dixit)" + "\n"
+                final_text += a_quote['text'] + " (" + a_quote["spoke_person"] + " dixit)" + "\n"
 
         return final_text.strip()
 
 
 # from src.model.sentilecto import Sentilecto
-# test = Sentilecto.analyze('"Cuando vimos eso, corrimos mucho", Alexis dijo')
+# test = Sentilecto.analyze('El médico dijo: "Cuando vimos eso, corrimos mucho"')
 # print QuoteFinder(test).get_checkable_quotes()
