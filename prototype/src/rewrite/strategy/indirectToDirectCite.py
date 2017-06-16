@@ -55,7 +55,7 @@ class IndirectToDirectCite:
 
         return [i for i, child in enumerate(node.children) if
                 isinstance(child, LabelNode) and
-                child.label == 'subord' and
+                (child.label == 'subord' or child.label == 'conj-subord') and
                 child.children[0].lemma == 'que']
 
     @property

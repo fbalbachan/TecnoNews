@@ -75,5 +75,5 @@ class QuoteFinder:
 
 
 # from src.model.sentilecto import Sentilecto
-# test = Sentilecto.analyze('El médico dijo ayer y hoy que cuando vimos eso, corrimos mucho. Esto no tiene que ir')
+# test = Sentilecto.analyze('Stanley sostuvo que "existen un millón y medio de familias que reciben una pensión en la Argentina y que la van a seguir cobrando".')
 # print QuoteFinder(test).get_checkable_quotes()
