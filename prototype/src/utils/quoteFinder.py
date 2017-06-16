@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 from src.rewrite.strategy.textualCite import TextualCite
+from src.rewrite.strategy.indirectToDirectCite import IndirectToDirectCite
 
 
 class QuoteFinder:
     def __init__(self, analysis):
         self.analysis = analysis
         self.textual_cite = TextualCite()
+        self.indirect_textual_cite = IndirectToDirectCite()
         self.verbs_que = self.textual_cite.verbs_que
 
     def get_quotes(self):
@@ -14,7 +16,26 @@ class QuoteFinder:
             if self.textual_cite.applies_to(a_sentence, a_sentence.parse_node):
                 sentence_quote = self.get_quote(a_sentence)
                 quotes.append(sentence_quote)
+            elif self.indirect_textual_cite.applies_to(a_sentence, a_sentence.parse_node):
+                sentence_quote = self.get_indirect_quote(a_sentence)
+                quotes.append(sentence_quote)
         return quotes
+
+    def get_indirect_quote(self, sentence):
+        node = sentence.parse_node
+        text = sentence.paragraph.text.decode("utf-8")
+
+        spoke_person = "The Author"
+        for a_clause in sentence.clauses:
+            if a_clause.verb and a_clause.verb.lemma() in self.verbs_que:
+                if a_clause.has_structure("subject"):
+                    spoke_person = str(a_clause.structure("subject").entity().referent.designated_ref())
+                    break
+
+        que_index = self.indirect_textual_cite.find_children_que(node)[0]
+        quote_text = text[node.children[que_index].children[0].token.end():node.token.end()].strip()
+        quote = {'text': quote_text.encode('utf-8'), 'is_fact': sentence.clauses_of_level(1)[0].is_fact(), 'spoke_person': spoke_person}
+        return quote
 
     def get_quote(self, sentence):
         node = sentence.parse_node
@@ -54,5 +75,5 @@ class QuoteFinder:
 
 
 # from src.model.sentilecto import Sentilecto
-# test = Sentilecto.analyze('El médico dijo: "Cuando vimos eso, corrimos mucho"')
+# test = Sentilecto.analyze('El médico dijo ayer y hoy que cuando vimos eso, corrimos mucho. Esto no tiene que ir')
 # print QuoteFinder(test).get_checkable_quotes()

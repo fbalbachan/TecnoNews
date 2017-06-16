@@ -62,7 +62,7 @@ class TextualCite:
                               or node.children[cite_indexes[0]-1].label == 'F-no-c'
                                  # and node.children[cite_indexes[0]-1].children[0].lemma == ':'))
                                  and self.is_comma_or_two_points_last_leave(node.children[cite_indexes[0]-1])) \
-                         and (abs(verb_que_idx - cite_indexes[0]) < 3
+                         and (abs(verb_que_idx - cite_indexes[0]) < 10
                               or abs(verb_que_idx - cite_indexes[0]) < 3)  # TODO: Are identical, it can't be right!
 
         applies_quote_root = isinstance(node, LabelNode) \
