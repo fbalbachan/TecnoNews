@@ -41,9 +41,27 @@ class IndirectToDirectCite:
             and len(que_indexes) > 0 \
             and isinstance(node.children[que_indexes[0]], LabelNode) \
             and que_indexes[0] > 1 \
-            and (abs(verb_que_idx - que_indexes[0]) < 10)
+            and (abs(verb_que_idx - que_indexes[0]) < 10) \
+            and self.sentence_has_cite(sentence)
 
         return applies_normal
+
+    def sentence_has_cite(self, sentence):
+        for a_clause in sentence.clauses:
+            if a_clause.verb is not None and a_clause.verb.lemma() in self.verbs_que:
+
+                struct_od = None
+                for a_structure in a_clause.syntactic_structures:
+                    if a_structure.name == "od":
+                        struct_od = a_structure
+                        break
+
+                if struct_od is not None \
+                    and len(struct_od.all_entities()) > 0 \
+                        and struct_od.all_entities()[0].__repr__() == "(implicit) algo":
+                        return True
+
+        return False
 
     def find_children_que(self, node):
         """
