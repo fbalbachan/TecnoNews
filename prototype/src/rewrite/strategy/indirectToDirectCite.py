@@ -82,8 +82,6 @@ class IndirectToDirectCite:
 
         que_index = self.find_children_que(node)[0]
         quote_text = text[node.children[que_index].children[0].token.end():node.token.end()].strip()
-        print len(text)
-        print node.token.start()
 
         if not spoke_person:
             return None
@@ -92,8 +90,10 @@ class IndirectToDirectCite:
         quote_token.components.append((node.children[que_index].children[0].token.end(), node.token.end()))
         prior_to_sentence_token = Token()
         prior_to_sentence_token.components.append((0, sentence.token.start()))
+        posterior_to_sentence_token = Token()
+        posterior_to_sentence_token.components.append((sentence.token.end(), len(text)))
 
-        to_delete_list = [node.children[que_index].children[0].token, quote_token, a_clause.verb.token, prior_to_sentence_token]
+        to_delete_list = [node.children[que_index].children[0].token, quote_token, a_clause.verb.token, prior_to_sentence_token, posterior_to_sentence_token]
         if not a_subject.is_tacit():
             to_delete_list.append(a_subject.token)
         to_delete_list.sort(key=lambda x: x.start(), reverse=True)
@@ -109,7 +109,10 @@ class IndirectToDirectCite:
         quote_text = quote_text.encode('utf-8')
         chorizo = chorizo.encode('utf-8')
 
-        rewritten_sentence = chorizo + " " + a_clause.verb.lexical_form + ": \"" + quote_text.strip() + "\""
+        if quote_text[-1] in [".", ":", ";"]:
+            quote_text = quote_text[:-1]
+
+        rewritten_sentence = chorizo + " " + a_clause.verb.lexical_form + ": \"" + quote_text.strip() + "\"."
         if a_subject.is_linked() or not a_subject.is_tacit():
             rewritten_sentence = a_subject.referent.name().strip() + " " + rewritten_sentence
 
@@ -152,7 +155,8 @@ class IndirectToDirectCite:
     type = "dislocation"
 
 # from src.model.sentilecto import Sentilecto
-# test = Sentilecto.analyze('Carolina Balbachan es inteligente. Balbachan sostuvo ayer que existen muchas familias en la Argentina para las que hay buenas oportunidades.')
+# test = Sentilecto.analyze('''El ministro dijo ayer que existen muchas familias en la Argentina para las que hay buenas oportunidades.
+# La Argentina y conquista del Río de la Plata es un poema épico escrito por el arcediano español Martín del Barco Centenera publicado en 1602.''')
 # strategy = IndirectToDirectCite()
 # for a_sentence in test['paragraph'].sentences:
 #     print a_sentence
