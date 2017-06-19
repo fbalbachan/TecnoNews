@@ -28,6 +28,7 @@ from src.rewrite.strategy.racontoStrategy import RacontoStrategy
 
 from src.rewrite.strategy.gentilicioStrategy import GentilicioStrategy
 from src.rewrite.strategy.counterGentilicioStrategy import CounterGentilicioStrategy
+from src.rewrite.strategy.indirectToDirectCite import IndirectToDirectCite
 
 debug_mode = False
 
@@ -57,6 +58,7 @@ class Rewriter:
                                           PartialVoicePassiveStrategy(ontology),
                                           SeImpersonalStrategy(ontology),
                                           FromRelativeClauseToIndependentSentenceStrategy(),
+                                          IndirectToDirectCite(),
                                           TextualCite(),
                                           AdverbialClauseDislocationStrategy(ontology),
                                           AlthoughClauseDislocationStrategy(),
