@@ -31,7 +31,6 @@ def detroll(text):
                 #return text.lower()
                 current_index = index
                 while current_index < len(output_tokens) and all_in_upper_case(output_tokens[current_index]):
-                    print output_tokens[current_index]
                     output_tokens[current_index] = output_tokens[current_index].lower()
                     current_index += 1
 
