@@ -8,7 +8,7 @@ future_verbs = augurar, predecir, anticipar, profetizar
 
 [nec]
 
-invalid_ne = fuente,cnn_en_español,cnn,isis,juzgado_penal,fuente_cnn_en_español,fuente_cnn,click_to_watch_video,click,Click,Click_to_watch_video,CNN_Español,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,Amnistía,Michael_Brown,Mujer,Mujeres,mujeres,us,US,BBC,bbc,ULTIMO,ultimo,LO_ULTIMO,lo_ultimo,Cabello,Vitónica,Diario,Diario_de_el_Viajero,Diario_del_Viajero,Thermomix,LO_MÁS,lo_mÁs,Autoblog
+invalid_ne = fuente,cnn_en_español,cnn,isis,juzgado_penal,fuente_cnn_en_español,fuente_cnn,click_to_watch_video,click,Click,Click_to_watch_video,CNN_Español,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,Amnistía,Michael_Brown,Mujer,Mujeres,mujeres,us,US,BBC,bbc,ULTIMO,ultimo,LO_ULTIMO,lo_ultimo,Cabello,Vitónica,Diario,Diario_de_el_Viajero,Diario_del_Viajero,Thermomix,LO_MÁS,lo_mÁs,Autoblog,MECÁNICA
 
 [rewrite]
 
