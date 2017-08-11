@@ -92,6 +92,11 @@ def financial_result(analysis):
                 else:
                     smart_partial_result.append({'SMART Objective': str(a_sentence), 'Target': str(a_clause)})
 
+            # CONDITION 2 FOR LEMMA OBJETIVO
+            if any(a_leaf.lemma == "objetivo" for a_leaf in a_clause.proper_tree().leaves()) and a_clause.is_fact():
+                if not a_clause.verb or a_clause.verb.msi["time"] not in ["pasado", "imperfecto"]:
+                    oraciones[str(a_sentence)].append({'SMART Objective': str(a_sentence), 'Target': str(a_clause), 'Condition': 'Lema "Objetivo" explícito'})
+
             # SEPARATOR -------------------------------
             if a_clause.verb is not None:
                 if a_clause.verb.lemma() in ['estafar', 'defraudar', 'quebrar', 'evadir', 'sobornar', 'coimear']:
