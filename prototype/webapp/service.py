@@ -62,10 +62,34 @@ def parse_url(url):
 def financial_result(analysis):
     import json
     crimes = ['corrup', 'droga', 'narco', 'estupefac', 'econ', 'terroris', 'peculado', 'enriqueci', 'estafa', 'fraud', 'quiebra', 'acreedor', 'deud', 'embarg', 'contraband', 'lavad', 'soborn', 'evadir', 'evasión', 'evadido', 'cohecho', 'coim']
+    infinitive_blacklist = ['escribir']
     oraciones = {}
     for a_sentence in analysis["paragraph"].sentences:
         oraciones[str(a_sentence)] = []
+        # CONTROL FOR SMART
+        sentence_disabled = False
         for a_clause in a_sentence.clauses:
+
+            # CONCEPT DEMO FOR DETECTING S.M.A.R.T. OBJETIVES IN R.R.H.H.
+            # CONDITION 1 FOR INFINITIVES
+            if a_clause.global_operators and any(a_go.klass != 'volitive' for a_go in a_clause.global_operators):
+                sentence_disabled = True
+
+            if a_clause.verb and a_clause.verb.msi['time'] != 'presente':
+                sentence_disabled = True
+
+            if a_clause.node.nodes_with_labels('infinitiu') and (not a_clause.global_operators or 'volitive' in [a_go.klass for a_go in a_clause.global_operators][0]):
+                infinitiu_node = a_clause.node.nodes_with_labels('infinitiu')[0]
+                infinitive_verb = infinitiu_node.leaves()[0]
+
+                path_to_root = [a_node.label for a_node in infinitiu_node.path_to_root()]
+
+                if infinitive_verb.lemma in infinitive_blacklist or 'grup-sp-inf' in path_to_root or sentence_disabled:
+                    pass
+                else:
+                    oraciones[str(a_sentence)].append({'SMART Objective': str(a_sentence), 'Target': str(a_clause)})
+
+            # SEPARATOR -------------------------------
             if a_clause.verb is not None:
                 if a_clause.verb.lemma() in ['estafar', 'defraudar', 'quebrar', 'evadir', 'sobornar', 'coimear']:
                     if a_clause.has_structure('subject') and a_clause.structure('subject').entity().referent.semantic_classification() in ['person', 'organization']:
