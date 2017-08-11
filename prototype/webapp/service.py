@@ -90,7 +90,7 @@ def financial_result(analysis):
                 if infinitive_verb.lemma in infinitive_blacklist or 'grup-sp-inf' in path_to_root or sentence_disabled:
                     pass
                 else:
-                    smart_partial_result.append({'SMART Objective': str(a_sentence), 'Target': str(a_clause)})
+                    smart_partial_result.append({'SMART Objective': str(a_sentence), 'Target': str(a_clause), 'Condition': 'Lema "Objetivo" implícito'})
 
             # CONDITION 2 FOR LEMMA OBJETIVO
             if any(a_leaf.lemma == "objetivo" for a_leaf in a_clause.proper_tree().leaves()) and a_clause.is_fact():
