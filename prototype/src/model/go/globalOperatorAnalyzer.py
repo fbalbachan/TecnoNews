@@ -69,7 +69,7 @@ class GlobalOperatorAnalyzer:
     def deontic_modality_finder(self, clause):
         if clause.voice:
             leaf = clause.verb.leaves()[0]
-            if leaf.lemma == "deber" and leaf.size() == 2 and leaf.components()[1] == "que":
+            if leaf.lemma == "deber" and leaf.size() == 2: #and leaf.components()[1] == "que":
                 return [ GlobalOperator("imperative", clause.verb)]
 
     def verb_poder_finder(self, clause):
