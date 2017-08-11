@@ -79,7 +79,7 @@ def financial_result(analysis):
 
             if a_clause.verb and a_clause.verb.msi['time'] != 'presente':
                 sentence_disabled = True
-                smart_partial_result = []
+                # smart_partial_result = []
 
             if a_clause.node.nodes_with_labels('infinitiu') and (not a_clause.global_operators or 'volitive' in [a_go.klass for a_go in a_clause.global_operators][0]):
                 infinitiu_node = a_clause.node.nodes_with_labels('infinitiu')[0]
