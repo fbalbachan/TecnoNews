@@ -342,7 +342,7 @@ class EntiNews_request:
     def action_content_financial(self):
         try:
             #analysis = analyze()
-            analysis = Sentilecto.analyze(get_input_text().replace('\'','').replace('"','') , output_demo_debug=debug_output)
+            analysis = Sentilecto.analyze(get_input_text().replace('\'','').replace('"',''))
             return web.template.render().financial(analysis["paragraph"].text, financial_result(analysis))
 
         except Exception:
