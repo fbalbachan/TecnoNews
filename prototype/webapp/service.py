@@ -68,15 +68,18 @@ def financial_result(analysis):
         oraciones[str(a_sentence)] = []
         # CONTROL FOR SMART
         sentence_disabled = False
+        smart_partial_result = []
         for a_clause in a_sentence.clauses:
 
             # CONCEPT DEMO FOR DETECTING S.M.A.R.T. OBJETIVES IN R.R.H.H.
             # CONDITION 1 FOR INFINITIVES
             if a_clause.global_operators and any(a_go.klass != 'volitive' for a_go in a_clause.global_operators):
                 sentence_disabled = True
+                smart_partial_result = []
 
             if a_clause.verb and a_clause.verb.msi['time'] != 'presente':
                 sentence_disabled = True
+                smart_partial_result = []
 
             if a_clause.node.nodes_with_labels('infinitiu') and (not a_clause.global_operators or 'volitive' in [a_go.klass for a_go in a_clause.global_operators][0]):
                 infinitiu_node = a_clause.node.nodes_with_labels('infinitiu')[0]
@@ -87,7 +90,7 @@ def financial_result(analysis):
                 if infinitive_verb.lemma in infinitive_blacklist or 'grup-sp-inf' in path_to_root or sentence_disabled:
                     pass
                 else:
-                    oraciones[str(a_sentence)].append({'SMART Objective': str(a_sentence), 'Target': str(a_clause)})
+                    smart_partial_result.append({'SMART Objective': str(a_sentence), 'Target': str(a_clause)})
 
             # SEPARATOR -------------------------------
             if a_clause.verb is not None:
@@ -131,7 +134,7 @@ def financial_result(analysis):
                                 if a_nested_entity.referent.semantic_classification() in ['person', 'organization'] and a_nested_entity.is_subordinated_with_preposition('de'):
                                     oraciones[str(a_sentence)].append({'Suspect': str(a_nested_entity), 'Condition': 'Inferred'})
                                     # print "DETECTA CONDICION 4"
-
+        oraciones[str(a_sentence)].extend(smart_partial_result)
     output = ""
     for a_sentence in oraciones:
         if len(oraciones[a_sentence]) > 0:
