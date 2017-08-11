@@ -145,7 +145,7 @@ def financial_result(analysis):
         if len(oraciones[a_sentence]) > 0:
             output += "\n" + str(a_sentence)
         for a_condition in oraciones[a_sentence]:
-            output += "\n" + json.dumps(a_condition)
+            output += "\n-" + json.dumps(a_condition) + "\n"
 
     return output
 
