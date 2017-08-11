@@ -73,6 +73,8 @@ class GlobalOperatorAnalyzer:
                 return [ GlobalOperator("imperative", clause.verb)]
 
     def verb_poder_finder(self, clause):
+        if clause.voice and len(clause.verb.leaves() >= 2) and clause.verb.leaves()[-2].lemma == "poder":
+            return [ GlobalOperator("possibility", clause.verb)]
         if clause.voice and clause.verb.leaves()[0].lemma == "poder":
             return [ GlobalOperator("possibility", clause.verb)]
 
