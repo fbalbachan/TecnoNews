@@ -87,7 +87,9 @@ def financial_result(analysis):
 
                 path_to_root = [a_node.label for a_node in infinitiu_node.path_to_root()]
 
-                if infinitiu_node.father.children[0].label != 'neg' and infinitive_verb.lemma in infinitive_blacklist or 'grup-sp-inf' in path_to_root or sentence_disabled or infinitive_verb.lemma == a_clause.verb.lemma():
+                if infinitive_verb.lemma in infinitive_blacklist or 'grup-sp-inf' in path_to_root or sentence_disabled or infinitive_verb.lemma == a_clause.verb.lemma():
+                    pass
+                elif infinitiu_node.father.children[0].is_leaf and infinitiu_node.father.children[0].label == 'neg':
                     pass
                 else:
                     smart_partial_result.append({'SMART Objective': str(a_sentence), 'Target': str(a_clause), 'Condition': 'Lema "Objetivo" implícito'})
