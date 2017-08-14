@@ -93,7 +93,7 @@ def financial_result(analysis):
                     smart_partial_result.append({'SMART Objective': str(a_sentence), 'Target': str(a_clause), 'Condition': 'Lema "Objetivo" implícito'})
 
             # CONDITION 2 FOR LEMMA OBJETIVO
-            if any(a_leaf.lemma == "objetivo" for a_leaf in a_clause.proper_tree().leaves()) and a_clause.is_fact():
+            if any(a_leaf.lemma in ["objetivo", 'meta'] for a_leaf in a_clause.proper_tree().leaves()) and a_clause.is_fact():
                 if not a_clause.verb or a_clause.verb.msi["time"] not in ["pasado", "imperfecto"]:
                     oraciones[str(a_sentence)].append({'SMART Objective': str(a_sentence), 'Target': str(a_clause), 'Condition': 'Lema "Objetivo" explícito'})
 
@@ -145,7 +145,7 @@ def financial_result(analysis):
         if len(oraciones[a_sentence]) > 0:
             output += "\n" + str(a_sentence)
         for a_condition in oraciones[a_sentence]:
-            output += "\n-" + json.dumps(a_condition) + "\n"
+            output += "\n" + json.dumps(a_condition)
 
     return output
 
