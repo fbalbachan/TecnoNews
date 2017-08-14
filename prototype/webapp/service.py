@@ -98,7 +98,7 @@ def financial_result(analysis):
 
             # CONDITION 2 FOR LEMMA OBJETIVO
             if any(a_leaf.lemma in ["objetivo", 'meta'] for a_leaf in a_clause.proper_tree().leaves()) and a_clause.is_fact():
-                if not a_clause.verb or a_clause.verb.msi["time"] not in ["pasado", "imperfecto"]:
+                if not a_clause.verb or a_clause.verb.msi["time"] not in ["pasado", "imperfecto"] or a_clause.node.nodes_with_labels('infinitiu'):
                     oraciones[str(a_sentence)].append({'SMART Objective': str(a_sentence), 'Target': str(a_clause), 'Condition': 'Lema "Objetivo" explícito'})
 
             # SEPARATOR -------------------------------
