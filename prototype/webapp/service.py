@@ -70,7 +70,7 @@ def financial_result(analysis):
         sentence_disabled = False
         smart_partial_result = []
         for a_clause in a_sentence.clauses:
-
+            '''
             # CONCEPT DEMO FOR DETECTING S.M.A.R.T. OBJETIVES IN R.R.H.H.
             # CONDITION 1 FOR INFINITIVES
             if a_clause.global_operators and any(a_go.klass != 'volitive' for a_go in a_clause.global_operators):
@@ -100,7 +100,7 @@ def financial_result(analysis):
             if any(a_leaf.lemma in ["objetivo", 'meta'] for a_leaf in a_clause.proper_tree().leaves()) and a_clause.is_fact():
                 if a_clause.verb and a_clause.verb.msi["time"] not in ["pasado", "imperfecto"] or a_clause.node.nodes_with_labels('infinitiu'):
                     oraciones[str(a_sentence)].append({'SMART Objective': str(a_sentence), 'Target': str(a_clause), 'Condition': 'Lema "Objetivo" explícito'})
-
+            '''
             # SEPARATOR -------------------------------
             if a_clause.verb is not None:
                 if a_clause.verb.lemma() in ['estafar', 'defraudar', 'quebrar', 'evadir', 'sobornar', 'coimear']:
