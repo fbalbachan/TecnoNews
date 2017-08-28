@@ -32,7 +32,7 @@ class CNetEspParser(GenericParser):
 
         image_search_string = None
 
-        #title = soup.find('h1', {"itemprop": "headline"})
+        # title = soup.find('h1', {"itemprop": "headline"})
         title = soup.find('h1')
         title = title.text.strip()
 
@@ -46,35 +46,35 @@ class CNetEspParser(GenericParser):
         for tag in tags_div.findAll(href=re.compile('/es/temas/')):
             tags.append(tag.text.strip())
 
-        #PUSE COL 10
+        # PUSE COL 10
         content = ""
         paragraphs = soup.find('div', {"class": "article-main-body", "itemprop": 'articleBody'}).findAll('p')
 
         for paragraph in paragraphs:
-            content+='\n'+paragraph.text.strip()
+            content += '\n' + paragraph.text.strip()
 
         content = content.strip()
-        #clean relate links from content
-        #for relatyed_link in content.findAll('div', {"section": "shortcodeRelatedLinks"}):
+        # clean relate links from content
+        # for relatyed_link in content.findAll('div', {"section": "shortcodeRelatedLinks"}):
         #    related_link.extract()
-        #clean any inpage videos from content
-        #for video in content.findAll(class_=re.compile("video")):
+        # clean any inpage videos from content
+        # for video in content.findAll(class_=re.compile("video")):
         #    video.extract()
-        #clean any inpage galleries from content
-        #for gallery in content.findAll(class_=re.compile("gallery")):
+        # clean any inpage galleries from content
+        # for gallery in content.findAll(class_=re.compile("gallery")):
         #    gallery.extract()
-        #clean of any figures so the caption wont appear
-        #for figure in content.findAll('figure'):
+        # clean of any figures so the caption wont appear
+        # for figure in content.findAll('figure'):
         #    figure.extract()
-            #clean of twits in content
-        #for twit in content.findAll(class_=re.compile("twitter")):
+        # clean of twits in content
+        # for twit in content.findAll(class_=re.compile("twitter")):
         #    twit.extract()
 
-        #content = content.text
-        #assert content.find('function()') == -1
+        # content = content.text
+        # assert content.find('function()') == -1
 
         new_entry = self.create_news_entry(title=title, content=content,
-                                           #tags=tags,
+                                           # tags=tags,
                                            tags=["tecnologia"],
                                            source=self.source,
                                            url=url,
