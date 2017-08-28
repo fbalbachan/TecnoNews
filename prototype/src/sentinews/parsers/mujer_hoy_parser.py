@@ -7,6 +7,7 @@ from urlparse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 
+
 class MujerHoyParser(GenericParser):
     def __init__(self):
         super(MujerHoyParser, self).__init__()
