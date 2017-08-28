@@ -22,10 +22,10 @@ class NuevoHeraldParser(GenericParser):
                 or (u'/ent-columnistas-blogs/' in url):
                 allowed = False
 
-        title = soup.find('h1', {"class": "title"})
+        title = soup.find(True, {"class": "title"})
         title = title.text.strip()
 
-        #the article is a photo gallery
+        # the article is a photo gallery
         if (u"GALERÍA" in title) or (u"MUNDO EN IMÁGENES" in title) or (u"VIDEO" in title):
             return None
 
@@ -44,13 +44,12 @@ class NuevoHeraldParser(GenericParser):
 
         image_search_string = None
 
-        #collet keywords from meta tags
-        keywords_set=set()
-        for keywords in soup.findAll('meta', {"name":re.compile("keywords")}):
+        # collect keywords from meta tags
+        keywords_set = set()
+        for keywords in soup.findAll('meta', {"name": re.compile("keywords")}):
             keywords_set.update([word.strip() for word in keywords['content'].split(',')])
 
-
-        title = soup.find('h1', {"class": "title"})
+        title = soup.find(True, {"class": "title"})
         title = title.text.strip()
 
         category = soup.find(class_=re.compile("section-main-heading"))
@@ -58,21 +57,21 @@ class NuevoHeraldParser(GenericParser):
 
         content = soup.find(id=re.compile("content-body"))
 
-        #clean endnote contact
+        # clean endnote contact
         for endnote in content.findAll(class_=re.compile("endnote")):
             endnote.extract()
 
-        #clean media from content
+        # clean media from content
         for media in content.findAll(class_=re.compile("media")):
             media.extract()
 
-        #clean twitter strings
+        # clean twitter strings
         strong_sentences = content.findAll('strong')
         for strong_sentence in strong_sentences:
-            if re.search(u'en twitter:',strong_sentence.text):
+            if re.search(u'en twitter:', strong_sentence.text):
                 strong_sentence.parent.extract()
 
-        #clean factbox contact
+        # clean factbox contact
         for factbox in content.findAll(class_=re.compile("ng_factbox")):
             factbox.extract()
 
@@ -85,11 +84,11 @@ class NuevoHeraldParser(GenericParser):
         keywords = list(keywords_set)
 
         new_entry = self.create_news_entry(title=title, content=content,
-                                    tags=tags,
-                                    source=self.source,
-                                    url=url,
-                                    original_categories=categories,
-                                    image_search_string=image_search_string,
-                                    keywords=keywords)
+                                           tags=tags,
+                                           source=self.source,
+                                           url=url,
+                                           original_categories=categories,
+                                           image_search_string=image_search_string,
+                                           keywords=keywords)
 
         return new_entry
