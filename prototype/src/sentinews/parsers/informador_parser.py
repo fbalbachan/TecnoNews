@@ -39,9 +39,9 @@ class InformadorParser(GenericParser):
 
         categories = [urlparse(url).path.split("/")[1]]
 
-        content = soup.find('div', {"id": "HOTWordsTxt"})
+        content = soup.find('div', {"id": "wpr-txt"})
 
-        #Remove place and date
+        # Remove place and date
         place_date = content.find('strong')
         place_date.extract()
 
