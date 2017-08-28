@@ -27,7 +27,7 @@ class CNetEspParser(GenericParser):
         for script in soup(["script", "style"]):
             script.extract()
 
-        for trash in soup.findAll(True, {"class": ["sharebarWrapper", "caption"]}):
+        for trash in soup.findAll(True, {"class": ["sharebarWrapper", "caption", "videoContainer"]}):
             trash.extract()
 
         image_search_string = None
@@ -36,19 +36,20 @@ class CNetEspParser(GenericParser):
         title = soup.find('h1')
         title = title.text.strip()
 
-        metadata = soup.find('ul', {"class": "breadcrumb"})
+        metadata = soup.find('div', {"class": "authorInfo"})
         categories = []
         for category in metadata.findAll(href=re.compile('/es/temas/')):
             categories.append(category.text.strip())
 
-        tags_div = soup.find('div', {"class": "row collections-topics-and-tags", "section": "tag"})
+        tags_div = soup.find('div', {"class": "tagList"})
         tags = []
         for tag in tags_div.findAll(href=re.compile('/es/temas/')):
             tags.append(tag.text.strip())
 
         #PUSE COL 10
         content = ""
-        paragraphs = soup.find('div', {"class": "col-10 article-main-body row", "itemprop": 'articleBody'}).find('div',{'class':'col-8'}).findAll('p')
+        paragraphs = soup.find('div', {"class": "article-main-body", "itemprop": 'articleBody'}).findAll('p')
+
         for paragraph in paragraphs:
             content+='\n'+paragraph.text.strip()
 
