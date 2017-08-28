@@ -8,6 +8,9 @@ class Animity(Enum):
     bianimate = u"bianimate"
     inanimate = u"inanimate"
 
+    def encode(self, encoding):
+        return self.value.encode(encoding)
+
     @classmethod
     def most_specific(cls, animity1, animity2):
 
