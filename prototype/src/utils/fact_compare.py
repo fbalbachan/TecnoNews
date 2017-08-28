@@ -123,6 +123,11 @@ class FactCompare(object):
         msi2 = referent2.msi
         return self.compare_entities_data(str(referent1), str(referent2), msi1, msi2, equality_value)
 
+    def sanitize_enums(self, msi):
+        from enum import Enum
+        for a_value in msi:
+            if isinstance(msi[a_value], Enum):
+                msi[a_value] = msi[a_value].value
 
     #EXTRACTS EVERYTHING WE NEED TO KNOW TO COMPARE CLAUSES (THIS IS USEFUL FOR SAVING TO DB AND MAKE A COMPARISON WITHOUT REANALYZING)
     def extract_comparable_data(self, a_clause):
@@ -143,16 +148,19 @@ class FactCompare(object):
             entities = a_clause.structure("subject").all_entities()
             if len(entities) > 0:
                 comparable_data["subject_msi"] = entities[0].referent.designated_ref().msi
+                self.sanitize_enums(comparable_data["subject_msi"])
                 comparable_data["subject_referent"] = str(entities[0].referent.designated_ref())
 
         if a_clause.verb is not None:
             comparable_data["verb_msi"] = a_clause.verb.msi
+            self.sanitize_enums(comparable_data["verb_msi"])
 
         for a_right_entity in ["od", "regimen", "equative"]:
                 if a_clause.has_structure(a_right_entity):
                     entities = a_clause.structure(a_right_entity).all_entities()
                     if len(entities) > 0:
                         comparable_data["object_msi"] = entities[0].referent.designated_ref().msi
+                        self.sanitize_enums(comparable_data["object_msi"])
                         comparable_data["object_referent"] = str(entities[0].referent.designated_ref())
 
         return comparable_data
