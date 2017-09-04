@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import re #, unidecode
+from src.ling.freelingDictionaryParser import FreelingDictionaryParser
 
+ontology = FreelingDictionaryParser.get_ontology()
 token_regex = re.compile(r'\w+|\w+\'\w+|[\w$]+', re.U | re.I)
 question_regex = re.compile(ur"""[.,¿]?([_\-$\w\s]+)\?+""", re.U | re.I)
 
@@ -32,7 +34,12 @@ def detroll(text):
                 # return text.decode("utf-8").lower().encode("utf-8")
                 current_index = index
                 while current_index < len(output_tokens) and all_in_upper_case(output_tokens[current_index]):
-                    output_tokens[current_index] = output_tokens[current_index].decode("utf-8").lower().encode("utf-8")
+                    # output_tokens[current_index] = output_tokens[current_index].decode("utf-8").lower().encode("utf-8")
+                    # UNCOMMENT BELOW FOR SUPER SMART DETROLL
+                    if ontology.is_valid_word(output_tokens[current_index].lower()):
+                        output_tokens[current_index] = output_tokens[current_index].decode("utf-8").lower().encode("utf-8")
+                    else:
+                        output_tokens[current_index] = (output_tokens[current_index].decode("utf-8")[:1] + output_tokens[current_index].decode("utf-8")[1:].lower()).encode("utf-8")
                     current_index += 1
 
     return ' '.join(output_tokens)
@@ -47,7 +54,7 @@ def all_rest_in_lower_case(token):
 
 
 def all_in_upper_case(token):
-    return re.match(r"[abdefghijkmnñopqstuvwxyzABDEFGHIJKMNÑOPQSTUVWXYZáéíóúÁÉÍÓÚ]", token) and token.upper() == token
+    return re.match(r"[abcdefghijklmnñopqrstuvwxyzABCDEFGHIJKLMNÑOPQRSTUVWXYZáéíóúÁÉÍÓÚ]", token) and token.upper() == token
 
 
 def limpieza_inicial(s):
