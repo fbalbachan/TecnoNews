@@ -13,7 +13,7 @@ nohup ./run0_demo.sh
 
 ps -p $! -o pgid | grep -E "[0-9]+" >| instances.pgid
 
-sleep 3
+sleep 10
 truncate "instance.1.out" --size=0
 truncate ../prototype/logs/instance1-tecnonews.log --size=0
 {
@@ -22,7 +22,7 @@ nohup ./run1_demo.sh
 
 #ps -p $! -o pgid | grep -E "[0-9]+" >| instance.1.pgid
 
-sleep 3
+sleep 10
 truncate "instance.2.out" --size=0
 truncate ../prototype/logs/instance2-tecnonews.log --size=0
 {
