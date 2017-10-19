@@ -1,7 +1,7 @@
 <meta http-equiv="content-type" content="text/html; charset=utf-8"></meta>
 <?php
 	$params = "";
-	if (!isset($_REQUEST["days"]) || !ctype_digit($_REQUEST["days"]) || intval($_REQUEST["days"]) > 30 || intval($_REQUEST["days"]) < 1){
+	if (!isset($_REQUEST["days"]) || !ctype_digit($_REQUEST["days"]) || intval($_REQUEST["days"]) > 30 || intval($_REQUEST["days"]) < 0){
 		$_REQUEST["days"] = 1;
 	}
 	if (!isset($_REQUEST["language"]) || !ctype_digit($_REQUEST["language"]) || intval($_REQUEST["language"]) > 2 || intval($_REQUEST["language"]) < 1){
@@ -13,7 +13,6 @@
 			$_REQUEST["language"] = "portuguese";
 		}
 	}
-
 	$params = $params." ".$_REQUEST["days"]." ".$_REQUEST["language"];
 
 	if (!isset($_REQUEST["categories"]) || !is_array($_REQUEST["categories"])){
@@ -89,9 +88,17 @@
 			echo "<center>".$val."</center><br>";
 		}
 		echo "<br><br><hr>";
-		echo "<table align='center' border='1'><tr>    <th>Categories</th>    <th>Type</th>  <th>Title</th> <th>Time Stamp</th> </tr>";
+		echo "<table align='center' border='1'><tr>    <th>Categories</th>    <th>Type of News</th>  <th>Title</th> <th>Time Stamp</th> </tr>";
         	foreach($json->entries as $val){
-			echo "<tr>";
+			$bgColor = "#FFFFFF";
+			if ($val->type == "Breakingnews"){
+				$bgColor = "#FF6060";
+			}elseif ($val->type == "VIP"){
+				$bgColor = "#60FF60";
+			}elseif ($val->type == "Discontinued"){
+				$bgColor = "#FFFF60";
+			}
+			echo "<tr bgcolor='". $bgColor."'>";
 			echo "<td>".implode(", ", $val->categories)."</td><td>".$val->type."</td><td>";
 			if (empty($val->wp_url)){
 				echo "<a target='_blank' href='".$val->url."'>".$val->title."</a>";

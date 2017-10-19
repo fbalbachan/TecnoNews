@@ -48,8 +48,10 @@ class NewsOrganizer(BaseInfo) :
     def organize(self, language, days, categories):
         self.short_id_dict = {}
 
-
-        fromDate = datetime.utcnow() - timedelta(days=days)
+        if days >= 1:
+            fromDate = datetime.utcnow() - timedelta(days=days)
+        else:
+            fromDate = datetime.utcnow() - timedelta(hours=5)
         fromIdDate = bson.ObjectId.from_datetime(fromDate)
         items = self.db["news_entries"].find({"_id" : {"$gt" : fromIdDate }, "language":language}, {"_id":1, "versions":1, "categories":1, "title": 1, "wp_url": 1, "url": 1})
         
@@ -98,6 +100,8 @@ class NewsOrganizer(BaseInfo) :
         filteredNews = []
         for aNewsId in newsDict.keys():
             if "all" in categories or any(aCat in categories for aCat in newsDict[aNewsId]["categories"]):
+                filteredCats = [aCat for aCat in newsDict[aNewsId]["categories"] if aCat in categories or "all" in categories]
+                newsDict[aNewsId]["categories"] = filteredCats
                 filteredNews.append(aNewsId)
 
         allNews = set(filteredNews)
@@ -110,10 +114,10 @@ class NewsOrganizer(BaseInfo) :
         returnObj = {}
 	returnObj["stats"] = [
                               "TOTAL: " + str(len(allNews)), 
-                              "With Children and Parents (VIP News - Very ImPortant news): " + str(len(withChildren & withParents)), 
-                              "With Children only (Discontinued news): " + str(len(withChildren - withParents)), 
-                              "With Parents only (Breaking news at that moment): " + str(len(withParents - withChildren)), 
-                              "With no children nor parents (Trivial news or fake news candidates): " + str(len(allNews - withChildren - withParents))
+                              "VIP News - Very ImPortant news       (With Children and Parents): " + str(len(withChildren & withParents)), 
+                              "Discontinued news                    (With Children only): " + str(len(withChildren - withParents)), 
+                              "Breaking news at that moment         (With Parents only): " + str(len(withParents - withChildren)), 
+                              "Trivial news or fake news candidates (With no children nor parents): " + str(len(allNews - withChildren - withParents))
                              ]
         returnObj["entries"] = []
         #print "TOTAL: " + str(len(allNews))
@@ -146,12 +150,17 @@ class NewsOrganizer(BaseInfo) :
                 elif typeMap[item1["type"]] < typeMap[item2["type"]]:
                     return -1
                 else:
-                    if item1["title"] > item2["title"]:
+                    if item1["generation_time"] < item2["generation_time"]:
                         return 1
-                    elif item1["title"] < item2["title"]:
+                    elif item1["generation_time"] > item2["generation_time"]:
                         return -1
                     else:
-                        return 0
+                        if item1["title"] > item2["title"]:
+                            return 1
+                        elif item1["title"] < item2["title"]:
+                            return -1
+                        else:
+                            return 0
                         
         for anItem in sorted(newsDict.values(), cmp=compareFunction):
             #print anItem["type"] + '|' + anItem["title"].encode('utf-8') + '|' + str(anItem["categories"]) + '|' + str(anItem["generation_time"])
