@@ -54,7 +54,7 @@ class NewsOrganizer(BaseInfo) :
             fromDate = datetime.utcnow() - timedelta(hours=5)
         fromIdDate = bson.ObjectId.from_datetime(fromDate)
         items = self.db["news_entries"].find({"_id" : {"$gt" : fromIdDate }, "language":language}, {"_id":1, "versions":1, "categories":1, "title": 1, "wp_url": 1, "url": 1})
-        
+ 
         withChildren = set()
         withParents  = set()
 
@@ -112,6 +112,7 @@ class NewsOrganizer(BaseInfo) :
         # END FILTER
 
         returnObj = {}
+        returnObj["serverTime"] = self.db.command("serverStatus")["localTime"].isoformat().replace("T", " ")[:-6]
 	returnObj["stats"] = [
                               "TOTAL: " + str(len(allNews)), 
                               "VIP News - Very ImPortant news       (With Children and Parents): " + str(len(withChildren & withParents)), 
