@@ -13,7 +13,7 @@
 	<div id="form_container">
 	
 		<h1><a>News Categorizer</a></h1>
-		<form id="form_54559" class="appnitro"  method="get" action="">
+		<form id="form_54559" class="appnitro"  method="post" action="categorizer.php">
 					<div class="form_description">
 			<h2>News Categorizer</h2>
 			<p>Parameters:</p>
@@ -21,7 +21,7 @@
 			<ul >
 			
 					<li id="li_1" >
-		<label class="description" for="language">Language </label>
+		<label class="description" for="language">Press </label>
 		<span>
 			<input id="spanish" name="language" class="element radio" type="radio" value="1" checked="checked"/>
 <label class="choice" for="language">Spanish</label>
@@ -32,8 +32,9 @@
 		</li>		<li id="li_2" >
 		<label class="description" for="days">Days to Search </label>
 		<div>
-		<select class="element select small" id="dats" name="days"> 
-            <option value="1" selected="selected">1</option>
+		<select class="element select small" id="dats" name="days">
+            <option value="0" selected="selected">Right now! (5hs)</option>
+            <option value="1">1</option>
             <option value="2" >2</option>
             <option value="3" >3</option>
             <option value="4" >4</option>
@@ -101,6 +102,9 @@
 <label class="choice" for="cat14">Health</label>
 <input id="cat15" name="categories[]" class="element checkbox" type="checkbox" value="15" />
 <label class="choice" for="cat15">Electronic Appliances</label>
+<input id="cat16" name="categories[]" class="element checkbox" type="checkbox" value="16" />
+<label class="choice" for="cat16">General Interest</label>
+
 
 		</span> 
 		</li>

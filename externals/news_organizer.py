@@ -37,7 +37,7 @@ class BaseInfo(object):
 
 class NewsOrganizer(BaseInfo) :
     def __init__(self):
-        super(TreeBuilder, self).__init__()
+        super(NewsOrganizer, self).__init__()
         self.short_id_dict = {}
 
     def get_short_id(self, an_id):
@@ -45,15 +45,16 @@ class NewsOrganizer(BaseInfo) :
             self.short_id_dict[an_id] = len(self.short_id_dict)
         return self.short_id_dict[an_id]
 
-    def organize(self, id_noticia, generations=4):
+    def organize(self, language, days, categories):
         self.short_id_dict = {}
 
-
-        language = "spanish"
-        fromDate = datetime.utcnow() - timedelta(days=7)
+        if days >= 1:
+            fromDate = datetime.utcnow() - timedelta(days=days)
+        else:
+            fromDate = datetime.utcnow() - timedelta(hours=5)
         fromIdDate = bson.ObjectId.from_datetime(fromDate)
-        items = self.db["news_entries"].find({"_id" : {"$gt" : fromIdDate }, "language":language}, {"_id":1, "versions":1, "categories":1, "title": 1})
-        
+        items = self.db["news_entries"].find({"_id" : {"$gt" : fromIdDate }, "language":language}, {"_id":1, "versions":1, "categories":1, "title": 1, "wp_url": 1, "url": 1})
+ 
         withChildren = set()
         withParents  = set()
 
@@ -62,12 +63,16 @@ class NewsOrganizer(BaseInfo) :
         
         # Fill dictionary with full news
         for mongoObject in items:
+            if mongoObject["versions"] is None:
+                mongoObject["versions"] = []
             newsObject = {
-                            "generation_time": mongoObject["_id"].generation_time,
+                            "generation_time": mongoObject["_id"].generation_time.isoformat().replace("T", " ")[:-6],
                             "total_children": len(mongoObject["versions"]),
                             "total_parents": 0,
                             "title": mongoObject["title"],
-                            "categories": mongoObject["categories"]
+                            "categories": mongoObject["categories"],
+                            "url": mongoObject["url"],
+                            "wp_url": mongoObject["wp_url"]
                          }
             shortId = self.get_short_id(mongoObject["_id"])
             newsDict[shortId] = newsObject
@@ -91,10 +96,31 @@ class NewsOrganizer(BaseInfo) :
                 if newsDict[aShortId]["total_parents"] > 0:
                     withParents.add(aShortId)
 
+        # Filter by category
+        filteredNews = []
+        for aNewsId in newsDict.keys():
+            if "all" in categories or any(aCat in categories for aCat in newsDict[aNewsId]["categories"]):
+                filteredCats = [aCat for aCat in newsDict[aNewsId]["categories"] if aCat in categories or "all" in categories]
+                newsDict[aNewsId]["categories"] = filteredCats
+                filteredNews.append(aNewsId)
 
-        allNews = set(newsDict.keys())    
-        
-                    
+        allNews = set(filteredNews)
+        withParents = withParents & allNews
+        withChildren = withChildren & allNews
+
+        newsDict = {k:v for k,v in newsDict.iteritems() if k in allNews} 
+        # END FILTER
+
+        returnObj = {}
+        returnObj["serverTime"] = self.db.command("serverStatus")["localTime"].isoformat().replace("T", " ")[:-6]
+	returnObj["stats"] = [
+                              "TOTAL: " + str(len(allNews)), 
+                              "VIP News - Very ImPortant news       (With Children and Parents): " + str(len(withChildren & withParents)), 
+                              "Discontinued news                    (With Children only): " + str(len(withChildren - withParents)), 
+                              "Breaking news at that moment         (With Parents only): " + str(len(withParents - withChildren)), 
+                              "Trivial news or fake news candidates (With no children nor parents): " + str(len(allNews - withChildren - withParents))
+                             ]
+        returnObj["entries"] = []
         #print "TOTAL: " + str(len(allNews))
         #print "With Children and Parents (VIP News - Very ImPortant news): " + str(len(withChildren & withParents))
         #print "With Children only (Discontinued news): " + str(len(withChildren - withParents))
@@ -125,30 +151,39 @@ class NewsOrganizer(BaseInfo) :
                 elif typeMap[item1["type"]] < typeMap[item2["type"]]:
                     return -1
                 else:
-                    if item1["title"] > item2["title"]:
+                    if item1["generation_time"] < item2["generation_time"]:
                         return 1
-                    elif item1["title"] < item2["title"]:
+                    elif item1["generation_time"] > item2["generation_time"]:
                         return -1
                     else:
-                        return 0
+                        if item1["title"] > item2["title"]:
+                            return 1
+                        elif item1["title"] < item2["title"]:
+                            return -1
+                        else:
+                            return 0
                         
         for anItem in sorted(newsDict.values(), cmp=compareFunction):
-            print anItem["type"] + '|' + anItem["title"].encode('utf-8') + '|' + str(anItem["categories"]) + '|' + str(anItem["generation_time"])
-        exit()
+            #print anItem["type"] + '|' + anItem["title"].encode('utf-8') + '|' + str(anItem["categories"]) + '|' + str(anItem["generation_time"])
+            returnObj["entries"].append(anItem)
 
 
-        return json.dumps(result, sort_keys=True, indent=4, separators=(',', ': '), cls=JSONEncoder)
+        return json.dumps(returnObj, sort_keys=True, indent=4, separators=(',', ': '), cls=JSONEncoder)
         #print merged_summary_clauses
 
 
 
 if __name__ == "__main__":
     try :
-        root_id = argv[1]
+        language = argv[2]
+        days = int(argv[1])
+        categories_len = int(argv[3])
+	categories = []
+        for i in range(4, 4+categories_len):
+            categories.append(argv[i].replace("_", " ").decode("utf-8"))
     except :
-        print "Debe especificar un id como primer parámetro. Imposible continuar."
+        print "ERROR"
         exit(1)
 
-    #print TreeBuilder().build_tree(bson.ObjectId(root_id))
-    tree_builder = NewsOrganizer()
-    print tree_builder.organize(root_id)
+    organizer = NewsOrganizer()
+    print organizer.organize(language, days, categories)
