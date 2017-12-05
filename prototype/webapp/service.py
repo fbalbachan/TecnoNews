@@ -374,9 +374,9 @@ class EntiNews_request:
 
         return web.template.render().entinews(analysis, WebOutputUtils(ontology))
 
-    def action_english(self):
+    def action_english(self, language):
         import json
-        response = ApiConnector().make_request(get_input_text())
+        response = ApiConnector().make_request(get_input_text(), language=language)
         try:
             test_result = json.dumps(response, sort_keys=True, indent=4)
         except Exception as e:
@@ -428,7 +428,7 @@ class EntiNews_request:
                     # return web.template.render().ptresult()
                     return redirect_to_pt(input_text, "result", web_input)
                 elif method == 'english':
-                    return action_by_method[method]()
+                    return action_by_method[method](language)
                 else:
                     return web.template.render().unsupported()
 
