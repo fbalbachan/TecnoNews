@@ -427,7 +427,7 @@ class EntiNews_request:
                 elif language == u'pt':
                     # return web.template.render().ptresult()
                     return redirect_to_pt(input_text, "result", web_input)
-                elif method == 'english' and language == u'en':
+                elif method == 'english':
                     return action_by_method[method]()
                 else:
                     return web.template.render().unsupported()
