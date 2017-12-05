@@ -372,6 +372,10 @@ class EntiNews_request:
 
         return web.template.render().entinews(analysis, WebOutputUtils(ontology))
 
+    def action_english(self):
+        test_result = None
+        return web.template.render().english(test_result, WebOutputUtils(ontology))
+
     def POST(self):
 
         web_input = web.input()
@@ -397,7 +401,8 @@ class EntiNews_request:
                                     "fact_extraction"	: self.action_fact_extraction,
                                     "content_rewrite"	: self.action_content_rewrite,
                                     "content_summarize": self.action_content_summarize,
-                                    "financial_compliance": self.action_content_financial}
+                                    "financial_compliance": self.action_content_financial,
+                                    "english"             : self.action_english}
 
                 method = web_input["method"]
 
