@@ -422,13 +422,13 @@ class EntiNews_request:
                 language = detect_language(input_text)
                 logger.info("Language is: " + language)
 
-                if method != 'english' and (language == u'es' or language == u'it' or language == u'fr' or language == u'ca' or language == u'as' or language == u'gl'):
+                if method == 'english':
+                    return action_by_method[method](language)
+                elif language == u'es' or language == u'it' or language == u'fr' or language == u'ca' or language == u'as' or language == u'gl':
                     return action_by_method[method]()
                 elif language == u'pt':
                     # return web.template.render().ptresult()
                     return redirect_to_pt(input_text, "result", web_input)
-                elif method == 'english':
-                    return action_by_method[method](language)
                 else:
                     return web.template.render().unsupported()
 
