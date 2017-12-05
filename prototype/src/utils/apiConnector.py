@@ -12,7 +12,7 @@ class ApiConnector(object):
         self.request_params = {}
 
     def make_request(self, text, language='en'):
-        self.request_params = {'verbose': 'y', 'lang': self.default_language, 'key': self.key}
+        self.request_params = {'tt': 'a', 'verbose': 'y', 'lang': self.default_language, 'key': self.key}
         self.request_params['lang'] = language
         self.request_params['txt'] = text
         response = requests.request(self.request_type,
