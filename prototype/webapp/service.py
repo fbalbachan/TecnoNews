@@ -29,6 +29,8 @@ from BeautifulSoup import BeautifulSoup
 import urllib2
 import re
 
+from src.utils.apiConnector import ApiConnector
+
 
 request_id = 0
 request_data = {}
@@ -373,7 +375,15 @@ class EntiNews_request:
         return web.template.render().entinews(analysis, WebOutputUtils(ontology))
 
     def action_english(self):
-        test_result = None
+        import json
+        response = ApiConnector().make_request(get_input_text())
+        try:
+            test_result = json.dumps(response, sort_keys=True, indent=4)
+        except Exception as e:
+            test_result = None
+
+        if not test_result:
+            web.redirect("/sentilecto")
         return web.template.render().english(test_result, WebOutputUtils(ontology))
 
     def POST(self):
