@@ -11,7 +11,7 @@ class ApiConnector(object):
         self.headers = {'content-type': 'application/x-www-form-urlencoded'}
         self.request_params = {}
 
-    def make_request(self, text, language=self.default_language):
+    def make_request(self, text, language='en'):
         self.request_params = {'verbose': 'y', 'lang': self.default_language, 'key': self.key}
         self.request_params['lang'] = language
         self.request_params['txt'] = text
