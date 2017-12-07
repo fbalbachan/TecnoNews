@@ -379,15 +379,15 @@ class EntiNews_request:
         import json
         response = ApiConnector().make_request(get_input_text(), language=language)
         extractor = TreeRepresentation(response)
-        new_response = ['\n'.join(extractor.get_compliance()), response]
+        new_response = '\n'.join(extractor.get_compliance())
         try:
-            test_result = json.dumps(new_response, sort_keys=True, indent=4)
+            test_result = json.dumps(response, sort_keys=True, indent=4)
         except Exception as e:
             test_result = None
 
         if not test_result:
             web.redirect("/sentilecto")
-        return web.template.render().english(test_result, WebOutputUtils(ontology))
+        return web.template.render().english(test_result, new_response, WebOutputUtils(ontology))
 
     def POST(self):
 
