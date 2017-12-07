@@ -30,6 +30,7 @@ import urllib2
 import re
 
 from src.utils.apiConnector import ApiConnector
+from src.utils.meaningCloud.treeRepresentation import TreeRepresentation
 
 
 request_id = 0
@@ -377,8 +378,10 @@ class EntiNews_request:
     def action_english(self, language):
         import json
         response = ApiConnector().make_request(get_input_text(), language=language)
+        extractor = TreeRepresentation(response)
+        new_response = ['\n'.join(extractor.get_compliance()), response]
         try:
-            test_result = json.dumps(response, sort_keys=True, indent=4)
+            test_result = json.dumps(new_response, sort_keys=True, indent=4)
         except Exception as e:
             test_result = None
 
