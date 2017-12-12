@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from src.utils.meaningCloud.model.entity.verb import Verb
+from src.utils.meaningCloud.model.entity.subject import Subject
+from src.utils.meaningCloud.model.entity.object import Object
 
 class Clause(object):
     def __init__(self, root, sentence, global_map, parent=None, is_valid=False,):
@@ -24,6 +26,20 @@ class Clause(object):
     def _get_text(self):
         if 'form' in self.root:
             return self.root['form']
+
+    def contains_lemma(self, a_lemma):
+        stack = [self.root]
+        while len(stack) > 0:
+            current_element = stack.pop()
+            if 'analysis_list' in current_element:
+                for an_item in current_element['analysis_list']:
+                    if 'lemma' in an_item and a_lemma == an_item['lemma']:
+                        return True
+
+            if 'token_list' in current_element:
+                for a_token in current_element['token_list']:
+                    stack.append(a_token)
+        return False
 
     def set_info(self):
         if self.subject is None:
@@ -56,11 +72,10 @@ class Clause(object):
         if 'syntactic_tree_relation_list' in self.root:
             for a_relation in self.root['syntactic_tree_relation_list']:
                 if a_relation['type'] == candidate_type:
-                    if 'form' in self.global_map[a_relation['id']]:
-                        subject_text = self.global_map[a_relation['id']]['form'].replace('por', '').strip()
-                        if self.parent is not None:
-                            self.parent.subject = subject_text.encode('utf-8')
-                        return subject_text
+                    new_subject = Subject(root=self.global_map[a_relation['id']], is_passive=is_passive)
+                    if self.parent is not None:
+                        self.parent.subject = new_subject
+                    return new_subject
 
         return None
 
@@ -77,11 +92,10 @@ class Clause(object):
         if 'syntactic_tree_relation_list' in self.root:
             for a_relation in self.root['syntactic_tree_relation_list']:
                 if a_relation['type'] == candidate_type:
-                    if 'form' in self.global_map[a_relation['id']]:
-                        object_text = self.global_map[a_relation['id']]['form']
-                        if self.parent is not None:
-                            self.parent.object = object_text.encode('utf-8')
-                        return object_text
+                    new_object = Object(root=self.global_map[a_relation['id']], is_passive=is_passive)
+                    if self.parent is not None:
+                        self.parent.object = new_object
+                    return new_object
 
         return None
 

@@ -379,7 +379,7 @@ class EntiNews_request:
         import json
         response = ApiConnector().make_request(get_input_text(), language=language)
         extractor = TreeRepresentation(response)
-        new_response = '\n'.join(extractor.get_compliance())
+        new_response = '\n'.join(extractor.get_compliance(language))
         new_response = "INPUT TEXT: " + get_input_text().encode('utf-8') + "\n" + new_response
         try:
             test_result = json.dumps(response, sort_keys=True, indent=4)

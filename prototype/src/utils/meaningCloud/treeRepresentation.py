@@ -30,16 +30,68 @@ class TreeRepresentation(object):
         ClauseExtractor(self.global_map, sentences).extract()
         return sentences
 
-    def get_compliance(self):
+    def get_compliance(self, language):
         sentences = SentenceExtractor(self.global_map).extract()
         ClauseExtractor(self.global_map, sentences).extract()
         result = []
-        actions = ['estafar', 'defraudar', 'quebrar', 'evadir', 'sobornar', 'coimear', 'enriquecer', 'lavar_dinero']
+        actions = {
+                    'es': [u'estafar', u'defraudar', u'quebrar', u'evadir', u'sobornar', u'coimear', u'enriquecer', u'lavar dinero'],
+                    'en': ['scam', 'bribe', 'defraud', 'evade', 'bankrupt', 'skim']}
+        offences = {'es': [u'corrupción', u'droga', u'estupefaciente', u'narcotráfico', u'narcotraficante', u'narcótico'
+                           u'terrorismo', u'peculado', u'enriquecimiento', u'estafa', u'fraude', u'defraudación', u'quiebra',
+                           u'acreedor', u'deuda', u'embargo', u'contrabando', u'soborno', u'evasión', u'cohecho', u'coima', u'lavado de dinero'],
+                    'en': [u'bribery', u'fraud', u'evasion', u'money laundering', u'embezzlement', u'drug', u'narcotic', u'narcotics', u'smuggling']
+                  }
+
+        performative_verbs = {'es': [u'realizar', u'hacer', u'cometer', u'perpetrar', u'organizar', u'planear', u'implementar',
+                                     u'articular', u'tener', u'llevar adelante', u'llevar a cabo'],
+                              'en': [u'make', u'commit', u'plan', u'organize', u'do', u'carry out', u'implement', u'articulate']}
+
+        accusative_verbs = {'es': [u'investigar', u'denunciar', u'condenar', u'acusar', u'procesar', u'implicar', u'involucrar',
+                                   u'sentenciar', u'sospechar', u'relacionar'],
+                            'en': [u'accuse', u'investigate', u'condemn', u'process', u'implicate', u'involve', u'suspect', u'relate']}
+
+        estative_verbs = {'es': [u'investigada', u'denunciada', u'condenada', u'acusada', u'procesada', u'implicada', u'involucrada',
+                                 u'sentenciada', u'sospechada', u'relacionada', u'investigado', u'denunciado', u'condenado',
+                                 u'acusado', u'procesado', u'implicado', u'involucrado', u'sentenciado', u'sospechado',
+                                 u'relacionado', u'investigadas', u'denunciadas', u'condenadas', u'acusadas', u'procesadas',
+                                 u'implicadas', u'involucradas', u'sentenciadas', u'sospechadas', u'relacionadas', u'investigados',
+                                 u'denunciados', u'condenados', u'acusados', u'procesados', u'implicados', u'involucrados', u'sentenciados',
+                                 u'sospechados', u'relacionados'],
+                          'en': []}
         cont = 0
         for a_sentence in sentences:
             for a_clause in a_sentence.clauses:
-                if a_clause.verb is not None and a_clause.verb.lemma is not None and a_clause.verb.lemma.lower() in actions:
-                    result.append("FINANCIAL COMPLIANCE DETECTED")
+                if a_clause.verb is None:
+                    continue
+                if a_clause.verb.lemma is not None and a_clause.verb.lemma.lower() in actions[language] and a_clause.subject is not None and a_clause.subject.is_proper_noun:
+                    result.append("FINANCIAL COMPLIANCE DETECTED - person or company committed an action, active or passive voice")
+
+                if a_clause.verb.lemma is not None and a_clause.verb.lemma.lower() in performative_verbs[language] and a_clause.subject is not None and a_clause.subject.is_proper_noun and a_clause.object is not None and a_clause.object.lemma in offences[language]:
+                    result.append("FINANCIAL COMPLIANCE DETECTED - person or company commit offence, active or passive voice")
+
+                if a_clause.verb.lemma is not None and a_clause.verb.lemma.lower() in accusative_verbs[language] and a_clause.object is not None and a_clause.object.is_proper_noun:
+                    if any(a_clause.contains_lemma(an_offence) for an_offence in offences[language] + actions[language]):
+                        result.append("FINANCIAL COMPLIANCE DETECTED - person or company is accused of offence or action, active or passive voice")
+
+                estative_condition = (language == 'es' and a_clause.verb.lemma is not None and len(a_clause.verb.lemma.split(' ')) == 2 and a_clause.verb.lemma.split(' ')[0] == u'estar' and a_clause.verb.lemma.split(' ')[1] in estative_verbs['es'])
+                if estative_condition and a_clause.subject is not None and a_clause.subject.is_proper_noun:
+                    if any(a_clause.contains_lemma(an_offence) for an_offence in offences[language] + actions[language]):
+                        result.append("FINANCIAL COMPLIANCE DETECTED - person or company estar accused of offence or action, active or passive voice")
+
+                # We have form ('la quiebra de Oracle') and original_form ('la quiebra') as candidates for lexical forms. The code invokes lemmas in the subject as in form. That's why the following code doesn't work
+                offence_de_person_detected = False
+                if a_clause.subject is not None and a_clause.subject.is_proper_noun and 'de' in a_clause.subject.lemma.split(' '):
+                    if a_clause.subject.lemma.split(' ')[0] in offences[language]:
+                        offence_de_person_detected = True
+                if a_clause.object is not None and a_clause.object.is_proper_noun and 'de' in a_clause.object.lemma.split(' '):
+                    if a_clause.object.lemma.split(' ')[0] in offences[language]:
+                        offence_de_person_detected = True
+                if offence_de_person_detected:
+                    result.append("FINANCIAL COMPLIANCE DETECTED - offence de person or company")
+
+
+
                 result.append('Clause ' + str(cont) + ': ' + repr(a_clause))
                 result.append('Subject: ' + repr(a_clause.subject))
                 result.append('Verb: ' + repr(a_clause.verb))
