@@ -37,7 +37,7 @@ class TreeRepresentation(object):
         actions = ['estafar', 'defraudar', 'quebrar', 'evadir', 'sobornar', 'coimear', 'enriquecer', 'lavar_dinero']
         for a_sentence in sentences:
             for a_clause in a_sentence.clauses:
-                if a_clause.verb is not None and a_clause.verb.lower() in actions:
+                if a_clause.verb is not None and a_clause.verb.lemma is not None and a_clause.verb.lemma.lower() in actions:
                     result.append("FINANCIAL COMPLIANCE DETECTED")
                 result.append('Clause: ' + repr(a_clause))
                 result.append('Subject: ' + repr(a_clause.subject))
