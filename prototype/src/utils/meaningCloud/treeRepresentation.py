@@ -45,7 +45,7 @@ class TreeRepresentation(object):
 
         performative_verbs = {'es': [u'realizar', u'hacer', u'cometer', u'perpetrar', u'organizar', u'planear', u'implementar',
                                      u'articular', u'tener', u'llevar adelante', u'llevar a cabo'],
-                              'en': [u'make', u'commit', u'plan', u'organize', u'do', u'carry out', u'implement', u'articulate']}
+                              'en': [u'make', u'commit', u'plan', u'organize', u'do', u'carry out', u'implement', u'articulate', u'scheme']}
 
         accusative_verbs = {'es': [u'investigar', u'denunciar', u'condenar', u'acusar', u'procesar', u'implicar', u'involucrar',
                                    u'sentenciar', u'sospechar', u'relacionar'],
