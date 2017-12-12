@@ -40,7 +40,7 @@ class TreeRepresentation(object):
         offences = {'es': [u'corrupción', u'droga', u'estupefaciente', u'narcotráfico', u'narcotraficante', u'narcótico'
                            u'terrorismo', u'peculado', u'enriquecimiento', u'estafa', u'fraude', u'defraudación', u'quiebra',
                            u'acreedor', u'deuda', u'embargo', u'contrabando', u'soborno', u'evasión', u'cohecho', u'coima', u'lavado de dinero'],
-                    'en': [u'bribery', u'fraud', u'evasion', u'money laundering', u'embezzlement', u'drug', u'narcotic', u'narcotics', u'smuggling']
+                    'en': [u'bribery', u'fraud', u'evasion', u'money laundering', u'embezzlement', u'drug', u'narcotic', u'narcotics', u'smuggling', u'bankruptcy]
                   }
 
         performative_verbs = {'es': [u'realizar', u'hacer', u'cometer', u'perpetrar', u'organizar', u'planear', u'implementar',
