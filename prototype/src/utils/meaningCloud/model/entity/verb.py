@@ -18,7 +18,7 @@ class Verb(object):
                     self.lemma = an_item['lemma']
                 if 'original_form' in an_item:
                     self.lexical_form = an_item['original_form']
-                if 'tag' in an_item:
+                if 'tag' in an_item and len(an_item['tag']) >= 8:
                     tag_set = list(an_item['tag'])
                     self.tag = tag_set
                     if tag_set[7] == u'A':
