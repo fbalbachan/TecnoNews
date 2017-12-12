@@ -28,4 +28,4 @@ class Verb(object):
 
 
     def __repr__(self):
-        return "%s (%s) - %s voice" % (self.lexical_form.encode('utf-8'), self.lemma.encode('utf-8'), self.voice.encode('utf-8'))
+        return "%s - %s voice" % (self.lemma.encode('utf-8'), self.voice.encode('utf-8'))
