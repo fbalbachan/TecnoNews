@@ -25,19 +25,24 @@ class TreeRepresentation(object):
             print a_clause['text']
         exit()
 
+    def get_sentences(self):
+        sentences = SentenceExtractor(self.global_map).extract()
+        ClauseExtractor(self.global_map, sentences).extract()
+        return sentences
 
     def get_compliance(self):
         sentences = SentenceExtractor(self.global_map).extract()
         ClauseExtractor(self.global_map, sentences).extract()
         result = []
-        actions = ['estafar', 'defraudar', 'quebrar', 'evadir', 'sobornar', 'coimear']
+        actions = ['estafar', 'defraudar', 'quebrar', 'evadir', 'sobornar', 'coimear', 'enriquecer', 'lavar_dinero']
         for a_sentence in sentences:
             for a_clause in a_sentence.clauses:
                 if a_clause.verb is not None and a_clause.verb.lower() in actions:
                     result.append("FINANCIAL COMPLIANCE DETECTED")
-                result.append(repr(a_clause))
-                result.append(repr(a_clause.subject))
-                result.append(repr(a_clause.verb))
+                result.append('Clause: ' + repr(a_clause))
+                result.append('Subject: ' + repr(a_clause.subject))
+                result.append('Verb: ' + repr(a_clause.verb))
+                result.append('Object: ' + repr(a_clause.object))
                 result.append("------------")
         return result
 
@@ -205,7 +210,7 @@ class TreeRepresentation(object):
                     resulting_text += a_sub_elem['form']
         return resulting_text
 
-    def get_sentences(self, a_tree):
+    def get_sentences_old(self, a_tree):
         sentences = []
         queue = deque()
 
