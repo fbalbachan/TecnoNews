@@ -44,7 +44,7 @@ class Clause(TreeNode):
 
     def is_fact(self):
         go = self.global_operators
-        return not go or go == {"negation"}
+        return not go or go == {"negation"} or go == {"question"}
 
     def is_negated(self):
         return self.has_global_operator_of("negation")
