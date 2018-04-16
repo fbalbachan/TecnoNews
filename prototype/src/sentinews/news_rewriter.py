@@ -465,7 +465,7 @@ class NewsRewriter(object):
         self.set_sentiment_score(analysis)
         self.set_countries()
 
-        skip_rewriting = False
+        skip_rewriting = not self.original_entry.rewritable
         if self.injected_count == 0:
             logger.info("Not enough injections: Skipping rewrite")
             skip_rewriting = True
