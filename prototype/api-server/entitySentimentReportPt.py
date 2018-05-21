@@ -20,11 +20,11 @@ import json
 __author__ = 'Alexis Balbachan'
 
 class EntitySentimentReportPT(Resource):
-   
+
     def __init__(self):
         self.sentilecto = Sentilecto()
-        
-        
+
+
     @swagger.operation(notes='<b style="color:red;">PORTUGUESE TEXT ONLY</b><br/>Analyze input text and returns an entity sentiment report. ---- NOTE: This v0.9 is an early release, please expect v1.0 to be released soon. You will find new resources and improved functionality.',
                    description='Natural Language Understanding / Sentiment Analysis service',
                    responseClass=EntitySentimentReportResponse,
@@ -53,18 +53,18 @@ class EntitySentimentReportPT(Resource):
                             {"code": 403, "message": "The authentication token provided is invalid."},
                             {"code": 500, "message": "Bad response"}
                         ]
-                  )    
-    
-    #@marshal_with(EntitySentimentReportResponse.resource_fields)                      
+                  )
+
+    #@marshal_with(EntitySentimentReportResponse.resource_fields)
     def get(self, text, api_key):
-        url    = "http://127.0.0.1:5500/api/v0.9/entity-sentiment-report/" + text + "/" + api_key
+        url    = "http://127.0.0.1:5500/api/v0.9/entity-sentiment-report/" + text.replace("?", ";;::;;::") + "/" + api_key
         req    = requests.get(url)
         text   = req.text
         status = req.status_code
         response = \
             (
                 json.loads(text) ,
-                status , 
+                status ,
                 {
                     'Access-Control-Allow-Origin': '*',
                     'Content-Type': 'application/json; '
@@ -73,7 +73,7 @@ class EntitySentimentReportPT(Resource):
             )
 
         return response
-    
+
     #def validate_token(self, token):
     #    if not users_storage.is_valid_token(token):
     #        message = "This token does not belong to a registered user."
@@ -82,8 +82,8 @@ class EntitySentimentReportPT(Resource):
     #    else:
     #        message = ""
     #    return message
-        
-        
+
+
     def build_response(self, response_code, response_value):
         response = \
             (
@@ -106,8 +106,8 @@ class EntitySentimentReportPT(Resource):
                200, \
                {'Access-Control-Allow-Origin':     '*',
                 'Access-Control-Allow-Methods':    'GET,PUT,POST,DELETE',
-                'Access-Control-Allow-Headers':    'Content-Type'}      
-                
+                'Access-Control-Allow-Headers':    'Content-Type'}
+
 
     def validate_token(self, token):
         if not users_storage.is_valid_token(token):
@@ -118,4 +118,3 @@ class EntitySentimentReportPT(Resource):
             message = ""
 
         return message
-    
