@@ -10,6 +10,7 @@ from flask_restful import Resource, marshal_with
 from usersStorage import users_storage
 import requests
 import json
+import urllib
 
 __author__ = 'Alexis Balbachan'
 
@@ -23,8 +24,7 @@ class SentimentAnalysisPT(Resource):
                        description='Natural Language Understanding service',
                        responseClass=SentimentAnalysisResponse,
                        nickname='get sentiment analysis',
-                       parameters=
-                            [
+                       parameters=[
                                 {
                                     "name":         "text",
                                     "description":  "Text to be Analyzed",
@@ -32,34 +32,30 @@ class SentimentAnalysisPT(Resource):
                                     "allowMultiple": False,
                                     "dataType":     "string",
                                     "paramType":    "path"
-                                },
-                                {
+                                }, {
                                     "name":          "api_key",
                                     "description":   "Access token.",
                                     "required":      True,
                                     "allowMultiple": False,
                                     "dataType":      "string",
                                     "paramType":     "path"
-                                }
-                            ],
-                       responseMessages=
-                            [
-                                {"code": 200, "message": "Sentiment details generated properly."},
-                                {"code": 403, "message": "The authentication token provided is invalid."},
-                                {"code": 500, "message": "Bad response."}
-                            ]
-                      )
-    #@marshal_with(SentimentAnalysisResponse.resource_fields)
+                                }],
+                       responseMessages=[{"code": 200, "message": "Sentiment details generated properly."},
+                                         {"code": 403, "message": "The authentication token provided is invalid."},
+                                         {"code": 500, "message": "Bad response."}
+                                         ]
+                       )
+    # @marshal_with(SentimentAnalysisResponse.resource_fields)
     def get(self, text, api_key):
-        #url = "http://127.0.0.1:5500/api/v0.9/sentiment-analysis/" + urllib.quote_plus(text.encode("utf-8")) + "/" + api_key
-        url    = "http://127.0.0.1:5500/api/v0.9/sentiment-analysis/" + text + "/" + api_key
-        req    = requests.get(url)
-        text   = req.text
+        # url = "http://127.0.0.1:5500/api/v0.9/sentiment-analysis/" + urllib.quote_plus(text.encode("utf-8")) + "/" + api_key
+        url = "http://127.0.0.1:5500/api/v0.9/sentiment-analysis/" + urllib.quote(text, safe='') + "/" + urllib.quote(api_key, safe='')
+        req = requests.get(url)
+        text = req.text
         status = req.status_code
         response = \
             (
-                json.loads(text) ,
-                status , 
+                json.loads(text),
+                status,
                 {
                     'Access-Control-Allow-Origin': '*',
                     'Content-Type': 'application/json; '
@@ -93,9 +89,9 @@ class SentimentAnalysisPT(Resource):
 
         return message
 
-    def options (self, **args):
+    def options(self, **args):
         return {'Allow': 'GET,PUT,POST,DELETE'}, \
-               200, \
+            200, \
                {'Access-Control-Allow-Origin':     '*',
                 'Access-Control-Allow-Methods':    'GET,PUT,POST,DELETE',
                 'Access-Control-Allow-Headers':    'Content-Type'}
