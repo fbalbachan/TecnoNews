@@ -48,7 +48,7 @@ class SentimentAnalysisPT(Resource):
     # @marshal_with(SentimentAnalysisResponse.resource_fields)
     def get(self, text, api_key):
         # url = "http://127.0.0.1:5500/api/v0.9/sentiment-analysis/" + urllib.quote_plus(text.encode("utf-8")) + "/" + api_key
-        url = "http://127.0.0.1:5500/api/v0.9/sentiment-analysis/" + test.replace('?', ';;::;;::') + "/" + urllib.quote(api_key, safe='')
+        url = "http://127.0.0.1:5500/api/v0.9/sentiment-analysis/" + text.replace("?", ";;::;;::") + "/" + urllib.quote(api_key, safe='')
         req = requests.get(url)
         text = req.text
         status = req.status_code
