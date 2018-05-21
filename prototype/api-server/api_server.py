@@ -31,6 +31,7 @@ resource_path = '/v0.9'
 base_path = api_root_path + resource_path
 
 app = Flask(__name__, static_folder='./static')
+app.config['DEBUG'] = False
 
 api = swagger.docs(Api(app),
                    apiVersion='0.9.0',
@@ -104,4 +105,4 @@ if __name__ == '__main__':
     print "Running on host 127.0.0.1"
 
     write_pid_file()
-    app.run(host='127.0.0.1', port=5000, debug=True)
+    app.run(host='127.0.0.1', port=5000, debug=False)

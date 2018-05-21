@@ -55,6 +55,7 @@ class EntitySentimentReport(Resource):
     @marshal_with(EntitySentimentReportResponse.resource_fields)                      
     def get(self, text, api_key):
         #messages1 = "AAAAAAAAAAAAAAAAAAA"
+        print "AAAAAAAAAAAAAA"
         messages1 = self.validate_token(api_key)
         if len(messages1) > 0:
             return self.build_response(403, {'type': 'ERROR', 'message': messages1})
