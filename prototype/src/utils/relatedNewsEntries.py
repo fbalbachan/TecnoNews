@@ -273,7 +273,8 @@ class RelatedNewsEntries(object):
             score = 0
 
             if not newsItem.url or newsItem.url == self.news_original.url:
-                continue
+                if self.news_original.url != u'www.no-url.com':
+                    continue
 
             entities_coincidence = self.text_distance.relevant_entities_coincidence(self.news_original, newsItem)
             title_distance = self.text_distance.title_distance(self.news_original.title, newsItem.title)
