@@ -28,8 +28,10 @@ language_port = 10998
 [mongodb]
 host = 85.10.210.172
 port = 27017
-db = sentinews_test
+db = sentinews_TN3
 db_test = sentinews_test
+username=root
+password=NaturalezaMuerta
 
 [language_filter]
 status = ON
