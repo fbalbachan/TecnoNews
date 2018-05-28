@@ -9,7 +9,7 @@ from sys import argv
 import bson
 
 
-class TreeBuilder(Object):
+class TreeBuilder(object):
     def __init__(self):
         self.short_id_dict = {}
         self.db = MongoConnector.get_instance(mode)
