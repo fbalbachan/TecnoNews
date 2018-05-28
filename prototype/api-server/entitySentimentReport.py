@@ -17,11 +17,11 @@ from usersStorage import users_storage
 __author__ = 'Alexis Balbachan'
 
 class EntitySentimentReport(Resource):
-   
+
     def __init__(self):
         self.sentilecto = Sentilecto()
-        
-        
+
+
     @swagger.operation(notes='<b style="color:red;">SPANISH TEXT ONLY</b><br/>Analyze input text and returns an entity sentiment report. ---- NOTE: This v0.9 is an early release, please expect v1.0 to be released soon. You will find new resources and improved functionality.',
                    description='Natural Language Understanding / Sentiment Analysis service',
                    responseClass=EntitySentimentReportResponse,
@@ -50,16 +50,16 @@ class EntitySentimentReport(Resource):
                             {"code": 403, "message": "The authentication token provided is invalid."},
                             {"code": 500, "message": "Bad response"}
                         ]
-                  )    
-    
-    @marshal_with(EntitySentimentReportResponse.resource_fields)                      
+                  )
+
+    @marshal_with(EntitySentimentReportResponse.resource_fields)
     def get(self, text, api_key):
         #messages1 = "AAAAAAAAAAAAAAAAAAA"
         messages1 = self.validate_token(api_key)
         if len(messages1) > 0:
             return self.build_response(403, {'type': 'ERROR', 'message': messages1})
 
-        users_storage.increase_access_counter(api_key)    
+        users_storage.increase_access_counter(api_key)
         if has_type_encoding(text, str, 'UTF-8'):
             text = text.decode('UTF-8')
 
@@ -71,22 +71,22 @@ class EntitySentimentReport(Resource):
             sentences = analysis["paragraph"].sentences
             text_entities = []
             for sentence in sentences:
-            
+
                 for clause in sentence.clauses:
-                
+
                     clause_entities = clause.entities + clause.tacit_entities()
                     clause_entities = filter(lambda entity: not entity.has_attr("implicit") and not entity.has_attr("impersonal"), clause_entities)
                     clause_entities = filter(lambda entity: entity.is_maximal_regarding(clause_entities), clause_entities)
 
                 text_entities.extend(clause_entities)
-                
+
                 if clause.relative_entity:
                     text_entities += [clause.relative_entity]
-                
-            if text_entities:    
-        
+
+            if text_entities:
+
                 referents_data = output_utils.get_referents_data(text_entities)
-                
+
                 for referent_data in referents_data:
 
                     appearing = {}
@@ -96,17 +96,17 @@ class EntitySentimentReport(Resource):
                             appearing[a_reference]+=1
                         else:
                             appearing[a_reference]=1
-                
-                    unique_arr = []    
+
+                    unique_arr = []
                     for unique_elem in appearing.iterkeys():
                         unique_arr.append({unique_elem : appearing[unique_elem]})
-                
+
                     occurrences = len(referent_data['refs'])
                     entities_report.append({
-                                                "0-Entity-Name": referent_data['rn'], 
-                                                "1-Positive-Score": str(referent_data['pos']), 
-                                                "2-Negative-Score": str(referent_data['neg']), 
-                                                "3-Type": referent_data['sc'], 
+                                                "0-Entity-Name": referent_data['rn'],
+                                                "1-Positive-Score": str(referent_data['pos']),
+                                                "2-Negative-Score": str(referent_data['neg']),
+                                                "3-Type": referent_data['sc'],
                                                 "4-Ocurrences": str(occurrences),
                                                 "5-Ocurrences-Appearing": unique_arr,
                                            })
@@ -136,7 +136,7 @@ class EntitySentimentReport(Resource):
             )
         #response = {"A":"B"}
         return response
-    
+
     #def validate_token(self, token):
     #    if not users_storage.is_valid_token(token):
     #        message = "This token does not belong to a registered user."
@@ -145,8 +145,8 @@ class EntitySentimentReport(Resource):
     #    else:
     #        message = ""
     #    return message
-        
-        
+
+
     def build_response(self, response_code, response_value):
         response = \
             (
@@ -169,8 +169,8 @@ class EntitySentimentReport(Resource):
                200, \
                {'Access-Control-Allow-Origin':     '*',
                 'Access-Control-Allow-Methods':    'GET,PUT,POST,DELETE',
-                'Access-Control-Allow-Headers':    'Content-Type'}      
-                
+                'Access-Control-Allow-Headers':    'Content-Type'}
+
 
     def validate_token(self, token):
         if not users_storage.is_valid_token(token):
@@ -181,4 +181,3 @@ class EntitySentimentReport(Resource):
             message = ""
 
         return message
-    

@@ -63,14 +63,14 @@ class StructuralUnderstandingPT(Resource):
                       )
     #@marshal_with(DeepStructureResponse.resource_fields)
     def get(self, text, api_key):
-        url    = "http://127.0.0.1:5500/api/v0.9/deep-structure/" + text + "/" + api_key
+        url    = "http://127.0.0.1:5500/api/v0.9/deep-structure/" + text.replace("?", ";;::;;::") + "/" + api_key
         req    = requests.get(url)
         text   = req.text
         status = req.status_code
         response = \
             (
                 json.loads(text) ,
-                status , 
+                status ,
                 {
                     'Access-Control-Allow-Origin': '*',
                     'Content-Type': 'application/json; '

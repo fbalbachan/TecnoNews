@@ -6,7 +6,8 @@ class TotalQuestionAnalyzer:
         self.sentence = sentence
 
     def analyze(self):
-        if not self.is_question() or self.has_invalid_pronouns(): return
+        #if not self.is_question() or self.has_invalid_pronouns(): return
+        if not self.is_question(): return
 
         operator = GlobalOperator("question")
         for clause in self.sentence.clauses_of_level(0): clause.global_operators.add(operator)

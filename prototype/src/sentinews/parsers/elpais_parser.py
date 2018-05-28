@@ -51,6 +51,7 @@ class ElPaisParser(GenericParser):
                                            url=url,
                                            original_categories=None,
                                            image_search_string=None,
-                                           keywords=None)
+                                           keywords=None,
+                                           rewritable=False)
 
         return new_entry

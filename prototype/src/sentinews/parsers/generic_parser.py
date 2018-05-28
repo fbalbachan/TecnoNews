@@ -20,7 +20,7 @@ class GenericParser(object):
         return self.sanitizer.process_content(content=content)
 
     def create_news_entry(self, title, content, tags, source, url, original_categories,
-                          image_search_string=None, keywords=None):
+                          image_search_string=None, keywords=None, rewritable=True):
         """
 
         :param title:
@@ -60,7 +60,8 @@ class GenericParser(object):
                                       source=source,
                                       url=url,
                                       original_categories=original_categories,
-                                      image_search_string=image_search_string)
+                                      image_search_string=image_search_string,
+                                      rewritable=rewritable)
 
             except Exception as e:
                 logger.error("%s" % e.message)

@@ -13,7 +13,7 @@ class NewsEntry(object):
     def __init__(self, title, content, tags, source, url=None, original_categories=None, language=u"spanish",
                  categories=None, wp_id=None, wp_url=None, related=None, entities=None,
                  published_date=None, object_id=None, versions=None, universe_versions=None,
-                 universe_scores=None, image=None, image_search_string=None, summary=None, extended_summary=None):
+                 universe_scores=None, image=None, image_search_string=None, summary=None, extended_summary=None, rewritable=True):
 
         self.title = title
         self.content = content
@@ -50,6 +50,7 @@ class NewsEntry(object):
         self.raconto_date = None
         self.raconto_url = None
         self.extended_summary = extended_summary
+        self.rewritable = rewritable
         # Defensive programing to avoid wrong encoded
         assert(isinstance(self.title, unicode))
         assert(isinstance(self.content, unicode))

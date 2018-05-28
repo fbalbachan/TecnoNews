@@ -48,14 +48,14 @@ class EntityExtractionPT(Resource):
                       )
     #@marshal_with(EntitiesResponse.resource_fields)
     def get(self, text, api_key):
-        url    = "http://127.0.0.1:5500/api/v0.9/entity-extraction/" + text + "/" + api_key
+        url    = "http://127.0.0.1:5500/api/v0.9/entity-extraction/" + text.replace("?", ";;::;;::") + "/" + api_key
         req    = requests.get(url)
         text   = req.text
         status = req.status_code
         response = \
             (
                 json.loads(text) ,
-                status , 
+                status ,
                 {
                     'Access-Control-Allow-Origin': '*',
                     'Content-Type': 'application/json; '

@@ -424,7 +424,7 @@ class EntiNews_request:
                                     "content_rewrite"	: self.action_content_rewrite,
                                     "content_summarize": self.action_content_summarize,
                                     "financial_compliance": self.action_content_financial,
-                                    "english"             : self.action_english,
+                                    # "english"             : self.action_english,
                                     "relations"           : self.action_relations}
 
                 method = web_input["method"]
@@ -435,7 +435,7 @@ class EntiNews_request:
                 language = detect_language(input_text)
                 logger.info("Language is: " + language)
 
-                if method == 'english':
+                if 1 == 2 and method == 'english':
                     return action_by_method[method](language)
                 elif language == u'es' or language == u'it' or language == u'fr' or language == u'ca' or language == u'as' or language == u'gl':
                     return action_by_method[method]()
