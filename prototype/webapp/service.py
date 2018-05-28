@@ -353,8 +353,8 @@ class EntiNews_request:
 
     def action_content_financial(self):
         try:
-            #analysis = analyze()
-            analysis = Sentilecto.analyze(get_input_text().replace('\'','').replace('"',''))
+            # analysis = analyze()
+            analysis = Sentilecto.analyze(get_input_text().replace('\'', '').replace('"', ''))
             return web.template.render().financial(analysis["paragraph"].text, financial_result(analysis))
 
         except Exception:
@@ -390,6 +390,14 @@ class EntiNews_request:
             web.redirect("/sentilecto")
         return web.template.render().english(test_result, new_response, WebOutputUtils(ontology))
 
+    def action_relations(self):
+        from src.utils.galaxy_finder import TreeBuilder
+        text = TreeBuilder().build_many()  # get_input_text()
+
+        if not text:
+            web.redirect("/sentilecto")
+        return web.template.render().english(text, u'', WebOutputUtils(ontology))
+
     def POST(self):
 
         web_input = web.input()
@@ -416,7 +424,8 @@ class EntiNews_request:
                                     "content_rewrite"	: self.action_content_rewrite,
                                     "content_summarize": self.action_content_summarize,
                                     "financial_compliance": self.action_content_financial,
-                                    "english"             : self.action_english}
+                                    "english"             : self.action_english,
+                                    "relations"           : self.action_relations}
 
                 method = web_input["method"]
 
