@@ -397,6 +397,8 @@ class EntiNews_request:
         from src.services.mongodb.news_entries_service import NewsEntriesService
         import datetime
         import traceback
+
+        categoria = [u'interés general']
         text = None
         try:
             service = NewsEntriesService()
