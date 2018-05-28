@@ -395,6 +395,8 @@ class EntiNews_request:
         from src.sentinews.news_entry import NewsEntry
         from src.utils.relatedNewsEntries import RelatedNewsEntries
         from src.services.mongodb.news_entries_service import NewsEntriesService
+        from src.model.referent.referentRanker import ReferentRanker
+
         import datetime
         import traceback
 
@@ -442,7 +444,8 @@ class EntiNews_request:
         except Exception as e:
             text = traceback.format_exc()
 
-        # text = TreeBuilder().build_many()  # get_input_text()
+        if text is None:
+            text = TreeBuilder().build_many()  # get_input_text()
 
         if not text:
             web.redirect("/sentilecto")
