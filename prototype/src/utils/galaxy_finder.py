@@ -3,7 +3,7 @@
 
 import json
 import pymongo
-from connector import MongoConnector
+from src.services.mongodb.connector import MongoConnector
 from bson.objectid import ObjectId
 from sys import argv
 import bson
