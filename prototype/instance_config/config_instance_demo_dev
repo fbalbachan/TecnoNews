@@ -28,7 +28,7 @@ language_port = 10998
 [mongodb]
 host = 85.10.210.172
 port = 27017
-db = sentinews_TN3
+db = sentinews_DEMO
 db_test = sentinews_test
 username=root
 password=NaturalezaMuerta

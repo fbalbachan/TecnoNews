@@ -392,6 +392,53 @@ class EntiNews_request:
 
     def action_relations(self):
         from src.utils.galaxy_finder import TreeBuilder
+        from src.sentinews.news_entry import NewsEntry
+        from src.utils.relatedNewsEntries import RelatedNewsEntries
+        from src.services.mongodb.news_entries_service import NewsEntriesService
+        import datetime
+
+        try:
+            service = NewsEntriesService()
+            contents = [a_content for a_content in get_input_text().split(u'NOTA ') if len(a_content.strip()) > 0]
+
+            final_news = []
+            for a_news in contents:
+                clean_lines = [a_line.strip() for a_line in a_news.split(u'\n') if len(a_line.strip()) > 0][1:]
+                raw_date = [int(a_number) for a_number in clean_lines[-1].split(u'-')[0].strip().split(u'/')]
+                raw_time = [int(a_number) for a_number in clean_lines[-1].split(u'-')[1].strip().split(u':')]
+                clean_news = {u'source': 'DEMO', u'title': clean_lines[0], u'content': u'\n'.join(clean_lines[1:-1]), u'date': datetime.datetime(raw_date[-1], raw_date[-2], raw_date[-3], raw_time[0], raw_time[1])}
+                final_news.append(clean_news)
+
+            final_news = sorted(final_news, key=lambda x: x['date'], reverse=False)
+            for a_news in final_news:
+                entry = NewsEntry(title=a_news[u'title'], content=a_news[u'content'],
+                                  tags=categoria,
+                                  source=a_news[u'source'],
+                                  url=u'www.no-url.com',
+                                  original_categories=categoria,
+                                  image_search_string=None)
+
+                entry.published_date = a_news[u'date']
+                other_versions = []
+                try:
+                    entry.set_analisys_info()
+                    analysis = Sentilecto.analyze(entry.content)
+                    analysis["referent_ranking"] = ReferentRanker(analysis["paragraph"]).rank()
+                    entry.categories = [u"interés general"]
+                    tsr = RelatedNewsEntries(entry, optimized=True)
+                    other_versions = tsr.get_other_versions_optimized(with_score=True)[:10]
+                    related = []
+                    entry.set_news_versions([x[0] for x in other_versions])
+                    entry.set_universe_scores([x[1] for x in other_versions])
+                    other_versions = [x[0] for x in other_versions]
+                    entry.set_related_news(related)
+                    service.save(news_entry=entry)
+
+                except Exception as e:
+                    pass
+        except Exception as e:
+            pass
+
         text = TreeBuilder().build_many()  # get_input_text()
 
         if not text:
@@ -419,13 +466,13 @@ class EntiNews_request:
                 ip = web_env["HTTP_X_FORWARDED_FOR"] if "HTTP_X_FORWARDED_FOR" in web_env else web.ctx["ip"]
                 logger.info(time.strftime("%d/%m/%Y %H:%M:%S") + "\t" + ip + "\t" + web.ctx["fullpath"])
 
-                action_by_method = {"svo_slots" 		: self.action_svo_slots,
-                                    "fact_extraction"	: self.action_fact_extraction,
-                                    "content_rewrite"	: self.action_content_rewrite,
-                                    "content_summarize": self.action_content_summarize,
-                                    "financial_compliance": self.action_content_financial,
+                action_by_method = {"svo_slots" 		:     self.action_svo_slots,
+                                    "fact_extraction"	:     self.action_fact_extraction,
+                                    "content_rewrite"	:     self.action_content_rewrite,
+                                    "content_summarize":      self.action_content_summarize,
+                                    "financial_compliance":   self.action_content_financial,
                                     # "english"             : self.action_english,
-                                    "relations"           : self.action_relations}
+                                    "relations":              self.action_relations}
 
                 method = web_input["method"]
 
