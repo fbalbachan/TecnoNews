@@ -396,7 +396,8 @@ class EntiNews_request:
         from src.utils.relatedNewsEntries import RelatedNewsEntries
         from src.services.mongodb.news_entries_service import NewsEntriesService
         import datetime
-
+        import traceback
+        text = None
         try:
             service = NewsEntriesService()
             contents = [a_content for a_content in get_input_text().split(u'NOTA ') if len(a_content.strip()) > 0]
@@ -435,11 +436,11 @@ class EntiNews_request:
                     service.save(news_entry=entry)
 
                 except Exception as e:
-                    pass
+                    text = traceback.format_exc()
         except Exception as e:
-            pass
+            text = traceback.format_exc()
 
-        text = TreeBuilder().build_many()  # get_input_text()
+        # text = TreeBuilder().build_many()  # get_input_text()
 
         if not text:
             web.redirect("/sentilecto")
