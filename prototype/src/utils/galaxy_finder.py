@@ -10,7 +10,7 @@ import bson
 
 
 class TreeBuilder(object):
-    def __init__(self):
+    def __init__(self, mode=None):
         self.short_id_dict = {}
         self.db = MongoConnector.get_instance(mode)
 
