@@ -7,12 +7,21 @@ from flask import Flask
 
 @swagger.model
 class EntitySentimentReportResponse(Flask.response_class):
+    appearences = {
+        '0-Name': fields.String(),
+        '1-Count': fields.Integer()
+    }
+    entity = {'0-Entity-Name': fields.String(),
+              '1-Positive-Score': fields.String(),
+              '2-Negative-Score': fields.String(),
+              '3-Type': fields.String(),
+              '4-Ocurrences': fields.String(),
+              '5-Ocurrences-Appearing': fields.List(fields.Nested(appearences))}
     resource_fields = \
         {
             '0-Paragraph-Text':     fields.String(),
-            '1-Entities-Report':    fields.List(fields.String)
+            '1-Entities-Report':    fields.List(fields.Nested(entity))
         }
-
 
 @swagger.model
 class TextAnalyze(Flask.request_class):

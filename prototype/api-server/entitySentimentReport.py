@@ -99,8 +99,7 @@ class EntitySentimentReport(Resource):
 
                     unique_arr = []
                     for unique_elem in appearing.iterkeys():
-                        unique_arr.append({unique_elem : appearing[unique_elem]})
-
+                        unique_arr.append({'0-Name': unique_elem, '1-Count': appearing[unique_elem]})
                     occurrences = len(referent_data['refs'])
                     entities_report.append({
                                                 "0-Entity-Name": referent_data['rn'],
