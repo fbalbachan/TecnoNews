@@ -33,18 +33,18 @@ class CNNParser(GenericParser):
         new_entry = None
         title = soup.find('h1', {"class": "headline-article-main"})
         if title is None : 
-            title = soup.find('h1', {"class": "news-title"})
+            title = soup.find('h1', {"class": "storyfull__title"})
         title = title.text
  
         content = soup.find('div', {"class": "content-body-text"})
         if content is None : 
-            content = soup.find('div', {"class": "news-body"})
+            content = soup.find('div', {"class": "storyfull__body"})
         content = content.text
         #if content is not None:
         #    print content
         content = self.sanitize(content)
         try : 
-            categories = [soup.find('div', {"class": "cat-section"}).text.strip()]
+            categories = [soup.find('div', {"class": "storyfull__section"}).text.strip()]
             categories = [x for x in categories if not 'CNN' in x]
         except Exception, e:
             categories = [u"noticias"]
@@ -70,3 +70,6 @@ class CNNParser(GenericParser):
                                            keywords=None)
 
         return new_entry
+
+if __name__ == '__main__':
+    CNNParser().parse("http://cnnespanol.cnn.com/2016/06/01/las-tres-opciones-para-los-hispanos-republicanos-ante-trump/")

@@ -43,7 +43,7 @@ class ElMundoParser(GenericParser):
             tweet.extract()
 
         new_entry = None
-        title = soup.find('h1', {"itemprop": "headline"}).text
+        title = soup.find('h1', {"class": "js-headline"}).text
         categories = [urlparse(url).path.split("/")[1]]
 
         des = soup.find('article', {"class": "desarrollo"})
@@ -69,7 +69,7 @@ class ElMundoParser(GenericParser):
 
 
         content = ""
-        for a_paragraph in soup.find('div', {"itemprop": 'articleBody'}).findAll('p'):
+        for a_paragraph in soup.find('div', {"data-section": 'articleBody'}).findAll('p'):
             content += "\n" + a_paragraph.text.strip()
 
         content = content.strip()
@@ -83,3 +83,6 @@ class ElMundoParser(GenericParser):
                                            keywords=None)
 
         return new_entry
+
+if __name__ == "__main__":
+    ElMundoParser().parse("https://www.elmundo.es/espana/2019/04/26/5cc36c9cfc6c830d038b4615.html")

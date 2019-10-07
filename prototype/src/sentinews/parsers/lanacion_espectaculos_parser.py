@@ -52,7 +52,7 @@ class LaNacionEspectaculosParser(GenericParser):
             tweets.append(tweet)
             tweet.extract()
 
-        title = soup.find('h1', {"itemprop": "headline"})
+        title = soup.find('h1', {"class": "titulo"})
 
         title = title.text.strip()
 
@@ -81,3 +81,5 @@ class LaNacionEspectaculosParser(GenericParser):
 
         return new_entry
 
+if __name__ == "__main__":
+    LaNacionEspectaculosParser().parse("https://www.lanacion.com.ar/espectaculos/television/showmatch-quien-es-figura-mas-cara-pista-nid2241559")

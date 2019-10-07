@@ -31,20 +31,20 @@ class TravelerParser(GenericParser):
 
 
         #-------------------TITLE--------------------------
-        title = soup.find('div', {"class":"article_title"})
+        title = soup.find('h1', {"class":"headline"})
         title = title.text.strip()
 
 
         #-------------------CONTENT--------------------------
         content = ""
 
-        intro = soup.find('div',{"class":"article_intro"})
+        intro = soup.find('h2',{"class":"lead-in"})
 
         if intro is not None:
             content = intro.text.strip() + "\n"
 
 
-        article_content = soup.find('div',{"class": "article_text"})
+        article_content = soup.find('div',{"class": "content"})
 
         paragraphs = article_content.findAll('p')
 
@@ -70,3 +70,6 @@ class TravelerParser(GenericParser):
                                            keywords=None)
 
         return new_entry
+
+if __name__ == "__main__":
+     TravelerParser().parse("https://www.traveler.es/experiencias/articulos/paseo-flores-jardin-botanico-y-cuadros-museo-thyssen-madrid/15114")

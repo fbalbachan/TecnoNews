@@ -47,3 +47,6 @@ class BBCParser(GenericParser):
                                            image_search_string=image_search_string,
                                            keywords=None)
         return new_entry
+
+if __name__ == "__main__":
+    BBCParser().parse("http://www.bbc.com/mundo/noticias/2016/06/160603_finde_galeria_imagenes_estrafalaria_ceremonia_inauguracion_tunel_san_gotardo_alpes_suiza_lb")
