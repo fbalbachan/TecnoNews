@@ -14,38 +14,29 @@ class InmodiarioParser(GenericParser):
     source = u"Inmodiario"
     
     def parse(self, url):
-        #url = "http://www.inmodiario.com/170/22367/tendencias-inmobiliarias-necesidad-panorama-sector-inmobiliario.html"
+        #url = "https://www.inmodiario.com/96/28175/cifras-sector-construccion-siguen-siendo-positivas-pero-apuntan-desaceleracion.html"
         
-	soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
-	for script in soup(["script", "style"]):
+        soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
+        for script in soup(["script", "style"]):
             script.extract()
             
             
         for image in soup.findAll('img'):
             image.extract()
-        
-            
-            
-        title = soup.find('div',{'class':'detail-news titulo'})
-        title =  title.text.strip()
-        
+
+        title = soup.find('div', {'class': 'title'})
+        title = title.text.strip()
         content = "" 
-        
-            
+
         paragraphs = soup.find('div',{'id':'contenedor-contenido'}).findAll(['p','ul'])
 
-        
         for paragraph in paragraphs:
             clean_text = paragraph.text.strip()
 
-                
             content += "\n" + clean_text
 
-
-        
         content = content.strip()
-        
-        
+
         tags = ["propiedades"]
         categories=["propiedades"]
         

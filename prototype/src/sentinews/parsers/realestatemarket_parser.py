@@ -22,7 +22,7 @@ class RealEstateMarketParser(GenericParser):
             script.extract()
 
         #-------------------TITLE--------------------------
-        title = soup.find('h2', {'itemprop':'name'})
+        title = soup.find('', {'itemprop':'headline'})
         title = title.text.strip()
 
         #-------------------CONTENT--------------------------

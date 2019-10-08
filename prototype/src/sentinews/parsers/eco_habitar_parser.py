@@ -16,8 +16,8 @@ class EcoHabitarParser(GenericParser):
     def parse(self, url):
         #url = "http://www.ecohabitar.org/anpier-exige-a-rajoy-una-rectificacion/"
         #url = "http://www.ecohabitar.org/ecohabitar-en-bioterra-2016/"
-	soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
-	for script in soup(["script", "style"]):
+        soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
+        for script in soup(["script", "style"]):
             script.extract()
 
 
