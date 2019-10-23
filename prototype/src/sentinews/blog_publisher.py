@@ -483,7 +483,7 @@ class BlogPublisher(object):
                 valid_host = True #TEMP
                 host["password"] = u"MarioKempes" #TEMP
                 if u"propiedades" in entry.categories:
-                    self.add_hyperlinks(entry, "hyperlinks_propiedades.csv")
+                    # self.add_hyperlinks(entry, "hyperlinks_propiedades.csv")
                     entry.categories = [u"propiedades"]
 
                 if entry.source is not None:
