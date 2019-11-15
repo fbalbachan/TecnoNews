@@ -518,8 +518,8 @@ class BlogPublisher(object):
         if u"propiedades" in entry.categories:
             entry.categories = [u"propiedades"]
 
-        if u"tecnología" in entry.categories:
-            entry.categories = [u"tecnología"]
+        if u"crypto" in entry.categories:
+            entry.categories = [u"crypto"]
 
         if u"turismo" in entry.categories:
             entry.categories = [u"turismo"]
