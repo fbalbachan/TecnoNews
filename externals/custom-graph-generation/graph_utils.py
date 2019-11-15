@@ -115,6 +115,8 @@ def color_from_category(cat = None) :
             ret = "rgba(47,79,79,1)"
         if u"propiedades-pt" in cat.lower() :
             ret = "rgba(47,79,79,1)"
+        if u"crypto" in cat.lower() :
+            ret = "rgba(0,0,0,1)"
 
     return ret
 
