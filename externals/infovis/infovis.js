@@ -1285,6 +1285,8 @@ function color_from_category(categories){
                         ret = "rgba(47,79,79,1)";
                 }else if(category_array.indexOf("propiedades-pt") > -1){
                         ret = "rgba(47,79,79,1)";
+                }else if(category_array.indexOf("crypto") > -1){
+                        ret = "rgba(0,0,0,1)";
                 }
         }
         return ret;
