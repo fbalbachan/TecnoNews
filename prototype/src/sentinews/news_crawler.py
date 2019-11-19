@@ -93,7 +93,7 @@ class NewsCrawler(object):
                                         'vivelo_hoy_parser.ViveloHoyParser', datetime.utcnow()))
 
             self.feed_service.save(Feed('criptonoticias', 'https://www.criptonoticias.com/feed/',
-                                        'criptonoticias_parser.CriptoNoticiasParser', datetime.utcnow()))
+                                        'criptonoticias_parser.CriptoNoticiasParse', datetime.utcnow()))
             self.feed_service.save(Feed('criptotendencia', 'https://criptotendencia.com/feed/',
                                         'criptotendencia_parser.CriptoTendenciaParser', datetime.utcnow()))
 
