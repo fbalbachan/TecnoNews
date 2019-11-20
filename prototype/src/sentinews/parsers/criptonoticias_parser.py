@@ -36,7 +36,7 @@ class CriptoNoticiasParse(GenericParser):
 
 
         new_entry = self.create_news_entry(title=title, content=content,
-                                           tags={"crypto"},
+                                           tags=["crypto"],
                                            source=self.source,
                                            url=url,
                                            original_categories=["crypto"],
