@@ -22,12 +22,12 @@ class CriptoNoticiasParse(GenericParser):
 
 
    
-        #pretags = soup.find('div', {"class": 'jeg_post_tags'}).findAll("a")
-        #tags = set(x.text.strip() for x in pretags)
+        pretags = soup.find('div', {"class": 'tags'}).findAll("a")
+        tags = set(x.text.strip() for x in pretags)
 
 
         content = ""
-        paragraphs = soup.find('div', {"class": 'post-content'}).findAll('p')
+        paragraphs = soup.find('div', {"class": 'post-full-text contents js-post-full-text'}).findAll('p')
 
         for paragraph in paragraphs:
             clean_text = paragraph.text.strip()
@@ -36,7 +36,7 @@ class CriptoNoticiasParse(GenericParser):
 
 
         new_entry = self.create_news_entry(title=title, content=content,
-                                           tags=["crypto"],
+                                           tags=tags,
                                            source=self.source,
                                            url=url,
                                            original_categories=["crypto"],
