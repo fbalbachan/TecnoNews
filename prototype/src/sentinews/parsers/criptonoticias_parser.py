@@ -27,7 +27,9 @@ class CriptoNoticiasParse(GenericParser):
 
 
         content = ""
-        paragraphs = soup.find('div', {"itemprop": 'articleBody', "class": 'post-full-text contents js-post-full-text'}).findAll('p')
+
+        paragraphs = soup.find('div', {"class": 'post-full-text contents js-post-full-text'}).findAll('p')
+
 
         for paragraph in paragraphs:
             clean_text = paragraph.text.strip()
