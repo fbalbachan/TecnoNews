@@ -8,7 +8,7 @@ from src.sentinews.parsers.generic_parser import GenericParser
 
 
 
-class BitcoinNoticiasParse(GenericParser):
+class BitcoinNoticiasParser(GenericParser):
     source = u"BitcoinNoticias"
 
     def parse(self, url):
