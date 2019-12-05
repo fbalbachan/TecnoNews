@@ -19,7 +19,7 @@ class BloombergParser(GenericParser):
         content = ""
         paragraphs1 = soup.findAll('div', {"class": 'wpb_wrapper'})
         for paragraph in paragraphs1:
-            for para in paragraph.find('div', {"class": 'wpb_wrapper'}).findAll('p')
+            for para in paragraph.find('div', {"class": 'wpb_wrapper'}).findAll('p'):
                 clean_text = para.text.strip()
                 content += "\n" + clean_text
         content = content.strip()
