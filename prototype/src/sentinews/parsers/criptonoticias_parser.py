@@ -45,7 +45,7 @@ class CriptoNoticiasParse(GenericParser):
                                            image_search_string="",
                                            keywords=None)
 
-
-
-
         return new_entry
+
+if __name__ == '__main__':
+    CriptoNoticiasParse().parse('https://www.criptonoticias.com/mineria/mejoras-introduce-stratum-v2-mineria-grupal-bitcoin/')

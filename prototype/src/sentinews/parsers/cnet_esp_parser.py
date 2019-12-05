@@ -48,7 +48,7 @@ class CNetEspParser(GenericParser):
 
         # PUSE COL 10
         content = ""
-        paragraphs = soup.find('div', {"class": "article-main-body", "itemprop": 'articleBody'}).findAll('p')
+        paragraphs = soup.find('div', {"class": "article-main-body"}).findAll('p')
 
         for paragraph in paragraphs:
             content += '\n' + paragraph.text.strip()
@@ -82,3 +82,6 @@ class CNetEspParser(GenericParser):
                                            image_search_string=image_search_string,
                                            keywords=None)
         return new_entry
+
+if __name__ == "__main__":
+    CNetEspParser().parse("https://www.cnet.com/es/noticias/draft-nfl-2019-tv-internet-estados-unidos-futbol-americano/#ftag=ESPdf5230a")
