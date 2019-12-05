@@ -34,7 +34,7 @@ class ForbesMexicoParser(GenericParser):
         # OLD METHOD WORKING?
         # category = metadata.find(href=re.compile('/category/'))
 
-        categories = [metadata['content']]
+        categories = [metadata['content'], "economia"]
 
         # NEW METHOD:
         '''

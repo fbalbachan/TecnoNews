@@ -99,6 +99,12 @@ class NewsCrawler(object):
             self.feed_service.save(Feed('criptotendencia', 'https://criptotendencia.com/feed/',
                                         'criptotendencia_parser.CriptoTendenciaParser', datetime.utcnow()))
 
+            self.feed_service.save(Feed('bloomberg', 'https://www.bloomberg.com/latam/feed/',
+                                        'bloomberg_parser.BloombergParser', datetime.utcnow()))
+            self.feed_service.save(Feed('ambito_financiero', 'https://ambito-financiero.com/feed',
+                                        'ambito_financiero_parser.AmbitoFinancieroParser', datetime.utcnow()))
+
+
     def crawl_all(self):
         crawler_logger.info("START crawl_all")
         entries = []
