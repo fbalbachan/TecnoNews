@@ -20,7 +20,7 @@ class AmbitoFinancieroParser(GenericParser):
         title = title.text.strip()
 
         content = ""
-        article_content = soup.find('div', {"class": "td-post-content"}).findAll('p'):
+        article_content = soup.find('div', {"class": "td-post-content"}).findAll('p')
         for paragraph in article_content:
             clean_text = paragraph.text.strip()
             content += "\n" + clean_text
