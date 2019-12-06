@@ -1,29 +1,51 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+import sys
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+try:
+    from src.sentinews.parsers.generic_parser import GenericParser
+except:
+    import requests
+    class GenericParser(object):
+        class _opener:
+            def read(self, url):
+                r = requests.get(url)
+                return r.text
 
-from src.sentinews.parsers.generic_parser import GenericParser
-import re
+        @property
+        def opener(self):
+            return self._opener()
+
+        def create_news_entry(self, **kw):
+            return kw
 
 
 class DailyFxParser(GenericParser):
     source = u"DailyFx"
+    dolog = False
+
+    def log(self, *args):
+        if self.dolog:
+            print((" ".join(unicode(x) for x in args)))
 
     def __init__(self):
         super(DailyFxParser, self).__init__()
 
     def parse(self, url):
-        soup = BeautifulSoup(self.opener.read(url))
+        return self.parse_soup(BeautifulSoup(self.opener.read(url)), url)
 
+    def parse_soup(self, soup, url):
         title = soup.find('h1', {"class": "dfx-articleHead__header"})
         title = title.text.strip()
+        self.log("title:", title)
 
         content = ""
-        article_content = soup.find('p', {"class": "gsstx"}).findAll('span')
+        article_content = soup.find("div", {"class":"dfx-articleBody__content"}).findAll("p")
         for paragraph in article_content:
             clean_text = paragraph.text.strip()
             content += "\n" + clean_text
+
+        self.log("content:", content)
 
         categories = ["economia"]
         tags = ["economia"]
@@ -36,3 +58,11 @@ class DailyFxParser(GenericParser):
                                            image_search_string=None,
                                            keywords=None)
         return new_entry
+
+
+if __name__=="__main__":
+    import requests
+    url = sys.argv[1]
+    p = DailyFxParser(True)
+    p.dolog = True
+    p.parse(url)
