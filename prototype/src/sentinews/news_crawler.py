@@ -104,6 +104,18 @@ class NewsCrawler(object):
             self.feed_service.save(Feed('ambito_financiero', 'https://ambito-financiero.com/feed',
                                         'ambito_financiero_parser.AmbitoFinancieroParser', datetime.utcnow()))
 
+            self.feed_service.save(Feed('dailyfx', 'https://www.dailyfx.com/espanol/feeds/noticias-trading',
+                                        'dailyfx_parser.DailyFxParser', datetime.utcnow()))
+            self.feed_service.save(Feed('estrategias_inversion', 'https://www.estrategiasdeinversion.com/rss/rssnoticias.xml',
+                                        'estrategias_inversion.EstrategiasDeInversionParser', datetime.utcnow()))
+            self.feed_service.save(Feed('abc_economia', 'https://www.abc.es/rss/feeds/abc_Economia.xml',
+                                        'abc_economia_parser.ABC_Economia_Parser', datetime.utcnow()))
+            self.feed_service.save(Feed('megabolsa', 'https://www.megabolsa.com/feed/',
+                                        'megabolsa_parser.MegaBolsaParser', datetime.utcnow()))
+            self.feed_service.save(Feed('finanzas', 'http://www.finanzas.com/rss/al-minuto.xml',
+                                        'finanzas_parser.FinanzasParser', datetime.utcnow()))
+            self.feed_service.save(Feed('elpais_cincodias', 'https://cincodias.elpais.com/seccion/rss/mercados/',
+                                        'elpais_cincodias_parser.ElPaisCincoDiasParser', datetime.utcnow()))
 
     def crawl_all(self):
         crawler_logger.info("START crawl_all")
