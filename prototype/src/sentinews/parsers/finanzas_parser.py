@@ -21,7 +21,7 @@ except:
 
 
 class FinanzasParser(GenericParser):
-    source = u"Finanzas"
+    source = "Finanzas"
 
     dolog = False
 
@@ -30,7 +30,7 @@ class FinanzasParser(GenericParser):
 
     def log(self, *args):
         if self.dolog:
-            print((" ".join(unicode(x) for x in args)))
+            print((" ".join(str(x) for x in args)))
 
     def parse(self, url):
         return self.parse_soup(BeautifulSoup(self.opener.read(url)), url)

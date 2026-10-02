@@ -38,7 +38,7 @@ class TextSummarizer:
                         equative_structure = a_structure
 
                 #GENERAL AND SUBJECT VALIDATIONS:
-                if main_clause.voice in [u"active", u"passive"] \
+                if main_clause.voice in ["active", "passive"] \
                     and not any(an_entity.is_impersonal() for an_entity in main_clause.all_entities()) \
                     and subject_structure is not None \
                     and len(subject_structure.all_entities()) > 0:

@@ -12,7 +12,7 @@ def to_desired_size(img_path, desired_h=380, desired_w=700, test=False):
 
     image_w, image_h = im.size
     aspect_ratio = image_h / float(image_w)
-    print aspect_ratio
+    print(aspect_ratio)
     new_width = int(desired_h / aspect_ratio)
     new_height = desired_h
 
@@ -35,7 +35,7 @@ def to_desired_size(img_path, desired_h=380, desired_w=700, test=False):
 
     if not face_center:
         # we just use old cropping algorithm
-        cut_amount_w = (resized_image_w - desired_w) / 2
+        cut_amount_w = (resized_image_w - desired_w) // 2
         cut_amount_h_total = resized_image_h - desired_h
 
         # if the picture is portrait and we didn't detect face
@@ -54,11 +54,11 @@ def to_desired_size(img_path, desired_h=380, desired_w=700, test=False):
                     resized_image_h - cut_amount_h_bottom)
     else:
         # use faces crop algorithm
-        cut_amount_w = (resized_image_w - desired_w) / 2
+        cut_amount_w = (resized_image_w - desired_w) // 2
         face_center_h = face_center[1]
 
-        if face_center_h - desired_h/2 > 0:
-            h_top = face_center_h - desired_h/2
+        if face_center_h - desired_h // 2 > 0:
+            h_top = face_center_h - desired_h // 2
         else:
             h_top = 0
 
@@ -105,7 +105,7 @@ def find_faces(image_path, test=False):
     center = None
 
     if test:
-        print "Faces:", faces
+        print("Faces:", faces)
         if len(faces) > 0:
             for face in faces:
                 (x, y, w, h) = face
@@ -115,7 +115,7 @@ def find_faces(image_path, test=False):
 
     if len(faces) > 0:
         (x, y, w, h) = faces[0]
-        center = (x+w/2, y+h/2)
+        center = (x + w // 2, y + h // 2)
 
     return center
 
@@ -125,7 +125,7 @@ if __name__ == '__main__':
     image_path = sys.argv[1]
     if len(sys.argv) > 2:
         test = sys.argv[2]
-        print test
+        print(test)
         if test == 'False':
             test = False
         if test == 'True':

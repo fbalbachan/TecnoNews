@@ -21,12 +21,12 @@ except:
 
 
 class DailyFxParser(GenericParser):
-    source = u"DailyFx"
+    source = "DailyFx"
     dolog = False
 
     def log(self, *args):
         if self.dolog:
-            print((" ".join(unicode(x) for x in args)))
+            print((" ".join(str(x) for x in args)))
 
     def __init__(self):
         super(DailyFxParser, self).__init__()

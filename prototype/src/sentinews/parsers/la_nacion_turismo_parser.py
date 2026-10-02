@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -11,13 +11,13 @@ class LaNacionTurismoParser(GenericParser):
     def __init__(self):
         super(LaNacionTurismoParser, self).__init__()
 
-    source = u"La Nación Turismo"
+    source = "La Nación Turismo"
     
     def parse(self, url):
         #url = "http://www.lanacion.com.ar/1855159-quito-una-capital-a-la-altura"
         
-	soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
-	for script in soup(["script", "style"]):
+        soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
+        for script in soup(["script", "style"]):
             script.extract()
             
             
@@ -44,7 +44,7 @@ class LaNacionTurismoParser(GenericParser):
         
         
         for paragraph in paragraphs:
-            clean_text = re.sub(u'[ ]{2,}', ' ', paragraph.text.strip())
+            clean_text = re.sub('[ ]{2,}', ' ', paragraph.text.strip())
 
                 
             content += "\n" + clean_text

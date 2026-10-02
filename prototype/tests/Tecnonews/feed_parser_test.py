@@ -12,16 +12,16 @@ class FeedParserTest(unittest.TestCase):
 		entries = feeds['entries']
 		self.assertIsNotNone(feeds)
 		self.assertTrue(len(feeds))
-		print len(feeds)
+		print(len(feeds))
 		for entry in entries:
 			self.assertTrue(len(entry['link']) > 0)
-			print entry['link']
+			print(entry['link'])
 		for entry in entries:
 			self.assertTrue(len(entry['title']) > 0)
-			print entry['title']
+			print(entry['title'])
 		for entry in entries:
 			self.assertTrue(len(entry['description']) > 0)
-			print entry['description']
+			print(entry['description'])
 
 	def test_create_class_by_parameter(self):
 

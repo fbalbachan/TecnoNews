@@ -15,16 +15,16 @@ class RelatedNewsEntries(object):
 
         #NEW METHOD (FOR VERSIONS_UNIVERSE)
         special_limits = [
-            {"category":u"deporte", "limit":3},
-            {"category":u"tecnología", "limit":10},
-            {"category":u"mujer", "limit":30},
-            {"category":u"propiedades", "limit":30},
-            {"category":u"electrodomésticos", "limit":30},
-            {"category":u"automóviles", "limit":15},
-            {"category":u"turismo", "limit":30},
-            {"category":u"estilo vida", "limit":30},
-            {"category":u"salud", "limit":30},
-            {"category":u"zolvers", "limit":30},
+            {"category":"deporte", "limit":3},
+            {"category":"tecnología", "limit":10},
+            {"category":"mujer", "limit":30},
+            {"category":"propiedades", "limit":30},
+            {"category":"electrodomésticos", "limit":30},
+            {"category":"automóviles", "limit":15},
+            {"category":"turismo", "limit":30},
+            {"category":"estilo vida", "limit":30},
+            {"category":"salud", "limit":30},
+            {"category":"zolvers", "limit":30},
         ]
 
 
@@ -44,34 +44,34 @@ class RelatedNewsEntries(object):
 
 
         #OLD METHOD (FOR VERSIONS):
-        if u"propiedades" in original.categories:
+        if "propiedades" in original.categories:
             DAYS_IN_THE_PAST_TO_SEARCH = 30
 
-        if u"electrodomésticos" in original.categories:
+        if "electrodomésticos" in original.categories:
             DAYS_IN_THE_PAST_TO_SEARCH = 30
 
-        if u"automóviles" in original.categories:
+        if "automóviles" in original.categories:
             DAYS_IN_THE_PAST_TO_SEARCH = 15
 
-        if u"turismo" in original.categories:
+        if "turismo" in original.categories:
             DAYS_IN_THE_PAST_TO_SEARCH = 30
 
-        if u"estilo vida" in original.categories:
+        if "estilo vida" in original.categories:
             DAYS_IN_THE_PAST_TO_SEARCH = 30
 
-        if u"tecnología" in original.categories:
+        if "tecnología" in original.categories:
             DAYS_IN_THE_PAST_TO_SEARCH = 10
 
-        if u"mujer" in original.categories:
+        if "mujer" in original.categories:
             DAYS_IN_THE_PAST_TO_SEARCH = 30
 
-        if u"deporte" in original.categories:
+        if "deporte" in original.categories:
             DAYS_IN_THE_PAST_TO_SEARCH = 3
 
-        if u"salud" in original.categories:
+        if "salud" in original.categories:
             DAYS_IN_THE_PAST_TO_SEARCH = 30
 
-        if u"zolvers" in original.categories:
+        if "zolvers" in original.categories:
             DAYS_IN_THE_PAST_TO_SEARCH = 30
 
         #if u"turismo" in original.categories and not u"tecnología" in original.categories:
@@ -128,19 +128,19 @@ class RelatedNewsEntries(object):
 
         stopwords_filename = config.get("resources", "stopwords_es_clean")
 
-        for line in open(stopwords_filename, 'r'):
+        for line in open(stopwords_filename, 'r', encoding="utf-8"):
             if line[0] not in ['<', '%', '\n']:
                 stopwords.append(self.safe_unicode(line.rstrip('\n')))
 
         return stopwords
 
     def safe_unicode(self, text):
-        if isinstance(text, unicode):
+        if isinstance(text, str):
             u_text = text
         else:
             try:
-                u_text = unicode(text, 'utf-8', errors='ignore')
-            except Exception, e:
+                u_text = str(text, 'utf-8', errors='ignore')
+            except Exception as e:
                 u_text = text
 
         return u_text
@@ -261,7 +261,7 @@ class RelatedNewsEntries(object):
 
         has_next = True
         while has_next:
-            newsItem = entries_iterable.next()
+            newsItem = next(entries_iterable)
             has_next = newsItem is not None
             if not has_next:
                 continue
@@ -273,7 +273,7 @@ class RelatedNewsEntries(object):
             score = 0
 
             if not newsItem.url or newsItem.url == self.news_original.url:
-                if self.news_original.url != u'www.no-url.com':
+                if self.news_original.url != 'www.no-url.com':
                     continue
 
             entities_coincidence = self.text_distance.relevant_entities_coincidence(self.news_original, newsItem)
@@ -283,14 +283,14 @@ class RelatedNewsEntries(object):
             related_logger.info("\t\tTitle Distance %s" % title_distance)
 
             #-------------SCORING--------------
-            if any(special_cat in self.news_original.categories for special_cat in [u"electrodomésticos", "propiedades"]):
+            if any(special_cat in self.news_original.categories for special_cat in ["electrodomésticos", "propiedades"]):
                 if entities_coincidence >= 1:
                     score += 30
             else:
                 if entities_coincidence > 1:
                     score += 30
 
-            if u"propiedades" in self.news_original.categories:
+            if "propiedades" in self.news_original.categories:
                 if 0.7 < title_distance <= 0.95:
                     score += 20
                 elif title_distance <= 0.7:
@@ -360,7 +360,7 @@ class RelatedNewsEntries(object):
             score = self.related_score(entities_coincidence, similarity, title_distance)
 
             threshold = 40
-            if any(special_cat in self.news_original.categories for special_cat in [u"belleza", u"estilo vida", u"propiedades", u"salud", u"zolvers"]):
+            if any(special_cat in self.news_original.categories for special_cat in ["belleza", "estilo vida", "propiedades", "salud", "zolvers"]):
                 threshold = 40
 
             if score >= threshold:
@@ -387,7 +387,7 @@ class RelatedNewsEntries(object):
 
         related_logger.info("Alexis alexis score related news")
         #if u"propiedades" in self.news_original.categories or u"turismo" in self.news_original.categories: # or u"insólito" in self.news_original.categories:
-        if any(special_cat in self.news_original.categories for special_cat in [u"electrodomésticos", "propiedades"]):
+        if any(special_cat in self.news_original.categories for special_cat in ["electrodomésticos", "propiedades"]):
             if entities_coincidence >= 1:
                 score += 30
         else:
@@ -397,7 +397,7 @@ class RelatedNewsEntries(object):
         #if entities_coincidence > 1:
         #    score += 30
 
-        if u"propiedades" in self.news_original.categories:
+        if "propiedades" in self.news_original.categories:
             if 0.7 < title_distance <= 0.95:
                 score += 20
             elif title_distance <= 0.7:

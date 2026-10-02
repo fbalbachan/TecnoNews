@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 
@@ -10,7 +10,7 @@ class GizmodoParser(GenericParser):
     def __init__(self):
         super(GizmodoParser, self).__init__()
 
-    source = u"Gizmodo"
+    source = "Gizmodo"
     
     def parse(self, url):
         #url = "http://es.gizmodo.com/he-usado-el-ipad-pro-como-sustituto-total-de-mi-portati-1743773109"
@@ -18,7 +18,7 @@ class GizmodoParser(GenericParser):
         soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
         #soup = BeautifulSoup(self.opener.read(url))
 
-	for script in soup(["script", "style"]):
+        for script in soup(["script", "style"]):
             script.extract()
             
             

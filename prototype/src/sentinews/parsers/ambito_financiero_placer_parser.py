@@ -3,7 +3,7 @@
 
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -12,7 +12,7 @@ class AmbitoFinancieroPlacerParser(GenericParser):
     def __init__(self):
         super(AmbitoFinancieroPlacerParser, self).__init__()
 
-    source = u"Ambito Financiero - Placer"
+    source = "Ambito Financiero - Placer"
 
     def parse(self, url):
         #url = "http://www.ambito.com/diario/noticia.asp?id=831750"

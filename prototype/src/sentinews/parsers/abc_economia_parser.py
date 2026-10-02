@@ -1,14 +1,14 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
 
 
 class ABC_Economia_Parser(GenericParser):
-    source = u"ABC Economia"
+    source = "ABC Economia"
 
     def __init__(self):
         super(ABC_Economia_Parser, self).__init__()

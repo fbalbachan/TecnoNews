@@ -86,7 +86,7 @@ if __name__ == "__main__":
     from src.utils.newsItem import NewsItem
     from pprint import pprint
     files = os.listdir('src/utils/texts/')
-    print files
+    print(files)
     original_file = files[-1]
 
     files.remove(original_file)
@@ -135,10 +135,10 @@ if __name__ == "__main__":
     # for result in tsr.get_similarity_rank_clean_content_lemmatized():
     #     print result[0], result[1].file_name
 
-    print "\n"
-    print "similarity entities:", original_file
+    print("\n")
+    print("similarity entities:", original_file)
 
     for result in tsr.get_similarity_rank_entities():
-        print result[0], result[1].file_name
+        print(result[0], result[1].file_name)
 
 

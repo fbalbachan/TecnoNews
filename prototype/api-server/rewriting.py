@@ -60,8 +60,6 @@ class Rewriting(Resource):
         #print "users_storage"
         users_storage.increase_access_counter(api_key)
         #print "has_type_encoding"
-        if has_type_encoding(text, str, 'UTF-8'):
-            text = text.decode('UTF-8')
 
         try:
             #print text
@@ -78,7 +76,7 @@ class Rewriting(Resource):
             response_value = analysis_results
             response_code = 200
 
-        except Exception, e:
+        except Exception as e:
             response_value = {'type': 'ERROR', 'message': str(e)}
             response_code = 500,
         #print "building response"

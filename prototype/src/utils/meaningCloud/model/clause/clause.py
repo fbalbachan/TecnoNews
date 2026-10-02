@@ -65,7 +65,7 @@ class Clause(object):
             final_verb = self.parent.verb
 
         candidate_type = "iof_isSubject"
-        is_passive = (final_verb is not None and final_verb.voice == u'passive')
+        is_passive = (final_verb is not None and final_verb.voice == 'passive')
         if is_passive:
             candidate_type = "iof_isAgentComplement"
 
@@ -85,7 +85,7 @@ class Clause(object):
             final_verb = self.parent.verb
 
         candidate_type = "iof_isDirectObject"
-        is_passive = (final_verb is not None and final_verb.voice == u'passive')
+        is_passive = (final_verb is not None and final_verb.voice == 'passive')
         if is_passive:
             candidate_type = "iof_isSubject"
 
@@ -100,4 +100,4 @@ class Clause(object):
         return None
 
     def __repr__(self):
-        return self.text.encode('utf-8')
+        return self.text

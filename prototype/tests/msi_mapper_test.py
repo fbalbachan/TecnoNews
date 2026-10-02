@@ -16,7 +16,7 @@ class TestMSIMapper(TestBase):
     def test_tag_to_full_msi_normal_case(self):
         normal_tag = "AQ0MS0"
 
-        expected = {"category": u"adjective", "type": u"calificative", "grade": None,
+        expected = {"category": "adjective", "type": "calificative", "grade": None,
                     "gender": Gender.masculine, "number": Number.singular, "function": None}
 
         expected_json = ('{"category": "adjective", "function": null, "grade": null, '
@@ -25,10 +25,11 @@ class TestMSIMapper(TestBase):
         result = tag_to_full_msi(normal_tag)
         result_json = json.dumps(result)
         self.assertEqual(expected, result)
-        self.assertEqual(expected_json, result_json.encode('utf-8'))
+        # dict key order is not part of the result (python 2 printed them in hash order)
+        self.assertEqual(json.loads(expected_json), json.loads(result_json))
 
     def test_msi_normal_case(self):
-        a_msi = {"category": u"adjective", "type": u"calificative", "grade": None,
+        a_msi = {"category": "adjective", "type": "calificative", "grade": None,
                  "gender": Gender.masculine, "number": Number.singular, "function": None}
 
         expected = {"gender": Gender.masculine, "number": Number.singular, "person": 3}
@@ -38,25 +39,27 @@ class TestMSIMapper(TestBase):
         result = msi(a_msi)
         result_json = json.dumps(result)
         self.assertEqual(expected, result)
-        self.assertEqual(expected_json, result_json.encode('utf-8'))
+        # dict key order is not part of the result (python 2 printed them in hash order)
+        self.assertEqual(json.loads(expected_json), json.loads(result_json))
 
     def test_tag_to_full_msi_special_case(self):
         self.special_case_tag = "NCMN000"
 
-        expected = {'category': u'noun', 'semantic_classification': None,
+        expected = {'category': 'noun', 'semantic_classification': None,
                     'grade': None, 'gender': Gender.masculine, 'number': Number.invariable,
-                    'type': u'common'}
+                    'type': 'common'}
 
-        expected_json = (u'{"category": "noun", "semantic_classification": null, "grade": null, '
-                         + u'"gender": "masculine", "number": "invariable", "type": "common"}').encode('utf-8')
+        expected_json = ('{"category": "noun", "semantic_classification": null, "grade": null, '
+                         + '"gender": "masculine", "number": "invariable", "type": "common"}')
 
         result = tag_to_full_msi(self.special_case_tag)
         result_json = json.dumps(result, ensure_ascii = False)
         self.assertEqual(expected, result)
-        self.assertEqual(expected_json, result_json.encode('utf-8'))
+        # dict key order is not part of the result (python 2 printed them in hash order)
+        self.assertEqual(json.loads(expected_json), json.loads(result_json))
 
     def test_msi_special_case(self):
-        a_msi = {"category": u"adjective",       "type": u"calificative",       "grade": None,
+        a_msi = {"category": "adjective",       "type": "calificative",       "grade": None,
                  "gender": Gender.masculine, "number": Number.singular, "function": None}
 
         expected = {"gender": Gender.masculine, "number": Number.singular, "person": 3}
@@ -66,7 +69,8 @@ class TestMSIMapper(TestBase):
         result = msi(a_msi)
         result_json = json.dumps(result)
         self.assertEqual(expected, result)
-        self.assertEqual(expected_json, result_json.encode('utf-8'))
+        # dict key order is not part of the result (python 2 printed them in hash order)
+        self.assertEqual(json.loads(expected_json), json.loads(result_json))
 
 
 if __name__ == '__main__':

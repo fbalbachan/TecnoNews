@@ -1,5 +1,5 @@
 #-*- coding: utf-8 -*-
-import ConfigParser
+import configparser
 
 from src.model.go.globalOperator import GlobalOperator
 from src.utils import resources
@@ -20,7 +20,7 @@ class VolitiveModalityFinder:
         clause = self.clause
 
         lemmas = [ "ojalá" ]
-        leaves = filter(lambda leaf: leaf.lemma in lemmas, clause.proper_leaves())
+        leaves = [leaf for leaf in clause.proper_leaves() if leaf.lemma in lemmas]
         return [ GlobalOperator("volitive", leaf) for leaf in leaves ]
 
     def find_selected_verbs(self):

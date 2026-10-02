@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from ConfigParser import ConfigParser
+from configparser import ConfigParser
 # from src.decorators.singleton import singleton
 
 # @singleton
@@ -10,19 +10,19 @@ class Resources:
         self.load_resource_file()
 
     def load_resource_file(self):
-        self.source_config = ConfigParser()
-        self.source_config.read("config")
+        self.source_config = ConfigParser(strict=False)
+        self.source_config.read("config", encoding="utf-8")
 
         resources_file = dict(self.source_config.items("resources"))["general_resources"]
 
-        self.config = ConfigParser()
-        self.config.read(resources_file)
+        self.config = ConfigParser(strict=False)
+        self.config.read(resources_file, encoding="utf-8")
 
     def get_config(self, section, key):
         return dict(self.source_config.items(section))[key]
 
     def get_wordlist(self, section, key):
-        _file = open(self.get_config(section, key))
+        _file = open(self.get_config(section, key), encoding="utf-8")
         return [pref.strip("\n") for pref in list(_file)]
 
     def get_wordlist_safe(self, section, key):
@@ -32,7 +32,7 @@ class Resources:
         :return: list of unicode words as list
         """
         filename = self.get_config(section, key)
-        file_lines = list(open(filename, 'r'))
+        file_lines = list(open(filename, 'r', encoding="utf-8"))
         items = [self.get_line_item(line) for line in file_lines if self.is_content_line(line)]
         return items
 
@@ -49,8 +49,8 @@ class Resources:
 
     def get_line_item(self, line):
         item = (line.rstrip('\n')).rstrip('\r')
-        if not isinstance(item, unicode):
-            item = unicode(item, 'utf-8')
+        if not isinstance(item, str):
+            item = str(item, 'utf-8')
         return item
 
     def has_key(self, section, key):

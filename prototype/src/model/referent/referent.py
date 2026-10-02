@@ -15,10 +15,9 @@ class Referent:
     def designated_ref(self):
         if all([not ref_entity.classification() for ref_entity in self.references]):
             return next(iter(self.references))
-        classified = filter(lambda entity: entity.classification(), self.references)
-        named = filter(lambda c_entity: c_entity.has_attr("names") or c_entity.has_attr("surnames"), classified)
-        fully_named = filter(lambda named_entity: named_entity.has_attr("names")and named_entity.has_attr("surnames"),
-                             named)
+        classified = [entity for entity in self.references if entity.classification()]
+        named = [c_entity for c_entity in classified if c_entity.has_attr("names") or c_entity.has_attr("surnames")]
+        fully_named = [named_entity for named_entity in named if named_entity.has_attr("names")and named_entity.has_attr("surnames")]
 
         for _list in [fully_named, named, classified]:
             if _list:
@@ -56,7 +55,7 @@ class Referent:
         return len(self.explicit_references())
 
     def explicit_references(self):
-        return filter(lambda entity: not entity.is_tacit(), self.references)
+        return [entity for entity in self.references if not entity.is_tacit()]
 
     def first_occurrence(self):
         return sorted(self.explicit_references(), key = lambda reference: reference.token.start())[0]

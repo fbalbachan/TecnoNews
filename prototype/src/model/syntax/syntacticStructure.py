@@ -27,12 +27,12 @@ class SyntacticStructure:
                 break
 
     def append_all(self, entities):
-        if debug_mode: print "--> SyntacticStructure.append_all()"
+        if debug_mode: print("--> SyntacticStructure.append_all()")
         for entity in entities:
             self.append(entity)
 
     def append(self, entity):
-        if debug_mode: print "--> SyntacticStructure.append()"
+        if debug_mode: print("--> SyntacticStructure.append()")
         if not self.accept(entity):
             raise Exception(self.name + " no acepta la entidad " + str(entity))
 

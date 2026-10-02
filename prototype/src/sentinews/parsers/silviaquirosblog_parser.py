@@ -3,7 +3,7 @@
 
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -12,7 +12,7 @@ class SilviaquirosblogParser(GenericParser):
     def __init__(self):
         super(SilviaquirosblogParser, self).__init__()
 
-    source = u"Silviaquirosblog"
+    source = "Silviaquirosblog"
     
     def parse(self, url):
         #url = "http://silviaquirosblog.com/2016/01/exfoliante-facial-purify-4d-de-sepai.html"

@@ -29,7 +29,7 @@ class TestClauseAnalyzer(TestBase):
 
         frame = {}
 
-        test_file = open(file)
+        test_file = open(file, encoding="utf-8")
         line_number = 0
         for line in test_file:
             line_number += 1
@@ -40,7 +40,7 @@ class TestClauseAnalyzer(TestBase):
             if self.begin_with_keyword(line):
                 self.update_frame_and_assert(line, frame)
             else:
-                print "Analyzing [" + file + ":" + str(line_number) + "]:", line
+                print("Analyzing [" + file + ":" + str(line_number) + "]:", line)
                 self.input = line
                 paragraph = Paragraph.from_text(line)
                 self.analyzer.analyze(paragraph)
@@ -48,7 +48,7 @@ class TestClauseAnalyzer(TestBase):
 
                 #print "Referents", paragraph.referents()
                 for referent in paragraph.referents():
-                    print "  REF", referent.semantic_classification(), referent
+                    print("  REF", referent.semantic_classification(), referent)
 
                 frame = {"paragraph": paragraph}
 
@@ -57,38 +57,38 @@ class TestClauseAnalyzer(TestBase):
 
     def show_info_for(self, sentence):
         #print sentence.parse_node.tree_representation()
-        print "Clauses"
+        print("Clauses")
         for clause in sentence.clauses:
             empty_structures = []
-            print "\t", clause
+            print("\t", clause)
             for structure in clause.syntactic_structures:
                 if structure.is_empty():
                     empty_structures.append(structure.name)
                 else:
-                    print "\t  ", structure.name, structure
-            print "\t   Empty structures", ", ".join(empty_structures)
-            print
-            print "\t   Global operators", list(clause.global_operators)
-            print "\t   Valuated adverbs", list(clause.valuated_adverbs)
-            print "\t   Time references ", [ ref.leaves() for ref in clause.time_references ]
-            print
+                    print("\t  ", structure.name, structure)
+            print("\t   Empty structures", ", ".join(empty_structures))
+            print()
+            print("\t   Global operators", list(clause.global_operators))
+            print("\t   Valuated adverbs", list(clause.valuated_adverbs))
+            print("\t   Time references ", [ ref.leaves() for ref in clause.time_references ])
+            print()
 
             entities = clause.entities
             if entities:
-                print "\t Entities"
+                print("\t Entities")
                 for entity in clause.entities:
-                    print "\t  ", entity.sentimental_value
+                    print("\t  ", entity.sentimental_value)
 
             entities = clause.tacit_entities()
             if entities:
-                print "\t Tacit entities"
+                print("\t Tacit entities")
                 for entity in entities:
-                    print "\t  ", entity.sentimental_value
-        print "--"
+                    print("\t  ", entity.sentimental_value)
+        print("--")
 
     def sentence(self, assertion, frame):
         paragraph = frame["paragraph"]
-        sentences = filter(lambda sentence: str(sentence) == assertion, paragraph.sentences)
+        sentences = [sentence for sentence in paragraph.sentences if str(sentence) == assertion]
         
         try:
             self.assertTrue(len(sentences) == 1, "No se encontró la oración " + assertion)
@@ -178,16 +178,16 @@ class TestClauseAnalyzer(TestBase):
         frame["entity"] = entity
 
     def search_non_linked_entity(self, lexical_form, entities):
-        return filter(lambda entity: not entity.is_linked() and entity.lexical_form == lexical_form, entities)
+        return [entity for entity in entities if not entity.is_linked() and entity.lexical_form == lexical_form]
 
     def search_linked_entity(self, lexical_forms, entities):
-        return filter(lambda entity: entity.is_linked() and entity.lexical_form == lexical_forms[0]
-                          and entity.referenced().lexical_form == lexical_forms[1], entities)
+        return [entity for entity in entities if entity.is_linked() and entity.lexical_form == lexical_forms[0]
+                          and entity.referenced().lexical_form == lexical_forms[1]]
 
     def sent_ev(self, assertion, frame):
         entity = frame["entity"]
         evidence = entity.sentimental_value.evidence()
-        found = filter(lambda each: each.object.lexical_form == assertion, evidence)
+        found = [each for each in evidence if each.object.lexical_form == assertion]
         try:
             self.assertTrue(len(found) == 1, "No se encontró (o hay más de una) evidencia con forma léxica " + assertion)
         except:
@@ -220,7 +220,7 @@ class TestClauseAnalyzer(TestBase):
         msi = entity.msi
         expected_msi = literal_eval(assertion)
 
-        for attribute, value in expected_msi.items():
+        for attribute, value in list(expected_msi.items()):
             self.assertTrue(attribute in msi)
             actual_value = msi[attribute]
             message = "Attribute " + str(attribute) + ": '" + str(value) + "' != '" + str(actual_value) + \
@@ -229,7 +229,7 @@ class TestClauseAnalyzer(TestBase):
 
     def clause(self, assertion, frame):
         sentence = frame["sentence"]
-        clauses = filter(lambda clause: str(clause) == assertion, sentence.clauses)
+        clauses = [clause for clause in sentence.clauses if str(clause) == assertion]
         self.assertTrue(len(clauses) == 1, "No se encontró la cláusula " + assertion)
         frame["clause"] = clauses[0]
 
@@ -252,7 +252,7 @@ class TestClauseAnalyzer(TestBase):
 
     def referent(self, assertion, frame):
         paragraph = frame["paragraph"]
-        referents = filter(lambda referent: referent.name().lower() == assertion.lower(), paragraph.referents())
+        referents = [referent for referent in paragraph.referents() if referent.name().lower() == assertion.lower()]
         self.assertTrue(len(referents) == 1, "No se encontró (o existe más de uno) el referente " + assertion)
         frame["referent"] = next(iter(referents))
 

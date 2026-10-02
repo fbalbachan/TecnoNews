@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 import wikipedia as wk
-import urllib
+from src.utils import wikipediaClient  # sets the User-Agent Wikimedia requires
+import urllib.request, urllib.parse, urllib.error
 import json
-import urllib
+import urllib.request, urllib.parse, urllib.error
 from collections import defaultdict
 from src.model.output.paragraphEntityTagger import ParagraphEntityTagger
 from src.utils.logger_utils import *
@@ -79,7 +80,7 @@ class HyperlinkProcessor(object):
                         continue
 
                     person = " ".join(person)
-                    self.links_by_entity[entity]['google'] = (GSEARCH_BASE_URL + urllib.quote_plus(person))
+                    self.links_by_entity[entity]['google'] = (GSEARCH_BASE_URL + urllib.parse.quote_plus(person))
 
 
     def _get_gMaps_links(self):
@@ -89,7 +90,7 @@ class HyperlinkProcessor(object):
                 if 'class' in entity.attributes:
                     search_string += " ".join(entity.attributes['class']) + " "
                 search_string +=  str(entity.kernel)
-                self.links_by_entity[entity]['maps'] = (GMAPS_BASE_URL + urllib.quote(search_string))
+                self.links_by_entity[entity]['maps'] = (GMAPS_BASE_URL + urllib.parse.quote(search_string))
     
     def _get_web_page_links(self):
         for entity in self.entities:
@@ -103,7 +104,7 @@ class HyperlinkProcessor(object):
         for entity in self.entities:
             if entity.classification() == 'other':
                 search_string = str(entity.kernel).replace('_', ' ')
-                self.links_by_entity[entity]['google'] = (GSEARCH_BASE_URL + urllib.quote_plus(search_string))
+                self.links_by_entity[entity]['google'] = (GSEARCH_BASE_URL + urllib.parse.quote_plus(search_string))
 
     def _get_wikipedia_links(self):
         ''' Searches Wikipedia for each Entity, uses first result to form URL. '''
@@ -125,10 +126,10 @@ class HyperlinkProcessor(object):
 
             search_result = wk.search(search_string)
             if search_result:
-                encoded_result = urllib.quote(search_result[0].encode('utf-8')) 
+                encoded_result = urllib.parse.quote(search_result[0]) 
                 self.links_by_entity[entity]['wiki'] = (WIKI_BASE_URL + encoded_result)
             else:
-                self.links_by_entity[entity]['google'] = (GSEARCH_BASE_URL + urllib.quote_plus(search_string))
+                self.links_by_entity[entity]['google'] = (GSEARCH_BASE_URL + urllib.parse.quote_plus(search_string))
 
     def _add_links_to_text(self):
         attrib_by_entity = {}
@@ -137,7 +138,7 @@ class HyperlinkProcessor(object):
             if link != None or link != '':
                 attrib_by_entity[entity] = {'href': link,
                                             'target':'_blank'}
-        keys = attrib_by_entity.keys()
+        keys = list(attrib_by_entity.keys())
         for entity in self.paragraph.entities():
             for main_entity in keys:
                 if entity != main_entity and entity.referent == main_entity.referent:
@@ -168,9 +169,9 @@ class HyperlinkProcessor(object):
         return ''
         
     def _google_search(self, searchfor):
-        query = urllib.urlencode({'q': searchfor})
+        query = urllib.parse.urlencode({'q': searchfor})
         url = 'http://ajax.googleapis.com/ajax/services/search/web?v=1.0&%s' % query
-        search_results = urllib.urlopen(url).read()
+        search_results = urllib.request.urlopen(url).read()
         return json.loads(search_results)
 
     def _get_first_gresult(self, searchfor):
@@ -189,7 +190,7 @@ class HyperlinkProcessor(object):
             logger.info("Searchfor: %s", searchfor)
             logger.info("JSON %s" % data)
             logger.info(traceback.format_exc())
-            logger.info("%s" % e.message)
+            logger.info("%s" % str(e))
 
         if not first_result:
             first_result = ''
@@ -219,7 +220,7 @@ class HyperlinkProcessor(object):
         # Given a text and a CSV resource, it loops the CSV file and 
         # applies links replaces
         
-        f = open(resource, "r")
+        f = open(resource, "r", encoding="utf-8")
         content = f.readlines()
         ret = text
         for line in content :

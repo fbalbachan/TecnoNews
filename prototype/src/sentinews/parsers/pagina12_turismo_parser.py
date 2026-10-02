@@ -3,7 +3,7 @@
 
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -12,7 +12,7 @@ class Pagina12TurismoParser(GenericParser):
     def __init__(self):
         super(Pagina12TurismoParser, self).__init__()
 
-    source = u"Pagina 12 - Turismo"
+    source = "Pagina 12 - Turismo"
 
     def parse(self, url):
         #url = "http://www.pagina12.com.ar/diario/suplementos/turismo/9-3314-2016-03-20.html"

@@ -16,19 +16,19 @@ class TestRewriter(unittest.TestCase):
 
     @classmethod
     def setUpClass(self):
-        print "[Rewriter test]"
+        print("[Rewriter test]")
 
         self.sentenceAnalyzer = SentenceAnalyzer(FreelingTreeRepository("tests/input/trees"))
         self.analyzer = ParagraphAnalyzer(self.sentenceAnalyzer)
 
     def __(self):
-        print "___________----____--_"
+        print("___________----____--_")
         ontology = FreelingDictionaryParser.get_ontology()
         msi = {"mode":   "indicative",
                "time":   "presente",
                "person": 2,
                "number": Number.singular}
-        print ontology.get_lexical_form("haber", msi)
+        print(ontology.get_lexical_form("haber", msi))
 
     def test_dislocate_cite(self):
         self.strategies = [TextualCite([True], [""])]
@@ -83,15 +83,15 @@ class TestRewriter(unittest.TestCase):
         #           'Afirmó el ingeniero de sistemas de aterrizaje de la ESA: “Es bastante extraordinario que podamos hacer esto; rastrear un cometa y mirar la evolución de un cometa. Tenemos un asiento en primera fila”')
 
     def kase(self, source, edited):
-        print "Case:", source
+        print("Case:", source)
         analyzer = self.analyzer
 
         paragraph = Paragraph.from_text(source)
         analyzer.analyze(paragraph)
 
         text = Rewriter(paragraph, self.ontology, self.strategies).rewrite()
-        print "\t[SOURCE]", paragraph.text
-        print "\t[EDITED]", text
+        print("\t[SOURCE]", paragraph.text)
+        print("\t[EDITED]", text)
 
         # if not text == edited:
         #     import difflib

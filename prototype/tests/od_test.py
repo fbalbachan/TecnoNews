@@ -18,7 +18,7 @@ class TestOD(TestBase):
         analyzer = SentenceAnalyzer(FreelingTreeRepository("tests/input/trees"))
 
         for (input_text, expected_od) in self.input_texts_with_ods:
-            print "trying: %s .. " % input_text,
+            print("trying: %s .. " % input_text, end=' ')
 
             self.input = input_text
 
@@ -28,16 +28,16 @@ class TestOD(TestBase):
             self.assertEqual(1, len(sentence.clauses), "La oración tiene más de una cláusula.")
             clause = sentence.clauses[0]
 
-            self.assertEquals("active", clause.voice)
+            self.assertEqual("active", clause.voice)
 
             #if clause.has_structure("od"):
             #    print "OD: " + str(clause.structure("od").lexical_form())
             if expected_od == "None":
                 self.assertTrue(not clause.has_structure("od") or clause.structure("od").is_empty())
             else:
-                self.assertEquals(expected_od, clause.structure("od").lexical_form())
+                self.assertEqual(expected_od, clause.structure("od").lexical_form())
 
-            print "OK"
+            print("OK")
 
 if __name__ == '__main__':
     unittest.main()

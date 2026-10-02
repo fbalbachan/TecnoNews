@@ -3,7 +3,7 @@
 
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -12,7 +12,7 @@ class AreasDigitalParser(GenericParser):
     def __init__(self):
         super(AreasDigitalParser, self).__init__()
 
-    source = u"Areas Digital"
+    source = "Areas Digital"
 
     def parse(self, url):
         #url = "http://www.areas-digital.com.ar/nota.php?id=24554"
@@ -43,8 +43,8 @@ class AreasDigitalParser(GenericParser):
             content += "\n" + clean_text
 
 
-        categories = [u"propiedades"]
-        tags = [u"propiedades"]
+        categories = ["propiedades"]
+        tags = ["propiedades"]
 
         #categories=[urlparse(url).path.split("/")[1]]
         #print categories

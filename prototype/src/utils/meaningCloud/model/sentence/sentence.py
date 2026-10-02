@@ -15,4 +15,4 @@ class Sentence(object):
             return ''.join(tokens)
 
     def __repr__(self):
-        return self.text.encode('utf-8')
+        return self.text

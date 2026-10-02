@@ -5,8 +5,8 @@ import unicodedata
 
 
 def remove_accents(input_str):
-    nkfd_form = unicodedata.normalize('NFKD', unicode(input_str))
-    return u"".join([c for c in nkfd_form if not unicodedata.combining(c)])
+    nkfd_form = unicodedata.normalize('NFKD', str(input_str))
+    return "".join([c for c in nkfd_form if not unicodedata.combining(c)])
 
 
 def set_first_letter_case(source, destination):
@@ -16,28 +16,11 @@ def set_first_letter_case(source, destination):
 
 
 def has_type_encoding(obj, obj_type=str, encoding='UTF-8'):
-    if sys.version_info >= (3,0,0):
-        # for Python 3
-        if isinstance(obj, bytes):
-            s = obj.decode('ascii')  # or  obj = str(obj)[2:-1]
-
-    else:
-        # for Python 2
-        if type(obj) is obj_type:
-
-            if obj_type is unicode:
-                return True
-
-            if obj_type is str:
-                try:
-                    obj.decode(encoding)
-                    return True
-
-                except Exception as e:
-                    return False
-
-            else:
-                return False
-
-        else:
+    """True when obj is of obj_type; bytes count as text when they decode with the given encoding."""
+    if isinstance(obj, bytes) and obj_type is str:
+        try:
+            obj.decode(encoding)
+            return True
+        except UnicodeDecodeError:
             return False
+    return isinstance(obj, obj_type)

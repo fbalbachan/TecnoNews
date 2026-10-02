@@ -22,7 +22,7 @@ class TreeBuilder(object):
     def build_many(self):
         categories = ["economía", "política", "tecnología", "ciencia", "deporte", "interés general", "internacionales", "policiales", "clima", "estilo vida", "turismo", "propiedades", "mujer", "entretenimiento", "automóviles", "salud", "electrodomésticos"]
         categories = ["interés general"]
-        output = u""
+        output = ""
         for a_category in categories:
             galaxies = self.db["news_entries"].find({"categories": a_category, "versions.0": {"$exists": True}}).sort("_id", pymongo.DESCENDING)
             max_sample = 5
@@ -96,12 +96,12 @@ class TreeBuilder(object):
             ids_found.extend(query_id_array)
 
         root = result[0]
-        output = u""
-        output += ("\nNoticia: \"%s\"   (%s   -   %s)" % (root[u'title'], root[u'date'], root['source']))
+        output = ""
+        output += ("\nNoticia: \"%s\"   (%s   -   %s)" % (root['title'], root['date'], root['source']))
 
         for idx, a_child in enumerate(root["edges"]):
             child = result[a_child]
-            output += ("\n     Misma noticia: \"%s\"      (%s   -   %s)   | Probabilidad porcentual: %d" % (child[u'title'], child[u'date'], child['source'], int(root["scores"][idx])))
+            output += ("\n     Misma noticia: \"%s\"      (%s   -   %s)   | Probabilidad porcentual: %d" % (child['title'], child['date'], child['source'], int(root["scores"][idx])))
         # print json.dumps(result, sort_keys=True, indent=4, separators=(',', ': '), cls=JSONEncoder)
 
         # print merged_summary_clauses
@@ -112,9 +112,9 @@ if __name__ == "__main__":
     try:
         root_id = argv[1]
     except Exception as e:
-        print "Debe especificar un id como primer parámetro. Imposible continuar."
+        print("Debe especificar un id como primer parámetro. Imposible continuar.")
         exit(1)
 
     # print TreeBuilder().build_tree(bson.ObjectId(root_id))
     tree_builder = TreeBuilder()
-    print tree_builder.build_many()
+    print(tree_builder.build_many())

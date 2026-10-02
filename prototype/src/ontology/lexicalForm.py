@@ -12,6 +12,6 @@ class LexicalForm:
 
     # Duplicado en TacitEntity
     def matches_msi(self, msi):
-        for key, value in msi.items():
+        for key, value in list(msi.items()):
             if not key in self.msi or self.msi[key] != value: return False
         return True

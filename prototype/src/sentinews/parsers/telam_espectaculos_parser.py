@@ -10,7 +10,7 @@ class TelamEspectaculosParser(GenericParser):
         # config = ConfigProvider()
         # self.language_filter_status = config.get('language_filter', 'status')
 
-    source = u"Telam Espectaculos"
+    source = "Telam Espectaculos"
 
     def get_categories(self, soup):
         categories = None
@@ -22,7 +22,7 @@ class TelamEspectaculosParser(GenericParser):
             categories = list(section_text)
 
         if not categories:
-            categories = [u'espect\xe1culos']
+            categories = ['espect\xe1culos']
 
         return categories
 
@@ -30,7 +30,7 @@ class TelamEspectaculosParser(GenericParser):
 
         soup = BeautifulSoup(self.opener.read(url))
         categories = self.get_categories(soup)
-        fobiden_sections = [u'televisi\xf3n']
+        fobiden_sections = ['televisi\xf3n']
         if any(k for k in fobiden_sections if k in categories):
             return False
         else:
@@ -62,8 +62,8 @@ class TelamEspectaculosParser(GenericParser):
         title = soup.find('div', {"class": ["title", "head-content"]}).find('h2').text.strip()
         content = soup.find('div', {"class": 'editable-content'}).text
 
-        tags = [u'entretenimiento']
-        categories = [u'entretenimiento']
+        tags = ['entretenimiento']
+        categories = ['entretenimiento']
 
         new_entry = self.create_news_entry(title=title, content=content,
                                            tags=tags,

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from parseNode import *
+from .parseNode import *
 
 
 class LabelNode(ParseNode):

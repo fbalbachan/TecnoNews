@@ -54,15 +54,14 @@ class Clause(TreeNode):
                any((child.is_subordinated_with("que") for child in self.children))
 
     def has_global_operator_of(self, *classes):
-        return bool(filter(lambda operator: operator.klass in classes, self.global_operators))
+        return bool([operator for operator in self.global_operators if operator.klass in classes])
 
     def is_relative(self):
         root = self.proper_tree()
         leaves = root.leaves()
 
-        relative_pronouns = filter(lambda leaf: leaf.msi["category"] == "pronoun"
-                                                and leaf.msi["type"] == "relative",
-                                   leaves)
+        relative_pronouns = [leaf for leaf in leaves if leaf.msi["category"] == "pronoun"
+                                                and leaf.msi["type"] == "relative"]
 
         there_are_relative_pronouns = bool(relative_pronouns)
 
@@ -72,14 +71,13 @@ class Clause(TreeNode):
         if not self.is_relative():
             return False
 
-        is_quien_vector = map(lambda word: word in ["quien", "quienes", "quién", "quiénes"],
-                              self.relative_linker_words())
+        is_quien_vector = [word in ["quien", "quienes", "quién", "quiénes"] for word in self.relative_linker_words()]
         return any(is_quien_vector)
 
     def is_cuyo_relative(self):
         if not self.is_relative():
             return False
-        is_cuyo_vector = map(lambda word: word in ["cuyo", "cuya", "cuyos", "cuyas"], self.relative_linker_words())
+        is_cuyo_vector = [word in ["cuyo", "cuya", "cuyos", "cuyas"] for word in self.relative_linker_words()]
         return any(is_cuyo_vector)
 
     def is_subordinated_with(self, header_lexical_form):
@@ -102,7 +100,7 @@ class Clause(TreeNode):
         return self.verb.msi["mode"] == "gerundio"
 
     def is_or_inherits_from(self, label):
-        if debug_mode: print "--> Clause.is_or_inherits_from(label: ", label, ")"
+        if debug_mode: print("--> Clause.is_or_inherits_from(label: ", label, ")")
         node = self.node
         while node:
             if node.label == label:
@@ -117,7 +115,7 @@ class Clause(TreeNode):
         return sorted(entities, key=lambda entity: self.index_of(entity, tacit_first))
 
     def is_assigned(self, entity):
-        if debug_mode: print "--> is_assigned(entity) - ", entity
+        if debug_mode: print("--> is_assigned(entity) - ", entity)
         assigned_entities = self.assigned_entities()
         assigned_directly = entity in assigned_entities
         contained_vector = [assigned.contains(entity) for assigned in assigned_entities]
@@ -132,7 +130,7 @@ class Clause(TreeNode):
     # Methods for accessing ENTITIES
     #
     def subord_entities_closest_to_verb_at(self, side, allowed_distance, which_node=lambda node: True):
-        if debug_mode: print "--> Clause.subord_entities_closest_to_verb_at() - side ", side, " - distance ", allowed_distance
+        if debug_mode: print("--> Clause.subord_entities_closest_to_verb_at() - side ", side, " - distance ", allowed_distance)
         which = lambda entity, node: entity.is_subordinated() \
                                      and entity.highest_subordinating_node() == node \
                                      and which_node(node)
@@ -146,7 +144,7 @@ class Clause(TreeNode):
         return self.grouped_by_node(entities_with_node)
 
     def verb_level_entities(self):
-        by_component = zip(*self.to_entities_with_node(self.verb_level_nodes(), entities=self.entities))
+        by_component = list(zip(*self.to_entities_with_node(self.verb_level_nodes(), entities=self.entities)))
         return list(by_component[0]) if by_component else []
 
     def entities_closest_to_verb(self, *sides_and_distances):
@@ -156,20 +154,20 @@ class Clause(TreeNode):
         return entities
 
     def entities_closest_to_verb_at(self, side, allowed_distance=float("inf")):
-        if debug_mode: print "--> Clause.entities_closest_to_verb_at(side, dist) - side: ", side, " - dist: ", allowed_distance
+        if debug_mode: print("--> Clause.entities_closest_to_verb_at(side, dist) - side: ", side, " - dist: ", allowed_distance)
         closest_to_verb = self.nodes_closest_to_verb_at(side, allowed_distance)
         entities_with_node = self.to_entities_with_node(closest_to_verb)
-        by_component = zip(*entities_with_node)
+        by_component = list(zip(*entities_with_node))
         entities = list(by_component[0]) if by_component else []
         return entities
 
     def entity_by_original(self, node):
         proper_node = self.proper_by_original[node]
-        entities = filter(lambda entity: entity.node == proper_node, self.entities)
+        entities = [entity for entity in self.entities if entity.node == proper_node]
         return entities[0] if entities else None
 
     def lonely_entities(self):
-        if debug_mode: print "--> Clause.lonely_entities()"
+        if debug_mode: print("--> Clause.lonely_entities()")
         lonely = [entity for entity in self.entities if not self.is_assigned(entity)]
         return lonely
 
@@ -220,7 +218,7 @@ class Clause(TreeNode):
         return entities
 
     def to_entities_with_node(self, nodes, which=lambda entity, node: entity.node == node, entities=None):
-        if debug_mode: print "--> Clause.to_entities_with_node()"
+        if debug_mode: print("--> Clause.to_entities_with_node()")
         if not entities:
             entities = self.lonely_entities()
 
@@ -235,7 +233,7 @@ class Clause(TreeNode):
         return verb_node.father.children
 
     def nodes_closest_to_verb_at(self, side, allowed_distance=float("inf")):
-        if debug_mode: print "--> Clause.nodes_closest_to_verb_at()"
+        if debug_mode: print("--> Clause.nodes_closest_to_verb_at()")
         verb = self.verb.node
         nodes_with_position = [(verb.absolute_distance_to(node), node) for node in self.verb_level_nodes()
                                if verb.position_of(node) == side]
@@ -244,8 +242,7 @@ class Clause(TreeNode):
         return closest
 
     def sorted_by_closest(self, things_with_position, allowed_distance):
-        within_distance = filter(lambda (position, entity): position <= allowed_distance,
-                                 things_with_position)
+        within_distance = [position_entity for position_entity in things_with_position if position_entity[0] <= allowed_distance]
         return sorted(within_distance)
 
     def set_father(self, clause):
@@ -281,8 +278,7 @@ class Clause(TreeNode):
                     time_references.remove(time_reference)
                     # TODO: also remove sub-nodes from this time_reference
 
-        time_entities = filter(lambda p_entity: p_entity.is_maximal_regarding(time_entities),
-                               time_entities)
+        time_entities = [p_entity for p_entity in time_entities if p_entity.is_maximal_regarding(time_entities)]
 
         self.time_entities = time_entities
         self.time_references = [time_references[0]] if time_references else []
@@ -292,7 +288,7 @@ class Clause(TreeNode):
                 self.entities.remove(time_entity)
 
     def get_hemiclauses(self):
-        if debug_mode: print "--> Clause.get_hemiclauses()"
+        if debug_mode: print("--> Clause.get_hemiclauses()")
         left_hemiclause_nodes = []
         right_hemiclause_nodes = []
 
@@ -305,14 +301,14 @@ class Clause(TreeNode):
                 elif orig_verb_node.position_of_leaf(orig_node) == "right":
                     right_hemiclause_nodes.append(orig_node)
 
-        if debug_mode: print "<-- Clause.get_hemiclauses()"
+        if debug_mode: print("<-- Clause.get_hemiclauses()")
         return left_hemiclause_nodes, right_hemiclause_nodes
 
     def relative_linker_words(self):
         return [leaf.lexical_form for leaf in self.relative_linker]
 
     def original_by_proper(self, proper):
-        original_by_proper = {v: k for k, v in self.proper_by_original.items()}
+        original_by_proper = {v: k for k, v in list(self.proper_by_original.items())}
         return original_by_proper[proper]
 
     def proper_tree(self):
@@ -327,12 +323,12 @@ class Clause(TreeNode):
             raise Exception("La cláusula no es una relativa (", str(self), ").")
 
         # ["los cuales", "las cuales", "quienes"],
-        is_plural_vector = map(lambda leaf: leaf.msi["number"] is Number.plural, self.relative_linker)
+        is_plural_vector = [leaf.msi["number"] is Number.plural for leaf in self.relative_linker]
 
         # ["el cual", "la cual", "quien"]
-        is_singular_vector = map(lambda leaf: leaf.msi["number"] is Number.singular, self.relative_linker)
+        is_singular_vector = [leaf.msi["number"] is Number.singular for leaf in self.relative_linker]
 
-        is_invariable_vector = map(lambda leaf: leaf.msi["number"] is Number.invariable, self.relative_linker)
+        is_invariable_vector = [leaf.msi["number"] is Number.invariable for leaf in self.relative_linker]
 
         if any(is_singular_vector):
             number = Number.singular
@@ -346,18 +342,18 @@ class Clause(TreeNode):
         return number
 
     def get_gender_from_relative_linker(self):
-        if debug_mode: print "--> clause.get_gender_from_relative_linker()"
+        if debug_mode: print("--> clause.get_gender_from_relative_linker()")
 
         if not self.is_relative():
             raise Exception("La cláusula no es una relativa (", str(self), ").")
 
         # "el cual", "los cuales"
-        is_masculine_vector = map(lambda leaf: leaf.msi["gender"] is Gender.masculine, self.relative_linker)
+        is_masculine_vector = [leaf.msi["gender"] is Gender.masculine for leaf in self.relative_linker]
 
         # "la cual", "las cuales"
-        is_feminine_vector = map(lambda leaf: leaf.msi["gender"] is Gender.feminine, self.relative_linker)
+        is_feminine_vector = [leaf.msi["gender"] is Gender.feminine for leaf in self.relative_linker]
 
-        is_neutral_vector = map(lambda leaf: leaf.msi["gender"] is Gender.neutral, self.relative_linker)
+        is_neutral_vector = [leaf.msi["gender"] is Gender.neutral for leaf in self.relative_linker]
 
         if any(is_masculine_vector):
             gender = Gender.masculine
@@ -371,8 +367,7 @@ class Clause(TreeNode):
         return gender
 
     def structure(self, name):
-        return filter(lambda structure: structure.name == name,
-                      self.syntactic_structures)[0]
+        return [structure for structure in self.syntactic_structures if structure.name == name][0]
 
     def leaves_at_left(self):
         root_leaves = self.root().node.leaves()
@@ -380,7 +375,15 @@ class Clause(TreeNode):
         return root_leaves[:self.index_in_root_of(first_leaf)]
 
     def index_in_root_of(self, node):
-        return self.root().node.leaves().index(self.original_by_proper(node.leaves()[0]))
+        root_leaves = self.root().node.leaves()
+        leaf = node.leaves()[0]
+        try:
+            return root_leaves.index(self.original_by_proper(leaf))
+        except KeyError:
+            # entities borrowed from another clause (the antecedent of a relative clause) are nodes of that
+            # clause's proper tree: locate their leaf in the root by its position in the text
+            start = leaf.token.start()
+            return next(index for index, root_leaf in enumerate(root_leaves) if root_leaf.token.start() == start)
 
     def index_of(self, entity, tacit_first):
         tacit_value = float("-inf") if tacit_first else float("inf")

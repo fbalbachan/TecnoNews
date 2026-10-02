@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 __author__ = 'Fernando Balbachan'
 import nltk
@@ -9,7 +9,8 @@ from src.utils.configProvider import ConfigProvider
 class TextDistance(object):
 
     def __init__(self):
-        self.valid_token_regex = re.compile(r'[áéíóúñäëïöüáàâéèêíìîóòôúùûãçêôõø]*(\w+)[áéíóúñäëïöüáàâéèêíìîóòôúùûãçêôõø]*(\w*)')
+        # non capturing groups: nltk 2 made them non capturing itself, nltk 3 would return tuples of groups
+        self.valid_token_regex = re.compile(r'[áéíóúñäëïöüáàâéèêíìîóòôúùûãçêôõø]*(?:\w+)[áéíóúñäëïöüáàâéèêíìîóòôúùûãçêôõø]*(?:\w*)')
         self.tokenizer_custom = nltk.tokenize.RegexpTokenizer(self.valid_token_regex)
         self.stopwords = self.load_stopwords()
 
@@ -29,27 +30,29 @@ class TextDistance(object):
 
         stopwords_filename = config.get("resources", "stopwords_es_clean")
 
-        for line in open(stopwords_filename, 'r'):
+        for line in open(stopwords_filename, 'r', encoding="utf-8"):
             if line[0] not in ['<', '%', '\n']:
                 stopwords.append(self.safe_unicode(line.rstrip('\n')))
 
         return stopwords
 
     def safe_unicode(self, text):
-        if isinstance(text, unicode):
+        if isinstance(text, str):
             u_text = text
         else:
             try:
-                u_text = unicode(text, 'utf-8', errors='ignore')
-            except Exception, e:
+                u_text = str(text, 'utf-8', errors='ignore')
+            except Exception as e:
                 u_text = text
 
         return u_text
 
     @staticmethod
     def cosine(x, y):
-        return nltk.cluster.cosine_distance(numpy.array(x),
-                                        numpy.array(y))
+        # nltk 2's cosine_distance returned the cosine *similarity*, which this code (and the similarity
+        # thresholds used with it) is built on; nltk 3 returns 1 - similarity
+        return 1 - nltk.cluster.cosine_distance(numpy.array(x),
+                                                numpy.array(y))
 
     def title_distance(self, title1, title2):
         from nltk import jaccard_distance
@@ -62,7 +65,7 @@ class TextDistance(object):
         tokens1, tokens2 = self.pre_process(text1), self.pre_process(text2)
         #print "tokens"
         #print [tokens1, tokens2]
-        ngrams1, ngrams2 = nltk.ngrams(tokens1, n), nltk.ngrams(tokens2, n)
+        ngrams1, ngrams2 = list(nltk.ngrams(tokens1, n)), list(nltk.ngrams(tokens2, n))
         #print "ngrams"
         #print [ngrams1, ngrams2]
         f1, f2 = nltk.FreqDist(ngrams1), nltk.FreqDist(ngrams2)

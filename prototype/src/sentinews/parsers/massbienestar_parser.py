@@ -3,7 +3,7 @@
 
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -12,7 +12,7 @@ class MassBienestarParser(GenericParser):
     def __init__(self):
         super(MassBienestarParser, self).__init__()
 
-    source = u"Mass Bienestar"
+    source = "Mass Bienestar"
 
     def parse(self, url):
         #url = "http://massbienestar.com/isdin-sunbrush-mineral-el-nuevo-fotoprotector-en-brocha-para-los-365-dias-del-ano/"
@@ -42,8 +42,8 @@ class MassBienestarParser(GenericParser):
             clean_text = paragraph.text.strip()
             content += "\n" + clean_text
 
-        categories = [u"salud"]
-        tags = [u"salud"]
+        categories = ["salud"]
+        tags = ["salud"]
 
         #categories=[urlparse(url).path.split("/")[1]]
         #print categories

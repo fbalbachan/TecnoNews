@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -11,7 +11,7 @@ class EcoHabitarParser(GenericParser):
     def __init__(self):
         super(EcoHabitarParser, self).__init__()
 
-    source = u"EcoHabitar"
+    source = "EcoHabitar"
 
     def parse(self, url):
         #url = "http://www.ecohabitar.org/anpier-exige-a-rajoy-una-rectificacion/"

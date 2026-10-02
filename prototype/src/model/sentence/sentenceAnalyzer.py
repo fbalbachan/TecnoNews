@@ -21,7 +21,7 @@ class SentenceAnalyzer:
         self.global_context = global_context
 
     def analyze(self, sentence):
-        if debug_mode: print "--> SentenceAnalyzer.analyze()"
+        if debug_mode: print("--> SentenceAnalyzer.analyze()")
 
         #TODO make it more readable!
        # done = False
@@ -33,15 +33,13 @@ class SentenceAnalyzer:
                 #If guess ends normally => end while
         if not TokenizationGuesser(sentence).guess():
             if self.output_demo_debug:
-                print ""
-                print ""
-                print ""
-                print "TOKENIZATION ERROR => TRYING TO FIX SENTENCE:"
+                print("")
+                print("")
+                print("")
+                print("TOKENIZATION ERROR => TRYING TO FIX SENTENCE:")
             sentence.rewritable = False
-            sentence.text = sentence.text.decode("utf-8")
-            sentence.text = re.sub(ur"\b(a|A)l\b", ur"\1 el", sentence.text)
-            sentence.text = re.sub(ur"\b(d|D)el\b", ur"\1e el", sentence.text)
-            sentence.text = sentence.text.encode("utf-8")
+            sentence.text = re.sub(r"\b(a|A)l\b", r"\1 el", sentence.text)
+            sentence.text = re.sub(r"\b(d|D)el\b", r"\1e el", sentence.text)
             self.set_parse_tree_to(sentence)
             TokenizationGuesser(sentence).guess()
         #        done = True
@@ -74,7 +72,7 @@ class SentenceAnalyzer:
         GlobalOperatorAnalyzer(sentence).analyze()
 
     def analyze_clauses_of(self, sentence):
-        if debug_mode: print "--> SentenceAnalyzer.analyze_clauses_of(sentence: ", sentence, ")"
+        if debug_mode: print("--> SentenceAnalyzer.analyze_clauses_of(sentence: ", sentence, ")")
 
         self.context["clauses"] = []
         clause_analyzer = ClauseAnalyzer(global_context=self.global_context)
@@ -91,28 +89,28 @@ class SentenceAnalyzer:
             #Fixes plurality in some named entities
             for a_leaf in node.leaves():
                 if a_leaf.father and a_leaf.father.label in ["w-mp", "w-fp"]:
-                    a_leaf.msi["number"] = u"plural"
+                    a_leaf.msi["number"] = "plural"
 
             sentence.parse_node = node
 
             if self.output_demo_debug:
-                print "-------------------------------------------------------"
-                print "TEXT".ljust(8), sentence.text
-                print "-------------------------------------------------------"
-                print "LEAVES".ljust(8), node.leaves()
-                print "-------------------------------------------------------"
-                print node.tree_representation()
-                print "-------------------------------------------------------"
+                print("-------------------------------------------------------")
+                print("TEXT".ljust(8), sentence.text)
+                print("-------------------------------------------------------")
+                print("LEAVES".ljust(8), node.leaves())
+                print("-------------------------------------------------------")
+                print(node.tree_representation())
+                print("-------------------------------------------------------")
 
                 for leaf in node.leaves():
                     lex_entry = leaf.original_lexical_form + " " + leaf.lemma
-                    print lex_entry.ljust(18), leaf.msi
-                    print ""
+                    print(lex_entry.ljust(18), leaf.msi)
+                    print("")
 
-                print "----------------------------------------------------------------------------------------------------"
+                print("----------------------------------------------------------------------------------------------------")
 
         except Exception as e:
             error_sentence = sentence.text[:]
             error_sentence = error_sentence.replace(" ", "_")
-            print "EB_FP_EXCEPTION_in_sentence: [", error_sentence, "]"
+            print("EB_FP_EXCEPTION_in_sentence: [", error_sentence, "]")
             raise

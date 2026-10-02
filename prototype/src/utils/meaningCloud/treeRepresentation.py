@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from collections import deque, Iterable
+from collections import deque
+from collections.abc import Iterable
 from src.utils.meaningCloud.sentenceExtractor import SentenceExtractor
 from src.utils.meaningCloud.clauseExtractor import ClauseExtractor
 import json
@@ -20,9 +21,9 @@ class TreeRepresentation(object):
         #print '\n'.join(self.get_compliance())
         return
         exit()
-        print self.sentences
+        print(self.sentences)
         for a_clause in self.clauses:
-            print a_clause['text']
+            print(a_clause['text'])
         exit()
 
     def get_sentences(self):
@@ -35,29 +36,29 @@ class TreeRepresentation(object):
         ClauseExtractor(self.global_map, sentences).extract()
         result = []
         actions = {
-                    'es': [u'estafar', u'defraudar', u'quebrar', u'evadir', u'sobornar', u'coimear', u'enriquecer', u'lavar dinero'],
+                    'es': ['estafar', 'defraudar', 'quebrar', 'evadir', 'sobornar', 'coimear', 'enriquecer', 'lavar dinero'],
                     'en': ['scam', 'bribe', 'defraud', 'evade', 'bankrupt', 'skim']}
-        offences = {'es': [u'corrupción', u'droga', u'estupefaciente', u'narcotráfico', u'narcotraficante', u'narcótico'
-                           u'terrorismo', u'peculado', u'enriquecimiento', u'estafa', u'fraude', u'defraudación', u'quiebra',
-                           u'acreedor', u'deuda', u'embargo', u'contrabando', u'soborno', u'evasión', u'cohecho', u'coima', u'lavado de dinero'],
-                    'en': [u'bribery', u'fraud', u'evasion', u'money laundering', u'embezzlement', u'drug', u'narcotic', u'narcotics', u'smuggling', u'bankruptcy']
+        offences = {'es': ['corrupción', 'droga', 'estupefaciente', 'narcotráfico', 'narcotraficante', 'narcótico'
+                           'terrorismo', 'peculado', 'enriquecimiento', 'estafa', 'fraude', 'defraudación', 'quiebra',
+                           'acreedor', 'deuda', 'embargo', 'contrabando', 'soborno', 'evasión', 'cohecho', 'coima', 'lavado de dinero'],
+                    'en': ['bribery', 'fraud', 'evasion', 'money laundering', 'embezzlement', 'drug', 'narcotic', 'narcotics', 'smuggling', 'bankruptcy']
                   }
 
-        performative_verbs = {'es': [u'realizar', u'hacer', u'cometer', u'perpetrar', u'organizar', u'planear', u'implementar',
-                                     u'articular', u'tener', u'llevar adelante', u'llevar a cabo'],
-                              'en': [u'make', u'commit', u'plan', u'organize', u'do', u'carry out', u'implement', u'articulate', u'scheme', u'run', u'elaborate']}
+        performative_verbs = {'es': ['realizar', 'hacer', 'cometer', 'perpetrar', 'organizar', 'planear', 'implementar',
+                                     'articular', 'tener', 'llevar adelante', 'llevar a cabo'],
+                              'en': ['make', 'commit', 'plan', 'organize', 'do', 'carry out', 'implement', 'articulate', 'scheme', 'run', 'elaborate']}
 
-        accusative_verbs = {'es': [u'investigar', u'denunciar', u'condenar', u'acusar', u'procesar', u'implicar', u'involucrar',
-                                   u'sentenciar', u'sospechar', u'relacionar'],
-                            'en': [u'accuse', u'investigate', u'condemn', u'process', u'implicate', u'involve', u'suspect', u'relate']}
+        accusative_verbs = {'es': ['investigar', 'denunciar', 'condenar', 'acusar', 'procesar', 'implicar', 'involucrar',
+                                   'sentenciar', 'sospechar', 'relacionar'],
+                            'en': ['accuse', 'investigate', 'condemn', 'process', 'implicate', 'involve', 'suspect', 'relate']}
 
-        estative_verbs = {'es': [u'investigada', u'denunciada', u'condenada', u'acusada', u'procesada', u'implicada', u'involucrada',
-                                 u'sentenciada', u'sospechada', u'relacionada', u'investigado', u'denunciado', u'condenado',
-                                 u'acusado', u'procesado', u'implicado', u'involucrado', u'sentenciado', u'sospechado',
-                                 u'relacionado', u'investigadas', u'denunciadas', u'condenadas', u'acusadas', u'procesadas',
-                                 u'implicadas', u'involucradas', u'sentenciadas', u'sospechadas', u'relacionadas', u'investigados',
-                                 u'denunciados', u'condenados', u'acusados', u'procesados', u'implicados', u'involucrados', u'sentenciados',
-                                 u'sospechados', u'relacionados'],
+        estative_verbs = {'es': ['investigada', 'denunciada', 'condenada', 'acusada', 'procesada', 'implicada', 'involucrada',
+                                 'sentenciada', 'sospechada', 'relacionada', 'investigado', 'denunciado', 'condenado',
+                                 'acusado', 'procesado', 'implicado', 'involucrado', 'sentenciado', 'sospechado',
+                                 'relacionado', 'investigadas', 'denunciadas', 'condenadas', 'acusadas', 'procesadas',
+                                 'implicadas', 'involucradas', 'sentenciadas', 'sospechadas', 'relacionadas', 'investigados',
+                                 'denunciados', 'condenados', 'acusados', 'procesados', 'implicados', 'involucrados', 'sentenciados',
+                                 'sospechados', 'relacionados'],
                           'en': []}
         cont = 0
         for a_sentence in sentences:
@@ -74,7 +75,7 @@ class TreeRepresentation(object):
                     if any(a_clause.contains_lemma(an_offence) for an_offence in offences[language] + actions[language]):
                         result.append("FINANCIAL COMPLIANCE DETECTED - person or company is accused of offence or action, active or passive voice")
 
-                estative_condition = (language == 'es' and a_clause.verb.lemma is not None and len(a_clause.verb.lemma.split(' ')) == 2 and a_clause.verb.lemma.split(' ')[0] == u'estar' and a_clause.verb.lemma.split(' ')[1] in estative_verbs['es'])
+                estative_condition = (language == 'es' and a_clause.verb.lemma is not None and len(a_clause.verb.lemma.split(' ')) == 2 and a_clause.verb.lemma.split(' ')[0] == 'estar' and a_clause.verb.lemma.split(' ')[1] in estative_verbs['es'])
                 if estative_condition and a_clause.subject is not None and a_clause.subject.is_proper_noun:
                     if any(a_clause.contains_lemma(an_offence) for an_offence in offences[language] + actions[language]):
                         result.append("FINANCIAL COMPLIANCE DETECTED - person or company estar accused of offence or action, active or passive voice")
@@ -124,7 +125,7 @@ class TreeRepresentation(object):
                     full_dict[an_item['id']]['isValid'] = True
                     clause_hierarchy[an_item['id']] = {'id': an_item['id'], 'clauses': [], 'text': an_item['form']}
 
-        for a_phrase in full_dict.values():
+        for a_phrase in list(full_dict.values()):
             if not a_phrase['isValid']:
                 continue
 
@@ -140,13 +141,13 @@ class TreeRepresentation(object):
                 clause_hierarchy[predecessor['node']['id']]['clauses'].append(clause_hierarchy[a_phrase['node']['id']])
 
             an_item = a_phrase['node']
-            indentation = u""
+            indentation = ""
             for i in range(a_phrase['level']):
-                indentation += u"    "
-            print indentation + " " + unicode(an_item['id']) + " " + an_item['form'] + " " + a_phrase['parentId']
+                indentation += "    "
+            print(indentation + " " + str(an_item['id']) + " " + an_item['form'] + " " + a_phrase['parentId'])
 
 
-        sentences = [sentences[a_key] for a_key in sorted(sentences.iterkeys())]
+        sentences = [sentences[a_key] for a_key in sorted(sentences.keys())]
 
         # SORT ALL COMPONENTS
         unsorted_lists = [sentences]
@@ -161,14 +162,14 @@ class TreeRepresentation(object):
 
         offences = ['corrupción', 'droga', 'narcotráfico', 'narcotraficante', 'narcótico',  'estupefaciente', 'terrorismo', 'peculado', 'enriquecimiento', 'estafa', 'fraude', 'defraudación', 'quiebra', 'acreedor', 'deuda', 'embargo', 'contrabando' 'soborno', 'evasión', 'cohecho', 'coima']
         actions = ['estafar', 'defraudar', 'quebrar', 'evadir', 'sobornar', 'coimear']
-        for a_clause in clause_hierarchy.keys():
+        for a_clause in list(clause_hierarchy.keys()):
             result = self.contains_tag('V', full_dict[a_clause]['node'])
             if result is None:
                 continue
 
             if result[0] in actions:
-                print "\n\n\n"
-                print result[0]
+                print("\n\n\n")
+                print(result[0])
                 if result[1] is not None:
                     found = False
                     for a_relation in result[1]:
@@ -177,19 +178,19 @@ class TreeRepresentation(object):
                                 if 'analysis_list' in a_token:
                                     for an_analysis in a_token['analysis_list']:
                                         if 'propio' in an_analysis['tag_info']:
-                                            print "PASA"
-                                            print "----------"
-                                            print full_dict[a_relation['id']]['node']['form']
-                                            print "---------"
+                                            print("PASA")
+                                            print("----------")
+                                            print(full_dict[a_relation['id']]['node']['form'])
+                                            print("---------")
                             found = True
                     if not found:
-                        print "NO TIENE SUBJECT"
+                        print("NO TIENE SUBJECT")
 
 
                 else:
-                    print "NO TIENE SYNTACTIC"
+                    print("NO TIENE SYNTACTIC")
 
-                print clause_hierarchy[a_clause]['text']
+                print(clause_hierarchy[a_clause]['text'])
         # print json.dumps(sentences, sort_keys=True, indent=4)
 
     def contains_tag(self, tag, tree):
@@ -257,7 +258,7 @@ class TreeRepresentation(object):
         return clauses
 
     def _get_raw_text(self, an_elem):
-        resulting_text = u""
+        resulting_text = ""
         if isinstance(an_elem, Iterable):
             for a_sub_elem in an_elem:
                 if 'form' in a_sub_elem:

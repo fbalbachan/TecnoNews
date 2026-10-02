@@ -10,7 +10,7 @@ class EuroNewsParser(GenericParser):
         super(EuroNewsParser, self).__init__()
 
     base_path = 'http://es.euronews.com'
-    source = u'Euronews'
+    source = 'Euronews'
 
     def parse(self, url):
         soup = BeautifulSoup(self.opener.read(url))
@@ -55,7 +55,7 @@ class EuroNewsParser(GenericParser):
             title = title_obj.text
 
         import re
-        title = re.sub(u'Fotos:( )*', u'', title)
+        title = re.sub('Fotos:( )*', '', title)
         title = title[0].upper() + title[1:]
 
         new_entry = self.create_news_entry(title=title, content=content,

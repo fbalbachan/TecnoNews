@@ -22,7 +22,7 @@ class FreelingDictionaryParser:
     @classmethod
     def parse_ontology(cls, _file, ontology_name):
         ontology = Ontology(ontology_name)
-        for line in open(_file):
+        for line in open(_file, encoding="utf-8"):
             tokens = line.strip().split()
 
             lexical_form = tokens[0]
@@ -39,7 +39,7 @@ class FreelingDictionaryParser:
                     ontology.concept(lemma, create_if_necessary=True).add(full_lexical_form)
 
                 except Exception:
-                    print "Error parsing ontology. Unrecognized (lemma: ", lemma, ", tag: ", tag, ")"
+                    print("Error parsing ontology. Unrecognized (lemma: ", lemma, ", tag: ", tag, ")")
                     continue
 
         return ontology

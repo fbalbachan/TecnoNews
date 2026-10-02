@@ -9,18 +9,8 @@ id = 4
 feeds_to_process = abc,xataka,gizmodo,engadget,genbeta,elle,entre_mujeres,mujer_hoy,vitonica,top_inmobiliario,veredes,foto_casa,pisos,clarin_arquitectura,cosas_de_arquitectos,cic_construccion,mvotma,eco_habitar,diario_del_viajero,expreso,nexotur,host_news,hoteltur,efetur,la_nacion_turismo,caribbean_news_digital,inmodiario,cincodias,veinte_minutos_vivienda,trendenciasbelleza,voguebelleza,voguemoda,la_pinturera,pon_tu_cara_bonita,id_belleza,silviaquiros,guapaalinstante,elrincondemoda,balamoda,telvabelleza,telvamoda,cordoba_turismo,clarin_todo_viajes,diariodegastronomia,elcomercio_gastronomia,sportlife,vida_y_salud,turismo_perfil
 #miami_diario,europa_press_internacional,europa_press_nacional,europa_press_economia,europa_press_deporte
 
-[freeling]
-
-host        = 85.10.210.172
-client      = ../externals/freeling/analyzer_client
-parser_port = 10004
-tagger_port = 9999
-
-[freeling_language]
-
-host        = 85.10.210.172
-client      = ../externals/freeling/analyzer_client_lang_ident
-language_port = 10104
+[spacy]
+model = es_core_news_md
 
 [mongodb]
 

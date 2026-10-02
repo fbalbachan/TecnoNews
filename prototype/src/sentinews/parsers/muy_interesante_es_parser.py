@@ -3,7 +3,7 @@
 
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -12,13 +12,13 @@ class MuyInteresanteEsParser(GenericParser):
     def __init__(self):
         super(MuyInteresanteEsParser, self).__init__()
 
-    source = u"Muy Interesante Español"
+    source = "Muy Interesante Español"
     
     def parse(self, url):
         #url = "http://feedproxy.google.com/~r/Muyinteresantees/~3/t45FyQWfCzg/story01.htm"
         
-	soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
-	for script in soup(["script", "style"]):
+        soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
+        for script in soup(["script", "style"]):
             script.extract()
             
             
@@ -58,8 +58,8 @@ class MuyInteresanteEsParser(GenericParser):
         #print content
         #exit()
 
-        tags = [u"insólito"]
-        categories=[u"insólito"]
+        tags = ["insólito"]
+        categories=["insólito"]
         
         new_entry = self.create_news_entry(title=title, content=content,
                                            tags=tags,

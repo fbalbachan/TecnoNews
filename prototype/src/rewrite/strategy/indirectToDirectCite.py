@@ -69,7 +69,7 @@ class IndirectToDirectCite:
         return False
 
     def rewrite(self, sentence, node):
-        text = sentence.paragraph.text.decode("utf-8")
+        text = sentence.paragraph.text
 
         spoke_person = None
         a_subject = None
@@ -106,8 +106,6 @@ class IndirectToDirectCite:
         # print spoke_person
         # print a_clause.verb.lexical_form
         quote_text = quote_text[:1].upper() + quote_text[1:]
-        quote_text = quote_text.encode('utf-8')
-        chorizo = chorizo.encode('utf-8')
 
         if quote_text[-1] in [".", ":", ";"]:
             quote_text = quote_text[:-1]
@@ -142,7 +140,7 @@ class IndirectToDirectCite:
         config = ConfigProvider()
         verbs_que_filename = config.get("resources", "verbs_que")
 
-        for line in open(verbs_que_filename, 'r'):
+        for line in open(verbs_que_filename, 'r', encoding="utf-8"):
             if line[0] not in ['<', '%', '\n']:
                 verbs_que.append(line.rstrip('\n'))
         return verbs_que

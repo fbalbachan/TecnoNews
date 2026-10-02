@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
 __author__ = 'Martin Caramés Abente'
-from enum import Enum
+# Python 2 ran with the 'enum' 0.4.4 package, where these members were plain strings: StrEnum keeps
+# them comparable to strings, JSON serializable and printable as their value
+from enum import StrEnum
 
 
-class Animity(Enum):
-    animated = u"animated"
-    bianimate = u"bianimate"
-    inanimate = u"inanimate"
-
-    def encode(self, encoding):
-        return self.value.encode(encoding)
+class Animity(StrEnum):
+    animated = "animated"
+    bianimate = "bianimate"
+    inanimate = "inanimate"
 
     @classmethod
     def most_specific(cls, animity1, animity2):

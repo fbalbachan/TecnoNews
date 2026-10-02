@@ -54,8 +54,6 @@ class EntityExtraction(Resource):
 
         users_storage.increase_access_counter(api_key)
 
-        if has_type_encoding(text, str, 'UTF-8'):
-            text = text.decode('UTF-8')
 
         try:
             analysis = self.sentilecto.analyze(text)
@@ -70,7 +68,7 @@ class EntityExtraction(Resource):
             response_value = analysis_results
             response_code = 200
 
-        except Exception, e:
+        except Exception as e:
             response_value = {'type': 'ERROR', 'message': str(e)}
             response_code = 500,
 

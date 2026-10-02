@@ -6,11 +6,11 @@ class NewsEntryIterable(object):
     def __init__(self, mongo_cursor=None):
         self.cursor = mongo_cursor
 
-    def next(self):
+    def __next__(self):
         ret_entry = None
 
         try:
-            entry = self.cursor.next()
+            entry = next(self.cursor)
             ret_entry = NewsEntry(
                               title=entry['title'] if 'title' in entry else None,
                               content=entry['content'] if 'content' in entry else None,

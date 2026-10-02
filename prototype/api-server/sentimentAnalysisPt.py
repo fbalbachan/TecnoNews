@@ -10,7 +10,7 @@ from flask_restful import Resource, marshal_with
 from usersStorage import users_storage
 import requests
 import json
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 __author__ = 'Alexis Balbachan'
 
@@ -47,8 +47,8 @@ class SentimentAnalysisPT(Resource):
                        )
     # @marshal_with(SentimentAnalysisResponse.resource_fields)
     def get(self, text, api_key):
-        # url = "http://127.0.0.1:5500/api/v0.9/sentiment-analysis/" + urllib.quote_plus(text.encode("utf-8")) + "/" + api_key
-        url = "http://127.0.0.1:5500/api/v0.9/sentiment-analysis/" + text.replace("?", ";;::;;::") + "/" + urllib.quote(api_key, safe='')
+        # url = "http://127.0.0.1:5500/api/v0.9/sentiment-analysis/" + urllib.quote_plus(text) + "/" + api_key
+        url = "http://127.0.0.1:5500/api/v0.9/sentiment-analysis/" + text.replace("?", ";;::;;::") + "/" + urllib.parse.quote(api_key, safe='')
         req = requests.get(url)
         text = req.text
         status = req.status_code

@@ -3,17 +3,17 @@
 
 from bs4 import BeautifulSoup
 from src.sentinews.parsers.generic_parser import GenericParser
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 
 class ElMundoParser(GenericParser):
     def __init__(self):
         super(ElMundoParser, self).__init__()
 
-    source = u"El Mundo"
+    source = "El Mundo"
 
     def parse(self, url):
-        if u'/opinion/' in url:
+        if '/opinion/' in url:
             return None
         #url  = "http://www.elmundo.es/espana/2016/06/01/574f24bf22601df96e8b4612.html"
         #url  = "http://www.elmundo.es/economia/2016/01/26/56a61a39ca474156648b466c.html"

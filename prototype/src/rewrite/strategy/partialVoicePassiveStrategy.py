@@ -21,15 +21,15 @@ class PartialVoicePassiveStrategy:
         self.ontology = ontology
 
     def applies_to(self, sentence, node):
-        if debug_mode: print "--> PartialVoicePassiveStrategy.applies_to(sentence: ", sentence, ")"
+        if debug_mode: print("--> PartialVoicePassiveStrategy.applies_to(sentence: ", sentence, ")")
 
         applies = any((self.applies_to_clause(clause) for clause in sentence.clauses))
 
-        if debug_mode: print "<-- applies_to: applies = ", str(applies)
+        if debug_mode: print("<-- applies_to: applies = ", str(applies))
         return applies
 
     def rewrite(self, sentence, node):
-        if debug_mode: print "--> PartialVoicePassiveStrategy.rewrite(sentence: ", sentence, ")"
+        if debug_mode: print("--> PartialVoicePassiveStrategy.rewrite(sentence: ", sentence, ")")
 
         clauses = []
         try:
@@ -44,24 +44,24 @@ class PartialVoicePassiveStrategy:
         except Exception as e:
             logger = get_logger('tecnonews')
             logger.info("PartialVoicePassiveStrategy Rewriting exception:")
-            logger.info(e.message)
+            logger.info(str(e))
             ex_type, ex, tb = sys.exc_info()
             logger.info(traceback.format_tb(tb))
 
         return self.rewrite_clause(node, sentence, clauses)
 
     def applies_to_clause(self, clause):
-        if debug_mode: print "--> PartialVoicePassiveStrategy.applies_to_clause(clause: ", clause, ")"
+        if debug_mode: print("--> PartialVoicePassiveStrategy.applies_to_clause(clause: ", clause, ")")
 
         applies = self.is_partial(clause) and clause.voice == 'passive' and \
                   clause.verb and clause.verb.transitivity == 'TRANSITIVE' and\
                   clause.node.label == "verb-pass"
 
-        if debug_mode: print "<-- applies_to_clause: applies = ", str(applies)
+        if debug_mode: print("<-- applies_to_clause: applies = ", str(applies))
         return applies
 
     def is_partial(self, clause):
-        if debug_mode: print "--> PartialVoicePassiveStrategy.is_partial(clause: ", clause, ")"
+        if debug_mode: print("--> PartialVoicePassiveStrategy.is_partial(clause: ", clause, ")")
 
         has_od_and_subject = clause.has_structure('od') and clause.has_structure('subject')
 
@@ -69,11 +69,11 @@ class PartialVoicePassiveStrategy:
                	     and clause.structure('subject').entity().has_attr("implicit") \
                      and (not clause.structure('od').is_tacit() or clause.structure('od').entity().coref_chain != [])
 
-        if debug_mode: print "<-- PartialVoicePassiveStrategy.is_partial = ", str(is_partial)
+        if debug_mode: print("<-- PartialVoicePassiveStrategy.is_partial = ", str(is_partial))
         return is_partial
 
     def rewrite_clause(self, node, sentence, clauses):
-        if debug_mode: print "--> PartialVoicePassiveStrategy.rewrite_clause(clauses: )"
+        if debug_mode: print("--> PartialVoicePassiveStrategy.rewrite_clause(clauses: )")
 
         rewrite_rule = None
         clause = clauses[0][0]
@@ -91,7 +91,7 @@ class PartialVoicePassiveStrategy:
         except Exception as e:
             ex_type, ex, tb = sys.exc_info()
             logger.info("PartialVoicePassiveStrategy Rewrite_clause exception")
-            logger.info(e.message)
+            logger.info(str(e))
             logger.info(traceback.print_tb(tb))
 
         return rewrite_rule
@@ -152,7 +152,7 @@ class PartialVoicePassiveStrategy:
         if ntext[-2:] == ' .':
             ntext = ntext[:-2] + '.'
 
-        paragraph = sentence.paragraph.text.decode("utf-8")
+        paragraph = sentence.paragraph.text
         start = clause.proper_leaves()[0].token.start()
 
         if start > 0:
@@ -227,7 +227,7 @@ class PartialVoicePassiveStrategy:
         if ntext[-2:] == ' .':
             ntext = ntext[:-2] + '.'
 
-        paragraph = sentence.paragraph.text.decode("utf-8")
+        paragraph = sentence.paragraph.text
         start = clause.proper_leaves()[0].token.start()
 
         if start > 0:

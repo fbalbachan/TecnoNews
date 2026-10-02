@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -11,13 +11,13 @@ class VeinteMinutosViviendaParser(GenericParser):
     def __init__(self):
         super(VeinteMinutosViviendaParser, self).__init__()
 
-    source = u"20 Minutos Vivienda"
+    source = "20 Minutos Vivienda"
 
     def parse(self, url):
         #url = "http://www.20minutos.es/noticia/2635327/0/firma-hipotecas-vivienda/ralentiza-octubre-2015/sube-7-por-ciento/"
         
-	soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
-	for script in soup(["script", "style"]):
+        soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
+        for script in soup(["script", "style"]):
             script.extract()
 
 
@@ -43,7 +43,7 @@ class VeinteMinutosViviendaParser(GenericParser):
             if paragraph.name == 'ul':
                 clean_text = paragraph.text.strip()
             else:
-                clean_text = re.sub(u'([^ ]+)[.]([A-Z][^A-Z ]*)', r'\1.\n\2', paragraph.text.strip())
+                clean_text = re.sub('([^ ]+)[.]([A-Z][^A-Z ]*)', r'\1.\n\2', paragraph.text.strip())
 
 
             content += "\n" + clean_text

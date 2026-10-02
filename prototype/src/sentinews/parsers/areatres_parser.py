@@ -3,7 +3,7 @@
 
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -12,7 +12,7 @@ class AreaTresParser(GenericParser):
     def __init__(self):
         super(AreaTresParser, self).__init__()
 
-    source = u"Area Tres"
+    source = "Area Tres"
 
     def parse(self, url):
         #url = "http://www.revistaareatres.com.ar/novedades/index/restricciones-que-afectan-a-la-construccion"
@@ -42,8 +42,8 @@ class AreaTresParser(GenericParser):
             clean_text = paragraph.text.strip()
             content += "\n" + clean_text
 
-        categories = [u"propiedades"]
-        tags = [u"propiedades"]
+        categories = ["propiedades"]
+        tags = ["propiedades"]
 
         #categories=[urlparse(url).path.split("/")[1]]
         #print categories

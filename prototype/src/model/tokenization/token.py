@@ -7,7 +7,7 @@ class Token:
 
     def append(self, start, end):
         self.components.append((start, end))
-        self.components.sort(key=lambda (p_start, p_end): p_start)
+        self.components.sort(key=lambda p_start_p_end: p_start_p_end[0])
 
     def start(self):
         return self.components[0][0]

@@ -3,7 +3,7 @@
 
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -12,7 +12,7 @@ class MundoReciclajeParser(GenericParser):
     def __init__(self):
         super(MundoReciclajeParser, self).__init__()
 
-    source = u"El mundo del reciclaje"
+    source = "El mundo del reciclaje"
 
     def parse(self, url):
         #url = "http://elmundodelreciclaje.blogspot.com.ar/2016/06/recicla-palets-y-disfruta-de-tu-jardin.html"
@@ -53,8 +53,8 @@ class MundoReciclajeParser(GenericParser):
 
         #print content
         #exit()
-        categories = [u"estilo vida"]
-        tags = [u"estilo vida"]
+        categories = ["estilo vida"]
+        tags = ["estilo vida"]
 
         #categories=[urlparse(url).path.split("/")[1]]
         #print categories

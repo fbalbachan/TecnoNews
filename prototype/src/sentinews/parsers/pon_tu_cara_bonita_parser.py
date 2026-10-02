@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
 
@@ -10,7 +10,7 @@ class PonTuCaraBonitaParser(GenericParser):
     def __init__(self):
         super(PonTuCaraBonitaParser, self).__init__()
 
-    source = u"Pon tu cara bonita"
+    source = "Pon tu cara bonita"
 
     def parse(self, url):
         #url= "http://www.portucarabonita.com/2015/12/ideas-de-regalos-very-cute.html?utm_source=feedburner&utm_medium=feed&utm_campaign=Feed%3A+PorTuCaraBonitaBlogDeBellezaModaYReviewsDeProductos+%28Por+tu+cara+bonita+|+Blog+de+belleza%2C+moda+y+lifestyle%29&utm_content=FeedBurner"

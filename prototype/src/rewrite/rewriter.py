@@ -35,7 +35,7 @@ debug_mode = False
 
 class Rewriter:
     def __init__(self, paragraph, ontology=None, strategies=None, clauses_for_replacements=None, applied_global_strategies=False):
-        if debug_mode: print "--> Rewriter.init()"
+        if debug_mode: print("--> Rewriter.init()")
 
         if ontology is None:
             ontology = self.ontology
@@ -79,7 +79,7 @@ class Rewriter:
         self.applied_global_strategies = applied_global_strategies
 
     def rewrite(self, raconto=False):
-        if debug_mode: print "--> Rewriter.rewrite()"
+        if debug_mode: print("--> Rewriter.rewrite()")
 
         text = self.paragraph.text
 
@@ -99,7 +99,7 @@ class Rewriter:
             #if self.applied_global_strategies and strategy.__class__.__name__ == "FromRelativeClauseToIndependentSentenceStrategy":
             #    continue
 
-            if debug_mode: print "\nTEXT BEFORE APPLYING DISLOCATION STRATEGY: ", strategy.__class__.__name__, ":\n[", text, "]\n".decode('utf-8')
+            if debug_mode: print("\nTEXT BEFORE APPLYING DISLOCATION STRATEGY: ", strategy.__class__.__name__, ":\n[", text, "]\n")
             self.paragraph = Paragraph.from_text(text)
             self.analyzer.analyze(self.paragraph)
             dislocations = self._dislocations_from(strategy, self.paragraph.sentences)
@@ -108,11 +108,11 @@ class Rewriter:
             if pre_text != text: #Text changed!
                 successful_strategies.append(strategy.__class__.__name__)
 
-            if debug_mode: print "\nTEXT AFTER APPLYING DISLOCATION STRATEGY: ", strategy.__class__.__name__, ":\n[", text, "]\n".decode('utf-8')
+            if debug_mode: print("\nTEXT AFTER APPLYING DISLOCATION STRATEGY: ", strategy.__class__.__name__, ":\n[", text, "]\n")
 
         replacements = []
 
-        if debug_mode: print "\nTEXT BEFORE APPLYING REPLACEMENT STRATEGIES: \n[", text, "]\n".decode('utf-8')
+        if debug_mode: print("\nTEXT BEFORE APPLYING REPLACEMENT STRATEGIES: \n[", text, "]\n")
         self.paragraph = Paragraph.from_text(text)
         self.analyzer.analyze(self.paragraph)
         clauses = self.clauses_for_replacements if self.clauses_for_replacements else self.paragraph.clauses()
@@ -121,32 +121,32 @@ class Rewriter:
             replacements.extend(replacement_rules)
 
         text = self.compose_text_with(replacements)
-        if debug_mode: print "\nTEXT AFTER APPLYING EVERY REPLACEMENT STRATEGY:\n[", text, "]\n".decode('utf-8')
+        if debug_mode: print("\nTEXT AFTER APPLYING EVERY REPLACEMENT STRATEGY:\n[", text, "]\n")
 
         return text
 
     def compose_text_with(self, rewrites):
-        if debug_mode: print "--> Rewriter.compose_text_with(rewrites: ", rewrites, ")"
+        if debug_mode: print("--> Rewriter.compose_text_with(rewrites: ", rewrites, ")")
         rewrites.sort(key=lambda rewrite_rule: rewrite_rule.token().start())
         rewrites_deque = deque(rewrites)
 
-        source_text = self.paragraph.text.decode("utf-8")
+        source_text = self.paragraph.text
 
         new_text = ""
         index = 0
         while rewrites_deque:
             rewrite = rewrites_deque.popleft()
             start, end = rewrite.token().start(), rewrite.token().end()
-            new_text += source_text[index:start] + rewrite.replacement.decode("utf-8")
+            new_text += source_text[index:start] + rewrite.replacement
             index = end
 
         new_text += source_text[index:]
 
-        if debug_mode: print "<-- compose_text_with() - source_text: ", new_text.encode('utf-8'), "\n\n"
-        return new_text.encode("utf-8")
+        if debug_mode: print("<-- compose_text_with() - source_text: ", new_text, "\n\n")
+        return new_text
 
     def _dislocations_from(self, strategy, sentences):
-        if debug_mode: print "--> Rewriter._dislocations_from(strategy: ", strategy.__class__.__name__, ")".decode('utf-8')
+        if debug_mode: print("--> Rewriter._dislocations_from(strategy: ", strategy.__class__.__name__, ")")
 
         dislocations = []
         for sentence in sentences:
@@ -157,14 +157,14 @@ class Rewriter:
             except:
                 pass  # TODO: Remove this exception handler when the problem is solved
 
-        if debug_mode: print "<-- _dislocations_from() - dislocations: ", dislocations, "\n\n".decode('utf-8')
+        if debug_mode: print("<-- _dislocations_from() - dislocations: ", dislocations, "\n\n")
         return dislocations
 
         # TODO: Use the line below again after removing the handler above
         # return [strategy.rewrite(sentence) for sentence in sentences if strategy.applies_to(sentence)]
 
     def _dislocations_from_node(self, strategy, sentence, node):
-        if debug_mode: print "--> Rewriter._dislocations_from_node(strategy: ", strategy.__class__.__name__, ", node: ", node, ")".decode('utf-8')
+        if debug_mode: print("--> Rewriter._dislocations_from_node(strategy: ", strategy.__class__.__name__, ", node: ", node, ")")
 
         dislocations = []
         applied_before = False
@@ -176,7 +176,7 @@ class Rewriter:
                     applied_before = True
 
         except:
-            if debug_mode: print "\n\nException in _dislocations_from_node!!\n\n\n"
+            if debug_mode: print("\n\nException in _dislocations_from_node!!\n\n\n")
             pass
 
         if not applied_before:
@@ -187,7 +187,7 @@ class Rewriter:
         return dislocations
 
     def replacements_for(self, clause, raconto=False):
-        if debug_mode: print "--> Rewriter.replacements_for()"
+        if debug_mode: print("--> Rewriter.replacements_for()")
         replacements = []
         for strategy in self.replacementStrategies:
             if strategy.__class__.__name__ == "RacontoStrategy" and raconto==False:
@@ -204,18 +204,18 @@ class Rewriter:
                     else:
                         self.append_if_not_overlaps(rewrites, replacements)
             except:
-                print format_exc()
+                print(format_exc())
 
-        if debug_mode: print "<-- replacements_for() - replacements: ", replacements, "\n\n"
+        if debug_mode: print("<-- replacements_for() - replacements: ", replacements, "\n\n")
         return replacements
 
     def append_if_not_overlaps(self, rewrite, rewrites):
-        if debug_mode: print "--> Rewriter.append_if_not_overlaps()"
+        if debug_mode: print("--> Rewriter.append_if_not_overlaps()")
         overlaps_rewrite_with_some_in_rewrites = any((each.overlaps(rewrite) for each in rewrites))
         if not overlaps_rewrite_with_some_in_rewrites:
             rewrites.append(rewrite)
         else:
-            if debug_mode: print "Hay OVERLAP"
+            if debug_mode: print("Hay OVERLAP")
 
     sentenceAnalyzer = SentenceAnalyzer()
     analyzer = ParagraphAnalyzer(sentenceAnalyzer)

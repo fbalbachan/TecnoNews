@@ -15,7 +15,7 @@ class TestEuroNewsCrawler(unittest.TestCase):
         entries = feeds['entries']
         self.assertIsNotNone(entries)
         for entry in entries:
-            print entry['link']
+            print(entry['link'])
             self.assertIsNotNone(entry['link'])
             self.assertTrue(len(entry['link']) > 0)
 
@@ -24,23 +24,23 @@ class TestEuroNewsCrawler(unittest.TestCase):
 
         entry = EuroNewsParser().parse(url)
         self.assertIsNotNone(entry)
-        print "Content:", entry.content, '\n'
-        print "Tags:", entry.tags, '\n'
-        print "Title:", entry.title, '\n'
-        print "Source:", entry.source, '\n'
-        print "Category:", entry.categories, '\n'
-        print "original_categories:", entry.original_categories, '\n'
+        print("Content:", entry.content, '\n')
+        print("Tags:", entry.tags, '\n')
+        print("Title:", entry.title, '\n')
+        print("Source:", entry.source, '\n')
+        print("Category:", entry.categories, '\n')
+        print("original_categories:", entry.original_categories, '\n')
 
     def parse_single_url(self, url):
 
         entry = EuroNewsParser().parse(url)
         self.assertIsNotNone(entry)
-        print "Content:", entry.content, '\n'
-        print "Tags:", entry.tags, '\n'
-        print "Title:", entry.title, '\n'
-        print "Source:", entry.source, '\n'
-        print "Category:", entry.categories, '\n'
-        print "original_categories:", entry.original_categories, '\n'
+        print("Content:", entry.content, '\n')
+        print("Tags:", entry.tags, '\n')
+        print("Title:", entry.title, '\n')
+        print("Source:", entry.source, '\n')
+        print("Category:", entry.categories, '\n')
+        print("original_categories:", entry.original_categories, '\n')
 
     def test_all_in_feed(self):
         feeds = feedparser.parse(feed_url)
@@ -50,18 +50,18 @@ class TestEuroNewsCrawler(unittest.TestCase):
         error_urls = []
 
         for entry in entries:
-            print u"case:", entry['link'], u"\n"
+            print("case:", entry['link'], "\n")
             try:
                 self.parse_single_url(entry['link'])
             except Exception as e:
                 error_urls.append(entry['link'])
 
-                print "Error parsing"
-                print e.message
+                print("Error parsing")
+                print(str(e))
 
-        print "Total cases: ", len(entries)
-        print "Errors", len(error_urls)
-        print "Urls:", error_urls
+        print("Total cases: ", len(entries))
+        print("Errors", len(error_urls))
+        print("Urls:", error_urls)
         
 
 if __name__ == '__main__':

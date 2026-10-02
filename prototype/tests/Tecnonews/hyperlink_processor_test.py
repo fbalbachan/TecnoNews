@@ -36,7 +36,7 @@ class TestHyperLinkProcessor(unittest.TestCase):
             self.assertTrue(entity.classification() != None )
 
         references = [x.referent.name() for x in self.processor.entities]
-        self.assertEquals(sorted(references), sorted(list(set(references))))
+        self.assertEqual(sorted(references), sorted(list(set(references))))
 
     def test__get_gMaps_links(self):
         self.processor._get_gMaps_links()
@@ -59,8 +59,8 @@ class TestHyperLinkProcessor(unittest.TestCase):
 
     def test__get_linkedIn_links(self):
         self.processor._get_linkedIn_links()
-        expected = [u'http://ar.linkedin.com/pub/leandro-liptak/95/36b/19b', 
-                    u'http://www.linkedin.com/pub/maurice-ohayon/1b/6b3/516']
+        expected = ['http://ar.linkedin.com/pub/leandro-liptak/95/36b/19b', 
+                    'http://www.linkedin.com/pub/maurice-ohayon/1b/6b3/516']
         for x in expected:
             self.assertIn(x, self._get_links_from_processor())
 
@@ -86,8 +86,8 @@ class TestHyperLinkProcessor(unittest.TestCase):
 
     def _get_links_from_processor(self):
         res = []
-        for links_by_type in self.processor.links_by_entity.values():
-            for links in links_by_type.values():
+        for links_by_type in list(self.processor.links_by_entity.values()):
+            for links in list(links_by_type.values()):
                 res.append(links) 
         return res
 

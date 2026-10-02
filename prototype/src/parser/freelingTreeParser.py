@@ -5,18 +5,17 @@ from re import search
 from src.ling.msi_mapper import *
 from src.parser.labelNode import *
 from src.parser.leafNode import *
-from src.utils.freelingClientParser import *
+from src.utils.spacyClientParser import SpacyClientParser
 
 
 class FreelingTreeParser:
 
     def from_text(self, text):
-        freeling_client = FreelingClientParser()
-        output = freeling_client.parse(text)
+        output = SpacyClientParser().parse(text)
         return self.parse(output)
 
     def from_file(self, path):
-        file = open(path)
+        file = open(path, encoding="utf-8")
         output = file.read().split("\n")
         return self.parse(output)
 
@@ -73,6 +72,6 @@ class FreelingTreeParser:
 
     def level_of(self, line):
         line_indentation = search("^ *", line).group(0)
-        return len(line_indentation) / self.SPACES_PER_LEVEL
+        return len(line_indentation) // self.SPACES_PER_LEVEL
 
     SPACES_PER_LEVEL = 2

@@ -31,7 +31,7 @@ class Subject(object):
                 for an_item in current_element['analysis_list']:
                     if 'tag' in an_item:
                         tag_set = list(an_item['tag'])
-                        if len(tag_set) > 2 and tag_set[0] == u'N' and tag_set[1] == u'P':
+                        if len(tag_set) > 2 and tag_set[0] == 'N' and tag_set[1] == 'P':
                             self.is_proper_noun = True
                             return
             if 'token_list' in current_element:
@@ -39,4 +39,4 @@ class Subject(object):
                     stack.append(a_token)
 
     def __repr__(self):
-        return "%s - Is proper noun: %s" % (self.lexical_form.encode('utf-8'), str(self.is_proper_noun))
+        return "%s - Is proper noun: %s" % (self.lexical_form, str(self.is_proper_noun))

@@ -6,6 +6,7 @@ from wikipedia.exceptions import DisambiguationError
 from src.model.paragraph.paragraph import Paragraph
 from src.utils.resources import instance as resources
 import wikipedia as wk
+from src.utils import wikipediaClient  # sets the User-Agent Wikimedia requires
 
 from src.utils.genderDetection.genderDetector import load_name_lists
 from src.utils.configProvider import ConfigProvider
@@ -19,8 +20,8 @@ class WikipediaContentGenerator:
     def generate(self):
         wk.set_lang("es")
         ranking = self.analysis["referent_ranking"]
-        ranking = filter(lambda (referent, score): not self.is_blacklisted(referent), ranking)
-        ranking = filter(lambda (referent, score): not self.is_name_blacklisted(referent), ranking)
+        ranking = [referent_score for referent_score in ranking if not self.is_blacklisted(referent_score[0])]
+        ranking = [referent_score1 for referent_score1 in ranking if not self.is_name_blacklisted(referent_score1[0])]
 
         content = []
 
@@ -35,7 +36,7 @@ class WikipediaContentGenerator:
 
     def is_name_blacklisted(self, referent):
         def has_blacklisted_name(entity):
-            formated_entity = unidecode(entity.lexical_form.decode("utf-8"))
+            formated_entity = unidecode(entity.lexical_form)
             return formated_entity.upper() in self.names or formated_entity.lower() in self.countries_list
 
         return any((has_blacklisted_name(reference) for reference in referent.explicit_references() ))
@@ -48,7 +49,7 @@ class WikipediaContentGenerator:
 
     def content_and_page_for(self, referent):
         page_rank = self.page_rank_for(referent)
-        tokens = [unidecode(a_token.decode("utf-8")).lower() for a_token in referent.name().split()]
+        tokens = [unidecode(a_token).lower() for a_token in referent.name().split()]
 
         if not page_rank:
             return
@@ -63,7 +64,7 @@ class WikipediaContentGenerator:
         if any(a_token not in unidecode(page.summary).lower() for a_token in tokens):
             return
 
-        summary = page.summary.encode("utf-8")
+        summary = page.summary
 
         try:
             sentence = self.first_content_sentence_of(summary)
@@ -78,7 +79,7 @@ class WikipediaContentGenerator:
 
     def first_content_sentence_of(self, summary):
         paragraph = Paragraph.from_text(self.without_parentheses(summary))
-        return iter((sentence for sentence in paragraph.sentences if self.is_valid_sentence(sentence))).next()
+        return next(iter((sentence for sentence in paragraph.sentences if self.is_valid_sentence(sentence))))
 
     def is_valid_sentence(self, sentence):
         text = sentence.text.lower()
@@ -95,7 +96,7 @@ class WikipediaContentGenerator:
         if not pages:
             return
 
-        page = pages[0].encode("utf-8")
+        page = pages[0]
 
         page_words = set([word.lower() for word in page.split()])
         referent_words = set(referent.extra_words)
@@ -114,7 +115,7 @@ class WikipediaContentGenerator:
     def page_rank_for(self, referent):
         name = referent.name()
 
-        pages = [page.encode("utf-8") for page in wk.search(name, results=3)]
+        pages = [page for page in wk.search(name, results=3)]
         page_rank = [(page, jaro_winkler(page, name)) for page in pages]
 
         return [page for page, rank in page_rank if rank > 0.93]
@@ -125,5 +126,5 @@ class WikipediaContentGenerator:
     names = load_name_lists()
     names = names["male"].union(names["female"]).union(names["neutral"])
     countries_file = config.get("resources", "countries")
-    countries_reader = unicode_csv_reader(open(countries_file, 'r'), first_line_is_header=False, delimiter=',')
-    countries_list = [unicode(country[0].lower(), 'utf-8') for country in countries_reader]
+    countries_reader = unicode_csv_reader(open(countries_file, 'r', encoding="utf-8"), first_line_is_header=False, delimiter=',')
+    countries_list = [country[0].lower() for country in countries_reader]

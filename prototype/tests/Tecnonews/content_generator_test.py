@@ -18,13 +18,13 @@ from tests.freelingTreeRepository import FreelingTreeRepository
 class ContentGeneratorTest(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        print "[Content generator test]"
+        print("[Content generator test]")
 
         self.sentenceAnalyzer = SentenceAnalyzer(FreelingTreeRepository("tests/input/news/trees"))
         self.analyzer = ParagraphAnalyzer(self.sentenceAnalyzer)
 
     def test(self):
-        paragraph = Paragraph.from_text(open("tests/input/news/higgs.txt").read())
+        paragraph = Paragraph.from_text(open("tests/input/news/higgs.txt", encoding="utf-8").read())
         self.analyzer.analyze(paragraph)
 
         EntityUnifier(paragraph).unify()
@@ -36,10 +36,10 @@ class ContentGeneratorTest(unittest.TestCase):
         analysis = { "paragraph" : paragraph, "referent_ranking" : ranking }
 
         analysis["generated_content"] = WikipediaContentGenerator(analysis).generate()
-        print "--"
+        print("--")
 
         text = Rewriter(paragraph).rewrite()
-        print text
+        print(text)
 
         #print TextInserter(analysis).get()
 

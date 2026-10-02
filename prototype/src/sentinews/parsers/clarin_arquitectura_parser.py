@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -12,7 +12,7 @@ class ClarinArquitecturaParser(GenericParser):
     def __init__(self):
         super(ClarinArquitecturaParser, self).__init__()
 
-    source = u"ClarinArquitectura"
+    source = "ClarinArquitectura"
     
     def parse(self, url):
         #url = "http://arq.clarin.com/construccion/propuesta-hacer-Nacional-Ley-Ascensores_0_1481252204.html"
@@ -36,7 +36,7 @@ class ClarinArquitecturaParser(GenericParser):
         paragraphs = soup.find('div',{'class':'body-nota'}).findAll('p')
         
         for paragraph in paragraphs:
-            clean_text = re.sub(u'^(Leer también|Leer más): .*$','', paragraph.text.strip()).strip()
+            clean_text = re.sub('^(Leer también|Leer más): .*$','', paragraph.text.strip()).strip()
 
             content += "\n" + clean_text
 

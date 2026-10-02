@@ -9,6 +9,8 @@ class VerbalSentimentAnalyzer:
 
     def analyze(self):
         verb = self.clause.verb
+        if verb is None or verb.sentimental_script is None:   # verb extraction failed for this clause
+            return
         verb_class = verb.sentimental_script.klass.lower()
         getattr(self, "analyze_" + verb_class)()
 
@@ -17,7 +19,8 @@ class VerbalSentimentAnalyzer:
 
     def analyze_equative(self):
         clause = self.clause
-        if clause.structure("equative").is_empty() or clause.structure("subject").is_empty():
+        if (not (clause.has_structure("equative") and clause.has_structure("subject"))
+                or clause.structure("equative").is_empty() or clause.structure("subject").is_empty()):
             return
 
         destination = clause.structure("subject").entity()

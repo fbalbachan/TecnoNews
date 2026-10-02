@@ -68,8 +68,6 @@ class FactMining(Resource):
 
         users_storage.increase_access_counter(api_key)
 
-        if has_type_encoding(text, str, 'UTF-8'):
-            text = text.decode('UTF-8')
 
         try:
             analysis = self.sentilecto.analyze(text)
@@ -85,8 +83,8 @@ class FactMining(Resource):
                     sentences = sentences + [sentence_data]
 
                 except Exception as e:
-                    print 'Exception while generating sentence information: %s - %s' % (str(index), sentence.text)
-                    print traceback.format_exc()
+                    print('Exception while generating sentence information: %s - %s' % (str(index), sentence.text))
+                    print(traceback.format_exc())
 
             analysis_results = \
                 {
@@ -100,7 +98,7 @@ class FactMining(Resource):
             users_storage.update_last_access_date(api_key, datetime.now())
             users_storage.signal_refresh_occasion()
 
-        except Exception, e:
+        except Exception as e:
             response_value = {'type': 'ERROR', 'message': str(e)}
             response_code = 500,
 
@@ -204,7 +202,7 @@ class FactMining(Resource):
         replacements = {}
         config = ConfigProvider()
         replacements_filename = config.get("resources", resource)
-        for line in reader(open(replacements_filename, 'r')):
+        for line in reader(open(replacements_filename, 'r', encoding="utf-8")):
             replacements[line[0]] = line[1]
             replacements[line[1]] = line[0]
         return replacements

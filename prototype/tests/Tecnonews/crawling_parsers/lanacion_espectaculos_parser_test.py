@@ -19,17 +19,17 @@ class LaNacionEspectaculosParserTest(unittest.TestCase):
     def parse_single_url(self, url):
         entry = LaNacionEspectaculosParser().parse(url=url)
         if not LaNacionEspectaculosParser().is_parseable_case(url):
-            print "only parssing selected kind of news"
+            print("only parssing selected kind of news")
             self.assertIsNone(entry)
         else:
 
             self.assertIsNotNone(entry)
-            print "Content:", entry.content, '\n'
-            print "Tags:", entry.tags, '\n'
-            print "Title:", entry.title, '\n'
-            print "Source:", entry.source, '\n'
-            print "Category:", entry.categories, '\n'
-            print "original_categories:", entry.original_categories, '\n'
+            print("Content:", entry.content, '\n')
+            print("Tags:", entry.tags, '\n')
+            print("Title:", entry.title, '\n')
+            print("Source:", entry.source, '\n')
+            print("Category:", entry.categories, '\n')
+            print("original_categories:", entry.original_categories, '\n')
 
     def test_all_in_feed(self):
         feeds = feedparser.parse(feed_url)
@@ -39,18 +39,18 @@ class LaNacionEspectaculosParserTest(unittest.TestCase):
         error_urls = []
 
         for entry in entries:
-            print u"case:", entry['id'], u"\n"
+            print("case:", entry['id'], "\n")
             try:
                 self.parse_single_url(url=entry['id'])
             except Exception as e:
                 error_urls.append(entry['id'])
-                print "Error parsing"
-                print e.message
-                print traceback.format_exc()
+                print("Error parsing")
+                print(str(e))
+                print(traceback.format_exc())
 
-        print "Total cases: ", len(entries)
-        print "Errors", len(error_urls)
-        print "Urls:", error_urls
+        print("Total cases: ", len(entries))
+        print("Errors", len(error_urls))
+        print("Urls:", error_urls)
 
     def _test_parse_single_url(self):
         url = 'http://personajes.lanacion.com.ar/1794128-adriana-lima-vs-irina-shayk-duelo-de-diosas-en-cannes'

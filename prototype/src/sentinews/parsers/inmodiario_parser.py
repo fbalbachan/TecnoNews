@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -11,7 +11,7 @@ class InmodiarioParser(GenericParser):
     def __init__(self):
         super(InmodiarioParser, self).__init__()
 
-    source = u"Inmodiario"
+    source = "Inmodiario"
     
     def parse(self, url):
         #url = "https://www.inmodiario.com/96/28175/cifras-sector-construccion-siguen-siendo-positivas-pero-apuntan-desaceleracion.html"

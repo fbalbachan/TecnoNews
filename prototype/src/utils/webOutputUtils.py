@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from functools import cmp_to_key
 from src.ling.gender import Gender
 from src.ling.number import Number
 from src.utils.factNormalizer import FactNormalizer
@@ -14,7 +15,7 @@ debug_mode = False
 class WebOutputUtils:
 
     def __init__(self, ontology):
-        if debug_mode: print "--> WebOutputUtils.init()"
+        if debug_mode: print("--> WebOutputUtils.init()")
         self.synonyms = self._get_synonyms()
         #self.synonyms.update(self._get_unidirectional_synonyms())
         self.ontology = ontology
@@ -47,19 +48,19 @@ class WebOutputUtils:
 
     def entity_tooltip(self, entity):
         tooltip = self.msi_string(entity.msi)
-        tooltip = tooltip if not isinstance(tooltip, unicode) else tooltip.encode("utf-8")
+        tooltip = tooltip if not isinstance(tooltip, str) else tooltip
 
         if (entity.category() == "noun" or entity.category() == "pronoun") \
            and "animity" in entity.msi:
-            tooltip = tooltip + " " + entity.msi["animity"].encode("utf-8")
+            tooltip = tooltip + " " + entity.msi["animity"].value
 
         if entity.is_named_entity():
             classification = str(entity.classification(look_deep=True)).upper()
-            tooltip = tooltip + " " + classification.encode("utf-8")
+            tooltip = tooltip + " " + classification
 
         if entity.category() == "verb":
-            transitivity = entity.transitivity.encode("utf-8")
-            klass = entity.sentimental_script.klass.encode("utf-8")
+            transitivity = entity.transitivity
+            klass = entity.sentimental_script.klass
             tooltip = tooltip + " - Transitivity " + transitivity + " - Sentiment script " + klass
 
         return tooltip
@@ -139,7 +140,7 @@ class WebOutputUtils:
         return score
 
     def fact(self, clause):
-        if debug_mode: print "--> WebOutputUtils.fact(clause:", clause, ")"
+        if debug_mode: print("--> WebOutputUtils.fact(clause:", clause, ")")
         return FactNormalizer(clause, self.ontology).fact()
 
     def fact_real_or_not(self, clause):
@@ -168,35 +169,33 @@ class WebOutputUtils:
         return preferred_classifications
 
     def choose_classification(self, real_name, entities):
-        same_name_entities = filter(lambda p_entity: p_entity.real_name() == real_name, entities)
+        same_name_entities = [p_entity for p_entity in entities if p_entity.real_name() == real_name]
         if same_name_entities and any(p_entity.is_named_entity() for p_entity in same_name_entities):
-            entity = filter(lambda p_entity: p_entity.classification(look_deep=True) is not None, entities)[0]
+            entity = [p_entity for p_entity in entities if p_entity.classification(look_deep=True) is not None][0]
             return entity.classification(look_deep=True)
         else:
             return None
 
     def choose_gender_number(self, entity, entities):
-        same_pgn_entities = filter(lambda e:
-                                      e.category() == entity.category()
+        same_pgn_entities = [e for e in entities if e.category() == entity.category()
                                       and e.msi["type"] == entity.msi["type"]
                                       and e.person() == entity.person()
                                       and (entity.gender() == Gender.neutral and e.gender() != Gender.neutral
                                            or entity.number() == Number.invariable and e.number() != Number.invariable)
                                       and e.matches_gender_of(entity)
-                                      and e.matches_number_of(entity),
-                                   entities)
+                                      and e.matches_number_of(entity)]
         gender = Gender.neutral
         number = Number.invariable
         if same_pgn_entities:
-            with_gender = filter(lambda e: e.gender() != Gender.neutral, same_pgn_entities) + [entity]
-            with_number = filter(lambda e: e.number() != Number.invariable, same_pgn_entities) + [entity]
+            with_gender = [e for e in same_pgn_entities if e.gender() != Gender.neutral] + [entity]
+            with_number = [e for e in same_pgn_entities if e.number() != Number.invariable] + [entity]
             gender = with_gender[0].gender()
             number = with_number[0].number()
 
         return gender, number
 
     def get_referents_data(self, entities, clauses = []):
-        if debug_mode: print "--> WebOutputUtils.get_referents_data(entities:", entities, ")"
+        if debug_mode: print("--> WebOutputUtils.get_referents_data(entities:", entities, ")")
         preferred_genders_numbers = self.preferred_genders_numbers_to_unify_with(entities)
         preferred_classifications = self.preferred_classifications_to_unify_with(entities)
 
@@ -225,14 +224,12 @@ class WebOutputUtils:
                       else 1 if x["rn"] > y["rn"]   else -1 if x["rn"] < y["rn"]\
                       else 0
 
-        referents_data = filter(lambda rd:
-                            rd["re"].real_name().lower() not in ["se", "le", "les",
+        referents_data = [rd for rd in referents_data if rd["re"].real_name().lower() not in ["se", "le", "les",
                                                                  "lo", "la", "los", "las",
                                                                  "él", "ella", "él/ella",
-                                                                 "ellos", "ellas", "ellos/ellas"],
-                                referents_data)
+                                                                 "ellos", "ellas", "ellos/ellas"]]
 
-        referents_data = sorted(referents_data, cmp=compare)
+        referents_data = sorted(referents_data, key=cmp_to_key(compare))
 
         tmp_idx=0
         for referent_data in referents_data:
@@ -257,7 +254,7 @@ class WebOutputUtils:
         return referents_data
 
     def unify_by_name_classification(self, entities, preferred_classifications, preferred_genders_numbers):
-        if debug_mode: print "--> WebOutputUtils.unify_by_name_classification(entities:", entities, ")"
+        if debug_mode: print("--> WebOutputUtils.unify_by_name_classification(entities:", entities, ")")
 
         entities_to_unify = [entity for entity in entities if entity.classification(look_deep=True) is not None
                                                               or preferred_classifications[entity] is not None]
@@ -265,7 +262,7 @@ class WebOutputUtils:
         for entity in [entity for entity in entities if entity not in entities_to_unify]:
             real_name = entity.real_name()
             referent_data = {"re":   entity,  "refs": [entity],
-                             "rn":   real_name.encode("utf-8") if isinstance(real_name, unicode) else real_name,
+                             "rn":   real_name if isinstance(real_name, str) else real_name,
                              "pos":  entity.sentimental_value.value[0],
                              "neg":  entity.sentimental_value.value[1],
                              "sc":   "NONE"}
@@ -278,7 +275,7 @@ class WebOutputUtils:
             classification = classification if classification else preferred_classifications[entity]
 
             nc_key = (real_name, classification)
-            if nc_key not in referents_dict.keys():
+            if nc_key not in list(referents_dict.keys()):
                 positive = entity.sentimental_value.value[0]
                 negative = entity.sentimental_value.value[1]
                 references = [entity]
@@ -292,20 +289,20 @@ class WebOutputUtils:
 
             referent_data = {"re":   referenced_entity,
                              "refs": references,
-                             "rn":   real_name.encode("utf-8") if isinstance(real_name, unicode) else real_name,
+                             "rn":   real_name if isinstance(real_name, str) else real_name,
                              "pos":  positive,
                              "neg":  negative,
                              "sc":   str(classification).upper()}
 
             referents_dict[nc_key] = referent_data
 
-        referents = referents_dict.values() + remainder_referents
-        unified = filter(lambda ref_data: len(ref_data["refs"]) > 1, referents)
-        singles = filter(lambda ref_data: len(ref_data["refs"]) == 1, referents)
+        referents = list(referents_dict.values()) + remainder_referents
+        unified = [ref_data for ref_data in referents if len(ref_data["refs"]) > 1]
+        singles = [ref_data for ref_data in referents if len(ref_data["refs"]) == 1]
         return [unified, singles]
 
     def unify_pronouns(self, referents_data, preferred_genders_numbers):
-        if debug_mode: print "--> WebOutputUtils.unify_pronouns(referents_data:", referents_data, ")"
+        if debug_mode: print("--> WebOutputUtils.unify_pronouns(referents_data:", referents_data, ")")
         referents_to_unify = [ref for ref in referents_data
                                       if (ref["re"].category(), ref["re"].msi["type"]) == ("pronoun", "personal")]
         referents_to_unify = [ref for ref in referents_to_unify
@@ -322,12 +319,12 @@ class WebOutputUtils:
         other_referents = [ref for ref in referents_data if ref not in referents_to_unify]
 
         referents = unified_singulars + unified_plurals + singles1 + singles2 + other_referents
-        unified = filter(lambda ref_data: len(ref_data["refs"]) > 1, referents)
-        singles = filter(lambda ref_data: len(ref_data["refs"]) == 1, referents)
+        unified = [ref_data for ref_data in referents if len(ref_data["refs"]) > 1]
+        singles = [ref_data for ref_data in referents if len(ref_data["refs"]) == 1]
         return [unified, singles]
 
     def unify_third_person_pronouns(self, referents_data, preferred_genders_numbers):
-        if debug_mode: print "--> WebOutputUtils.unify_third_person_pronouns(referents_data:", referents_data, ")"
+        if debug_mode: print("--> WebOutputUtils.unify_third_person_pronouns(referents_data:", referents_data, ")")
         pronouns_in_third = \
             [ref for ref in referents_data
              if (ref["re"].category(), ref["re"].msi["type"], ref["re"].person()) == ("pronoun", "personal", 3)]
@@ -342,7 +339,7 @@ class WebOutputUtils:
             name = str(pronoun.referenced()).lower() if pronoun.is_linked() else pronoun.real_name()
 
             key = (gender, number)
-            if key in dict_by_gender_number.keys() \
+            if key in list(dict_by_gender_number.keys()) \
                     and pronoun.is_linked() \
                     and dict_by_gender_number[key]["refs"][0].is_linked() \
                     and pronoun.referenced().lexical_form == dict_by_gender_number[key]["refs"][0].referenced().lexical_form:
@@ -364,20 +361,20 @@ class WebOutputUtils:
 
             dict_by_gender_number[key] = new_referent_data
 
-        referents = dict_by_gender_number.values() + other_referents
-        unified = filter(lambda ref_data: len(ref_data["refs"]) > 1, referents)
-        singles = filter(lambda ref_data: len(ref_data["refs"]) == 1, referents)
+        referents = list(dict_by_gender_number.values()) + other_referents
+        unified = [ref_data for ref_data in referents if len(ref_data["refs"]) > 1]
+        singles = [ref_data for ref_data in referents if len(ref_data["refs"]) == 1]
         return [unified, singles]
 
     def unify_singular_pronouns(self, pronouns_in_singular):
-        if debug_mode: print "--> WebOutputUtils.unify_singular_pronouns(prons_in_singular:", pronouns_in_singular, ")"
+        if debug_mode: print("--> WebOutputUtils.unify_singular_pronouns(prons_in_singular:", pronouns_in_singular, ")")
         sing_pronouns_dict = {}
         for referent_data in pronouns_in_singular:
             entity = referent_data["re"]
             name = "yo" if entity.person() == 1 else "tú"
 
             person = entity.person()
-            if person in sing_pronouns_dict.keys():
+            if person in list(sing_pronouns_dict.keys()):
                 references = sing_pronouns_dict[person]["refs"] + [entity]
                 positive = sing_pronouns_dict[person]["pos"] + referent_data["pos"]
                 negative = sing_pronouns_dict[person]["neg"] + referent_data["neg"]
@@ -395,13 +392,13 @@ class WebOutputUtils:
 
             sing_pronouns_dict[person] = new_referent_data
 
-        referents = sing_pronouns_dict.values()
-        unified = filter(lambda ref_data: len(ref_data["refs"]) > 1, referents)
-        singles = filter(lambda ref_data: len(ref_data["refs"]) == 1, referents)
+        referents = list(sing_pronouns_dict.values())
+        unified = [ref_data for ref_data in referents if len(ref_data["refs"]) > 1]
+        singles = [ref_data for ref_data in referents if len(ref_data["refs"]) == 1]
         return [unified, singles]
 
     def unify_plural_pronouns(self, pronouns_in_plural, preferred_genders_numbers):
-        if debug_mode: print "--> WebOutputUtils.unify_plural_pronouns(prons_in_plural:", pronouns_in_plural, ")"
+        if debug_mode: print("--> WebOutputUtils.unify_plural_pronouns(prons_in_plural:", pronouns_in_plural, ")")
         dict_by_person_gender = {}
         for referent_data in pronouns_in_plural:
             entity = referent_data["re"]
@@ -410,7 +407,7 @@ class WebOutputUtils:
             name = tacit_subjects[entity.person(), number, gender]
             pgn_key = (entity.person(), gender)
 
-            if pgn_key in dict_by_person_gender.keys():
+            if pgn_key in list(dict_by_person_gender.keys()):
                 positive = dict_by_person_gender[pgn_key]["pos"] + referent_data["pos"]
                 negative = dict_by_person_gender[pgn_key]["neg"] + referent_data["neg"]
                 references = dict_by_person_gender[pgn_key]["refs"] + [entity]
@@ -430,13 +427,13 @@ class WebOutputUtils:
 
             dict_by_person_gender[pgn_key] = new_referent_data
 
-        referents = dict_by_person_gender.values()
-        unified = filter(lambda ref_data: len(ref_data["refs"]) > 1, referents)
-        singles = filter(lambda ref_data: len(ref_data["refs"]) == 1, referents)
+        referents = list(dict_by_person_gender.values())
+        unified = [ref_data for ref_data in referents if len(ref_data["refs"]) > 1]
+        singles = [ref_data for ref_data in referents if len(ref_data["refs"]) == 1]
         return [unified, singles]
 
     def unify_plain_entities(self, plain_referents_data):
-        if debug_mode: print "--> WebOutputUtils.unify_plain_entities(plain_referents_data:", plain_referents_data, ")"
+        if debug_mode: print("--> WebOutputUtils.unify_plain_entities(plain_referents_data:", plain_referents_data, ")")
         atomic_plain_referents_data = [ref for ref in plain_referents_data if not ref["re"].children]
         non_atomic_plain_referents_data = [ref for ref in plain_referents_data if ref["re"].children]
 
@@ -448,12 +445,12 @@ class WebOutputUtils:
 
         referents_data = unified_atomic + unified_non_atomic + singles1 + singles2
 
-        unified = filter(lambda ref_data: len(ref_data["refs"]) > 1, referents_data)
-        singles = filter(lambda ref_data: len(ref_data["refs"]) == 1, referents_data)
+        unified = [ref_data for ref_data in referents_data if len(ref_data["refs"]) > 1]
+        singles = [ref_data for ref_data in referents_data if len(ref_data["refs"]) == 1]
         return [unified, singles]
 
     def unify_plain_referents(self, plain_refs_data, is_atomic):
-        if debug_mode: print "--> WebOutputUtils.unify_plain_entities(plain_refs_data:", plain_refs_data, ")"
+        if debug_mode: print("--> WebOutputUtils.unify_plain_entities(plain_refs_data:", plain_refs_data, ")")
         unified_referents = []
         while len(plain_refs_data) > 0:
             unified = plain_refs_data.pop(0)
@@ -468,12 +465,12 @@ class WebOutputUtils:
 
             unified_referents.append(unified)
 
-        unified = filter(lambda ref_data: len(ref_data["refs"]) > 1, unified_referents)
-        singles = filter(lambda ref_data: len(ref_data["refs"]) == 1, unified_referents)
+        unified = [ref_data for ref_data in unified_referents if len(ref_data["refs"]) > 1]
+        singles = [ref_data for ref_data in unified_referents if len(ref_data["refs"]) == 1]
         return [unified, singles]
 
     def get_real_name_for_plain_entities(self, entity1, entity2, is_atomic):
-        if debug_mode: print "--> WebOutputUtils.get_real_name_for_plain_entities(entity1:", entity1, ", entity2:", entity2, ", is_atomic:", str(is_atomic),")"
+        if debug_mode: print("--> WebOutputUtils.get_real_name_for_plain_entities(entity1:", entity1, ", entity2:", entity2, ", is_atomic:", str(is_atomic),")")
 
         if self.kernels_are_synonyms(entity1, entity2):
             object1 = entity1.kernel if is_atomic else entity1
@@ -490,13 +487,13 @@ class WebOutputUtils:
 
             real_name = obj.lexical_form
 
-        real_name = real_name.encode("utf-8") if isinstance(real_name, unicode) else real_name
+        real_name = real_name if isinstance(real_name, str) else real_name
 
-        if debug_mode: print "<-- get_real_name_for_plain_entities:", real_name
+        if debug_mode: print("<-- get_real_name_for_plain_entities:", real_name)
         return real_name
 
     def plain_entities_match(self, entity1, entity2, is_atomic):
-        if debug_mode: print "--> WebOutputUtils.plain_entities_match(entity1:", entity1, ", entity2:", entity2, ")"
+        if debug_mode: print("--> WebOutputUtils.plain_entities_match(entity1:", entity1, ", entity2:", entity2, ")")
 
         if not is_atomic:
             return entity1.lexical_form.lower() == entity2.lexical_form.lower()
@@ -514,33 +511,33 @@ class WebOutputUtils:
 
         msi_match = True
         if both_have_kernel:
-            for key, value in entity1.kernel.msi.iteritems():
-                key_value_match = key in entity2.kernel.msi.keys() and entity2.kernel.msi[key] == value \
-                                  or key not in entity2.kernel.msi.keys()
+            for key, value in entity1.kernel.msi.items():
+                key_value_match = key in list(entity2.kernel.msi.keys()) and entity2.kernel.msi[key] == value \
+                                  or key not in list(entity2.kernel.msi.keys())
                 msi_match = msi_match and key_value_match
             kernels_match = self.kernels_match(entity1.kernel, entity2.kernel)
             match = msi_match and kernels_match
 
         else:
-            for key, value in entity1.msi.iteritems():
-                msi_match = msi_match and ((key in entity2.msi.keys() and entity2.msi[key] == value)
-                                           or (key not in entity2.msi.keys()))
+            for key, value in entity1.msi.items():
+                msi_match = msi_match and ((key in list(entity2.msi.keys()) and entity2.msi[key] == value)
+                                           or (key not in list(entity2.msi.keys())))
             same_lexical_form = entity1.lexical_form.lower() == entity2.lexical_form.lower()
             match = msi_match and same_lexical_form
 
-        if debug_mode: print "<-- plain_entities_match:", str(match)
+        if debug_mode: print("<-- plain_entities_match:", str(match))
         return match
 
     def kernels_match(self, kernel1, kernel2):
-        if debug_mode: print "--> WebOutputUtils.kernels_match(kernel1:", kernel1, ", kernel2:", kernel2, ")"
+        if debug_mode: print("--> WebOutputUtils.kernels_match(kernel1:", kernel1, ", kernel2:", kernel2, ")")
         match = kernel1.lexical_form.lower() == kernel2.lexical_form.lower() \
                 or self.are_synonyms(kernel1, kernel2)
 
-        if debug_mode: print "<-- kernels_match:", str(match)
+        if debug_mode: print("<-- kernels_match:", str(match))
         return match
 
     def kernels_are_synonyms(self, entity1, entity2):
-        if debug_mode: print "--> WebOutputUtils.kernels_are_synonyms(entity1:", entity1, ", entity2:", entity2, ")"
+        if debug_mode: print("--> WebOutputUtils.kernels_are_synonyms(entity1:", entity1, ", entity2:", entity2, ")")
 
         both_have_kernel =     hasattr(entity1, "kernel") and entity1.kernel is not None \
                            and hasattr(entity2, "kernel") and entity2.kernel is not None
@@ -548,16 +545,16 @@ class WebOutputUtils:
         are_synonyms = self.are_synonyms(entity1.kernel, entity2.kernel) if both_have_kernel \
                        else False
 
-        if debug_mode: print "<-- kernels_are_synonyms:", str(are_synonyms)
+        if debug_mode: print("<-- kernels_are_synonyms:", str(are_synonyms))
         return are_synonyms
 
     def are_synonyms(self, kernel1, kernel2):
-        if debug_mode: print "--> WebOutputUtils.are_synonyms(lemma1:", kernel1.lemma, ", lemma2:", kernel2.lemma, ")"
+        if debug_mode: print("--> WebOutputUtils.are_synonyms(lemma1:", kernel1.lemma, ", lemma2:", kernel2.lemma, ")")
         lemma1 = kernel1.lemma
         lemma2 = kernel2.lemma
-        are_synonyms = lemma1 in self.synonyms.keys() and self.synonyms[lemma1] == lemma2
+        are_synonyms = lemma1 in list(self.synonyms.keys()) and self.synonyms[lemma1] == lemma2
 
-        if debug_mode: print "<-- are_synonyms:", str(are_synonyms)
+        if debug_mode: print("<-- are_synonyms:", str(are_synonyms))
         return are_synonyms
 
     def _get_synonyms(self):
@@ -574,7 +571,7 @@ class WebOutputUtils:
         replacements = {}
         config = ConfigProvider()
         replacements_filename = config.get("resources", resource)
-        for line in reader(open(replacements_filename, 'r')):
+        for line in reader(open(replacements_filename, 'r', encoding="utf-8")):
             replacements[line[0]] = line[1]
             if bidirectional:
                 replacements[line[1]] = line[0]

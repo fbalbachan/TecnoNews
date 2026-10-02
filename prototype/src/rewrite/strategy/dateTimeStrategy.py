@@ -113,7 +113,7 @@ class DateTimeStrategy:
                 text += "s"
             text += ", "
 
-        groups_by_pos = dict_by(groups, lambda (group, position): position)
+        groups_by_pos = dict_by(groups, lambda group_position: group_position[1])
 
         middle_end_groups = sum([[group for group, pos in groups_by_pos[pos]] for pos in ["middle", "end"]
                                  if pos in groups_by_pos], [])
@@ -204,10 +204,10 @@ class DateTimeStrategy:
         return grouped
 
     def filter_not_punctuation(self, leaves):
-        return filter(lambda leaf: leaf.msi["category"] != "punctuation", leaves)
+        return [leaf for leaf in leaves if leaf.msi["category"] != "punctuation"]
 
     def are_adjacent(self, node, other, clause):
-        all_leaves = filter(lambda leaf: leaf.msi["category"] != "punctuation", clause.proper_leaves())
+        all_leaves = [leaf for leaf in clause.proper_leaves() if leaf.msi["category"] != "punctuation"]
         node_leaves = self.filter_not_punctuation(node.leaves())
         other_leaves = self.filter_not_punctuation(other.leaves())
         return all_leaves.index(node_leaves[-1]) == all_leaves.index(other_leaves[0]) - 1

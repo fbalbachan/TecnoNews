@@ -3,7 +3,7 @@
 
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 
@@ -11,13 +11,13 @@ class VitonicaParser(GenericParser):
     def __init__(self):
         super(VitonicaParser, self).__init__()
 
-    source = u"Vitonica"
+    source = "Vitonica"
 
     def parse(self, url):
         #url = "http://www.vitonica.com/dietas/el-indice-glucemico-de-un-alimento-podria-variar-de-una-persona-a-otra?utm_source=feedburner&utm_medium=feed&utm_campaign=Feed%3A+Vitonica+%28Vitonica%29"
 
-	soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
-	for script in soup(["script", "style"]):
+        soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
+        for script in soup(["script", "style"]):
             script.extract()
 
 

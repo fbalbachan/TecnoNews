@@ -9,7 +9,7 @@ from src.sentinews.parsers.generic_parser import GenericParser
 
 
 class BitcoinNoticiasParser(GenericParser):
-    source = u"BitcoinNoticias"
+    source = "BitcoinNoticias"
 
     def parse(self, url):
        

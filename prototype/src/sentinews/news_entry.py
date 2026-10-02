@@ -4,13 +4,13 @@ from src.sentinews.categorizer import Categorizer
 from src.utils.logger_utils import *
 from src.utils.configProvider import ConfigProvider
 import traceback
-import ConfigParser
+import configparser
 
 logger = get_logger('tecnonews')
 
 
 class NewsEntry(object):
-    def __init__(self, title, content, tags, source, url=None, original_categories=None, language=u"spanish",
+    def __init__(self, title, content, tags, source, url=None, original_categories=None, language="spanish",
                  categories=None, wp_id=None, wp_url=None, related=None, entities=None,
                  published_date=None, object_id=None, versions=None, universe_versions=None,
                  universe_scores=None, image=None, image_search_string=None, summary=None, extended_summary=None, rewritable=True):
@@ -52,8 +52,8 @@ class NewsEntry(object):
         self.extended_summary = extended_summary
         self.rewritable = rewritable
         # Defensive programing to avoid wrong encoded
-        assert(isinstance(self.title, unicode))
-        assert(isinstance(self.content, unicode))
+        assert(isinstance(self.title, str))
+        assert(isinstance(self.content, str))
 
         # 20160328 - Daniel Cantarín
         # There are some problematic titles. Here's some cleaning code.
@@ -92,7 +92,7 @@ class NewsEntry(object):
 
         assert self.categories
 
-        if len(self.categories) == 1 and list(self.categories)[0] == u'inter\xe9s general':
+        if len(self.categories) == 1 and list(self.categories)[0] == 'inter\xe9s general':
             logger.info("Tags to be categorized")
             logger.info("Original Categories %s " % self.original_categories)
             logger.info("tags %s" % self.tags)
@@ -149,7 +149,7 @@ class NewsEntry(object):
             ranked_entities_list = self.rank_of_entities()
         except Exception as e:
             logger = get_logger('tecnonews')
-            logger.error("<NewsEntry> <most_relevant_entities> %s " % e.message)
+            logger.error("<NewsEntry> <most_relevant_entities> %s " % str(e))
             logger.error(traceback.format_exc())
             # If we have an error getting the rank list just return empty relevant entities
             return []
@@ -165,27 +165,27 @@ class NewsEntry(object):
         return ' '.join([w for w in self.content.split() if w.lower() not in self.load_stopwords()])
 
     def load_stopwords(self):
-        import ConfigParser
+        import configparser
 
         stopwords = []
         config = ConfigProvider()
         stopwords_filename = config.get("resources", "stopwords_es_clean")
 
-        for line in open(stopwords_filename, 'r'):
+        for line in open(stopwords_filename, 'r', encoding="utf-8"):
             if line[0] not in ['<', '%', '\n']:
-                stopwords.append(line.decode('utf-8').rstrip('\n'))
+                stopwords.append(line.rstrip('\n'))
 
         return stopwords
 
     def safe_unicode(self, text):
-        if isinstance(text, unicode):
+        if isinstance(text, str):
             u_text = text
         else:
             try:
-                u_text = unicode(text, 'utf-8', errors='ignore')
-            except Exception, e:
+                u_text = str(text, 'utf-8', errors='ignore')
+            except Exception as e:
                 logger = get_logger('tecnonews')
-                logger.info("NewsEntry safe_unicode :" + e.message)
+                logger.info("NewsEntry safe_unicode :" + str(e))
                 u_text = text
 
         return u_text
@@ -202,10 +202,10 @@ class NewsEntry(object):
             str_text = text
         else:
             try:
-                str_text = text.encode('utf-8')
-            except Exception, e:
+                str_text = text
+            except Exception as e:
                 logger = get_logger('tecnonews')
-                logger.info("NewsEntry safe_str :" + e.message)
+                logger.info("NewsEntry safe_str :" + str(e))
                 str_text = text
 
         return str_text

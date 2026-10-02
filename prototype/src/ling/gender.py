@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 __author__ = 'Martin Caramés Abente'
 
-from enum import Enum
+# Python 2 ran with the 'enum' 0.4.4 package, where these members were plain strings: StrEnum keeps
+# them comparable to strings, JSON serializable and printable as their value
+from enum import StrEnum
 
 
-class Gender(Enum):
-    masculine = u"masculine"
-    feminine = u"feminine"
-    neutral = u"neutral"
+class Gender(StrEnum):
+    masculine = "masculine"
+    feminine = "feminine"
+    neutral = "neutral"
 
     @classmethod
     def most_specific(cls, gender1, gender2):

@@ -13,7 +13,7 @@ class AlthoughClauseDislocationStrategy:
 
         aunque = False
         i = 0
-        for i in xrange(len(node.children)):
+        for i in range(len(node.children)):
             child = node.children[i]
             if isinstance(child, LeafNode) and child.lemma == 'aunque':
                 aunque = True
@@ -41,7 +41,7 @@ class AlthoughClauseDislocationStrategy:
         node = sentence.parse_node
         token = node.children[1].token
 
-        text = sentence.paragraph.text.decode("utf-8")
+        text = sentence.paragraph.text
         first_part = text[node.token.start():token.end()].strip()
         second_part = text[token.end():node.token.end()].strip()
 
@@ -65,20 +65,20 @@ class AlthoughClauseDislocationStrategy:
         first_part = first_part[0].lower() + first_part[1:]
 
         rewritten_sentence = second_part + " " + first_part + final_punctuation
-        return Rewrite(node, rewritten_sentence.encode('utf-8'))
+        return Rewrite(node, rewritten_sentence)
 
     def rewrite_q_although_p(self, sentence):
         node = sentence.parse_node
 
         iaunque = 0
-        for iaunque in xrange(len(node.children)):
+        for iaunque in range(len(node.children)):
             child = node.children[iaunque]
             if isinstance(child, LeafNode) and child.lemma == 'aunque':
                 break
         token_aunque = node.children[iaunque].token
         token = node.children[iaunque+1].token
 
-        text = sentence.paragraph.text.decode("utf-8")
+        text = sentence.paragraph.text
         first_part = text[node.token.start():token_aunque.start()].strip()
         second_part = text[token.start():token.end()].strip()
         third_part = text[token.end():node.token.end()].strip()
@@ -109,6 +109,6 @@ class AlthoughClauseDislocationStrategy:
             third_part = " " + third_part[0].lower() + third_part[1:]
 
         rewritten_sentence = second_part + " " + first_part + third_part + final_punctuation
-        return Rewrite(node, rewritten_sentence.encode('utf-8'))
+        return Rewrite(node, rewritten_sentence)
 
     type = "dislocation"

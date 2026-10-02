@@ -13,7 +13,7 @@ class ClauseExtractor:
 
     @staticmethod
     def extract_from(sentence):
-        if debug_mode: print "--> ClauseExtractor. extract_from(sentence) - sentence: ", sentence.text
+        if debug_mode: print("--> ClauseExtractor. extract_from(sentence) - sentence: ", sentence.text)
 
         clause_separators = ["grup-verb", "subord-rel", "subord", "subord-ger", "verb-pass"]
         root = sentence.parse_node
@@ -31,15 +31,14 @@ class ClauseExtractor:
             for node in nodes:
                 clause = Clause(node)
                 clauses_by_node[node] = clause
-                parents = filter(lambda clause_node: clause_node in clauses_by_node,
-                                 node.path_to_root())
+                parents = [clause_node for clause_node in node.path_to_root() if clause_node in clauses_by_node]
                 if parents:
                     parent = parents[0]
                     father_clause = clauses_by_node[parent]
                     clause.set_father(father_clause)
                     father_clause.add_child(clause)
 
-        clauses = clauses_by_node.values()
+        clauses = list(clauses_by_node.values())
 
         for clause in clauses:
             clause.proper_by_original = ClauseExtractor.compute_proper_tree_for(clause)
@@ -63,14 +62,14 @@ class ClauseExtractor:
     def without_invalid_clauses(clauses):
         is_cc = lambda leaf: leaf.msi["category"] == "conjunction" and leaf.msi["type"] == "coordinated"
         is_punctuation = lambda leaf: leaf.msi["category"] == "punctuation"
-        invalids = filter(lambda p_clause: all([is_cc(leaf) or is_punctuation(leaf)
-                                                for leaf in p_clause.proper_tree().leaves()]), clauses)
+        invalids = [p_clause for p_clause in clauses if all([is_cc(leaf) or is_punctuation(leaf)
+                                                for leaf in p_clause.proper_tree().leaves()])]
         only_valid_clauses = lambda p_clause: p_clause not in invalids
-        clauses = filter(only_valid_clauses, clauses)
+        clauses = list(filter(only_valid_clauses, clauses))
         for clause in clauses:
             if clause.father in invalids:
                 clause.father = None
-            clause.children = filter(only_valid_clauses, clause.children)
+            clause.children = list(filter(only_valid_clauses, clause.children))
         return clauses
 
     @staticmethod
@@ -82,6 +81,5 @@ class ClauseExtractor:
 
     @staticmethod
     def filter_invalid_subordinated_clauses(nodes):
-        temp_nodes = filter(lambda node: node.label not in ["subord-rel"] or (node.label in ["subord-rel"] and node.level() != 0) ,nodes)
-        return filter(lambda node: not node.is_subordinate() or node.label not in ["grup-verb", "verb-pass"],
-                      temp_nodes)
+        temp_nodes = [node for node in nodes if node.label not in ["subord-rel"] or (node.label in ["subord-rel"] and node.level() != 0)]
+        return [node for node in temp_nodes if not node.is_subordinate() or node.label not in ["grup-verb", "verb-pass"]]

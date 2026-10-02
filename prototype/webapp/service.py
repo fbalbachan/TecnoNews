@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from StringIO import StringIO
+from io import StringIO
 import logging
 import os
 import sys
@@ -13,20 +13,20 @@ import random
 import codecs
 
 import web
-from skimpyGimpy import skimpyAPI
+from captcha.image import ImageCaptcha
 
 from src.model.contentRewriterAndGenerator import ContentRewriterAndGenerator
 from src.model.sentilecto import Sentilecto
 from src.utils.webOutputUtils import WebOutputUtils
 from src.utils.configProvider import ConfigProvider
 from src.ling.freelingDictionaryParser import FreelingDictionaryParser
-from src.utils.freelingLanguageDetectorClient import FreelingLanguageDetectorClient
+from src.utils.languageDetectorClient import LanguageDetectorClient
 
 from src.utils.textSummarizer import TextSummarizer
 from src.utils.quoteFinder import QuoteFinder
 
-from BeautifulSoup import BeautifulSoup
-import urllib2
+from bs4 import BeautifulSoup
+import urllib.request, urllib.error, urllib.parse
 import re
 
 from src.utils.apiConnector import ApiConnector
@@ -41,12 +41,12 @@ cleanup_timer = None
 config = ConfigProvider()
 debug_mode = (config.get("debug", "debug") == "True")
 ontology = FreelingDictionaryParser.get_ontology()
-freeling_language_detector = FreelingLanguageDetectorClient()
+language_detector = LanguageDetectorClient()
 
 
 def parse_url(url):
     try:
-        page = urllib2.urlopen(url)
+        page = urllib.request.urlopen(url)
 
         soup = BeautifulSoup(page.read())
         texts = soup.findAll("p")
@@ -158,12 +158,11 @@ def financial_result(analysis):
 
 
 def generate_captcha(req_id):
-    captcha_key = os.urandom(2).encode("hex")
+    captcha_key = os.urandom(2).hex()
     request_data[req_id] = {"captcha": captcha_key,
                             "start": time.time()}
 
-    generator = skimpyAPI.Png(captcha_key)
-    generator.data(captcha_filename_for(req_id))
+    ImageCaptcha().write(captcha_key, captcha_filename_for(req_id))
 
 
 def captcha_filename_for(req_id):
@@ -190,8 +189,8 @@ def cleanup_session(p_request_id):
 
 
 def detect_language(input_text):
-    result = freeling_language_detector.parse(input_text.replace('\n', ' '))
-    if result[0] == u'':
+    result = language_detector.parse(input_text.replace('\n', ' '))
+    if result[0] == '':
         return None
     else:
         return result[0]
@@ -208,14 +207,14 @@ def get_input_text():
             file_contents = ""
 
         if file_contents != "":
-            text = unicode(file_contents, "utf-8")
+            text = file_contents.decode("utf-8") if isinstance(file_contents, bytes) else file_contents
         else:
             text = web_input.text if ("url-input" not in web_input or web_input["url-input"] == "") else parse_url(web_input["url-input"])
 
         return text
 
     except Exception:
-        print format_exc()
+        print(format_exc())
 
         if debug_mode:
             web.template.render().exception(format_exc(), "")
@@ -244,7 +243,7 @@ def analyze(debug_output=False):
         return Sentilecto.analyze(get_input_text(), output_demo_debug=debug_output)
 
     except Exception:
-        print format_exc()
+        print(format_exc())
 
         if debug_mode:
             web.template.render().exception(format_exc(), "")
@@ -283,7 +282,7 @@ class RunTests_request:
 
         subprocess.call(path + "/../run_tests", shell=True)
         # It takes its time, then writes a file. We catch that.
-        f = open(path + "/../test_results.log", "r")
+        f = open(path + "/../test_results.log", "rb")
         a = f.read()
         f.close()
         return a.decode("unicode-escape")
@@ -295,14 +294,14 @@ class Debug_request:
         sys.stdout = output
         sys.stderr = output
 
-        print web.ctx
+        print(web.ctx)
 
         input_text = get_input_text()
         language = detect_language(input_text)
-        if language == u'es' or language == u'it' or language == u'fr' or language == u'ca' or language == u'as' or language == u'gl':
+        if language == 'es' or language == 'it' or language == 'fr' or language == 'ca' or language == 'as' or language == 'gl':
             analysis = analyze(debug_output=True)
             return web.template.render().debug(output.getvalue())
-        elif language == u'pt':
+        elif language == 'pt':
             # return web.template.render().ptresult()
             return redirect_to_pt(input_text, "debug")
         else:
@@ -317,10 +316,10 @@ class HiddenEntiNews_request:
 
         input_text = get_input_text()
         language = detect_language(input_text)
-        if language == u'es' or language == u'it' or language == u'fr' or language == u'ca' or language == u'as' or language == u'gl':
+        if language == 'es' or language == 'it' or language == 'fr' or language == 'ca' or language == 'as' or language == 'gl':
             analysis = analyze()
             return web.template.render().entinews(analysis, WebOutputUtils(ontology))
-        elif language == u'pt':
+        elif language == 'pt':
             # return web.template.render().ptresult()
             return redirect_to_pt(input_text, "hidden")
         else:
@@ -339,7 +338,7 @@ class EntiNews_request:
             return web.template.render().rewrite(ContentRewriterAndGenerator().run(web_input.text))
 
         except Exception:
-            print format_exc()
+            print(format_exc())
             web.redirect("/sentilecto")
 
     def action_content_summarize(self):
@@ -348,7 +347,7 @@ class EntiNews_request:
             return web.template.render().summary(analysis["paragraph"].text, TextSummarizer(analysis).summarize(), QuoteFinder(analysis).get_checkable_quotes())
 
         except Exception:
-            print format_exc()
+            print(format_exc())
             web.redirect("/sentilecto")
 
     def action_content_financial(self):
@@ -358,7 +357,7 @@ class EntiNews_request:
             return web.template.render().financial(analysis["paragraph"].text, financial_result(analysis))
 
         except Exception:
-            print format_exc()
+            print(format_exc())
             web.redirect("/sentilecto")
 
     def action_fact_extraction(self):
@@ -380,7 +379,7 @@ class EntiNews_request:
         response = ApiConnector().make_request(get_input_text(), language=language)
         extractor = TreeRepresentation(response)
         new_response = '\n'.join(extractor.get_compliance(language))
-        new_response = "INPUT TEXT: " + get_input_text().encode('utf-8') + "\n" + new_response
+        new_response = "INPUT TEXT: " + get_input_text() + "\n" + new_response
         try:
             test_result = json.dumps(response, sort_keys=True, indent=4)
         except Exception as e:
@@ -400,36 +399,36 @@ class EntiNews_request:
         import datetime
         import traceback
 
-        categoria = [u'interés general']
+        categoria = ['interés general']
         text = None
         try:
             service = NewsEntriesService()
-            contents = [a_content for a_content in get_input_text().split(u'NOTA ') if len(a_content.strip()) > 0]
+            contents = [a_content for a_content in get_input_text().split('NOTA ') if len(a_content.strip()) > 0]
 
             final_news = []
             for a_news in contents:
-                clean_lines = [a_line.strip() for a_line in a_news.split(u'\n') if len(a_line.strip()) > 0][1:]
-                raw_date = [int(a_number) for a_number in clean_lines[-1].split(u'-')[0].strip().split(u'/')]
-                raw_time = [int(a_number) for a_number in clean_lines[-1].split(u'-')[1].strip().split(u':')]
-                clean_news = {u'source': 'DEMO', u'title': clean_lines[0], u'content': u'\n'.join(clean_lines[1:-1]), u'date': datetime.datetime(raw_date[-1], raw_date[-2], raw_date[-3], raw_time[0], raw_time[1])}
+                clean_lines = [a_line.strip() for a_line in a_news.split('\n') if len(a_line.strip()) > 0][1:]
+                raw_date = [int(a_number) for a_number in clean_lines[-1].split('-')[0].strip().split('/')]
+                raw_time = [int(a_number) for a_number in clean_lines[-1].split('-')[1].strip().split(':')]
+                clean_news = {'source': 'DEMO', 'title': clean_lines[0], 'content': '\n'.join(clean_lines[1:-1]), 'date': datetime.datetime(raw_date[-1], raw_date[-2], raw_date[-3], raw_time[0], raw_time[1])}
                 final_news.append(clean_news)
 
             final_news = sorted(final_news, key=lambda x: x['date'], reverse=False)
             for a_news in final_news:
-                entry = NewsEntry(title=a_news[u'title'], content=a_news[u'content'],
+                entry = NewsEntry(title=a_news['title'], content=a_news['content'],
                                   tags=categoria,
-                                  source=a_news[u'source'],
-                                  url=u'www.no-url.com',
+                                  source=a_news['source'],
+                                  url='www.no-url.com',
                                   original_categories=categoria,
                                   image_search_string=None)
 
-                entry.published_date = a_news[u'date']
+                entry.published_date = a_news['date']
                 other_versions = []
                 try:
                     entry.set_analisys_info()
                     analysis = Sentilecto.analyze(entry.content)
                     analysis["referent_ranking"] = ReferentRanker(analysis["paragraph"]).rank()
-                    entry.categories = [u"interés general"]
+                    entry.categories = ["interés general"]
                     tsr = RelatedNewsEntries(entry, optimized=True)
                     other_versions = tsr.get_other_versions_optimized(with_score=True)[:10]
                     related = []
@@ -449,7 +448,7 @@ class EntiNews_request:
 
         if not text:
             web.redirect("/sentilecto")
-        return web.template.render().english(text, u'', WebOutputUtils(ontology))
+        return web.template.render().english(text, '', WebOutputUtils(ontology))
 
     def POST(self):
 
@@ -490,9 +489,9 @@ class EntiNews_request:
 
                 if 1 == 2 and method == 'english':
                     return action_by_method[method](language)
-                elif language == u'es' or language == u'it' or language == u'fr' or language == u'ca' or language == u'as' or language == u'gl':
+                elif language == 'es' or language == 'it' or language == 'fr' or language == 'ca' or language == 'as' or language == 'gl':
                     return action_by_method[method]()
-                elif language == u'pt':
+                elif language == 'pt':
                     # return web.template.render().ptresult()
                     return redirect_to_pt(input_text, "result", web_input)
                 else:
@@ -507,22 +506,22 @@ class EntiNews_request:
 def redirect_to_pt(text, point, web_input=None):
     numero = random.random()
     archivo = "/tmp/sentilecto-redirect-" + str(numero)
-    print "Escribiendo archivo \"" + archivo + "\"..."
-    f = open(archivo, "w")
+    print("Escribiendo archivo \"" + archivo + "\"...")
+    f = open(archivo, "w", encoding="utf-8")
 
     if web_input is not None:
         for key in web_input:
-            f.write(key.encode("utf-8") + ":" + web_input[key].encode("utf-8") + "\n")
+            f.write(key + ":" + web_input[key] + "\n")
 
-    f.write("--------------------\n".encode("utf-8"))
-    f.write(text.encode("utf-8"))
+    f.write("--------------------\n")
+    f.write(text)
     f.close()
     # f = codecs.open(archivo, "r", "utf-8")
     # print "Contenido del archivo: " + f.read().decode('string-escape').decode("utf-8")
     # f.close()
 
     url = "/sentiportugues/" + point + "?n=" + str(numero)
-    print "Redireccionando hacia \"" + url + "\" ..."
+    print("Redireccionando hacia \"" + url + "\" ...")
     return web.seeother(url)
 
 # # # MAIN # # #
@@ -531,7 +530,7 @@ def redirect_to_pt(text, point, web_input=None):
 def write_pid_file():
     pid = str(os.getpid())
     pid_file = './sentilecto.pid'
-    file(pid_file, 'w').write(pid)
+    open(pid_file, 'w').write(pid)
 
 
 def setup_loggers():
@@ -543,7 +542,7 @@ def setup_loggers():
 
 
 if __name__ == '__main__':
-    print 'launching...'
+    print('launching...')
 
     urls = ('/',            'Index_request',
             '/result',      'EntiNews_request',

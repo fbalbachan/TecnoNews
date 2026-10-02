@@ -3,7 +3,7 @@
 
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -13,7 +13,7 @@ class TelamTurismoParser(GenericParser):
     def __init__(self):
         super(TelamTurismoParser, self).__init__()
 
-    source = u"Telam - Turismo"
+    source = "Telam - Turismo"
 
     def parse(self, url):
         # url = "http://www.telam.com.ar/notas/201603/140085-chaco-semana-santa-turismo.html"

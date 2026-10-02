@@ -3,7 +3,7 @@
 
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -12,7 +12,7 @@ class ElcomercioGastronomiaParser(GenericParser):
     def __init__(self):
         super(ElcomercioGastronomiaParser, self).__init__()
 
-    source = u"ElcomercioGastronomia"
+    source = "ElcomercioGastronomia"
     
     def parse(self, url):
         #url = "http://elcomercio.pe/gastronomia/recetas/facebook-aprende-hacer-panqueques-saludables-solo-dos-ingredientes-video-noticia-1872084"
@@ -33,7 +33,7 @@ class ElcomercioGastronomiaParser(GenericParser):
         content = "" 
         article_content = None
         tmp = soup.select("div[itemprop=articleBody]")
-	for div in tmp:
+        for div in tmp:
             article_content = div
         
         paragraphs = article_content.findAll("p")
@@ -51,7 +51,7 @@ class ElcomercioGastronomiaParser(GenericParser):
         categories = []
         tags = []
 
-        tags = [u"gastronomía"]
+        tags = ["gastronomía"]
         categories=["estilo vida"]
         
         new_entry = self.create_news_entry(title=title, content=content,

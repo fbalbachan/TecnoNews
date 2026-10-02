@@ -24,9 +24,9 @@ class TestBlogPublisher(unittest.TestCase):
 
         content = 'Hola. <a href=http://www.google.com>Link de prueba</a>. y mas texto no analizado'
         entry = NewsEntry('Hola, a diego le gusta hacer pruebas',content,['salud', 'droga'], 'fuente_de_prueba')
-        print entry.destination
+        print(entry.destination)
         self.blog_publisher.publish(entry)
-        print entry.wp_id
+        print(entry.wp_id)
 
 
     def test_publish_tecnologia(self):

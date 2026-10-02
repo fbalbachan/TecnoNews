@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -11,13 +11,13 @@ class DiarioDelViajeroParser(GenericParser):
     def __init__(self):
         super(DiarioDelViajeroParser, self).__init__()
 
-    source = u"Diario del Viajero"
+    source = "Diario del Viajero"
     
     def parse(self, url):
         #url = "http://www.diariodelviajero.com/espana/monasterio-de-silos-1?utm_source=feedburner&utm_medium=feed&utm_campaign=Feed%3A+diariodelviajero+%28Diario+del+viajero%29"
         
-	soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
-	for script in soup(["script", "style"]):
+        soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
+        for script in soup(["script", "style"]):
             script.extract()
             
             

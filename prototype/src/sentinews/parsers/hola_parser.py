@@ -3,7 +3,7 @@
 
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -12,14 +12,14 @@ class HolaParser(GenericParser):
     def __init__(self):
         super(HolaParser, self).__init__()
 
-    source = u"Hola"
+    source = "Hola"
     
     def parse(self, url):
         #url = "http://www.hola.com/actualidad/2015112582300/sergio-alvarez-charlotte-murray-hola/"
         
-	soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
-	
-	for script in soup(["script", "style"]):
+        soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
+        
+        for script in soup(["script", "style"]):
             script.extract()
             
             
@@ -28,7 +28,7 @@ class HolaParser(GenericParser):
         
         
         title = soup.find('h1', {'itemprop':'headline'})
-        title = re.sub(u' ?[^., ]{2,3}? ¡HOLA![,]?', '', title.text.strip()).strip()
+        title = re.sub(' ?[^., ]{2,3}? ¡HOLA![,]?', '', title.text.strip()).strip()
         
         content = ""
         
@@ -41,12 +41,12 @@ class HolaParser(GenericParser):
         for paragraph in paragraphs:
             clean_text = paragraph.text.strip()
             for a_tag in paragraph.findAll(["strong", "a"]):
-            	a_tag.extract()
+                a_tag.extract()
             no_tag_text = paragraph.text.strip()
             #print clean_text
             #print no_tag_text
 
-            if re.match(u'^-', clean_text) is not None:
+            if re.match('^-', clean_text) is not None:
                 continue
                 
             if no_tag_text != "":

@@ -3,7 +3,7 @@
 
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -12,13 +12,13 @@ class PlanetaCuriosoParser(GenericParser):
     def __init__(self):
         super(PlanetaCuriosoParser, self).__init__()
 
-    source = u"Planeta Curioso"
+    source = "Planeta Curioso"
     
     def parse(self, url):
         #url = "http://www.planetacurioso.com/2016/01/25/air-bonsai-los-curiosos-bonsais-que-flotan-causan-sensacion-todos-quieren-uno/"
         
-	soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
-	for script in soup(["script", "style"]):
+        soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
+        for script in soup(["script", "style"]):
             script.extract()
             
             
@@ -58,8 +58,8 @@ class PlanetaCuriosoParser(GenericParser):
         #print content
         #exit()
 
-        tags = [u"insólito"]
-        categories=[u"insólito"]
+        tags = ["insólito"]
+        categories=["insólito"]
         
         new_entry = self.create_news_entry(title=title, content=content,
                                            tags=tags,

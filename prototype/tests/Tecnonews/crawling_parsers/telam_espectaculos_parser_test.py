@@ -18,16 +18,16 @@ class TelamEspectaculosParserTest(unittest.TestCase):
     def parse_single_url(self, url):
         entry = TelamEspectaculosParser().parse(url=url)
         if not TelamEspectaculosParser().is_parseable_case(url):
-            print "Nor parsing news"
+            print("Nor parsing news")
             self.assertIsNone(entry)
         else:
             self.assertIsNotNone(entry)
-            print "Content:", entry.content, '\n'
-            print "Tags:", entry.tags, '\n'
-            print "Title:", entry.title, '\n'
-            print "Source:", entry.source, '\n'
-            print "Category:", entry.categories, '\n'
-            print "original_categories:", entry.original_categories, '\n'
+            print("Content:", entry.content, '\n')
+            print("Tags:", entry.tags, '\n')
+            print("Title:", entry.title, '\n')
+            print("Source:", entry.source, '\n')
+            print("Category:", entry.categories, '\n')
+            print("original_categories:", entry.original_categories, '\n')
 
     def test_all_in_feed(self):
         feeds = feedparser.parse(feed_url)
@@ -37,32 +37,32 @@ class TelamEspectaculosParserTest(unittest.TestCase):
         error_urls = []
 
         for entry in entries:
-            print u"case:", entry['link'], u"\n"
+            print("case:", entry['link'], "\n")
             try:
                 self.parse_single_url(entry['link'])
             except Exception as e:
                 error_urls.append(entry['link'])
-                print "Error parsing"
-                print e.message
+                print("Error parsing")
+                print(str(e))
 
-        print "Total cases: ", len(entries)
-        print "Errors", len(error_urls)
-        print "Urls:", error_urls
+        print("Total cases: ", len(entries))
+        print("Errors", len(error_urls))
+        print("Urls:", error_urls)
 
     def test_parse_single_url(self):
         url = 'http://www.telam.com.ar/notas/201505/105200-cine-festival-de-cannes-la-patota-santiago-mitre-dolores-fonzi.html'
         if not TelamEspectaculosParser().is_parseable_case(url):
-            print "Nor parsing news"
+            print("Nor parsing news")
             self.assertIsNone(entry)
         else:
             entry = TelamEspectaculosParser().parse(url=url)
             self.assertIsNotNone(entry)
-            print "Content:", entry.content, '\n'
-            print "Tags:", entry.tags, '\n'
-            print "Title:", entry.title, '\n'
-            print "Source:", entry.source, '\n'
-            print "Category:", entry.categories, '\n'
-            print "original_categories:", entry.original_categories, '\n'
+            print("Content:", entry.content, '\n')
+            print("Tags:", entry.tags, '\n')
+            print("Title:", entry.title, '\n')
+            print("Source:", entry.source, '\n')
+            print("Category:", entry.categories, '\n')
+            print("original_categories:", entry.original_categories, '\n')
 
 if __name__ == '__main__':
     unittest.main()

@@ -3,7 +3,7 @@
 
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -12,13 +12,13 @@ class PisosParser(GenericParser):
     def __init__(self):
         super(PisosParser, self).__init__()
 
-    source = u"Pisos"
+    source = "Pisos"
     
     def parse(self, url):
         #url = "http://www.pisos.com/noticias/noticias/mas-actualidad/barcelona-anuncia-un-paquete-de-2-000-viviendas-sociales/?utm_source=feedburner&utm_medium=feed&utm_campaign=Feed%3A+ActualidadPisosCom+%28Actualidad+Inmobiliaria%29&utm_content=FeedBurner"
         
-	soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
-	for script in soup(["script", "style"]):
+        soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
+        for script in soup(["script", "style"]):
             script.extract()
             
             

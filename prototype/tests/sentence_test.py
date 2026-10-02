@@ -3,7 +3,7 @@
 from ast import literal_eval
 import unittest
 
-from csv_file_reader import load_csv_test_file
+from tests.csv_file_reader import load_csv_test_file
 from src.model.sentence.sentenceAnalyzer import SentenceAnalyzer
 from src.model.sentence.sentence import *
 from tests.freelingTreeRepository import FreelingTreeRepository
@@ -19,7 +19,7 @@ class TestSentence(TestBase):
         analyzer = SentenceAnalyzer(FreelingTreeRepository("tests/input/trees"))
 
         for (input_text, active, passive, unimember) in self.input_texts:
-            print "trying: %s .. " % input_text,
+            print("trying: %s .. " % input_text, end=' ')
 
             self.input = input_text
 
@@ -30,9 +30,9 @@ class TestSentence(TestBase):
 
             voice = sentence.clauses[0].voice
             expected_voice = "active" if literal_eval(active) else "passive" if literal_eval(passive) else None
-            self.assertEquals(voice, expected_voice, "La voz de la oración es incorrecta.")
+            self.assertEqual(voice, expected_voice, "La voz de la oración es incorrecta.")
 
-            print "OK"
+            print("OK")
 
 if __name__ == '__main__':
     unittest.main()

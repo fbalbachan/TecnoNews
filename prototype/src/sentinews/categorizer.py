@@ -14,25 +14,23 @@ class Categorizer(object):
         categories_file = self.config.get("resources", "categories")
         countries_file = self.config.get("resources", "countries")
 
-        categories_reader = unicode_csv_reader(open(categories_file, 'r'), first_line_is_header=False, delimiter=',')
+        categories_reader = unicode_csv_reader(open(categories_file, 'r', encoding="utf-8"), first_line_is_header=False, delimiter=',')
 
         self.default_cat = self.config.get('publishing', 'default_category')
         assert self.default_cat
-        if not isinstance(self.default_cat, unicode):
-            self.default_cat = self.default_cat.decode('utf-8')
 
         self.categories_dict = {}
         for row in categories_reader:
-            if not isinstance(row[0], unicode):
-                category = unicode(row[0], 'utf-8')
+            if not isinstance(row[0], str):
+                category = str(row[0], 'utf-8')
             else:
                 category = row[0]
 
-            self.categories_dict[category] = [unicode(element, 'utf-8') for element in row if element != '']
+            self.categories_dict[category] = [element for element in row if element != '']
 
-        countries_reader = unicode_csv_reader(open(countries_file, 'r'), first_line_is_header=False, delimiter=',')
+        countries_reader = unicode_csv_reader(open(countries_file, 'r', encoding="utf-8"), first_line_is_header=False, delimiter=',')
 
-        self.countries_list = [unicode(country[0].lower(), 'utf-8') for country in countries_reader]
+        self.countries_list = [country[0].lower() for country in countries_reader]
         self.categories = self.__create_categories()
 
     def get_or_else(self):
@@ -42,7 +40,7 @@ class Categorizer(object):
         categories = set([])
         if len(self.tags) > 0:
             for element in self.tags:
-                for category, list_tags in self.categories_dict.iteritems():
+                for category, list_tags in self.categories_dict.items():
                     for tag in list_tags:
                         ltag = tag.lower()
                         lelement = element.lower()

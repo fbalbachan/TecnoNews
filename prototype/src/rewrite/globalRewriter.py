@@ -22,12 +22,12 @@ class GlobalRewriter:
         sentences_entity_context = []
 
         for a_sentence in self.paragraph.sentences:
-            if debug_mode: print "-->SENTENCE:" + a_sentence.text
+            if debug_mode: print("-->SENTENCE:" + a_sentence.text)
 
             a_clause = a_sentence.main_clause()
 
-            if debug_mode: print "---->CLAUSE: " + str(a_clause)
-            if debug_mode: print "\n------>" + str(a_clause.all_entities()) + "\n"
+            if debug_mode: print("---->CLAUSE: " + str(a_clause))
+            if debug_mode: print("\n------>" + str(a_clause.all_entities()) + "\n")
 
             sentences_entity_context.append(a_clause.named_entities_by_structure())
 
@@ -41,7 +41,7 @@ class GlobalRewriter:
                 current_context.update(a_clause.named_entities_by_structure())
 
             #GET ALL ENTITIES WITH THEIR RESPECTIVE ROLES:
-            current_entities = {str(k):{"entity_object":k,"role":v} for (k,v) in current_context.iteritems() if (k.is_tacit() or not k.appositions)}
+            current_entities = {str(k):{"entity_object":k,"role":v} for (k,v) in current_context.items() if (k.is_tacit() or not k.appositions)}
 
             #LOOP THROUGH ALL FOLLOWING SENTENCES:
             for current_idx, a_following_context in enumerate(sentences_entity_context):
@@ -52,7 +52,7 @@ class GlobalRewriter:
                 secondary_sentence_idx = main_sentence_idx + current_idx + 1
 
                 #GET AL ENTITIES WITH SUBJECT ROLE:
-                subject_entities = [k for (k,v) in a_following_context.iteritems() if v == u'subject']
+                subject_entities = [k for (k,v) in a_following_context.items() if v == 'subject']
 
                 for a_subject_entity in subject_entities:
                     #GOTO REFERENCE (IF NECESSARY)
@@ -69,13 +69,13 @@ class GlobalRewriter:
                         secondary_entity = a_subject_entity
 
                         #NEED UNICODE FOR SLICING!!
-                        input_paragraph = self.paragraph.text.decode('utf-8')
+                        input_paragraph = self.paragraph.text
 
-                        if debug_mode: print "----------HAY CAMBIO----------"
-                        if debug_mode: print "---Role: " + main_role.encode('utf-8')
-                        if debug_mode: print "---Main sentence: " + main_sentence.text
-                        if debug_mode: print "---Secondary sentence: " + secondary_sentence.text
-                        if debug_mode: print "\n"
+                        if debug_mode: print("----------HAY CAMBIO----------")
+                        if debug_mode: print("---Role: " + main_role)
+                        if debug_mode: print("---Main sentence: " + main_sentence.text)
+                        if debug_mode: print("---Secondary sentence: " + secondary_sentence.text)
+                        if debug_mode: print("\n")
 
                         #Extract sentence:
                         new_secondary = input_paragraph[secondary_sentence.token.start():secondary_sentence.token.end()]
@@ -108,5 +108,5 @@ class GlobalRewriter:
 
 
 
-                        return (new_paragraph_before + " " + new_main + " " + new_paragraph_after).strip().encode('utf-8')
+                        return (new_paragraph_before + " " + new_main + " " + new_paragraph_after).strip()
         return self.paragraph.text

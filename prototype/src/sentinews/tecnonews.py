@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from src.sentinews.news_rewriter import NewsRewriter
 from src.sentinews.news_crawler import NewsCrawler
-from src.utils.freelingLanguageDetectorClient import FreelingLanguageDetectorClient
-from src.utils.freelingClientParser import FreelingClientParser
+from src.utils.languageDetectorClient import LanguageDetectorClient
+from src.utils.spacyClientParser import SpacyClientParser
 from src.utils.textDistance import TextDistance
 from src.services.mongodb.news_entries_service import NewsEntriesService
 from src.utils.relatedNewsEntries import RelatedNewsEntries
@@ -26,15 +26,15 @@ class TecnoNews(object):
             self.config = config_provider
 
         self.instance = get_instance_info()
-        self.freeling_lang_ident = FreelingLanguageDetectorClient()
-        self.freeling_parse = FreelingClientParser()
+        self.lang_ident = LanguageDetectorClient()
+        self.parser = SpacyClientParser()
         self.service = NewsEntriesService()
         self.published_in_this_run = 0
         self.not_published_in_this_run = 0
 
     def _environment_health(self):
-        li_health = self.freeling_lang_ident.health_check()
-        parse_health = self.freeling_parse.health_check()
+        li_health = self.lang_ident.health_check()
+        parse_health = self.parser.health_check()
 
         return li_health and parse_health
 
@@ -52,7 +52,7 @@ class TecnoNews(object):
             logger.info("<Tecnonews> <run> processing entry %s of %s" % (idx, len(entries)))
             self._process(entry)
 
-        logger.info("Freeling ident calls number:%s" % self.freeling_lang_ident.calls_count)
+        logger.info("Language ident calls number:%s" % self.lang_ident.calls_count)
         logger.info("not published: %s \n Published: %s" % (self.not_published_in_this_run,
                                                             self.published_in_this_run))
         logger.info("<Tecnonews> <run> Done.")
@@ -180,7 +180,7 @@ if __name__ == '__main__':
     # time.sleep(1)
     tn = TecnoNews()
     instance_id = tn.config.get('instance', 'id')
-    print instance_id
+    print(instance_id)
 
     while True:
         if tn._environment_health():

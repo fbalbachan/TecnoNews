@@ -30,7 +30,7 @@ class TecnonewsTest(unittest.TestCase):
             entry.set_related_news(related)
             logger.info("<Tecnonews> <_process> samenews diferente coverage number %s" % len(other_versions))
             logger.info("<Tecnonews> <_process> related_news number %s" % len(related))
-        except Exception, e:
+        except Exception as e:
             logger.error("<Tecnonews> <_process> related_news %s" % entry.title)
             logger.error("<Tecnonews> <_process> related_news %s" % traceback.format_exc())
             logger.info(traceback.format_exc())
@@ -47,7 +47,7 @@ class TecnonewsTest(unittest.TestCase):
             # entry.published_date = datetime.utcnow()
             # entry.wp_id = c.rewritten_entry.wp_id
             # pass
-        except Exception, e:
+        except Exception as e:
             logger.error("<Tecnonews> <_process> rewriting fail: %s " % (entry.title))
             logger.info(traceback.format_exc())
 

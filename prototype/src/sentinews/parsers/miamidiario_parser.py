@@ -11,7 +11,7 @@ class MiamiDiarioParser(GenericParser):
     def __init__(self):
         super(MiamiDiarioParser, self).__init__()
 
-    source = u"Miami Diario"
+    source = "Miami Diario"
 
     def is_parseable(self, url, soup=None):
         allowed = True
@@ -19,8 +19,8 @@ class MiamiDiarioParser(GenericParser):
             soup = BeautifulSoup(self.opener.read(url))
 
         category = soup.find('div', {"class": "nombre_seccion"})
-        categories_not_wanted = {u'Guia fin de semana', u'Eventos', u'Farándula', u'Rostro y cuerpo',
-                                 u'Trucos de cocina', u'Curiosidades', u'Comunitaria', u'Tránsito', u'Música'}
+        categories_not_wanted = {'Guia fin de semana', 'Eventos', 'Farándula', 'Rostro y cuerpo',
+                                 'Trucos de cocina', 'Curiosidades', 'Comunitaria', 'Tránsito', 'Música'}
 
         if category.text in categories_not_wanted:
             allowed = False
@@ -28,10 +28,10 @@ class MiamiDiarioParser(GenericParser):
         #extract video
         tag_list = soup.find('div', {"class": "tags"})
         for tag in tag_list.findAll('a'):
-            if (tag.text in u'Video') or (tag.text in u'caja de pandora') or (tag.text in u'nuevo video'):
+            if (tag.text in 'Video') or (tag.text in 'caja de pandora') or (tag.text in 'nuevo video'):
                 allowed = False
 
-        if u'/opinion/' in url:
+        if '/opinion/' in url:
             allowed = False
 
         return allowed
@@ -58,10 +58,10 @@ class MiamiDiarioParser(GenericParser):
 
         content = soup.find('div', {"class": "desarrollo_noticia"})
 
-        unwanted_titles = {u"También te puede interesar:", u"También le puede interesar leer:",
-                           u"Quizás le interese leer:", u"Le puede interesar también:",
-                           u"Para más información, visite:", u"Quizás le interese...", u"Le puede interesar:",
-                           u"Le puede interesar leer:", u"Disfrútalo aquí"}
+        unwanted_titles = {"También te puede interesar:", "También le puede interesar leer:",
+                           "Quizás le interese leer:", "Le puede interesar también:",
+                           "Para más información, visite:", "Quizás le interese...", "Le puede interesar:",
+                           "Le puede interesar leer:", "Disfrútalo aquí"}
 
         #clean unwanted links
         for tambien in content.findAll('strong'):

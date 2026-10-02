@@ -11,7 +11,7 @@ class ViveloHoyParser(GenericParser):
     def __init__(self):
         super(ViveloHoyParser, self).__init__()
 
-    source = u"Vivelo Hoy"
+    source = "Vivelo Hoy"
 
     def is_parseable(self, url, soup=None):
 
@@ -19,11 +19,11 @@ class ViveloHoyParser(GenericParser):
         if not soup:
             soup = BeautifulSoup(self.opener.read(url))
 
-        if u"/video/" in url:
+        if "/video/" in url:
             allowed = False
         #lso post de opinion no van
         category = soup.find('meta',{"property":"article:section"})
-        if (u'Opinión' in category['content']) or ('Entretenimiento' in category['content']):
+        if ('Opinión' in category['content']) or ('Entretenimiento' in category['content']):
             allowed = False
         #los post sin tags son solo video
         tag_list = soup.findAll('meta',{"property":"article:tag"})
@@ -89,18 +89,18 @@ class ViveloHoyParser(GenericParser):
         paragraphs =  content.findAll('p')
         if paragraphs:
             last_paragraph = paragraphs.pop()
-            if re.match(u'[_|-| ]?Por .+',last_paragraph.text):
+            if re.match('[_|-| ]?Por .+',last_paragraph.text):
                 last_paragraph.extract()
 
         content = content.text
         #remove certain strings
-        content = re.sub(u'-Con servicios de w+',u'',content)
-        content = re.sub(ur'– ?Con información .+', u'', content)
-        content = re.sub(u'EFE[USA]*', u'',content)
-        content = re.sub(u'—Agencias', u'',content)
+        content = re.sub('-Con servicios de w+','',content)
+        content = re.sub(r'– ?Con información .+', '', content)
+        content = re.sub('EFE[USA]*', '',content)
+        content = re.sub('—Agencias', '',content)
         #take out first line
-        first_line_regex = re.compile(ur'( ?\S)+? ?[-|—|–]')
-        content = first_line_regex.sub(u'', content, 1)
+        first_line_regex = re.compile(r'( ?\S)+? ?[-|—|–]')
+        content = first_line_regex.sub('', content, 1)
         content = content.strip()
 
         new_entry = self.create_news_entry(title=title, content=content,

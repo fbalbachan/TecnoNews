@@ -11,7 +11,7 @@ debug_mode = False
 
 class TextualCite:
     def __init__(self, dislocation=None, changes=None):
-        if debug_mode: print "--> TextualCite.init()"
+        if debug_mode: print("--> TextualCite.init()")
 
         if dislocation is None:
             self.dislocation = [True, False]
@@ -24,11 +24,11 @@ class TextualCite:
         self.head_nodes = ["grup-verb", "subord-rel", "subord", "subord-ger", "verb-pass"]
 
     def applies_to(self, sentence, node):
-        if debug_mode: print "--> TextualCite.applies_to(node:", node, ")"
+        if debug_mode: print("--> TextualCite.applies_to(node:", node, ")")
         return self.applies_quote(sentence, node)
 
     def applies_quote(self, sentence, node):
-        if debug_mode: print "--> TextualCite.applies_quote(node:", node, ")"
+        if debug_mode: print("--> TextualCite.applies_quote(node:", node, ")")
         verb_que_idx = None
         group_verb_que_idx = None
         closing_quote_idx = None
@@ -71,7 +71,7 @@ class TextualCite:
                              and closing_quote_idx is not None
                              # and is_verb_son_of_verb_root != []
 
-        if debug_mode: print "<-- applies_quote(): ", str(applies_normal or applies_quote_root)
+        if debug_mode: print("<-- applies_quote(): ", str(applies_normal or applies_quote_root))
         return applies_normal or applies_quote_root
 
     @property
@@ -85,7 +85,7 @@ class TextualCite:
         config = ConfigProvider()
         verbs_que_filename = config.get("resources", "verbs_que")
 
-        for line in open(verbs_que_filename, 'r'):
+        for line in open(verbs_que_filename, 'r', encoding="utf-8"):
             if line[0] not in ['<', '%', '\n']:
                 verbs_que.append(line.rstrip('\n'))
         return verbs_que
@@ -147,7 +147,7 @@ class TextualCite:
                 else:
                     continue
         except Exception as e:
-            print e.message
+            print(str(e))
             ex_type, ex, tb = sys.exc_info()
             traceback.print_tb(tb)
             raise e
@@ -215,7 +215,7 @@ class TextualCite:
             return self.rewrite_quote(sentence, node)
 
     def rewrite_quote(self, sentence, node):
-        text = sentence.paragraph.text.decode("utf-8")
+        text = sentence.paragraph.text
 
         # Case root is '"'
         if node.label == "F-no-c":
@@ -279,7 +279,7 @@ class TextualCite:
                 rewritten_sentence += '.'
 
 
-            return Rewrite(node, rewritten_sentence.encode('utf-8'))
+            return Rewrite(node, rewritten_sentence)
 
 
         # Case root is not '"'
@@ -319,6 +319,6 @@ class TextualCite:
             before_verb = text[node.children[cite_indexes[0]+2].token.start():node.children[verb_idx-1].token.end()].strip()
             between_verb_and_cite = text[node.children[verb_idx+1].token.start():node.children[cite_indexes[0]-1].token.end()].strip()
 
-        return Rewrite(node, rewritten_sentence.encode('utf-8'))
+        return Rewrite(node, rewritten_sentence)
 
     type = "dislocation"

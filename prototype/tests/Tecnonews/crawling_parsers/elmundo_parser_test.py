@@ -23,32 +23,32 @@ class ElMundoParserTest(unittest.TestCase):
         # url = 'http://www.elmundo.es/opinion/2015/04/29/554138cd22601db75d8b456d.html'
 
         entry = ElMundoParser().parse(url=url)
-        if u'/opinion/' in url:
-            print "Nor parsing opinion news"
+        if '/opinion/' in url:
+            print("Nor parsing opinion news")
             self.assertIsNone(entry)
         else:
             self.assertIsNotNone(entry)
-            print "Content:", entry.content, '\n'
-            print "Tags:", entry.tags, '\n'
-            print "Title:", entry.title, '\n'
-            print "Source:", entry.source, '\n'
-            print "Category:", entry.categories, '\n'
-            print "original_categories:", entry.original_categories, '\n'
+            print("Content:", entry.content, '\n')
+            print("Tags:", entry.tags, '\n')
+            print("Title:", entry.title, '\n')
+            print("Source:", entry.source, '\n')
+            print("Category:", entry.categories, '\n')
+            print("original_categories:", entry.original_categories, '\n')
 
     def parse_single_url(self, url):
 
         entry = ElMundoParser().parse(url=url)
-        if u'/opinion/' in url:
-            print "Nor parsing opinion news"
+        if '/opinion/' in url:
+            print("Nor parsing opinion news")
             self.assertIsNone(entry)
         else:
             self.assertIsNotNone(entry)
-            print "Content:", entry.content, '\n'
-            print "Tags:", entry.tags, '\n'
-            print "Title:", entry.title, '\n'
-            print "Source:", entry.source, '\n'
-            print "Category:", entry.categories, '\n'
-            print "original_categories:", entry.original_categories, '\n'
+            print("Content:", entry.content, '\n')
+            print("Tags:", entry.tags, '\n')
+            print("Title:", entry.title, '\n')
+            print("Source:", entry.source, '\n')
+            print("Category:", entry.categories, '\n')
+            print("original_categories:", entry.original_categories, '\n')
 
     def test_all_in_feed(self):
         feeds = feedparser.parse(feed_url)
@@ -58,18 +58,18 @@ class ElMundoParserTest(unittest.TestCase):
         error_urls = []
 
         for entry in entries:
-            print u"case:", entry['link'], u"\n"
+            print("case:", entry['link'], "\n")
             try:
                 self.parse_single_url(entry['link'])
             except Exception as e:
                 error_urls.append(entry['link'])
 
-                print "Error parsing"
-                print e.message
+                print("Error parsing")
+                print(str(e))
 
-        print "Total cases: ", len(entries)
-        print "Errors", len(error_urls)
-        print "Urls:", error_urls
+        print("Total cases: ", len(entries))
+        print("Errors", len(error_urls))
+        print("Urls:", error_urls)
 
 
 

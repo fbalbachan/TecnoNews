@@ -3,7 +3,7 @@
 
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -12,7 +12,7 @@ class DomesticooParser(GenericParser):
     def __init__(self):
         super(DomesticooParser, self).__init__()
 
-    source = u"Domesticoo"
+    source = "Domesticoo"
 
     def parse(self, url):
         #url = "http://www.serviciodomesticoo.com/blog/domesticoo-foro-de-envejecimiento-activo/"
@@ -53,8 +53,8 @@ class DomesticooParser(GenericParser):
 
         #print content
         #exit()
-        categories = [u"interés general"]
-        tags = [u"interés general"]
+        categories = ["interés general"]
+        tags = ["interés general"]
 
         #categories=[urlparse(url).path.split("/")[1]]
         #print categories

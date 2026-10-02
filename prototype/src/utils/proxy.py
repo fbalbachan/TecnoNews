@@ -1,6 +1,5 @@
 #-*- coding: utf-8 -*-
 
-import new
 from types import MethodType
 
 class Proxy(object):
@@ -13,6 +12,6 @@ class Proxy(object):
         f = getattr(target, aname)
         if isinstance(f, MethodType):
             # Rebind the method to the target.
-            return new.instancemethod(f.im_func, self, target.__class__)
+            return MethodType(f.__func__, self)
         else:
             return f

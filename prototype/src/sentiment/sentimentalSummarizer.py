@@ -41,12 +41,12 @@ class SentimentalSummarizer:
         summary = {}
         for clause in clauses:
             clause_summary = analysis[clause]
-            for dimension, value in clause_summary.items():
+            for dimension, value in list(clause_summary.items()):
                 if not dimension in summary: summary[dimension] = 0
                 summary[dimension] = summary[dimension] + value
 
         n = float(len(clauses))
-        for dimension, value in summary.items():
+        for dimension, value in list(summary.items()):
             summary[dimension] = summary[dimension] / n
 
         return summary

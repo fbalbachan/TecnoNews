@@ -16,7 +16,7 @@ class NewsEntryMongoServiceTest(unittest.TestCase):
 		self.db = MongoConnector.get_instance('test')
 		if self.db is not None:
 			self.db.drop_collection('news_entries')
-		self.news = NewsEntry(title=u'Diego ganó el prode', content=u'Reamente lo ganó. Aun laburando de ñoqui', 
+		self.news = NewsEntry(title='Diego ganó el prode', content='Reamente lo ganó. Aun laburando de ñoqui', 
 			tags=['deportes','salud', 'delito'],source='Euronews',
 			url="http://feed.clarin.com", wp_id='999',
 			related=[ObjectId() for i in range(0,5)],
@@ -36,7 +36,7 @@ class NewsEntryMongoServiceTest(unittest.TestCase):
 		news_list = self.service.get_list({'title': 'Diego ganó el prode'})
 		self.assertIsNotNone(news_list)
 		self.assertTrue(len(news_list) > 0)
-		self.assertEquals(news_list[0].title, self.news.title)
+		self.assertEqual(news_list[0].title, self.news.title)
 
 
 	def test_retrieve_news_entry_list_by_given_date(self):
@@ -52,7 +52,7 @@ class NewsEntryMongoServiceTest(unittest.TestCase):
 		news_list = self.service.get_list({'published_date': {'$gte': self.news.published_date - five_seconds}})
 		self.assertIsNotNone(news_list)
 		self.assertTrue(len(news_list) == 1)
-		self.assertEquals(news_list[0].content, self.news.content)
+		self.assertEqual(news_list[0].content, self.news.content)
 
 	def test_retrieve_news_by_given_date_fail(self):
 		five_seconds = timedelta(seconds=5)
@@ -117,14 +117,14 @@ class NewsEntryMongoServiceTest(unittest.TestCase):
 		for related_new_object_id in news_list[0].related:
 			self.assertTrue(isinstance(related_new_object_id, ObjectId))
 
-		self.assertEquals(len(news_list[0].versions), 3)
+		self.assertEqual(len(news_list[0].versions), 3)
 		for version_id in news_list[0].versions:
 			self.assertTrue(isinstance(version_id, ObjectId))
 
 		unmarshalled_news = self.service.get_list({'_id': news_list[0].object_id})
 		self.assertIsNotNone(unmarshalled_news)
 		self.assertTrue(len(unmarshalled_news) == 1)
-		self.assertEquals(unmarshalled_news[0].title, self.news.title )
+		self.assertEqual(unmarshalled_news[0].title, self.news.title )
 
 
 if __name__ == '__main__':

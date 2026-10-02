@@ -19,19 +19,19 @@ logger = get_logger('tecnonews')
 class VoicePassiveStrategy:
 
     def __init__(self, ontology):
-        if debug_mode: print "--> VoicePassiveStrategy.init()"
+        if debug_mode: print("--> VoicePassiveStrategy.init()")
         self.ontology = ontology
 
     def applies_to(self, sentence, node):
-        if debug_mode: print "--> VoicePassiveStrategy.applies_to(sentence: ", sentence, ")"
+        if debug_mode: print("--> VoicePassiveStrategy.applies_to(sentence: ", sentence, ")")
         appliance_vector = (self.applies_to_clause(clause) for clause in sentence.clauses)
         applies = any(appliance_vector)
 
-        if debug_mode: print "<-- VoicePassiveStrategy.applies_to = ", str(applies)
+        if debug_mode: print("<-- VoicePassiveStrategy.applies_to = ", str(applies))
         return applies
 
     def rewrite(self, sentence, node):
-        if debug_mode: print "--> VoicePassiveStrategy.rewrite(sentence: ", sentence, ", node: ", node, ")"
+        if debug_mode: print("--> VoicePassiveStrategy.rewrite(sentence: ", sentence, ", node: ", node, ")")
 
         rewrite_rule = None
 
@@ -49,25 +49,25 @@ class VoicePassiveStrategy:
         except Exception as e:
             logger = get_logger('tecnonews')
             logger.info("VoicePassiveStrategy Rewrite exception:")
-            logger.info(e.message)
+            logger.info(str(e))
             ex_type, ex, tb = sys.exc_info()
             logger.info(traceback.format_tb(tb))
 
         return rewrite_rule
 
     def applies_to_clause(self, clause):
-        if debug_mode: print "--> VoicePassiveStrategy.applies_to_clause(clause: ", clause, ")"
+        if debug_mode: print("--> VoicePassiveStrategy.applies_to_clause(clause: ", clause, ")")
 
         applies = self.is_complete(clause) \
                   and clause.voice == 'passive' \
                   and clause.verb and clause.verb.transitivity == 'TRANSITIVE' \
                   and clause.node.label == "verb-pass"
 
-        if debug_mode: print "<-- VoicePassiveStrategy.applies_to_clause = ", str(applies)
+        if debug_mode: print("<-- VoicePassiveStrategy.applies_to_clause = ", str(applies))
         return applies
 
     def is_complete(self, clause):
-        if debug_mode: print "--> VoicePassiveStrategy.is_complete(clause: ", clause, ")"
+        if debug_mode: print("--> VoicePassiveStrategy.is_complete(clause: ", clause, ")")
 
         is_complete = clause.has_structure('subject') \
                       and not clause.structure('subject').is_tacit() \
@@ -76,7 +76,7 @@ class VoicePassiveStrategy:
                            or (clause.structure('od').is_tacit()
                                and clause.structure('od').entity().coref_chain != []))
 
-        if debug_mode: print "<-- is_complete? ", str(is_complete)
+        if debug_mode: print("<-- is_complete? ", str(is_complete))
         return is_complete
 
     def rewrite_clause(self, node, sentence, clauses):
@@ -99,7 +99,7 @@ class VoicePassiveStrategy:
 
             # transform the last leaf of verb (ie clause.verb) to the msi of the first leaf of verb
             lexical_forms = self.ontology.get_lexical_forms(clause.verb.lemma(), msi)
-            rewritten_verb = filter(lambda lf: lf.text != leaf.lexical_form, lexical_forms)[0].text
+            rewritten_verb = [lf for lf in lexical_forms if lf.text != leaf.lexical_form][0].text
 
             text = clause.node.leaves_string()
             verb = clause.structure('verb').lexical_form()
@@ -168,7 +168,7 @@ class VoicePassiveStrategy:
                 ntext = ntext[:-2] + '.'
 
             # Uppercase if produced text if the start of a sentence
-            paragraph = sentence.paragraph.text.decode("utf-8")
+            paragraph = sentence.paragraph.text
             start = clause.proper_leaves()[0].token.start()
 
             if start > 0:
@@ -183,7 +183,7 @@ class VoicePassiveStrategy:
         except Exception as e:
             ex_type, ex, tb = sys.exc_info()
             logger.info("VoicePassiveStrategy Rewriting:")
-            logger.info(e.message)
+            logger.info(str(e))
             logger.info(traceback.print_tb(tb))
 
         return Rewrite(clause.node, ntext)

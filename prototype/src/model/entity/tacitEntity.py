@@ -10,7 +10,7 @@ debug_mode = False
 
 class TacitEntity:
     def __init__(self, lexical_form, msi, attributes=None):
-        if debug_mode: print "--> TacitEntity.init(lexical_form:", lexical_form, ")"
+        if debug_mode: print("--> TacitEntity.init(lexical_form:", lexical_form, ")")
         self.lexical_form = lexical_form
         if 'animity' not in msi:
             msi["animity"] = Animity.inanimate
@@ -59,7 +59,7 @@ class TacitEntity:
         return self.lexical_form.split("_")
 
     def children_of_category(self, category):
-        return filter(lambda entity: entity.category() == category, self.children)
+        return [entity for entity in self.children if entity.category() == category]
 
     #
     # Methods related to MSI (morphosyntatic-information)
@@ -105,7 +105,7 @@ class TacitEntity:
         return Animity.animities_match(self.msi["animity"], animity)
 
     def matches_msi(self, msi):
-        for key, value in msi.items():
+        for key, value in list(msi.items()):
             if key not in self.msi:
                 return False
 

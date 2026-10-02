@@ -3,7 +3,7 @@
 
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -12,7 +12,7 @@ class AutoBildMxParser(GenericParser):
     def __init__(self):
         super(AutoBildMxParser, self).__init__()
 
-    source = u"Auto Bild Mexico"
+    source = "Auto Bild Mexico"
 
     def parse(self, url):
         #url = "http://autobild.com.mx/doble-hoy-no-circula/"
@@ -47,8 +47,8 @@ class AutoBildMxParser(GenericParser):
             clean_text = paragraph.text.strip()
             content += "\n" + clean_text
 
-        categories = [u"automóviles"]
-        tags = [u"automóviles"]
+        categories = ["automóviles"]
+        tags = ["automóviles"]
 
         #categories=[urlparse(url).path.split("/")[1]]
         #print categories

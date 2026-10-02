@@ -12,7 +12,7 @@ debug_mode = False
 class Entity (TacitEntity):
 
     def __init__(self, node):
-        if debug_mode: print "--> Entity.init(node: ", node, ")"
+        if debug_mode: print("--> Entity.init(node: ", node, ")")
         self.node = node
         self.kernel = None
         self.father = None
@@ -67,11 +67,10 @@ class Entity (TacitEntity):
 
     def subordinating_nodes(self):
         path_to_root = self.node.path_to_root()
-        return filter(lambda node: node.label in ["coor-sp", "grup-sp", "sp-de", "grup-sp-inf"],
-                      path_to_root)
+        return [node for node in path_to_root if node.label in ["coor-sp", "grup-sp", "sp-de", "grup-sp-inf"]]
 
     def lexical_form(self):
-        if debug_mode: print "--> Entity.lexical_form()"
+        if debug_mode: print("--> Entity.lexical_form()")
         lf = ParseNode.lexical_form(self.node)
         return lf
 

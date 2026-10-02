@@ -1,45 +1,20 @@
-try:
-    import cairo
-except ImportError:
-    import cairocffi as cairo
-try:
-    import rsvg
-except ImportError:
-    import cairosvg as rsvg
-from wand.image import Image
-from wand.color import Color
-
-
 def to_png(data, ofile, maxwidth=0, maxheight=0):
+    """Renders the SVG markup in data to the PNG file ofile, on a light grey background, scaled down
+    (keeping the aspect ratio) to fit maxwidth x maxheight when they are given."""
+    # imported here: they need the native cairo / ImageMagick libraries, only for this conversion
+    import cairosvg
+    from wand.image import Image
+    from wand.color import Color
 
-    svg = rsvg.Handle(data=data)
-
-    x = width = svg.props.width
-    y = height = svg.props.height
-    print "actual dims are " + str((width, height))
-    print "converting to " + str((maxwidth, maxheight))
-
-    yscale = xscale = 1
-
-    if (maxheight != 0 and width > maxwidth) or (maxheight != 0 and height > maxheight):
-        x = maxwidth
-        y = float(maxwidth)/float(width) * height
-        print "first resize: " + str((x, y))
-        if y > maxheight:
-            y = maxheight
-            x = float(maxheight)/float(height) * width
-            print "second resize: " + str((x, y))
-        xscale = float(x)/svg.props.width
-        yscale = float(y)/svg.props.height
-
-    surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, x, y)
-    context = cairo.Context(surface)
-    context.scale(xscale, yscale)
-    svg.render_cairo(context)
-    surface.write_to_png(ofile)
+    if isinstance(data, str):
+        data = data.encode("utf-8")
+    cairosvg.svg2png(bytestring=data, write_to=ofile)
 
     with Image(filename=ofile) as img:
+        print("actual dims are " + str((img.width, img.height)))
+        if maxwidth and maxheight and (img.width > maxwidth or img.height > maxheight):
+            print("converting to " + str((maxwidth, maxheight)))
+            img.transform(resize="%dx%d" % (maxwidth, maxheight))
         img.background_color = Color("#EEEEEE")
+        img.alpha_channel = "remove"
         img.save(filename=ofile)
-
-

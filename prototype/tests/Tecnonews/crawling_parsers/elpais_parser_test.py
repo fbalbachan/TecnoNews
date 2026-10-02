@@ -17,12 +17,12 @@ class TestElPaisCrawler(unittest.TestCase):
 
         entry = ElPaisParser().parse(url=url)
         self.assertIsNotNone(entry)
-        print "Content:", entry.content, '\n'
-        print "Tags:", entry.tags, '\n'
-        print "Title:", entry.title, '\n'
-        print "Source:", entry.source, '\n'
-        print "Category:", entry.categories, '\n'
-        print "original_categories:", entry.original_categories, '\n'
+        print("Content:", entry.content, '\n')
+        print("Tags:", entry.tags, '\n')
+        print("Title:", entry.title, '\n')
+        print("Source:", entry.source, '\n')
+        print("Category:", entry.categories, '\n')
+        print("original_categories:", entry.original_categories, '\n')
 
     def test_resumen_del_dia(self):
         url = 'http://elpais.com/elpais/2015/05/01/actualidad/1430515195_553826.html'
@@ -43,12 +43,12 @@ class TestElPaisCrawler(unittest.TestCase):
 
         entry = ElPaisParser().parse(url=url)
         self.assertIsNotNone(entry)
-        print "Content:", entry.content, '\n'
-        print "Tags:", entry.tags, '\n'
-        print "Title:", entry.title, '\n'
-        print "Source:", entry.source, '\n'
-        print "Category:", entry.categories, '\n'
-        print "original_categories:", entry.original_categories, '\n'
+        print("Content:", entry.content, '\n')
+        print("Tags:", entry.tags, '\n')
+        print("Title:", entry.title, '\n')
+        print("Source:", entry.source, '\n')
+        print("Category:", entry.categories, '\n')
+        print("original_categories:", entry.original_categories, '\n')
 
     def test_all_in_feed(self):
         feeds = feedparser.parse(feed_url)
@@ -58,18 +58,18 @@ class TestElPaisCrawler(unittest.TestCase):
         error_urls = []
 
         for entry in entries:
-            print u"case:", entry['link'], u"\n"
+            print("case:", entry['link'], "\n")
             try:
                 self.parse_single_url(entry['link'])
             except Exception as e:
                 error_urls.append(entry['link'])
 
-                print "Error parsing"
-                print e.message
+                print("Error parsing")
+                print(str(e))
 
-        print "Total cases: ", len(entries)
-        print "Errors", len(error_urls)
-        print "Urls:", error_urls
+        print("Total cases: ", len(entries))
+        print("Errors", len(error_urls))
+        print("Urls:", error_urls)
 
 if __name__ == '__main__':
     unittest.main()

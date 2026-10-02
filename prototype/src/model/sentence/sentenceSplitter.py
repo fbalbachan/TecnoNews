@@ -14,23 +14,22 @@ class SentenceSplitter:
     # TODO: Think again these parameters: text / paragraph / both?
     def sentences_in(self, text, paragraph=None):
 
-        text = text.decode("utf-8")
         text = self.replace_strange_chars(text)
         split_text = self.split(text)
-        texts = [each.strip().encode("utf-8") for each in split_text]
+        texts = [each.strip() for each in split_text]
 
-        non_empty_texts = filter(lambda p_text: p_text != '' and text is not None, texts)
+        non_empty_texts = [p_text for p_text in texts if p_text != '' and text is not None]
         sentences = self.to_sentences(non_empty_texts, text, paragraph)
 
         return sentences
 
     def replace_strange_chars(self, text):
-        text = text.replace(u'\xab', u'"').replace(u'\xbb', u'"')
-        text = text.replace(u'«', u'"').replace(u'»', u'"')
-        text = text.replace(u'/', u'-')
-        text = text.replace(u'“', u'"').replace(u'”', u'"')
-        text = text.replace(u'‘', u'"').replace(u'’', u'"')
-        text = text.replace(u'“', u'"').replace(u'”', u'"')
+        text = text.replace('\xab', '"').replace('\xbb', '"')
+        text = text.replace('«', '"').replace('»', '"')
+        text = text.replace('/', '-')
+        text = text.replace('“', '"').replace('”', '"')
+        text = text.replace('‘', '"').replace('’', '"')
+        text = text.replace('“', '"').replace('”', '"')
         return text
 
     # Dirty
@@ -41,6 +40,7 @@ class SentenceSplitter:
         validator = lambda match: not self.is_number(match) \
                                   and self.is_valid_delimiter_before_period(match.group(1))
 
+        # the third argument has always been maxsplit (re.U == 32), not flags: kept as it was
         texts = re.split(self.delimiters, text, re.U)
         reg_exp = "(\w+|[^A-Za-z0-9])(\.)(?=[^\.])"
         texts_list = [self.split_by(reg_exp, text, default_replace, validator) for text in texts]
@@ -81,7 +81,7 @@ class SentenceSplitter:
 
         end = 0
         for sentence in sentences:
-            sentence_text = sentence.text.decode("utf-8")
+            sentence_text = sentence.text
             index = source.index(sentence_text)
             source = source[index + len(sentence_text):]
 
@@ -103,16 +103,17 @@ class SentenceSplitter:
 
     abbreviation_regex = re.compile(abbreviation_re, re.U | re.I)
 
-    delimiters = re.compile(ur"""[!\?]\s+"""
-                            ur"""|(?=\.$)"""
-                            ur"""|\n"""
-                            ur"""|, ?y\b"""
-                            ur"""|, ?pero\b"""
-                            ur"""|, ?entonces"""
-                            ur"""|, ?sin embargo\b"""
-                            ur"""|, ?no obstante"""
-                            ur"""|;"""
-                            ur"""|\.\.\."""
-                            ur"""|, ?pues\b""", re.U | re.I)
+    # Python 2 ignored empty matches in re.split, so a zero width alternative "(?=\.$)" that used to be here
+    # never split anything; Python 3.7+ would split on it and cut the final period off every paragraph
+    delimiters = re.compile(r"""[!\?]\s+"""
+                            r"""|\n"""
+                            r"""|, ?y\b"""
+                            r"""|, ?pero\b"""
+                            r"""|, ?entonces"""
+                            r"""|, ?sin embargo\b"""
+                            r"""|, ?no obstante"""
+                            r"""|;"""
+                            r"""|\.\.\."""
+                            r"""|, ?pues\b""", re.U | re.I)
 
     textCleaner = TextCleaner()

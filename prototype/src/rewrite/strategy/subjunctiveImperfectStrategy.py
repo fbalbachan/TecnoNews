@@ -19,7 +19,7 @@ class SubjunctiveImperfectStrategy:
 
         lexical_forms = ontology.get_lexical_forms(leaf.lemma, SubjunctiveImperfectStrategy.msi_for(leaf))
 
-        filtered_list = filter(lambda lf: lf.text != leaf.lexical_form, lexical_forms)
+        filtered_list = [lf for lf in lexical_forms if lf.text != leaf.lexical_form]
         if len(filtered_list) == 0:
             return []
 

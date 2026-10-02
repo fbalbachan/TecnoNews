@@ -39,7 +39,7 @@ class GenericParser(object):
         content = self.sanitize(content)
         assert content.find('function()') == -1
 
-        content_paragraphs = content.strip().split(u"\n")
+        content_paragraphs = content.strip().split("\n")
         if len(content_paragraphs) >= 4:
             current_index = len(content_paragraphs) -2
             while content_paragraphs[current_index].strip() == "" and current_index >= 2:
@@ -47,10 +47,10 @@ class GenericParser(object):
 
             content_paragraphs.pop(current_index)
 
-        content = u"\n".join(content_paragraphs)
+        content = "\n".join(content_paragraphs)
 
 
-        if original_categories and u'video' in original_categories:
+        if original_categories and 'video' in original_categories:
             return None
 
         if len(tags) or original_categories:
@@ -64,11 +64,11 @@ class GenericParser(object):
                                       rewritable=rewritable)
 
             except Exception as e:
-                logger.error("%s" % e.message)
+                logger.error("%s" % str(e))
                 logger.error(traceback.format_exc())
 
         if not new_entry:
-            logger.error(u"Couldn't parse news %s" % source)
-            logger.error(u"Url: %s " % url)
+            logger.error("Couldn't parse news %s" % source)
+            logger.error("Url: %s " % url)
 
         return new_entry

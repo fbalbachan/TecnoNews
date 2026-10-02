@@ -20,7 +20,7 @@ class TestVerbs(TestBase):
                     ('has podido comprar', {'person': 2, 'number': Number.singular, 'gender': Gender.neutral}, 'comprar'),]
 
         for (input_text, expected_verb_msi, expected_verb_lemma) in examples:
-            print "trying: %s .. " % input_text,
+            print("trying: %s .. " % input_text, end=' ')
             
             self.input = input_text
             
@@ -36,7 +36,7 @@ class TestVerbs(TestBase):
             verb_lemma = clause.structure("verb").entity().lemma()
             self.assertEqual(expected_verb_lemma, verb_lemma)
 
-            print "OK"
+            print("OK")
 
     def test_verb_msi(self):
         examples = [
@@ -53,7 +53,7 @@ class TestVerbs(TestBase):
         ]
 
         for (input_text, expected_verb_msi, expected_verb_lemma) in examples:
-            print "trying: %s .. " % input_text,
+            print("trying: %s .. " % input_text, end=' ')
             sentence = Sentence(input_text)
             self.analyzer.analyze(sentence)
             self.input = input_text
@@ -85,7 +85,7 @@ class TestVerbs(TestBase):
         ]
 
         for (input_text, expected_verb_pass_msi, expected_verb_pass_lemma) in examples:
-            print "trying: %s .. " % input_text,
+            print("trying: %s .. " % input_text, end=' ')
             sentence = Sentence(input_text)
             self.analyzer.analyze(sentence)
             self.input = input_text
@@ -99,10 +99,10 @@ class TestVerbs(TestBase):
             self.assert_is_included(expected_verb_pass_msi, verb.msi)
             self.assertEqual(expected_verb_pass_lemma, verb.lemma())
 
-            print "OK"
+            print("OK")
 
     def assert_is_included(self, this, into_that):
-        for attribute, value in this.items():
+        for attribute, value in list(this.items()):
             self.assertTrue(attribute in into_that)
             self.assertEqual(value, into_that[attribute])
 

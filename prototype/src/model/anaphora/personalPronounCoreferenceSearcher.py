@@ -15,13 +15,13 @@ class PersonalPronounCoreferenceSearcher:
         self.pronoun_index = self.compute_pronoun_index()
 
     def search(self):
-        if debug_mode: print "--> PersonalPronounCoreferenceSearcher.search() - pronoun: ", self.pronoun
+        if debug_mode: print("--> PersonalPronounCoreferenceSearcher.search() - pronoun: ", self.pronoun)
         methods = [self.search_in_parent_clauses,
                    self.search_in_previous_clauses,
                    self.search_in_previous_sentences]
 
         entity = self.first_non_none((method() for method in methods))
-        if debug_mode: print "<-- search()  --> entity: ", entity
+        if debug_mode: print("<-- search()  --> entity: ", entity)
         return entity
 
     def search_in_parent_clauses(self):
@@ -30,8 +30,7 @@ class PersonalPronounCoreferenceSearcher:
 
     def search_in_previous_clauses(self):
         current_clause_root = self.clause.root()
-        previous_main_clauses = filter(lambda clause: clause.is_root() and clause != current_clause_root,
-                                       self.context["clauses"][::-1])
+        previous_main_clauses = [clause for clause in self.context["clauses"][::-1] if clause.is_root() and clause != current_clause_root]
 
         search_in_main_clause = lambda clause: self.search_in_clauses(self.sorted(list(clause)))
         return self.first_non_none((search_in_main_clause(clause) for clause in previous_main_clauses))
@@ -58,12 +57,10 @@ class PersonalPronounCoreferenceSearcher:
             structure = clause.structure(structure_name)
             entities = self.entities_to_be_searched_in(structure)
             entities = self.only_matching_entities(entities, clause)
-            entities = filter(lambda entity: entity.matches_animity_of(self.pronoun),
-                              entities)
+            entities = [entity for entity in entities if entity.matches_animity_of(self.pronoun)]
 
             already_placed_entities = self.clause.assigned_entities_with_referenced_ones()
-            non_linked_entities = filter(lambda entity: entity not in already_placed_entities,
-                                         entities)
+            non_linked_entities = [entity for entity in entities if entity not in already_placed_entities]
             if non_linked_entities:
                 return non_linked_entities[0]
 
@@ -72,7 +69,7 @@ class PersonalPronounCoreferenceSearcher:
 
     def entities_to_be_searched_in(self, structure):
         entities = []
-        non_trace_entities = filter(lambda p_entity: not p_entity.is_trace(), structure.all_entities())
+        non_trace_entities = [p_entity for p_entity in structure.all_entities() if not p_entity.is_trace()]
         for entity in non_trace_entities:
             if not entity.has_attr("infinitive"):
                 entities.append(entity)
@@ -83,20 +80,19 @@ class PersonalPronounCoreferenceSearcher:
         return entities
 
     def only_matching_entities(self, entities, entities_clause):
-        matching_entities = filter(lambda entity: entity.matches(self.pronoun),
-                                   entities)
+        matching_entities = [entity for entity in entities if entity.matches(self.pronoun)]
         if entities_clause.root() == self.clause.root():
             matching_entities = self.only_already_read_entities(matching_entities, entities_clause)
         return matching_entities
 
     def only_already_read_entities(self, entities, entities_clause):
         clause = entities_clause
-        return filter(lambda entity: entity.is_linked() or entity.is_tacit() or \
-                      (clause.index_in_root_of(entity.node) < self.pronoun_index), entities)
+        return [entity for entity in entities if entity.is_linked() or entity.is_tacit() or \
+                      (clause.index_in_root_of(entity.node) < self.pronoun_index)]
 
     def sorted(self, clauses):
         clauses_by_level = TreeNode.by_level(clauses)
-        clauses_lists = zip(*sorted(clauses_by_level.items()))[1]
+        clauses_lists = list(zip(*sorted(clauses_by_level.items())))[1]
         clauses_lists = [ list_for_level[::-1] for list_for_level in clauses_lists ] # En orden reverso de lectura
         return list(chain(*clauses_lists))
 

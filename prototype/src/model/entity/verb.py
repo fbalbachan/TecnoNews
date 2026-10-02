@@ -12,7 +12,7 @@ debug_mode = False
 class Verb(Entity):
 
     def __init__(self, node, voice, leaves):
-        if debug_mode: print "--> Verb.init(node: ", node, ")"
+        if debug_mode: print("--> Verb.init(node: ", node, ")")
         Entity.__init__(self, node)
 
         self.voice = voice

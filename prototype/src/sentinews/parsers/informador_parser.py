@@ -3,7 +3,7 @@
 
 import re
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 from src.sentinews.parsers.generic_parser import GenericParser
 
 
@@ -11,7 +11,7 @@ class InformadorParser(GenericParser):
     def __init__(self):
         super(InformadorParser, self).__init__()
 
-    source = u"Informador"
+    source = "Informador"
 
     def is_parseable(self, url, soup=None):
         allowed = True

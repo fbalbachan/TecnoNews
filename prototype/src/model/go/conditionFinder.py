@@ -30,10 +30,10 @@ class ConditionFinder:
         return operators
 
     def find_conditional_si(self):
-        leaves = filter(self.is_si_conditional, self.clause.proper_leaves())
+        leaves = list(filter(self.is_si_conditional, self.clause.proper_leaves()))
         return [ GlobalOperator("condition", leaf) for leaf in leaves ]
 
     def is_si_conditional(self, leaf):
         check_by_lemma = { "si": lambda l: l.msi["category"] == "conjunction" and l.msi["type"] == "subordinated" }
         lemma = leaf.lemma
-        return lemma in check_by_lemma.keys() and check_by_lemma[lemma](leaf)
+        return lemma in list(check_by_lemma.keys()) and check_by_lemma[lemma](leaf)

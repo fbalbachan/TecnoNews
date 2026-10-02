@@ -3,7 +3,7 @@
 
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -12,10 +12,10 @@ class VogueParser(GenericParser):
     def __init__(self):
         super(VogueParser, self).__init__()
 
-    source = u"Vogue"
+    source = "Vogue"
 
     def parse(self, url):
-        if u"/galerias/" in url:
+        if "/galerias/" in url:
             return None
         #url = "http://www.vogue.es/moda/news/articulos/nueva-serie-moda-creadores-gossip-girl-mila-kunis-juicy-couture/24478"
 

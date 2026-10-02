@@ -13,9 +13,9 @@ class TextInserter:
 
     def get(self):
         injections_wiki = self.get_injections_wiki_idx()
-        print "TextInserter: Injections_wiki", injections_wiki, "\n"
+        print("TextInserter: Injections_wiki", injections_wiki, "\n")
         injections_paragraphs = self.get_injection_paragraphs_other_sources()
-        generated = u""
+        generated = ""
 
         injected_count = 0  # keep the count of how many paragraph we add to the news
         wiki_injected = False
@@ -24,40 +24,40 @@ class TextInserter:
 
         true_index = 0
         for idx, paragraph in enumerate(self.paragraphs):
-            if not isinstance(paragraph, unicode):
-                paragraph = unicode(paragraph, 'utf-8')
+            if not isinstance(paragraph, str):
+                paragraph = str(paragraph, 'utf-8')
                 # TODO: Transform all to unicode at the beginning of the pipeline!!!
             true_index += 1
-            generated += paragraph + u'\n'
+            generated += paragraph + '\n'
 
             # if there is some paragraph to append
-            if idx in injections_paragraphs.keys():
+            if idx in list(injections_paragraphs.keys()):
                 injected_count += 1
                 # generated += u'[eyesonly logged="in"]' \
                 #              + u'<p><strong>Start paragraph from other coverage</strong></p>[/eyesonly]'
-                generated += u'\n'
+                generated += '\n'
 
                 lowered = injections_paragraphs[idx][:1].lower() + injections_paragraphs[idx][1:]
                 if true_index == 4:
-                    generated += u"A su vez, " + lowered
+                    generated += "A su vez, " + lowered
                 elif true_index == 5:
-                    generated += u"Por otra parte, " + lowered
+                    generated += "Por otra parte, " + lowered
                 else:
                     generated += injections_paragraphs[idx]
 
-                generated += u'\n'
+                generated += '\n'
                 if raconto_available:
                     raconto_available = False
-                    generated += self.analysis["raconto_content"] + u'\n'
+                    generated += self.analysis["raconto_content"] + '\n'
                 # generated += u'[eyesonly logged="in"]' \
                 #              + u'<p><strong> Ends paragraph from other coverage<strong></p>[/eyesonly]'
 
-            if idx in injections_wiki.keys():
+            if idx in list(injections_wiki.keys()):
                 wiki_injected = True
                 for content in injections_wiki[idx]:
                     # generated += u'[eyesonly logged="in"]' \
                     #              + u'<p><strong>Starts paragraph from wiki</strong></p> [/eyesonly]\n'
-                    generated += u'\n' + content + u'\n'
+                    generated += '\n' + content + '\n'
                     # generated += u'[eyesonly logged="in"]' \
                     #              + u'<p><strong>Ends paragraph from wiki</strong></p>[/eyesonly]'
 
@@ -72,10 +72,10 @@ class TextInserter:
 
         contents = self.analysis["generated_content_wiki"]
 
-        print "TextInserter: Generated Wikipedia contents"
+        print("TextInserter: Generated Wikipedia contents")
         for c in contents:
-            print c
-        print "--------"
+            print(c)
+        print("--------")
 
         for referent, content, page in contents[0:2]:  # @UnusedVariable
             referent_index = referent.first_occurrence().token.start()
@@ -86,8 +86,8 @@ class TextInserter:
 
             # TODO: Transform all to unicode at the beginning of the
             # pipeline!!!
-            if not isinstance(content, unicode):
-                content = unicode(content, 'utf-8')
+            if not isinstance(content, str):
+                content = str(content, 'utf-8')
 
             injections[previous_paragraph_idx].append(content)
 

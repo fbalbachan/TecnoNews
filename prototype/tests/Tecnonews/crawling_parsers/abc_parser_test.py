@@ -17,17 +17,17 @@ class ABCParserTest(unittest.TestCase):
 
     def parse_single_url(self, url):
         entry = ABCParser().parse(url=url)
-        if u'/silencio-por-favor/' in url:
-            print "Not parsing silencio-por-favor news"
+        if '/silencio-por-favor/' in url:
+            print("Not parsing silencio-por-favor news")
             self.assertIsNone(entry)
         else:
             self.assertIsNotNone(entry)
-            print "Content:", entry.content, '\n'
-            print "Tags:", entry.tags, '\n'
-            print "Title:", entry.title, '\n'
-            print "Source:", entry.source, '\n'
-            print "Category:", entry.categories, '\n'
-            print "original_categories:", entry.original_categories, '\n'
+            print("Content:", entry.content, '\n')
+            print("Tags:", entry.tags, '\n')
+            print("Title:", entry.title, '\n')
+            print("Source:", entry.source, '\n')
+            print("Category:", entry.categories, '\n')
+            print("original_categories:", entry.original_categories, '\n')
 
     def test_all_in_feed(self):
         feeds = feedparser.parse(feed_url)
@@ -37,17 +37,17 @@ class ABCParserTest(unittest.TestCase):
         error_urls = []
 
         for entry in entries:
-            print u"case:", entry['link'], u"\n"
+            print("case:", entry['link'], "\n")
             try:
                 self.parse_single_url(entry['link'])
             except Exception as e:
                 error_urls.append(entry['link'])
-                print "Error parsing"
-                print e.message
+                print("Error parsing")
+                print(str(e))
 
-        print "Total cases: ", len(entries)
-        print "Errors", len(error_urls)
-        print "Urls:", error_urls
+        print("Total cases: ", len(entries))
+        print("Errors", len(error_urls))
+        print("Urls:", error_urls)
 
     def _test_parse_single_url(self):
         url = 'http://www.abc.es/internacional/20150504/abci-votacion-cambio-electoral-italia-201505041501.html'
@@ -58,17 +58,17 @@ class ABCParserTest(unittest.TestCase):
 
         entry = ABCParser().parse(url=url)
 
-        if u'/silencio-por-favor/' in url:
-            print "Nor parsing opinion news"
+        if '/silencio-por-favor/' in url:
+            print("Nor parsing opinion news")
             self.assertIsNone(entry)
         else:
             self.assertIsNotNone(entry)
-            print "Content:", entry.content, '\n'
-            print "Tags:", entry.tags, '\n'
-            print "Title:", entry.title, '\n'
-            print "Source:", entry.source, '\n'
-            print "Category:", entry.categories, '\n'
-            print "original_categories:", entry.original_categories, '\n'
+            print("Content:", entry.content, '\n')
+            print("Tags:", entry.tags, '\n')
+            print("Title:", entry.title, '\n')
+            print("Source:", entry.source, '\n')
+            print("Category:", entry.categories, '\n')
+            print("original_categories:", entry.original_categories, '\n')
 
 if __name__ == '__main__':
     unittest.main()

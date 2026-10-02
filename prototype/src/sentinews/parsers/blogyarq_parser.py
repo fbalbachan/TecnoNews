@@ -3,7 +3,7 @@
 
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -12,7 +12,7 @@ class BlogYArqParser(GenericParser):
     def __init__(self):
         super(BlogYArqParser, self).__init__()
 
-    source = u"Blog y Arquitectura"
+    source = "Blog y Arquitectura"
 
     def parse(self, url):
         #url = "http://blogyarq.blogspot.com.ar/2016/03/coleccion-muffin-stone-designs.html?utm_source=feedburner&utm_medium=feed&utm_campaign=Feed:+Blogyarquitectura+%28Blog+y+Arquitectura%29&utm_content=FeedBurner"
@@ -42,8 +42,8 @@ class BlogYArqParser(GenericParser):
         content = soup.find('div',{'class':'entry-content'}).text.strip()
 
 
-        categories = [u"propiedades"]
-        tags = [u"propiedades"]
+        categories = ["propiedades"]
+        tags = ["propiedades"]
 
         #categories=[urlparse(url).path.split("/")[1]]
         #print categories

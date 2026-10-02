@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 
@@ -10,13 +10,13 @@ class GenbetaParser(GenericParser):
     def __init__(self):
         super(GenbetaParser, self).__init__()
 
-    source = u"Genbeta"
+    source = "Genbeta"
     
     def parse(self, url):
 
-	soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
+        soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
 
-	for script in soup(["script", "style"]):
+        for script in soup(["script", "style"]):
             script.extract()
             
             

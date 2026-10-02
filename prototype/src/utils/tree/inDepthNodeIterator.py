@@ -8,7 +8,7 @@ class InDepthNodeIterator:
         if not self.is_banned(node):
             self.node_stack.append(node)
 
-    def next(self):
+    def __next__(self):
         if not self.node_stack:
             raise StopIteration
         else:
@@ -18,7 +18,7 @@ class InDepthNodeIterator:
             return node
 
     def non_banned_nodes(self, nodes):
-        return filter(lambda node: not self.is_banned(node), nodes)
+        return [node for node in nodes if not self.is_banned(node)]
 
     def is_banned(self, node):
         return node in self.banned_nodes

@@ -24,7 +24,7 @@ class TestSubject(TestBase):
         ]
 
         for (input_text, expected_entities) in examples:
-            print "trying: %s .. " % input_text,
+            print("trying: %s .. " % input_text, end=' ')
             self.input = input_text
             sentence = Sentence(input_text)
             self.analyzer.analyze(sentence)
@@ -34,7 +34,7 @@ class TestSubject(TestBase):
             entities_at_verb_level = [ str(entity) for entity in clause.verb_level_entities() ]
             self.assertEqual(expected_entities, entities_at_verb_level)
 
-            print "OK"
+            print("OK")
 
     def test_subject_msi(self):
         for (input_text,
@@ -49,7 +49,7 @@ class TestSubject(TestBase):
              expected_verb_gender,
              expected_verb) in self.input_texts_with_msi:
 
-            print "trying: %s .. " % input_text,
+            print("trying: %s .. " % input_text, end=' ')
             self.input = input_text
             sentence = Sentence(input_text)
             self.analyzer.analyze(sentence)
@@ -76,11 +76,11 @@ class TestSubject(TestBase):
             self.assertEqual(expected_verb_gender, verb.msi()["gender"])
             self.assertEqual(expected_verb, verb.entity().lemma())
 
-            print "OK"
+            print("OK")
 
     def test_subject_active_voice(self):
         for (input_text, expected_subject) in self.input_texts:
-            print "trying: %s .. " % input_text,
+            print("trying: %s .. " % input_text, end=' ')
             self.input = input_text
             sentence = Sentence(input_text)
             self.analyzer.analyze(sentence)
@@ -93,7 +93,7 @@ class TestSubject(TestBase):
             else:
                 self.assertEqual(expected_subject, clause.structure("subject").lexical_form())
 
-            print "OK"
+            print("OK")
 
 if __name__ == '__main__':
     unittest.main()

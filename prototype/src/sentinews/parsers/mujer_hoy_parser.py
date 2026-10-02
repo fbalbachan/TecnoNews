@@ -3,7 +3,7 @@
 
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 
@@ -12,13 +12,13 @@ class MujerHoyParser(GenericParser):
     def __init__(self):
         super(MujerHoyParser, self).__init__()
 
-    source = u"MujerHoy"
+    source = "MujerHoy"
 
     def parse(self, url):
         # url = "http://blogs.mujerhoy.com/maquillaje-estrellas/2016/08/04/maquillaje-ojos-de-gata-los-trucos-para-conseguir-el-perfecto-eyeliner.html"
         # url = "http://blogs.mujerhoy.com/adelgazar/2016/01/11/culos-sentados-grasas-en-expansion.html"
         # url = "http://www.mujerhoy.com/celebrities/corazon/201606/07/entrevista-noriega-michelle-jenner-amor-letra-20160607124020.html"
-        if u"/galerias/" in url:
+        if "/galerias/" in url:
             return None
         soup = BeautifulSoup(self.opener.read(url).decode('utf-8', 'ignore'), "html.parser", from_encoding='utf-8')
         for script in soup(["script", "style"]):

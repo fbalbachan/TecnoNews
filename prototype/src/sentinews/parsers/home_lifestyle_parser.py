@@ -3,7 +3,7 @@
 
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -12,7 +12,7 @@ class HomeLifeStyleParser(GenericParser):
     def __init__(self):
         super(HomeLifeStyleParser, self).__init__()
 
-    source = u"Home Life Style"
+    source = "Home Life Style"
 
     def parse(self, url):
         #url = "http://homelifestyle.es/couleur-locale-conceptstore-estilo-y-personalidad-en-belgica/"
@@ -47,8 +47,8 @@ class HomeLifeStyleParser(GenericParser):
             clean_text = paragraph.text.strip()
             content += "\n" + clean_text
 
-        categories = [u"estilo vida"]
-        tags = [u"estilo vida"]
+        categories = ["estilo vida"]
+        tags = ["estilo vida"]
 
         #categories=[urlparse(url).path.split("/")[1]]
         #print categories

@@ -2,13 +2,13 @@
 
 
 def safe_unicode(text):
-    if isinstance(text, unicode):
+    if isinstance(text, str):
         u_text = text
     else:
         try:
-            u_text = unicode(text, 'utf-8', errors='ignore')
+            u_text = str(text, 'utf-8', errors='ignore')
 
-        except Exception, e:
+        except Exception as e:
             u_text = text
 
     return u_text

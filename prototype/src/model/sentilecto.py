@@ -17,8 +17,6 @@ class Sentilecto:
 
     @staticmethod
     def analyze(text, output_demo_debug=False):
-        if type(text) == unicode:
-            text = text.encode("utf-8")  # unicode -> str (utf8-encoded)
 
         analysis = {}
         analysis["global_context"] = {"TEST":"TEST1"}

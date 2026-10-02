@@ -5,7 +5,7 @@
 
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -14,13 +14,13 @@ class EntreMujeresParser(GenericParser):
     def __init__(self):
         super(EntreMujeresParser, self).__init__()
 
-    source = u"EntreMujeres"
+    source = "EntreMujeres"
 
     def parse(self, url):
         #url = "http://entremujeres.clarin.com/moda/look-de-celebrity/hijos-fashionistas-famosos-Instagram_0_1471053241.html"
 
-	soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
-	for script in soup(["script", "style"]):
+        soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
+        for script in soup(["script", "style"]):
             script.extract()
 
 
@@ -44,7 +44,7 @@ class EntreMujeresParser(GenericParser):
         for paragraph in paragraphs:
             clean_text = paragraph.text.strip()
 
-            if clean_text == u"Seguí leyendo:":
+            if clean_text == "Seguí leyendo:":
                 break
             if re.match('^[*]{2}.*[*]{2}$', clean_text) is not None:
                 continue

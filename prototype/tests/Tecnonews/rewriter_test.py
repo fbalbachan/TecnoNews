@@ -25,7 +25,7 @@ class TestRewriter(unittest.TestCase):
 
     @classmethod
     def setUpClass(self):
-        print "[Rewriter test]"
+        print("[Rewriter test]")
 
         self.sentenceAnalyzer = SentenceAnalyzer(FreelingTreeRepository("tests/input/trees"))
         self.analyzer = ParagraphAnalyzer(self.sentenceAnalyzer)
@@ -36,7 +36,7 @@ class TestRewriter(unittest.TestCase):
                "time":   "presente",
                "person": 2,
                "number": Number.singular}
-        print ontology.get_lexical_form("haber", msi)
+        print(ontology.get_lexical_form("haber", msi))
 
     def test_segun_to_dijo_dislocation(self):
         self.strategies = [SegunToDijoDislocationStrategy([True], [""])]
@@ -341,15 +341,15 @@ class TestRewriter(unittest.TestCase):
         self.kase("Pasó esto hace una hora", "Hace una hora, pasó esto")
 
     def kase(self, source, edited):
-        print "Case:", source
+        print("Case:", source)
         analyzer = self.analyzer
 
         paragraph = Paragraph.from_text(source)
         analyzer.analyze(paragraph)
 
         text = Rewriter(paragraph, self.ontology, self.strategies).rewrite()
-        print "\t[SOURCE]", paragraph.text
-        print "\t[EDITED]", text
+        print("\t[SOURCE]", paragraph.text)
+        print("\t[EDITED]", text)
 
         self.assertEqual(text, edited)
 

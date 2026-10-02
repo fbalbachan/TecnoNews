@@ -21,8 +21,8 @@ class NewsItem(object):
 
     @classmethod
     def from_file(cls, path, file_name):
-        content = open(path + file_name, 'r').read()
-        title = open(path + file_name, 'r').readline()
+        content = open(path + file_name, 'r', encoding="utf-8").read()
+        title = open(path + file_name, 'r', encoding="utf-8").readline()
 
         return cls(file_name, content, title)
 
@@ -79,7 +79,7 @@ class NewsItem(object):
 
         stopwords_filename = config.get("resources", "stopwords_es_clean")
 
-        for line in open(stopwords_filename, 'r'):
+        for line in open(stopwords_filename, 'r', encoding="utf-8"):
             if line[0] not in ['<', '%', '\n']:
                 stopwords.append(line.rstrip('\n'))
 

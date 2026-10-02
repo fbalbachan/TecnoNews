@@ -91,18 +91,18 @@ class SentimentalAnalyzer:
                 method(entity)
 
     def analyze_adjectival(self, entity):
-        if debug_mode: print "--> SentimentalAnalyzer.analyze_adjectival(entity)"
+        if debug_mode: print("--> SentimentalAnalyzer.analyze_adjectival(entity)")
         node = entity.proper_node
         hints = node.leaves_of_category("adjective") + node.leaves_of_msi({ "category": "verb", "mode" : "participio"})
         evidence = self.only_valuated_of(hints)
         entity.sentimental_value.add_evidence(*evidence)
 
     def analyze_nominal(self, entity):
-        if debug_mode: print "--> SentimentalAnalyzer.analyze_nominal(entity)"
+        if debug_mode: print("--> SentimentalAnalyzer.analyze_nominal(entity)")
         node = entity.proper_node
         noun_leaves = node.leaves_of_category("noun")
 
-        hints = filter(lambda leaf: leaf.msi["semantic_classification"] is None, noun_leaves) \
+        hints = [leaf for leaf in noun_leaves if leaf.msi["semantic_classification"] is None] \
               + node.leaves_of_msi({"category": "verb", "mode": "infinitive"})
 
         evidence = self.only_valuated_of(hints)

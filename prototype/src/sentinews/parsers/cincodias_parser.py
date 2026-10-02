@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -11,13 +11,13 @@ class CincoDiasParser(GenericParser):
     def __init__(self):
         super(CincoDiasParser, self).__init__()
 
-    source = u"Cinco Dias"
+    source = "Cinco Dias"
     
     def parse(self, url):
         #url = "http://cincodias.com/cincodias/2015/12/17/sentidos/1450385127_093885.html#?ref=rss&format=simple&link=link"
         
-	soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
-	for script in soup(["script", "style"]):
+        soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
+        for script in soup(["script", "style"]):
             script.extract()
             
             

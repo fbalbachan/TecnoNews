@@ -14,14 +14,14 @@ class ContentRewriterAndGenerator:
         pass
 
     def run(self, text):
-        if debug_mode: print "--> ContentRewriterAndGenerator.run()"
+        if debug_mode: print("--> ContentRewriterAndGenerator.run()")
         changed = text
         analysis = self._analyze(changed)
 
         applied_global = False
 
         try:
-            changed = GlobalRewriter(analysis['paragraph']).rewrite().decode('utf-8')
+            changed = GlobalRewriter(analysis['paragraph']).rewrite()
             analysis = self._analyze(changed)
         except:
             pass
@@ -32,9 +32,9 @@ class ContentRewriterAndGenerator:
         analysis["generated_content_wiki"] = WikipediaContentGenerator(analysis).generate()
 
         for referent, content, page in analysis["generated_content_wiki"]:
-            if not isinstance(content, unicode):
-                content = unicode(content, 'utf-8')
-            changed = changed + u"\n" + content
+            if not isinstance(content, str):
+                content = str(content, 'utf-8')
+            changed = changed + "\n" + content
 
         #analysis = self._analyze(changed)
         #changed = GlobalRewriter(analysis['paragraph']).rewrite()
@@ -43,9 +43,9 @@ class ContentRewriterAndGenerator:
         rewriter = Rewriter(analysis['paragraph'], applied_global_strategies=applied_global)
         changed = rewriter.rewrite()
 
-        if debug_mode: print "<-- ContentRewriterAndGenerator.run() - changed: ", changed, "\n\n"
+        if debug_mode: print("<-- ContentRewriterAndGenerator.run() - changed: ", changed, "\n\n")
         return {"source": text, "changed": changed}
 
     def _analyze(self, text):
-        if debug_mode: print "--> ContentRewriterAndGenerator._analyze()"
+        if debug_mode: print("--> ContentRewriterAndGenerator._analyze()")
         return Sentilecto.analyze(text)

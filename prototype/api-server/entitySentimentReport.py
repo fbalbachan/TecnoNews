@@ -60,8 +60,6 @@ class EntitySentimentReport(Resource):
             return self.build_response(403, {'type': 'ERROR', 'message': messages1})
 
         users_storage.increase_access_counter(api_key)
-        if has_type_encoding(text, str, 'UTF-8'):
-            text = text.decode('UTF-8')
 
         try:
             output_utils = WebOutputUtils(None)
@@ -75,8 +73,8 @@ class EntitySentimentReport(Resource):
                 for clause in sentence.clauses:
 
                     clause_entities = clause.entities + clause.tacit_entities()
-                    clause_entities = filter(lambda entity: not entity.has_attr("implicit") and not entity.has_attr("impersonal"), clause_entities)
-                    clause_entities = filter(lambda entity: entity.is_maximal_regarding(clause_entities), clause_entities)
+                    clause_entities = [entity for entity in clause_entities if not entity.has_attr("implicit") and not entity.has_attr("impersonal")]
+                    clause_entities = [entity for entity in clause_entities if entity.is_maximal_regarding(clause_entities)]
 
                 text_entities.extend(clause_entities)
 
@@ -98,7 +96,7 @@ class EntitySentimentReport(Resource):
                             appearing[a_reference]=1
 
                     unique_arr = []
-                    for unique_elem in appearing.iterkeys():
+                    for unique_elem in appearing.keys():
                         unique_arr.append({'0-Name': unique_elem, '1-Count': appearing[unique_elem]})
                     occurrences = len(referent_data['refs'])
                     entities_report.append({
@@ -118,9 +116,9 @@ class EntitySentimentReport(Resource):
             response_value = analysis_results
             response_code = 200
 
-        except Exception, e:
-            print e
-            print traceback.format_exc()
+        except Exception as e:
+            print(e)
+            print(traceback.format_exc())
             response_value = {'type': 'ERROR', 'message': str(e)}
             response_code = 500,
 

@@ -10,7 +10,7 @@ debug_mode = False
 
 class FactNormalizer:
     def __init__(self, clause, ontology):
-        if debug_mode: print "--> FactNormalizer.init(node: ", clause, ")"
+        if debug_mode: print("--> FactNormalizer.init(node: ", clause, ")")
         self.clause = clause
         self.synonyms = Synonyms()
         self.ontology = ontology
@@ -189,13 +189,13 @@ class FactNormalizer:
         replacements = {}
         config = ConfigProvider()
         replacements_filename = config.get("resources", resource)
-        for line in reader(open(replacements_filename, 'r')):
+        for line in reader(open(replacements_filename, 'r', encoding="utf-8")):
             replacements[line[0]] = line[1]
             replacements[line[1]] = line[0]
         return replacements
 
     def _msi_transform(self, msi):
-        if debug_mode: print "--> SynonymsStrategy._msi_transform(msi: ", msi, ")"
+        if debug_mode: print("--> SynonymsStrategy._msi_transform(msi: ", msi, ")")
 
         result_msi = {}
         if 'number' in msi:
