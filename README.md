@@ -36,13 +36,13 @@ Each running instance loops forever, once a minute:
 
 ## Requirements
 
-- Python 3.11 with the packages in `requirements.txt` (includes spaCy 3.8 and its Spanish model `es_core_news_md`)
-- System libraries for the image handling: cairo (SVG to PNG) and ImageMagick (Wand)
+- Python 3.11 with the packages in `requirements.txt`
+- A reachable FreeLing server (parser and language identification)
 - MongoDB
 - WordPress blogs with XML-RPC enabled (for publishing)
 
 ```bash
-python3.11 -m venv .
+virtualenv -p python3.11 .
 source bin/activate
 pip install -r requirements.txt
 pip install --no-deps -r requirements-nodeps.txt   # flask-restful-swagger, see the file
