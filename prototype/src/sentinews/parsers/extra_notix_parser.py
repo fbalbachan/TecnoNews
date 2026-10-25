@@ -3,7 +3,7 @@
 
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -12,13 +12,13 @@ class ExtraNotixParser(GenericParser):
     def __init__(self):
         super(ExtraNotixParser, self).__init__()
 
-    source = u"Extra Notix"
+    source = "Extra Notix"
     
     def parse(self, url):
         #url = "http://extranotix.blogspot.com/2016/01/un-virus-mortal-causa-20-muertos-y-mas.html"
         
-	soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
-	for script in soup(["script", "style"]):
+        soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
+        for script in soup(["script", "style"]):
             script.extract()
             
             
@@ -56,14 +56,14 @@ class ExtraNotixParser(GenericParser):
         #content = content.strip()
         
         content = soup.find('div',{'class':'post-body entry-content'}).text
-        content = re.sub(u'\nFuentes?:.+\n','',content)
-        content = re.sub(u'\n(Extranotix\.|Tu opinión|Enviar por correo electrónico.+)\n','',content)
-        content = re.sub(u'\n\n+','\n',content).strip()
+        content = re.sub('\nFuentes?:.+\n','',content)
+        content = re.sub('\n(Extranotix\.|Tu opinión|Enviar por correo electrónico.+)\n','',content)
+        content = re.sub('\n\n+','\n',content).strip()
         #print content
         #exit()
 
-        tags = [u"insólito"]
-        categories=[u"insólito"]
+        tags = ["insólito"]
+        categories=["insólito"]
         
         new_entry = self.create_news_entry(title=title, content=content,
                                            tags=tags,

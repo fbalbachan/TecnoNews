@@ -1,0 +1,4 @@
+# Installed with: pip install --no-deps -r requirements-nodeps.txt
+# flask-restful-swagger declares Jinja2<3 (so Flask<2, which needs click<8) but works with Flask 2.2 / Jinja2 3;
+# its dependency pins cannot be satisfied together with spaCy (click>=8).
+flask-restful-swagger==0.20.2

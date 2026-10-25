@@ -14,9 +14,9 @@ class TotalQuestionAnalyzer:
 
     def has_invalid_pronouns(self):
         leaves = self.sentence.parse_node.leaves()
-        return bool(filter(lambda leaf: (leaf.msi["category"] == "pronoun" and leaf.msi["type"] == "interrogative")
+        return bool([leaf for leaf in leaves if (leaf.msi["category"] == "pronoun" and leaf.msi["type"] == "interrogative")
                            or (leaf.msi["category"] == "determinant" and leaf.msi["type"]
-                               in ["interrogative", "exclamative"]), leaves))
+                               in ["interrogative", "exclamative"])])
 
     def is_question(self):
         lexical_forms = [ leaf.lexical_form for leaf in self.sentence.parse_node.leaves() ]

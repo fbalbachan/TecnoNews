@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import wordpress_xmlrpc
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import mimetypes
 import traceback
 
@@ -40,13 +40,13 @@ class BlogPublisher(object):
     @staticmethod
     def check_and_remove_con_foto(client, wp_id):
         wpost = client.call(posts.GetPost(wp_id))
-        print wpost.thumbnail
+        print(wpost.thumbnail)
         if not wpost.thumbnail:
             cf = None
             # TODO: use taxonomies insted of checking the name
             for t in wpost.terms:
                 if t.name == 'z con foto':
-                    print t.name
+                    print(t.name)
                     # we are in the case where we upload a photo asign it and
                     # some how thumbnail is not setted so remove category 'z con foto
                     cf = t
@@ -181,16 +181,10 @@ class BlogPublisher(object):
             except:
                 entryDate = ""
 
-            if isinstance(entryDate, unicode):
-                entryDate = entryDate.encode("utf-8")
 
             main_source = entry.source
-            if isinstance(main_source, unicode):
-                main_source = main_source.encode("utf-8")
 
             main_title = entry.title
-            if isinstance(main_title, unicode):
-                main_title = main_title.encode("utf-8")
 
             post.content += "<br>>"
             post.content += main_title
@@ -227,16 +221,10 @@ class BlogPublisher(object):
                         entryDate = ""
 
                     post_url = dbEntry[0].wp_url
-                    if isinstance(post_url, unicode):
-                        post_url = post_url.encode("utf-8")
 
                     post_title = dbEntry[0].title
-                    if isinstance(post_title, unicode):
-                        post_title = post_title.encode("utf-8")
 
                     post_source = dbEntry[0].source
-                    if isinstance(post_source, unicode):
-                        post_source = post_source.encode("utf-8")
 
                     if dbEntry[0].wp_url != None and show_link:
                         if show_source:
@@ -263,9 +251,8 @@ class BlogPublisher(object):
         if has_type_encoding(entry.content, str, 'UTF-8'):
             logger.info("Content is UTF8")
             pass # we expect it to be UTF-8
-        if has_type_encoding(entry.content, unicode):
+        if has_type_encoding(entry.content, str):
             logger.info("Content is UNICODE")
-            entry.content = entry.content.encode("utf-8")
 
 
         news_service = NewsEntriesService()
@@ -289,16 +276,16 @@ class BlogPublisher(object):
 
 
             #TODO Check limits => TEMP!
-            if host['id'] == u"politica_bit":
+            if host['id'] == "politica_bit":
                 interval_time = datetime.datetime.utcnow() - datetime.timedelta(seconds=86400) #1 Day
                 post_count = news_service.get_count({'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id']})
                 if post_count < 5:
                     valid_host = True
-                    host["password"] = u"MarioKempes" #TEMP
+                    host["password"] = "MarioKempes" #TEMP
 
-            elif u"puntorojo" in host['id'] and entry.token_count >= 600:
+            elif "puntorojo" in host['id'] and entry.token_count >= 600:
 
-                if u"interes" in host['id']:
+                if "interes" in host['id']:
                     if not entry.image:
                         valid_host = False
                         continue
@@ -307,33 +294,33 @@ class BlogPublisher(object):
                 post_count = news_service.get_count({'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id']})
                 if post_count < 1:
                     valid_host = True
-                    entry.categories = [u"noticias"]
+                    entry.categories = ["noticias"]
 
-            elif host['id'] == u"alma_shopping":
+            elif host['id'] == "alma_shopping":
 
                 interval_time = datetime.datetime.utcnow() - datetime.timedelta(seconds=2592000) #1 Month
                 post_count = news_service.get_count({'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id']})
                 if post_count < 300:
                     valid_host = True
-                    host["password"] = u"District93_Alma" #TEMP
-                    entry.categories = [u"ARTICULOS"]
+                    host["password"] = "District93_Alma" #TEMP
+                    entry.categories = ["ARTICULOS"]
 
-            elif host['id'] == u"guialocal_es":
+            elif host['id'] == "guialocal_es":
 
                 customizations = [
-                        {"category":u"economía", "limit":2},
-                        {"category":u"deporte", "limit":2},
-                        {"category":u"internacionales", "limit":2},
-                        {"category":u"clima", "limit":2},
-                        {"category":u"estilo vida", "limit":5},
-                        {"category":u"turismo", "limit":5},
-                        {"category":u"entretenimiento", "limit":2},
+                        {"category":"economía", "limit":2},
+                        {"category":"deporte", "limit":2},
+                        {"category":"internacionales", "limit":2},
+                        {"category":"clima", "limit":2},
+                        {"category":"estilo vida", "limit":5},
+                        {"category":"turismo", "limit":5},
+                        {"category":"entretenimiento", "limit":2},
                         #{"category":u"interés general", "limit":5},
                         #{"category":u"policiales", "limit":8},
                         #{"category":u"tecnología", "limit":8},
                 ]
                 valid_country = False
-                valid_countries = [ u'argentina']
+                valid_countries = [ 'argentina']
                 temp_country = None
                 for country in valid_countries :
                     if country in entry.countries :
@@ -359,7 +346,7 @@ class BlogPublisher(object):
                 if valid_host:
                     entry.categories = [temp_country]
 
-            elif host['id'] == u"properati":
+            elif host['id'] == "properati":
 
                 #valid_country = False
                 #valid_countries = [ u'argentina', u'uruguay', u'chile', u'mexico', u'united states']
@@ -378,18 +365,18 @@ class BlogPublisher(object):
                         valid_host = True
                         self.add_hyperlinks(entry, "hyperlinks_propiedades.csv")
                         #entry.categories = [u"Noticias"]
-                        entry.categories = [u"propiedades"]
+                        entry.categories = ["propiedades"]
                         entry.tags = []
                         self.add_countries(entry)
                         self.add_cities(entry)
                         self.add_related_news_tree(entry, news_service, show_source=True, show_link=True)
 
-            elif host['id'] == u"zolvers":
+            elif host['id'] == "zolvers":
                 customizations = [
-                        {"category":u"salud", "limit":5},
-                        {"category":u"estilo vida", "limit":5},
-                        {"category":u"belleza", "limit":200000},
-                        {"category":u"zolvers", "limit":200000},
+                        {"category":"salud", "limit":5},
+                        {"category":"estilo vida", "limit":5},
+                        {"category":"belleza", "limit":200000},
+                        {"category":"zolvers", "limit":200000},
                 ]
 
                 interval_time = datetime.datetime.utcnow() - datetime.timedelta(seconds=86400) #1 Day
@@ -403,21 +390,21 @@ class BlogPublisher(object):
                             break
 
                 if valid_host:
-                    entry.categories = u"zolvers"
+                    entry.categories = "zolvers"
 
-            elif host['id'] == u"les_amis":
+            elif host['id'] == "les_amis":
 
                 interval_time = datetime.datetime.utcnow() - datetime.timedelta(seconds=2592000) #1 Month
                 post_count = news_service.get_count({'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id']})
                 if post_count < 285:
                     valid_host = True
 
-            elif host['id'] == u"noticias_com":
+            elif host['id'] == "noticias_com":
                 logger.info("Evaluating noticias.com...")
                 # 20160203 - Daniel Cantarin
                 # Added filter by country logic.
                 valid_country = False
-                valid_countries = [ u'peru', u'vatican city', u'bolivia', u'paraguay', u'uruguay', u'panama', u'honduras', u'nicaragua', u'el salvador', u'costa rica', u'mexico', u'colombia', u'ecuador', u'brazil', u'united states', u'argentina', u'venezuela', u'chile', u'china', u'japan', u'korea' ]
+                valid_countries = [ 'peru', 'vatican city', 'bolivia', 'paraguay', 'uruguay', 'panama', 'honduras', 'nicaragua', 'el salvador', 'costa rica', 'mexico', 'colombia', 'ecuador', 'brazil', 'united states', 'argentina', 'venezuela', 'chile', 'china', 'japan', 'korea' ]
                 for country in valid_countries :
                     if country in entry.countries :
                         valid_country = True
@@ -432,67 +419,67 @@ class BlogPublisher(object):
                 if post_count < 3800:
                     interval_time = datetime.datetime.utcnow() - datetime.timedelta(seconds=86400) #1 Day
 
-                    if u'policiales' in entry.categories and valid_country:
+                    if 'policiales' in entry.categories and valid_country:
                         logger.info("Case: Noticias.com->Policiales")
                         post_count = news_service.get_count(
-                            {'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id'], 'categories': u'policiales'})
+                            {'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id'], 'categories': 'policiales'})
 
                         if post_count < 10:
-                            entry.categories = [u'sucesos']
+                            entry.categories = ['sucesos']
                             valid_host = True
 
-                    if u'internacionales' in entry.categories and valid_country and entry.image:
+                    if 'internacionales' in entry.categories and valid_country and entry.image:
                         logger.info("Case: Noticias.com->Internacionales")
                         post_count = news_service.get_count(
-                            {'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id'], 'categories': u'internacionales'})
+                            {'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id'], 'categories': 'internacionales'})
 
                         if post_count < 10:
-                            entry.categories = [u'sucesos']
+                            entry.categories = ['sucesos']
                             valid_host = True
 
-                    if u'deporte' in entry.categories and valid_country and entry.image:
+                    if 'deporte' in entry.categories and valid_country and entry.image:
                         logger.info("Case: Noticias.com->Deporte")
                         post_count = news_service.get_count(
-                            {'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id'], 'categories': u'deporte'})
+                            {'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id'], 'categories': 'deporte'})
 
                         if post_count < 6:
-                            entry.categories = [u'deportes']
+                            entry.categories = ['deportes']
                             valid_host = True
 
-                    if u'clima' in entry.categories and valid_country and entry.image:
+                    if 'clima' in entry.categories and valid_country and entry.image:
                         logger.info("Case: Noticias.com->Clima")
                         post_count = news_service.get_count(
-                            {'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id'], 'categories': u'clima'})
+                            {'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id'], 'categories': 'clima'})
 
                         if post_count < 6:
-                            entry.categories = [u'sucesos']
+                            entry.categories = ['sucesos']
                             valid_host = True
 
 
-                    if u'interés general' in entry.categories and valid_country:
+                    if 'interés general' in entry.categories and valid_country:
                         logger.info("Case: Noticias.com->interés general")
                         post_count = news_service.get_count(
-                            {'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id'], 'categories': u'interés general'})
+                            {'_id': {'$gte': ObjectId.from_datetime(interval_time)}, 'host_id': host['id'], 'categories': 'interés general'})
 
                         if post_count < 10:
-                            entry.categories = [u'sociedad']
+                            entry.categories = ['sociedad']
                             valid_host = True
 
 
             else:
                 valid_host = True #TEMP
-                host["password"] = u"MarioKempes" #TEMP
-                if u"propiedades" in entry.categories:
+                host["password"] = "MarioKempes" #TEMP
+                if "propiedades" in entry.categories:
                     # self.add_hyperlinks(entry, "hyperlinks_propiedades.csv")
-                    entry.categories = [u"propiedades"]
+                    entry.categories = ["propiedades"]
 
                 if entry.source is not None:
                     tmp_source = entry.source
                     tmp_url = entry.url
-                    if isinstance(entry.source, unicode):
-                        tmp_source = entry.source.encode("utf-8")
-                    if isinstance(entry.url, unicode):
-                        tmp_url = entry.url.encode("utf-8")
+                    if isinstance(entry.source, str):
+                        tmp_source = entry.source
+                    if isinstance(entry.url, str):
+                        tmp_url = entry.url
                     entry.content = "<p align=\"left\">Por: <a href=\"http://natural.do\" target=\"_blank\">SentiLecto</a></p>" + entry.content
                     entry.content += "<p align=\"right\">Fuente: <a href=\"" + tmp_url + "\" target=\"_blank\">" + tmp_source + "</a></p>"
                 self.add_sentiment(entry)
@@ -515,17 +502,17 @@ class BlogPublisher(object):
         camelCategories = []
 
         #logger.info("ALEXIS: categories: %s" % ', '.join(entry.categories))
-        if u"propiedades" in entry.categories:
-            entry.categories = [u"propiedades"]
+        if "propiedades" in entry.categories:
+            entry.categories = ["propiedades"]
 
-        if u"crypto" in entry.categories:
-            entry.categories = [u"crypto"]
+        if "crypto" in entry.categories:
+            entry.categories = ["crypto"]
 
-        if u"turismo" in entry.categories:
-            entry.categories = [u"turismo"]
+        if "turismo" in entry.categories:
+            entry.categories = ["turismo"]
 
-        if u"estilo vida" in entry.categories:
-            entry.categories = [u"estilo vida"]
+        if "estilo vida" in entry.categories:
+            entry.categories = ["estilo vida"]
 
 #        if u"propiedades" in entry.categories:
 #            entry.categories = [u"propiedades"]
@@ -557,7 +544,7 @@ class BlogPublisher(object):
                 thumbnail, image_url = self.process_image(client, entry, wp_id)
                 if thumbnail:
                     post.thumbnail = thumbnail
-            except Exception, e:
+            except Exception as e:
                 logger.error("Error al procesar la imagen. WP_ID: %s" % wp_id)
 
             self.special_catogory_insertion(client=client,
@@ -581,7 +568,7 @@ class BlogPublisher(object):
         import json
         user_per_categories_file = self.config.get('publishing', 'category_host_to_publish')
 
-        with open(user_per_categories_file) as f:
+        with open(user_per_categories_file, encoding="utf-8") as f:
             categories_host = json.loads(f.read())
         return categories_host
 
@@ -589,7 +576,7 @@ class BlogPublisher(object):
         import json
         categories_priority_file = self.config.get('publishing', 'categories_priority')
 
-        with open(categories_priority_file) as f:
+        with open(categories_priority_file, encoding="utf-8") as f:
             categories_priority = json.loads(f.read())
         return categories_priority
 
@@ -597,7 +584,7 @@ class BlogPublisher(object):
         import json
         user_per_categories_file = self.config.get('publishing', 'unique_host_data')
 
-        with open(user_per_categories_file) as f:
+        with open(user_per_categories_file, encoding="utf-8") as f:
             unique_host = json.loads(f.read())
         return unique_host
 
@@ -628,7 +615,7 @@ class BlogPublisher(object):
         title = img['title']
         description = img['description']
 
-        image = urllib.URLopener()
+        image = urllib.request.URLopener()
         tmp_filepath, o = image.retrieve(url)
         filename = url.split('/')[-1]
         filename_wo_extension = filename.split('.')[0]
@@ -649,7 +636,7 @@ class BlogPublisher(object):
 
             filename_png = filename_wo_extension_safe + '.png'
 
-            svg = open(tmp_filepath).read()
+            svg = open(tmp_filepath, encoding="utf-8").read()
             to_png(svg, '/tmp/' + filename_png)
 
             tmp_filepath = '/tmp/' + filename_png
@@ -664,7 +651,7 @@ class BlogPublisher(object):
             add_background(tmp_filepath)
         except Exception as e:
             logger.error("Error inserting background")
-            logger.error("%s" % e.message)
+            logger.error("%s" % str(e))
 
         # read the binary file and let the XMLRPC library encode it into base64
         with open(tmp_filepath, 'rb') as img:
@@ -701,7 +688,7 @@ class BlogPublisher(object):
                 logger.info("inserted cannonical in %s" % entry.wp_url)
             except Exception as e:
                 logger.error("Couldn't recover and update entry %s" % entry.wp_id)
-                logger.error("%s" % e.message)
+                logger.error("%s" % str(e))
 
     def remove_from_portada(self, entries):
         # TODO: workaround this hardcoded data
@@ -723,7 +710,7 @@ class BlogPublisher(object):
 
                 for t in wpost.terms:
                     if t.name == 'z destacada':
-                        print t.id
+                        print(t.id)
                         wpost.terms.remove(t)
                         break
 
@@ -733,7 +720,7 @@ class BlogPublisher(object):
                 logger.info("remove from portada in %s" % entry.wp_url)
             except Exception as e:
                 logger.error("Couldn't remove from portada %s" % entry.wp_id)
-                logger.error("%s" % e.message)
+                logger.error("%s" % str(e))
 
     def insert_source_data(self, entry, post):
         post.custom_fields.append(dict(key='source', value=entry.source))

@@ -9,7 +9,7 @@ class GerundSubjectSolver:
         self.clause = clause
 
     def solve(self):
-        if debug_mode: print "--> GerundSubjectSolver.solve()"
+        if debug_mode: print("--> GerundSubjectSolver.solve()")
         clause = self.clause
         subject = clause.structure("subject")
 

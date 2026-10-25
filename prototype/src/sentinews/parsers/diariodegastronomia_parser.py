@@ -3,7 +3,7 @@
 
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -12,7 +12,7 @@ class DiariodegastronomiaParser(GenericParser):
     def __init__(self):
         super(DiariodegastronomiaParser, self).__init__()
 
-    source = u"Diariodegastronomia"
+    source = "Diariodegastronomia"
     
     def parse(self, url):
         #url = "http://diariodegastronomia.com/los-ocho-mejores-virgen-extra-de-jaen/"
@@ -51,7 +51,7 @@ class DiariodegastronomiaParser(GenericParser):
         categories = []
         tags = []
 
-        tags = [u"gastronomía"]
+        tags = ["gastronomía"]
         categories=["estilo vida"]
         
         new_entry = self.create_news_entry(title=title, content=content,

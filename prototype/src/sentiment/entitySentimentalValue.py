@@ -14,14 +14,14 @@ class EntitySentimentalValue(SentimentalValuedObject):
             self.compute_value()
 
     def compute_value(self):
-        arrenged = zip(*[ each.value for each in self.evidence() ])
+        arrenged = list(zip(*[ each.value for each in self.evidence() ]))
         self.value = (sum(arrenged[0]), sum(arrenged[1]))
 
     def positive_evidence(self):
-        return filter(lambda evidence: evidence.value[0], self.evidence())
+        return [evidence for evidence in self.evidence() if evidence.value[0]]
 
     def negative_evidence(self):
-        return filter(lambda evidence: evidence.value[1], self.evidence())
+        return [evidence for evidence in self.evidence() if evidence.value[1]]
 
     def __repr__(self):
         return SentimentalValuedObject.__repr__(self) + " " + str(self.evidence())

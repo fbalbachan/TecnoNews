@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
 
@@ -10,7 +10,7 @@ class LaPintureraParser(GenericParser):
     def __init__(self):
         super(LaPintureraParser, self).__init__()
 
-    source = u"La Pinturera"
+    source = "La Pinturera"
 
     def parse(self, url):
         # url= "http://www.lapinturera.com/2016/01/verde-mentatambien-en-invierno-look.html?utm_source=feedburner&utm_medium=feed&utm_campaign=Feed%3A+Lapinturera-BlogDeCosmticaMaquillajeYBelleza+%28lapinturera+-+Blog+de+cosm%C3%A9tica%2C+maquillaje+y+belleza.%29&utm_content=FeedBurner"
@@ -26,7 +26,7 @@ class LaPintureraParser(GenericParser):
         title = title.text.strip()
 
         content = soup.find('div', {"class": 'post-body'}).text
-        content = re.sub(u'¡¡BESOS!!', '', content).strip()
+        content = re.sub('¡¡BESOS!!', '', content).strip()
         content = '\n'.join([line for line in content.splitlines() if line.strip()])
         tags = ["belleza"]
         categories = ["belleza"]

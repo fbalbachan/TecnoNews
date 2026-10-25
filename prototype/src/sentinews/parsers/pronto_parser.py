@@ -4,7 +4,7 @@
 #{ "url" : [ "http://www.pronto.com.ar/rss/famosos" ], "default_tags" : null, "parser" : "pronto_parser.ProntoParser", "lastupdated" : ISODate("2016-01-27T02:01:07.174Z"), "id" : "pronto" }
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -13,7 +13,7 @@ class ProntoParser(GenericParser):
     def __init__(self):
         super(ProntoParser, self).__init__()
 
-    source = u"Pronto"
+    source = "Pronto"
 
     def parse(self, url):
         #url = "http://www.pronto.com.ar/articulo/famosos/alfredo-caseros-protagonizo-escandalo-policial-casa-ex-mujer/20160127153351202196.html"

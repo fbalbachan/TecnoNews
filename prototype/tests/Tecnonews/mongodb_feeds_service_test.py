@@ -12,7 +12,7 @@ class FeedServiceTest(unittest.TestCase):
 	def test_create_single_feed_object(self):
 		feed = Feed('clarin', 'http://edant.clarin.com/shared/v7/rss/', datetime.utcnow())
 		self.assertIsNotNone(feed)
-		self.assertEquals(feed.id, 'clarin')
+		self.assertEqual(feed.id, 'clarin')
 
 	def test_save_single_feed_object(self):
 		feed = Feed('clarin', 'http://edant.clarin.com/shared/v7/rss/', datetime.utcnow())
@@ -24,7 +24,7 @@ class FeedServiceTest(unittest.TestCase):
 		feed_list = self.service.get_all()
 		self.assertIsNotNone(feed_list)
 		self.assertTrue(len(feed_list) > 0)
-		print feed_list
+		print(feed_list)
 
 
 if __name__ == '__main__':

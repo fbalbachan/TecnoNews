@@ -34,11 +34,11 @@ class SegunToDijoDislocationStrategy:
         token = node.token
         
         return isinstance(node, LabelNode) and node.label == 'F-no-c' and\
-            sentence.paragraph.text.decode("utf-8")[token.start():token.end()].encode('utf-8') == '"'
+            sentence.paragraph.text[token.start():token.end()] == '"'
 
     def correct_last_quotes(self, node, sentence):
         if self.is_quote(node.children[2], sentence):
-            for i in xrange(3, len(node.children)):
+            for i in range(3, len(node.children)):
                 if self.is_quote(node.children[i], sentence): return i
         return -1
 
@@ -60,7 +60,7 @@ class SegunToDijoDislocationStrategy:
             else:
                 rewrite_selection_tries -= 1
 
-        text = sentence.paragraph.text.decode("utf-8")
+        text = sentence.paragraph.text
 
         last_quote_index = self.correct_last_quotes(node, sentence)
         last_quote_token = node.children[last_quote_index].token
@@ -94,6 +94,6 @@ class SegunToDijoDislocationStrategy:
             rewritten_sentence = second_part + " " + first_part + third_part
         else:
             rewritten_sentence = first_part + " " + second_part + third_part
-        return Rewrite(node, rewritten_sentence.encode('utf-8'))
+        return Rewrite(node, rewritten_sentence)
 
     type = "dislocation"

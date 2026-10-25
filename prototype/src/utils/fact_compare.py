@@ -51,8 +51,6 @@ class FactCompare(object):
         return final_score
 
     def get_boxes(self, a_fact):
-        if not isinstance(a_fact, unicode):
-            a_fact = a_fact.decode("utf-8")
 
         boxes = {"subject": None, "verb": None, "object": None, "time": None}
 
@@ -69,14 +67,14 @@ class FactCompare(object):
         if len(parts) == 3:
             boxes["object"] = parts[2].strip()
 
-        if boxes["subject"] in [u"alguien", u"algo"]:
-            boxes["subject"] = u"alguien"
-        elif boxes["subject"] == u"∅":
+        if boxes["subject"] in ["alguien", "algo"]:
+            boxes["subject"] = "alguien"
+        elif boxes["subject"] == "∅":
             boxes["subject"] == None
 
-        if boxes["object"] in [u"alguien", u"algo"]:
-            boxes["object"] = u"alguien"
-        elif boxes["object"] == u"∅":
+        if boxes["object"] in ["alguien", "algo"]:
+            boxes["object"] = "alguien"
+        elif boxes["object"] == "∅":
             boxes["object"] = None
 
         return boxes
@@ -181,7 +179,7 @@ class FactCompare(object):
         time_data2 = compare_data2["time_reference"]
 
         equality_box = {}
-        for a_label, a_value1 in boxes1.iteritems():
+        for a_label, a_value1 in boxes1.items():
             equality_box[a_label] = float((boxes2[a_label] == a_value1))
 
         #WILDCARD
@@ -229,7 +227,7 @@ class FactCompare(object):
         #FINAL SCORE:
         available_scores = 0
         sum_scores = 0
-        for a_label, a_score in equality_box.iteritems():
+        for a_label, a_score in equality_box.items():
             if a_score > -1:
                 available_scores += 1
                 sum_scores += self.weights[a_label] * a_score
@@ -267,7 +265,7 @@ class FactCompare(object):
 
 
         equality_box = {}
-        for a_label, a_value1 in boxes1.iteritems():
+        for a_label, a_value1 in boxes1.items():
             equality_box[a_label] = float((boxes2[a_label] == a_value1))
 
         #WILDCARD
@@ -345,7 +343,7 @@ class FactCompare(object):
         #FINAL SCORE:
         available_scores = 0
         sum_scores = 0
-        for a_label, a_score in equality_box.iteritems():
+        for a_label, a_score in equality_box.items():
             if a_score > -1:
                 available_scores += 1
                 sum_scores += self.weights[a_label] * a_score

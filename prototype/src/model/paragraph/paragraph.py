@@ -9,7 +9,7 @@ debug_mode = False
 
 class Paragraph:
     def __init__(self, sentences=None, text=""):
-        if debug_mode: print "--> Paragraph.init()"
+        if debug_mode: print("--> Paragraph.init()")
         self.sentences = sentences if sentences else []
         self.original_text = text
         self.parenthesis_positions_in_original_text = []
@@ -29,15 +29,14 @@ class Paragraph:
         return {referent for referent in self.referents() if referent.semantic_classification()}
 
     def clauses_for(self, referent):
-        return filter(lambda clause: any( ( referent == entity.referent for entity in clause.all_entities()) ),
-                      self.clauses())
+        return [clause for clause in self.clauses() if any( ( referent == entity.referent for entity in clause.all_entities()) )]
 
     def facts_for(self, referent):
-        return filter(lambda clause: clause.is_fact(), self.clauses_for(referent))
+        return [clause for clause in self.clauses_for(referent) if clause.is_fact()]
 
     @staticmethod
     def from_text(text):
-        if debug_mode: print "--> Paragraph.from_text()"
+        if debug_mode: print("--> Paragraph.from_text()")
 
         # TODO: Repensar desde la arquitectura si las sentences son de text o del párrafo,
         #       ya que Paragraph(sentences, text) puede ser redundante.
@@ -54,7 +53,7 @@ class Paragraph:
             sentence.text = Paragraph._preprocess_text(sentence.text)
         paragraph.sentences = sentences
 
-        if debug_mode: print "<-- Paragraph.from_text() - Sentences retrieved: ", paragraph.sentences
+        if debug_mode: print("<-- Paragraph.from_text() - Sentences retrieved: ", paragraph.sentences)
         return paragraph
 
     def _process_parenthesis(self):

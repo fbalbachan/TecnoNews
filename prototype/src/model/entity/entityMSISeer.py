@@ -18,7 +18,7 @@ class EntityMSISeer:
         self.global_context = global_context
 
     def msi_of(self, entity):
-        if debug_mode: print "--> EntityMSISeer.msi_of(entity:", entity, ")"
+        if debug_mode: print("--> EntityMSISeer.msi_of(entity:", entity, ")")
 
         label = entity.node.label
         entity.msi = self.msi_seer_by_label[label](self, entity) if label in self.msi_seer_by_label else {}
@@ -28,7 +28,7 @@ class EntityMSISeer:
         return entity.msi
 
     def msi_of_single(self, entity):
-        if debug_mode: print "--> EntityMSISeer.msi_of_single(entity:", entity, ")"
+        if debug_mode: print("--> EntityMSISeer.msi_of_single(entity:", entity, ")")
 
         useful_leaves = self.get_useful_leaves(entity)
 
@@ -58,13 +58,11 @@ class EntityMSISeer:
         return msi
 
     def get_useful_leaves(self, entity):
-        if debug_mode: print "--> EntityMSISeer.get_useful_leaves(entity:", entity, ")"
+        if debug_mode: print("--> EntityMSISeer.get_useful_leaves(entity:", entity, ")")
         node = entity.node
 
         banned_labels = ["grup-sp", "sp-de"]
-        banned_nodes = filter(lambda child:
-                                  not child.is_leaf() and child.label in banned_labels,
-                              node.children)
+        banned_nodes = [child for child in node.children if not child.is_leaf() and child.label in banned_labels]
         banned_nodes = set(banned_nodes)
 
         nouns = self.filter_banned(node.leaves_of_category("noun") + node.leaves_of_category("number"),
@@ -83,13 +81,13 @@ class EntityMSISeer:
         return useful_leaves
 
     def filter_banned(self, leaves, banned_nodes):
-        return filter(lambda leaf: not banned_nodes & set(leaf.path_to_root()), leaves)
+        return [leaf for leaf in leaves if not banned_nodes & set(leaf.path_to_root())]
 
     def has_unexchangeable_appositional_relationship(self, kernel_nouns):
         return [noun.msi["type"] if "type" in noun.msi else None for noun in kernel_nouns] == ["common", "proper"]
 
     def disambiguate_if_necessary(self, msi, leaves):
-        if debug_mode: print "--> EntityMSISeer.disambiguate_if_necessary(msi, leaves)", msi
+        if debug_mode: print("--> EntityMSISeer.disambiguate_if_necessary(msi, leaves)", msi)
         if not leaves:
             return
         leaves = leaves[::-1]
@@ -97,7 +95,7 @@ class EntityMSISeer:
         non_neutral_attribute_values = {"gender": [Gender.masculine, Gender.feminine],
                                         "number": [Number.singular, Number.plural]}
 
-        for attribute, non_neutral_values in non_neutral_attribute_values.items():
+        for attribute, non_neutral_values in list(non_neutral_attribute_values.items()):
             if msi[attribute] not in non_neutral_values:
                 for leaf in leaves:
                     if attribute in leaf.msi and leaf.msi[attribute] in non_neutral_values:
@@ -119,7 +117,7 @@ class EntityMSISeer:
                    for child in entity.children_of_category("noun") + entity.children_of_category("pronoun")]
         if Gender.masculine in genders:
             gender = Gender.masculine
-        elif all(map(lambda p_gender: p_gender == Gender.feminine, genders)):
+        elif all([p_gender == Gender.feminine for p_gender in genders]):
             gender = Gender.feminine
         else:
             gender = Gender.neutral
@@ -184,8 +182,8 @@ class EntityMSISeer:
     def _calculate_animity_single(self, msi, kernel):
 
         lemma = kernel.lemma
-        if not isinstance(lemma, unicode):
-            lemma = unicode(lemma, "utf-8")
+        if not isinstance(lemma, str):
+            lemma = str(lemma, "utf-8")
 
         if msi['category'] is "pronoun" and msi['type'] is "personal" and msi['person'] in [1, 2]:
             animity = Animity.animated

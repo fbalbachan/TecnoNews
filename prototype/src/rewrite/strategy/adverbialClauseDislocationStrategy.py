@@ -20,7 +20,7 @@ class AdverbialClauseDislocationStrategy:
         self.change_header_if_possible = change_header_if_possible
 
     def applies_to(self, sentence, node):
-        if debug_mode: print "--> AdverbialClauseDislocationStrategy.applies_to()"
+        if debug_mode: print("--> AdverbialClauseDislocationStrategy.applies_to()")
         en_caso_de_que = (
             isinstance(node, LabelNode) and node.label == 'prep' and
             self.en_caso_de_subord_node(node)
@@ -32,7 +32,7 @@ class AdverbialClauseDislocationStrategy:
         return self.is_subord_to_apply(node) or en_caso_de_que
 
     def is_subord_to_apply(self, node, subordinate_headers=None):
-        if debug_mode: print "--> AdverbialClauseDislocationStrategy.is_subord_to_apply()"
+        if debug_mode: print("--> AdverbialClauseDislocationStrategy.is_subord_to_apply()")
 
         return isinstance(node, LabelNode) \
                and node.label == 'grup-verb' \
@@ -60,12 +60,12 @@ class AdverbialClauseDislocationStrategy:
         """
 
     def subord_node(self, node, subordinate_headers=None):
-        if debug_mode: print "--> AdverbialClauseDislocationStrategy.subord_node()"
+        if debug_mode: print("--> AdverbialClauseDislocationStrategy.subord_node()")
 
         if subordinate_headers is None:
             subordinate_headers = self.subordinate_headers
 
-        for i in xrange(len(node.children)):
+        for i in range(len(node.children)):
             child = node.children[i]
             if isinstance(child, LabelNode) and child.label == 'subord':
                 if len(child.children) > 0:
@@ -76,8 +76,8 @@ class AdverbialClauseDislocationStrategy:
 
     # TODO: Terminar en caso de que!!
     def en_caso_de_subord_node(self, node):
-        if debug_mode: print "--> AdverbialClauseDislocationStrategy.en_caso_de_subord_node()"
-        for i in xrange(len(node.children)):
+        if debug_mode: print("--> AdverbialClauseDislocationStrategy.en_caso_de_subord_node()")
+        for i in range(len(node.children)):
             child = node.children[i]
             if isinstance(child, LeafNode) and child.lemma == 'en_caso_de' and i + 1 < len(node.children):
                 possible_subord = node.children[i+1]
@@ -88,7 +88,7 @@ class AdverbialClauseDislocationStrategy:
         return None
 
     def rewrite(self, sentence, node):
-        if debug_mode: print "--> AdverbialClauseDislocationStrategy.rewrite()"
+        if debug_mode: print("--> AdverbialClauseDislocationStrategy.rewrite()")
         if self.is_subord_to_apply(node):
             subord_node = self.subord_node(node)
             if node.token.start() == subord_node.token.start():
@@ -100,8 +100,8 @@ class AdverbialClauseDislocationStrategy:
             return self.rewrite_en_caso_de_que_p_q(sentence, node, subord_node)
 
     def rewrite_if_p_q(self, sentence, node, subord_node):
-        if debug_mode: print "--> AdverbialClauseDislocationStrategy.rewrite_if_p_q(node:", node, ", subord:", subord_node, ")"
-        text = sentence.paragraph.text.decode("utf-8")
+        if debug_mode: print("--> AdverbialClauseDislocationStrategy.rewrite_if_p_q(node:", node, ", subord:", subord_node, ")")
+        text = sentence.paragraph.text
         first_part = text[node.token.start():subord_node.token.end()].strip()
         second_part = text[subord_node.token.end():node.token.end()].strip()
 
@@ -126,26 +126,26 @@ class AdverbialClauseDislocationStrategy:
                 first_part = "cuando " + first_part[7:]
 
         rewritten_sentence = second_part + " " + first_part + final_punctuation
-        return Rewrite(node, rewritten_sentence.encode('utf-8'))
+        return Rewrite(node, rewritten_sentence)
 
     # Si p => En caso de que subjuntivo(p)
     def rewrite_si_a_en_caso_de(self, first_part):
-        if debug_mode: print "--> AdverbialClauseDislocationStrategy.rewrite_si_a_en_caso_de()"
+        if debug_mode: print("--> AdverbialClauseDislocationStrategy.rewrite_si_a_en_caso_de()")
         si_a_en_caso_de_que = [SiAEncasodequeStrategySubjunctivePart(self.ontology)]
-        paragraph = Paragraph.from_text(first_part.encode('utf-8'))
+        paragraph = Paragraph.from_text(first_part)
         self.analyzer.analyze(paragraph)
 
         not_subord_rel = [c for c in paragraph.clauses() if not c.is_or_inherits_from('subord-rel')]
         rewriter = src.rewrite.rewriter.Rewriter(paragraph, self.ontology, si_a_en_caso_de_que, not_subord_rel)
-        subjunctive_first_part = rewriter.rewrite().decode('utf-8')
+        subjunctive_first_part = rewriter.rewrite()
 
         if first_part != subjunctive_first_part and subjunctive_first_part[:3].lower() == 'si ':
             return set_first_letter_case(subjunctive_first_part, "en caso de que ") + subjunctive_first_part[3:]
         return first_part
 
     def rewrite_q_if_p(self, sentence, node, subord_node):
-        if debug_mode: print "--> AdverbialClauseDislocationStrategy.rewrite_q_if_p(node:", node, ", subord:", subord_node, ")"
-        text = sentence.paragraph.text.decode("utf-8")
+        if debug_mode: print("--> AdverbialClauseDislocationStrategy.rewrite_q_if_p(node:", node, ", subord:", subord_node, ")")
+        text = sentence.paragraph.text
         first_part = text[node.token.start():subord_node.token.start()].strip()
         second_part = text[subord_node.token.start():subord_node.token.end()].strip()
         third_part = text[subord_node.token.end():node.token.end()].strip()
@@ -179,14 +179,14 @@ class AdverbialClauseDislocationStrategy:
             third_part = " " + third_part[0].lower() + third_part[1:]
 
         rewritten_sentence = second_part + " " + first_part + third_part + final_punctuation
-        return Rewrite(node, rewritten_sentence.encode('utf-8'))
+        return Rewrite(node, rewritten_sentence)
 
     def rewrite_en_caso_de_que_p_q(self, sentence, node, subord_node):
         main_clause = sentence.main_clause()
         clause = main_clause.children[0]
         token = clause.children[0].node.token
 
-        text = sentence.paragraph.text.decode("utf-8")
+        text = sentence.paragraph.text
         first_part = text[clause.node.token.start():token.end()].strip()
         second_part = text[token.end():clause.node.token.end()].strip()
 
@@ -205,7 +205,7 @@ class AdverbialClauseDislocationStrategy:
         first_part = first_part[0].lower() + first_part[1:]
 
         rewritten_sentence = second_part + " en caso de " + first_part + final_punctuation
-        return Rewrite(main_clause.node, rewritten_sentence.encode('utf-8'))
+        return Rewrite(main_clause.node, rewritten_sentence)
 
     type = "dislocation"
 

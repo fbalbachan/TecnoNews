@@ -3,14 +3,14 @@
 
 from bs4 import BeautifulSoup
 from src.sentinews.parsers.generic_parser import GenericParser
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 
 class ClarinExtrashowParser(GenericParser):
     def __init__(self):
         super(ClarinExtrashowParser, self).__init__()
 
-    source = u"Clarin Extrashow"
+    source = "Clarin Extrashow"
 
     def is_parseable_case(self, url):
         allowed = True
@@ -65,8 +65,8 @@ class ClarinExtrashowParser(GenericParser):
             clean_text = paragraph.text.strip()
             content += "\n" + clean_text
 
-        tags=[u'entretenimiento']
-        categories=[u'entretenimiento']
+        tags=['entretenimiento']
+        categories=['entretenimiento']
         new_entry = self.create_news_entry(title=title, content=content,
                                            tags=tags,
                                            source=self.source,

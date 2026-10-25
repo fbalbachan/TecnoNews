@@ -8,7 +8,7 @@ class SentenceExtractor(object):
 
     def extract(self):
         sentences = []
-        for key, value in self.global_map.iteritems():
+        for key, value in self.global_map.items():
             if 'type' in value and value['type'] == 'sentence':
                 sentences.append(Sentence(value))
         return sentences

@@ -9,7 +9,7 @@ def load_sentiwordnet():
     Config = ConfigProvider()
 
     sentiwordnet_file =  Config.get("resources", "sentiwordnet")
-    reader = unicode_csv_reader(open(sentiwordnet_file, 'r'), first_line_is_header=False, delimiter=',')
+    reader = unicode_csv_reader(open(sentiwordnet_file, 'r', encoding="utf-8"), first_line_is_header=False, delimiter=',')
     values_by_lemma = {}
 
     for lemma, verb_mark, positive, negative in reader:  # @UnusedVariable

@@ -2,7 +2,7 @@
 
 import re
 import traceback
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 from src.model.sentilecto import Sentilecto
 from src.sentinews.blog_publisher import BlogPublisher
@@ -66,7 +66,7 @@ class NewsRewriter(object):
             except:
                 res[url] = url
 
-        if debug_mode: logger.info("<-- _get_alt_text >> result: [%s]" % (res.values()[0:2] if len(res) > 2 else ""))
+        if debug_mode: logger.info("<-- _get_alt_text >> result: [%s]" % (list(res.values())[0:2] if len(res) > 2 else ""))
         return res
 
     def get_main_image_url(self, wikipage):
@@ -74,7 +74,7 @@ class NewsRewriter(object):
         # TODO Extract this to a class
 
         img_alts = self._get_alt_text(wikipage.images, wikipage.html())
-        images_urls = img_alts.keys()
+        images_urls = list(img_alts.keys())
 
         title_words = wikipage.original_title.lower().split()
         logger.info("search_string %s " % title_words)
@@ -164,9 +164,9 @@ class NewsRewriter(object):
             for clause in sentence.clauses:
                 clause_entities = clause.entities + clause.tacit_entities()
 
-                clause_entities = filter(lambda entity: not entity.has_attr("implicit") and not entity.has_attr("impersonal"), clause_entities)
+                clause_entities = [entity for entity in clause_entities if not entity.has_attr("implicit") and not entity.has_attr("impersonal")]
 
-                clause_entities = filter(lambda entity: entity.is_maximal_regarding(clause_entities), clause_entities)
+                clause_entities = [entity for entity in clause_entities if entity.is_maximal_regarding(clause_entities)]
 
                 text_entities.extend(clause_entities)
                 if clause.relative_entity:
@@ -193,7 +193,7 @@ class NewsRewriter(object):
                         appearing[a_reference]=1
 
                 unique_str = ""
-                for unique_elem in appearing.iterkeys():
+                for unique_elem in appearing.keys():
                     unique_str+=' ' + unique_elem+': '+output_utils.e_name(appearing[unique_elem])+','
 
                 unique_str = unique_str[:-1]
@@ -218,39 +218,39 @@ class NewsRewriter(object):
 
     def rewrite_raconto(self):
         months = {
-                    "01":u"enero",
-                    "02":u"febrero",
-                    "03":u"marzo",
-                    "04":u"abril",
-                    "05":u"mayo",
-                    "06":u"junio",
-                    "07":u"julio",
-                    "08":u"agosto",
-                    "09":u"septiembre",
-                    "10":u"octubre",
-                    "11":u"noviembre",
-                    "12":u"diciembre",
+                    "01":"enero",
+                    "02":"febrero",
+                    "03":"marzo",
+                    "04":"abril",
+                    "05":"mayo",
+                    "06":"junio",
+                    "07":"julio",
+                    "08":"agosto",
+                    "09":"septiembre",
+                    "10":"octubre",
+                    "11":"noviembre",
+                    "12":"diciembre",
                 }
         days = {
-                    "0":u"lunes",
-                    "1":u"martes",
-                    "2":u"miércoles",
-                    "3":u"jueves",
-                    "4":u"viernes",
-                    "5":u"sábado",
-                    "6":u"domingo",
-                    "rep1": u"día",
-                    "rep2": u"dia",
-                    "rep3": u"Lunes",
-                    "rep4": u"Martes",
-                    "rep5": u"Miércoles",
-                    "rep6": u"Miercoles",
-                    "rep7": u"Jueves",
-                    "rep8": u"Viernes",
-                    "rep9": u"Sábado",
-                    "rep10": u"Sabado",
-                    "rep11": u"Domingo",
-                    "rep12": u"miercoles"
+                    "0":"lunes",
+                    "1":"martes",
+                    "2":"miércoles",
+                    "3":"jueves",
+                    "4":"viernes",
+                    "5":"sábado",
+                    "6":"domingo",
+                    "rep1": "día",
+                    "rep2": "dia",
+                    "rep3": "Lunes",
+                    "rep4": "Martes",
+                    "rep5": "Miércoles",
+                    "rep6": "Miercoles",
+                    "rep7": "Jueves",
+                    "rep8": "Viernes",
+                    "rep9": "Sábado",
+                    "rep10": "Sabado",
+                    "rep11": "Domingo",
+                    "rep12": "miercoles"
         }
 
         intro = None
@@ -264,47 +264,46 @@ class NewsRewriter(object):
         if self.original_entry.raconto_date is not None:
 
             tempReplace =  self.original_entry.raconto_content
-            for a_day in days.values():
-                tempReplace = tempReplace.replace(u"este " + a_day + u" ", "")
-                tempReplace = tempReplace.replace(u"el " + a_day + u" pasado", "")
-                tempReplace = tempReplace.replace(u"el pasado " + a_day + u" ", "")
-                tempReplace = tempReplace.replace(u"el " + a_day + u" que viene ", "")
-                tempReplace = tempReplace.replace(u"el " + a_day + u" entrante ", "")
-                tempReplace = tempReplace.replace(u"el " + a_day + u" próximo ", "")
-                tempReplace = tempReplace.replace(u"el " + a_day + u" proximo ", "")
-                tempReplace = tempReplace.replace(u"el próximo " + a_day + u" ", "")
-                tempReplace = tempReplace.replace(u"el proximo " + a_day + u" ", "")
-                tempReplace = tempReplace.replace(u"el " + a_day + u" ", "")
+            for a_day in list(days.values()):
+                tempReplace = tempReplace.replace("este " + a_day + " ", "")
+                tempReplace = tempReplace.replace("el " + a_day + " pasado", "")
+                tempReplace = tempReplace.replace("el pasado " + a_day + " ", "")
+                tempReplace = tempReplace.replace("el " + a_day + " que viene ", "")
+                tempReplace = tempReplace.replace("el " + a_day + " entrante ", "")
+                tempReplace = tempReplace.replace("el " + a_day + " próximo ", "")
+                tempReplace = tempReplace.replace("el " + a_day + " proximo ", "")
+                tempReplace = tempReplace.replace("el próximo " + a_day + " ", "")
+                tempReplace = tempReplace.replace("el proximo " + a_day + " ", "")
+                tempReplace = tempReplace.replace("el " + a_day + " ", "")
 
-            tempReplace = tempReplace.replace(u"esta semana ", "")
-            tempReplace = tempReplace.replace(u"esta mañana ", "")
-            tempReplace = tempReplace.replace(u"esta tarde ", "")
-            tempReplace = tempReplace.replace(u"esta noche ", "")
-            tempReplace = tempReplace.replace(u"este mediodía ", "")
-            tempReplace = tempReplace.replace(u"esta madrugada ", "")
-            tempReplace = tempReplace.replace(u"la semana pasada ", "")
-            tempReplace = tempReplace.replace(u"la pasada semana ", "")
-            tempReplace = tempReplace.replace(u"la semana que viene ", "")
-            tempReplace = tempReplace.replace(u"la semana entrante ", "")
-            tempReplace = tempReplace.replace(u"la semana próxima ", "")
-            tempReplace = tempReplace.replace(u"la semana proxima ", "")
-            tempReplace = tempReplace.replace(u"la próxima semana ", "")
-            tempReplace = tempReplace.replace(u"la proxima semana ", "")
-            tempReplace = tempReplace.replace(u"la semana ", "")
-            tempReplace = tempReplace.replace(u"ayer ", "")
-            tempReplace = tempReplace.replace(u"hoy ", "")
-            tempReplace = tempReplace.replace(u"mañana ", "")
-            tempReplace = tempReplace.replace(u"anoche ", "")
+            tempReplace = tempReplace.replace("esta semana ", "")
+            tempReplace = tempReplace.replace("esta mañana ", "")
+            tempReplace = tempReplace.replace("esta tarde ", "")
+            tempReplace = tempReplace.replace("esta noche ", "")
+            tempReplace = tempReplace.replace("este mediodía ", "")
+            tempReplace = tempReplace.replace("esta madrugada ", "")
+            tempReplace = tempReplace.replace("la semana pasada ", "")
+            tempReplace = tempReplace.replace("la pasada semana ", "")
+            tempReplace = tempReplace.replace("la semana que viene ", "")
+            tempReplace = tempReplace.replace("la semana entrante ", "")
+            tempReplace = tempReplace.replace("la semana próxima ", "")
+            tempReplace = tempReplace.replace("la semana proxima ", "")
+            tempReplace = tempReplace.replace("la próxima semana ", "")
+            tempReplace = tempReplace.replace("la proxima semana ", "")
+            tempReplace = tempReplace.replace("la semana ", "")
+            tempReplace = tempReplace.replace("ayer ", "")
+            tempReplace = tempReplace.replace("hoy ", "")
+            tempReplace = tempReplace.replace("mañana ", "")
+            tempReplace = tempReplace.replace("anoche ", "")
 
             self.original_entry.raconto_content = tempReplace
 
-            date = unicode(self.original_entry.raconto_date).split()[0]
-            weekday = unicode(self.original_entry.raconto_date.weekday())
+            date = str(self.original_entry.raconto_date).split()[0]
+            weekday = str(self.original_entry.raconto_date.weekday())
             date_numbers = date.split('-')
 
             if len(date_numbers) == 3:
-                intro = u"El " + days[weekday] + u" " + date_numbers[2] + u" de " + months[date_numbers[1]] + u" " + self.original_entry.raconto_content
-                intro = intro
+                intro = "El " + days[weekday] + " " + date_numbers[2] + " de " + months[date_numbers[1]] + " " + self.original_entry.raconto_content
         if intro is None:
             intro = self.original_entry.raconto_content
 
@@ -328,7 +327,7 @@ class NewsRewriter(object):
             for an_entity in self.original_entry.entities:
                 if an_entity["semantic"] == "place":
                     #entity_places.append(an_entity["name"]
-                    sock.send(an_entity["name"].replace("_"," ")+"\n")
+                    sock.send((an_entity["name"].replace("_"," ")+"\n").encode("utf-8"))
                     a_response = json.loads(sock.recv(1024))
                     if a_response[0] != "Unknown":
                         if a_response[0] in entity_countries:
@@ -343,16 +342,16 @@ class NewsRewriter(object):
                             entity_cities[a_response[1]] = 1
                         #entity_places.append(a_response[1])
         except Exception as e:
-            logger.error("COUNTRIES ERROR: %s" % e.message)
+            logger.error("COUNTRIES ERROR: %s" % str(e))
             logger.error("COUNTRIES ERROR: \n%s" % traceback.format_exc())
 
 
         if len(entity_countries) > 0:
-            for a_country, a_count in sorted(entity_countries.iteritems(), key=lambda (k,v): (v,k),reverse=True):
-                self.original_entry.countries.append(a_country.encode('utf-8'))
+            for a_country, a_count in sorted(iter(entity_countries.items()), key=lambda k_v: (k_v[1],k_v[0]),reverse=True):
+                self.original_entry.countries.append(a_country)
         if len(entity_cities) > 0:
-            for a_city, a_count in sorted(entity_cities.iteritems(), key=lambda (k,v): (v,k),reverse=True):
-                self.original_entry.cities.append(a_city.encode('utf-8'))
+            for a_city, a_count in sorted(iter(entity_cities.items()), key=lambda k_v1: (k_v1[1],k_v1[0]),reverse=True):
+                self.original_entry.cities.append(a_city)
 
         self.rewritten_entry.cities = self.original_entry.cities
         self.rewritten_entry.countries = self.original_entry.countries
@@ -445,7 +444,7 @@ class NewsRewriter(object):
         if dated_raconto is not None:
             raconto_analysis = self._analyze(dated_raconto)
             rewriter = Rewriter(raconto_analysis['paragraph'])
-            analysis["raconto_content"] = rewriter.rewrite(raconto=True).decode('utf-8')
+            analysis["raconto_content"] = rewriter.rewrite(raconto=True)
 
         if not self.config.get('instance', 'id') == 'Test':
             self.to_insert_canonical = self.rewritten_entry.other_versions[:2]
@@ -493,7 +492,7 @@ class NewsRewriter(object):
             self.set_sentiment_score(analysis)
 
 
-            if wikiinfo and filter(lambda (referent, score): referent == wikiinfo[0][0] and score > 1., ranking):
+            if wikiinfo and [referent_score2 for referent_score2 in ranking if referent_score2[0] == wikiinfo[0][0] and referent_score2[1] > 1.]:
                 # logger.info("WIKIINFO: %s", str(wikiinfo))
                 # logger.info("Searching for %s " % wikiinfo[0][2])
                 wikipedia_page = wikiinfo[0][2]
@@ -520,7 +519,7 @@ class NewsRewriter(object):
                 ranking = analysis["referent_ranking"]
                 wikiinfo = analysis["generated_content_wiki"]
 
-                if wikiinfo and filter(lambda (referent, score): referent == wikiinfo[0][0] and score > 1., ranking):
+                if wikiinfo and [referent_score for referent_score in ranking if referent_score[0] == wikiinfo[0][0] and referent_score[1] > 1.]:
                     # logger.info("WIKIINFO: %s", str(wikiinfo))
                     # logger.info("Searching for %s " % wikiinfo[0][2])
                     wikipedia_page = wikiinfo[0][2]
@@ -539,7 +538,7 @@ class NewsRewriter(object):
     def publish(self):
         publisher = BlogPublisher()
         wp_id, wp_url, host_id, image_url = publisher.publish(self.rewritten_entry)
-        if host_id == u"entretenimiento_bit":
+        if host_id == "entretenimiento_bit":
             publisher.insert_canonical(self.to_insert_canonical, wp_url)
             publisher.remove_from_portada(self.to_insert_canonical)
         return wp_id, wp_url, host_id, image_url
@@ -560,19 +559,17 @@ class NewsRewriter(object):
         # 1) Restore URL escaped characters.
         try :
             #ALEXIS: Encodeo a UTF-8 PORQUE LOS URL ENCODINGS (%%) DEPENDEN DEL ENCODING FUENTE (WINDOWS-1xxx != UTF-8)
-            ret = ret.encode('utf-8')
 
             #DECODEO PORCENTAJES
-            ret  = urllib.unquote(ret)
+            ret  = urllib.parse.unquote(ret)
 
             #VUELVO A CONVERTIR A UNICODE PORQUE ERA LO QUE ME VINO
-            ret = ret.decode('utf-8')
         except :
             pass
 
         # 2) Dealing with encodings.
         # try :
-        #     ret = ret.decode("utf8")
+        #     ret = ret
         # except :
         #    pass
 
@@ -593,27 +590,26 @@ class NewsRewriter(object):
         rewritten_content_with_caption = rewritten_content
         try:
             caption = image_data['description']
-            if isinstance(rewritten_content, unicode):
+            if isinstance(rewritten_content, str):
                 logger.info("Rewritten entry content is unicode")
-                if not isinstance(caption, unicode):
+                if not isinstance(caption, str):
                     logger.info('Caption is UTF-8')
-                    caption = unicode(caption,"utf-8")
+                    caption = str(caption,"utf-8")
                 caption = self._sanitize_caption(caption)
-                logger.info(u'Image Caption: %s' % caption)
-                rewritten_content_with_caption = u'<p><small>Foto: Wikipedia - %s</small></p> %s' % (caption, rewritten_content)
+                logger.info('Image Caption: %s' % caption)
+                rewritten_content_with_caption = '<p><small>Foto: Wikipedia - %s</small></p> %s' % (caption, rewritten_content)
             else:
                 logger.info("Rewritten entry content is UTF-8")
-                if isinstance(caption, unicode):
+                if isinstance(caption, str):
                     logger.info('Caption is UNICODE')
-                    caption = caption.encode("utf-8")
                 caption = self._sanitize_caption(caption)
                 logger.info('Image Caption: %s' % caption)
                 rewritten_content_with_caption =  '<p><small>Foto: Wikipedia - %s</small></p> %s' % (caption, rewritten_content)
 
         except Exception as e:
             caption = image_data['description'] if 'description' in image_data else "NO CAPTION"
-            if isinstance(caption, unicode):
-                logger.info(u'Image Caption error 1! Caption: %s' % caption)
+            if isinstance(caption, str):
+                logger.info('Image Caption error 1! Caption: %s' % caption)
             else:
                 logger.info('Image Caption error 1! Caption: %s' % caption)
 
@@ -626,7 +622,7 @@ class NewsRewriter(object):
         new_tags_list = [r[0].name() for r in ranking]
         logger.info("Tags in Ranking %s" % new_tags_list)
         if not new_tags_list:
-            print "Empty tags to add"
+            print("Empty tags to add")
 
         base_tags = self.rewritten_entry.tags
         if not base_tags:
@@ -640,7 +636,7 @@ class NewsRewriter(object):
 
         for tag in new_tags_list:
             tag_clean = re.sub('_', ' ', tag)
-            tag_clen_utf = tag_clean.decode('utf-8')
+            tag_clen_utf = tag_clean
             if tag_clen_utf not in base_tags:
                 base_tags.append(tag_clean)
 
@@ -656,24 +652,24 @@ class NewsRewriter(object):
         import traceback
         from src.utils.unicodeTools import safe_unicode
         pre_content = safe_unicode(self.rewritten_entry.content)
-        content = u''
+        content = ''
 
-        for paragraph in pre_content.split(u'\n'):
+        for paragraph in pre_content.split('\n'):
             if len(paragraph) > 0:
                 # patch to clean wrong formatted paragraphs
-                if paragraph[0] in [u',', u'.']:
+                if paragraph[0] in [',', '.']:
                     paragraph = paragraph[1:].strip()
 
-                content += u'<p>' + paragraph[0].upper() + paragraph[1:] + u'</p>'
+                content += '<p>' + paragraph[0].upper() + paragraph[1:] + '</p>'
 
         try:
-            logger.info("Is content unicode %s" % isinstance(content, unicode))
+            logger.info("Is content unicode %s" % isinstance(content, str))
             # content = safe_unicode(content)
-            content = re.sub(r' +',  u' ', content)
+            content = re.sub(r' +',  ' ', content)
 
         except Exception as e:
                 logger.error("Couldn't clean multiple spaces")
-                logger.error("%s" % e.message)
+                logger.error("%s" % str(e))
                 logger.error(traceback.format_exc())
 
         self.rewritten_entry.content = content

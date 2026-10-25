@@ -15,7 +15,7 @@ class TestRewriter(unittest.TestCase):
 
     @classmethod
     def setUpClass(self):
-        print "[Rewriter test]"
+        print("[Rewriter test]")
 
         self.sentenceAnalyzer = SentenceAnalyzer(FreelingTreeRepository("tests/input/trees"))
         self.analyzer = ParagraphAnalyzer(self.sentenceAnalyzer)
@@ -51,15 +51,15 @@ class TestRewriter(unittest.TestCase):
         self.kase('La mesa había sido construida por mi padre con madera de Noruega.', 'Mi padre construía la mesa con madera de Noruega.')
 
     def kase(self, source, edited):
-        print "Case:", source
+        print("Case:", source)
         analyzer = self.analyzer
 
         paragraph = Paragraph.from_text(source)
         analyzer.analyze(paragraph)
 
         text = Rewriter(paragraph, self.ontology, self.strategies).rewrite()
-        print "\t[SOURCE]", paragraph.text
-        print "\t[EDITED]", text
+        print("\t[SOURCE]", paragraph.text)
+        print("\t[EDITED]", text)
 
         # if not text == edited:
         #     import difflib

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import ConfigParser
+import configparser
 from src.services.mongodb.news_entries_service import NewsEntriesService
 from src.sentinews.parsers import *
 from src.utils.logger_utils import get_crawler_logger
@@ -26,21 +26,21 @@ class Crawler(object):
         # Filter if we already process the url
         # and if is not in sections we want to filter
 
-        return [entry for entry in entries if hasattr(entry, 'link') and len(service.get_list({'url': unicode(entry.link)})) == 0
+        return [entry for entry in entries if hasattr(entry, 'link') and len(service.get_list({'url': str(entry.link)})) == 0
                 and not '/videos/' in entry.link
                 and not '/inenglish/' in entry.link
                 and not '/album/' in entry.link
                 and not '/video_fotos/' in entry.link
-                and not u'#As\xedLoVivimos' in entry.title
-                and not u'Resumen' in entry.title
-                and not u'CNN' in entry.title]
+                and not '#As\xedLoVivimos' in entry.title
+                and not 'Resumen' in entry.title
+                and not 'CNN' in entry.title]
 
     def _filter_by_tag(self, news_entries):
         Config = ConfigProvider()
 
         tags_filename = Config.get("resources", "tags_to_filter")
-        with open(tags_filename) as tags_file:
-            tags = [unicode(tag.strip().lower(), 'utf-8') for tag in tags_file]
+        with open(tags_filename, encoding="utf-8") as tags_file:
+            tags = [tag.strip().lower() for tag in tags_file]
         return [entry for entry in news_entries if len(set(tags) & set([tag.lower() for tag in entry.tags])) == 0]
 
     def create_parser(self, cls_parser):
@@ -77,7 +77,7 @@ class Crawler(object):
             except Exception as e:
                 crawler_logger.error("<crawler> <crawl> %s" % feedParserDict["link"])
                 crawler_logger.error(traceback.format_exc())
-                crawler_logger.error("%s" % e.message)
+                crawler_logger.error("%s" % str(e))
 
         filtered_by_tags = self._filter_by_tag(news_entries)
 

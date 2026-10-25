@@ -3,7 +3,7 @@
 
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -12,7 +12,7 @@ class BalamodaParser(GenericParser):
     def __init__(self):
         super(BalamodaParser, self).__init__()
 
-    source = u"Balamoda"
+    source = "Balamoda"
     
     def parse(self, url):
         #url = "http://www.balamoda.net/2016/01/currently-loving-las-cosas-que-me-ponen.html?utm_source=feedburner&utm_medium=feed&utm_campaign=Feed%3A+balamoda+%28B+a+la+moda%29&utm_content=FeedBurner"

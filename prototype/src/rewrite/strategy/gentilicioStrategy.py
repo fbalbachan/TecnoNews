@@ -46,7 +46,7 @@ class GentilicioStrategy:
 
             if previous_de is not None and country_node is not None:
                 for a_country in countries_list:
-                    if unidecode(a_country) in unidecode(an_entity.lexical_form.decode("utf-8").replace("_", " ")):
+                    if unidecode(a_country) in unidecode(an_entity.lexical_form.replace("_", " ")):
                         country_prefix_len = 5
                         gent_found = False
                         gent_match = None
@@ -74,7 +74,7 @@ class GentilicioStrategy:
             an_entity = gent_match['entity']
             a_gent = gent_match['gentilicio']
             a_country = gent_match['country']
-            gent_info = self.ontology.get_lemma_and_msi(a_gent.encode("utf-8"))
+            gent_info = self.ontology.get_lemma_and_msi(a_gent)
             if gent_info is None:
                 return []
             concepts = self.ontology.concept(gent_info["lemma"])
@@ -85,7 +85,7 @@ class GentilicioStrategy:
                     if "number" in a_concept.msi and "number" in target_msi and a_concept.msi["number"] == target_msi["number"]:
                         if "gender" in a_concept.msi and "gender" in target_msi and (a_concept.msi["gender"] == target_msi["gender"] or a_concept.msi['gender'] == 'neutral'):
                             return Rewrite(gent_match["de_node"].father, a_concept.text)
-                            #return repr(a_clause).replace("_", " ").replace("de " + a_country.encode("utf-8"), a_concept.text)
+                            #return repr(a_clause).replace("_", " ").replace("de " + a_country, a_concept.text)
 
         return []
 
@@ -94,9 +94,9 @@ class GentilicioStrategy:
 
 config = ConfigProvider()
 countries_file = config.get("resources", "countries_cities")
-countries_reader = unicode_csv_reader(open(countries_file, 'r'), first_line_is_header=False, delimiter=',')
-countries_list = [unicode(country[0], 'utf-8') for country in countries_reader]
+countries_reader = unicode_csv_reader(open(countries_file, 'r', encoding="utf-8"), first_line_is_header=False, delimiter=',')
+countries_list = [country[0] for country in countries_reader]
 
 gent_file = config.get("resources", "demonyms")
-gent_reader = unicode_csv_reader(open(gent_file, 'r'), first_line_is_header=False, delimiter=',')
-gent_list = [unicode(gent[0], 'utf-8') for gent in gent_reader]
+gent_reader = unicode_csv_reader(open(gent_file, 'r', encoding="utf-8"), first_line_is_header=False, delimiter=',')
+gent_list = [gent[0] for gent in gent_reader]

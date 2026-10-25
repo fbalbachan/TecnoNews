@@ -10,18 +10,8 @@ feeds_to_process = bbc_economia,bbc_tecnologia,bbc_ciencia,bbc_salud,bbc_cultura
 #feeds_to_process = bbc_economia,bbc_tecnologia,bbc_ciencia,bbc_salud,bbc_cultura,bbc_deportes,cnet_esp,diario_america,forbes_mexico,informador_mexico,nuevoherald,vivelo_hoy,Eonline
 
 
-[freeling]
-
-host        = 85.10.210.172
-client      = ../externals/freeling/analyzer_client
-parser_port = 10003
-tagger_port = 9999
-
-[freeling_language]
-
-host        = 85.10.210.172
-client      = ../externals/freeling/analyzer_client_lang_ident
-language_port = 10103
+[spacy]
+model = es_core_news_md
 
 [mongodb]
 

@@ -3,7 +3,7 @@
 
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -12,7 +12,7 @@ class CientoUnLugaresParser(GenericParser):
     def __init__(self):
         super(CientoUnLugaresParser, self).__init__()
 
-    source = u"101 Lugares Increibles"
+    source = "101 Lugares Increibles"
 
     def parse(self, url):
         #url = "http://101lugaresincreibles.com/2016/03/7-mejores-playas-de-cerdena-italia.html"
@@ -47,7 +47,7 @@ class CientoUnLugaresParser(GenericParser):
         paragraphs = article_content.findAll(['p','h2'])
 
         for paragraph in paragraphs:
-            clean_text = re.sub(ur"^Copyright:.+$", "", paragraph.text.strip())
+            clean_text = re.sub(r"^Copyright:.+$", "", paragraph.text.strip())
             content += "\n" + clean_text
 
 

@@ -3,14 +3,14 @@
 
 from bs4 import BeautifulSoup
 from src.sentinews.parsers.generic_parser import GenericParser
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 
 class EuropaPressParser(GenericParser):
     def __init__(self):
         super(EuropaPressParser, self).__init__()
 
-    source = u"EuropaPress"
+    source = "EuropaPress"
 
     def parse(self, url):
         # if u'/silencio-por-favor/' in url:
@@ -62,21 +62,21 @@ class EuropaPressParser(GenericParser):
         for dd in date_div:
             dd.extract()
 
-        p_content = u''
+        p_content = ''
         all_p_in_content = content.findAll('p')
         if 'EUROPA PRESS' in all_p_in_content[0].text:
             all_p_in_content.pop(0)
 
         for p in all_p_in_content:
-            p_content += p.text + u'\n'
+            p_content += p.text + '\n'
 
         content = p_content
 
         # TODO make a cleanning method in each parser and leave only common in
         # the sanitize process
         import re
-        content = re.sub(u'\(EUROPA PRESS\) ?(-|–)?', u'', content)
-        content = re.sub(u'\(EDIZIONES\) ?(-|–)?', u'', content)
+        content = re.sub('\(EUROPA PRESS\) ?(-|–)?', '', content)
+        content = re.sub('\(EDIZIONES\) ?(-|–)?', '', content)
 
         new_entry = self.create_news_entry(title=title, content=content,
                                            tags=tags,

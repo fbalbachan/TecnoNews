@@ -17,8 +17,8 @@ class TreeNode(object):
         return InDepthNodeIterator(self)
 
     def leaves(self, iterator=InDepthNodeIterator):
-        if debug_mode: print "--> TreeNode.leaves()"
-        return filter(lambda node: node.is_leaf(), iterator(self))
+        if debug_mode: print("--> TreeNode.leaves()")
+        return [node for node in iterator(self) if node.is_leaf()]
 
     def is_subordinated(self):
         return not self.is_root()

@@ -5,11 +5,11 @@ from src.utils.sanitizer import Sanitizer
 class SanitizerTest(unittest.TestCase):
 
     def test_clean_mix(self):
-        content = open('tests/input/sanitizer_test.text').read()
+        content = open('tests/input/sanitizer_test.text', encoding="utf-8").read()
         self.sanitizer = Sanitizer()
         result = self.sanitizer.process_content(content=content)
         if result:
-            print result
+            print(result)
 
         assert not result
 

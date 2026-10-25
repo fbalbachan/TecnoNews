@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -12,7 +12,7 @@ class MarronyblancoParser(GenericParser):
     def __init__(self):
         super(MarronyblancoParser, self).__init__()
 
-    source = u"marronyblanco"
+    source = "marronyblanco"
     
     def parse(self, url):
         #url = "http://marronyblanco.com/entrevista-noelia-carrasco-directora-marketing-fersay/"
@@ -42,8 +42,8 @@ class MarronyblancoParser(GenericParser):
         categories = []
         tags = []
 
-        tags        =   [u"electrodomésticos"]
-        categories  =   [u"electrodomésticos"]
+        tags        =   ["electrodomésticos"]
+        categories  =   ["electrodomésticos"]
         title       =   safe_unicode(title)
         content     =   safe_unicode(content)
         

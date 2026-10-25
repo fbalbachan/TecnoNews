@@ -1,4 +1,4 @@
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 from random import choice
 
 
@@ -18,6 +18,6 @@ class BitOpener(object):
         self.user_agent = choice(user_agents)
 
     def read(self, url):
-        req = urllib2.Request(url, headers={'User-Agent': self.user_agent})
-        html = urllib2.urlopen(req).read()
+        req = urllib.request.Request(url, headers={'User-Agent': self.user_agent})
+        html = urllib.request.urlopen(req).read()
         return html

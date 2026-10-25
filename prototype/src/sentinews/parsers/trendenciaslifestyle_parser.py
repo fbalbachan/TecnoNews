@@ -3,7 +3,7 @@
 
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -12,7 +12,7 @@ class TrendenciasLifeStyleParser(GenericParser):
     def __init__(self):
         super(TrendenciasLifeStyleParser, self).__init__()
 
-    source = u"Trendencias Lifestyle"
+    source = "Trendencias Lifestyle"
 
     def parse(self, url):
         #url = "http://lifestyle.trendencias.com/tecnologia-y-gadgets/floatti-tras-los-smartphones-los-smartwatches-o-las-smartcases-llega-la-smartsuitcase"
@@ -50,8 +50,8 @@ class TrendenciasLifeStyleParser(GenericParser):
             clean_text = paragraph.text.strip()
             content += "\n" + clean_text
 
-        categories = [u"belleza"]
-        tags = [u"belleza"]
+        categories = ["belleza"]
+        tags = ["belleza"]
 
         #categories=[urlparse(url).path.split("/")[1]]
         #print categories

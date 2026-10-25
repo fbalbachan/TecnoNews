@@ -18,10 +18,10 @@ debug_mode = False
 
 class FromRelativeClauseToIndependentSentenceStrategy:
     def __init__(self):
-        if debug_mode: print "--> FromRelativeClauseToIndependentSentenceStrategy.init()"
+        if debug_mode: print("--> FromRelativeClauseToIndependentSentenceStrategy.init()")
 
     def applies_to(self, sentence, node):
-        if debug_mode: print "--> FromRelativeClauseToIndependentSentenceStrategy.applies_to(sentence:", sentence.text, ")"
+        if debug_mode: print("--> FromRelativeClauseToIndependentSentenceStrategy.applies_to(sentence:", sentence.text, ")")
         result = False
         for clause in sentence.clauses:
             if self.applies_to_clause(clause, sentence):
@@ -30,7 +30,7 @@ class FromRelativeClauseToIndependentSentenceStrategy:
         return result
 
     def applies_to_clause(self, clause, sentence):
-        if debug_mode: print "--> FromRelativeClauseToIndependentSentenceStrategy.applies_to_clause(", clause.node, ")"
+        if debug_mode: print("--> FromRelativeClauseToIndependentSentenceStrategy.applies_to_clause(", clause.node, ")")
         result = False
         if clause.is_relative():
             if any(linker_lexical in clause.relative_linker_words() for linker_lexical in ["quien", "quienes"]):
@@ -46,7 +46,7 @@ class FromRelativeClauseToIndependentSentenceStrategy:
     def rewrite(self, sentence, node):
         for a_clause in sentence.clauses:
             if self.applies_to_clause(a_clause, sentence):
-                original_sentence = sentence.text.decode('utf-8')
+                original_sentence = sentence.text
                 clause_start_index = a_clause.node.leaves()[0].token.start()
                 clause_end_index = a_clause.node.leaves()[-1].token.end()
                 #print clause_start_index
@@ -59,36 +59,36 @@ class FromRelativeClauseToIndependentSentenceStrategy:
                     dereferenced_entity = an_entity.referent.designated_ref()
                     if not dereferenced_entity.is_tacit() and dereferenced_entity.is_named_entity() and dereferenced_entity.token.end() < clause_start_index:
                         #FOUND ENTITY! (Change possible underscores for spaces)
-                        found_entity = re.sub(u'_', u' ', dereferenced_entity.lexical_form)
+                        found_entity = re.sub('_', ' ', dereferenced_entity.lexical_form)
 
                         #Get entity pronoun for second sentence:
                         entity_pronoun = None
-                        if dereferenced_entity.msi["gender"] == u"masculine":
-                            if dereferenced_entity.msi["number"] == u"singular":
-                                entity_pronoun =  u"él"
+                        if dereferenced_entity.msi["gender"] == "masculine":
+                            if dereferenced_entity.msi["number"] == "singular":
+                                entity_pronoun =  "él"
                             else:
-                                entity_pronoun = u"ellos"
+                                entity_pronoun = "ellos"
                         else:
-                            if dereferenced_entity.msi["number"] == u"singular":
-                                entity_pronoun = u"ella"
+                            if dereferenced_entity.msi["number"] == "singular":
+                                entity_pronoun = "ella"
                             else:
-                                entity_pronoun = u"ellas"
+                                entity_pronoun = "ellas"
 
 
                         #Extract sub clause, replace for pronoun, and clean:
                         new_second_sentence = original_sentence[:dereferenced_entity.token.start()] + entity_pronoun + " " + original_sentence[dereferenced_entity.token.end():clause_start_index].strip() + original_sentence[clause_end_index:].strip()
-                        new_second_sentence = re.sub(u',,', u'', new_second_sentence)
-                        new_second_sentence = re.sub(u',\.', u'.', new_second_sentence)
-                        new_second_sentence = re.sub(ur'(.),(.)', ur'\1 \2', new_second_sentence)
-                        new_second_sentence = re.sub(ur',$', ur'', new_second_sentence)
-                        new_second_sentence = re.sub(ur'\s{2,}', ur' ', new_second_sentence)
+                        new_second_sentence = re.sub(',,', '', new_second_sentence)
+                        new_second_sentence = re.sub(',\.', '.', new_second_sentence)
+                        new_second_sentence = re.sub(r'(.),(.)', r'\1 \2', new_second_sentence)
+                        new_second_sentence = re.sub(r',$', r'', new_second_sentence)
+                        new_second_sentence = re.sub(r'\s{2,}', r' ', new_second_sentence)
 
 
                         new_first_sentence = original_sentence[clause_start_index:clause_end_index]
                         #Remove linker words:
                         new_first_sentence = new_first_sentence[a_clause.relative_linker[-1].token.end()-clause_start_index:].strip()
 
-                        if new_first_sentence[-1] == u",":
+                        if new_first_sentence[-1] == ",":
                             new_first_sentence = new_first_sentence[:-1]
 
 

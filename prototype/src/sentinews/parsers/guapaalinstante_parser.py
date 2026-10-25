@@ -3,7 +3,7 @@
 
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -12,7 +12,7 @@ class GuapaalinstanteParser(GenericParser):
     def __init__(self):
         super(GuapaalinstanteParser, self).__init__()
 
-    source = u"Guapaalinstante"
+    source = "Guapaalinstante"
     
     def parse(self, url):
         #url = "http://www.guapaalinstante.com/2016/01/maquillaje-caducado.html"

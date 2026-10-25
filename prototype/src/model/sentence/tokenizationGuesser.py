@@ -12,7 +12,7 @@ class TokenizationGuesser:
         self.sentence = sentence
 
     def guess(self):
-        text = self.sentence.text.decode("utf-8")
+        text = self.sentence.text
         leaves = self.sentence.parse_node.leaves()
 
         leaves_it = iter(leaves)
@@ -42,45 +42,45 @@ class TokenizationGuesser:
                 token = Token()
                 words = self.words_for(leaf)
 
-            if debug_mode: print "REMAINING WORDS: "
-            if debug_mode: print words
+            if debug_mode: print("REMAINING WORDS: ")
+            if debug_mode: print(words)
 
             word = words.pop()
 
-            if debug_mode: print "-------------CURRENT WORD: " + word.encode('utf-8')
+            if debug_mode: print("-------------CURRENT WORD: " + word)
 
             if not following_contraction:
                 following_contraction = self.get_following_contraction(text)
 
             if following_contraction:
-                if debug_mode: print "HAS FOLLOWING CONTRACTION"
+                if debug_mode: print("HAS FOLLOWING CONTRACTION")
                 component = following_contraction.popleft()
                 if component[0] == word.lower():
                     word = component[1] if component[1] != word.lower() else word
                 else:
                     following_contraction = []
 
-            if debug_mode: print "WORD AFTER CONTRACTIONS:" + word.encode('utf-8')
+            if debug_mode: print("WORD AFTER CONTRACTIONS:" + word)
 
             if self.starts_with(word, text):
-                if debug_mode: print "STARTS WITH"
+                if debug_mode: print("STARTS WITH")
                 length = len(word)
                 token.components.append((index, index + length))
                 text = text[len(word):]
             elif self.is_pending_mismatch(word, mismatchs):
-                if debug_mode: print "IS PENDING MISSMATCH"
+                if debug_mode: print("IS PENDING MISSMATCH")
                 mismatch, mismatch_index = mismatchs.popleft()
                 token.components.append((mismatch_index, mismatch_index + len(mismatch)))
                 length = 0
             else:
                 match = self.whitespace_pattern.match(text)
                 if not match:
-                    if debug_mode: print "NOT WHITESPACE"
+                    if debug_mode: print("NOT WHITESPACE")
                     match = self.mismatch_pattern.match(text)
                     if not match:
-                        if debug_mode: print "NOT MISSMATCH"
-                        #text = text if not isinstance(text, unicode) else text.encode("utf8")
-                        #word = word if not isinstance(word, unicode) else word.encode("utf8")
+                        if debug_mode: print("NOT MISSMATCH")
+                        #text = text if not isinstance(text, unicode) else text
+                        #word = word if not isinstance(word, unicode) else word
 
                         #bad_word_index = self.sentence.text.find(word,index)
                         #sentence_start = self.sentence.text[:bad_word_index]
@@ -93,11 +93,11 @@ class TokenizationGuesser:
 
                         #Avoid endless loop if unexpected case (It would deep moving the same leaves endlessly)
                         if moved_leaves > list_len:
-                            if debug_mode: print "MOVE LIMIT! BREAK>>>>>>>>>>>>>>>>>>>>>>>>>>"
+                            if debug_mode: print("MOVE LIMIT! BREAK>>>>>>>>>>>>>>>>>>>>>>>>>>")
                             break
                         moved_leaves = moved_leaves +1
 
-                        if debug_mode: print "CONTINUE"
+                        if debug_mode: print("CONTINUE")
                         continue
 
                         #break
@@ -111,31 +111,31 @@ class TokenizationGuesser:
                 length = len(match.group(0))
                 text = text[length:]
 
-            if debug_mode: print "TEXT AFTER CHANGES: " + text.encode('utf-8')
+            if debug_mode: print("TEXT AFTER CHANGES: " + text)
 
             index += length
 
-            if debug_mode: print "NEW LENGTH: " + str(length)
+            if debug_mode: print("NEW LENGTH: " + str(length))
 
         leaf.token = token
 
         for word, index in mismatchs:
-            if debug_mode: print "PROCESSING MISMATCHS"
+            if debug_mode: print("PROCESSING MISMATCHS")
             token = Token()
             token.components.append((index, index + len(word)))
 
             #leaf = leaves_it.next()
             leaf = leaves_lst.pop(0)
-            leaf_word = leaf.original_lexical_form.decode("utf-8")
+            leaf_word = leaf.original_lexical_form
 
             if leaf_word != word:
                 raise Exception("Tokenization error!")
             leaf.token = token
 
-        if debug_mode: print ">>>ASSING MIDDLE NODE TOKENS:"
+        if debug_mode: print(">>>ASSING MIDDLE NODE TOKENS:")
 
         good_tokenization = self.assing_middle_node_tokens()
-        if debug_mode: print ">>>>>>>>>>>>>>END TOKENIZATION"
+        if debug_mode: print(">>>>>>>>>>>>>>END TOKENIZATION")
         return good_tokenization
 
     def assing_middle_node_tokens(self):
@@ -146,7 +146,7 @@ class TokenizationGuesser:
                 node.token = token
             return True
         except:
-            print "TOKENIZATION ERROR!"
+            print("TOKENIZATION ERROR!")
             return False
 
     def is_pending_mismatch(self, word, mismatchs):
@@ -184,7 +184,7 @@ class TokenizationGuesser:
     def words_for(self, leaf):
         words = list(leaf.original_components())
         words.reverse()
-        return [word.decode("utf-8") for word in words]
+        return [word for word in words]
 
     contractions = {"al": [("a", "a"), ("el", "l")],
                     "del": [("de", "de"), ("el", "l")]}

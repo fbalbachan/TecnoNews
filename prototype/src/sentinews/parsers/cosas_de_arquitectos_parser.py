@@ -4,7 +4,7 @@
 
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -13,13 +13,13 @@ class CosasDeArquitectosParser(GenericParser):
     def __init__(self):
         super(CosasDeArquitectosParser, self).__init__()
 
-    source = u"CosasDeArquitectos"
+    source = "CosasDeArquitectos"
     
     def parse(self, url):
         #url = "http://www.cosasdearquitectos.com/2015/11/estacion-servicios-turisticos-punta-arenas-colectivo-taller-independiente/"
         
-	soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
-	for script in soup(["script", "style"]):
+        soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
+        for script in soup(["script", "style"]):
             script.extract()
             
             

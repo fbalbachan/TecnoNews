@@ -47,12 +47,10 @@ $def with (analysis, printer)
             $code:
                 clause_entities = clause.entities + clause.tacit_entities()
 
-                clause_entities = filter(lambda entity: not entity.has_attr("implicit")
-                                                        and not entity.has_attr("impersonal"),
-                                         clause_entities)
+                clause_entities = [entity for entity in clause_entities if not entity.has_attr("implicit")
+                                   and not entity.has_attr("impersonal")]
 
-                clause_entities = filter(lambda entity: entity.is_maximal_regarding(clause_entities),
-                                         clause_entities)
+                clause_entities = [entity for entity in clause_entities if entity.is_maximal_regarding(clause_entities)]
 
                 all_clauses.append(clause)
 
@@ -169,7 +167,7 @@ $def with (analysis, printer)
                         $ appearing[a_reference]=1
 
                 $ unique_str = ""
-                $for unique_elem in appearing.iterkeys():
+                $for unique_elem in appearing.keys():
                     $ unique_str+=' ' + unique_elem+': '+printer.e_name(appearing[unique_elem])+','
 
                 $ unique_str = unique_str[:-1]

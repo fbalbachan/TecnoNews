@@ -1,4 +1,4 @@
-from connector import MongoConnector
+from .connector import MongoConnector
 from src.sentinews.news_entry import NewsEntry
 
 
@@ -12,13 +12,13 @@ class NewsEntriesService(object):
     def save(self, news_entry):
         """ this method returns the objectId assigned"""
 
-        return self.news_entries.insert(news_entry.to_dict())
+        return self.news_entries.insert_one(news_entry.to_dict()).inserted_id
 
     def remove_all(self):
-        return self.news_entries.remove({})
+        return self.news_entries.delete_many({})
 
     def get_count(self, criteria):
-        return self.news_entries.find(criteria).count()
+        return self.news_entries.count_documents(criteria)
 
     def get_iterable(self, criteria, projection=None):
         from src.services.mongodb.news_entry_iterable import NewsEntryIterable
@@ -131,6 +131,6 @@ class NewsEntriesService(object):
         dummy_id_to = ObjectId.from_datetime(toDate)
         # TODO: use dummy_id_to
         if not get_iterable:
-            return self.get_list({"_id": {"$gt": dummy_id_from}, 'language':u"spanish"}, limit)
+            return self.get_list({"_id": {"$gt": dummy_id_from}, 'language':"spanish"}, limit)
         else:
-            return self.get_iterable({"_id": {"$gt": dummy_id_from}, 'language':u"spanish"}, projection)
+            return self.get_iterable({"_id": {"$gt": dummy_id_from}, 'language':"spanish"}, projection)

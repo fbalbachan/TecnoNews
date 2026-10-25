@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -12,7 +12,7 @@ class RevistagadgetsParser(GenericParser):
     def __init__(self):
         super(RevistagadgetsParser, self).__init__()
 
-    source = u"revistagadgets"
+    source = "revistagadgets"
     
     def parse(self, url):
         #url = "http://www.revistagadgets.com/www/2016/04/06/build-bear-mexico-cerro-positivamente-2015-2016-abrira-7-espacios-mas-pais/"

@@ -42,16 +42,16 @@ if sys.version_info[0] > 2:
     from urllib.request import Request, urlopen
     from urllib.parse import quote_plus, urlparse, parse_qs
 else:
-    from cookielib import LWPCookieJar
-    from urllib import quote_plus
-    from urllib2 import Request, urlopen
-    from urlparse import urlparse, parse_qs
+    from http.cookiejar import LWPCookieJar
+    from urllib.parse import quote_plus
+    from urllib.request import Request, urlopen
+    from urllib.parse import urlparse, parse_qs
 
 try:
     from bs4 import BeautifulSoup
     is_bs4 = True
 except ImportError:
-    from BeautifulSoup import BeautifulSoup
+    from bs4 import BeautifulSoup
     is_bs4 = False
 
 # URL templates to make Google searches.
@@ -236,7 +236,7 @@ def search(query, tld='com', lang='en', tbs='0', safe='off', num=10, start=0,
 
     # Check extra_params for overlapping
     for builtin_param in ('hl', 'q', 'btnG', 'tbs', 'safe', 'tbm'):
-        if builtin_param in extra_params.keys():
+        if builtin_param in list(extra_params.keys()):
             raise ValueError(
                 'GET parameter "%s" is overlapping with \
                 the built-in GET parameter',
@@ -262,9 +262,9 @@ def search(query, tld='com', lang='en', tbs='0', safe='off', num=10, start=0,
     while not stop or start < stop:
 
         try:  # Is it python<3?
-            iter_extra_params = extra_params.iteritems()
+            iter_extra_params = iter(extra_params.items())
         except AttributeError:  # Or python>3?
-            iter_extra_params = extra_params.items()
+            iter_extra_params = list(extra_params.items())
         # Append extra GET_parameters to URL
         for k, v in iter_extra_params:
             url += url + ('&%s=%s' % (k, v))
@@ -322,7 +322,7 @@ def search(query, tld='com', lang='en', tbs='0', safe='off', num=10, start=0,
                     fecha.extract()
 
                 abst  = span.text.strip()
-            except Exception, e:
+            except Exception as e:
                 #abst = str(e)
                 pass
 
@@ -350,7 +350,7 @@ def get_clean_abstracts(query, tld='com.ar', lang='es', start = 1, stop = 10 ):
         if tupla[1] is not None :
             url  = tupla[0]
             abst = tupla[1]
-            print "working with " + url + " (" + abst + ")"
+            print("working with " + url + " (" + abst + ")")
             # Applying filters
             # 1) remove initial date.
             try:
@@ -364,7 +364,7 @@ def get_clean_abstracts(query, tld='com.ar', lang='es', start = 1, stop = 10 ):
             # 2) For each filtered snippet, we get the complete sentence.
             # To do that, we parse the url.
             
-            print "opening " + url
+            print("opening " + url)
             html = get_page(url)
             if is_bs4:
                 soup = BeautifulSoup(html, 'html.parser')
@@ -373,9 +373,9 @@ def get_clean_abstracts(query, tld='com.ar', lang='es', start = 1, stop = 10 ):
             
             tmpabst  = abst.split("\n")
             
-            print "strings : "
-            print tmpabst
-            print "\n"
+            print("strings : ")
+            print(tmpabst)
+            print("\n")
             
             for tmp in tmpabst : 
                 if tmp is not None and tmp.strip() != "" :
@@ -384,9 +384,9 @@ def get_clean_abstracts(query, tld='com.ar', lang='es', start = 1, stop = 10 ):
                         tmp = sentence[0].strip()
             
             abst = "\n".join(tmpabst)
-            print "string final:"
-            print abst
-            print "\n"
+            print("string final:")
+            print(abst)
+            print("\n")
             
             ret.append( abst )
     

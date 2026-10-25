@@ -9,8 +9,6 @@ class MongoConnector(object):
     def get_instance(cls, mode=None):
         if MongoConnector.__db is None:
             config = ConfigProvider()
-            client = MongoClient(config.get('mongodb', 'host'),
-                                 int(config.get('mongodb', 'port')))
 
             username = None
             try:
@@ -18,11 +16,14 @@ class MongoConnector(object):
             except:
                 pass
 
+            # pymongo 4: credentials go to the client (Database.authenticate no longer exists)
+            credentials = {}
             if not username is None :
-                client["admin"].authenticate(
-                                    username, 
-                                    config.get('mongodb', 'password'))
+                credentials = {"username": username, "password": config.get('mongodb', 'password'),
+                               "authSource": "admin"}
 
+            client = MongoClient(config.get('mongodb', 'host'),
+                                 int(config.get('mongodb', 'port')), **credentials)
 
             if not mode is None and mode == 'test':
                 MongoConnector.__db = client[config.get('mongodb', 'db_test')]

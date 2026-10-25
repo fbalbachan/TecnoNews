@@ -22,14 +22,14 @@ class Ontology:
         return lexical_forms[0] if lexical_forms else None
 
     def get_lemma_and_msi(self, a_lexical_form):
-        for concept in self.concepts.values():
+        for concept in list(self.concepts.values()):
             for lexical_form in concept.lexical_forms:
                 if lexical_form.text == a_lexical_form:
                     return {"lemma": lexical_form.lemma, "msi": lexical_form.msi}
 
     def _get_lexical_forms(self, lemma, msi, stop_on_match=False):
         lexical_forms = []
-        for concept in self.concepts.values():
+        for concept in list(self.concepts.values()):
             for lexical_form in concept.lexical_forms:
                 if lexical_form.lemma == lemma and lexical_form.matches_msi(msi):
                     if stop_on_match:
@@ -38,7 +38,7 @@ class Ontology:
         return lexical_forms
 
     def is_valid_word(self, word):
-        for concept in self.concepts.values():
+        for concept in list(self.concepts.values()):
             for lexical_form in concept.lexical_forms:
                 if lexical_form.text == word:
                     return True

@@ -3,7 +3,7 @@
 
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -12,7 +12,7 @@ class VidaMasBienestarParser(GenericParser):
     def __init__(self):
         super(VidaMasBienestarParser, self).__init__()
 
-    source = u"Vida + Bienestar"
+    source = "Vida + Bienestar"
 
     def parse(self, url):
         #url = "http://vidaybienestar.mx/limpieza-cada-temporada/?utm_source=rss&utm_medium=rss&utm_campaign=limpieza-cada-temporada"
@@ -51,8 +51,8 @@ class VidaMasBienestarParser(GenericParser):
             clean_text = paragraph.text.strip()
             content += "\n" + clean_text
 
-        categories = [u"salud"]
-        tags = [u"salud"]
+        categories = ["salud"]
+        tags = ["salud"]
         #categories=[urlparse(url).path.split("/")[1]]
         #print categories
         #return {"content":content, "title":title}

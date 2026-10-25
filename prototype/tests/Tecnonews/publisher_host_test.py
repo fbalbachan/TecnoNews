@@ -11,7 +11,7 @@ class PublisherHostTest(unittest.TestCase):
         self.host = WPHost('http://tecnonews.comule.com/xmlrpc.php', 'tecnonews', 'tecnonews1')
         self.config = ConfigProvider()
         user_per_categories_file = self.config.get('resources', 'user_per_categories')
-        user_per_categories = unicode_csv_reader(open(user_per_categories_file, 'r'),
+        user_per_categories = unicode_csv_reader(open(user_per_categories_file, 'r', encoding="utf-8"),
                                                  first_line_is_header=False, delimiter=',')
         self.user_per_categories_dict = {}
         i = 0
@@ -31,14 +31,14 @@ class PublisherHostTest(unittest.TestCase):
 
     def test_create_entry_with_destination(self):
         newEntry = NewsEntry('Hoy llegue temprano', 'y me compre un cafe violento',
-                             ['economía', 'salud'], u'DiegoNews en español')
+                             ['economía', 'salud'], 'DiegoNews en español')
         self.assertIsNotNone(newEntry)
-        self.assertEquals(newEntry.title, 'Hoy llegue temprano')
+        self.assertEqual(newEntry.title, 'Hoy llegue temprano')
         self.assertIsNotNone(newEntry.categories)
         self.assertTrue(len(newEntry.categories) > 0)
         self.assertTrue(len(newEntry.destination) > 0)
         for host in newEntry.destination:
-            print host.user
+            print(host.user)
 
 
 if __name__ == '__main__':

@@ -3,7 +3,7 @@
 
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -13,10 +13,10 @@ class GlamourParser(GenericParser):
     def __init__(self):
         super(GlamourParser, self).__init__()
 
-    source = u"Glamour"
+    source = "Glamour"
 
     def parse(self, url):
-        if u"/galerias/" in url:
+        if "/galerias/" in url:
             return None
         # url = "http://www.glamour.es/belleza/cuerpo/articulos/la-dieta-feng-shui-tu-cocina-te-esta-haciendo-engordar-1/22478"
 
@@ -65,8 +65,8 @@ class GlamourParser(GenericParser):
         # content = re.sub(u'\n(Extranotix\.|Tu opinión|Enviar por correo electrónico.+)\n','',content)
         # content = re.sub(u'\n\n+','\n',content).strip()
 
-        tags = [u"entretenimiento"]
-        categories = [u"entretenimiento"]
+        tags = ["entretenimiento"]
+        categories = ["entretenimiento"]
 
         new_entry = self.create_news_entry(title=title, content=content,
                                            tags=tags,

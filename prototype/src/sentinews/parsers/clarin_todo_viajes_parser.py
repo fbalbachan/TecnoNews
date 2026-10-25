@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -11,13 +11,13 @@ class ClarinTodoViajesParser(GenericParser):
     def __init__(self):
         super(ClarinTodoViajesParser, self).__init__()
 
-    source = u"Clarin Todo Viajes"
+    source = "Clarin Todo Viajes"
     
     def parse(self, url):
         #url = "http://www.clarin.com/todoviajes/destinos/america-del-norte/razones-viajar-Vegas-ano_0_1502850046.html"
         
-	soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
-	for script in soup(["script", "style"]):
+        soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
+        for script in soup(["script", "style"]):
             script.extract()
             
             
@@ -44,7 +44,7 @@ class ClarinTodoViajesParser(GenericParser):
         
         
         for paragraph in paragraphs:
-            clean_text = re.sub(u'^(Leé también .+)|(FUENTE:.+)$','',paragraph.text.strip())
+            clean_text = re.sub('^(Leé también .+)|(FUENTE:.+)$','',paragraph.text.strip())
                 
             content += "\n" + clean_text
 

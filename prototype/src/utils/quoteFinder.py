@@ -23,7 +23,7 @@ class QuoteFinder:
 
     def get_indirect_quote(self, sentence):
         node = sentence.parse_node
-        text = sentence.paragraph.text.decode("utf-8")
+        text = sentence.paragraph.text
 
         spoke_person = "The Author"
         for a_clause in sentence.clauses:
@@ -34,12 +34,12 @@ class QuoteFinder:
 
         que_index = self.indirect_textual_cite.find_children_que(node)[0]
         quote_text = text[node.children[que_index].children[0].token.end():node.token.end()].strip()
-        quote = {'text': quote_text.encode('utf-8'), 'is_fact': sentence.clauses_of_level(1)[0].is_fact(), 'spoke_person': spoke_person}
+        quote = {'text': quote_text, 'is_fact': sentence.clauses_of_level(1)[0].is_fact(), 'spoke_person': spoke_person}
         return quote
 
     def get_quote(self, sentence):
         node = sentence.parse_node
-        text = sentence.paragraph.text.decode("utf-8")
+        text = sentence.paragraph.text
         spoke_person = "The Author"
 
         if node.label == "F-no-c":
@@ -55,14 +55,14 @@ class QuoteFinder:
             closing_quote_idxs = self.textual_cite.find_quote_comma(node)
             closing_quote_idx = closing_quote_idxs[0]
             quote_text = text[node.children[0].token.start():node.children[closing_quote_idx].token.end()].strip()
-            quote = {'text': quote_text.encode('utf-8'), 'is_fact': sentence.main_clause().is_fact(), 'spoke_person': spoke_person}
+            quote = {'text': quote_text, 'is_fact': sentence.main_clause().is_fact(), 'spoke_person': spoke_person}
         else:
             # print "CASO 2"
             if sentence.main_clause().has_structure("subject"):
                 spoke_person = str(sentence.main_clause().structure("subject").entity().referent.designated_ref())
             quote_indexes = self.textual_cite.find_children_cite_indexes(node)
             quote_text = text[node.children[quote_indexes[0]].token.start():node.children[quote_indexes[1]].token.end()].strip()
-            quote = {'text': quote_text.encode('utf-8'), 'is_fact': sentence.clauses_of_level(1)[0].is_fact(), 'spoke_person': spoke_person}
+            quote = {'text': quote_text, 'is_fact': sentence.clauses_of_level(1)[0].is_fact(), 'spoke_person': spoke_person}
         return quote
 
     def get_checkable_quotes(self):

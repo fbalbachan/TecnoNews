@@ -1,14 +1,14 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
 
 
 class AmbitoFinancieroParser(GenericParser):
-    source = u"Ambito Financiero"
+    source = "Ambito Financiero"
 
     def __init__(self):
         super(AmbitoFinancieroParser, self).__init__()

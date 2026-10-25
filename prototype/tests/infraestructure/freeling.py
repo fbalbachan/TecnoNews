@@ -1,3 +1,3 @@
-from src.utils.freelingClientParser import FreelingClientParser
-flcp = FreelingClientParser()
-print flcp.health_check()
+from src.utils.spacyClientParser import SpacyClientParser
+flcp = SpacyClientParser()
+print(flcp.health_check())

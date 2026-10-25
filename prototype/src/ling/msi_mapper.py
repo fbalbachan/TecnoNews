@@ -21,7 +21,7 @@ def tag_to_full_msi(tag):
                 result[attribute] = values[letter]
 
             except KeyError:
-                print "Unrecognized tag: ", tag, " - (position: ", position, ", letter: ", letter, ")"
+                print("Unrecognized tag: ", tag, " - (position: ", position, ", letter: ", letter, ")")
                 raise Exception()
 
     elif category == "F":
@@ -34,7 +34,7 @@ def tag_to_full_msi(tag):
                 result[attribute] = values[letter]           # result["function"] = values["P"]
 
             except KeyError:
-                print "Unrecognized tag: ", tag, " - (position: ", position, ", letter: ", letter, ")"
+                print("Unrecognized tag: ", tag, " - (position: ", position, ", letter: ", letter, ")")
                 raise Exception
 
     return result

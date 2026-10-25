@@ -20,11 +20,11 @@ class Sentence(object):
         return self.clauses_of_level(0)
 
     def clauses_of_level(self, level):
-        return filter(lambda clause: clause.level() == level, self.clauses)
+        return [clause for clause in self.clauses if clause.level() == level]
 
     def non_clause_leaves(self):
         clause_leaves = sum([ clause.node.leaves() for clause in self.clauses_of_level(0) ], [])
-        return filter(lambda leaf: leaf not in clause_leaves, self.parse_node.leaves())
+        return [leaf for leaf in self.parse_node.leaves() if leaf not in clause_leaves]
 
     def __repr__(self):
         return self.text

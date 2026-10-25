@@ -3,7 +3,7 @@
 
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -12,7 +12,7 @@ class DiariodelviajeroParser(GenericParser):
     def __init__(self):
         super(DiariodelviajeroParser, self).__init__()
 
-    source = u"Diariodelviajero"
+    source = "Diariodelviajero"
     
     def parse(self, url):
         #url = "http://www.diariodelviajero.com/gastronomia/turismo-gastronomico-comer-cocido-en-una-finca-rustica-de-toledo"

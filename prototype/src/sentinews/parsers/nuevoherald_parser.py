@@ -11,22 +11,22 @@ class NuevoHeraldParser(GenericParser):
     def __init__(self):
         super(NuevoHeraldParser, self).__init__()
 
-    source = u"Nuevo Herald"
+    source = "Nuevo Herald"
 
     def is_parseable(self, url, soup=None):
         allowed = True
         if not soup:
             soup = BeautifulSoup(self.opener.read(url))
 
-        if (u'/opinion-es/' in url) or (u'/vivir-mejor/' in url) or (u'/dep-col-blogs/' in url) \
-                or (u'/ent-columnistas-blogs/' in url):
+        if ('/opinion-es/' in url) or ('/vivir-mejor/' in url) or ('/dep-col-blogs/' in url) \
+                or ('/ent-columnistas-blogs/' in url):
                 allowed = False
 
         title = soup.find(True, {"class": "title"})
         title = title.text.strip()
 
         # the article is a photo gallery
-        if (u"GALERÍA" in title) or (u"MUNDO EN IMÁGENES" in title) or (u"VIDEO" in title):
+        if ("GALERÍA" in title) or ("MUNDO EN IMÁGENES" in title) or ("VIDEO" in title):
             return None
 
         return allowed
@@ -68,7 +68,7 @@ class NuevoHeraldParser(GenericParser):
         # clean twitter strings
         strong_sentences = content.findAll('strong')
         for strong_sentence in strong_sentences:
-            if re.search(u'en twitter:', strong_sentence.text):
+            if re.search('en twitter:', strong_sentence.text):
                 strong_sentence.parent.extract()
 
         # clean factbox contact

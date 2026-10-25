@@ -3,7 +3,7 @@
 
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -12,7 +12,7 @@ class ElrincondemodaParser(GenericParser):
     def __init__(self):
         super(ElrincondemodaParser, self).__init__()
 
-    source = u"Elrincondemoda"
+    source = "Elrincondemoda"
     
     def parse(self, url):
         #url = "http://www.elrincondemoda.com/2016/01/tendencias-fitness-lo-que-nos-espera-en-2016/"

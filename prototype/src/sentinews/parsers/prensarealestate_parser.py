@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -11,7 +11,7 @@ class PrensarealestateParser(GenericParser):
     def __init__(self):
         super(PrensarealestateParser, self).__init__()
 
-    source = u"Prensarealestate"
+    source = "Prensarealestate"
 
     def parse(self, url):
         #url = "http://prensarealestate.com/colombia-maestria-ciencias-habitat/"

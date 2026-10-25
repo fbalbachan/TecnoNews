@@ -3,7 +3,7 @@
 
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -12,7 +12,7 @@ class ParabrisasParser(GenericParser):
     def __init__(self):
         super(ParabrisasParser, self).__init__()
 
-    source = u"Parabrisas"
+    source = "Parabrisas"
 
     def parse(self, url):
         #url = "http://parabrisas.perfil.com/2016/04/01/subastan-fiat-500l-que-uso-el-papa-en-nueva-york/"
@@ -48,8 +48,8 @@ class ParabrisasParser(GenericParser):
             clean_text = paragraph.text.strip()
             content += "\n" + clean_text
 
-        categories = [u"automóviles"]
-        tags = [u"automóviles"]
+        categories = ["automóviles"]
+        tags = ["automóviles"]
 
         #categories=[urlparse(url).path.split("/")[1]]
         #print categories

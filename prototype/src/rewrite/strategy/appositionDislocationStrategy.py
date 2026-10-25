@@ -17,10 +17,10 @@ debug_mode = False
 
 class AppositionDislocationStrategy:
     def __init__(self):
-        if debug_mode: print "--> AppositionDislocationStrategy.init()"
+        if debug_mode: print("--> AppositionDislocationStrategy.init()")
 
     def applies_to(self, sentence, node):
-        if debug_mode: print "--> AppositionDislocationStrategy.applies_to(sentence:", sentence.text, ")"
+        if debug_mode: print("--> AppositionDislocationStrategy.applies_to(sentence:", sentence.text, ")")
         result = False
         for clause in sentence.clauses:
             if self.applies_to_clause(clause):
@@ -29,7 +29,7 @@ class AppositionDislocationStrategy:
         return result
 
     def applies_to_clause(self, clause):
-        if debug_mode: print "--> AppositionDislocationStrategy.applies_to_clause(", clause.node, ")"
+        if debug_mode: print("--> AppositionDislocationStrategy.applies_to_clause(", clause.node, ")")
         result = False
         for structure in clause.syntactic_structures:
             for entity in structure.all_entities():
@@ -39,7 +39,7 @@ class AppositionDislocationStrategy:
         return result
 
     def rewrite(self, sentence, node):
-        if debug_mode: print "--> AppositionDislocationStrategy.rewrite(sentence:", sentence, ", node:", node, ")"
+        if debug_mode: print("--> AppositionDislocationStrategy.rewrite(sentence:", sentence, ", node:", node, ")")
 
         rewrite = None
 
@@ -55,28 +55,26 @@ class AppositionDislocationStrategy:
             new_text = self.compose_text(replacements, sentence.text)
 
             for new_sentence_text in new_sentence_texts:
-                new_text += u" " + new_sentence_text
+                new_text += " " + new_sentence_text
 
             rewrite = Rewrite(sentence.parse_node, new_text)
 
         except Exception as e:
-            msg = (": " + e.message) if e and hasattr(e, "message") else ""
+            msg = (": " + str(e)) if e and hasattr(e, "message") else ""
             logger = get_logger('tecnonews')
             logger.info("AppositionDislocationStrategy Rewriting:")
             logger.info(msg)
             ex_type, ex, tb = sys.exc_info()
             logger.info(traceback.format_tb(tb))
 
-        if debug_mode: print "<-- AppositionDislocationStrategy.rewrite()"
+        if debug_mode: print("<-- AppositionDislocationStrategy.rewrite()")
         return rewrite
 
     def compose_text(self, rewrites, text):
-        if debug_mode: print "--> AppositionDislocationStrategy.compose_text(rewrites, text:", text, ")"
+        if debug_mode: print("--> AppositionDislocationStrategy.compose_text(rewrites, text:", text, ")")
         rewrites.sort(key=lambda rewrite_rule: rewrite_rule.token.start())
         rewrites_queue = deque(rewrites)
 
-        if not has_type_encoding(text, unicode):
-            text = text.decode("utf-8")
 
         offset = 0
         while rewrites_queue:
@@ -88,7 +86,7 @@ class AppositionDislocationStrategy:
             text = new_rewrite.replacement
             offset += local_offset
 
-        if debug_mode: print "<-- AppositionDislocationStrategy.compose_text() --> ", text
+        if debug_mode: print("<-- AppositionDislocationStrategy.compose_text() --> ", text)
         return text
 
     def rewrite_clause(self, sentence, clause, replacements, sentence_texts):
@@ -100,7 +98,7 @@ class AppositionDislocationStrategy:
                1) ", los tiburones del río," --> ""
                2) New sentence: "(B)agres (son) los tiburones del río(.)"
         """
-        if debug_mode: print "--> AppositionDislocationStrategy.rewrite_clause(sentence:", sentence, ", clause:", clause, ")"
+        if debug_mode: print("--> AppositionDislocationStrategy.rewrite_clause(sentence:", sentence, ", clause:", clause, ")")
 
         appositions = self.get_appositions(clause)
         for apposition in appositions:
@@ -111,14 +109,14 @@ class AppositionDislocationStrategy:
             sentence_texts.append(new_sentence_text)
 
         if debug_mode:
-            print "<-- AppositionDislocationStrategy.rewrite_clause: "
-            print "replacements: ", replacements
-            print "new_sentence_texts: ", sentence_texts
+            print("<-- AppositionDislocationStrategy.rewrite_clause: ")
+            print("replacements: ", replacements)
+            print("new_sentence_texts: ", sentence_texts)
 
         return [replacements, sentence_texts]
 
     def get_appositions(self, clause):
-        if debug_mode: print "--> AppositionDislocationStrategy.get_appositions()"
+        if debug_mode: print("--> AppositionDislocationStrategy.get_appositions()")
         appositions = []
         for structure in clause.syntactic_structures:
             for entity in structure.all_entities():
@@ -139,22 +137,22 @@ class AppositionDislocationStrategy:
         return rewrite_rule
 
     def get_replace_string_for(self, sentence, entity):
-        if debug_mode: print "--> AppositionDislocationStrategy.get_replace_string_for(entity:", entity, ")"
+        if debug_mode: print("--> AppositionDislocationStrategy.get_replace_string_for(entity:", entity, ")")
 
         origin = sentence.token.start()
         start_idx = entity.node.token.start() - origin
 
         # This takes into account a possible leapfrogged node (based on apposition def.)
         last_leaf = entity.node.leaves()[-1]
-        if last_leaf.lexical_form in [u","]:
+        if last_leaf.lexical_form in [","]:
             end_idx = last_leaf.token.start() - origin                          # Index points to the comma
         else:
             end_idx = entity.node.token.end() - origin
-            end_idx = sentence.text.decode("utf-8").find(u",", end_idx, -1)     # Index points to the comma
+            end_idx = sentence.text.find(",", end_idx, -1)     # Index points to the comma
 
-        result = sentence.text.decode("utf8")[start_idx:end_idx].replace('_', ' ')
+        result = sentence.text[start_idx:end_idx].replace('_', ' ')
 
-        if debug_mode: print "<-- AppositionDislocationStrategy.get_replace_string_for() --> ", result
+        if debug_mode: print("<-- AppositionDislocationStrategy.get_replace_string_for() --> ", result)
         return result
 
     def find_apposition_token(self, sentence, appositions_head):
@@ -195,31 +193,31 @@ class AppositionDislocationStrategy:
 
                 # This takes into account a possible leapfrogged node (based on apposition def.)
                 last_leaf = element.node.leaves()[-1]
-                if last_leaf.lexical_form in [u","]:
+                if last_leaf.lexical_form in [","]:
                     relative_end = last_leaf.token.end() - origin       # Point to the char following the comma
                 else:
-                    relative_end = sentence.text.decode("utf-8").find(u",", relative_end, -1) + 1
+                    relative_end = sentence.text.find(",", relative_end, -1) + 1
 
         return relative_end
 
     def get_new_sentence_text(self, sentence, apposition):
-        if debug_mode: print "--> AppositionDislocationStrategy.get_new_sentence_text(apposition:", apposition, ")"
+        if debug_mode: print("--> AppositionDislocationStrategy.get_new_sentence_text(apposition:", apposition, ")")
 
         head = self.get_replace_string_for(sentence, apposition)
 
         # Uppercase for the beginning of a sentence
         head = head[0].upper() + head[1:]
 
-        verb = u"son" if apposition.number() == Number.plural else u"es"
+        verb = "son" if apposition.number() == Number.plural else "es"
 
         tail_first = self.get_replace_string_for(sentence, apposition.appositions[0])
 
         # Lowercase for the second part of the sentence
         tail_first = tail_first[0].lower() + tail_first[1:]
 
-        sentence_text = head + u" " + verb + u" " + tail_first + u"."
+        sentence_text = head + " " + verb + " " + tail_first + "."
 
-        if debug_mode: print "<-- AppositionDislocationStrategy.get_new_sentence_text() --> ", sentence_text
+        if debug_mode: print("<-- AppositionDislocationStrategy.get_new_sentence_text() --> ", sentence_text)
         return sentence_text
 
     type = "dislocation"

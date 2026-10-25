@@ -3,7 +3,7 @@
 
 from bs4 import BeautifulSoup
 from src.sentinews.parsers.generic_parser import GenericParser
-from urlparse import urlparse
+from urllib.parse import urlparse
 from src.utils.unicodeTools import safe_unicode
 
 class ArqaParser(GenericParser):
@@ -17,7 +17,7 @@ class ArqaParser(GenericParser):
         #url = "http://arqa.com/agenda/lanzamiento-convocatoria-bia-ar-2016.html"
 
         content = None
-        title   = u""
+        title   = ""
         soup    = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
         # rip out script and style elements
         for script in soup(["script", "style"]):
@@ -32,8 +32,8 @@ class ArqaParser(GenericParser):
                 if paragraphs is not None and len(paragraphs) > 0 :
                     content = ' '.join([paragraph.text + '\n' for paragraph in paragraphs])
         
-        categories  = [u"propiedades"]
-        tags        = [u"propiedades"]
+        categories  = ["propiedades"]
+        tags        = ["propiedades"]
         
         title   = safe_unicode(title)
         content = safe_unicode(content)

@@ -12,12 +12,12 @@ class PersonalPronounSolver:
         self.context = context
 
     def solve(self):
-        if debug_mode: print "--> PersonalPronounSolver.solve() - clause: ", self.clause
+        if debug_mode: print("--> PersonalPronounSolver.solve() - clause: ", self.clause)
         for pronoun, structure in self.pronouns_in_order():
             self.link(structure, pronoun)
 
     def link(self, structure, pronoun):
-        if debug_mode: print "--> PersonalPronounSolver.link(structure: ", structure.name, ", pronoun: ", pronoun, ")"
+        if debug_mode: print("--> PersonalPronounSolver.link(structure: ", structure.name, ", pronoun: ", pronoun, ")")
         coref_searcher = PersonalPronounCoreferenceSearcher(self.clause, self.context, pronoun)
         referenced_entity = coref_searcher.search()
         if referenced_entity:
@@ -26,10 +26,10 @@ class PersonalPronounSolver:
                 if referenced_entity.animity_matches(verbal_animity):
                     pronoun.msi["animity"] = Animity.most_specific(verbal_animity, referenced_entity.msi["animity"])
                     pronoun.add_coreference(referenced_entity)
-                    if debug_mode: print "<-- link()  --> referenced_entity: ", referenced_entity
+                    if debug_mode: print("<-- link()  --> referenced_entity: ", referenced_entity)
             else:
                 pronoun.add_coreference(referenced_entity)
-                if debug_mode: print "<-- link()  --> referenced_entity: ", referenced_entity
+                if debug_mode: print("<-- link()  --> referenced_entity: ", referenced_entity)
 
     def pronouns_in_order(self):
         clause = self.clause
@@ -40,7 +40,7 @@ class PersonalPronounSolver:
                 pronouns_with_structure.append((valid_pronoun, syn_structure))
 
         ordered = sorted(pronouns_with_structure,
-                         key=lambda (pronoun, structure): clause.index_of(pronoun, True))
+                         key=lambda pronoun_structure: clause.index_of(pronoun_structure[0], True))
         return ordered
 
     def only_valid_pronouns(self, entities):
@@ -53,7 +53,6 @@ class PersonalPronounSolver:
                                                      and entity.msi["type"] == "indefinite" \
                                                      and entity.lexical_form.lower() in ["ambos", "ambas"]
 
-        valid_pronouns = filter(lambda entity: is_valid_personal_pronoun(entity)
-                                               or is_valid_indefinite_pronoun(entity),
-                                entities)
+        valid_pronouns = [entity for entity in entities if is_valid_personal_pronoun(entity)
+                                               or is_valid_indefinite_pronoun(entity)]
         return valid_pronouns

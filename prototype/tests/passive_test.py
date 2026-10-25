@@ -2,7 +2,7 @@
 #-*- coding: utf-8 -*-
 import unittest
 
-from csv_file_reader import load_csv_test_file
+from tests.csv_file_reader import load_csv_test_file
 from src.model.sentence.sentenceAnalyzer import SentenceAnalyzer
 from src.model.sentence.sentence import Sentence
 from tests.freelingTreeRepository import FreelingTreeRepository
@@ -18,7 +18,7 @@ class TestPassiveSentence(TestBase):
         analyzer = SentenceAnalyzer(FreelingTreeRepository("tests/input/trees"))
 
         for (input_text, expected_verb_lemma, expected_subject, expected_od) in self.input_texts:
-            print "trying: %s .. " % input_text,
+            print("trying: %s .. " % input_text, end=' ')
 
             self.input = input_text
 
@@ -34,7 +34,7 @@ class TestPassiveSentence(TestBase):
 
             self.assertEqual(expected_od, clause.structure("od").lexical_form())
 
-            print "OK"
+            print("OK")
 
 if __name__ == '__main__':
     unittest.main()

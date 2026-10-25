@@ -3,7 +3,7 @@
 
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -12,7 +12,7 @@ class AutoBlogParser(GenericParser):
     def __init__(self):
         super(AutoBlogParser, self).__init__()
 
-    source = u"Auto Blog"
+    source = "Auto Blog"
 
     def parse(self, url):
         #url = "http://autoblog.com.ar/2016/04/04/el-gobierno-despidio-al-disenador-de-la-nueva-patente-mercosur/"
@@ -51,8 +51,8 @@ class AutoBlogParser(GenericParser):
                 break
             content += "\n" + clean_text
 
-        categories = [u"automóviles"]
-        tags = [u"automóviles"]
+        categories = ["automóviles"]
+        tags = ["automóviles"]
 
         #categories=[urlparse(url).path.split("/")[1]]
         #print categories

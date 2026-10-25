@@ -10,5 +10,5 @@ class WPHost(object):
 		return hash(self.host + self.user + self.password)
 
 
-	def __cmp__(self, other):
-		return cmp(self.host, other.host) and cmp(self.user, other.user) and cmp(self.password, other.password)
+	def __eq__(self, other):
+		return (self.host, self.user, self.password) == (other.host, other.user, other.password)

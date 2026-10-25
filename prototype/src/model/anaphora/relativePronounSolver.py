@@ -14,8 +14,13 @@ class RelativePronounSolver:
         self.linker = clause.relative_linker
 
     def solve(self):
-        if debug_mode: print "--> RelativePronounSolver.solve()"
+        if debug_mode: print("--> RelativePronounSolver.solve()")
         clause = self.clause
+
+        # a relative pronoun deep inside a subordinate clause ("si ... por lo que nos ponemos") leaves no linker
+        # words at the start of the clause: nothing to solve
+        if not self.linker:
+            return
 
         if self.is_possessive_relative():
             self.solve_possessive_relative()
@@ -33,7 +38,7 @@ class RelativePronounSolver:
         return linker_words == ["lo", "cual"]
 
     def solve_undefined_relative(self):
-        if debug_mode: print "--> RelativePronounSolver.solve_undefined_relative() - linker: ", self.linker
+        if debug_mode: print("--> RelativePronounSolver.solve_undefined_relative() - linker: ", self.linker)
         clause = self.clause
         clause.relative_entity = None
 
@@ -50,7 +55,7 @@ class RelativePronounSolver:
         return pronoun in ["cuyo", "cuya", "cuyos", "cuyas"]
 
     def solve_possessive_relative(self):
-        if debug_mode: print "--> RelativePronounSolver.solve_possessive_relative() - linker: ", self.linker
+        if debug_mode: print("--> RelativePronounSolver.solve_possessive_relative() - linker: ", self.linker)
         clause = self.clause
         possessed_entity = clause.sorted(clause.lonely_entities(), False)[0]
         possessed_entity.owner = clause.relative_entity
@@ -74,14 +79,14 @@ class RelativePronounSolver:
             slot.append(possessed_entity)
 
     def is_valid_linker(self):
-        if debug_mode: print "--> RelativePronounSolver.is_valid_linker()"
+        if debug_mode: print("--> RelativePronounSolver.is_valid_linker()")
 
         word = self.linker[0].lexical_form
         is_valid = word not in ["donde", "adonde"]
         return is_valid
 
     def solve_active_voice(self):
-        if debug_mode: print "--> RelativePronounSolver.solve_active_voice() - linker: ", self.linker
+        if debug_mode: print("--> RelativePronounSolver.solve_active_voice() - linker: ", self.linker)
         clause = self.clause
         req_gender = clause.get_gender_from_relative_linker()
         req_number = clause.get_number_from_relative_linker()
@@ -139,8 +144,8 @@ class RelativePronounSolver:
 
     @staticmethod
     def relative_entity_matches_msi(relative_entity, is_quien_relative, gender, number, verb_animity):
-        if debug_mode: print "--> RelativePronounSolver.relative_entity_matches_msi - Rel entity: ", relative_entity, \
-                             " - Verb_animity", str(verb_animity), " - gender ", str(gender), " - number ", str(number)
+        if debug_mode: print("--> RelativePronounSolver.relative_entity_matches_msi - Rel entity: ", relative_entity, \
+                             " - Verb_animity", str(verb_animity), " - gender ", str(gender), " - number ", str(number))
         matches_animity = (not is_quien_relative or relative_entity.animity_matches(Animity.animated)) \
                           and relative_entity.animity_matches(verb_animity)
         matches_gender = not gender or relative_entity.gender_matches(gender)
@@ -180,7 +185,7 @@ class RelativePronounSolver:
         return structures
 
     def solve_passive_voice(self):
-        if debug_mode: print "--> RelativePronounSolver.solve_passive_voice() - linker: ", self.linker
+        if debug_mode: print("--> RelativePronounSolver.solve_passive_voice() - linker: ", self.linker)
 
         clause = self.clause
         is_quien = clause.is_quien_relative()
@@ -236,14 +241,14 @@ class RelativePronounSolver:
 
         for category_sequence in category_sequences:
             while category_sequence:
-                arranged = zip(category_sequence, leaves)
+                arranged = list(zip(category_sequence, leaves))
 
                 initial_leaves_match_category_seq = \
                     all([leaf.msi["category"] == expected_category for (expected_category, leaf) in arranged])
 
                 if initial_leaves_match_category_seq:
                     category_sequence = []
-                    linker.extend(zip(*arranged)[1])
+                    linker.extend(list(zip(*arranged))[1])
                 else:
                     category_sequence = category_sequence[1:]
 

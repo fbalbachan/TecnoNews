@@ -3,7 +3,7 @@
 
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -12,7 +12,7 @@ class SaludNutricionBienestarParser(GenericParser):
     def __init__(self):
         super(SaludNutricionBienestarParser, self).__init__()
 
-    source = u"Salud Nutrición Bienestar"
+    source = "Salud Nutrición Bienestar"
 
     def parse(self, url):
         #url = "http://www.saludnutricionbienestar.com/estrategias-reducir-riesgo-cancer/?utm_source=feedburner&utm_medium=feed&utm_campaign=Feed%3A+saludnutricionbienestar+%28Salud+Nutrici%C3%B3n+Bienestar%29&utm_content=FeedBurner"
@@ -38,8 +38,8 @@ class SaludNutricionBienestarParser(GenericParser):
                 clean_text = "\t-" + clean_text
             content += "\n" + clean_text
 
-        categories = [u"salud"]
-        tags = [u"salud"]
+        categories = ["salud"]
+        tags = ["salud"]
         
         #categories=[urlparse(url).path.split("/")[1]]
         #print categories

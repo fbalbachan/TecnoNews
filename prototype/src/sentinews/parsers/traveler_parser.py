@@ -3,7 +3,7 @@
 
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -12,10 +12,10 @@ class TravelerParser(GenericParser):
     def __init__(self):
         super(TravelerParser, self).__init__()
 
-    source = u"Traveler"
+    source = "Traveler"
 
     def parse(self, url):
-        if u"/galerias/" in url:
+        if "/galerias/" in url:
             return None
         #url = "http://www.traveler.es/viajes/viajes-urbanos/articulos/cosas-que-debes-saber-antes-de-viajar-a-cuba/8582"
 
@@ -50,7 +50,7 @@ class TravelerParser(GenericParser):
 
         for paragraph in paragraphs:
             clean_text = paragraph.text.strip()
-            if clean_text.find(u"Puede que también te interese...") != -1:
+            if clean_text.find("Puede que también te interese...") != -1:
                 break
             content += "\n" + clean_text
 

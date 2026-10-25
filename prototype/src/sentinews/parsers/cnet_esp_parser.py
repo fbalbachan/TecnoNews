@@ -14,11 +14,11 @@ class CNetEspParser(GenericParser):
     def __init__(self):
         super(CNetEspParser, self).__init__()
 
-    source = u"CNet Español"
+    source = "CNet Español"
 
     def parse(self, url):
 
-        if (u'/imagenes/' in url) or (u'/videos/' in url) or (u'/analisis/' in url) or (u'cazadores-de-ofertas' in url):
+        if ('/imagenes/' in url) or ('/videos/' in url) or ('/analisis/' in url) or ('cazadores-de-ofertas' in url):
             return None
 
         soup = BeautifulSoup(self.opener.read(url))

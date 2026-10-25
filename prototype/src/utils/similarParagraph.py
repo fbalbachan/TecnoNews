@@ -11,10 +11,10 @@ class SimilarParagraph:
         self.analysis = analysis
         self.text_distance = TextDistance()
         self.text = self.analysis["paragraph"].text
-        if not isinstance(self.text, unicode):
+        if not isinstance(self.text, str):
             paragraph_logger.error('analysis["paragraph"].text is not unicode')
             paragraph_logger.error('decoding analysis["paragraph"].text to unicode')
-            self.text = unicode(self.text, 'utf-8')
+            self.text = str(self.text, 'utf-8')
         self.paragraphs = self.get_paragraphs(self.text)
         self.load_other_sources(other_versions)
         self.clean_candidate_paragraphs()
@@ -76,7 +76,7 @@ class SimilarParagraph:
         self.delete_invalid_candidate_paragraph(self.paragraph_c3)
 
     def delete_invalid_candidate_paragraph(self, paragraphs):
-        for key in paragraphs.keys():
+        for key in list(paragraphs.keys()):
             if '@' in paragraphs[key]:
                 del paragraphs[key]
 
@@ -90,7 +90,7 @@ class SimilarParagraph:
         max_similarity = 0
         max_idx = -1
 
-        for k in t0_paragraphs.keys():
+        for k in list(t0_paragraphs.keys()):
             paragraph_logger.info("\tcomparing paragraph %d of t0_paragraphs" % k)
             t1_k = self._paragraphSimilarity(t0_paragraphs[k], paragraph_l)
             paragraph_logger.info("\t %s" % t1_k)
@@ -121,7 +121,7 @@ class SimilarParagraph:
         min_simil_idx = -1
         t0_max_simil = -1
 
-        for k in t1_paragraphs.keys():
+        for k in list(t1_paragraphs.keys()):
             paragraph_logger.info("paragraph %d of t1_paragraphs" % k)
             simil_idx, simil_k = self.max_similarity_of_paragraph_l(t0_paragraphs, t1_paragraphs[k])
 
@@ -160,7 +160,7 @@ class SimilarParagraph:
         # First paragraph from paragraph_c1
         simil, t1_p, t0_p = self.less_similar_paragraph(self.paragraphs, self.paragraph_c1)
         paragraph_logger.info("%s, %s, %s" % (simil, t1_p, t0_p))
-        injection_mark = u""
+        injection_mark = ""
 
         self.select_paragraph(simil, t1_p, t0_p, self.paragraph_c1, injection_mark)
         assert t1_p not in self.paragraph_c1
@@ -170,7 +170,7 @@ class SimilarParagraph:
         simil, t1_p, t0_p = self.less_similar_paragraph(self.paragraphs, self.paragraph_c1)
         paragraph_logger.info("%s, %s, %s" % (simil, t1_p, t0_p))
 
-        injection_mark = u""
+        injection_mark = ""
         self.select_paragraph(simil, t1_p, t0_p, self.paragraph_c1, injection_mark)
         assert t1_p not in self.paragraph_c1
 
@@ -178,7 +178,7 @@ class SimilarParagraph:
         # First paragraph from paragraphs_c2
         simil, t1_p, t0_p = self.less_similar_paragraph(self.paragraphs, self.paragraph_c2)
 
-        injection_mark = u""
+        injection_mark = ""
         self.select_paragraph(simil, t1_p, t0_p, self.paragraph_c2, injection_mark)
         assert t1_p not in self.paragraph_c2
 
@@ -189,7 +189,7 @@ class SimilarParagraph:
         # First paragraph from paragraphs_c3
         simil, t1_p, t0_p = self.less_similar_paragraph(self.paragraphs, self.paragraph_c3)
 
-        injection_mark = u""
+        injection_mark = ""
         self.select_paragraph(simil, t1_p, t0_p, self.paragraph_c3, injection_mark)
         assert t1_p not in self.paragraph_c3
 
@@ -204,22 +204,20 @@ class SimilarParagraph:
 def test_news1_news2():
 
     class MockParagraph:
-        def __init__(self, text = u""):
+        def __init__(self, text = ""):
             self.text = text
     class MockEntity:
         def __init__(self, content):
             self.content = content
 
-    t0 = open('test_0', 'r').read()
-    t1 = open('test_1', 'r').read()
-    t0 = unicode(t0, 'utf-8')
-    t1 = unicode(t1, 'utf-8')
+    t0 = open('test_0', 'r', encoding="utf-8").read()
+    t1 = open('test_1', 'r', encoding="utf-8").read()
     analysis = {"paragraph": MockParagraph(text=t0)}
 
     sp = SimilarParagraph(analysis, [MockEntity(t1)])
-    print sp.paragraphs
-    print sp.paragraph_c1
-    print "\n"
+    print(sp.paragraphs)
+    print(sp.paragraph_c1)
+    print("\n")
 
     sp.get_generated_content()
     # t0_paragraphs = sp.get_paragraphs(t0)

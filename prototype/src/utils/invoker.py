@@ -21,6 +21,6 @@ class Invoker:
             return method(*args)
         except Exception as exception:
             if self.raise_exception:
-                print format_exc()
+                print(format_exc())
                 raise exception
             logging.getLogger("exceptions").error("[Unraised exception] " + format_exc())

@@ -20,8 +20,8 @@ class ReferentRanker:
                     score += sum(self.score_by_function[function] for function in functions_by_entity[reference])
             score_by_referent[referent] = score
 
-        ranking = sorted(score_by_referent.items(),
-                         key = lambda (p_referent, p_score): (p_score, - p_referent.first_occurrence().token.start()),
+        ranking = sorted(list(score_by_referent.items()),
+                         key = lambda p_referent_p_score: (p_referent_p_score[1], - p_referent_p_score[0].first_occurrence().token.start()),
                          reverse = True)
         return ranking
 

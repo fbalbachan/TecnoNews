@@ -3,7 +3,7 @@
 
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -12,7 +12,7 @@ class RealEstateMarketParser(GenericParser):
     def __init__(self):
         super(RealEstateMarketParser, self).__init__()
 
-    source = u"Real Estate Market"
+    source = "Real Estate Market"
 
     def parse(self, url):
         #url = "http://realestatemarket.com.mx/noticias/infraestructura-y-construccion/18654-aumenta-1-inversion-fija-bruta-en-enero"
@@ -42,8 +42,8 @@ class RealEstateMarketParser(GenericParser):
             clean_text = paragraph.text.strip()
             content += "\n" + clean_text
 
-        categories = [u"propiedades"]
-        tags = [u"propiedades"]
+        categories = ["propiedades"]
+        tags = ["propiedades"]
 
         #categories=[urlparse(url).path.split("/")[1]]
         #print categories

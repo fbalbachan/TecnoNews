@@ -68,12 +68,12 @@ class TestStructureHead(TestBase):
             self.assertEqual(1, len(sentence.clauses), "La oración tiene más de una cláusula.")
             clause = sentence.clauses[0]
 
-            entity = filter(lambda e: str(e) == which_entity, clause.entities)[0]
+            entity = [e for e in clause.entities if str(e) == which_entity][0]
 
-            print ("trying: %s" % entity), "..",
+            print(("trying: %s" % entity), "..", end=' ')
 
             self.assert_is_included(expected_MSI, entity.msi)
-            print "OK"
+            print("OK")
 
     def test_get_grup_verb_inf_MSI(self):
         input_text = 'caminar por el bosque es peligroso'
@@ -85,13 +85,13 @@ class TestStructureHead(TestBase):
         self.assertEqual(1, len(sentence.clauses), "La oración tiene más de una cláusula.")
         clause = sentence.clauses[0]
 
-        entity = filter(lambda x: str(x) == 'caminar por el bosque'.encode('utf-8'), clause.entities)[0]
+        entity = [x for x in clause.entities if str(x) == 'caminar por el bosque'][0]
         expected_MSI = {'person': 3, 'number': Number.singular, 'gender': None}
 
-        print ("trying: %s" % entity), "..",
+        print(("trying: %s" % entity), "..", end=' ')
 
         self.assert_is_included(expected_MSI, entity.msi)
-        print "OK"
+        print("OK")
 
     def test_get_grammatical_person_MSIs(self):
         for (input_text, expected_MSI) in self.grammatical_person_data:
@@ -105,13 +105,13 @@ class TestStructureHead(TestBase):
 
             entity = clause.entities[0]
 
-            print ("trying: %s" % entity), "..",
+            print(("trying: %s" % entity), "..", end=' ')
 
             self.assert_is_included(expected_MSI, entity.msi)
-            print "OK"
+            print("OK")
 
     def assert_is_included(self, this, into_that):
-        for attribute, value in this.items():
+        for attribute, value in list(this.items()):
             self.assertTrue(attribute in into_that)
             self.assertEqual(value, into_that[attribute])
 

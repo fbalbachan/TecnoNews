@@ -3,7 +3,7 @@
 
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -12,7 +12,7 @@ class AfuegolentoParser(GenericParser):
     def __init__(self):
         super(AfuegolentoParser, self).__init__()
 
-    source = u"Afuegolento"
+    source = "Afuegolento"
     
     def parse(self, url):
         #url = "http://www.afuegolento.com/noticias/cocina/noticia/17551/vinos/alicante/dop/realizaran/salon/profesional/dar/conocer/sus/novedades"
@@ -45,7 +45,7 @@ class AfuegolentoParser(GenericParser):
         categories = []
         tags = []
 
-        tags = [u"gastronomía"]
+        tags = ["gastronomía"]
         categories=["estilo vida"]
         
         new_entry = self.create_news_entry(title=title, content=content,

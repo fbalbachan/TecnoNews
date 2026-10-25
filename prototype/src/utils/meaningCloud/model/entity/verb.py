@@ -21,11 +21,11 @@ class Verb(object):
                 if 'tag' in an_item and len(an_item['tag']) >= 8:
                     tag_set = list(an_item['tag'])
                     self.tag = tag_set
-                    if tag_set[7] == u'A':
-                        self.voice = u'active'
-                    elif tag_set[7] == u'P':
-                        self.voice = u'passive'
+                    if tag_set[7] == 'A':
+                        self.voice = 'active'
+                    elif tag_set[7] == 'P':
+                        self.voice = 'passive'
 
 
     def __repr__(self):
-        return "%s - %s voice" % (self.lemma.encode('utf-8'), self.voice.encode('utf-8'))
+        return "%s - %s voice" % (self.lemma, self.voice)

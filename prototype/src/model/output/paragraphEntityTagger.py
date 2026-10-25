@@ -9,9 +9,8 @@ class ParagraphEntityTagger:
         if attrib_by_entity is None:
             attrib_by_entity = {}
 
-        text = text.decode("utf-8")
         entities = [entity for entity in set(entities) if not entity.is_tacit()]
-        entities = filter(lambda p_entity: p_entity.is_maximal_regarding(entities), entities)
+        entities = [p_entity for p_entity in entities if p_entity.is_maximal_regarding(entities)]
         entities.sort(key=lambda p_entity: p_entity.token.start())
 
         tag_mapping = {}
@@ -27,7 +26,7 @@ class ParagraphEntityTagger:
             tagged_text += "<%s id='e_%s'" % (tag_name, str(entity_id))
             if entity in attrib_by_entity:
                 for attrib in attrib_by_entity[entity]:
-                    tagged_text += " %s=%s" % (attrib, attrib_by_entity[entity][attrib].encode('ascii'))
+                    tagged_text += " %s=%s" % (attrib, attrib_by_entity[entity][attrib])
             tagged_text += ">%s</%s>" % (entity_text, tag_name)
             tag_mapping[entity] = "e_%s" % (str(entity_id))
             index = end
@@ -41,9 +40,8 @@ class ParagraphEntityTagger:
         if attrib_by_entity is None:
             attrib_by_entity = {}
 
-        text = text.decode("utf-8")
         entities = [entity for entity in set(entities) if not entity.is_tacit()]
-        entities = filter(lambda p_entity: p_entity.is_maximal_regarding(entities), entities)
+        entities = [p_entity for p_entity in entities if p_entity.is_maximal_regarding(entities)]
         entities.sort(key=lambda p_entity: p_entity.token.start())
 
         tag_mapping = {}

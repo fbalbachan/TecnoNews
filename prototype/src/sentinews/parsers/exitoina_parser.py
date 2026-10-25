@@ -3,7 +3,7 @@
 
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -12,7 +12,7 @@ class ExitoinaParser(GenericParser):
     def __init__(self):
         super(ExitoinaParser, self).__init__()
 
-    source = u"Exitoina"
+    source = "Exitoina"
     
     def parse(self, url):
         #url = "http://exitoina.perfil.com/2016-01-27-382203-amenazan-de-muerte-a-beyonce/"

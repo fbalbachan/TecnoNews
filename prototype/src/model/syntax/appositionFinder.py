@@ -10,19 +10,18 @@ class AppositionFinder:
         self.clause = clause
 
     def retrieve_appositions(self):
-        if debug_mode: print "--> ClauseAnalyzer.retrieve_appositions(clause: ", self.clause, ")"
+        if debug_mode: print("--> ClauseAnalyzer.retrieve_appositions(clause: ", self.clause, ")")
 
-        candidate_entities = filter(lambda entity: entity.is_explicit()
+        candidate_entities = [entity for entity in self.clause.entities if entity.is_explicit()
                                                    and entity.category() == "noun"
                                                    and entity.node.label == "sn"
-                                                   and self.entity_is_next_or_close_to(entity, [","], 1),
-                                    self.clause.entities)
+                                                   and self.entity_is_next_or_close_to(entity, [","], 1)]
 
-        candidate_entities = filter(lambda entity: entity.is_maximal_regarding(candidate_entities), candidate_entities)
+        candidate_entities = [entity for entity in candidate_entities if entity.is_maximal_regarding(candidate_entities)]
 
         candidate_chains = self.group_entities_in_chains(candidate_entities)
 
-        candidate_chains = filter(lambda chain: not self.is_enumeration(chain), candidate_chains)
+        candidate_chains = [chain for chain in candidate_chains if not self.is_enumeration(chain)]
 
         appositions = []
         for candidate_chain in candidate_chains:
@@ -41,7 +40,7 @@ class AppositionFinder:
 
     def build_apposition(self, entity_chain):
         reference_entity = self.get_reference_entity(entity_chain)
-        entities_in_apposition = filter(lambda p_entity: p_entity is not reference_entity, entity_chain)
+        entities_in_apposition = [p_entity for p_entity in entity_chain if p_entity is not reference_entity]
         apposition = (reference_entity, entities_in_apposition)
         return apposition
 
@@ -73,7 +72,7 @@ class AppositionFinder:
         return entity_levels_are_ok and agree_in_per_gen_num and not there_is_place
 
     def get_reference_entity(self, chain):
-        named = filter(lambda entity: entity.classification(), chain)
+        named = [entity for entity in chain if entity.classification()]
         return named[0] if named else chain[0]
 
     def entity_is_next_or_close_to(self, entity, lemmas, distance):
@@ -84,7 +83,7 @@ class AppositionFinder:
         :return: bool
         """
 
-        if debug_mode: print "--> ClauseAnalyzer.entity_is_next_or_close_to(entity: ", entity, ", lemmas: ", lemmas, ")"
+        if debug_mode: print("--> ClauseAnalyzer.entity_is_next_or_close_to(entity: ", entity, ", lemmas: ", lemmas, ")")
 
         is_next_to_lemma = self.entity_is_next_to(entity, lemmas)
 
@@ -101,7 +100,7 @@ class AppositionFinder:
         :return: bool
         """
 
-        if debug_mode: print "--> ClauseAnalyzer.is_next_to_lexical_form(entity: ", entity, ", lemmas: ", lemmas, ")"
+        if debug_mode: print("--> ClauseAnalyzer.is_next_to_lexical_form(entity: ", entity, ", lemmas: ", lemmas, ")")
 
         clause_leaves = self.clause.proper_leaves()
         leaf_positions = {leaf: index for (index, leaf) in enumerate(clause_leaves)}

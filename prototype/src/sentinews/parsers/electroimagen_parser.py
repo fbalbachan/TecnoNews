@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -12,7 +12,7 @@ class ElectroimagenParser(GenericParser):
     def __init__(self):
         super(ElectroimagenParser, self).__init__()
 
-    source = u"electroimagen"
+    source = "electroimagen"
     
     def parse(self, url):
         #url = "http://electro-imagen.com/articulo/whirlpool-presenta-su-programa-fast-track-a-los-estudiantes-de-esade-en-la-feria-spring-fair"
@@ -40,8 +40,8 @@ class ElectroimagenParser(GenericParser):
         content = content.strip()
         
 
-        tags        =   [u"electrodomésticos"]
-        categories  =   [u"electrodomésticos"]
+        tags        =   ["electrodomésticos"]
+        categories  =   ["electrodomésticos"]
         title       =   safe_unicode(title)
         content     =   safe_unicode(content)
         

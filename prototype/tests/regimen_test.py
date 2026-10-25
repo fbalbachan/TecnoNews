@@ -19,7 +19,7 @@ class TestRegimen(TestBase):
         analyzer = SentenceAnalyzer(FreelingTreeRepository("tests/input/trees"))
 
         for (input_text, expected_regimen) in self.input_texts_with_regimen:
-            print "trying: %s .. " % input_text,
+            print("trying: %s .. " % input_text, end=' ')
 
             self.input = input_text
 
@@ -29,11 +29,11 @@ class TestRegimen(TestBase):
             self.assertEqual(1, len(sentence.clauses), "La oración tiene más de una cláusula.")
             clause = sentence.clauses[0]
 
-            self.assertEquals("active", clause.voice)
+            self.assertEqual("active", clause.voice)
 
-            self.assertEquals(expected_regimen, clause.structure("regimen").lexical_form())
+            self.assertEqual(expected_regimen, clause.structure("regimen").lexical_form())
 
-            print "OK"
+            print("OK")
 
 if __name__ == '__main__':
     unittest.main()

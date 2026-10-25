@@ -1,4 +1,4 @@
-from connector import MongoConnector
+from .connector import MongoConnector
 from src.sentinews.feeds import Feed
 
 
@@ -10,7 +10,7 @@ class FeedService(object):
         self.feeds = self.db[FeedService.COLLECTION]
 
     def save(self, feed):
-        return self.feeds.insert(feed.to_dict())
+        return self.feeds.insert_one(feed.to_dict()).inserted_id
 
     def get_all(self):
         return [Feed(feed['id'], feed['url'], feed['parser'], feed['lastupdated'],

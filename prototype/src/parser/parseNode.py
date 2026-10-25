@@ -6,7 +6,7 @@ debug_mode = False
 class ParseNode(TreeNode):
 
     def __init__(self):
-        if debug_mode: print "--> ParseNode.Init"
+        if debug_mode: print("--> ParseNode.Init")
         TreeNode.__init__(self)
         self.token = None
 
@@ -16,27 +16,27 @@ class ParseNode(TreeNode):
             father.add_child(self)
 
     def leaves_of_msi(self, msi):
-        if debug_mode: print "--> ParseNode.leaves_of_msi"
-        return filter(lambda leaf: all([attribute in leaf.msi and leaf.msi[attribute] == value
-                                       for attribute, value in msi.items()]), self.leaves())
+        if debug_mode: print("--> ParseNode.leaves_of_msi")
+        return [leaf for leaf in self.leaves() if all([attribute in leaf.msi and leaf.msi[attribute] == value
+                                       for attribute, value in list(msi.items())])]
 
     def leaves_of_category(self, *categories):
-        if debug_mode: print "--> ParseNode.leaves_of_category"
+        if debug_mode: print("--> ParseNode.leaves_of_category")
         return sum([self.leaves_of_msi({"category": category}) for category in categories], [])
 
     def leaves_string(self):
-        if debug_mode: print "--> ParseNode.leaves_string"
+        if debug_mode: print("--> ParseNode.leaves_string")
         return " ".join([str(leaf) for leaf in self.leaves()])
 
     def lexical_form(self):
-        if debug_mode: print "--> ParseNode.lexical_form()"
+        if debug_mode: print("--> ParseNode.lexical_form()")
         leaves = self.leaves()
         forms = [str(leaf) for leaf in leaves if leaf.msi["category"] != "punctuation"]
         lf = " ".join(forms)
         return lf
 
     def original_lexical_form(self):
-        if debug_mode: print "--> ParseNode.original_lexical_form()"
+        if debug_mode: print("--> ParseNode.original_lexical_form()")
 
         result = ""
         for leaf in self.leaves():
@@ -80,8 +80,8 @@ class ParseNode(TreeNode):
         return any((node.subordinates_others_special() for node in self.path_to_root()))
 
     def label_node_children(self):
-        if debug_mode: print "--> ParseNode.label_node_children()"
-        return filter(lambda child: not child.is_leaf(), self.children)
+        if debug_mode: print("--> ParseNode.label_node_children()")
+        return [child for child in self.children if not child.is_leaf()]
 
     def label_lemma_lf_matches(self, labels, lemmas, lexical_forms):
         '''Matches a leaf or a label/leaf pair of nodes with the proper label/lemma as described bellow.

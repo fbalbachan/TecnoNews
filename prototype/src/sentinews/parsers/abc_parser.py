@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 from src.sentinews.parsers.generic_parser import GenericParser
 
 
@@ -10,10 +10,10 @@ class ABCParser(GenericParser):
     def __init__(self):
         super(ABCParser, self).__init__()
 
-    source = u"ABC"
+    source = "ABC"
 
     def parse(self, url):
-        if u'/silencio-por-favor/' in url:
+        if '/silencio-por-favor/' in url:
             return None
 
         soup = BeautifulSoup(self.opener.read(url),

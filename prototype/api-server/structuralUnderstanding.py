@@ -69,8 +69,6 @@ class StructuralUnderstanding(Resource):
 
         users_storage.increase_access_counter(api_key)
 
-        if has_type_encoding(text, str, 'UTF-8'):
-            text = text.decode('UTF-8')
 
         try:
             analysis = self.sentilecto.analyze(text)
@@ -86,8 +84,8 @@ class StructuralUnderstanding(Resource):
                     sentences = sentences + [sentence_data]
 
                 except Exception as e:
-                    print 'Exception while generating sentence information: %s - %s' % (str(index), sentence.text)
-                    print traceback.format_exc()
+                    print('Exception while generating sentence information: %s - %s' % (str(index), sentence.text))
+                    print(traceback.format_exc())
 
             analysis_results = \
                 {
@@ -99,8 +97,8 @@ class StructuralUnderstanding(Resource):
             response_value = analysis_results
             response_code = 200
 
-        except Exception, e:
-            print traceback.format_exc()
+        except Exception as e:
+            print(traceback.format_exc())
             response_value = {'type': 'ERROR', 'message': str(e)}
             response_code = 500
 
@@ -194,15 +192,15 @@ class StructuralUnderstanding(Resource):
 
             if (entity.category() == "noun" or entity.category() == "pronoun") \
                and "animity" in entity.msi:
-                entity_morphosyntactic_info['5-Animity'] = entity.msi["animity"].encode("utf-8")
+                entity_morphosyntactic_info['5-Animity'] = entity.msi["animity"].value
 
             if entity.is_named_entity():
                 classification = str(entity.classification(look_deep=True)).upper()
-                entity_morphosyntactic_info['6-Semantic-Classification'] = classification.encode("utf-8")
+                entity_morphosyntactic_info['6-Semantic-Classification'] = classification
 
             if entity_morphosyntactic_info['4-Category'] is "verb":
-                entity_morphosyntactic_info['7-Transitivity'] = entity.transitivity.encode("utf-8")
-                entity_morphosyntactic_info['8-Sentimental-Script-Class'] = entity.sentimental_script.klass.encode("utf-8")
+                entity_morphosyntactic_info['7-Transitivity'] = entity.transitivity
+                entity_morphosyntactic_info['8-Sentimental-Script-Class'] = entity.sentimental_script.klass
 
             morphosyntactic_info = morphosyntactic_info + [entity_morphosyntactic_info]
 

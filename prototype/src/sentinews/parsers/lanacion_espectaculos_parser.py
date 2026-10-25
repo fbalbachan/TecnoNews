@@ -9,7 +9,7 @@ class LaNacionEspectaculosParser(GenericParser):
     def __init__(self):
         super(LaNacionEspectaculosParser, self).__init__()
 
-    source = u"La Nacion espectaculos"
+    source = "La Nacion espectaculos"
 
     def is_parseable_case(self, url, soup=None):
         allowed = True
@@ -18,12 +18,12 @@ class LaNacionEspectaculosParser(GenericParser):
 
 
         tema_nota = soup.find('span', {"class": "tema-nota"})
-        print "tema_nota %s" % tema_nota
+        print("tema_nota %s" % tema_nota)
 
-        dislowed_keywords = [u'Bailando por un sueño',
-                             u'Conversaciones',
-                             u'LA NACION',
-                             u'look']
+        dislowed_keywords = ['Bailando por un sueño',
+                             'Conversaciones',
+                             'LA NACION',
+                             'look']
 
         if tema_nota and any(k for k in dislowed_keywords if k in tema_nota):
             allowed = False
@@ -69,8 +69,8 @@ class LaNacionEspectaculosParser(GenericParser):
             clean_text = paragraph.text.strip()
             content += "\n" + clean_text
 
-        tags=[u'entretenimiento']
-        categories=[u'entretenimiento']
+        tags=['entretenimiento']
+        categories=['entretenimiento']
         new_entry = self.create_news_entry(title=title, content=content,
                                            tags=tags,
                                            source=self.source,

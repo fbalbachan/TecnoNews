@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -11,13 +11,13 @@ class EngadgetParser(GenericParser):
     def __init__(self):
         super(EngadgetParser, self).__init__()
 
-    source = u"Engadget"
+    source = "Engadget"
     
     def parse(self, url):
         #url  = "http://es.engadget.com/2016/06/06/cortana-xbox-one-nueva-actualizacion/"
         #url  = "http://es.engadget.com/2016/06/06/kingston-datatraveler-2000-pendrive-mas-seguro-del-mundo/"
-	soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
-	for script in soup(["script", "style"]):
+        soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
+        for script in soup(["script", "style"]):
             script.extract()
             
             
@@ -43,8 +43,8 @@ class EngadgetParser(GenericParser):
         #print content
         #exit()
         tmptags    = soup.find("div",{"class":"post-meta-tags"}).findAll("a")
-        tags       = [u"tecnologia"]
-        categories = [u"tecnologia"]
+        tags       = ["tecnologia"]
+        categories = ["tecnologia"]
 
         for t in tmptags:
             tags.append( t.text.strip() )

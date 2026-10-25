@@ -12,14 +12,13 @@ class PassiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         SyntacticAnalyzer.__init__(self, clause)
 
     def subject(self):
-        if debug_mode: print "--> PassiveVoiceSyntacticAnalyzer.subject()"
+        if debug_mode: print("--> PassiveVoiceSyntacticAnalyzer.subject()")
         at_right = lambda: self.search_subject_at("right", 4)
         at_left = lambda: self.search_subject_at("left", 4)
 
         verbal_animity = self.clause.verb.subject_animity
         entities = self.find_entities_by(at_right, at_left)
-        entities = filter(lambda entity: entity.animity_matches(verbal_animity),
-                          entities)
+        entities = [entity for entity in entities if entity.animity_matches(verbal_animity)]
         if entities:
             entities[0].msi["animity"] = Animity.most_specific(verbal_animity, entities[0].msi["animity"])
             subject = [entities[0]]
@@ -42,13 +41,12 @@ class PassiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         # From domain knowledge we know that entities must be at: max distance left 6, max distance right 5
         # (insight come from oracle Fernando)
 
-        if debug_mode: print "--> PassiveVoiceSyntacticAnalyzer.od()"
+        if debug_mode: print("--> PassiveVoiceSyntacticAnalyzer.od()")
         verbal_animity = self.clause.verb.affected_object_animity
         entities = self.verb_matching_subject_entities(6, 5)
-        entities = filter(lambda entity: entity.animity_matches(verbal_animity)
+        entities = [entity for entity in entities if entity.animity_matches(verbal_animity)
                                          and (not self.starts_with_accepted_preposition(entity.node, "a")
-                                              or Animity.animities_match(verbal_animity, Animity.animated)),
-                          entities)
+                                              or Animity.animities_match(verbal_animity, Animity.animated))]
         if entities:
             od_entity = entities[0]
         else:
@@ -60,7 +58,7 @@ class PassiveVoiceSyntacticAnalyzer(SyntacticAnalyzer):
         return [od_entity]
 
     def tacit_od(self):
-        if debug_mode: print "--> PassiveVoiceSyntacticAnalyzer.tacit_od()"
+        if debug_mode: print("--> PassiveVoiceSyntacticAnalyzer.tacit_od()")
         verb = self.clause.verb
         pronoun = verb.matching_pronoun()
         pronoun_msi = verb.matching_pronoun_msi()

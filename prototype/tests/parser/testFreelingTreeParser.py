@@ -45,7 +45,7 @@ class FreelingTreeParserTest(unittest.TestCase):
                     n_fs_3:           [manzana_4]
                     }
 
-        for node, children in hierachy.items():
+        for node, children in list(hierachy.items()):
             for child in children: node.add_child(child)
 
         self.assertTrue(parsed.is_equivalent_to(grup_verb_0))

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -13,13 +13,13 @@ class CicConstruccionParser(GenericParser):
     def __init__(self):
         super(CicConstruccionParser, self).__init__()
 
-    source = u"CicConstruccion"
+    source = "CicConstruccion"
     
     def parse(self, url):
         #url = "http://www.cicconstruccion.com/es/notices/2015/12/euroconstruct-preve-que-la-construccion-crecera-en-espana-un-4-4-en-2016-67908.php#.VnQcKV5vthE"
         
-	soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
-	for script in soup(["script", "style"]):
+        soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
+        for script in soup(["script", "style"]):
             script.extract()
             
             

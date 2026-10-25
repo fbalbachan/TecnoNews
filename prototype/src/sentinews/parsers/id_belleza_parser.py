@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
 
@@ -10,7 +10,7 @@ class IdBellezaParser(GenericParser):
     def __init__(self):
         super(IdBellezaParser, self).__init__()
 
-    source = u"Id Belleza"
+    source = "Id Belleza"
 
     def parse(self, url):
         #url= "http://idbelleza.com/2016/01/13/iconos-de-la-belleza-diane-kruger/"
@@ -35,7 +35,7 @@ class IdBellezaParser(GenericParser):
         paragraphs = soup.find('div', {"itemprop": 'articleBody'}).findAll('p')
    
         for paragraph in paragraphs:
-            clean_text = re.sub(u'^Imagen via:.+$', '', paragraph.text.strip())
+            clean_text = re.sub('^Imagen via:.+$', '', paragraph.text.strip())
             content += "\n" + clean_text
             
         #print content

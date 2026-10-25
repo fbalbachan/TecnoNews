@@ -3,7 +3,7 @@
 
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -12,7 +12,7 @@ class VidaNaturalParser(GenericParser):
     def __init__(self):
         super(VidaNaturalParser, self).__init__()
 
-    source = u"Vida Natural"
+    source = "Vida Natural"
 
     def parse(self, url):
         #url = "http://vida-natural.es/el-falso-pan-que-nos-enferma-por-tony-tamallo/"
@@ -42,8 +42,8 @@ class VidaNaturalParser(GenericParser):
             clean_text = paragraph.text.strip()
             content += "\n" + clean_text
 
-        categories = [u"salud"]
-        tags = [u"salud"]
+        categories = ["salud"]
+        tags = ["salud"]
 
         #categories=[urlparse(url).path.split("/")[1]]
         #print categories

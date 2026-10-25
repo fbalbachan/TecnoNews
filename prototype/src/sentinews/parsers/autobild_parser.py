@@ -3,7 +3,7 @@
 
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -12,7 +12,7 @@ class AutoBildParser(GenericParser):
     def __init__(self):
         super(AutoBildParser, self).__init__()
 
-    source = u"Auto Bild"
+    source = "Auto Bild"
 
     def parse(self, url):
         #url = "http://www.autobild.es/noticias/subaru-wrx-sti-brutal-batir-record-isla-man-286183"
@@ -56,8 +56,8 @@ class AutoBildParser(GenericParser):
             content += "\n" + clean_text
 
 
-        categories = [u"automóviles"]
-        tags = [u"automóviles"]
+        categories = ["automóviles"]
+        tags = ["automóviles"]
 
         #categories=[urlparse(url).path.split("/")[1]]
         #print categories

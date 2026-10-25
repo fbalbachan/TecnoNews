@@ -148,7 +148,7 @@ class FactMiningPT(Resource):
         replacements = {}
         config = ConfigProvider()
         replacements_filename = config.get("resources", resource)
-        for line in reader(open(replacements_filename, 'r')):
+        for line in reader(open(replacements_filename, 'r', encoding="utf-8")):
             replacements[line[0]] = line[1]
             replacements[line[1]] = line[0]
         return replacements

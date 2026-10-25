@@ -10,7 +10,7 @@ class ElPaisParser(GenericParser):
     def __init__(self):
         super(ElPaisParser, self).__init__()
 
-    source = u'El País'
+    source = 'El País'
 
     def parse(self, url):
         soup = BeautifulSoup(self.opener.read(url))
@@ -40,7 +40,7 @@ class ElPaisParser(GenericParser):
 
         if title_obj is not None:
             title = title_obj.text
-        if u'El resumen del d\xeda de El Pa\xeds' in title:
+        if 'El resumen del d\xeda de El Pa\xeds' in title:
             title = None
 
         content = ' '.join(paragraphs)

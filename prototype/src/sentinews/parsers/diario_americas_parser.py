@@ -11,7 +11,7 @@ class DiarioAmericasParser(GenericParser):
     def __init__(self):
         super(DiarioAmericasParser, self).__init__()
 
-    source = u"Diario de las Americas"
+    source = "Diario de las Americas"
 
     def is_parseable(self, url, soup=None):
         allowed = True
@@ -22,10 +22,10 @@ class DiarioAmericasParser(GenericParser):
         for ref in category.findAll('a'):
             ref.extract()
         category = category.text.strip()
-        categories_wanted = {u'Portada América Latina', u'Venezuela', u'Cuba', u'Locales', u'La Nación', u'EEUU',
-                             u'Inmigración', u'Acercamiento EEUU-Cuba', u'Mundo', u'Portada Deportes', u'NBA',
-                             u'Béisbol', u'Fútbol', u'Boxeo', u'Deportes Agencia EFE', u'Portada Dinero', u'Tecnología',
-                             u'Ultima Hora'}
+        categories_wanted = {'Portada América Latina', 'Venezuela', 'Cuba', 'Locales', 'La Nación', 'EEUU',
+                             'Inmigración', 'Acercamiento EEUU-Cuba', 'Mundo', 'Portada Deportes', 'NBA',
+                             'Béisbol', 'Fútbol', 'Boxeo', 'Deportes Agencia EFE', 'Portada Dinero', 'Tecnología',
+                             'Ultima Hora'}
 
         if category not in categories_wanted:
             allowed = False
@@ -33,7 +33,7 @@ class DiarioAmericasParser(GenericParser):
         title = soup.find('div', {"class": "detailbox"})
         title = title.h1.text
 
-        if u"FOTOGALERÍA" in title:
+        if "FOTOGALERÍA" in title:
             allowed = False
 
         return allowed
@@ -76,14 +76,14 @@ class DiarioAmericasParser(GenericParser):
         #clean unwanted links
         strong_sentences = content.findAll('strong')
         for strong_sentence in strong_sentences:
-            if re.match(u"LEA TAMBIÉN", strong_sentence.text):
+            if re.match("LEA TAMBIÉN", strong_sentence.text):
                 strong_sentence.parent.extract()
-            elif re.match(u"VIDEO", strong_sentence.text):
+            elif re.match("VIDEO", strong_sentence.text):
                 strong_sentence.parent.extract()
 
         bold_sentences = content.findAll('a', {"href": re.compile(".+")})
         for sentence in bold_sentences:
-            if re.match(u"LEA TAMBIÉN", sentence.string):
+            if re.match("LEA TAMBIÉN", sentence.string):
                 sentence.parent.extract()
 
         #clean video
@@ -95,9 +95,9 @@ class DiarioAmericasParser(GenericParser):
         first_paragraph.extract()
 
         tags = []
-        p_content = u''
+        p_content = ''
         for p in content.findAll('p'):
-            p_content += p.text + u'\n'
+            p_content += p.text + '\n'
 
         content = p_content
         new_entry = self.create_news_entry(title=title, content=content,

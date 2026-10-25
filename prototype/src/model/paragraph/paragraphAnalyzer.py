@@ -13,7 +13,7 @@ class ParagraphAnalyzer:
         self.sentenceAnalyzer.output_demo_debug = output_demo_debug
 
     def analyze(self, paragraph):
-        if debug_mode: print "--> ParagraphAnalyzer.analyze()"
+        if debug_mode: print("--> ParagraphAnalyzer.analyze()")
         self.context["sentences"] = []
 
         for sentence in paragraph.sentences:

@@ -86,7 +86,7 @@ class GlobalOperatorAnalyzer:
     def possibility_word_finder(self, clause):
         possibility_forms = ["probablemente", "posiblemente", "supuestamente", "aparentemente",
                              "tal_vez", "acaso", "quizá", "quizás"]
-        leaves = filter(lambda leaf: leaf.lexical_form in possibility_forms, clause.proper_leaves())
+        leaves = [leaf for leaf in clause.proper_leaves() if leaf.lexical_form in possibility_forms]
         return [GlobalOperator("possibility", leaf) for leaf in leaves]
 
     def imperative_finder(self, clause):

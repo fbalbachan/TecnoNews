@@ -1,5 +1,5 @@
 import sys
-import ConfigParser
+import configparser
 from src.decorators.singleton import singleton
 
 @singleton
@@ -7,11 +7,11 @@ class ConfigProvider(object):
 
     def __new__(cls):
         new_instance = object.__new__(cls)
-        config = ConfigParser.ConfigParser()
+        config = configparser.ConfigParser(strict=False)
         if False and len(sys.argv)==2:
-            config.read(sys.argv[1])
+            config.read(sys.argv[1], encoding="utf-8")
         else:
-            config.read("config")
+            config.read("config", encoding="utf-8")
         cls.cfg = config
         return new_instance
 

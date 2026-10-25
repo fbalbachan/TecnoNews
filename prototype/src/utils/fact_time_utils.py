@@ -82,7 +82,7 @@ class FactTimeUtils(object):
             timebox = self.get_timebox(clause)
 
         data_info = {}
-        time_regex = re.compile(ur"^\[[0-9A-Z:?/.]+\]$", re.U)
+        time_regex = re.compile(r"^\[[0-9A-Z:?/.]+\]$", re.U)
         day_of_week_labels = {"L": "lunes", "M": "martes", "X": "miércoles", "J": "jueves", "V": "viernes", "S": "sábado", "G": "domingo"}
 
         for a_data in clause.proper_tree().nodes_with_labels("data"):
@@ -110,7 +110,7 @@ class FactTimeUtils(object):
         now = datetime.datetime.now()
         today = {"year": now.year, "month": now.month, "day": now.day}
 
-        year_regexp = re.compile(ur"(1\d{3}|2[012]\d{2})($|[^0-9])", re.U | re.I)
+        year_regexp = re.compile(r"(1\d{3}|2[012]\d{2})($|[^0-9])", re.U | re.I)
 
         if len(data_info) == 0 and timebox is not None:
             if year_regexp.search(timebox):
@@ -156,60 +156,58 @@ class FactTimeUtils(object):
             reference_time["year"] = now.year
 
         #SANITIZE
-        if not isinstance(timebox, unicode):
-            timebox = timebox.decode("utf-8")
         timebox = timebox.lower()
 
-        number_words = [ur"un(o|a)?", ur"dos", ur"tres", ur"cuatro", ur"cinco", ur"seis", ur"siete", ur"ocho", ur"nueve", ur"diez",
-                        ur"once", ur"doce", ur"trece", ur"catorce", ur"quince", ur"dieciseis", ur"diecisiete", ur"dieciocho", ur"diecinueve", ur"veinte",
-                        ur"(veintiun(o|a))|(veintiún)", ur"veintidos", ur"veintitrés", ur"veinticuatro", ur"veinticinco", ur"veintiseis", ur"veintisiete", ur"veintiocho", ur"veintinueve", ur"treinta"]
+        number_words = [r"un(o|a)?", r"dos", r"tres", r"cuatro", r"cinco", r"seis", r"siete", r"ocho", r"nueve", r"diez",
+                        r"once", r"doce", r"trece", r"catorce", r"quince", r"dieciseis", r"diecisiete", r"dieciocho", r"diecinueve", r"veinte",
+                        r"(veintiun(o|a))|(veintiún)", r"veintidos", r"veintitrés", r"veinticuatro", r"veinticinco", r"veintiseis", r"veintisiete", r"veintiocho", r"veintinueve", r"treinta"]
 
         date_magnitudes = {
-                            ur"\bdías?\b"          : {"weigth": 1,     "overrides": []},
-                            ur"\bsemanas?\b"       : {"weigth": 7,     "overrides": []},
-                            ur"\bquincenas?\b"     : {"weigth": 15,    "overrides": []},
-                            ur"\bmes(es)?\b"       : {"weigth": 31,    "overrides": ["day"]},
-                            ur"\bbimestres?\b"     : {"weigth": 62,    "overrides": ["day"]},
-                            ur"\btrimestres?\b"    : {"weigth": 93,    "overrides": ["day"]},
-                            ur"\bcuatrimestres?\b" : {"weigth": 124,   "overrides": ["day"]},
-                            ur"\bsemestres?\b"     : {"weigth": 186,   "overrides": ["day"]},
-                            ur"\baños?\b"          : {"weigth": 366,   "overrides": ["day", "month"]},
-                            ur"\bdécadas?\b"       : {"weigth": 3650,  "overrides": ["day", "month"]},
-                            ur"\bsiglos?\b"        : {"weigth": 36500, "overrides": ["day", "month"]},
+                            r"\bdías?\b"          : {"weigth": 1,     "overrides": []},
+                            r"\bsemanas?\b"       : {"weigth": 7,     "overrides": []},
+                            r"\bquincenas?\b"     : {"weigth": 15,    "overrides": []},
+                            r"\bmes(es)?\b"       : {"weigth": 31,    "overrides": ["day"]},
+                            r"\bbimestres?\b"     : {"weigth": 62,    "overrides": ["day"]},
+                            r"\btrimestres?\b"    : {"weigth": 93,    "overrides": ["day"]},
+                            r"\bcuatrimestres?\b" : {"weigth": 124,   "overrides": ["day"]},
+                            r"\bsemestres?\b"     : {"weigth": 186,   "overrides": ["day"]},
+                            r"\baños?\b"          : {"weigth": 366,   "overrides": ["day", "month"]},
+                            r"\bdécadas?\b"       : {"weigth": 3650,  "overrides": ["day", "month"]},
+                            r"\bsiglos?\b"        : {"weigth": 36500, "overrides": ["day", "month"]},
                         }
 
         #TYPES OF OPERATIONS: 0 => USE MAGNITUDE, +x => ADD WEIGTH, -x => SUBTRACT WEIGTH
         date_operations = {
-                            ur"\bhace\b"           : {"use_number": True, "sign": -1},
-                            ur"\bantes\b"          : {"use_number": True, "sign": -1},
-                            ur"\batrás\b"          : {"use_number": True, "sign": -1},
-                            ur"\bdespués\b"        : {"use_number": True, "sign": +1},
-                            ur"\bpróxim(o|a)s\b"   : {"use_number": True, "sign": +1},
-                            ur"\bvenider(o|a)s\b"  : {"use_number": True, "sign": +1},
-                            ur"\banteriores\b"     : {"use_number": True, "sign": -1},
-                            ur"\bpasad(o|a)s\b"    : {"use_number": True, "sign": -1},
+                            r"\bhace\b"           : {"use_number": True, "sign": -1},
+                            r"\bantes\b"          : {"use_number": True, "sign": -1},
+                            r"\batrás\b"          : {"use_number": True, "sign": -1},
+                            r"\bdespués\b"        : {"use_number": True, "sign": +1},
+                            r"\bpróxim(o|a)s\b"   : {"use_number": True, "sign": +1},
+                            r"\bvenider(o|a)s\b"  : {"use_number": True, "sign": +1},
+                            r"\banteriores\b"     : {"use_number": True, "sign": -1},
+                            r"\bpasad(o|a)s\b"    : {"use_number": True, "sign": -1},
 
-                            ur"\bviene\b"          : {"use_number": False, "value": +1},
-                            ur"\bpasad(o|a)\b"     : {"use_number": False, "value": -1},
-                            ur"\banterior\b"       : {"use_number": False, "value": -1},
-                            ur"\bsiguiente\b"      : {"use_number": False, "value": +1},
-                            ur"\bpróxim(o|a)\b"    : {"use_number": False, "value": +1},
-                            ur"\bvenider(o|a)\b"   : {"use_number": False, "value": +1},
+                            r"\bviene\b"          : {"use_number": False, "value": +1},
+                            r"\bpasad(o|a)\b"     : {"use_number": False, "value": -1},
+                            r"\banterior\b"       : {"use_number": False, "value": -1},
+                            r"\bsiguiente\b"      : {"use_number": False, "value": +1},
+                            r"\bpróxim(o|a)\b"    : {"use_number": False, "value": +1},
+                            r"\bvenider(o|a)\b"   : {"use_number": False, "value": +1},
                         }
 
         #NUMBER:
-        number_regex = ur"\b[0-9]{1,3}\b"
+        number_regex = r"\b[0-9]{1,3}\b"
         a_number = re.search(number_regex, timebox)
         if a_number:
             a_number = int(a_number.group(0))
         else:
             for idx, a_word in enumerate(number_words):
-                if re.search(ur"\b"+a_word+ur"\b", timebox):
+                if re.search(r"\b"+a_word+r"\b", timebox):
                     a_number = idx + 1
 
         #MODIFIER:
         selected_operation = None
-        for an_operation_regex, an_operation in date_operations.iteritems():
+        for an_operation_regex, an_operation in date_operations.items():
             if re.search(an_operation_regex, timebox):
                 selected_operation = an_operation
                 if an_operation["use_number"]:
@@ -221,7 +219,7 @@ class FactTimeUtils(object):
 
         #MAGNITUDE:
         if a_number:
-            for a_regex, a_value in date_magnitudes.iteritems():
+            for a_regex, a_value in date_magnitudes.items():
                 if re.search(a_regex, timebox):
                     a_number = a_number * a_value["weigth"]
 

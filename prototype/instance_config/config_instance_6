@@ -9,18 +9,8 @@ id = 6
 feeds_to_process = cnet_esp,diario_america,forbes_mexico,informador_mexico,nuevoherald,vivelo_hoy
 #miami_diario
 
-[freeling]
-
-host        = 85.10.210.172
-client      = ../externals/freeling/analyzer_client
-parser_port = 10999
-tagger_port = 9999
-
-[freeling_language]
-
-host        = 85.10.210.172
-client      = ../externals/freeling/analyzer_client_lang_ident
-language_port = 10998
+[spacy]
+model = es_core_news_md
 
 [mongodb]
 

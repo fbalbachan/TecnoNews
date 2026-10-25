@@ -20,7 +20,7 @@ class TestEquative(TestBase):
         analyzer = SentenceAnalyzer(FreelingTreeRepository("tests/input/trees"))
 
         for (input_text, expected_equative) in self.input_texts_with_equative:
-            print "trying: %s .. " % input_text,
+            print("trying: %s .. " % input_text, end=' ')
 
             self.input = input_text
 
@@ -30,10 +30,10 @@ class TestEquative(TestBase):
             self.assertEqual(1, len(sentence.clauses), "La oración tiene más de una cláusula.")
             clause = sentence.clauses[0]
 
-            self.assertEquals("active", clause.voice)
-            self.assertEquals(expected_equative, clause.structure("equative").lexical_form())
+            self.assertEqual("active", clause.voice)
+            self.assertEqual(expected_equative, clause.structure("equative").lexical_form())
 
-            print "OK"
+            print("OK")
 
 
 if __name__ == '__main__':

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import ConfigParser
+import configparser
 
 from src.sentiment.verbalScript import VerbalScript
 from src.utils.csvwrapper import unicode_csv_reader
@@ -24,7 +24,7 @@ allowed_boxes_according_to_verb_transitivity = \
        'IMPERSONAL':    ['verb', 'instrument_goal', 'adjuncts'], }
 
 existing_boxes = set(sum([allowed_boxes_according_to_verb_transitivity[value]
-                          for key, value in transitivity_values.iteritems()], []))
+                          for key, value in transitivity_values.items()], []))
 
 allowed_boxes_for_passive_verbs = ['verb', 'subject', 'od', 'instrument_goal', 'adjuncts']
 
@@ -82,7 +82,7 @@ def get_animity_value(animity_code):
     if animity_code in ['Anim', 'Bi', 'No']:
         return animity_values[animity_code]
     else:
-        print "Wrong animity code in resource: ", animity_code
+        print("Wrong animity code in resource: ", animity_code)
         return animity_values['Bi']
 
 
@@ -90,16 +90,16 @@ def get_transitivity_value(p_transitivity_code):
     if p_transitivity_code in ['T', 'I', 'R', 'E', 'X', 'H', 'M']:
         return transitivity_values[p_transitivity_code]
     else:
-        print "Wrong transitivity code in resource: ", p_transitivity_code
+        print("Wrong transitivity code in resource: ", p_transitivity_code)
         return transitivity_values['I']
 
 
 # Load verb resources from file
-Config = ConfigParser.ConfigParser()
-Config.read("config")
+Config = configparser.ConfigParser(strict=False)
+Config.read("config", encoding="utf-8")
 
 verb_file = Config.get("resources", "verbal_scripts")
-verb_file_reader = unicode_csv_reader(open(verb_file, 'r'), first_line_is_header=False, delimiter=',')
+verb_file_reader = unicode_csv_reader(open(verb_file, 'r', encoding="utf-8"), first_line_is_header=False, delimiter=',')
 verbs = {}
 
 for lemma, script_class, transitivity_code, agentive_coef, \

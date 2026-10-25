@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -11,10 +11,10 @@ class RevistaplotParser(GenericParser):
     def __init__(self):
         super(RevistaplotParser, self).__init__()
 
-    source = u"revistaplot"
+    source = "revistaplot"
 
     def parse(self, url):
-        if u"/tienda/" in url:
+        if "/tienda/" in url:
             return None
         #url = "http://www.revistaplot.com/es/finalistas-mchap-emerge-20142015/"
 

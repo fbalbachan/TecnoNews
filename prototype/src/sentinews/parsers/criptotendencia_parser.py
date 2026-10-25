@@ -6,7 +6,7 @@ from src.sentinews.parsers.generic_parser import GenericParser
 
 
 class CriptoTendenciaParser(GenericParser):
-    source = u"CriptoTendencia"
+    source = "CriptoTendencia"
 
     def parse(self, url):
         soup = BeautifulSoup(self.opener.read(url),

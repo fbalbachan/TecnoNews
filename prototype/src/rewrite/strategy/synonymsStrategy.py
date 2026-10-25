@@ -15,7 +15,7 @@ debug_mode = False
 class SynonymsStrategy:
 
     def __init__(self, ontology):
-        if debug_mode: print "--> SynonymsStrategy.__init__()"
+        if debug_mode: print("--> SynonymsStrategy.__init__()")
         self.ontology = ontology
         self.synonyms = self._get_synonyms()
         self.adverbs = self._get_adverbs()
@@ -25,13 +25,13 @@ class SynonymsStrategy:
 
     def applies_to(self, clause):
         for leaf in clause.proper_leaves():
-            if (leaf.lemma in self.synonyms.keys()
-               or leaf.lexical_form in self.adverbs.keys()):
+            if (leaf.lemma in list(self.synonyms.keys())
+               or leaf.lexical_form in list(self.adverbs.keys())):
                 return True
         return False
 
     def rewrite(self, clause):
-        if debug_mode: print "--> SynonymsStrategy.rewrite(clause: ", clause, ")"
+        if debug_mode: print("--> SynonymsStrategy.rewrite(clause: ", clause, ")")
         ontology = self.ontology
 
         rewrites = []
@@ -41,7 +41,7 @@ class SynonymsStrategy:
             if 'semantic_classification' in leaf.msi and leaf.msi['semantic_classification'] != None:
                 continue
 
-            if leaf.lemma in self.synonyms.keys():
+            if leaf.lemma in list(self.synonyms.keys()):
                 synonym = self.synonyms[leaf.lemma]
                 if '_' in synonym or synonym not in ontology.concepts:
                     if synonym in self.locutions and self.locutions[synonym]:
@@ -65,7 +65,7 @@ class SynonymsStrategy:
                 if replacement:
                     rewrites.append(Rewrite.preserving_case(leaf, replacement))
 
-            if not replacement and leaf.lexical_form in self.adverbs.keys():
+            if not replacement and leaf.lexical_form in list(self.adverbs.keys()):
                 adverb = self.adverbs[leaf.lexical_form]
                 rewrites.append(Rewrite.preserving_case(leaf, adverb.replace('_', ' ')))
 
@@ -83,7 +83,7 @@ class SynonymsStrategy:
 
         rewrites = [Rewrite.preserving_case(leaf, target_synonym.text)]
         #Solo cambio el resto de la entidad si el genero NO es neutro!
-        if found_entity != None and target_gender != u'neutral':
+        if found_entity != None and target_gender != 'neutral':
 
             #SKIP WORDS CONTAINED IN NESTED ENTITIES ("muro de usuarios" -> "pared de USUARIAS"!!)
             #kernel_leaf_level = leaf.level()
@@ -128,24 +128,24 @@ class SynonymsStrategy:
 
 
     def _get_synonyms(self):
-        if debug_mode: print "--> SynonymsStrategy._get_synonyms()"
+        if debug_mode: print("--> SynonymsStrategy._get_synonyms()")
         return self._get_replacements_from_csv("synonyms")
 
     def _get_adverbs(self):
         return self._get_replacements_from_csv("adverb_forms")
 
     def _get_unidirectional_synonyms(self):
-        if debug_mode: print "--> SynonymsStrategy,_get_unidirectional_synonyms()"
+        if debug_mode: print("--> SynonymsStrategy,_get_unidirectional_synonyms()")
         return self._get_single_replacements_from_csv("unidirectional_synonyms")
 
     def _get_replacements_from_csv(self, resource):
-        if debug_mode: print "--> SynonymsStrategy._get_replacements_from_csv()"
+        if debug_mode: print("--> SynonymsStrategy._get_replacements_from_csv()")
         # Warning, it is a dict, it doesn't work for multiple replacements for the same word.
 
         replacements = {}
         config = ConfigProvider()
         replacements_filename = config.get("resources", resource)
-        for line in csv.reader(open(replacements_filename, 'r')):
+        for line in csv.reader(open(replacements_filename, 'r', encoding="utf-8")):
             replacements[line[0]] = line[1]
             replacements[line[1]] = line[0]
         return replacements
@@ -155,7 +155,7 @@ class SynonymsStrategy:
         replacements = {}
         config = ConfigProvider()
         replacements_filename = config.get("resources", resource)
-        for line in csv.reader(open(replacements_filename, 'r')):
+        for line in csv.reader(open(replacements_filename, 'r', encoding="utf-8")):
             replacements[line[0]] = line[1]
         return replacements
 
@@ -164,13 +164,13 @@ class SynonymsStrategy:
         config = ConfigProvider()
         locutions_filename = config.get("resources", "locutions")
         regex = re.compile('<.[^_]+>')
-        for line in open(locutions_filename, 'r'):
+        for line in open(locutions_filename, 'r', encoding="utf-8"):
             line = line.strip().split()
             locutions[line[1]] = [y[1:-1] for y in regex.findall(line[0])]
         return locutions
 
     def _msi_transform(self, msi):
-        if debug_mode: print "--> SynonymsStrategy._msi_transform(msi: ", msi, ")"
+        if debug_mode: print("--> SynonymsStrategy._msi_transform(msi: ", msi, ")")
 
         result_msi = {}
         if 'number' in msi:

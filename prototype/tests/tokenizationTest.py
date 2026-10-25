@@ -13,7 +13,7 @@ from tests.base_test import TestBase
 class TokenizationTest(TestBase):
     @classmethod
     def setUpClass(self):
-        print "[Tokenization test]"
+        print("[Tokenization test]")
         super(TokenizationTest, self).setUpClass()
         self.sentenceAnalyzer = SentenceAnalyzer(FreelingTreeRepository("tests/input/trees"))
         self.paragraphAnalyzer = ParagraphAnalyzer(self.sentenceAnalyzer)
@@ -78,13 +78,13 @@ class TokenizationTest(TestBase):
             self.kase_(sentence, *expected_components)
 
     def kase_compound(self, text, *expected_components):
-        print "\tCase (compound):", text, "->",
+        print("\tCase (compound):", text, "->", end=' ')
         self.input = text
         sentence = Sentence(text)
         self.sentenceAnalyzer.analyze(sentence)
 
         token = sentence.parse_node.leaves()[0].token
-        print token, token.components
+        print(token, token.components)
 
         self.assertEqual((expected_components[0][0], expected_components[-1][1]), (token.start(), token.end()))
 
@@ -98,7 +98,7 @@ class TokenizationTest(TestBase):
 
     def kase_(self, sentence, *expected_tokens):
         actual_tokens = [ (leaf.token.start(), leaf.token.end()) for leaf in sentence.parse_node.leaves() ]
-        print "\tCase:", sentence.text, "->", actual_tokens
+        print("\tCase:", sentence.text, "->", actual_tokens)
         self.assertEqual(actual_tokens, list(expected_tokens))
 
 if __name__ == '__main__':

@@ -3,7 +3,7 @@
 
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -13,7 +13,7 @@ class TelvaParser(GenericParser):
     def __init__(self):
         super(TelvaParser, self).__init__()
 
-    source = u"Telva"
+    source = "Telva"
 
     def parse(self, url):
         # url = "http://www.telva.com/2016/01/13/belleza/1452686897.html"

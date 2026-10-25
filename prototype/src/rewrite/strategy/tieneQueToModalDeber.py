@@ -27,6 +27,6 @@ class TieneQueToModalDeber:
     @staticmethod
     def msi_for(verb):
         msi = verb.msi
-        return { attr: value for attr, value in msi.items() if attr in ["category", "number", "person", "mode", "time"] }
+        return { attr: value for attr, value in list(msi.items()) if attr in ["category", "number", "person", "mode", "time"] }
 
     type = "replacement"

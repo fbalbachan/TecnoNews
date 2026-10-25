@@ -22,18 +22,18 @@ class NuevoHeraldParserTest(unittest.TestCase):
 
         entry = NuevoHeraldParser().parse(url=url)
         if not NuevoHeraldParser().is_parseable(url):
-            print "Only parsing certain news"
+            print("Only parsing certain news")
             self.assertIsNone(entry)
         else:
             self.assertIsNotNone(entry)
-            print "Content:"
+            print("Content:")
             for paragraph in entry.content.split('\n'):
-                print paragraph + '\n'
-            print "Tags:", entry.tags, '\n'
-            print "Title:", entry.title, '\n'
-            print "Source:", entry.source, '\n'
-            print "Category:", entry.categories, '\n'
-            print "original_categories:", entry.original_categories, '\n'
+                print(paragraph + '\n')
+            print("Tags:", entry.tags, '\n')
+            print("Title:", entry.title, '\n')
+            print("Source:", entry.source, '\n')
+            print("Category:", entry.categories, '\n')
+            print("original_categories:", entry.original_categories, '\n')
             # print "keywords:", entry.keywords, '\n'
 
     def test_all_in_feed(self):
@@ -44,18 +44,18 @@ class NuevoHeraldParserTest(unittest.TestCase):
         error_urls = []
 
         for entry in entries:
-            print u"case:", entry['link'], u"\n"
+            print("case:", entry['link'], "\n")
             try:
                 self.parse_single_url(entry['link'])
             except Exception as e:
                 error_urls.append(entry['link'])
-                print "Error parsing"
-                print e.message
-                print traceback.format_exc()
+                print("Error parsing")
+                print(str(e))
+                print(traceback.format_exc())
 
-        print "Total cases: ", len(entries)
-        print "Errors", len(error_urls)
-        print "Urls:", error_urls
+        print("Total cases: ", len(entries))
+        print("Errors", len(error_urls))
+        print("Urls:", error_urls)
 
     def _test_parse_single_url(self):
         # TODO: url = ''
@@ -63,17 +63,17 @@ class NuevoHeraldParserTest(unittest.TestCase):
         
         entry = NuevoHeraldParser().parse(url=url)
         pdb.set_trace()
-        if (u'/opinion-es/' in url) or (u'/vivir-mejor/' in url):
-            print "Not parsing opinion or lifestyle news"
+        if ('/opinion-es/' in url) or ('/vivir-mejor/' in url):
+            print("Not parsing opinion or lifestyle news")
             self.assertIsNone(entry)
         else:
             self.assertIsNotNone(entry)
-            print "Content:", entry.content, '\n'
-            print "Tags:", entry.tags, '\n'
-            print "Title:", entry.title, '\n'
-            print "Source:", entry.source, '\n'
-            print "Category:", entry.categories, '\n'
-            print "original_categories:", entry.original_categories, '\n'
+            print("Content:", entry.content, '\n')
+            print("Tags:", entry.tags, '\n')
+            print("Title:", entry.title, '\n')
+            print("Source:", entry.source, '\n')
+            print("Category:", entry.categories, '\n')
+            print("original_categories:", entry.original_categories, '\n')
 
 if __name__ == '__main__':
     unittest.main()

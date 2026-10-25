@@ -11,10 +11,9 @@ class DateTimeFinder:
     def find(self):
         clause = self.clause
         useful_nodes = clause.verb_level_nodes() if clause.voice else clause.proper_tree().children
-        time_nodes = filter(lambda node: not node.is_leaf() and (self.has_data(node)
+        time_nodes = [node for node in useful_nodes if not node.is_leaf() and (self.has_data(node)
                                                                  or self.is_valid_subord(node)
-                                                                 or self.is_valid_sadv(node)),
-                            useful_nodes)
+                                                                 or self.is_valid_sadv(node))]
         return time_nodes
 
     def is_valid_sadv(self, node):

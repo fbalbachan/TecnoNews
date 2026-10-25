@@ -15,11 +15,11 @@ debug_mode = False
 
 class SeImpersonalStrategy:
     def __init__(self, ontology):
-        if debug_mode: print "--> SeImpersonalStrategy.init()"
+        if debug_mode: print("--> SeImpersonalStrategy.init()")
         self.ontology = ontology
 
     def applies_to(self, sentence, node):
-        if debug_mode: print "--> SeImpersonalStrategy.applies_to(sentence:", sentence.text, ")"
+        if debug_mode: print("--> SeImpersonalStrategy.applies_to(sentence:", sentence.text, ")")
 
         result = False
         for sentence_clause in sentence.clauses:
@@ -30,14 +30,14 @@ class SeImpersonalStrategy:
         return result
 
     def applies_to_clause(self, clause):
-        if debug_mode: print "--> SeImpersonalStrategy.applies_to_clause(", clause.node, ")"
+        if debug_mode: print("--> SeImpersonalStrategy.applies_to_clause(", clause.node, ")")
 
         subject_entity = clause.structure('subject').entity()
-        result = not clause.is_relative() and "impersonal" in subject_entity.attributes.keys()
+        result = not clause.is_relative() and "impersonal" in list(subject_entity.attributes.keys())
         return result
 
     def rewrite(self, sentence, node):
-        if debug_mode: print "--> SeImpersonalStrategy.rewrite(sentence:", sentence, ", node:", node, ")"
+        if debug_mode: print("--> SeImpersonalStrategy.rewrite(sentence:", sentence, ", node:", node, ")")
 
         rewrite = None
         try:
@@ -49,24 +49,24 @@ class SeImpersonalStrategy:
         except Exception as e:
             logger = get_logger('tecnonews')
             logger.info("SeImpersonalStrategy Rewrite exception: ")
-            logger.info((": " + e.message) if e and hasattr(e, "message") else "")
+            logger.info((": " + str(e)) if e and hasattr(e, "message") else "")
             ex_type, ex, tb = sys.exc_info()
             logger.info(traceback.format_tb(tb))
 
-        if debug_mode: print "<-- SeImpersonalStrategy.rewrite()"
+        if debug_mode: print("<-- SeImpersonalStrategy.rewrite()")
         return rewrite
 
     def rewrite_clause(self, sentence, clause):
-        if debug_mode: print "--> SeImpersonalStrategy.rewrite_clause(clause:", clause, ")\n"
+        if debug_mode: print("--> SeImpersonalStrategy.rewrite_clause(clause:", clause, ")\n")
 
         replacement_string = self.get_clause_replacement_string(sentence, clause)
         rewrite_rule = Rewrite.preserving_case(clause.node, replacement_string)
 
-        if debug_mode: print "<-- SeImpersonalStrategy.rewrite_clause()\n"
+        if debug_mode: print("<-- SeImpersonalStrategy.rewrite_clause()\n")
         return rewrite_rule
 
     def get_clause_replacement_string(self, sentence, clause):
-        if debug_mode: print "--> SeImpersonalStrategy.get_clause_replacement_string(clause:", clause, ")\n"
+        if debug_mode: print("--> SeImpersonalStrategy.get_clause_replacement_string(clause:", clause, ")\n")
 
         rewritten_verb = self.flex_verb(clause)
 
@@ -96,19 +96,19 @@ class SeImpersonalStrategy:
 
         new_clause_text = new_clause_text.replace('_', ' ').rstrip()
 
-        if debug_mode: print "<-- SeImpersonalStrategy.get_clause_replacement_string() --> new_clause_text: ", new_clause_text, "\n"
+        if debug_mode: print("<-- SeImpersonalStrategy.get_clause_replacement_string() --> new_clause_text: ", new_clause_text, "\n")
         return new_clause_text
 
     def trim_known_elements(self, clause):
-        if debug_mode: print "--> SeImpersonalStrategy.trim_known_elements(clause:", clause, ")"
+        if debug_mode: print("--> SeImpersonalStrategy.trim_known_elements(clause:", clause, ")")
 
         od_string = clause.structure('od').lexical_form().replace("_", " ")
         replacements = [("A " + od_string, ""), ("a " + od_string, ""), (od_string, "")]
 
         left_hemiclause_leaves, right_hemiclause_leaves = clause.get_hemiclauses()
         if debug_mode:
-            print "left_hemiclause_leaves: ", left_hemiclause_leaves
-            print "right_hemiclause_leaves: ", right_hemiclause_leaves
+            print("left_hemiclause_leaves: ", left_hemiclause_leaves)
+            print("right_hemiclause_leaves: ", right_hemiclause_leaves)
 
         # The method get_hemiclauses() will NOT ALWAYS return the header,
         # so we remove it here and add it later, by hand
@@ -140,11 +140,11 @@ class SeImpersonalStrategy:
             ending += leaf.joined_text()
         ending = self.multiple_replace(ending, *replacements).strip()
 
-        if debug_mode: print "<-- trim_known_elements() --> beginning: ", beginning, " - ending: ", ending
+        if debug_mode: print("<-- trim_known_elements() --> beginning: ", beginning, " - ending: ", ending)
         return beginning, ending
 
     def flex_verb(self, clause):
-        if debug_mode: print "--> SeImpersonalStrategy.flex_verb(clause:", clause, ")\n"
+        if debug_mode: print("--> SeImpersonalStrategy.flex_verb(clause:", clause, ")\n")
         od_entity = clause.structure('od')
         verb = clause.verb
         has_compound_time = verb.has_compound_time()
@@ -176,11 +176,11 @@ class SeImpersonalStrategy:
         if clause.is_negated():
             flexed_verb = "no " + flexed_verb
 
-        if debug_mode: print "<-- SeImpersonalStrategy.flex_verb() --> flexed_verb: ", flexed_verb, "\n"
+        if debug_mode: print("<-- SeImpersonalStrategy.flex_verb() --> flexed_verb: ", flexed_verb, "\n")
         return flexed_verb
 
     def flex_auxiliary_verb(self, verb, od_entity):
-        if debug_mode: print "--> SeImpersonalStrategy.flex_auxiliary_verb(verb:", verb, " - od_entity: ", od_entity, ")\n"
+        if debug_mode: print("--> SeImpersonalStrategy.flex_auxiliary_verb(verb:", verb, " - od_entity: ", od_entity, ")\n")
         leaf = verb.node.leaves()[0]
         aux_msi = {"mode": leaf.msi["mode"],
                    "time": leaf.msi["time"],
@@ -210,7 +210,7 @@ class SeImpersonalStrategy:
         return modal_verb_flexed
 
     def flex_verb_participle(self, verb, od_entity):
-        if debug_mode: print "--> SeImpersonalStrategy.flex_verb_participle(verb:", verb, " - od_entity: ", od_entity, ")\n"
+        if debug_mode: print("--> SeImpersonalStrategy.flex_verb_participle(verb:", verb, " - od_entity: ", od_entity, ")\n")
 
         #gender = od_entity.gender()
         gender = od_entity.msi()['gender']

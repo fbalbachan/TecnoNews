@@ -9,15 +9,15 @@ class SyntacticAnalyzer(object):
         self.clause = clause
 
     def analyze(self, clause):
-        if debug_mode: print "--> SyntacticAnalyzer.analyze(clause: ", clause, ")"
+        if debug_mode: print("--> SyntacticAnalyzer.analyze(clause: ", clause, ")")
 
         # The order in which the FSynStr are extracted matters.
         for structure in clause.syntactic_structures:
             if debug_mode:
-                assigned = filter(lambda p_ent: clause.is_assigned(p_ent), clause.all_entities())
-                unassigned = filter(lambda p_ent: p_ent not in assigned, clause.all_entities())
-                print "--------------"
-                print "Assigned entities for clause: ", assigned, "\nUnassigned entities for clause: ", unassigned, "\n"
+                assigned = [p_ent for p_ent in clause.all_entities() if clause.is_assigned(p_ent)]
+                unassigned = [p_ent for p_ent in clause.all_entities() if p_ent not in assigned]
+                print("--------------")
+                print("Assigned entities for clause: ", assigned, "\nUnassigned entities for clause: ", unassigned, "\n")
 
             if structure.is_empty():
                 slot_name = structure.name
@@ -28,16 +28,16 @@ class SyntacticAnalyzer(object):
                 structure.append_all(entities)
 
             if debug_mode:
-                print "\nFINAL Entities for ", structure.name, ": ", structure.all_entities()
-                print "--------------"
+                print("\nFINAL Entities for ", structure.name, ": ", structure.all_entities())
+                print("--------------")
 
     def subject(self):
-        if debug_mode: print "--> SyntacticAnalyzer.subject()"
+        if debug_mode: print("--> SyntacticAnalyzer.subject()")
         entities = self.clause.lonely_entities()
         return [entities[0]] if entities else []
 
     def verb(self):
-        if debug_mode: print "--> SyntacticAnalyzer.verb()"
+        if debug_mode: print("--> SyntacticAnalyzer.verb()")
 
         return [self.clause.verb]
 
@@ -46,19 +46,19 @@ class SyntacticAnalyzer(object):
             return self.starts_with_accepted_preposition(node, *self.instrument_goal_preps)
         entities = self.clause.subord_entities(which)
         entities = sum(entities, [])
-        instrument_goal = filter(lambda p_entity: p_entity.is_maximal_regarding(entities), entities)
+        instrument_goal = [p_entity for p_entity in entities if p_entity.is_maximal_regarding(entities)]
         return instrument_goal
 
     def adjuncts(self):
         lonely = self.clause.lonely_entities()
-        adjuncts = filter(lambda p_entity: p_entity.is_maximal_regarding(lonely), lonely)
+        adjuncts = [p_entity for p_entity in lonely if p_entity.is_maximal_regarding(lonely)]
         return adjuncts
 
     def search_instrument_goal_at(self, side, distance):
         return SyntacticAnalyzer.filter_infinitives(self.search_subords_with_prep_at(side, distance, ))
 
     def find_entities_by(self, *methods):
-        if debug_mode: print "--> find_entities_by"
+        if debug_mode: print("--> find_entities_by")
         for method in methods:
             entities = method()
             if entities:
@@ -67,15 +67,14 @@ class SyntacticAnalyzer(object):
         return []
 
     def verb_matching_subject_entities(self, distance_at_left, distance_at_right, left_to_right=True):
-        if debug_mode: print "--> SyntacticAnalyzer.verb_matching_subject_entities()"
+        if debug_mode: print("--> SyntacticAnalyzer.verb_matching_subject_entities()")
 
         valid_subject_entities = self.valid_subject_entities(distance_at_left, distance_at_right, left_to_right)
-        verb_matching_entities = filter(lambda entity: self.clause.verb.matches(entity),
-                                        valid_subject_entities)
+        verb_matching_entities = [entity for entity in valid_subject_entities if self.clause.verb.matches(entity)]
         return verb_matching_entities
 
     def valid_subject_entities(self, distance_at_left, distance_at_right, left_to_right=True):
-        if debug_mode: print "--> SyntacticAnalyzer.valid_subject_entities()"
+        if debug_mode: print("--> SyntacticAnalyzer.valid_subject_entities()")
         clause = self.clause
 
         entities_l = clause.entities_closest_to_verb_at("left", distance_at_left)
@@ -91,20 +90,17 @@ class SyntacticAnalyzer(object):
 
     @staticmethod
     def filter_group_sp_inf(entities):
-        entities_without_group_sp_inf = filter(lambda entity: entity.node.label is not "group-sp-inf",
-                                               entities)
+        entities_without_group_sp_inf = [entity for entity in entities if entity.node.label is not "group-sp-inf"]
         return entities_without_group_sp_inf
 
     @staticmethod
     def filter_infinitives(entities):
-        entities_without_infs = filter(lambda entity: not entity.has_attr("infinitive"),
-                                       entities)
+        entities_without_infs = [entity for entity in entities if not entity.has_attr("infinitive")]
         return entities_without_infs
 
     @staticmethod
     def filter_by_animity(entities, verbal_animity):
-        filtered_entities = filter(lambda entity: entity.animity_matches(verbal_animity),
-                                   entities)
+        filtered_entities = [entity for entity in entities if entity.animity_matches(verbal_animity)]
         return filtered_entities
 
     def search_subord_with_prep_at(self, side, distance, *accepted_prepositions):
@@ -116,7 +112,7 @@ class SyntacticAnalyzer(object):
         return entities
 
     def search_subords_with_prep_at(self, side, distance, *accepted_prepositions):
-        if debug_mode: print "--> SyntacticAnalyzer.search_subords_with_prep_at()"
+        if debug_mode: print("--> SyntacticAnalyzer.search_subords_with_prep_at()")
 
         def which(node):
             return self.starts_with_accepted_preposition(node, *accepted_prepositions)
@@ -144,7 +140,7 @@ class SyntacticAnalyzer(object):
         return all_subord_entities[0] if all_subord_entities else []
 
     def search_subords_at(self, side, distance, which=lambda node: True):
-        if debug_mode: print "--> SyntacticAnalyzer.search_subords_at() - side ", str(side), " - distance ", str(distance)
+        if debug_mode: print("--> SyntacticAnalyzer.search_subords_at() - side ", str(side), " - distance ", str(distance))
         all_subord_entities = self.clause.subord_entities_closest_to_verb_at(side, distance, which)
         all_subord_entities = [sorted(entities, key=lambda entity: entity.level())
                                for entities in all_subord_entities]
@@ -167,24 +163,21 @@ class SyntacticAnalyzer(object):
         return pronouns
 
     def only_pronouns_of(self, entities):
-        return filter(lambda entity: entity.category() == "pronoun",
-                      entities)
+        return [entity for entity in entities if entity.category() == "pronoun"]
 
     def only_accusative_pronouns_of(self, entities):
-        return filter(lambda entity: entity.category() == "pronoun" and entity.msi["case"] == "accusative",
-                      entities)
+        return [entity for entity in entities if entity.category() == "pronoun" and entity.msi["case"] == "accusative"]
 
     def only_valid_subject_entities_of(self, entities):
         is_valid_pronoun = lambda entity: entity.category() == "pronoun" \
                                           and entity.msi["case"] in [None, "personal", "demonstrative", "nominative"]
         valid_subject_entities = \
-            filter(lambda entity: not entity.node.label == "patons"
-                                  and (entity.category() in ["noun", "determinant", "adjective"] or is_valid_pronoun(entity)),
-                   entities)
+            [entity for entity in entities if not entity.node.label == "patons"
+                                  and (entity.category() in ["noun", "determinant", "adjective"] or is_valid_pronoun(entity))]
         return valid_subject_entities
 
     def only_nominal_of(self, entities):
-        nominal_entities = filter(lambda entity: entity.category() == "noun", entities)
+        nominal_entities = [entity for entity in entities if entity.category() == "noun"]
         return nominal_entities
 
     instrument_goal_preps = ["sin", "con", "contra", "en_favor_de", "a_favor_de", "en_defensa_de",

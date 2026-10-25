@@ -168,15 +168,15 @@ class StructuralUnderstandingPT(Resource):
 
             if (entity.category() == "noun" or entity.category() == "pronoun") \
                and "animity" in entity.msi:
-                entity_morphosyntactic_info['5-Animity'] = entity.msi["animity"].encode("utf-8")
+                entity_morphosyntactic_info['5-Animity'] = entity.msi["animity"].value
 
             if entity.is_named_entity():
                 classification = str(entity.classification(look_deep=True)).upper()
-                entity_morphosyntactic_info['6-Semantic-Classification'] = classification.encode("utf-8")
+                entity_morphosyntactic_info['6-Semantic-Classification'] = classification
 
             if entity_morphosyntactic_info['4-Category'] is "verb":
-                entity_morphosyntactic_info['7-Transitivity'] = entity.transitivity.encode("utf-8")
-                entity_morphosyntactic_info['8-Sentimental-Script-Class'] = entity.sentimental_script.klass.encode("utf-8")
+                entity_morphosyntactic_info['7-Transitivity'] = entity.transitivity
+                entity_morphosyntactic_info['8-Sentimental-Script-Class'] = entity.sentimental_script.klass
 
             morphosyntactic_info = morphosyntactic_info + [entity_morphosyntactic_info]
 

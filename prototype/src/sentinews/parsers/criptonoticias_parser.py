@@ -10,7 +10,7 @@ from src.sentinews.parsers.generic_parser import GenericParser
 
 
 class CriptoNoticiasParse(GenericParser):
-    source = u"CriptoNoticias"
+    source = "CriptoNoticias"
 
     def parse(self, url):
        

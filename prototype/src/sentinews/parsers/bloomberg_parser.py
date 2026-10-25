@@ -22,7 +22,7 @@ except:
 
 class BloombergParser(GenericParser):
     """this isn't actually working: server seems to reject our user agent!"""
-    source = u"Bloomberg"
+    source = "Bloomberg"
     dolog = False
 
     def __init__(self):
@@ -30,7 +30,7 @@ class BloombergParser(GenericParser):
 
     def log(self, *args):
         if self.dolog:
-            print((" ".join(unicode(x) for x in args)))
+            print((" ".join(str(x) for x in args)))
 
     def parse(self, url):
         page = self.opener.read(url)

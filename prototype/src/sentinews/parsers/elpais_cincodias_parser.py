@@ -21,7 +21,7 @@ except:
 
 
 class ElPaisCincoDiasParser(GenericParser):
-    source = u"El Pais Cinco Dias"
+    source = "El Pais Cinco Dias"
     dolog = False
 
     def __init__(self):
@@ -32,7 +32,7 @@ class ElPaisCincoDiasParser(GenericParser):
 
     def log(self, *args):
         if self.dolog:
-            print((" ".join(unicode(x) for x in args)))
+            print((" ".join(str(x) for x in args)))
 
     def parse(self, url):
         return self.parse_soup(BeautifulSoup(self.opener.read(url)), url)

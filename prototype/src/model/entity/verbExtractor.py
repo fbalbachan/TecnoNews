@@ -9,7 +9,7 @@ class VerbExtractor:
         self.clause = clause
 
     def extract(self):
-        if debug_mode: print "--> VerbExtractor.extract()"
+        if debug_mode: print("--> VerbExtractor.extract()")
         node = self._verb_node()
         leaves = self._verb_leaves_of(node)
         verb = Verb(node, self.clause.voice, leaves)
@@ -17,7 +17,7 @@ class VerbExtractor:
 
     # Freeling does not group verb leaves for the passive voice. This method does that.
     def _verb_leaves_of(self, node):
-        if debug_mode: print "--> VerbExtractor._verb_leaves_of()"
+        if debug_mode: print("--> VerbExtractor._verb_leaves_of()")
 
         def _leaves_of_passive_voice(p_clause, p_node):
             leaves = []
@@ -34,7 +34,7 @@ class VerbExtractor:
             return leaves
 
         def _leaves_of_active_voice(p_clause, p_node):
-            if debug_mode: print "--> VerbExtractor._leaves_of_active_voice()"
+            if debug_mode: print("--> VerbExtractor._leaves_of_active_voice()")
 
             root = p_clause.proper_tree()
             leaves = p_node.leaves_of_category("verb")
@@ -44,9 +44,7 @@ class VerbExtractor:
                     leaves = [leaves[0]]
                 return leaves
 
-            ser_node = filter(lambda child:
-                                    not child.is_leaf() and child.label == "parti-ser",
-                              root.children)
+            ser_node = [child for child in root.children if not child.is_leaf() and child.label == "parti-ser"]
             if ser_node:
                 leaves.extend(ser_node[0].leaves())
 
@@ -58,7 +56,7 @@ class VerbExtractor:
         return verbal_leaves_by_voice[clause.voice](clause, node)
 
     def _verb_node(self):
-        if debug_mode: print "--> VerbExtractor._verb_node()"
+        if debug_mode: print("--> VerbExtractor._verb_node()")
         root = self.clause.proper_tree()
         verb_nodes = root.nodes_with_labels(["subord-ger", "verb", "parti-flex"])
         verb_nodes = sorted(verb_nodes, key=lambda p_node: p_node.level())

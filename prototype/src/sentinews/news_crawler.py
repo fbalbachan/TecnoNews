@@ -28,9 +28,9 @@ class NewsCrawler(object):
         db = MongoConnector.get_instance()
         insert_feed_in_db = True
 
-        if 'feeds' in db.collection_names():
+        if 'feeds' in db.list_collection_names():
             # if not zero insert_feed_in_db is False
-            if db['feeds'].count():
+            if db['feeds'].count_documents({}):
                 insert_feed_in_db = False
 
         if insert_feed_in_db:

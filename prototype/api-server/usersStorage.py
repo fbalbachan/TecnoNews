@@ -27,23 +27,23 @@ class UsersStorage(object):
         return self._users
 
     def synchronize_cache_db(self):
-        if debug_mode: print "--> UsersStorage.synchronize_cache_db"
+        if debug_mode: print("--> UsersStorage.synchronize_cache_db")
         users_on_storage = UsersStorage.deserialize()
         self._users = self.merge_users_data(self._users, users_on_storage)
         self.serialize()
         UsersStorage._last_refresh_date = datetime.now()
-        if debug_mode: print "<-- UsersStorage.synchronize_cache_db"
+        if debug_mode: print("<-- UsersStorage.synchronize_cache_db")
 
     @staticmethod
     def deserialize():
-        if debug_mode: print "--> UsersStorage.deserialize"
+        if debug_mode: print("--> UsersStorage.deserialize")
         users_file = "./users.csv"
-        users_file_reader = unicode_csv_reader(open(users_file, 'r'), first_line_is_header=False, delimiter=',')
+        users_file_reader = unicode_csv_reader(open(users_file, 'r', encoding="utf-8"), first_line_is_header=False, delimiter=',')
 
         users = dict()
         for row in list(users_file_reader):
             if len(row) < 8:
-                print "This line has a wrong format, ignoring. Line: ", row
+                print("This line has a wrong format, ignoring. Line: ", row)
                 continue
 
             auth_token = row[0]
@@ -65,17 +65,17 @@ class UsersStorage(object):
             user["last_access_date"] = datetime.strptime(last_access_date, "%Y-%m-%d")
             users[auth_token] = user
 
-        if debug_mode: print "<-- UsersStorage.deserialize"
+        if debug_mode: print("<-- UsersStorage.deserialize")
         return users
 
     def serialize(self):
-        if debug_mode: print "--> UsersStorage.serialize"
+        if debug_mode: print("--> UsersStorage.serialize")
 
         if not self._users:
             return
 
         rows = []
-        for token in self._users.keys():
+        for token in list(self._users.keys()):
             user = self._users[token]
             row = [token,
                    user["name"],
@@ -88,14 +88,14 @@ class UsersStorage(object):
 
             rows = rows + [row]
 
-        unicode_csv_writer(rows, open("./users.csv", 'w'))
-        if debug_mode: print "<-- UsersStorage.serialize"
+        unicode_csv_writer(rows, open("./users.csv", 'w', encoding="utf-8"))
+        if debug_mode: print("<-- UsersStorage.serialize")
 
     def merge_users_data(self, users_on_cache, users_on_storage):
-        if debug_mode: print "--> UsersStorage.merge_users_data"
+        if debug_mode: print("--> UsersStorage.merge_users_data")
 
         new_users = dict()
-        for token in users_on_storage.keys():
+        for token in list(users_on_storage.keys()):
             user_on_storage = users_on_storage[token]
             new_user = user_on_storage
 
@@ -116,7 +116,7 @@ class UsersStorage(object):
 
             new_users[token] = new_user
 
-        for token in users_on_cache.keys():
+        for token in list(users_on_cache.keys()):
             user_on_cache = users_on_cache[token]
             new_user = user_on_cache
             if token in users_on_storage:
@@ -136,11 +136,11 @@ class UsersStorage(object):
 
                 new_users[token] = new_user
 
-        if debug_mode: print "<-- UsersStorage.merge_users_data"
+        if debug_mode: print("<-- UsersStorage.merge_users_data")
         return new_users
 
     def is_valid_token(self, api_key):
-        return api_key in self.get_users().keys()
+        return api_key in list(self.get_users().keys())
 
     def get_user(self, api_key):
         return self.get_users()[api_key]
@@ -152,17 +152,17 @@ class UsersStorage(object):
         return self.get_user(api_key)["access_counter"]
 
     def increase_access_counter(self, api_key):
-        if debug_mode: print "--> UsersStorage.increase_access_counter"
+        if debug_mode: print("--> UsersStorage.increase_access_counter")
         user = self.get_user(api_key)
         ac = user["access_counter"]
         user["access_counter"] = ac + 1
-        if debug_mode: print "<-- UsersStorage.increase_access_counter: result=", user["access_counter"]
+        if debug_mode: print("<-- UsersStorage.increase_access_counter: result=", user["access_counter"])
 
     def update_last_access_date(self, api_key, last_access_date):
-        if debug_mode: print "--> UsersStorage.update_last_access_date"
+        if debug_mode: print("--> UsersStorage.update_last_access_date")
         user = self.get_user(api_key)
         user["last_access_date"] = last_access_date
-        if debug_mode: print "<-- UsersStorage.update_last_access_date: result=", user["last_access_date"]
+        if debug_mode: print("<-- UsersStorage.update_last_access_date: result=", user["last_access_date"])
 
     def get_last_access_date(self, api_key):
         return self.get_user(api_key)["last_access_date"]
@@ -177,16 +177,16 @@ class UsersStorage(object):
         #      or time_passed.days > 30
 
     def signal_refresh_occasion(self):
-        if debug_mode: print "--> UsersStorage.signal_refresh_occasion"
+        if debug_mode: print("--> UsersStorage.signal_refresh_occasion")
         if self.is_time_to_refresh():
             self.synchronize_cache_db()
-        if debug_mode: print "<-- UsersStorage.signal_refresh_occasion"
+        if debug_mode: print("<-- UsersStorage.signal_refresh_occasion")
 
     def is_time_to_refresh(self):
-        if debug_mode: print "--> UsersStorage.is_time_to_refresh"
+        if debug_mode: print("--> UsersStorage.is_time_to_refresh")
         time_to_last_refresh = abs(datetime.now() - UsersStorage._last_refresh_date)
         is_time = time_to_last_refresh.total_seconds() > 60
-        if debug_mode: print "--> UsersStorage.is_time_to_refresh: result=", str(is_time)
+        if debug_mode: print("--> UsersStorage.is_time_to_refresh: result=", str(is_time))
         return is_time
 
 users_storage = UsersStorage()

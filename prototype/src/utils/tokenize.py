@@ -5,7 +5,7 @@ from src.ling.freelingDictionaryParser import FreelingDictionaryParser
 
 ontology = FreelingDictionaryParser.get_ontology()
 token_regex = re.compile(r'\w+|\w+\'\w+|[\w$]+', re.U | re.I)
-question_regex = re.compile(ur"""[.,¿]?([_\-$\w\s]+)\?+""", re.U | re.I)
+question_regex = re.compile(r"""[.,¿]?([_\-$\w\s]+)\?+""", re.U | re.I)
 
 # repeat_regex = re.compile(r'([abdefghijkmnñopqstuvwxyzABDEFGHIJKMNÑOPQSTUVWXYZáéíóúÁÉÍÓÚ])\1+')
 repeat_regex = re.compile(r'([abdefghijkmnñopqstuvwxyzABDEFGHIJKMNÑOPQSTUVWXYZáéíóúÁÉÍÓÚ])\1\1+')
@@ -16,11 +16,10 @@ replacement = r'\1'
 def detroll(text):
 
     def por_token(p_token):
-        p_token = p_token.decode("utf-8")
         if not all_in_upper_case(p_token) \
            and (not first_in_upper_case(p_token) or not all_rest_in_lower_case(p_token)):
             p_token = p_token.lower()
-        return p_token.encode("utf-8")
+        return p_token
 
     # output_tokens = [por_token(token) for token in text.split()]
     output_tokens = text.split()
@@ -31,15 +30,15 @@ def detroll(text):
             next_token = output_tokens[index + 1]
             if len(token) > 2 and all_in_upper_case(token) and all_in_upper_case(next_token):
                 # UNCOMMENT BELOW FOR DUMB DETROLL
-                # return text.decode("utf-8").lower().encode("utf-8")
+                # return text.lower()
                 current_index = index
                 while current_index < len(output_tokens) and all_in_upper_case(output_tokens[current_index]):
-                    # output_tokens[current_index] = output_tokens[current_index].decode("utf-8").lower().encode("utf-8")
+                    # output_tokens[current_index] = output_tokens[current_index].lower()
                     # UNCOMMENT BELOW FOR SUPER SMART DETROLL
                     if ontology.is_valid_word(output_tokens[current_index].lower()):
-                        output_tokens[current_index] = output_tokens[current_index].decode("utf-8").lower().encode("utf-8")
+                        output_tokens[current_index] = output_tokens[current_index].lower()
                     else:
-                        output_tokens[current_index] = (output_tokens[current_index].decode("utf-8")[:1] + output_tokens[current_index].decode("utf-8")[1:].lower()).encode("utf-8")
+                        output_tokens[current_index] = (output_tokens[current_index][:1] + output_tokens[current_index][1:].lower())
                     current_index += 1
 
     return ' '.join(output_tokens)

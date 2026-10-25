@@ -15,7 +15,7 @@ class Synonyms:
         replacements_filename = config.get("resources", "synsets")
 
         resource_line_index = 0
-        for line in reader(open(replacements_filename, 'r')):
+        for line in reader(open(replacements_filename, 'r', encoding="utf-8")):
             for index in range(len(line)):
                 if line[index] is None or len(line[index]) == 0:
                     del line[index]
@@ -25,7 +25,7 @@ class Synonyms:
             if len(line) > 1:
                 self.replacements[line[0]] = line[1:len(line)]
             else:
-                print "Synsets resource load: Error in line ", resource_line_index, "... skipping."
+                print("Synsets resource load: Error in line ", resource_line_index, "... skipping.")
 
             resource_line_index += 1
 
@@ -38,7 +38,7 @@ class Synonyms:
 
     def get_base_synonym(self, word, include_base=False):
         base_synonym = None
-        for base_word, synonym_list in self.replacements.items():
+        for base_word, synonym_list in list(self.replacements.items()):
             if word in synonym_list:
                 base_synonym = base_word
                 break

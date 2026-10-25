@@ -3,7 +3,7 @@
 
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -12,7 +12,7 @@ class TurismoPerfilParser(GenericParser):
     def __init__(self):
         super(TurismoPerfilParser, self).__init__()
 
-    source = u"TurismoPerfil"
+    source = "TurismoPerfil"
     
     def parse(self, url):
         #url = "http://turismo.perfil.com/48891-de-viaje-por-el-desierto-de-los-mil-budas/"

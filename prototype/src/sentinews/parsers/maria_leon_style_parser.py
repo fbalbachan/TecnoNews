@@ -3,7 +3,7 @@
 
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -12,7 +12,7 @@ class MariaLeonStyleParser(GenericParser):
     def __init__(self):
         super(MariaLeonStyleParser, self).__init__()
 
-    source = u"Maria Leon Style"
+    source = "Maria Leon Style"
 
     def parse(self, url):
         #url = "http://www.marialeonstyle.com/lifestyle/un-viaje-con-estilo-por-peru-by-maria-leon-style-2/"
@@ -47,8 +47,8 @@ class MariaLeonStyleParser(GenericParser):
             clean_text = paragraph.text.strip()
             content += "\n" + clean_text
 
-        categories = [u"belleza"]
-        tags = [u"belleza"]
+        categories = ["belleza"]
+        tags = ["belleza"]
 
         #categories=[urlparse(url).path.split("/")[1]]
         #print categories

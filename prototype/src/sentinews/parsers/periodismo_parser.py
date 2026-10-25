@@ -3,7 +3,7 @@
 
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -12,13 +12,13 @@ class PeriodismoParser(GenericParser):
     def __init__(self):
         super(PeriodismoParser, self).__init__()
 
-    source = u"Periodismo"
+    source = "Periodismo"
     
     def parse(self, url):
         #url = "http://www.periodismo.com/2016/01/27/el-curioso-origen-de-algunas-palabras/"
         
-	soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
-	for script in soup(["script", "style"]):
+        soup = BeautifulSoup(self.opener.read(url), from_encoding='utf-8')
+        for script in soup(["script", "style"]):
             script.extract()
             
             
@@ -58,8 +58,8 @@ class PeriodismoParser(GenericParser):
         #print content
         #exit()
 
-        tags = [u"insólito"]
-        categories=[u"insólito"]
+        tags = ["insólito"]
+        categories=["insólito"]
         
         new_entry = self.create_news_entry(title=title, content=content,
                                            tags=tags,

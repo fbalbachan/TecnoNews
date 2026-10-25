@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from src.sentinews.parsers.generic_parser import GenericParser
 import re
@@ -11,7 +11,7 @@ class EonlineParser(GenericParser):
     def __init__(self):
         super(EonlineParser, self).__init__()
 
-    source = u"Eonline"
+    source = "Eonline"
 
     def parse(self, url):
         #url = "http://la.eonline.com/argentina/2016/bella-thorne-tambien-hablo-de-la-polemica-alrededor-de-la-selfie-desnuda-de-kim-kardashian/"
@@ -38,7 +38,7 @@ class EonlineParser(GenericParser):
 
         for paragraph in paragraphs:
             clean_text = paragraph.text.strip()
-            clean_text = re.sub(ur"^E! NEWS >.+$", "", clean_text)
+            clean_text = re.sub(r"^E! NEWS >.+$", "", clean_text)
             content += "\n" + clean_text
 
         content = content.strip()

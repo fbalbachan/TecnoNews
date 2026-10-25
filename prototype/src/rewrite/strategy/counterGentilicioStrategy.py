@@ -33,7 +33,7 @@ class CounterGentilicioStrategy:
                 if a_node.lemma in self.forbidden_words:
                     continue
 
-                if a_node.lemma.decode('utf-8').lower() in gent_list:
+                if a_node.lemma.lower() in gent_list:
                     if 'category' in a_node.msi and a_node.msi['category'] == 'adjective':
                         gent_node = a_node
                         break
@@ -44,7 +44,7 @@ class CounterGentilicioStrategy:
             country_match = None
             if gent_node is not None:
                 while gent_prefix_len >= 3 and not country_found:
-                    regex=re.compile("^"+gent_node.lexical_form.decode('utf-8')[:gent_prefix_len].lower()+".*")
+                    regex=re.compile("^"+gent_node.lexical_form[:gent_prefix_len].lower()+".*")
                     country_match = [a_country for a_country in countries_list for a_match in [regex.search(a_country.lower().replace("_", " "))] if a_match]
                     if len(country_match) > 0:
                         country_match = country_match[0]
@@ -56,7 +56,7 @@ class CounterGentilicioStrategy:
                 if not country_found:
                     gent_prefix_len = 5
                     while gent_prefix_len >= 3 and not country_found:
-                        regex=re.compile("^"+gent_node.lexical_form.decode('utf-8')[:gent_prefix_len].lower()+".*")
+                        regex=re.compile("^"+gent_node.lexical_form[:gent_prefix_len].lower()+".*")
                         country_match = [a_country for a_country in countries_cities_list for a_match in [regex.search(a_country.lower().replace("_", " "))] if a_match]
                         if len(country_match) > 0:
                             country_match = country_match[0]
@@ -78,7 +78,7 @@ class CounterGentilicioStrategy:
             an_entity = gent_match['entity']
             a_gent = gent_match['gentilicio']
             a_country = gent_match['country']
-            return Rewrite(gent_match["gent_node"].father, "de " + a_country.encode("utf-8"))
+            return Rewrite(gent_match["gent_node"].father, "de " + a_country)
 
         return []
 
@@ -87,13 +87,13 @@ class CounterGentilicioStrategy:
 
 config = ConfigProvider()
 countries_cities_file = config.get("resources", "countries_cities")
-countries_cities_reader = unicode_csv_reader(open(countries_cities_file, 'r'), first_line_is_header=False, delimiter=',')
-countries_cities_list = [unicode(country[0], 'utf-8') for country in countries_cities_reader]
+countries_cities_reader = unicode_csv_reader(open(countries_cities_file, 'r', encoding="utf-8"), first_line_is_header=False, delimiter=',')
+countries_cities_list = [country[0] for country in countries_cities_reader]
 
 countries_file = config.get("resources", "countries")
-countries_reader = unicode_csv_reader(open(countries_file, 'r'), first_line_is_header=False, delimiter=',')
-countries_list = [unicode(country[0], 'utf-8') for country in countries_reader]
+countries_reader = unicode_csv_reader(open(countries_file, 'r', encoding="utf-8"), first_line_is_header=False, delimiter=',')
+countries_list = [country[0] for country in countries_reader]
 
 gent_file = config.get("resources", "demonyms")
-gent_reader = unicode_csv_reader(open(gent_file, 'r'), first_line_is_header=False, delimiter=',')
-gent_list = [unicode(gent[0], 'utf-8') for gent in gent_reader]
+gent_reader = unicode_csv_reader(open(gent_file, 'r', encoding="utf-8"), first_line_is_header=False, delimiter=',')
+gent_list = [gent[0] for gent in gent_reader]

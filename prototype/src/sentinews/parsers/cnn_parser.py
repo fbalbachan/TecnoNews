@@ -9,7 +9,7 @@ class CNNParser(GenericParser):
     def __init__(self):
         super(CNNParser, self).__init__()
 
-    source = u"CNN en español"
+    source = "CNN en español"
 
     def parse(self, url, limit=1):
         #url = "http://cnnespanol.cnn.com/2016/06/01/100-anos-de-historia-de-la-copa-america/#0"
@@ -46,11 +46,11 @@ class CNNParser(GenericParser):
         try : 
             categories = [soup.find('div', {"class": "storyfull__section"}).text.strip()]
             categories = [x for x in categories if not 'CNN' in x]
-        except Exception, e:
-            categories = [u"noticias"]
+        except Exception as e:
+            categories = ["noticias"]
 
         tags = set()
-        tags.add(u"noticias")
+        tags.add("noticias")
         
         tag_links = soup.findAll('div', {"class": "tags"})
         for tag in tag_links:

@@ -10,15 +10,15 @@ class RacontoFinder(object):
         default_to = 7
 
         special_limits = [
-            {"category":u"tecnología", "limit":10},
-            {"category":u"belleza", "limit":30},
-            {"category":u"propiedades", "limit":30},
-            {"category":u"electrodomésticos", "limit":30},
-            {"category":u"automóviles", "limit":30},
-            {"category":u"turismo", "limit":30},
-            {"category":u"estilo vida", "limit":30},
-            {"category":u"salud", "limit":30},
-            {"category":u"zolvers", "limit":30},
+            {"category":"tecnología", "limit":10},
+            {"category":"belleza", "limit":30},
+            {"category":"propiedades", "limit":30},
+            {"category":"electrodomésticos", "limit":30},
+            {"category":"automóviles", "limit":30},
+            {"category":"turismo", "limit":30},
+            {"category":"estilo vida", "limit":30},
+            {"category":"salud", "limit":30},
+            {"category":"zolvers", "limit":30},
         ]
 
         self.news_original = original
@@ -57,7 +57,7 @@ class RacontoFinder(object):
         while has_next:
             score = 0
 
-            newsItem = entries_iterable.next()
+            newsItem = next(entries_iterable)
             has_next = newsItem is not None
             if not has_next:
                 continue
@@ -141,8 +141,8 @@ class RacontoFinder(object):
         if not set_paragraph:
             return
 
-        if not isinstance(self.news_original.raconto_content, unicode):
-            self.news_original.raconto_content = unicode(self.news_original.raconto_content, 'utf-8')
+        if not isinstance(self.news_original.raconto_content, str):
+            self.news_original.raconto_content = str(self.news_original.raconto_content, 'utf-8')
         self.news_original.raconto_title = raconto.title
         self.news_original.raconto_date = raconto.object_id.generation_time
         self.news_original.raconto_id = raconto.object_id
@@ -174,19 +174,19 @@ class RacontoFinder(object):
 
         stopwords_filename = config.get("resources", "stopwords_es_clean")
 
-        for line in open(stopwords_filename, 'r'):
+        for line in open(stopwords_filename, 'r', encoding="utf-8"):
             if line[0] not in ['<', '%', '\n']:
                 stopwords.append(self.safe_unicode(line.rstrip('\n')))
 
         return stopwords
 
     def safe_unicode(self, text):
-        if isinstance(text, unicode):
+        if isinstance(text, str):
             u_text = text
         else:
             try:
-                u_text = unicode(text, 'utf-8', errors='ignore')
-            except Exception, e:
+                u_text = str(text, 'utf-8', errors='ignore')
+            except Exception as e:
                 u_text = text
 
         return u_text

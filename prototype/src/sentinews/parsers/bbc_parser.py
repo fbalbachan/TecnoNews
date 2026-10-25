@@ -12,7 +12,7 @@ class BBCParser(GenericParser):
     source = 'BBC'
 
     def parse(self, url, tags=None):
-        if u'/video_fotos/' in url:
+        if '/video_fotos/' in url:
             return None
 
         content = None
