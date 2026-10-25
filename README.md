@@ -35,13 +35,13 @@ Each running instance loops forever, once a minute:
 
 ## Requirements
 
-- Python 2.7 with the packages in `requirements.txt`
+- Python 3.11 with the packages in `requirements.txt`
 - A reachable FreeLing server (parser and language identification)
 - MongoDB
 - WordPress blogs with XML-RPC enabled (for publishing)
 
 ```bash
-virtualenv -p python2.7 .
+virtualenv -p python3.11 .
 source bin/activate
 pip install -r requirements.txt
 ```
